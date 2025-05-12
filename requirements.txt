@@ -1,0 +1,8 @@
+# Core dependencies
+requests
+# For RAG (vector search, etc.)
+faiss-cpu
+sentence-transformers
+# For CLI and optional GUI
+click
+# For running OpenSCAD CLI 
