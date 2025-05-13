@@ -1,0 +1,1 @@
+function NEMA_length(type)       = type[2]; //! Body length

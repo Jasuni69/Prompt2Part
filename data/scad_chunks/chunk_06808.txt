@@ -1,0 +1,5 @@
+module test_v_ceil() {
+    assert_equal(v_ceil([2.0, 3.14, 18.9, 7]), [2,4,19,7]);
+    assert_equal(v_ceil([-2.0, -3.14, -18.9, -7]), [-2,-3,-18,-7]);
+}
+test_v_ceil();

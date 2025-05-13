@@ -1,0 +1,8 @@
+function _rotz(pt, a) = 
+    a == 0 ? pt :
+    let(cosa = cos(a), sina = sin(a))
+    [
+        pt.x * cosa - pt.y * sina,
+        pt.x * sina + pt.y * cosa,
+        pt.z
+    ];

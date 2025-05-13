@@ -1,0 +1,19 @@
+module orientate_axial(length, height, pitch, wire_d) { // Orient horizontal or vertical and add the wires
+    min_pitch = ceil((length + 1) / inch(0.1)) * inch(0.1);
+    lead_pitch = pitch ? pitch : min_pitch;
+    if(lead_pitch > min_pitch - eps) {
+        not_on_bom()
+            wire_link(wire_d, lead_pitch, height);
+
+        translate_z(height)
+            rotate([0, 90, 0])
+                children();
+    }
+    else {
+        not_on_bom()
+            wire_link(wire_d, lead_pitch, length + 0.7 + wire_d);
+
+        translate([-pitch / 2, 0, length / 2 + 0.2])
+            children();
+   }
+}

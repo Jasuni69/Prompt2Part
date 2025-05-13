@@ -1,0 +1,2 @@
+function mapByStringKey(stringKey,objArray) = [for(i=[0:1:len(objArray)]) if(objArray[i][0] == stringKey)objArray[i]];
+//function find(stringKey,arrayVect)occurencesAt(stringKey,arrayVect)

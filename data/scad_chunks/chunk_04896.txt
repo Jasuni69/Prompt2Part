@@ -1,0 +1,15 @@
+function maxXDist(pts=[], dist=1, _i=0, _pts=[]) = let(
+    dx = pts[_i+1][0] - pts[_i][0],
+    sx = dist==0? 1 : floor(abs(dx)/dist)+1,
+    seg = sx==1? dx : dx / sx,
+    ipt = sx<0? [for(i=[sx:-1:0]) [pts[_i][0]+ i*seg, pts[_i][1], pts[_i][2]]] : [for(i=[0:sx]) [pts[_i][0]+ i*seg, pts[_i][1], pts[_i][2]]]
+    //e=echo(dx, sx, seg)
+    )_i<len(pts)-1? maxXDist(pts, dist, _i+1, concat(_pts,ipt)) : _pts;
+   
+//  BETA - bendPoints(pts=[], x=0, r=1)
+//
+//  Bends x and z coordinates of the 2D or 3D point list around a circle with offset x and radius r.
+//  pts       (list)    List of 2D or 3D points.
+//  x         (number)  The x offset for the circle center around which the bend radius is projected.
+//  r         (number)  The bend radius used for the bend.
+//  return    (list)    Adjusted list of 2D or 3D points.

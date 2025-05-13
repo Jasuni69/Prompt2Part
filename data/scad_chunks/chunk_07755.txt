@@ -1,0 +1,20 @@
+module SGlied(sym=0,l=12,la=-.5,d=3,h=5,spiel=0.4,spielZ=nozzle/2,rand=n(1.5),freiwinkel=30,help,messpunkt=messpunkt,fn=36){
+
+  T(0,l/2){
+  Halb(!sym,x=1)T(0,-l/2)Glied(l,la=la,spiel=spiel,d=d,h=h,rand=rand,fn=fn,freiwinkel=sym?freiwinkel:90,messpunkt=false);
+  Halb(sym,x=1)rotate(180)T(0,-l/2)Glied(l,la=la,spiel=spiel,d=d,h=h,rand=rand,fn=fn,messpunkt=false,freiwinkel=sym?freiwinkel:90);
+  }
+  HelpTxt("SGlied",["sym",sym,"l",l,"spiel",spiel,"spielZ",spielZ,"la",la,"fn",fn,"d",d,"h",h,"rand",rand,"freiwinkel",freiwinkel],help);
+
+  if (messpunkt)
+  {
+      %color (sym?"red":"blue")translate([0,l,0.1])R(z=180/12)cylinder(5, d1=1,d2=1,$fn=12,center=true);//messachse1
+      %color(sym?"red":"blue")cylinder(5, d1=1,d2=1,$fn=12,center=true);//messachse2
+  }
+}
+/*
+Schnitt(0,center=true,z=3){
+Glied(l=31,d=3,la=-1,spielZ=0);
+rotate(30+180)T(0,-31)Glied(l=31,d=3,la=-1,spielZ=0);
+}
+// */

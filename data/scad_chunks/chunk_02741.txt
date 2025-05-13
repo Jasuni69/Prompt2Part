@@ -1,0 +1,37 @@
+module aluProTSlot(profileType, $fn=8) {
+	//BR_20x20_Corner = [20, 7, 1.5, 0.5, 4];
+	//BR_20x20_Core = [9,2,0.75];
+	
+	coreType = profileType[1];
+	cornerType = profileType[2];
+	 
+	w1 = cornerType[0];
+	w2 = cornerType[1];
+	t = cornerType[2];
+	cham = cornerType[3];
+	w3 = cornerType[4];	
+
+	tol = 0.5;  // mm tolerance, total per gap
+
+	slotW = w1- 2*w2 - tol;
+	slotD = (w1 - coreType[0]) / 2 - tol;
+	slotOffset = coreType[0]/2 + tol;
+	
+	wingW = w1 - 2*w3 - 4*tol;
+	wingInset = t + tol/2;
+
+	union() {	
+		// central block
+		translate([slotOffset,-slotW/2,0]) square([slotD+eta, slotW]);
+	
+		// wings
+		for (i=[0,1]) mirror([0,i,0]) {
+			polygon(points=[[slotOffset,slotW/2],[w1/2-w3/2-tol,wingW/2],[w1/2-wingInset,wingW/2],[w1/2-wingInset, slotW/2]], paths=[[0,1,2,3]]);
+		}
+	}
+}
+
+// TSlotLug - to be unioned onto a printed part for engaging tightly with the aluprofile slot
+//  same centre and orientation as a full profile section, x+ side
+// protrudes eta beyond external boundary of section to allow for union
+// NB: solid part

@@ -1,0 +1,7 @@
+function riemen(r1=5,r2=10,tx=20,fn=fn,fs=fs,z,center=false)=
+let(a=asin((r2-r1)/tx))
+concat(kreis(r=r1,rand=0,grad=180 - 2*a,center=true,fn=fn,fs=fs,z=z,t=[center?-tx/2:0,0]),kreis(r=r2,rand=0,grad=180 + 2*a,t=[center?tx/2:tx,0],rot=180,center=true,fn=fn,fs=fs,z=z));
+
+
+
+//polygon(kreisSek(grad=[60,81]*1,r=[+4,8],h=20,center=+0,rev=1,mitte=5));

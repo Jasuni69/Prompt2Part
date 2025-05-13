@@ -1,0 +1,40 @@
+module NEMA(nr=17,l=34.3,rot=0,help){
+data=[
+["nr[0]","size[1]","holes[2]","arbor[3]","arborL[4]","disc[5]","discH[6]","flat[7]","holeD[8]"],
+
+[11     ,    28.3 ,        23,         5,         24,       22,         2,       15, 2.5],
+[14     ,    35   ,        26,         5,         24,       22,         2,       15, 3],
+[17     ,    42.3 ,        31,         5,         24,       22,         2,       15, 3],
+[23     ,    56.4 ,     47.14 ,      6.35,         21,     38.1,      1.6,       15, 5]
+
+];
+set=data[search([nr],data)[0]];
+HelpTxt("NEMA",["nr",nr,"l",l],help);
+//echo(set);
+  Tz(l-.1)cylinder(set[6]+.1,d=set[5],$fn=0);
+  Tz(l+.1)rotate(rot)difference(){
+    cylinder(set[4]-.1,d=set[3],$fn=0);
+    Tz(set[4]-set[7])T(set[3]/2 -.5 , -25)cube(50);
+    }
+  difference(){
+    linear_extrude(l)
+    Quad(set[1],rad=set[1]/8,fn=nr<20?4:36);
+    //  offset(delta=set[1]/4,chamfer=nr<23?true:false)square(set[1]/2,true);
+    //holes  
+    Tz(l-4.5)for(x=[-1,1],y=[-1,1])translate([x,y]*set[2]/2)cylinder(h=50,d=set[8],$fn=0);
+  }
+}
+
+
+
+/** \name MicroSD
+MicroSD() makes a micro SD card
+\param ofs offset increases size
+\param h thickness (+ofs)
+\param center center x
+\param notch  enalble notch
+\pram help
+
+*/
+
+//MicroSD();

@@ -1,0 +1,1 @@
+function sc_diameter(type)     = type[2]; //! Coupling outer diameter

@@ -1,0 +1,21 @@
+function round3points(rp,fn)=
+  rp[1][2]==0?[[rp[1][0],rp[1][1]]]://return the middle point if the radius is 0
+	let(
+    p=getpoints(rp), //get list of points
+	  r=rp[1][2],//get the centre 3 radii
+    ang=cosineRuleAngle(p[0],p[1],p[2]),//angle between the lines
+    //now that the radius has been determined, find tangent points and circle centre
+	  tangD=r/tan(ang/2),//distance to the tangent point from p2
+    circD=r/sin(ang/2),//distance to the circle centre from p2
+    //find the angles from the p2 with respect to the postitive x axis
+    angleFromPoint1ToPoint2=getAngle(p[0],p[1]),
+    angleFromPoint2ToPoint3=getAngle(p[2],p[1]),
+    //find tangent points
+    t12=[p[1][0]-cos(angleFromPoint1ToPoint2)*tangD,p[1][1]-sin(angleFromPoint1ToPoint2)*tangD],//tangent point between points 1&2
+    t23=[p[1][0]-cos(angleFromPoint2ToPoint3)*tangD,p[1][1]-sin(angleFromPoint2ToPoint3)*tangD],//tangent point between points 2&3
+    //find circle centre
+    tmid=getMidpoint(t12,t23),//midpoint between the two tangent points
+    angCen=getAngle(tmid,p[1]),//angle from point 2 to circle centre
+    cen=[p[1][0]-cos(angCen)*circD,p[1][1]-sin(angCen)*circD] //circle center by offseting from point 2 
+  )
+	[t12,t23,cen];

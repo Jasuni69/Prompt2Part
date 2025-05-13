@@ -1,0 +1,1 @@
+function _get_y(turtle) = turtle[0].y;

@@ -1,0 +1,100 @@
+module bounding_box(excess=0, planar=false) {
+    // a 3d (or 2d when planar=true) approx. of the children projection on X axis
+    module _xProjection() {
+        if (planar) {
+            projection()
+                rotate([90,0,0])
+                    linear_extrude(1, center=true)
+                        hull()
+                            children();
+        } else {
+            xs = excess<.1? 1: excess;
+            linear_extrude(xs, center=true)
+                projection()
+                    rotate([90,0,0])
+                        linear_extrude(xs, center=true)
+                            projection()
+                                hull()
+                                    children();
+        }
+    }
+
+    // a bounding box with an offset of 1 in all axis
+    module _oversize_bbox() {
+        if (planar) {
+            minkowski() {
+                _xProjection() children(); // x axis
+                rotate(-90) _xProjection() rotate(90) children(); // y axis
+            }
+        } else {
+            minkowski() {
+                _xProjection() children(); // x axis
+                rotate(-90) _xProjection() rotate(90) children(); // y axis
+                rotate([0,-90,0]) _xProjection() rotate([0,90,0]) children(); // z axis
+            }
+        }
+    }
+
+    // offsets a cube by `excess`
+    module _shrink_cube() {
+        intersection() {
+            translate((1-excess)*[ 1, 1, 1]) children();
+            translate((1-excess)*[-1,-1,-1]) children();
+        }
+    }
+
+    req_children($children);
+    attachable(){
+      if(planar) {
+          offset(excess-1/2) _oversize_bbox() children();
+      } else {
+          render(convexity=2)
+          if (excess>.1) {
+              _oversize_bbox() children();
+          } else {
+              _shrink_cube() _oversize_bbox() children();
+          }
+      }
+      union();
+    }
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// Section: Hull Based Modules
+//////////////////////////////////////////////////////////////////////
+
+
+// Module: chain_hull()
+// Synopsis: Performs the union of hull operations between consecutive pairs of children.
+// SynTags: Geom
+// Topics: Miscellaneous
+// See Also: hull()
+// Usage:
+//   chain_hull() CHILDREN;
+//
+// Description:
+//   Performs hull operations between consecutive pairs of children,
+//   then unions all of the hull results.  This can be a very slow
+//   operation, but it can provide results that are hard to get
+//   otherwise.
+//
+// Side Effects:
+//   `$idx` is set to the index value of the first child of each hulling pair, and can be used to modify each child pair individually.
+//   `$primary` is set to true when the child is the first in a chain pair.
+//
+// Example:
+//   chain_hull() {
+//       cube(5, center=true);
+//       translate([30, 0, 0]) sphere(d=15);
+//       translate([60, 30, 0]) cylinder(d=10, h=20);
+//       translate([60, 60, 0]) cube([10,1,20], center=false);
+//   }
+// Example: Using `$idx` and `$primary`
+//   chain_hull() {
+//       zrot(  0) right(100) if ($primary) cube(5+3*$idx,center=true); else sphere(r=10+3*$idx);
+//       zrot( 45) right(100) if ($primary) cube(5+3*$idx,center=true); else sphere(r=10+3*$idx);
+//       zrot( 90) right(100) if ($primary) cube(5+3*$idx,center=true); else sphere(r=10+3*$idx);
+//       zrot(135) right(100) if ($primary) cube(5+3*$idx,center=true); else sphere(r=10+3*$idx);
+//       zrot(180) right(100) if ($primary) cube(5+3*$idx,center=true); else sphere(r=10+3*$idx);
+//   }

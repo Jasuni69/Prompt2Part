@@ -1,0 +1,7 @@
+function c3_a(r1, r2, r3) = 
+    let(
+        a = r3 + r1,
+        b = r3 + r2,
+        c = r1 + r2
+    )
+    acos((b ^ 2 + c ^ 2 - a ^ 2) / (2 * b * c));

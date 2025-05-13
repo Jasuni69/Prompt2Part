@@ -1,0 +1,37 @@
+function bezier_triangle_point(tri, u, v) =
+	len(tri) == 1 ? tri[0][0] :
+	let(
+		n = len(tri)-1,
+		Pu = [for(i=[0:n-1]) [for (j=[1:len(tri[i])-1]) tri[i][j]]],
+		Pv = [for(i=[0:n-1]) [for (j=[0:len(tri[i])-2]) tri[i][j]]],
+		Pw = [for(i=[1:len(tri)-1]) tri[i]]
+	)
+	bezier_triangle_point(u*Pu + v*Pv + (1-u-v)*Pw, u, v);
+
+
+
+// Function: bezier_patch()
+// Usage:
+//   bezier_patch(patch, [splinesteps], [vertices], [faces]);
+// Description:
+//   Calculate vertices and faces for forming a partial polyhedron
+//   from the given bezier rectangular patch.  Returns a list containing
+//   two elements.  The first is the list of unique vertices.  The
+//   second is the list of faces, where each face is a list of indices
+//   into the list of vertices.  You can chain calls to this, to add
+//   more vertices and faces for multiple bezier patches, to stitch
+//   them together into a complete polyhedron.
+// Arguments:
+//   patch = The rectangular array of endpoints and control points for this bezier patch.
+//   splinesteps = Number of steps to divide each bezier segment into.  Default: 16
+//   vertices = Vertex list to add new points to.  Default: []
+//   faces = Face list to add new faces to.  Default: []
+// Example(3D):
+//   patch = [
+//       [[-50, 50,  0], [-16, 50, -20], [ 16, 50,  20], [50, 50,  0]],
+//       [[-50, 16, 20], [-16, 16, -20], [ 16, 16,  20], [50, 16, 20]],
+//       [[-50,-16, 20], [-16,-16,  20], [ 16,-16, -20], [50,-16, 20]],
+//       [[-50,-50,  0], [-16,-50,  20], [ 16,-50, -20], [50,-50,  0]]
+//   ];
+//   vnf = bezier_patch(patch, splinesteps=16);
+//   polyhedron(points=vnf[0], faces=vnf[1]);

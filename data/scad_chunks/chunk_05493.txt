@@ -1,0 +1,11 @@
+function os_profile(points, extra,check_valid, quality, offset) =
+        assert(is_path(points),"Profile point list is not valid")
+        _remove_undefined_vals([
+                "for", "offset_sweep",
+                "type", "profile",
+                "points", points,
+                "extra",extra,
+                "check_valid",check_valid,
+                "quality", quality,
+                "offset", offset
+        ]);

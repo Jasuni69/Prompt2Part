@@ -1,0 +1,1 @@
+function rod_end_bearing_bore(type)          = type[1];    //! radius of the  bore hole in the bearing

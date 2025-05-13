@@ -1,0 +1,83 @@
+function RotEx(rot=0,points=points,verschieb=tan(konisch),steigung=p,detail=fn,start=start,end=end)=
+[for(rotation=[0:detail*rot/360])for(i=innen?[0:len(points[0])-1]:[len(points[0])-1:-1:0])
+[ // Punkt
+if(rotation<detail*rot/360-end)(points[min(rotation,start)][i][0]+verschieb*rotation/detail*steigung)*sin(rotation*360/detail) //⇐ normal
+    else (pointsEnd[detail*rot/360-rotation][i][0]+verschieb*rotation/detail*steigung)*sin(rotation*360/detail),
+if(rotation<detail*rot/360-end)profilkorrekturY*points[min(rotation,start)][i][1]+rotation/detail*steigung //⇐ normal
+    else profilkorrekturY*pointsEnd[detail*rot/360-rotation][i][1]+rotation/detail*steigung,
+if(rotation<detail*rot/360-end)(points[min(rotation,start)][i][0]+verschieb*rotation/detail*steigung)*cos(rotation*360/detail) //⇐ normal
+    else (pointsEnd[detail*rot/360-rotation][i][0]+verschieb*rotation/detail*steigung)*cos(rotation*360/detail) 
+] // Punkt end
+];
+
+
+facesALL=concat(
+faces0(points=RotEx(+0))//floor endcap
+,faces1(points=RotEx(0),start=len(RotEx(grad))-len(RotEx(0)))//top endcap
+
+//Outer wall
+,[if(innen)for(level=[0:detail-1])each faces31(points=RotEx(0),start=(len(RotEx(0)))*level)
+    else for(level=[0:detail-1])each faces3(points=RotEx(0),start=(len(RotEx(0)))*level)]
+//inner wall
+,[if(innen)for(level=[0:detail-1])each faces41(points=RotEx(0),start=(len(RotEx(0)))*level)
+   else for(level=[0:detail-1])each faces4(points=RotEx(0),start=(len(RotEx(0)))*level)]
+// bottom skin
+,[if(konisch==0)for(level=[0:(fn*min(1,grad/360))- 1])each faces5(points=RotEx(0),start=(len(RotEx(0)))*level)
+   else for(level=[0:detail- 1])each faces5(points=RotEx(0),start=(len(RotEx(0)))*level)]
+//top skin
+,[if(konisch==0)for(level=[detail-(fn*min(1,grad/360)):detail- 1])each faces6(points=RotEx(0),start=(len(RotEx(0)))*(level-(innen?1 : 0)))
+    else
+    for(level=[0:detail- 1])each faces6(points=RotEx(0),start=(len(RotEx(0)))*(level-(innen?1:0)))]
+);
+
+pointsALL=RotEx(grad);//3D
+if(profil)!Linear(x=0,y=1,es=p)polygon(points=pointskorr); 
+  else Tz(center?center<0?-p/2+tz:tz:tz+p/2)color(innen?"slategrey":"gold"){
+        R(90,0,90) polyhedron(points=pointsALL,faces=facesALL,convexity=5);
+//cylinder body    
+        if(cyl)Tz(-p/2){
+          if(!konisch)linear_extrude(h,convexity=5,scale=1+h*tan(konisch)/(d2/2))Kreis(r=d2/2-.000001,dicke=innen?max(wand,+0.0001):mantel<0.01?0:wand,fn=fn,name=0);
+
+// konisch
+         else {
+          d2=abs(d2)+p*tan(konisch)* (innen?1:-1);//korrecktur da d2 Gewindespitze
+         if(innen) difference(){
+              cylinder(h=h,d1=d2+wand*2,d2=(d2+wand*2)*scaleGrad(grad=90-konisch,h=h,r=d2/2+wand),$fn=fn,$fs=fs,$fa=fa);
+              Tz(-.01)cylinder(h=h+.02,d1=d2,d2=d2*scaleGrad(grad=90-konisch,h=h+.02,r=d2/2),$fn=fn,$fs=fs,$fa=fa);
+         } else difference(){
+              cylinder(h=h,d1=d2,d2=d2*scaleGrad(grad=90+konisch,h=h,r=d2/2),$fn=fn,$fs=fs,$fa=fa);
+              if(d2-wand*2>0) Tz(-.01)cylinder(h=h+.02,d1=d2-wand*2,d2=(d2-wand*2)*scaleGrad(grad=90+konisch,h=h+.02,r=d2/2-wand),$fn=fn,$fs=fs,$fa=fa);
+         }
+       }
+    //Ring(h=h,rand=wand,d=abs(d2),cd=innen?-1:1);
+    }
+  }
+children();
+}
+
+
+
+/** \name Coil \page Objects
+Coil() creates a coil
+\param r radius of the coil
+\param d diameter of the coil wire
+\param r2 end radius for conical coils
+\param od id optional outer inner diameter ↦ r and d
+\param grad windings
+\param p pitch
+\param h height ↦ p or grad
+\param points  allows other profiles as points
+\param twist  twist profile towards end
+\param scale profile towards end
+\param fn fs fs fraqment number size angle
+\param fn2 fragmentsize for d (if undef then fs fa is used)
+\param center centers coil
+\param rot rotate profile
+\param open  creates end surfaces
+\param rev  revers path
+\param convexity convexity of polyhedron
+\param name name
+\param help help
+*/
+
+//Coil(h=20,scale=1,center=+1,grad=undef,fn2=4,rot=45,rev=0);

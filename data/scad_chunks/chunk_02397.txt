@@ -1,0 +1,1 @@
+module ribbon_clamp_20_stl() ribbon_clamp(20);

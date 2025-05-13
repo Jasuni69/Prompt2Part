@@ -1,0 +1,1 @@
+function gm_shaft_offset(type) = type[3]; //! Offset of shaft from the centre of the gearbox

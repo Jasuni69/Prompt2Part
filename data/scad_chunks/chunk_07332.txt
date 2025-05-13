@@ -1,0 +1,15 @@
+module Rosette(
+r1=10,
+r2=15,
+ratio=2,
+wall=0.4,
+id,
+od,
+fn=fn,
+rotations,
+name,
+help
+){
+$info=0;
+$helpf=0;
+$messpunkt=0;

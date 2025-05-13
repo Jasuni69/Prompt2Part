@@ -1,0 +1,11 @@
+function TurtleToPath(turtlelist,accuracy=$fn) =
+  turtlelist[0][0] == TELEPORT ?
+    let(x = turtlelist[0][1])
+    let(y = turtlelist[0][2])
+    concat([[x,y], each WalkTheTurtle(turtlelist=turtlelist,accuracy=accuracy,index=1,lastpos=[x,y])]) :
+    concat([[0,0], each WalkTheTurtle(turtlelist=turtlelist,accuracy=accuracy)]);
+ 
+// This function is recursive, going through all
+// the commands in the list.
+// The position and the angle of the turtle is kept
+// in the parameters "angle" and "lastpos".

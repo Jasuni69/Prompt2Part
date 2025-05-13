@@ -1,0 +1,4 @@
+function _isobands_corner_value(cell_pts) =
+    str(cell_pts[1][3], cell_pts[2][3], cell_pts[3][3], cell_pts[0][3]); 
+
+// single triangle

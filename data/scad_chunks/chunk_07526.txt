@@ -1,0 +1,1 @@
+function fs2fn(r,grad=360,fs=fs,minf=3)=max(minf,PI*r*2/360*grad/max(fs,0.001));

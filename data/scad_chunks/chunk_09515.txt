@@ -1,0 +1,61 @@
+module threaded_rod(
+	d=10, l=100, pitch=2,
+	left_handed=false,
+	bevel=false,
+	bevel1=false,
+	bevel2=false,
+	internal=false,
+	slop=undef,
+	orient=ORIENT_Z,
+	align=V_CENTER
+) {
+	depth = pitch * cos(30) * 5/8;
+	profile = internal? [
+		[-6/16, -depth/pitch],
+		[-1/16,  0],
+		[-1/32,  0.02],
+		[ 1/32,  0.02],
+		[ 1/16,  0],
+		[ 6/16, -depth/pitch]
+	] : [
+		[-7/16, -depth/pitch*1.07],
+		[-6/16, -depth/pitch],
+		[-1/16,  0],
+		[ 1/16,  0],
+		[ 6/16, -depth/pitch],
+		[ 7/16, -depth/pitch*1.07]
+	];
+	trapezoidal_threaded_rod(
+		d=d, l=l, pitch=pitch,
+		thread_depth=depth,
+		thread_angle=30,
+		profile=profile,
+		left_handed=left_handed,
+		bevel=bevel,
+		bevel1=bevel1,
+		bevel2=bevel2,
+		internal=internal,
+		slop=slop,
+		orient=orient,
+		align=align
+	);
+}
+
+
+
+// Module: threaded_nut()
+// Description:
+//   Constructs a hex nut for a metric or UTS threaded screw rod.  This method
+//   makes much smoother threads than the naive linear_extrude method.
+// Arguments:
+//   od = diameter of the nut.
+//   id = diameter of threaded rod to screw onto.
+//   h = height/thickness of nut.
+//   pitch = Length between threads.
+//   left_handed = if true, create left-handed threads.  Default = false
+//   bevel = if true, bevel the thread ends.  Default: false
+//   slop = printer slop calibration to allow for tight fitting of parts.  default=0.2
+//   orient = Orientation of the nut.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Z`.
+//   align = Alignment of the nut.  Use the `V_` constants from `constants.scad`.  Default: `V_CENTER`.
+// Examples(Med):
+//   threaded_nut(od=16, id=8, h=8, pitch=1.25, left_handed=true, slop=0.2, $fa=1, $fs=1);

@@ -1,0 +1,33 @@
+function format_fixed(f,digits=6) =
+    assert(is_int(digits))
+    assert(digits>0)
+    is_list(f)? str("[",str_join(sep=", ", [for (g=f) format_fixed(g,digits=digits)]),"]") :
+    str(f)=="nan"? "nan" :
+    str(f)=="inf"? "inf" :
+    f<0? str("-",format_fixed(-f,digits=digits)) :
+    assert(is_num(f))
+    let(
+        sc = pow(10,digits),
+        scaled = floor(f * sc + 0.5),
+        whole = floor(scaled/sc),
+        part = floor(scaled-(whole*sc))
+    ) str(format_int(whole),".",format_int(part,digits));
+
+
+// Function: format_float()
+// Synopsis: Formats a float into a string with a given number of significant digits.
+// Topics: Strings
+// See Also: format_int(), format_fixed(), format_float(), format()
+// Usage:
+//   str = format_float(f,[sig]);
+// Description:
+//   Formats the given floating point number `f` into a string with `sig` significant digits.
+//   Strips trailing `0`s after the decimal point.  Strips trailing decimal point.
+//   If the number can be represented in `sig` significant digits without a mantissa, it will be.
+//   If given a list of numbers, recursively prints each item in the list, returning a string like `[3,4,5]`
+// Arguments:
+//   f = The floating point number to format.
+//   sig = The number of significant digits to display.  Default: 12
+// Example:
+//   format_float(PI,12);  // Returns: "3.14159265359"
+//   format_float([PI,-16.75],12);  // Returns: "[3.14159265359, -16.75]"

@@ -1,0 +1,1 @@
+function smd_res_power(type)   = type[3]; //! Power rating in Watts, 0 for choke

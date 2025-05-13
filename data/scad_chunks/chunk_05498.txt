@@ -1,0 +1,223 @@
+function _rp_compute_patches(top, bot, rtop, rsides, ktop, ksides, concave) =
+   let(
+     N = len(top),
+     plane = plane3pt_indexed(top,0,1,2),
+     rtop_in = is_list(rtop) ? rtop[0] : rtop,
+     rtop_down = is_list(rtop) ? rtop[1] : abs(rtop)
+   )
+  [for(i=[0:N-1])
+           let(
+               rside_prev = is_list(rsides[i])? rsides[i][0] : rsides[i],
+               rside_next = is_list(rsides[i])? rsides[i][1] : rsides[i],
+               concave_sign = (concave[i] ? -1 : 1) * (rtop_in>=0 ? 1 : -1),  // Negative if normals need to go "out"
+               prev = select(top,i-1) - top[i],
+               next = select(top,i+1) - top[i],
+               prev_offset = top[i] + rside_prev * unit(prev) / sin(vector_angle(prev,bot[i]-top[i])),
+               next_offset = top[i] + rside_next * unit(next) / sin(vector_angle(next,bot[i]-top[i])),
+               down = rtop_down * unit(bot[i]-top[i]) / sin(abs(plane_line_angle(plane, [bot[i],top[i]]))),
+               row2 = [prev_offset,     top[i],     next_offset     ],
+               row4 = [prev_offset+down,top[i]+down,next_offset+down],
+               in_prev = concave_sign * unit(next-(next*prev)*prev/(prev*prev)),
+               in_next = concave_sign * unit(prev-(prev*next)*next/(next*next)),
+               far_corner = top[i]+ concave_sign*unit(unit(prev)+unit(next))* abs(rtop_in) / sin(vector_angle(prev,next)/2),
+               row0 =
+                 concave_sign<0 ?
+                    [prev_offset+abs(rtop_in)*in_prev, far_corner, next_offset+abs(rtop_in)*in_next]
+                 :
+                    let(
+                       prev_corner = prev_offset + abs(rtop_in)*in_prev,
+                       next_corner = next_offset + abs(rtop_in)*in_next,
+                       line = project_plane(plane, [
+                                                       [far_corner, far_corner+prev],
+                                                       [prev_offset, prev_offset+in_prev],
+                                                       [far_corner, far_corner+next],
+                                                       [next_offset, next_offset+in_next]
+                                                   ]),
+                       prev_degenerate = is_undef(line_intersection(line[0],line[1],RAY,RAY)),
+                       next_degenerate = is_undef(line_intersection(line[2],line[3],RAY,RAY))
+                    )
+                    [ prev_degenerate ? far_corner : prev_corner,
+                      far_corner,
+                      next_degenerate ? far_corner : next_corner]
+            ) _smooth_bez_fill(
+                      [for(row=[row0, row2, row4]) _smooth_bez_fill(row,ksides[i])],
+                      ktop)];
+
+
+// Function&Module: rounded_prism()
+// Synopsis: Make a rounded 3d object by connecting two polygons with the same vertex count.
+// SynTags: Geom, VNF
+// Topics: Rounding, Offsets
+// See Also: offset_sweep(), convex_offset_extrude(), rounded_prism(), bent_cutout_mask(), join_prism()
+// Usage: as a module
+//   rounded_prism(bottom, [top], [height=|h=|length=|l=], [joint_top=], [joint_bot=], [joint_sides=], [k=], [k_top=], [k_bot=], [k_sides=], [splinesteps=], [debug=], [convexity=],...) [ATTACHMENTS];
+// Usage: as a function
+//   vnf = rounded_prism(bottom, [top], [height=|h=|length=|l=], [joint_top=], [joint_bot=], [joint_sides=], [k=], [k_top=], [k_bot=], [k_sides=], [splinesteps=], [debug=]);
+// Description:
+//   Construct a generalized prism with continuous curvature rounding.  You supply the polygons for the top and bottom of the prism.  The only
+//   limitation is that joining the edges must produce a valid polyhedron with coplanar side faces.  The vertices of the top and bottom
+//   are joined in the order listed.  The top should have the standard vertex order for a polyhedron: clockwise as seen when viewing the prism
+//   from the outside. 
+//   .
+//   You specify the rounding by giving
+//   the joint distance away from the corner for the rounding curve.  The k parameter ranges from 0 to 1 with a default of 0.5.  Larger
+//   values give a more abrupt transition and smaller ones a more gradual transition.  If you set the value much higher
+//   than 0.8 the curvature changes abruptly enough that though it is theoretically continuous, it may
+//   not be continuous in practice.  A value of 0.92 is a good approximation to a circle.  If you set it small then the transition
+//   is so gradual that the roundover may be small.  If you want a smooth roundover, set the joint parameter as large as possible and
+//   then adjust the k value down as low as gives a sufficiently large roundover.  See
+//   [Types of Roundover](rounding.scad#subsection-types-of-roundover) for more information on continuous curvature rounding.  
+//   .
+//   You can specify the bottom and top polygons by giving two compatible 3d paths.  You can also give 2d paths and a height/length and the
+//   two shapes are offset in the z direction from each other.  The final option is to specify just the bottom along with a height/length;
+//   in this case the top is a copy of the bottom, offset in the z direction by the specified height.
+//   .
+//   You define rounding for all of the top edges, all of the bottom edges, and independently for each of the connecting side edges.
+//   You specify rounding the rounding by giving the joint distance for where the curved section should start.  If the joint distance is 1 then
+//   it means the curved section begins 1 unit away from the edge (in the perpendicular direction).  Typically each joint distance is a scalar
+//   value and the rounding is symmetric around each edge.  However, you can specify a 2-vector for the joint distance to produce asymmetric
+//   rounding which is different on the two sides of the edge.  This may be useful when one one edge in your polygon is much larger than another.
+//   For the top and bottom you can specify negative joint distances.  If you give a scalar negative value, then the roundover flares
+//   outward.  If you give a vector value then a negative value, then if `joint_top[0]` is negative the shape flares outward, but if
+//   `joint_top[1]` is negative, the shape flares upward.  At least one value must be non-negative.  The same rules apply for joint_bot.
+//   The joint_sides parameter must be entirely nonnegative.
+//   .
+//   If the roundings at two adjacent side edges exceed the width of the face then the polyhedron becomes invalid due to self-intersecting faces.
+//   Similarly, if the roundings on the top or bottom edges cross the top face and intersect with each other, the resulting polyhedron is invalid:
+//   the top face after the roundings are applied must be a valid, non-degenerate polyhedron.  There are two exceptions:  it is permissible to
+//   construct a top that is a single point or two points.  This means you can completely round a cube by setting the joint to half of
+//   the cube's width.  
+//   If you set `debug` to true, the module version displays the polyhedron even when it is invalid and it shows the bezier patches at the corners.
+//   This can help troubleshoot problems with your parameters.  With the function form setting debug to true causes run even on invalid cases and to return [patches,vnf] where
+//   patches is a list of the bezier control points for the corner patches.
+//   .
+//   This module offers five anchor types.  The default is "hull" in which VNF anchors are placed on the VNF of the **unrounded** object.  You
+//   can also use "intersect" to get the intersection anchors to the unrounded object. If you prefer anchors that respect the rounding
+//   then use "surf_hull" or "intersect_hull".  Lastly, in the special case of a prism with four sides, you can use "prismoid" anchoring
+//   which attempts to assign standard prismoid anchors to the shape by assigning as RIGHT the face that is closest to the RIGHT direction,
+//   and defining the other anchors around the shape baesd on that choice.  
+//   .
+//   Note that rounded_prism() is not well suited to rounding shapes that have already been rounded, or that have many points.
+//   It works best when the top and bottom are polygons with well-defined corners.  When the polygons have been rounded already,
+//   further rounding generates tiny bezier patches patches that can more easily
+//   interfere, giving rise to an invalid polyhedron.  It's also slow because you get bezier patches for every corner in the model.  
+//   .
+// Named Anchors:
+//   "origin" = The native position of the prism.
+//   "top" = Top face, with spin BACK if face is parallel to the XY plane, or with positive Z otherwise
+//   "bot" = Bottom face, with spin BACK if face is parallel to the XY plane, or with positive Z otherwise
+//   "edge0", "edge1", etc. = Center of each side edge, spin pointing up along the edge
+//   "face0", "face1", etc. = Center of each side face, spin pointing up
+//   "top_edge0", "top_edge1", etc = Center of each top edge, spin pointing clockwise (from top)
+//   "bot_edge0", "bot_edge1", etc = Center of each bottom edge, spin pointing clockwise (from bottom)
+//   "top_corner0", "top_corner1", etc = Top corner, pointing in direction of associated edge anchor, spin up along associated edge
+//   "bot_corner0", "bot_2corner1", etc = Bottom corner, pointing in direction of associated edge anchor, spin up along associated edge
+// Arguments:
+//   bottom = 2d or 3d path describing bottom polygon
+//   top = 2d or 3d path describing top polygon (must be the same dimension as bottom)
+//   ---
+//   height/length/h/l = height of the shape when you give 2d bottom
+//   joint_top = joint distance or [joint,k] pair for top roundover (number or 2-vector).  Default: 0
+//   joint_bot = joint distance or [joint,k] for bottom roundover (number or 2-vector).  Default: 0
+//   joint_sides = joint distance or [joint,k] for rounding of side edges, a number/2-vector or list of them.  Default: 0
+//   k = continuous curvature rounding parameter for all edges.  Default: 0.5
+//   k_top = continuous curvature rounding parameter for top
+//   k_bot = continuous curvature rounding parameter for bottom
+//   k_sides = continuous curvature rounding parameter side edges, a number or vector.  
+//   splinesteps = number of segments to use for curved patches.  Default: 16
+//   debug = turn on debug mode which displays illegal polyhedra and shows the bezier corner patches for troubleshooting purposes.  Default: False
+//   convexity = convexity parameter for polyhedron(), only for module version.  Default: 10
+//   anchor = Translate so anchor point is at the origin.  (module only) Default: "origin"
+//   spin = Rotate this many degrees around Z axis after anchor.  (module only) Default: 0
+//   orient = Vector to rotate top toward after spin  (module only)
+//   atype = Select "prismoid", "hull", "intersect", "surf_hull" or "surf_intersect" anchor types. (module only) Default: "hull"
+//   cp = Centerpoint for determining "intersect" anchors or centering the shape.  Determintes the base of the anchor vector.  Can be "centroid", "mean", "box" or a 3D point.  (module only) Default: "centroid"
+// Named Anchors:
+//   "top" = center of top face pointing normal to that face
+//   "bot" = center of bottom face pointing normal to that face
+//   "edge0", "edge1", etc. = Center of each side edge, spin pointing up along the edge.  Can access with EDGE(i)
+//   "face0", "face1", etc. = Center of each side face, spin pointing up.  Can access with FACE(i)
+//   "top_edge0", "top_edge1", etc = Center of each top edge, spin pointing clockwise (from top). Can access with EDGE(TOP,i)
+//   "bot_edge0", "bot_edge1", etc = Center of each bottom edge, spin pointing clockwise (from bottom).  Can access with EDGE(BOT,i)
+//   "top_corner0", "top_corner1", etc = Top corner, pointing in direction of associated edge anchor, spin up along associated edge
+//   "bot_corner0", "bot_corner1", etc = Bottom corner, pointing in direction of associated edge anchor, spin up along associated edge
+// Anchor Types:
+//   "hull" = Anchors to the VNF of the **unrounded** prism using VNF hull anchors (default)
+//   "intersect" = Anchors to the VNF of the **unrounded** prism using VNF intersection anchors
+//   "surf_hull" = Use VNF hull anchors to the rounded VNF
+//   "surf_intersect" = USe VFN intersection anchors to the rounded VNF
+//   "prismoid" = For four sided prisms only, defined standard prismsoid anchors, with RIGHT set to the face closest to the RIGHT direction.  
+// Example: Uniformly rounded pentagonal prism
+//   rounded_prism(pentagon(3), height=3,
+//                 joint_top=0.5, joint_bot=0.5, joint_sides=0.5) position(FWD) cube(1);
+// Example: Maximum possible rounding.
+//   rounded_prism(pentagon(3), height=3,
+//                 joint_top=1.5, joint_bot=1.5, joint_sides=1.5);
+// Example: Decreasing k from the default of 0.5 to 0.3 gives a smoother round over which takes up more space, so it appears less rounded.
+//   rounded_prism(pentagon(3), height=3, joint_top=1.5, joint_bot=1.5,
+//                 joint_sides=1.5, k=0.3, splinesteps=32);
+// Example: Increasing k from the default of 0.5 to 0.92 approximates a circular roundover, which does not have continuous curvature.  Notice the visible "edges" at the boundary of the corner and edge patches.  
+//   rounded_prism(pentagon(3), height=3, joint_top=0.5,
+//                 joint_bot=0.5, joint_sides=0.5, k=0.92);
+// Example: rounding just one edge
+//   rounded_prism(pentagon(side=3), height=3, joint_top=0.5, joint_bot=0.5,
+//                 joint_sides=[0,0,0.5,0,0], splinesteps=16);
+// Example: rounding all the edges differently
+//   rounded_prism(pentagon(side=3), height=3, joint_top=0.25, joint_bot=0.5,
+//                 joint_sides=[1.7,.5,.7,1.2,.4], splinesteps=32);
+// Example: different k values for top, bottom and sides
+//   rounded_prism(pentagon(side=3.0), height=3.0, joint_top=1.4, joint_bot=1.4,
+//                 joint_sides=0.7, k_top=0.7, k_bot=0.3, k_sides=0.5, splinesteps=48);
+// Example: flared bottom
+//   rounded_prism(pentagon(3), height=3, joint_top=1.0,
+//                 joint_bot=-0.5, joint_sides=0.5);
+// Example: truncated pyramid
+//   rounded_prism(pentagon(3), apply(scale(.7),pentagon(3)),
+//                 height=3, joint_top=0.5, joint_bot=0.5, joint_sides=0.5);
+// Example: top translated
+//   rounded_prism(pentagon(3), apply(right(2),pentagon(3)),
+//                 height=3, joint_top=0.5, joint_bot=0.5, joint_sides=0.5);
+// Example(NORENDER): top rotated: fails due to non-coplanar side faces
+//   rounded_prism(pentagon(3), apply(rot(45),pentagon(3)), height=3,
+//                 joint_top=0.5, joint_bot=0.5, joint_sides=0.5);
+// Example: skew top
+//   rounded_prism(path3d(pentagon(3)), apply(affine3d_skew_yz(0,-20),path3d(pentagon(3),3)),
+//                 joint_top=0.5, joint_bot=0.5, joint_sides=0.5);
+// Example: this rotation gives coplanar sides
+//   rounded_prism(path3d(square(4)), apply(yrot(-100)*right(2),path3d(square(4),3)),
+//                 joint_top=0.5, joint_bot=0.5, joint_sides=0.5);
+// Example: a shape with concave corners
+//   M = path3d(turtle(["left", 180, "length",3,"move", "left", "move", 3, "right",
+//                      "move", "right", "move", 4, "right", "move", 3, "right", "move", 2]));
+//   rounded_prism(M, apply(up(3),M), joint_top=0.75, joint_bot=0.2,
+//                 joint_sides=[.2,2.5,2,0.5,1.5,.5,2.5], splinesteps=32);
+// Example: using debug mode to see the corner patch sizes, which may help figure out problems with interfering corners or invalid polyhedra.  The corner patches must not intersect each other.
+//   M = path3d(turtle(["left", 180, "length",3,"move", "left", "move", 3, "right",
+//                      "move", "right", "move", 4, "right", "move", 3, "right", "move", 2]));
+//   rounded_prism(M, apply(up(3),M), joint_top=0.75, joint_bot=0.2,
+//                 joint_sides=[.2,2.5,2,0.5,1.5,.5,2.5], splinesteps=16,debug=true);
+// Example: applying transformation to the previous example
+//   M = path3d(turtle(["left", 180, "length",3,"move", "left", "move", 3, "right",
+//                      "move", "right", "move", 4, "right", "move", 3, "right", "move", 2]));
+//   rounded_prism(M, apply(right(1)*scale(.75)*up(3),M), joint_top=0.5, joint_bot=0.2,
+//                 joint_sides=[.2,1,1,0.5,1.5,.5,2], splinesteps=32);
+// Example: this example shows most of the different types of patches that rounded_prism creates.  Note that some of the patches are close to interfering with each other across the top of the polyhedron, which would create an invalid result.
+//   N = apply(rot(180)*yscale(.8),turtle(["length",3,"left", "move", 2, "right", 135,"move", sqrt(2), 
+//                                         "left", "move", sqrt(2), "right", 135, "move", 2]));
+//   rounded_prism(N, height=3, joint_bot=0.5, joint_top=1.25, joint_sides=[[1,1.75],0,.5,.5,2], debug=true);
+// Example: This object has different scales on its different axies.  Here is the largest symmetric rounding that fits.  Note that the rounding is slightly smaller than the object dimensions because of roundoff error.
+//   rounded_prism(square([100.1,30.1]), height=8.1, joint_top=4, joint_bot=4,
+//                 joint_sides=15, k_sides=0.3, splinesteps=32);
+// Example: Using asymetric rounding enables a much more rounded form:
+//   rounded_prism(square([100.1,30.1]), height=8.1, joint_top=[15,4], joint_bot=[15,4],
+//                 joint_sides=[[15,50],[50,15],[15,50],[50,15]], k_sides=0.3, splinesteps=32);
+// Example: Flaring the top upward instead of outward.  The bottom has an asymmetric rounding with a small flare but a large rounding up the side.
+//   rounded_prism(pentagon(3), height=3, joint_top=[1,-1],
+//                 joint_bot=[-0.5,2], joint_sides=0.5);
+// Example: Sideways polygons:
+//   rounded_prism(apply(yrot(95),path3d(hexagon(3))), apply(yrot(95), path3d(hexagon(3),3)),
+//                 joint_top=2, joint_bot=1, joint_sides=1);
+// Example: Chamfer a polyhedron by setting splinesteps to 1
+//   N = apply(rot(180)*yscale(.8),turtle(["length",3,"left", "move", 2, "right", 135,"move", sqrt(2), 
+//                                         "left", "move", sqrt(2), "right", 135, "move", 2]));
+//   rounded_prism(N, height=3, joint_bot=-0.3, joint_top=.4, joint_sides=[.75,0,.2,.2,.7], splinesteps=1);

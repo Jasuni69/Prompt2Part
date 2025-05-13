@@ -1,0 +1,7 @@
+module lidHook()
+{
+  
+} //  lidHook()
+
+//---- This is where the magic happens ----
+YAPPgenerate();

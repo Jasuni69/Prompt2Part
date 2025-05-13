@@ -1,0 +1,5 @@
+function opp_adj_to_ang(opp,adj) = adj_opp_to_ang(adj,opp);
+
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

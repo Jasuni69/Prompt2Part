@@ -1,0 +1,7 @@
+module pulleys()
+    layout([for(p = pulleys) pulley_flange_dia(p)])
+        rotate(-145)
+            pulley_assembly(pulleys[$i]);
+
+if($preview)
+    pulleys();

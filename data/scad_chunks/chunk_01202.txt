@@ -1,0 +1,1 @@
+function leadnuthousing_hole_pos(type)          = type[5];  //! Offset from center for nut hole

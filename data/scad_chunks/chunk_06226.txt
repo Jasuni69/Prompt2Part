@@ -1,0 +1,54 @@
+function rect_tube(
+    h, size, isize, center, shift=[0,0],
+    wall, size1, size2, isize1, isize2,
+    rounding=0, rounding1, rounding2,
+    irounding, irounding1, irounding2,
+    chamfer=0, chamfer1, chamfer2,
+    ichamfer, ichamfer1, ichamfer2,
+    anchor, spin=0, orient=UP,
+    l, length, height
+) = no_function("rect_tube");
+
+
+// Function&Module: wedge()
+// Synopsis: Creates a 3d triangular wedge.
+// SynTags: Geom, VNF
+// Topics: Shapes (3D), Attachable, VNF Generators
+// See also: prismoid(), rounded_prism(), pie_slice()
+// Usage: As Module
+//   wedge(size, [center], ...) [ATTACHMENTS];
+// Usage: As Function
+//   vnf = wedge(size, [center], ...);
+//
+// Description:
+//   When called as a module, creates a 3D triangular wedge with the hypotenuse in the X+Z+ quadrant.
+//   When called as a function, creates a VNF for a 3D triangular wedge with the hypotenuse in the X+Z+ quadrant.
+//   The anchors for the wedge are the anchors of the wedge's bounding box.  The named enchors listed below
+//   give the sloped face and edges, and those edge anchors have spin oriented with positive Z value in the
+//   direction of the sloped edge.  
+//
+// Arguments:
+//   size = [width, thickness, height].  Default: [1,1,1]
+//   center = If given, overrides `anchor`.  A true value sets `anchor=CENTER`, false sets `anchor=UP`.
+//   ---
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `FRONT+LEFT+BOTTOM`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//
+// Named Anchors:
+//   "hypot" = Center of angled wedge face, perpendicular to that face.
+//   "hypot_left" = Left side of angled wedge face, bisecting the angle between the left side and angled faces.
+//   "hypot_right" = Right side of angled wedge face, bisecting the angle between the right side and angled faces.
+//
+// Example: Centered
+//   wedge([20, 40, 15], center=true);
+// Example: *Non*-Centered
+//   wedge([20, 40, 15]);
+// Example(3D,Med,VPR=[59.50,0.00,36.90],VPD=257.38,VPT=[5.60,-1.98,3.65]): Standard Anchors
+//   wedge([40, 80, 30], center=true)
+//       show_anchors(custom=false);
+//   color([0.5,0.5,0.5,0.1])
+//       cube([40, 80, 30], center=true);
+// Example(3D,Med,VPR=[55.00,0.00,25.00],VPD=151.98,VPT=[2.30,-11.81,-5.66]): Named Anchors
+//   wedge([40, 80, 30], center=true)
+//       show_anchors(std=false);

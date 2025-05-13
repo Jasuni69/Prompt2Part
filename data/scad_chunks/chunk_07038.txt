@@ -1,0 +1,5 @@
+module test_is_1region() {
+    assert(!is_1region([[3,4],[5,6],[7,8]]));
+    assert(is_1region([[[3,4],[5,6],[7,8]]]));
+}
+test_is_1region();

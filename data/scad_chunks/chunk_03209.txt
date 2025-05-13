@@ -1,0 +1,50 @@
+hideBaseWalls       = false;    //-> false
+showOrientation     = true;
+showPCB             = true;
+showSwitches        = false;
+showPCBmarkers      = false;
+showShellZero       = false;
+showCenterMarkers   = false;
+inspectX            = 0;        //-> 0=none (>0 from Back)
+inspectY            = 0;        //-> 0=none (>0 from Right)
+inspectZ            = 0;        //-> 0=none (>0 from Bottom)
+inspectXfromBack    = true;     // View from the inspection cut foreward
+inspectYfromLeft    = true;     //-> View from the inspection cut to the right
+inspectZfromTop     = false;    //-> View from the inspection cut down
+//-- C O N T R O L ---------------------------------------
+
+
+
+//===================================================================
+//   *** PCB Supports ***
+//   Pin and Socket standoffs 
+//-------------------------------------------------------------------
+//  Default origin =  yappCoordPCB : pcb[0,0,0]
+//
+//  Parameters:
+//   Required:
+//    (0) = posx
+//    (1) = posy
+//   Optional:
+//    (2) = Height to bottom of PCB : Default = standoffHeight
+//    (3) = PCB Gap : Default = -1 : Default for yappCoordPCB=pcbThickness, yappCoordBox=0
+//    (4) = standoffDiameter    Default = standoffDiameter;
+//    (5) = standoffPinDiameter Default = standoffPinDiameter;
+//    (6) = standoffHoleSlack   Default = standoffHoleSlack;
+//    (7) = filletRadius (0 = auto size)
+//    (n) = { <yappBoth> | yappLidOnly | yappBaseOnly }
+//    (n) = { yappHole, <yappPin> } // Baseplate support treatment
+//    (n) = { <yappAllCorners> | yappFrontLeft | yappFrontRight | yappBackLeft | yappBackRight }
+//    (n) = { yappCoordBox, <yappCoordPCB> }  
+//    (n) = { yappNoFillet }
+//-------------------------------------------------------------------
+pcbStands = [
+  //[5, 5, yappHole]
+];
+
+
+
+//===================================================================
+//  *** Cutouts ***
+//    There are 6 cutouts one for each surface:
+//      cutoutsBase (Bottom), cutoutsLid (Top), cutoutsFront, cutoutsBack, cutoutsLeft, cutoutsRight

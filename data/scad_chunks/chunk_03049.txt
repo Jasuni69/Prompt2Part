@@ -1,0 +1,28 @@
+    -1, // Cap above Lid
+    6, // Switch Height
+    1, // Switch travel
+    3, // Pole Diameter
+    undef, // Height to top of PCB
+    yappRoundedRect // Shape
+  ]
+  ,[80,pcbWidth/2, 
+    8, // Width
+    8, // Length
+    0, // Radius
+    1, // Cap above Lid
+    5, // Switch Height
+    0.5, // Switch travel
+    3, // Pole Diameter
+    undef, // Height to top of PCB
+    yappRectangle,  // Shape
+    0
+  ]
+
+];
+
+
+//========= MAIN CALL's ===========================================================
+
+
+//---- This is where the magic happens ----
+YAPPgenerate();

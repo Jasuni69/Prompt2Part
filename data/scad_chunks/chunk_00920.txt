@@ -1,0 +1,1 @@
+function bearing_dia(type)              = type[2];   //! Outside diameter

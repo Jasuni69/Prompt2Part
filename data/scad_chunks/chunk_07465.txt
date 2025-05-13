@@ -1,0 +1,26 @@
+module Tugel(
+dia=40,
+loch=+24.72,
+scaleKugel=1,
+scaleTorus=1,
+rand,
+name,
+help
+){
+    
+    
+    Halb()scale([1,1,scaleTorus])Torus(dia=dia,d=rand?rand:dia/2-loch/2,name=name);
+    Halb(1)scale([1,1,scaleKugel])Kugelmantel(d=dia,rand=rand?rand:dia/2-loch/2);
+    
+    HelpTxt("Tugel",[
+    "dia",dia,
+    "loch",loch,
+    "scaleKugel",scaleKugel,
+    "scaleTorus",scaleTorus,
+    "rand",rand,
+    "name",name,],help);
+}
+
+
+/// Vorterantrotor creates a rotor for the Vorterant pump
+//Polar(6,10*tan(60),mitte=true,rotE=t0,rot=-t0,dr=-360)Vorterantrotor(caps=1,rund=+1);

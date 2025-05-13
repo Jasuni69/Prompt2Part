@@ -1,0 +1,4 @@
+function calcStackingTranslation(lx,ly,lz,stackingInfo=stackingInfo())=
+                            stackingInfo[2/*$stackSpaceBy*/]
+                            +multV(stackingInfo[0/*stackDirection*/]
+                                    ,[lx,ly,lz]);

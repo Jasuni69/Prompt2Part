@@ -1,0 +1,10 @@
+module skew(p, sxy, sxz, syx, syz, szx, szy, axy, axz, ayx, ayz, azx, azy)
+{
+    req_children($children);          
+    assert(is_undef(p), "Module form `skew()` does not accept p= argument.");
+    mat = skew(
+        sxy=sxy, sxz=sxz, syx=syx, syz=syz, szx=szx, szy=szy,
+        axy=axy, axz=axz, ayx=ayx, ayz=ayz, azx=azx, azy=azy
+    );
+    multmatrix(mat) children();
+}

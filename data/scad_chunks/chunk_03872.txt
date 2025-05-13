@@ -1,0 +1,16 @@
+module bentStripXZ(places=[X(10)],y=$y,thick=3)
+{
+  allPlaces=concat([turnYZ()],placesOnly(places));
+
+  g(Y(-y/2),turnYZ(-90))linear_extrude(y)
+    for(limit=[0:1:(len(allPlaces)-2)])
+    {
+      base =multAll([for(i=[0:1:limit])allPlaces[i]]);
+      hull()
+      two()
+        multmatrix(
+          vals(base,base*allPlaces[limit+1])
+                    * turnYZ(-90))
+        circle(d=thick);
+    }
+}

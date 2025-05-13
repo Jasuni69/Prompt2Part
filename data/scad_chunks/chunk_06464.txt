@@ -1,0 +1,59 @@
+module sp_cap(diam,type,wall,style="L",top_adj=0, bot_adj=0, texture="none", anchor, spin, orient)
+{
+    table = struct_val(_sp_specs,type);
+    dum1=assert(is_def(table),"Unknown SP closure type.  Type must be one of 400, 410, or 415");
+    entry = struct_val(table, diam);
+    dum2=assert(is_def(entry), str("Unknown closure nominal diameter.  Allowed diameters for SP",type,": ",struct_keys(table)))
+         assert(style=="L" || style=="M", "style must be \"L\" or \"M\"");
+
+    T = entry[0];
+    I = entry[1];
+    H = entry[2]-0.5;
+    S = entry[3];
+    tpi = entry[4];
+    a = (style=="M" && tpi==12) ? 1.3 : struct_val(_sp_thread_width,tpi);
+
+    twist = struct_val(_sp_twist, type);
+
+    dum3=assert(top_adj<S+0.75*a, str("The top_adj value is too large so the thread won't fit.  It must be smaller than ",S+0.75*a));
+    oprofile = _sp_thread_profile(tpi,a,S+0.75*a-top_adj,style,flip=true);
+    bounds=pointlist_bounds(oprofile);
+    profile = fwd(-bounds[0].y,yflip(oprofile));
+
+    depth = a/2;
+    taperlen = 2*a;
+    assert(in_list(texture, ["none","knurled","ribbed"]));
+    space=2*depth/10+2*get_slop();
+    attachable(anchor,spin,orient,r= (T+space)/2+wall, l=H-bot_adj+wall){
+        xrot(180)
+        up((H-bot_adj)/2-wall/2){
+            difference(){
+                up(wall){
+                   if (texture=="knurled")
+                        cyl(d=T+space+2*wall,l=H+wall-bot_adj,anchor=TOP,texture="trunc_pyramids", tex_size=[3,3], style="convex");
+                   else if (texture == "ribbed") 
+                        cyl(d=T+space+2*wall,l=H+wall-bot_adj,anchor=TOP,chamfer2=.8,tex_taper=0,texture="trunc_ribs", tex_size=[3,3], style="min_edge");
+                   else
+                        cyl(d=T+space+2*wall,l=H+wall-bot_adj,anchor=TOP,chamfer2=.8);
+                }
+                cyl(d=T+space, l=H-bot_adj+1, anchor=TOP);
+            }
+            thread_helix(d=T+space-.01, profile=profile, pitch = INCH/tpi, turns=twist/360, lead_in=taperlen, anchor=TOP, internal=true);
+        }
+        children();
+    }
+}
+
+
+
+// Function: sp_diameter()
+// Synopsis: Returns the base diameter of an SPI bottle neck from the nominal diameter and type number.
+// Topics: Bottles, Threading
+// See Also: sp_neck(), sp_cap()
+// Usage:
+//   true_diam = sp_diameter(diam,type)
+// Description:
+//   Returns the actual base diameter (root of the threads) for a SPI plastic bottle neck given the nominal diameter and type number (400, 410, 415). 
+// Arguments:
+//   diam = nominal diameter
+//   type = closure type number (400, 410 or 415)

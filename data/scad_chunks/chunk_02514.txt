@@ -1,0 +1,1 @@
+function catenary_ds_by_da(d, a) = 2 * sinh(d / a) - 2 * d / a * cosh(d / a); //! First derivative of the length with respect to `a`.

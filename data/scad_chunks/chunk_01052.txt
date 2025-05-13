@@ -1,0 +1,9 @@
+function screw_shorter_than(x) = x >= 20 ? floor(x / 5) * 5 : //! Returns the length of the longest screw shorter than or equal to x
+                                 x >= 16 ? 16 :
+                                 x >= 12 ? 12 :
+                                 x >= 10 ? 10 :
+                                 x >=  8 ?  8 :
+                                 x >=  6 ?  6 :
+                                 x >=  5 ?  5 :
+                                 x >=  4 ?  4 :
+                                 3;

@@ -1,0 +1,5 @@
+module skipFirst(n=1)
+{
+  if($valPtr>=n)
+		children();
+}

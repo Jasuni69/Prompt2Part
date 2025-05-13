@@ -1,0 +1,15 @@
+function f_floor(a) = f_1arg(function(a) floor(a))(a);
+
+
+// Function: f_round()
+// Synopsis: Returns a function to calculate the integer rounding of a given number.
+// Topics: Function Literals, Math Operators
+// See Also: f_floor(), f_ceil(), f_round()
+// Usage:
+//   fn = f_round();
+//   fn = f_round(a);
+// Description:
+//   A factory that generates function literals based on `round(a)`, where the `a`
+//   argument can optionally be replaced with a constant.
+// Arguments:
+//   a = If given, replaces the argument.

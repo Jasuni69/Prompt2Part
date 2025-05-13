@@ -1,0 +1,1 @@
+function gs_boss_h(type)       = type[12]; //! Boss around the shaft height

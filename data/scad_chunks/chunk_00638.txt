@@ -1,0 +1,1 @@
+function tx_bobbin_width(type)      = type[14]; //! Bobbin width

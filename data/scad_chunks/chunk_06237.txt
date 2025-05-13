@@ -1,0 +1,113 @@
+module cyl(
+    h, r, center,
+    l, r1, r2,
+    d, d1, d2,
+    chamfer, chamfer1, chamfer2,
+    chamfang, chamfang1, chamfang2,
+    rounding, rounding1, rounding2,
+    circum=false, realign=false, shift=[0,0],
+    teardrop=false, clip_angle,
+    from_end, from_end1, from_end2,
+    texture, tex_size=[5,5], tex_reps, tex_counts,
+    tex_inset=false, tex_rot=0,
+    tex_scale, tex_depth, tex_samples, length, height, 
+    tex_taper, style, tex_style,
+    extra, extra1, extra2, 
+    anchor, spin=0, orient=UP
+) {
+    dummy=
+      assert(num_defined([style,tex_style])<2, "In cyl() the 'tex_style' parameters has been replaced by 'style'.  You cannot give both.")
+      assert(num_defined([tex_reps,tex_counts])<2, "In cyl() the 'tex_counts' parameters has been replaced by 'tex_reps'.  You cannot give both.")
+      assert(num_defined([tex_scale,tex_depth])<2, "In cyl() the 'tex_scale' parameter has been replaced by 'tex_depth'.  You cannot give both.");
+    style = is_def(tex_style)? echo("In cyl() the 'tex_style' parameter is deprecated and has been replaced by 'style'")tex_style
+          : default(style,"min_edge");
+    tex_reps = is_def(tex_counts)? echo("In cyl() the 'tex_counts' parameter is deprecated and has been replaced by 'tex_reps'")tex_counts
+             : tex_reps;
+    tex_depth = is_def(tex_scale)? echo("In rotate_sweep() the 'tex_scale' parameter is deprecated and has been replaced by 'tex_depth'")tex_scale
+              : default(tex_depth,1);
+    l = one_defined([l, h, length, height],"l,h,length,height",dflt=1);
+    _r1 = get_radius(r1=r1, r=r, d1=d1, d=d, dflt=1);
+    _r2 = get_radius(r1=r2, r=r, d1=d2, d=d, dflt=1);
+    sides = segs(max(_r1,_r2));
+    sc = circum? 1/cos(180/sides) : 1;
+    r1 = _r1 * sc;
+    r2 = _r2 * sc;
+    anchor = get_anchor(anchor,center,BOT,CENTER);
+    skmat = down(l/2) * skew(sxz=shift.x/l, syz=shift.y/l) * up(l/2);
+    attachable(anchor,spin,orient, r1=r1, r2=r2, l=l, shift=shift) {
+        multmatrix(skmat)
+        zrot(realign? 180/sides : 0) {
+            if (!any_defined([chamfer, chamfer1, chamfer2, rounding, rounding1, rounding2, texture, extra1, extra2, extra])) {
+                cylinder(h=l, r1=r1, r2=r2, center=true, $fn=sides);
+            } else {
+                vnf = cyl(
+                    l=l, r1=r1, r2=r2, center=true, 
+                    chamfer=chamfer, chamfer1=chamfer1, chamfer2=chamfer2,
+                    chamfang=chamfang, chamfang1=chamfang1, chamfang2=chamfang2,
+                    rounding=rounding, rounding1=rounding1, rounding2=rounding2,
+                    from_end=from_end, from_end1=from_end1, from_end2=from_end2,
+                    teardrop=teardrop, clip_angle=clip_angle,
+                    texture=texture, tex_size=tex_size,
+                    tex_reps=tex_reps, tex_depth=tex_depth,
+                    tex_inset=tex_inset, tex_rot=tex_rot,
+                    style=style, tex_taper=tex_taper,
+                    tex_samples=tex_samples,
+                    extra1=extra1,extra2=extra2,extra=extra 
+                );
+                vnf_polyhedron(vnf, convexity=texture!=undef? 2 : 10);
+            }
+        }
+        children();
+    }
+}
+
+
+
+// Module: xcyl()
+// Synopsis: creates a cylinder oriented along the X axis.
+// SynTags: Geom
+// Topics: Cylinders, Textures, Rounding, Chamfers
+// See Also: texture(), rotate_sweep(), cyl()
+// Description:
+//   Creates an attachable cylinder with roundovers and chamfering oriented along the X axis.
+//
+// Usage: Typical
+//   xcyl(l|h|length|height, r|d=, [anchor=], ...) [ATTACHMENTS];
+//   xcyl(l|h|length|height, r1=|d1=, r2=|d2=, [anchor=], ...) [ATTACHMENTS];
+//
+// Arguments:
+//   l / h / length / height = Length of cylinder along oriented axis. Default: 1
+//   r = Radius of cylinder.  Default: 1
+//   ---
+//   r1 = Optional radius of left (X-) end of cylinder.
+//   r2 = Optional radius of right (X+) end of cylinder.
+//   d = Optional diameter of cylinder. (use instead of `r`)
+//   d1 = Optional diameter of left (X-) end of cylinder.
+//   d2 = Optional diameter of right (X+) end of cylinder.
+//   circum = If true, cylinder should circumscribe the circle of the given size.  Otherwise inscribes.  Default: `false`
+//   chamfer = The size of the chamfers on the ends of the cylinder.  Default: none.
+//   chamfer1 = The size of the chamfer on the left end of the cylinder.  Default: none.
+//   chamfer2 = The size of the chamfer on the right end of the cylinder.  Default: none.
+//   chamfang = The angle in degrees of the chamfers on the ends of the cylinder.
+//   chamfang1 = The angle in degrees of the chamfer on the left end of the cylinder.
+//   chamfang2 = The angle in degrees of the chamfer on the right end of the cylinder.
+//   from_end = If true, chamfer is measured from the end of the cylinder, instead of inset from the edge.  Default: `false`.
+//   rounding = The radius of the rounding on the ends of the cylinder.  Default: none.
+//   rounding1 = The radius of the rounding on the left end of the cylinder.
+//   rounding2 = The radius of the rounding on the right end of the cylinder.
+//   realign = If true, rotate the cylinder by half the angle of one face.
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//
+// Example: By Radius
+//   ydistribute(50) {
+//       xcyl(l=35, r=10);
+//       xcyl(l=35, r1=15, r2=5);
+//   }
+//
+// Example: By Diameter
+//   ydistribute(50) {
+//       xcyl(l=35, d=20);
+//       xcyl(l=35, d1=30, d2=10);
+//   }

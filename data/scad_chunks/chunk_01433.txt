@@ -1,0 +1,1 @@
+function ringterm_thickness(type)    = type[6];    //! Metal thickness

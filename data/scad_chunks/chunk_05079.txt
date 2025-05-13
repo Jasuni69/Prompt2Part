@@ -1,0 +1,3 @@
+function _mb_ring_full(point, rmaj, rmin, cutoff, ex, neg) =
+    let(dist = abs(norm([point.x,point.y])-rmaj))
+        neg * mb_cutoff(dist, cutoff) * (rmin/dist)^ex;

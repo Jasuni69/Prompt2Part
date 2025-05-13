@@ -1,0 +1,6 @@
+function delBadTriangles(d, badTriangles, _indices_hash) = 
+	[
+		delaunay_coords(d), 
+		hashmap_dels(delaunay_triangles(d), badTriangles, _indices_hash), 
+		hashmap_dels(delaunay_circles(d), badTriangles, _indices_hash)
+	];

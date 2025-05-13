@@ -1,0 +1,4 @@
+module test_array_shortest() {
+	assert(array_shortest(["foobar", "bazquxx", "abcd"]) == 4);
+}
+test_array_shortest();

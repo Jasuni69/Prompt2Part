@@ -1,0 +1,1 @@
+function bulldog_handle_length(type) = type[7]; //! Length that the handle protrudes from the back

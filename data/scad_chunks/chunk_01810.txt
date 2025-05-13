@@ -1,0 +1,1 @@
+function battery_pos_dia(type)       = type[5]; //! Positive terminal diameter

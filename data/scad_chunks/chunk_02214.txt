@@ -1,0 +1,7 @@
+module hinge_both(type) { //! Both parts together for printing
+    hinge_male(type);
+
+    translate([0, -hinge_knuckle_dia(type)])
+        rotate(180)
+             hinge_female(type);
+}

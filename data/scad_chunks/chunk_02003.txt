@@ -1,0 +1,1 @@
+function drag_chain_screw_lists(type) = type[9]; //! Two lists of four bools to say which screws positions are used

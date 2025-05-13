@@ -1,0 +1,9 @@
+module bearing_blocks() {
+    scs_bearing_blocks();
+
+    translate([190, 0])
+        sbr_bearing_blocks();
+}
+
+if($preview)
+    bearing_blocks();

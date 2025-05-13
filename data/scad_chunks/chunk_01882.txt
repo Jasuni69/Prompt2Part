@@ -1,0 +1,1 @@
+function cable_width(cable)  = cable_bundle(cable).x; //! Width in flat clip

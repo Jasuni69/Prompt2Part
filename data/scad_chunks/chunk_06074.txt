@@ -1,0 +1,30 @@
+function region_parts(region) =
+   let(
+       region = force_region(region)
+   )
+   assert(is_region(region), "\nInput is not a region.")
+   let(
+       inside = [for(i=idx(region))
+                    let(pt = mean([region[i][0], region[i][1]]))
+                    [for(j=idx(region))  i==j ? 0
+                                       : point_in_polygon(pt,region[j]) >=0 ? 1 : 0]
+                ],
+       level = inside*repeat(1,len(region))
+   )
+   [ for(i=idx(region))
+      if(level[i]%2==0)
+         let(
+             possible_children = search([level[i]+1],level,0)[0],
+             keep=search([1], select(inside,possible_children), 0, i)[0]
+         )
+         [
+           clockwise_polygon(region[i]),
+           for(good=keep)
+              ccw_polygon(region[possible_children[good]])
+         ]
+    ];
+
+
+
+
+// Section: Offset and 2D Boolean Set Operations

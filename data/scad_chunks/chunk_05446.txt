@@ -1,0 +1,29 @@
+function desc_dist(desc1,anchor1=CENTER, desc2, anchor2=CENTER)=
+   assert(is_description(desc1),"Invalid description: desc1")
+   assert(is_description(desc2),"Invalid description: desc2")
+   let(
+         anch1 = _find_anchor(anchor1, desc1[1]),
+         anch2 = _find_anchor(anchor2, desc2[1]),         
+         Tinv = matrix_inverse($transform),
+         T1 = Tinv*desc1[0],
+         T2 = Tinv*desc2[0],
+         pt1 = apply(T1,anch1[1]),
+         pt2 = apply(T2,anch2[1])
+    )
+    norm(pt1-pt2);
+
+// Function: transform_desc()
+// Synopsis: Applies a transformation matrix to a description
+// Topics: Descriptions, Attachments
+// See Also: parent()
+// Usage:
+//   new_desc = transform_desc(T, desc);
+// Description:
+//   Applies a transformation matrix to a description, producing a new transformed description as
+//   output.  The transformation matrix can be produced using any of the usual transform commands.
+//   The resulting description is as if it was produced from an object that had the transformation
+//   applied.  You can also give a list of transformation matrices, in which case the output is
+//   a list of descriptions.  
+// Arguments:
+//   T = transformation or list of transformations to apply (a 4x4 matrix or list of them)
+//   desc = description to transform

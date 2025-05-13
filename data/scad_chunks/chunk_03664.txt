@@ -1,0 +1,7 @@
+function reverse(list) = [for (i = [len(list)-1:-1:0]) list[i]];
+
+/*!
+  Extracts a subarray from index begin (inclusive) to end (exclusive)
+  FIXME: Change name to use list instead of array?
+  subarray([1,2,3,4], 1, 2) => [2,3]
+*/

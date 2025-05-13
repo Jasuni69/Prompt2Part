@@ -1,0 +1,15 @@
+module tray_scoop(dimensions, dividers_height, thickness=2, curved=true,
+                  dividers_thickness=undef, top_bevel_radius=undef) {
+
+	    // Main external box dimensions.
+	    ext_width  = dimensions[0];
+	    ext_length = dimensions[1];
+	    ext_height = dimensions[2];
+	    int_width  = ext_width - 2*thickness;
+	    int_length  = ext_length - 2*thickness;
+	    translate([thickness, thickness, dividers_height])
+		    	_tray_rounded_cube([int_width, int_length, 2*(ext_height-dividers_height)],
+		                     r=(top_bevel_radius != undef ? top_bevel_radius : (curved ? thickness : 0)), x=true, y=true, z=true);
+}
+
+// Draws a single tray.

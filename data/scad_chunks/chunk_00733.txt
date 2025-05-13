@@ -1,0 +1,22 @@
+module pi_pcb(type) { //! Draw the support PCB
+    pcb = pi_pcb(type);
+    color(pcb[6]) {
+        translate([0, 0, -pcb[2]]) {
+            linear_extrude(pcb[2]) {
+                difference() {
+                    rounded_polygon([[0, -(pi_base_length(type) - pi_base_width(type)) / 2, -pi_base_width(type) / 2],
+                                     [pi_base_width(type) / 2, -pcb[1]/2, eps],
+                                     [pcb[0]+1, -pcb[1]/2, eps],
+                                     [pcb[0]+1, pcb[1]/2, eps],
+                                     [pi_base_width(type) / 2, pcb[1]/2, eps],
+                                     [0, (pi_base_length(type) - pi_base_width(type)) / 2, -pi_base_width(type) / 2]
+                                     ]);
+                    pi_pcb_hole_locations(pcb)
+                        circle(d = pcb[8]);
+                    pi_hole_locations(type)
+                        circle(d=pi_hole_diameter(type));
+                }
+            }
+        }
+    }
+}

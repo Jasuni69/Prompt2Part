@@ -1,0 +1,5 @@
+module hullIf(case=false)
+{
+  if(case)hull()children();
+  else children();
+}

@@ -1,0 +1,31 @@
+module camera_bracket(cam) { //! Make the STL for the camera bracket
+    t = bracket_thickness(cam);
+    z = hinge_z(cam);
+
+    stl(str("camera_bracket_", cam[0])) union() {
+        translate([hinge_h / 2, 0])
+            difference() {
+                hull() {
+                    translate_z(eps / 2)
+                        cube([hinge_h, 2 * hinge_r, eps], center = true);
+
+                    translate_z(z)
+                        rotate([0, 90, 0])
+                            cylinder(r = hinge_r, h = hinge_h, center = true);
+                }
+                translate([hinge_h / 2, 0, z])
+                    rotate([90, 0, 90])
+                        nut_trap(hinge_screw, screw_nut(hinge_screw), horizontal = true);
+            }
+
+        linear_extrude(t)
+            difference() {
+                hull()
+                    camera_bracket_screw_positions(cam)
+                        circle(washer_radius(screw_washer(bracket_screw)) + 0.5);
+
+                camera_bracket_screw_positions(cam)
+                    poly_circle(screw_clearance_radius(bracket_screw));
+            }
+    }
+}

@@ -1,0 +1,3 @@
+function _all_func(l, func, i=0, out=true) =
+    i >= len(l) || !out? out :
+    _all_func(l, func, i=i+1, out=out && func(l[i]));

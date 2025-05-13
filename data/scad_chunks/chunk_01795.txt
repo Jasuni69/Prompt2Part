@@ -1,0 +1,40 @@
+module dip(n, part, size, w, pitch, pin) { //! Draw DIP package
+    D = [3, 0.6];
+
+    translate_z(pdip_pin_s(pin)) {
+        color(grey(20)) {
+            rotate([90, 0, 0])
+                linear_extrude(size.x, center = true)
+                    difference() {
+                        hull() {
+                            square([size.y, pdip_pin_t(pin)], center = true);
+
+                            square([size.y - 1, size.z], center = true);
+                        }
+                        square([D.x + 1, size.z + 1], center = true);
+                    }
+
+            translate_z(-D.y / 2)
+                cube([D.x + 1 + eps, size.x, size.z - D.y], center = true);
+
+            linear_extrude(size.z / 2)
+                difference() {
+                    square([D.x + 1 + eps, size.x], center = true);
+
+                    translate([0, size.x / 2])
+                        circle(d = D.x);
+                }
+        }
+
+        color("white")
+            translate([0, -D.x / 4, size.z / 2])
+                rotate(-90)
+                    linear_extrude(eps)
+                        resize([(size.x - D.x / 2) * 0.75, size.y / 3])
+                            text(part, halign = "center", valign = "center");
+    }
+
+    l = size.x / 2 - pdip_pin_W(pin) / 2;
+    dil_pin_positions(n, w, pitch)
+        pdip_pin(pin, w / 2, $side * (abs($x) > l ? sign($x) : 0));
+}

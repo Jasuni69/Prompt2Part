@@ -1,0 +1,30 @@
+module Achshalter
+(
+laenge=30,
+achse=+5,
+schraube=3,
+mutter=5.5,
+schraubenabstand=15,
+hoehe=8,
+fn=fn,
+help
+){
+HelpTxt("Achshalter",["laenge",laenge,"achse",achse,"schraube",schraube,"mutter",mutter,"schraubenabstand",schraubenabstand,"hoehe",hoehe,"fn",fn],help);
+difference()
+{
+    union()
+    {
+        minkowski()
+        {
+        T(-8+laenge/2-achse/2)cube([laenge+16+achse-schraube,achse+0,hoehe-1],center=true);
+            cylinder(1,d=schraube,$fn=fn,center=true);
+        }
+        cylinder(hoehe,d=achse+10,$fn=fn,center=true);
+    }
+    T(0)cube([15+achse+schraubenabstand,2,hoehe+1],center=true);//Schlitz
+    cylinder(50,d=achse,center=true,$fn=fn);//Motorachse
+    R(90)T(z=-10)Twins(20,l=schraubenabstand+achse,d=schraube+2*spiel,center=1);//Schraubenlöcher
+    T(-(schraubenabstand+achse)/2,-achse/2)Linear(s=schraubenabstand+achse)R(90)cylinder(5,d=Umkreis(6,mutter+spiel*2),$fn=6);
+    //Inkreis(d=mutter+spiel*2);} depreciated
+}
+}

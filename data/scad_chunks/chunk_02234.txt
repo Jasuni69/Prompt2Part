@@ -1,0 +1,1 @@
+function cam_front_clearance(cam) = round_to_layer(camera_connector_size(cam).z + clearance);

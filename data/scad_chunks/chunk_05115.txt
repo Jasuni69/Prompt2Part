@@ -1,0 +1,29 @@
+function list_bset(indexset, valuelist, dflt=0) =
+    assert(is_list(indexset), "The index set is not a list." )
+    assert(is_list(valuelist), "The `valuelist` is not a list." )
+    let( trueind = search([true], indexset,0)[0] )
+    assert( !(len(trueind)>len(valuelist)), str("List `valuelist` too short; its length should be ",len(trueind)) )
+    assert( !(len(trueind)<len(valuelist)), str("List `valuelist` too long; its length should be ",len(trueind)) )
+    concat(
+        list_set([],trueind, valuelist, dflt=dflt),    // Fill in all of the values
+        repeat(dflt,len(indexset)-max(trueind)-1)  // Add trailing values so length matches indexset
+    );
+
+
+
+// Function: list()
+// Synopsis: Expands a range into a full list.
+// Topics: List Handling, Type Conversion
+// See Also: scalar_vec3(), force_list()
+// Usage:
+//   list = list(l)
+// Description:
+//   Expands a range into a full list.  If given a list, returns it verbatim.
+//   If given a string, explodes it into a list of single letters.
+// Arguments:
+//   l = The value to expand.
+// Example:
+//   l1 = list([3:2:9]);  // Returns: [3,5,7,9]
+//   l2 = list([3,4,5]);  // Returns: [3,4,5]
+//   l3 = list("Foo");    // Returns: ["F","o","o"]
+//   l4 = list(23);       // Returns: [23]

@@ -1,0 +1,6 @@
+function _combine_complex(data) =
+    is_vector(data,2) ? data
+    : is_num(data[0][0]) ? [for(i=[0:len(data[0])-1]) [data[0][i],data[1][i]]]
+    : [for(i=[0:1:len(data[0])-1])
+          [for(j=[0:1:len(data[0][0])-1])  
+              [data[0][i][j], data[1][i][j]]]];

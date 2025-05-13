@@ -1,0 +1,47 @@
+module belt(type, points, belt_colour = grey(20), tooth_colour = grey(50), open = false, twist = undef, auto_twist = false, start_twist = false) { //! Draw a belt path given a set of points and pitch radii where the pulleys are. Closed loop unless open is specified
+    width = belt_width(type);
+    pitch = belt_pitch(type);
+    thickness = belt_thickness(type);
+
+    info = _belt_points_info(type, points, open, twist, auto_twist, start_twist);
+    dotwist = info[0]; // array of booleans, true if a twist happen after the position
+    twisted = info[1]; // array of booleans, true if the belt is twisted at the position
+    pointsx = info[2]; // array of [x,y,r], r is negative if left-angle (points may have pulleys as third element, but pointsx have radii)
+    tangents = info[3];
+    arcs = info[4];
+    length = ceil(_belt_length(info, open) / pitch) * pitch;
+
+    part = type[0];
+    vitamin(str("belt(", no_point(part), "x", width, ", ", pointsx, "): Belt ", part," x ", width, "mm x ", length, "mm"));
+
+    len = len(points);
+
+    th = belt_tooth_height(type);
+    ph = belt_pitch_height(type);
+    module beltp() translate([ph - th, -width / 2]) square([th, width]);
+    module beltb() translate([ph - thickness, -width / 2]) square([thickness - th, width]);
+
+    for (i = [0 : len - (open ? 2 : 1)]) {
+        p1 = tangents[i].x;
+        p2 = tangents[i].y;
+        v = p2-p1;
+        a =  atan(v.y / v.x) - (v.x < 0 ? 180 : 0); //a2(p2-p1);
+        l = norm(v);
+        translate(p1) rotate([-90, 0, a - 90]) {
+            twist = dotwist[i] ? 180 : 0;
+            mirrored = twisted[i] ? 1 : 0;
+            color(tooth_colour) linear_extrude(l, twist = twist) mirror([mirrored, 0, 0]) beltp();
+            color(belt_colour)  linear_extrude(l, twist = twist) mirror([mirrored, 0, 0]) beltb();
+        }
+    }
+
+    for (i = [(open ? 1 : 0) : len - (open ? 2 : 1)]) {
+        p = pointsx[i];
+        arc = arcs[i];
+        translate([p.x, p.y]) rotate([0, 0, arc[1]]) {
+            mirrored = xor(twisted[i], p[2] < 0) ? 0 : 1;
+            color(tooth_colour) rotate_extrude(angle = arc[0]) translate([abs(p[2]), 0, 0]) mirror([mirrored, 0, 0]) beltp();
+            color(belt_colour)  rotate_extrude(angle = arc[0]) translate([abs(p[2]), 0, 0]) mirror([mirrored, 0, 0]) beltb();
+        }
+    }
+}

@@ -1,0 +1,10 @@
+module xscale(x=1, p, cp=0) {
+    req_children($children);      
+    assert(is_undef(p), "Module form `xscale()` does not accept p= argument.");
+    cp = is_num(cp)? [cp,0,0] : cp;
+    if (cp == [0,0,0]) {
+        scale([x,1,1]) children();
+    } else {
+        translate(cp) scale([x,1,1]) translate(-cp) children();
+    }
+}

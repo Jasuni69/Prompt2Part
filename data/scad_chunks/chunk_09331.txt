@@ -1,0 +1,12 @@
+module wheel() {
+    color("DimGray")
+        rotate_extrude()
+            translate([15, 0])
+                offset(2)
+                    square([3, 12], center = true);
+    color("Silver")
+        for (a = [0:20:179])
+            rotate([90, 0, a])
+                scale([0.2, 1, 1])
+                    cylinder(r = 4, h = 30, center = true);
+}

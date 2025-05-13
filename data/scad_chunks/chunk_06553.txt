@@ -1,0 +1,18 @@
+function u_mul(a,b) =
+    is_undef(a) || is_undef(b)? undef :
+    is_vector(a) && is_vector(b)? v_mul(a,b) :
+    a * b;
+
+
+// Function: u_div()
+// Synopsis: Returns the quotient of 2 numbers if both are defined, otherwise returns undef.
+// Topics: Undef Handling
+// See Also: u_add(), u_sub(), u_mul()
+// Usage:
+//   x = u_div(a, b);
+// Description:
+//   Divides `a` by `b`, returning the result, or undef if either value is `undef`.
+//   This emulates the way undefs used to be handled in versions of OpenSCAD before 2020.
+// Arguments:
+//   a = First value.
+//   b = Second value.

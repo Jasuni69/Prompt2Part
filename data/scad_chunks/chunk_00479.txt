@@ -1,0 +1,1 @@
+function iec_body_w2(type)  = type[5];  //! Body width at the narrow part

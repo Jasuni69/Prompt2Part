@@ -1,0 +1,25 @@
+module Stabhalter (l=10,d=3.5)// Replaced with Ring(cd=-1,rand(n(1.5)),durchmesser=In6eck(3.1),fn=6)
+{
+    
+    
+    
+    translate([+0.0,0,2.165])difference()
+    {
+        rotate ([0,90,0])rotate ([0,0,30]) cylinder(l,d=d+n(3),$fn=6);
+        translate([+0.5,0,0])rotate ([0,90,0])rotate ([0,0,30]) cylinder(l+5,d=d,$fn=6);
+    }
+    
+    echo("Removed!  Verschoben wegen nozzle∅! Use T(z=3.1/2)R(0,90)Inkreis(d=3.1) or Ring(cd=-1,rand(n(1.5)),durchmesser=In6eck(3.1),fn=6)");
+}
+
+
+/** \name Halbrund \page Products
+Halbrund() removes a flat circle from a children
+\param h height (h=0 ↦ 2D polygon)
+\param d diameter
+\param d2 flat diameter (x can be used instead)
+\param x the flat reduction optional to calc ↦ d2
+\param doppel makes it doubble side flat
+*/
+
+//Halbrund(help=1);

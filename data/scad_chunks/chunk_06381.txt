@@ -1,0 +1,31 @@
+function plane_intersection(plane1,plane2,plane3) =
+    assert( _valid_plane(plane1) && _valid_plane(plane2) && (is_undef(plane3) ||_valid_plane(plane3)),
+                "\nThe input must be 2 or 3 planes." )
+    is_def(plane3)
+      ? let(
+            matrix = [for(p=[plane1,plane2,plane3]) point3d(p)],
+            rhs = [for(p=[plane1,plane2,plane3]) p[3]]
+        )
+        linear_solve(matrix,rhs)
+      : let( normal = cross(plane_normal(plane1), plane_normal(plane2)) )
+        approx(norm(normal),0) ? undef :
+        let(
+            matrix = [for(p=[plane1,plane2]) point3d(p)],
+            rhs = [plane1[3], plane2[3]],
+            point = linear_solve(matrix,rhs)
+        )
+        point==[]? undef:
+        [point, point+normal];
+
+
+
+// Function: plane_line_angle()
+// Synopsis: Returns the angle between a plane and a 3d line. 
+// Topics: Geometry, Planes, Lines, Angle
+// See Also: plane3pt(), plane_from_normal(), plane_from_points(), plane_from_polygon(), plane_intersection(), line_intersection(), vector_angle()
+// Usage:
+//   angle = plane_line_angle(plane,line);
+// Description:
+//   Compute the angle between a plane [A, B, C, D] and a 3d line, specified as a pair of 3d points [p1,p2].
+//   The resulting angle is signed, with the sign positive if the vector p2-p1 lies above the plane, on
+//   the same side of the plane as the plane's normal vector.

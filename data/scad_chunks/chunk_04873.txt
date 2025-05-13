@@ -1,0 +1,7 @@
+module pb_draw(){
+    data1 = [$pb_pts, concat($pb_post, [[4,len($pb_pts)-1]])];
+    points1 = pb_postProcessPathLists([data1]);
+    polygon(points1[0]);
+    //if (pb_do_render($children, parent_module(0))) pb_draw();
+    children();      
+}

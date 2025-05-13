@@ -1,0 +1,12 @@
+module aluProExtrusion(profileType, l, detailed) {
+	render()
+	    translate([0,0,center?-l/2:0]) 
+		linear_extrude(height=l)
+		aluProSection(profileType, detailed=detailed);
+}
+
+
+
+// utility functions to generate common profiles with gussets
+// set gusset array values to 1 to indicate where a gusset should be present
+// numbering is anticlockwise from y+

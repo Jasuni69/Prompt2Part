@@ -1,0 +1,24 @@
+function getVector(identifier, setArray) = 
+  ( setArray[0][0] == identifier) ? setArray[0][1] : 
+  ( setArray[1][0] == identifier) ? setArray[1][1] : 
+  ( setArray[2][0] == identifier) ? setArray[2][1] : 
+  ( setArray[3][0] == identifier) ? setArray[3][1] : 
+  ( setArray[4][0] == identifier) ? setArray[4][1] : 
+  ( setArray[5][0] == identifier) ? setArray[5][1] : 
+  ( setArray[6][0] == identifier) ? setArray[6][1] : 
+  ( setArray[7][0] == identifier) ? setArray[7][1] : 
+  ( setArray[8][0] == identifier) ? setArray[8][1] : 
+  ( setArray[9][0] == identifier) ? setArray[9][1] : 
+  ( setArray[10][0] == identifier) ? setArray[10][1] : 
+  ( setArray[11][0] == identifier) ? setArray[11][1] : 
+  ( setArray[12][0] == identifier) ? setArray[12][1] : 
+  ( setArray[13][0] == identifier) ? setArray[13][1] : 
+  ( setArray[14][0] == identifier) ? setArray[14][1] : 
+  ( setArray[15][0] == identifier) ? setArray[15][1] : 
+  ( setArray[16][0] == identifier) ? setArray[16][1] : 
+  ( setArray[17][0] == identifier) ? setArray[17][1] : 
+  ( setArray[18][0] == identifier) ? setArray[18][1] : 
+  ( setArray[19][0] == identifier) ? setArray[19][1] : false ;
+  
+  
+// Return vector that starts with Identifier

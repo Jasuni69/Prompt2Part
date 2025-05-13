@@ -1,0 +1,2 @@
+module face_plate(type)
+    rounded_square([mains_socket_width(type), mains_socket_depth(type)], mains_socket_corner(type));

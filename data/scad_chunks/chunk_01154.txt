@@ -1,0 +1,1 @@
+function BLDC_base_hole_diameter(type)          = type[10]; //! Base hole diameter

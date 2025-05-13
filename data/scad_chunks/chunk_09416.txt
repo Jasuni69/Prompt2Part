@@ -1,0 +1,8 @@
+function point3d(p) = [for (i=[0:2]) (p[i]==undef)? 0 : p[i]];
+
+
+// Function: path3d()
+// Description:
+//   Returns a list of 3D vectors/points from a list of 2D or 3D vectors/points.
+// Arguments:
+//   points = A list of 2D or 3D points/vectors.

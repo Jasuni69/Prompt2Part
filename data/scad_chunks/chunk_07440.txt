@@ -1,0 +1,40 @@
+module Bayonet(d=20,l=8,h=15,lock=-0.5,e=3,nibH=1,nibR=[.5,.35],nibMitte=.25,spiel=spiel,lap=.25,invert=0,part=0,fs=fs,pos=0,name,help){
+pos=bool(pos,false);
+lock2=.2; // radial lock
+lock=is_list(lock)?lock:[lock,lock2];
+spielR=spiel; // radius change to add clearance for outer ring
+
+l=is_list(l)?l:l*[0.7,.3];
+fn=ceil(vSum(l)/fs);
+r=d/2+(invert?0:spielR);
+step=assert(is_num(d),"Bayonet d not a number!")l*gradB(b=1,r=r)/fn;
+ifn=[floor(fn/2),ceil(fn/2)];
+// for flat on round error
+adj=-d/2+distS(s=vSum(nibR)*2,r=d/2);
+endPosZ=-spiel;//lock pos lower 0
+
+deg=[atan2(-lock[0],l[0]),atan2(lock[0],l[1])]*(invert?-1:1);// profile angle
+lockWinkel=-vSum(vMult(ifn,step));
+eINPUT=e;
+
+e=min(e,floor(360/(-lockWinkel+ gradB(b=nibMitte+ vSum(nibR) + nibH*tan(60)*2, r=r)/2) ) );
+
+InfoTxt("Bayonet",["elements",e,"lockWinkel",lockWinkel],name);
+Echo(str(name," Bayonet e= ",eINPUT," to high - limited to ",e),color="warning",condition=eINPUT>e);
+
+//nib
+  if(part==0)color("gold")Polar(e,d/2+(invert?spielR+adj*0: adj),rot=pos?lockWinkel*sign(pos):0,name=false)rotate([0,invert?-90:90])rotate_extrude()SWelle(nibR,h=nibH,deg=60,lap=[0,lap],ext=nibMitte/2);
+//groove
+  if(part==1)color("steelblue"){
+    Polar(e,rot=pos?-lockWinkel*sign(pos):0,name=false){
+      rotate([0,0,invert?180:0]){
+        rotate([90,0])PolyH(points,loop=len(profilP()),flip=invert?false:true);
+        translate([invert?-adj:adj,0,l[0]?0:lock[0]])linear_extrude(h,convexity=5)polygon(profilP(z=undef));
+      }
+      
+      translate([(invert?d/2:d/2+spielR)+adj,0,l[0]?0:lock[0]])rotate([0,90,invert?180:0])rotate_extrude()SWelle(nibR+[spiel,-spiel],h=nibH,deg=60,ext=nibMitte/2);
+//LockPos
+      rotate([0,0,lockWinkel])translate([(invert?d/2:d/2+spielR+adj),0,endPosZ])rotate([0,90,invert?180:0])rotate_extrude()SWelle(nibR+[spiel,-spiel]*.5,h=nibH-spiel/2,deg=60,ext=nibMitte/2);
+      
+    }
+  }

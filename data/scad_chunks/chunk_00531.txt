@@ -1,0 +1,1 @@
+function pillar_chamfered(type)  = type[12];    //! True if pillar is chamfered

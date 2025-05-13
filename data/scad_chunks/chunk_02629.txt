@@ -1,0 +1,1 @@
+function inch(x) = x * 25.4;                                                        //! Inch to mm conversion (For fractional inches, 'inch(1 + 7/8)' will work as expected.)

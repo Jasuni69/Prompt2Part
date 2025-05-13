@@ -1,0 +1,5 @@
+module test_xval() {
+    assert_equal(str(xval(function (a) a)), "function(a, b) target_func(b)");
+    assert_equal(xval(function (a) a)(3,5), 5);
+}
+test_xval();

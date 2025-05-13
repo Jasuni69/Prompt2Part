@@ -1,0 +1,20 @@
+module orient_cube(ang) {
+    color("lightgray") cube(20, center=true);
+    color(axiscolors.x) up  ((20-1)/2+0.01) back ((20-1)/2+0.01) cube([18,1,1], center=true);
+    color(axiscolors.y) up  ((20-1)/2+0.01) right((20-1)/2+0.01) cube([1,18,1], center=true);
+    color(axiscolors.z) back((20-1)/2+0.01) right((20-1)/2+0.01) cube([1,1,18], center=true);
+    for (axis=[0:2], neg=[0:1]) {
+        idx = axis + 3*neg;
+        labels = [
+            "RIGHT",  "BACK",    "UP",
+            "LEFT",   "FWD",     "DOWN"
+        ];
+        rot(ang, from=UP, to=orientations[idx]) {
+            up(10) {
+                back(4) color("black") text3d(text=str("spin=",ang), size=2.5);
+                fwd(2) color(axiscolors[axis]) text3d(text="orient=", size=2.5);
+                fwd(6) color(axiscolors[axis]) text3d(text=labels[idx], size=2.5);
+            }
+        }
+    }
+}

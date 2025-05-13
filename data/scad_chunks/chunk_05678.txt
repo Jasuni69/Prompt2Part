@@ -1,0 +1,57 @@
+module pentagon(r, d, or, od, ir, id, side, rounding=0, realign=false, align_tip, align_side, anchor=CENTER, spin=0)
+    regular_ngon(n=5, r=r, d=d, or=or, od=od, ir=ir, id=id, side=side, rounding=rounding, realign=realign, align_tip=align_tip, align_side=align_side, anchor=anchor, spin=spin) children();
+
+
+// Function&Module: hexagon()
+// Synopsis: Creates a regular hexagon.
+// SynTags: Geom, Path
+// Topics: Shapes (2D), Paths (2D), Path Generators, Attachable
+// See Also: circle(), regular_ngon(), pentagon(), octagon(), ellipse(), star()
+// Usage: As Module
+//   hexagon(r/or, [realign=], <align_tip=|align_side=>, [rounding=], ...) [ATTACHMENTS];
+//   hexagon(d=/od=, ...) [ATTACHMENTS];
+//   hexagon(ir=/id=, ...) [ATTACHMENTS];
+//   hexagon(side=, ...) [ATTACHMENTS];
+// Usage: As Function
+//   path = hexagon(...);
+// Description:
+//   When called as a function, returns a 2D path for a regular hexagon.
+//   When called as a module, creates a 2D regular hexagon.
+// Arguments:
+//   r/or = Outside radius, at points.
+//   ---
+//   d/od = Outside diameter, at points.
+//   ir = Inside radius, at center of sides.
+//   id = Inside diameter, at center of sides.
+//   side = Length of each side.
+//   rounding = Radius of rounding for the tips of the polygon.  Default: 0 (no rounding)
+//   realign = If false, vertex 0 will lie on the X+ axis.  If true then the midpoint of the last edge will lie on the X+ axis, and vertex 0 will be below the X axis.    Default: false
+//   align_tip = If given as a 2D vector, rotates the whole shape so that the first vertex points in that direction.  This occurs before spin.
+//   align_side = If given as a 2D vector, rotates the whole shape so that the normal of side0 points in that direction.  This occurs before spin.
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+// Named Anchors:
+//   "tip0" ... "tip5" = Each tip has an anchor, pointing outwards.
+//   "side0" ... "side5" = The center of each side has an anchor, pointing outwards.
+// Example(2D): by Outer Size
+//   hexagon(or=30);
+//   hexagon(od=60);
+// Example(2D): by Inner Size
+//   hexagon(ir=30);
+//   hexagon(id=60);
+// Example(2D): by Side Length
+//   hexagon(side=20);
+// Example(2D): Realigned
+//   hexagon(side=20, realign=true);
+// Example(2D): Alignment by Tip
+//   hexagon(r=30, align_tip=BACK+RIGHT)
+//       attach("tip0", FWD) color("blue")
+//           stroke([[0,0],[0,7]], endcap2="arrow2");
+// Example(2D): Alignment by Side
+//   hexagon(r=30, align_side=BACK+RIGHT)
+//       attach("side0", FWD) color("blue")
+//           stroke([[0,0],[0,7]], endcap2="arrow2");
+// Example(2D): Rounded
+//   hexagon(od=100, rounding=20, $fn=20);
+// Example(2D): Called as Function
+//   stroke(closed=true, hexagon(or=30));

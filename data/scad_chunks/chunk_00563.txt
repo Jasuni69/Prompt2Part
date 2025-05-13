@@ -1,0 +1,1 @@
+function spring_od(type)     = type[1]; //! Outside diameter

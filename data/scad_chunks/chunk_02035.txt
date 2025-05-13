@@ -1,0 +1,1 @@
+function door_hinge_stat_screw() = stat_screw;              //! Screw use to fasten the stationary part

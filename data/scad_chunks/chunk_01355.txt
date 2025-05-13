@@ -1,0 +1,2 @@
+function TO220_lead_pos(i, l) =  //! Position of ith lead end when length = l
+    [i * inch(0.1), -TO220_size().y + TO220_hole_y - l, 1.9];

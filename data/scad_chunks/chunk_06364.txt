@@ -1,0 +1,43 @@
+function line_closest_point(line, pt, bounded=false) =
+    assert(_valid_line(line), "\nInvalid line.")
+    assert(is_vector(pt, len(line[0])), "\nInvalid point or incompatible dimensions.")
+    assert(is_bool(bounded) || is_bool_list(bounded,2), "\nInvalid value for \"bounded\".")
+    let(
+        bounded = force_list(bounded,2)
+    )
+    bounded==[false,false] ?
+          let( n = unit( line[0]- line[1]) )
+          line[1] + ((pt- line[1]) * n) * n
+    : bounded == [true,true] ?
+          pt + _closest_s1([line[0]-pt, line[1]-pt])[0]
+    : 
+          let(
+               ray = bounded==[true,false] ? line : reverse(line),
+               seglen = norm(ray[1]-ray[0]),
+               segvec = (ray[1]-ray[0])/seglen,
+               projection = (pt-ray[0]) * segvec
+          )
+          projection<=0 ? ray[0] :
+                          ray[0] + projection*segvec;
+            
+
+// Function: line_from_points()
+// Synopsis: Given a list of collinear points, return the line they define. 
+// Topics: Geometry, Lines, Points
+// Usage:
+//   line = line_from_points(points, [check_collinear], [eps]);
+// Description:
+//   Given a list of 2 or more collinear points, returns two points defining a line containing them.
+//   If `check_collinear=true` a line is returned if the points are collinear; otherwise `undef` is returned.
+//   if `check_collinear=false`, then the collinearity test is skipped and a best-fit line is returned (where "best fit"
+//   means minimal perpendiclular point-line distances, not minimal vertical distances as one would get with least-squares fitting).
+// Arguments:
+//   points = The list of points to find the line through.
+//   check_collinear = If true, don't verify that all points are collinear.  Default: false
+//   eps = How much variance is allowed in testing each point against the line.  Default: `EPSILON` (1e-9)
+// Example(FlatSpin,VPD=250): A line fitted to a cloud of points.
+//   points = rot(45, v=[-0.5,1,0],
+//       p=random_points(100,3,scale=[5,5,50],seed=47));
+//   line = line_from_points(points);
+//   stroke(line, color="#06f");
+//   %move_copies(points) sphere(d=2, $fn=12);

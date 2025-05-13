@@ -1,0 +1,1 @@
+function sclip_hinge_offset(type)  = type[9]; //! Offset of hinge

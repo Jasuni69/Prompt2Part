@@ -1,0 +1,1 @@
+function tx_width(type)             = type[2];  //! Bounding width of the core

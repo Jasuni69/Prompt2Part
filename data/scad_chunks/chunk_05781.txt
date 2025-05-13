@@ -1,0 +1,15 @@
+function struct_keys(struct) = column(struct,0);
+
+
+// Function&Module: echo_struct()
+// Synopsis: Echoes the struct to the console in a formatted manner.
+// Topics: Data Structures, Dictionaries
+// See Also: struct_set(), struct_remove(), struct_val(), struct_keys(), echo_struct(), is_struct()
+// Usage:
+//   echo_struct(struct, [name]);
+//   foo = echo_struct(struct, [name]);
+// Description:
+//   Displays a list of structure keys and values, one pair per line, for easier reading.
+// Arguments:
+//   struct = input structure
+//   name = optional structure name to list at the top of the output.  Default: ""

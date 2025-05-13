@@ -1,0 +1,1 @@
+function _normalize_corners(v) = [for (x=v) x>0? 1 : 0];

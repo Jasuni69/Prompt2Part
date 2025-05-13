@@ -1,0 +1,3 @@
+module ribbon_clamp_holes(ways, h = 20, screw = screw) //! Drill screw holes
+    ribbon_clamp_hole_positions(ways, screw)
+        drill(screw_clearance_radius(screw), h);

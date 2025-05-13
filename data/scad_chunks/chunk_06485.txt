@@ -1,0 +1,6 @@
+module zmove(z=0, p) {
+    req_children($children);      
+    assert(is_undef(p), "Module form `zmove()` does not accept p= argument.");
+    assert(is_finite(z), "Invalid number");
+    translate([0,0,z]) children();
+}

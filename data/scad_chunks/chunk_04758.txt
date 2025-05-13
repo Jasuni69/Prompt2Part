@@ -1,0 +1,11 @@
+function _bounds_3d(poly) =
+    let(
+      points = get_points(poly),
+      minX = min([for (p = points) p.x]),
+      maxX = max([for (p = points) p.x]),
+      minY = min([for (p = points) p.y]),
+      maxY = max([for (p = points) p.y]),
+      minZ = min([for (p = points) p.z]),
+      maxZ = max([for (p = points) p.z])
+    )
+    [[minX,minY,minZ],[maxX,maxY,maxZ]];

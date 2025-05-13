@@ -1,0 +1,1 @@
+function leadnut_od(type)            = type[3];     //! Outer diameter of the shank

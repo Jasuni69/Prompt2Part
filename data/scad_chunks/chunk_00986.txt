@@ -1,0 +1,50 @@
+        // motor connections
+        for (x = [7, 27.1, 47.3, 67.5, 87.9])
+            [x, -3.9,  0, "jst_xh", 4, false, grey(20)],
+        [47.3, -10.4,  0, "jst_xh", 4, false, grey(20)], // second Z connector
+        // motor jumpers
+        for (x = [9.4, 26.4, 42.5, 58.7, 75.3])
+            [x, -33.7,  0, "2p54header", 2, 1],
+        // SWD
+        [  45.4,   35.7,   0, "2p54header", 5, 1 ],
+        // USB power jumber
+        [ -12.6,   40.3,   0, "2p54header", 3, 1 ],
+        // VOUT
+        [ -13.9,   44.5,   0, "2p54header", 2, 2 ],
+        // VIN
+        [  18.6,   29.8,   0, "2p54header", 2, 2 ],
+    ],
+    [] // accessories
+];
+
+TMC2130 = [
+    "TMC2130", "TMC2130",
+    20, 14, 1.6, // size
+    0, 0, 0, // corner radius, mounting hole diameter, pad around mounting hole
+    grey(95), // colour
+    false, // true if parts should be separate BOM items
+    [], // hole positions
+    [
+        [  10,  1,  0, "-2p54header", 8, 1 ],
+        [  10, 13,  0, "-2p54header", 8, 1 ],
+        [  12,  7,  0, "-chip", 6, 4, 1, grey(20) ],
+        // mock up a heat sink
+        [  10,  7,  0, "block", 9, 8.5, 2, "DeepSkyBlue" ],
+        for (y = [-4,-2,0,2,4]) [ 10, 7 + y,  0, "block", 9, 0.75, 11, "DeepSkyBlue" ],
+    ],
+    []
+];
+
+BTT_SKR_V1_4_TURBO = [
+    "BTT_SKR_V1_4_TURBO", "BigTreeTech SKR v1.4 Turbo",
+    110, 85, 1.6, // size
+    1, // corner radius
+    3, // mounting hole diameter
+    4, // pad around mounting hole
+    grey(30), // colour
+    false, // true if parts should be separate BOM items
+    [ // hole positions
+        [-4, 4], [-4, -4], [4, -4], [4, 4]
+    ],
+    [ // components
+        [  (29.15+31.5)/2,  8, -90, "usb_B" ],

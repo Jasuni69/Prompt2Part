@@ -1,0 +1,7 @@
+function update_maze(maze, cell) = 
+    let(
+	    row = maze[cell[0]],
+		u_row = update_maze_row(row, cell),
+		leng = len(maze)
+	)
+	[for(i = 0; i < leng; i = i + 1) i == cell[0] ? u_row : maze[i]];

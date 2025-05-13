@@ -1,0 +1,8 @@
+function parse_int(str,base=10) =
+    str==undef ? undef
+  : assert(is_str(str))
+    len(str)==0 ? 0
+  : let(str=downcase(str))
+    str[0] == "-" ? -_parse_int_recurse(substr(str,1),base,len(str)-2)
+  : str[0] == "+" ?  _parse_int_recurse(substr(str,1),base,len(str)-2)
+  : _parse_int_recurse(str,base,len(str)-1);

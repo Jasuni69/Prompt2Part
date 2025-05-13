@@ -1,0 +1,1 @@
+function pillar_bot_thread(type) = type[11];    //! Bottom thread length, + for male, - for female

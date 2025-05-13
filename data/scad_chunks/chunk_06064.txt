@@ -1,0 +1,41 @@
+module region(r, anchor="origin", spin=0, cp="centroid", atype="hull")
+{
+    assert(in_list(atype, _ANCHOR_TYPES), "\nAnchor type must be \"hull\" or \"intersect\".");
+    r = force_region(r);
+    dummy=assert(is_region(r), "\nInput is not a region.");
+    points = flatten(r);
+    lengths = [for(path=r) len(path)];
+    starts = [0,each cumsum(lengths)];
+    paths = [for(i=idx(r)) count(s=starts[i], n=lengths[i])];
+    attachable(anchor, spin, two_d=true, region=r, extent=atype=="hull", cp=cp){
+      polygon(points=points, paths=paths);
+      children();
+    }
+}
+
+
+
+// Module: debug_region()
+// Synopsis: Draws an annotated {{region}}.
+// SynTags: Geom
+// Topics: Shapes (2D)
+// See Also: region(), debug_polygon(), debug_vnf(), debug_bezier()
+//
+// Usage:
+//   debug_region(region, [vertices=], [edges=], [convexity=], [size=]);
+// Description:
+//   A replacement for {{region()}} that displays the {{region}} and labels the vertices and
+//   edges.  The region vertices and edges are labeled with letters to identify the path
+//   component in the region, starting with A.  
+//   The start of each path is marked with a blue circle and the end with a pink diamond.
+//   You can suppress the display of vertex or edge labeling using the `vertices` and `edges` arguments.
+// Arguments:
+//   region = region to display
+//   ---
+//   vertices = if true display vertex labels and start/end markers.  Default: true
+//   edges = if true display edge labels.  Default: true
+//   convexity = The max number of walls a ray can pass through the given polygon paths.
+//   size = The base size of the line and labels.
+// Example(2D,Big):
+//   region = make_region([square(15), move([5,5],square(15))]);
+//   debug_region(region,size=1);

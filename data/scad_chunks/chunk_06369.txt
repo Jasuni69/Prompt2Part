@@ -1,0 +1,28 @@
+function plane3pt_indexed(points, i1, i2, i3) =
+    is_undef(i3) && is_undef(i2) && is_vector(i1) ? plane3pt_indexed(points, i1[0], i1[1], i1[2])
+  :
+    assert( is_vector([i1,i2,i3]) && min(i1,i2,i3)>=0 && is_list(points) && max(i1,i2,i3)<len(points),
+            "\nInvalid or out of range indices." )
+    assert( is_path([points[i1], points[i2], points[i3]],dim=3),
+            "\nImproper points or improper dimensions." )
+    let(
+        p1 = points[i1],
+        p2 = points[i2],
+        p3 = points[i3]
+    ) plane3pt(p1,p2,p3);
+
+
+// Function: plane_from_normal()
+// Synopsis: Return plane defined by normal vector and a point. 
+// Topics: Geometry, Planes
+// See Also: plane3pt(), plane3pt_indexed(), plane_from_normal(), plane_from_points(), plane_from_polygon()
+// Usage:
+//   plane = plane_from_normal(normal, [pt])
+// Description:
+//   Returns a plane defined by a normal vector and a point.  If you omit `pt`, you get a plane
+//   passing through the origin.  
+// Arguments:
+//   normal = Normal vector to the plane to find.
+//   pt = Point 3D on the plane to find.
+// Example:
+//   plane_from_normal([0,0,1], [2,2,2]);  // Returns the xy plane passing through the point (2,2,2)

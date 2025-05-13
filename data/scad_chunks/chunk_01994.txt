@@ -1,0 +1,1 @@
+function drag_chain_name(type)        = type[0]; //! The name to allow more than one in a project

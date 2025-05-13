@@ -1,0 +1,12 @@
+function xyz_to_altaz(x,y,z) =
+    y != undef
+      ? assert(is_num(x) && is_num(y) && is_num(z), "\nBad arguments.")
+        [atan2(z,norm([x,y])), atan2(x,y), norm([x,y,z])]
+      : assert(is_list(x), "Bad arguments.")
+        is_num(x.x)
+          ? xyz_to_altaz(x.x, x.y, x.z)
+          : [for(p = x) xyz_to_altaz(p.x, p.y, p.z)];
+
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

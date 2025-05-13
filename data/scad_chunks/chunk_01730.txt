@@ -1,0 +1,1 @@
+function hdmi_width2(type)    = type[4]; //! Inside width at the bottom

@@ -1,0 +1,28 @@
+function bez_tangent(curve, u) = (
+	len(curve) <= 2
+		? normalize(u * (curve[1] - curve[0]))
+		: bez_tangent([
+			for(i=[0:len(curve)-2])
+				curve[i] * (1 - u) +
+				curve[i + 1] * u
+		], u)
+);
+
+// Function: bezier_segment_closest_point()
+// Usage:
+//   bezier_segment_closest_point(bezier,pt)
+// Description:
+//   Finds the closest part of the given bezier segment to point `pt`.
+//   The degree of the curve, N, is one less than the number of points in `curve`.
+//   Returns `u` for the shortest position on the bezier segment to the given point `pt`.
+// Arguments:
+//   curve = The list of endpoints and control points for this bezier segment.
+//   pt = The point to find the closest curve point to.
+//   max_err = The maximum allowed error when approximating the closest approach.
+// Example(2D):
+//   pt = [40,15];
+//   bez = [[0,0], [20,40], [60,-25], [80,0]];
+//   u = bezier_segment_closest_point(bez, pt);
+//   trace_bezier(bez, N=len(bez)-1);
+//   color("red") translate(pt) sphere(r=1);
+//   color("blue") translate(bez_point(bez,u)) sphere(r=1);

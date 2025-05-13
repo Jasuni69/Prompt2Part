@@ -1,0 +1,13 @@
+function c_conj(z) =
+   is_vector(z,2) ? [z.x,-z.y] :
+   [for(entry=z) c_conj(entry)];
+
+
+// Function: c_real()
+// Synopsis: Returns the real part of a complex number, vector or matrix..
+// Topics: Math, Complex Numbers
+// See Also: complex(), c_mul(), c_div(), c_conj(), c_real(), c_imag(), c_ident(), c_norm()
+// Usage:
+//   x = c_real(z)
+// Description:
+//   Returns real part of a complex number, vector or matrix.

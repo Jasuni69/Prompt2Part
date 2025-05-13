@@ -1,0 +1,1 @@
+function BLDC_boss_diameter(type)               = type[21]; //! Boss diameter

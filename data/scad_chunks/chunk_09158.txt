@@ -1,0 +1,6 @@
+function rand_dirs(x, y, cells, seed) =
+   let(r = is_undef(seed) ? rands(0, 23, 1) : rands(0, 23, 1, x + y * len(cells[0]) + seed))
+    _rand_dir_table[round(r[0])]; 
+
+// get x value by dir
+_next_x_table = [1, 0, -1, 0];

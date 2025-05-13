@@ -1,0 +1,1 @@
+function NEMA_end_connector(type)= type[13]; //! If has a connector then plug goes in the end rather than the side

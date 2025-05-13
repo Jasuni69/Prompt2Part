@@ -1,0 +1,31 @@
+function affine3d_skew(sxy=0, sxz=0, syx=0, syz=0, szx=0, szy=0) = [
+    [  1, sxy, sxz, 0],
+    [syx,   1, syz, 0],
+    [szx, szy,   1, 0],
+    [  0,   0,   0, 1]
+];
+
+
+// Function: affine3d_skew_xy()
+// Synopsis: Returns a 3D (4x4) XY-plane skewing transformation matrix.
+// SynTags: Mat
+// Topics: Affine, Matrices, Transforms, Skewing
+// See Also: skew(), affine3d_skew(), affine3d_skew_xz(), affine3d_skew_yz(), affine2d_skew()
+// Usage:
+//   mat = affine3d_skew_xy(xa);
+//   mat = affine3d_skew_xy(ya=);
+//   mat = affine3d_skew_xy(xa, ya);
+// Description:
+//   Returns the 4x4 affine3d matrix to perform a skew transformation along the XY plane.
+// Arguments:
+//   xa = Skew angle, in degrees, in the direction of the X axis.  Default: 0
+//   ya = Skew angle, in degrees, in the direction of the Y axis.  Default: 0
+// Example:
+//   mat = affine3d_skew_xy(xa=45,ya=-45);
+//   // Returns:
+//   //   [
+//   //     [ 1, 0, 1, 0],
+//   //     [ 0, 1,-1, 0],
+//   //     [ 0, 0, 1, 0],
+//   //     [ 0, 0, 0, 1]
+//   //   ]

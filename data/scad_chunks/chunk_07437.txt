@@ -1,0 +1,75 @@
+function alternate2(x,y,z1=0.0,z2=0.5)=x%2?y%2?z1:z2:z2;
+//
+points0alternativ=[
+for(x=[-rowl/2+versch[0]:resolution:rowl/2+versch[0]])
+    for(y=[-rowly/2+versch[1]:resolution:rowly/2+versch[1]])
+        [x,y,
+    //alternate2((x+(rowl/2)),(y+(rowly/2)))]
+    //alternate[(x+rowl/2)+(rowl+0.5)*(y+rowly/2)]] 
+    alternate3[(x+rowl/2)+(rowl+0)*(y+rowly/2)]] 
+    ];
+    
+*/
+    
+points0=[
+for(x=[-rowl/2+versch[0]:resolution:rowl/2+versch[0]])
+    for(y=[-rowly/2+versch[1]:resolution:rowly/2+versch[1]])
+        [x,y,
+    (rand?random[randSizeY*(round((y+rowly/2-versch[1])/randsize)+round((x+rowl/2-versch[0])/randsize)*rowly)]:0)
+    +(waves?abs?
+    pow(ampY*abs(sinDeltaY+sin(y*36*freqY+x*36*freqX*waveSkewY)),expY)
+    *(mult?pow(ampX*abs(sinDelta+sin(x*36*freqX+y*36*waveSkewX*freqY)),exp):1)
+    +(mult?0:pow(ampX*abs(sinDelta+sin(x*36*freqX+y*36*waveSkewX*freqY)),exp))
+    +ampRoundX*round(rfX*abs(sin(x*36*freqX+y*36*waveSkewX*freqY)))
+    +ampRoundY*round(rfY*abs(sin(y*36*freqY+x*36*freqX*waveSkewY)))
+    :
+    pow(ampY*(sinDeltaY+sin(y*36*freqY+x*36*freqX*waveSkewY)),expY)
+    *(mult?pow(ampX*(sinDelta+sin(x*36*freqX+y*36*waveSkewX*freqY)),exp):1)
+    +(mult?0:pow(ampX*(sinDelta+sin(x*36*freqX+y*36*waveSkewX*freqY)),exp))
+    +ampRoundX*round(rfX*sin(x*36*freqX+y*36*waveSkewX*freqY))
+    +ampRoundY*round(rfY*sin(y*36*freqY+x*36*freqX*waveSkewY))
+    //+amplitude4*sin((y*0+x*1)*freqY)
+    //+amplitude3*cos((y-x)*freqY)
+    :0)]
+    ];
+
+
+resx=rowl*res;// /resolution;
+resy=rowly*res;// /resolution;
+
+faces0=[
+    for(row=[+0:resx-1])
+        for(i=[row*resy-1:(row+1)*resy-2])
+            [i+1+row,i+row+2,i+row+3+resy,i+row+2+resy]
+        ];
+        
+
+points1=[
+[-rowl/2+versch[0],-rowly/2+versch[1],-zBase],
+[-rowl/2+versch[0],rowly/2+versch[1],-zBase],
+[rowl/2+versch[0],-rowly/2+versch[1],-zBase],
+[rowl/2+versch[0],rowly/2+versch[1],-zBase],
+];
+        
+end0=len(points0);
+faces1=[[end0+3,end0+1,end0+0,end0+2]];
+fpointssideA=[for(i=[resy:-1:0])i];
+fpointssideB=[for(i=[0:resy+1:resx*(resy+1)])i];
+fpointssideC=[for(i=[(resy+1)*(resx+1)-1:-resy-1:resy])i]; 
+fpointssideD=[for(i=[len(points0)-resy-1:len(points0)-1])i];    
+
+    
+faces2=[concat(fpointssideA,[end0+0,end0+1])];    
+faces3=[concat(fpointssideB,[end0+2,end0+0])];
+faces4=[concat(fpointssideC,[end0+1,end0+3])];
+faces5=[concat(fpointssideD,[end0+3,end0+2])];
+
+
+
+points=concat(points0,points1);
+faces=concat(faces0,faces1,faces2,faces3,faces4,faces5);
+
+
+ translate(-versch)Col(6)polyhedron(points,faces,convexity=5);
+    
+}

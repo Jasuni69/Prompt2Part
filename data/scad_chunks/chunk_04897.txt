@@ -1,0 +1,21 @@
+function bendPoints(pts=[], x=0, r=1) = let(
+    c = 2 * PI *r,
+    degPerUnit = 360 / c,
+    e=echo(degPerUnit),
+    seg = _pu_segmentsPerCircle(r),
+    _pts = maxXDist(pts, c/seg)
+   ) [for (pt=_pts)let(
+    dx = pt[0] - x,
+    d = degPerUnit * dx,
+    np = [sin(d) * r, pt[1], cos(d) * r]
+) [sin(d) * r, pt[1], cos(d) * r]];
+
+//  openSCAD polyline offset routine retrieved from newgroup https://forum.openscad.org/Polygon-Offset-Function-td17186.html
+//
+//  Offsets a list of points around along three axis (x, y,z). Although the input can be a 2D point, the output
+//  will be a 3D point.
+//  The return value is a 3D points list
+//  pts      (list)   List of zero or more 2D or 3D points.
+//  angles   (list)   angles along X, Y and Z axis in that order. Angles in degrees.
+//  z_offset (number) moves the final z value by Z-offset.
+//  return   (list)   Rotated list of 3D points.

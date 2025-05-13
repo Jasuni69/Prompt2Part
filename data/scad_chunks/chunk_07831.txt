@@ -1,0 +1,14 @@
+module persevering_face(ball_radius) {
+    r = ball_radius * 0.4;
+    a = 25;
+    
+    translate([ball_radius / 4, ball_radius / 4, 0]) 
+        polyline2d([[r * cos(a), r * sin(a)], [0, 0], [r * cos(a), r * -sin(a)]], width = ball_radius / 10);
+
+    translate([-ball_radius / 4, ball_radius / 4, 0]) 
+        polyline2d([[-r * cos(a), r * sin(a)], [0, 0], [-r * cos(a), r * -sin(a)]], width = ball_radius / 10);
+
+    scale([1.4, 0.8, 1])
+    translate([0, -ball_radius / 1.75, 0]) 
+        arc(ball_radius / 4, 180, width = ball_radius / 10);
+}

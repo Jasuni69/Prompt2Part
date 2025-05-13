@@ -1,0 +1,1 @@
+function mains_socket_top_d(type)       = type[4];   //! Depth at the top, might be tapered

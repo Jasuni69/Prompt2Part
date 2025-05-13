@@ -1,0 +1,14 @@
+function any_defined(v) = len(remove_undefs(v))>0;
+
+
+// Function: scalar_vec3()
+// Usage:
+//   scalar_vec3(v, [dflt]);
+// Description:
+//   If `v` is a scalar, and `dflt==undef`, returns `[v, v, v]`.
+//   If `v` is a scalar, and `dflt!=undef`, returns `[v, dflt, dflt]`.
+//   If `v` is a vector, returns the first 3 items, with any missing values replaced by `dflt`.
+//   If `v` is `undef`, returns `undef`.
+// Arguments:
+//   v = Value to return vector from.
+//   dflt = Default value to set empty vector parts from.

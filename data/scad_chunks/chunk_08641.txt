@@ -1,0 +1,3 @@
+function _unit_vts(turtle) = turtle[1];
+
+// forward the turtle in the x' direction

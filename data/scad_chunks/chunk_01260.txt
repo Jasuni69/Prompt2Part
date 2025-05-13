@@ -1,0 +1,28 @@
+module extrusion_corner_bracket_assembly(type, part_thickness = undef, screw_type = undef, nut_type = undef, max_screw_depth = undef, extrusion = undef) { //! Assembly with fasteners in place
+    extrusion_corner_bracket(type);
+    extrusion = is_undef(extrusion) ? extrusion_corner_bracket_extrusion(type) : extrusion;
+
+    nut = is_undef(nut_type) ? extrusion_corner_bracket_tnut(type) : nut_type;
+    screw = is_undef(screw_type) ? find_screw(hs_cap, nut_size(nut)) : screw_type;
+    thickness = is_undef(part_thickness) ? extrusion_tab_thickness(extrusion) : part_thickness;
+    depth = is_undef(max_screw_depth) ? (extrusion_width(extrusion) - extrusion_center_square(extrusion)) / 2 - eps : max_screw_depth;
+
+    screw_washer_thickness = washer_thickness(screw_washer(screw));
+    nut_washer_type = nut_washer(nut);
+    nut_washer_thickness = nut_washer_type ? washer_thickness(nut_washer_type) : 0;
+
+    nut_offset = extrusion_corner_bracket_base_thickness(type) + thickness;
+    screw_length = depth ? screw_shorter_than(extrusion_corner_bracket_base_thickness(type) + screw_washer_thickness + depth)
+                         : screw_longer_than(nut_offset + screw_washer_thickness + nut_washer_thickness + nut_thickness(nut));
+
+    extrusion_corner_bracket_hole_positions(type) {
+        screw_and_washer(screw, screw_length);
+        translate_z(-nut_offset)
+            vflip()
+                if(nut_washer_type)
+                    nut_and_washer(nut);
+                else
+                    rotate(90)
+                        sliding_t_nut(nut);
+    }
+}

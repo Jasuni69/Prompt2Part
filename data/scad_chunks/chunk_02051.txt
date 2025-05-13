@@ -1,0 +1,53 @@
+module single_cable_clip(screw, cable, h = 0, insert = false, nut = false) {
+    insert = cable_clip_insert(screw, insert);
+    height = cable_clip_width(screw, insert, nut);
+    depth = h ? h : cable_clip_height(cable, screw, insert, nut);
+    w = cable_width(cable);
+    width = wall + w + height;
+    hole_x = wall + w + height / 2;
+    rad = min(wall + cable_wire_size(cable) / 2, depth / 2);
+    r = extrusion_width - eps;
+    the_nut = screw_nut(screw);
+    translate([-hole_x, 0])
+        difference() {
+            linear_extrude(height)
+                difference() {
+                    hull() {
+                        rounded_square([width, 1], r, center = false);
+
+                        translate([width - 1, 0])
+                            rounded_square([1, depth], r, center = false);
+
+                        translate([rad, depth - rad])
+                            circle(r = rad);
+                    }
+
+                    translate([wall + cable_width(cable) / 2, 0]) {
+                        hull() {
+                            for(p = cable_bundle_positions(cable))
+                                translate(p)
+                                    circle(d = cable_wire_size(cable));
+
+                            square([w, eps], center = true);
+                        }
+                        for(side = [-1, 1])
+                            translate([side * w / 2, 0])
+                                hflip(side < 0)
+                                    fillet(r = r, h = 0);
+                    }
+                }
+
+            translate([hole_x, depth, height / 2])
+                rotate([90, 0, 0])
+                    if(insert)
+                        insert_hole(insert, 10, horizontal = true);
+                    else
+                        if(nut) {
+                            translate_z(depth - wall - nut_trap_depth(the_nut))
+                                nut_trap(screw, the_nut, horizontal = true);
+                            nut_trap(screw, the_nut, horizontal = true);
+                        }
+                        else
+                            teardrop_plus(h = 2 * depth + 1, r = screw_clearance_radius(screw), center = true);
+        }
+}

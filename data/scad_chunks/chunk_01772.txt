@@ -1,0 +1,1 @@
+function hot_end_total_length(type)       = type[3];    //! Length from nozzle tip to the top

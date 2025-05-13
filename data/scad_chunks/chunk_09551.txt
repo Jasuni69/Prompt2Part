@@ -1,0 +1,18 @@
+function bezier_patch_flat(size=[100,100], N=4, orient=ORIENT_Z, trans=[0,0,0]) =
+	let(
+		patch = [for (x=[0:N]) [for (y=[0:N]) vmul(point3d(size),[x/N-0.5, 0.5-y/N, 0])]]
+	) [for (row=patch)
+		translate_points(v=trans,
+			rotate_points3d(v=orient,row)
+		)
+	];
+
+
+
+// Function: patch_reverse()
+// Usage:
+//   patch_reverse(patch)
+// Description:
+//   Reverses the patch, so that the faces generated from it are flipped back to front.
+// Arguments:
+//   patch = The patch to reverse.

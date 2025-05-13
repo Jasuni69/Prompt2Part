@@ -1,0 +1,1 @@
+function extrusion_inner_corner_bracket_tnut(type)           = type[2]; //! The sliding t-nut it is based on

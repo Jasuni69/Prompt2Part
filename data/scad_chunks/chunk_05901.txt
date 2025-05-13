@@ -1,0 +1,12 @@
+function _sort_general(arr, idx=undef, indexed=false) =
+    (len(arr)<=1) ? arr :
+    ! indexed && is_undef(idx)
+    ? _lexical_sort(arr)
+    : let( labeled = is_undef(idx) ? [for(i=idx(arr)) [i,arr[i]]]
+                                   : [for(i=idx(arr)) [i, for(j=idx) arr[i][j]]],
+           arrind = _indexed_sort(labeled))
+      indexed 
+      ? arrind
+      : [for(i=arrind) arr[i]];
+      
+// lexical sort using compare_vals()

@@ -1,0 +1,14 @@
+function matrix4_apply(pts, matrices) = let(m = matrix4_mult(matrices)) [for (p = pts) point3d(m * concat(point3d(p),[1]))];
+
+
+// Section: Geometry
+
+// Function: point_on_segment()
+// Usage:
+//   point_on_segment(point, edge);
+// Description:
+//   Determine if the point is on the line segment between two points.
+//   Returns true if yes, and false if not.  
+// Arguments:
+//   point = The point to check colinearity of.
+//   edge = Array of two points forming the line segment to test against.

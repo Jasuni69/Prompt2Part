@@ -1,0 +1,18 @@
+module assembly(name, big = undef, ngb = false) {    //! Name an assembly that will appear on the BOM, there needs to a module named `<name>_assembly` to make it. `big` can force big or small assembly diagrams.
+    if(bom_mode()) {
+        zoom = is_undef($zoomed) ? 0 : $zoomed;
+        arglist = str(arg(big, undef, "big"), arg(ngb, false, "ngb"), arg(zoom, 0, "zoomed"));
+        args = len(arglist) ? str("(", slice(arglist, 2), ")") : "";
+        echo(str("~", name, "_assembly", args, "{"));
+    }
+    no_pose()
+        if(is_undef($child_assembly))
+            let($child_assembly = true)
+                children();
+        else
+            no_explode()
+                children();
+
+    if(bom_mode())
+        echo(str("~}", name, "_assembly"));
+}

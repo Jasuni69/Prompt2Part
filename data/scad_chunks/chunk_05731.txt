@@ -1,0 +1,33 @@
+function vnf_from_region(region, transform, reverse=false, triangulate=true) =
+    let (
+        region = [for (path = region) deduplicate(path, closed=true)],
+        regions = region_parts(force_region(region)),
+        vnfs =
+            [
+                for (rgn = regions)
+                let(
+                    cleaved = path3d(_cleave_connected_region(rgn))
+                )
+                assert( cleaved, "\nThe region is invalid.")
+                let(
+                    face = is_undef(transform)? cleaved : apply(transform,cleaved),
+                    faceidxs = reverse? [for (i=[len(face)-1:-1:0]) i] : [for (i=[0:1:len(face)-1]) i]
+                ) [face, [faceidxs]]
+            ],
+        outvnf = vnf_join(vnfs)
+    )
+    triangulate ? vnf_triangulate(outvnf) : outvnf;
+
+
+
+// Section: VNF Testing and Access
+
+
+// Function: is_vnf()
+// Synopsis: Returns true given a VNF-like structure.
+// Topics: VNF Manipulation
+// See Also: is_vnf_list(), vnf_vertices(), vnf_faces()
+// Usage:
+//   bool = is_vnf(x);
+// Description:
+//   Returns true if the given value looks like a VNF structure.

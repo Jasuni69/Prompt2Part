@@ -1,0 +1,19 @@
+module horiholes_stl(t = thickness) {
+    rotate([90, 0, 0])
+        difference() {
+            linear_extrude(t, center = true) {
+                difference() {
+                    square([length, height]);
+
+                    hole_positions()
+                        if(use_horihole)
+                            horihole($r, $z);
+                        else
+                            teardrop_plus(h = 0, r = $r);
+                }
+            }
+        }
+    if(t == thickness)
+        translate([length / 2, 0])
+            rounded_rectangle([length + 2 * overlap_x, thickness + 2 * overlap_y, 2], 5, true);
+}

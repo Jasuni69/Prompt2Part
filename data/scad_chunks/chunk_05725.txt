@@ -1,0 +1,14 @@
+function vnf_from_polygons(polygons,fast=false,eps=EPSILON) =
+   assert(is_list(polygons) && is_path(polygons[0]),"\nInput should be a list of polygons.")
+   let(
+       offs = cumsum([0, for(p=polygons) len(p)]),
+       faces = [for(i=idx(polygons))
+                  let(
+                      area=fast ? 1 : polygon_area(polygons[i]),
+                      dummy=assert(is_def(area) || is_collinear(polygons[i],eps=eps),str("\nPolygon ", i, " is not coplanar."))
+                  )
+                  if (is_def(area) && area > eps)
+                    [for (j=idx(polygons[i])) offs[i]+j]
+               ]
+   )
+   [flatten(polygons), faces];

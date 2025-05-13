@@ -1,0 +1,27 @@
+function _doDirs(compatibilities, wf_stack, current_coord, current_tiles, dirs, leng, i = 0) = 
+    i == leng ? wf_stack :
+	let(
+		dir = dirs[i],
+		nbr = dir + current_coord,
+		mx_wf_stack = 
+			(
+				let(nbr_tiles = wf_eigenstates(wf_stack[0])[nbr.y][nbr.x])
+				len(nbr_tiles) == 1 ? wf_stack :
+				let(
+					compatible_nbr_tiles = [
+						for(nbr_tile = nbr_tiles) 
+						if(compatible_nbr_tile(compatibilities, current_tiles, nbr_tile, dir)) nbr_tile
+					],
+					leng_compatible_nbr_tiles = len(compatible_nbr_tiles)
+				)
+				assert(leng_compatible_nbr_tiles > 0, contradiction_msg)
+				leng_compatible_nbr_tiles == len(nbr_tiles) ? 
+					wf_stack
+					: 
+					[   
+						_replaceStatesAt(wf_stack[0], nbr.x, nbr.y, compatible_nbr_tiles), 
+						stack_push(wf_stack[1], nbr)
+					]
+			)
+	)
+	_doDirs(compatibilities, mx_wf_stack, current_coord, current_tiles, dirs, leng, i + 1);

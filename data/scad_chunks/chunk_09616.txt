@@ -1,0 +1,45 @@
+module interior_fillet(l=1.0, r=1.0, ang=90, overlap=0.01, orient=ORIENT_X, align=V_CENTER) {
+	dy = r/tan(ang/2);
+	orient_and_align([l,r,r], orient, align, orig_orient=ORIENT_X) {
+		difference() {
+			translate([0,-overlap/tan(ang/2),-overlap]) {
+				if (ang == 90) {
+					translate([0,r/2,r/2]) cube([l,r,r], center=true);
+				} else {
+					rotate([90,0,90]) pie_slice(ang=ang, r=dy+overlap, h=l, center=true);
+				}
+			}
+			translate([0,dy,r]) xcyl(l=l+0.1, r=r);
+		}
+	}
+}
+
+
+
+// Module: slot()
+// 
+// Description:
+//   Makes a linear slot with rounded ends, appropriate for bolts to slide along.
+//
+// Usage:
+//   slot(h, l, r|d, [orient], [align|center]);
+//   slot(h, p1, p2, r|d, [orient], [align|center]);
+//   slot(h, l, r1|d1, r2|d2, [orient], [align|center]);
+//   slot(h, p1, p2, r1|d1, r2|d2, [orient], [align|center]);
+//
+// Arguments:
+//   p1 = center of starting circle of slot.
+//   p2 = center of ending circle of slot.
+//   l = length of slot along the X axis.
+//   h = height of slot shape. (default: 10)
+//   r = radius of slot circle. (default: 5)
+//   r1 = bottom radius of slot cone.
+//   r2 = top radius of slot cone.
+//   d = diameter of slot circle.
+//   d1 = bottom diameter of slot cone.
+//   d2 = top diameter of slot cone.
+//
+// Example: Between Two Points
+//   slot([0,0,0], [50,50,0], r1=5, r2=10, h=5);
+// Example: By Length
+//   slot(l=50, r1=5, r2=10, h=5);

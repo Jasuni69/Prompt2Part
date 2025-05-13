@@ -1,0 +1,39 @@
+function _polygon_crosses_region(region, poly, eps=EPSILON) =
+    let(  
+        subpaths = flatten(split_region_at_region_crossings(region,[poly],eps=eps)[1])
+    )
+    [for(path=subpaths)
+      let(isect=
+         [for (subpath = subpaths)
+          let(
+                midpt = mean([subpath[0], subpath[1]]),
+                rel = point_in_region(midpt,region,eps=eps)
+          )
+          rel
+         ])
+       if (!all_equal(isect) || isect[0]==0) 1 ] != [];
+
+
+// Function: is_region_simple()
+// Synopsis: Returns true if the input is a region with no corner contact.
+// Topics: Regions, Paths, Polygons, List Handling
+// See Also: is_region(), is_valid_region(), is_1region()
+// Usage:
+//   bool = is_region_simple(region, [eps]);
+// Description:
+//   We extend the notion of the simple {{path}} to {{regions}}: a simple region is entirely
+//   non-self-intersecting, meaning that it is formed from a list of simple polygons that
+//   don't intersect each other at all&mdash;not even with corner contact points.
+//   Regions with corner contact are valid but may fail CGAL.  Simple regions
+//   should not create problems with CGAL.  
+// Arguments:
+//   region = region to check
+//   eps = tolerance for geometric comparisons.  Default: `EPSILON` = 1e-9
+// Example(2D,NoAxes):  Corner contact means it's not simple
+//   region = [move([-2,-2],square(14)), [[0,0],[10,0],[5,5]], [[5,5],[0,10],[10,10]]];
+//   rainbow(region)stroke($item, width=.2,closed=true);
+//   move([-1,13])text(is_region_simple(region) ? "simple" : "not-simple", size=2);
+// Example(2D,NoAxes):  Moving apart the triangles makes it simple:
+//   region = [move([-2,-2],square(14)), [[0,0],[10,0],[5,4.5]], [[5,5.5],[0,10],[10,10]]];
+//   rainbow(region)stroke($item, width=.2,closed=true);
+//   move([1,13])text(is_region_simple(region) ? "simple" : "not-simple", size=2);

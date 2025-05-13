@@ -1,0 +1,50 @@
+
+translate([x1, bulldogs_y])
+    bulldogs();
+
+translate([x1, swiss_clips_y])
+    swiss_clips();
+
+leds_y = 0;
+carriers_y = leds_y + 40;
+magnets_y = carriers_y + 40;
+spades_y = magnets_y + 20;
+fastons_y = spades_y + 20;
+buttons_y = fastons_y + 20;
+jacks_y = buttons_y + 30;
+microswitches_y = jacks_y + 30;
+rockers_y = microswitches_y + 40;
+toggles_y = rockers_y + 60;
+components_y = toggles_y + 40;
+
+translate([x2, leds_y])
+    leds();
+
+translate([x2 + 55, leds_y])
+    ldrs();
+
+translate([x2 + 87, leds_y])
+    fuseholders();
+
+translate([x2 + 8, carriers_y])
+    carriers();
+
+translate([x2, magnets_y])
+    magnets();
+
+translate([x2 + 20, carriers_y])
+    led_meters();
+
+translate([x2, spades_y])
+    spades();
+
+translate([x2, fastons_y])
+    fastons();
+
+translate([x2,  buttons_y])
+    buttons();
+
+translate([x2, jacks_y])
+    jacks();
+
+translate([x2, microswitches_y])

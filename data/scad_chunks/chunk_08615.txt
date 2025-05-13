@@ -1,0 +1,5 @@
+function _offset_edges(edges, d) = 
+    [ 
+        for(edge = edges)
+        _edge(edge, _outward_edge_normal(edge) * d)
+    ];

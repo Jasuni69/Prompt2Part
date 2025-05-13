@@ -1,0 +1,3 @@
+module usb_Ax2(cutout = false) { //! Draw USB type A dual socket
+    usb_A(h = 15.6, v_flange_l = 12.15, bar = 3.4, cutout = cutout);
+}

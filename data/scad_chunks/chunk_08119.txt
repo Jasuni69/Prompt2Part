@@ -1,0 +1,4 @@
+module maze3d() {
+    cells = mz_cube(layers, rows, columns);
+    draw_3dmaze(cells, cell_width, road_width);
+}

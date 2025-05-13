@@ -1,0 +1,1 @@
+function led_bezel(led, flange = 1, flange_h = 1, wall = 1, height = 8) = [led, flange, flange_h, wall, height]; //! Constructor

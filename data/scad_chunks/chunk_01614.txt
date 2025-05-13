@@ -1,0 +1,1 @@
+function sheet_is_soft(type)   = type[4]; //! Is soft enough for wood screws

@@ -1,0 +1,3 @@
+module al_clad_resistor_holes(type, h = 100) //! Drill screw holes for an aluminium clad resistor
+    al_clad_resistor_hole_positions(type)
+        drill(screw_clearance_radius(al_clad_hole(type) > 3 ? M3_pan_screw : M2p5_pan_screw), h);

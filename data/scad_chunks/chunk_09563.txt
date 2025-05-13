@@ -1,0 +1,22 @@
+function face_normal(points, face) =
+	let(count=len(face))
+	normalize(
+		sum(
+			[
+				for(i=[0:count-1]) cross(
+					points[face[(i+1)%count]]-points[face[0]],
+					points[face[(i+2)%count]]-points[face[(i+1)%count]]
+				)
+			]
+		)
+	)
+;
+
+
+// Function: find_convex_vertex()
+// Description:
+//   Returns the index of a convex point on the given face.
+// Arguments:
+//   points = Array of vertices for the polyhedron.
+//   face = The face, given as a list of indices into the vertex array `points`.
+//   facenorm = The normal vector of the face.

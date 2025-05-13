@@ -1,0 +1,3 @@
+function isPlaceOrGeom(what)=  isOfGeomType(what) || isPlace(what);
+
+//---------typesystem start--------------------------------

@@ -1,0 +1,76 @@
+function circle_point_tangents(r, cp, pt, d) =
+    assert(is_finite(r) || is_finite(d), "\nInvalid radius or diameter." )
+    assert(is_path([cp, pt],dim=2), "\nInvalid center point or external point.")
+    let(
+        r = get_radius(r=r, d=d, dflt=1),
+        delta = pt - cp,
+        dist = norm(delta),
+        baseang = atan2(delta.y,delta.x)
+    ) dist < r? [] :
+    approx(dist,r)? [pt] :
+    let(
+        relang = acos(r/dist),
+        angs = [baseang + relang, baseang - relang]
+    ) [for (ang=angs) cp + r*[cos(ang),sin(ang)]];
+
+
+// Function: circle_circle_tangents()
+// Synopsis: Find tangents to a pair of circles in 2d.  
+// Topics: Geometry, Circles, Tangents
+// See Also: circle_line_intersection(), circle_circle_intersection(), circle_2tangents(), circle_3points(), circle_point_tangents(), circle_circle_tangents()
+// Usage:
+//   segs = circle_circle_tangents(r1|d1=, cp1, r2|d2=, cp2);
+// Description:
+//   Computes 2d lines tangents to a pair of circles in 2d.  Returns a list of line endpoints [p1,p2] where
+//   p1 is the tangent point on circle 1 and p2 is the tangent point on circle 2.
+//   If four tangents exist then the first one is the left hand exterior tangent as regarded looking from
+//   circle 1 toward circle 2.  The second value is the right hand exterior tangent.  The third entry
+//   gives the interior tangent that starts on the left of circle 1 and crosses to the right side of
+//   circle 2.  And the fourth entry is the last interior tangent that starts on the right side of
+//   circle 1.  If the circles intersect then the interior tangents don't exist and the function
+//   returns only two entries.  If one circle is inside the other one then no tangents exist
+//   so the function returns the empty set.  When the circles are tangent a degenerate tangent line
+//   passes through the point of tangency of the two circles:  this degenerate line is NOT returned.
+// Arguments:
+//   r1 = Radius of the first circle.
+//   cp1 = Centerpoint of the first circle.
+//   r2 = Radius of the second circle.
+//   cp2 = Centerpoint of the second circle.
+//   ---
+//   d1 = Diameter of the first circle.
+//   d2 = Diameter of the second circle.
+// Example(2D,NoAxes): Four tangents, first in green, second in black, third in blue, last in red.
+//   $fn=32;
+//   cp1 = [3,4];  r1 = 2;
+//   cp2 = [7,10]; r2 = 3;
+//   pts = circle_circle_tangents(r1, cp1, r2, cp2);
+//   move(cp1) stroke(circle(r=r1), width=0.2, closed=true);
+//   move(cp2) stroke(circle(r=r2), width=0.2, closed=true);
+//   colors = ["green","black","blue","red"];
+//   for(i=[0:len(pts)-1]) color(colors[i]) stroke(pts[i],width=0.2);
+// Example(2D,NoAxes): Circles overlap so only exterior tangents exist.
+//   $fn=32;
+//   cp1 = [4,4];  r1 = 3;
+//   cp2 = [7,7];  r2 = 2;
+//   pts = circle_circle_tangents(r1, cp1, r2, cp2);
+//   move(cp1) stroke(circle(r=r1), width=0.2, closed=true);
+//   move(cp2) stroke(circle(r=r2), width=0.2, closed=true);
+//   colors = ["green","black","blue","red"];
+//   for(i=[0:len(pts)-1]) color(colors[i]) stroke(pts[i],width=0.2);
+// Example(2D,NoAxes): Circles are tangent.  Only exterior tangents are returned.  The degenerate internal tangent is not returned.
+//   $fn=32;
+//   cp1 = [4,4];  r1 = 4;
+//   cp2 = [4,10]; r2 = 2;
+//   pts = circle_circle_tangents(r1, cp1, r2, cp2);
+//   move(cp1) stroke(circle(r=r1), width=0.2, closed=true);
+//   move(cp2) stroke(circle(r=r2), width=0.2, closed=true);
+//   colors = ["green","black","blue","red"];
+//   for(i=[0:1:len(pts)-1]) color(colors[i]) stroke(pts[i],width=0.2);
+// Example(2D,NoAxes): One circle is inside the other: no tangents exist.  If the interior circle is tangent the single degenerate tangent is not returned.
+//   $fn=32;
+//   cp1 = [4,4];  r1 = 4;
+//   cp2 = [5,5];  r2 = 2;
+//   pts = circle_circle_tangents(r1, cp1, r2, cp2);
+//   move(cp1) stroke(circle(r=r1), width=0.2, closed=true);
+//   move(cp2) stroke(circle(r=r2), width=0.2, closed=true);
+//   echo(pts);   // Returns []

@@ -1,0 +1,1 @@
+function faces0(points,start=0)=[[for(i=[len(points)-1:-1:0])i+start]];//Top

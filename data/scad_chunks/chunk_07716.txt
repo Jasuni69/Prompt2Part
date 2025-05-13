@@ -1,0 +1,15 @@
+module REcke(h=5,r=5,rad=.5,rad2,single=0,grad=90,center=false,fn=fn,help){
+rad2=is_undef(rad2)?rad:rad2;
+   radius=TangentenP(180-grad,r,r); 
+   radius2=TangentenP(180-grad,r+Hypotenuse(rad,rad),r-rad);
+    
+ translate([0,0,center?-h/2:0])difference(){
+  if(grad==90)T(-rad,-rad)cube([r+rad,rad+r,h]);
+      else translate([-rad*tan(90-grad/2),-rad]) rotate_extrude(angle=grad,convexity=5)square([radius2,h]);
+  translate(RotLang(90-grad/2,radius))rotate(grad/2+180)Strebe(angle=200-grad,h=h,single=single,2D=0,rad=rad,rad2=rad2,d=2*r,help=0,name=0,fn=fn);
+ }   
+HelpTxt("REcke",["h",h,"r",r,"rad",rad,"rad2",rad2,"single",single,"grad",grad,"center",center,"fn",fn],help); 
+ if(grad!=90)Echo("WIP grad!=90",color="warning");   
+}
+
+//SBogen(2D=true);

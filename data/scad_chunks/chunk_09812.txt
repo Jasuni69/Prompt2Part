@@ -1,0 +1,39 @@
+module right_half(s=100, x=undef, cp=[0,0,0], planar=false)
+{
+	dir = V_RIGHT;
+	cp = is_scalar(x)? [x,0,0] : is_scalar(cp)? cp*dir : cp;
+	translate(cp) difference() {
+		translate(-cp) children();
+		translate(-dir*s/2) {
+			if (planar) {
+				square(s, center=true);
+			} else {
+				cube(s, center=true);
+			}
+		}
+	}
+}
+
+
+
+// Module: front_half()
+//
+// Usage:
+//   front_half([y|cp], [s]) ...
+//
+// Description:
+//   Slices an object at a vertical X-Z cut plane, and masks away everything that is behind it.
+//
+// Arguments:
+//   cp = If given as a scalar, moves the cut plane forward by the given amount.  If given as a point, specifies a point on the cut plane.  Default: [0,0,0]
+//   y = The Y coordinate of the cut-plane, if given.  Use instead of `cp`.
+//   s = Mask size to use.  Use a number larger than twice your object's largest axis.  If you make this too large, it messes with centering your view.  Default: 100
+//   planar = If true, this becomes a 2D operation.
+//
+// Examples(FlatSpin):
+//   front_half() sphere(r=20);
+//   front_half(y=5) sphere(r=20);
+//   front_half(cp=5) sphere(r=20);
+//   front_half(cp=[0,5,0]) sphere(r=20);
+// Example(2D):
+//   front_half(planar=true) circle(r=20);

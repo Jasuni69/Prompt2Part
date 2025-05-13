@@ -1,0 +1,44 @@
+function sort(list, idx=undef) = 
+    assert(is_list(list)||is_string(list), "Invalid input." )
+    is_string(list)? str_join(sort([for (x = list) x],idx)) :
+    !is_list(list) || len(list)<=1 ? list :
+    is_homogeneous(list,1)
+    ?   let(size = list_shape(list[0]))
+        size==0 ?         _sort_scalars(list)
+        : len(size)!=1 ?  _sort_general(list,idx)  
+        : is_undef(idx) ? _sort_vectors(list)
+        : assert( _valid_idx(idx) , "Invalid indices.")
+          _sort_vectors(list,[for(i=idx) i])        
+    : _sort_general(list,idx);
+        
+
+// Function: sortidx()
+// Synopsis: Returns a list of sorted indices into a list.
+// Topics: List Handling
+// See Also: shuffle(), sort(), group_sort(), unique(), unique_count()
+// Usage:
+//   idxlist = sortidx(list, [idx]);
+// Description:
+//   Given a list, sort it as function `sort()`, and returns
+//   a list of indexes into the original list in that sorted order.
+//   The sort is stable, so equivalent items so not change order.  
+//   If you iterate the returned list in order, and use the list items
+//   to index into the original list, then you are accessing the original
+//   values in sorted order.
+// Arguments:
+//   list = The list to sort.
+//   idx = If given, do the comparison based just on the specified index, range or list of indices.  
+// Example:
+//   lst = ["d","b","e","c"];
+//   idxs = sortidx(lst);  // Returns: [1,3,0,2]
+//   ordered = select(lst, idxs);   // Returns: ["b", "c", "d", "e"]
+// Example:
+//   lst = [
+//       ["foo", 88, [0,0,1], false],
+//       ["bar", 90, [0,1,0], true],
+//       ["baz", 89, [1,0,0], false],
+//       ["qux", 23, [1,1,1], true]
+//   ];
+//   idxs1 = sortidx(lst, idx=1); // Returns: [3,0,2,1]
+//   idxs2 = sortidx(lst, idx=0); // Returns: [1,2,0,3]
+//   idxs3 = sortidx(lst, idx=[1,3]); // Returns: [3,0,2,1]

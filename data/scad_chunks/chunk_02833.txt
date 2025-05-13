@@ -1,0 +1,23 @@
+function ReverseList(list) = [for(i=[0:len(list)-1]) list[len(list)-1-i]];
+
+
+// RandomNonOverlap
+// ----------------
+// Randomly Distribute Shapes Over An Area Without Overlap.
+// Goal: To make a birthday card or Christmas card 
+//       with many small shapes, randomly distributed,
+//       without overlapping other shapes.
+//       The shapes can be, for example, stars or 
+//       hearts or balloons.
+// A random coordinate is added to the list if it was
+// not too close to the other coordinates.
+// Parameters:
+//   n:    The number of coordinates.
+//         The result might have less coordinates,
+//         because the coordinates that are too close
+//         will not be used.
+//         For example 10 or 100.
+//   area: The size as [xsize,ysize] for the area.
+//         The lower-left corner is at [0,0].
+//   dist: The minimal distance between the coordinates.
+//   list: Used internally to build the result.

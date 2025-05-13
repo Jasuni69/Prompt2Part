@@ -1,0 +1,29 @@
+module Stern(e=5,r1=10,r2=5,mod=2,delta=+0,center=1,name,help){
+    name=is_undef(name)?is_undef($info)?false:$info:name;
+  
+    star=
+    let(schritt=360/(e*mod))
+    [for(i=[0:e*mod])i%mod<mod/2+round(delta)?[sin(i*schritt)*r1,cos(i*schritt)*r1]:[sin(i*schritt)*r2,cos(i*schritt)*r2]];
+    
+    
+    abstandR1=2*r1*sin(360/(e*mod));
+    abstandR2=2*r2*sin(360/(e*mod));
+    hoeheR1=r1-Kathete(r2,abstandR2/2);
+    hypR1=Hypotenuse(abstandR2/2,hoeheR1);
+    gradR1=2*acos(hoeheR1/hypR1);
+    gradR2=2*asin((abstandR1/2)/hypR1);
+    sWinkel=360/(e*mod);
+    deltaSoll=(floor((mod-1)/2));
+    $idx=is_undef($idx)?0:$idx;
+    
+    rotate((center==-1?180/e:0)-90+(center?sWinkel/4*(mod-(mod%2?1:2))+delta*sWinkel/2:+0))polygon(points=star,convexity=5);
+    
+    if(name&&delta!=-deltaSoll&&!$idx)Echo(str("Delta für Spitze r1=",-deltaSoll),color="green");
+    
+    if(mod==2&&delta==0)InfoTxt("Stern",["Spitzenabstand r1",abstandR1,"Abstand r2",abstandR2,"Flanke",hypR1,"Winkel r1",str(delta==-deltaSoll?gradR1:gradR1-(sWinkel*(deltaSoll+delta)),"°"),"Winkel r2",str(mod==2?gradR2:undef,"°"),"Schrittwinkel",str(sWinkel,"°")],name);   
+    
+    else InfoTxt("Stern",["Flanke",hypR1,"Winkel r1",str(delta==-deltaSoll?gradR1:gradR1-(sWinkel*(deltaSoll+delta)),"°"),"Schrittwinkel=",str(sWinkel,"°")],name);
+      
+    HelpTxt("Stern",["e",e,"r1",r1,"r2",r2,"mod",mod,"delta",delta,"center",center,"name",name],help);
+  
+}

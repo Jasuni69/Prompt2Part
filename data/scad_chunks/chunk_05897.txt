@@ -1,0 +1,18 @@
+function _group_sort(l) =
+    len(l) == 0 ? [] : 
+    len(l) == 1 ? [l] : 
+    let(
+        pivot   = l[floor(len(l)/2)],
+        equal   = [ for(li=l) if( li==pivot) li ],
+        lesser  = [ for(li=l) if( li< pivot) li ],
+        greater = [ for(li=l) if( li> pivot) li ]
+    )
+    concat(
+        _group_sort(lesser), 
+        [equal], 
+        _group_sort(greater)
+    );    
+
+
+// Sort a vector of scalar values with the native comparison operator
+// all elements should have the same type.

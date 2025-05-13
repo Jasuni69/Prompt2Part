@@ -1,0 +1,131 @@
+module displayMount(
+          displayWidth,
+          displayHeight,
+          wallThickness,
+          pinInsetH,
+          pinInsetV,
+          pinDiameter,
+          postOverhang,
+          walltoPCBGap,
+          pcbThickness,
+          windowWidth,
+          windowHeight,
+          windowOffsetH,
+          windowOffsetV,
+          bevel,
+          postOffset,
+          useSelfThreading,
+        ) 
+{
+  mirror([0,0,1])
+  {
+    translate([-(displayWidth)/2,-(displayHeight)/2, 0])//1.5*5/2])
+    {
+      difference()
+      {
+        union()
+        {
+          color("green") 
+          {
+            //-- Stands
+            translate([pinInsetH - postOffset,pinInsetV - postOffset,walltoPCBGap/2+wallThickness ])
+              cube([pinDiameter+postOverhang,pinDiameter+postOverhang,walltoPCBGap], center=true);
+
+            translate([displayWidth-(pinInsetH-postOffset),(pinInsetV-postOffset),walltoPCBGap/2+wallThickness])
+              cube([pinDiameter+postOverhang,pinDiameter+postOverhang,walltoPCBGap], center=true);
+            
+            //-- Stands
+            translate([(pinInsetH-postOffset),displayHeight-(pinInsetV-postOffset),walltoPCBGap/2+wallThickness])
+              cube([pinDiameter+postOverhang,pinDiameter+postOverhang,walltoPCBGap], center=true);
+
+            translate([displayWidth-(pinInsetH-postOffset),displayHeight-(pinInsetV-postOffset),walltoPCBGap/2+wallThickness])
+              cube([pinDiameter+postOverhang,pinDiameter+postOverhang,walltoPCBGap], center=true);
+          }// color
+
+          if (!useSelfThreading)
+          {
+            echo("Display Pins", pinDiameter=pinDiameter);
+            color("blue")
+            {
+              //--pins
+              translate([pinInsetH,pinInsetV,walltoPCBGap+lidPlaneThickness])
+                cylinder (d=pinDiameter, h=pcbThickness*2);
+
+              translate([pinInsetH,displayHeight-pinInsetV,walltoPCBGap+lidPlaneThickness])
+                cylinder (d=pinDiameter, h=pcbThickness*2);
+
+              translate([displayWidth-pinInsetH,pinInsetV,walltoPCBGap+lidPlaneThickness])
+                cylinder (d=pinDiameter, h=pcbThickness*2);
+
+              translate([displayWidth-pinInsetH,displayHeight-pinInsetV,walltoPCBGap+lidPlaneThickness])
+                cylinder (d=pinDiameter, h=pcbThickness*2);
+            }// color
+          } // Self Threading
+        }// Union
+
+        if (useSelfThreading)
+        {
+          //--echo("***** Add the self tapping holes *****");
+          color("blue")
+          {
+            //--pins
+            translate([pinInsetH,pinInsetV,lidPlaneThickness])
+            self_forming_screw(
+                d=pinDiameter,
+                h=walltoPCBGap + 0.02, 
+                center=false);   
+
+            translate([pinInsetH,displayHeight-pinInsetV,lidPlaneThickness])
+            self_forming_screw(
+                d=pinDiameter,
+                h=walltoPCBGap + 0.02, 
+                center=false);   
+
+            translate([displayWidth-pinInsetH,pinInsetV,lidPlaneThickness])
+            self_forming_screw(
+                d=pinDiameter,
+                h=walltoPCBGap + 0.02, 
+                center=false);   
+
+            translate([displayWidth-pinInsetH,displayHeight-pinInsetV,lidPlaneThickness])
+            self_forming_screw(
+                d=pinDiameter,
+                h=walltoPCBGap + 0.02, 
+                center=false);   
+          }// color
+        } // if(useSelfThreading)
+      } //difference
+    }// translate
+    
+    faceWidth = max(displayWidth + ((pinInsetH-pinDiameter/2 - postOverhang) * -2), windowWidth+(wallThickness*2))+0.1;
+    faceHeight = max(displayHeight + ((pinInsetV-pinDiameter/2 - postOverhang) * -2), windowHeight+(wallThickness*2))+0.1;
+    
+    xScale = (bevel) ? 1 + (((wallThickness+ 0.00)*2)/windowWidth) : 1;
+    yScale = (bevel) ? 1 + (((wallThickness+ 0.00)*2)/windowHeight) : 1;
+    
+    // Beveled Faceplate
+    difference()
+    {
+      //-- faceplate
+      color("Grey")
+      translate([0,0, wallThickness/2])
+        cube([faceWidth,faceHeight, wallThickness],center=true);
+      
+      //-- Cutout Opening
+      translate([windowOffsetH, windowOffsetV, wallThickness + 0.02]) 
+      {
+        rotate([180,0,0])
+        // Bevel out at a either 90 or 45deg angle based on bevel parameter
+        linear_extrude(wallThickness + 0.04, scale = [xScale,yScale])
+          square([windowWidth,windowHeight],center=true);
+      }// translate 
+    }// difference
+  }// mirror
+} //displayMount
+
+
+//===========================================================
+//===========================================================
+// General functions
+//===========================================================
+//===========================================================

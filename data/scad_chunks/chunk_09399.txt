@@ -1,0 +1,14 @@
+function flatten(l) = [for (a = l) for (b = a) b];
+
+
+// Function: sort()
+// Usage:
+//   sort(arr, [idx])
+// Description:
+//   Sorts the given list using `compare_vals()`.  Results are undefined if list elements are not of similar type.
+// Arguments:
+//   arr = The list to sort.
+//   idx = If given, the index, range, or list of indices of sublist items to compare.
+// Example:
+//   l = [45,2,16,37,8,3,9,23,89,12,34];
+//   sorted = sort(l);  // Returns [2,3,8,9,12,16,23,34,37,45,89]

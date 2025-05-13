@@ -1,0 +1,2 @@
+function suitableForGrowth(node, nxNode) =
+    norm(position_of(node) - position_of(nxNode)) > maxEdgeLength_of(node);

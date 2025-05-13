@@ -1,0 +1,39 @@
+function bezier_surface(patches=[], tris=[], splinesteps=16, i=0, vertices=[], faces=[]) =
+	let(
+		vnf = (i >= len(patches))? [vertices, faces] :
+			bezier_patch(patches[i], splinesteps=splinesteps, vertices=vertices, faces=faces),
+		vnf2 = (i >= len(tris))? vnf :
+			bezier_triangle(tris[i], splinesteps=splinesteps, vertices=vnf[0], faces=vnf[1])
+	) (i >= len(patches) && i >= len(tris))? vnf2 :
+	bezier_surface(patches=patches, tris=tris, splinesteps=splinesteps, i=i+1, vertices=vnf2[0], faces=vnf2[1]);
+
+
+
+// Section: Bezier Surface Modules
+
+
+// Module: bezier_polyhedron()
+// Useage:
+//   bezier_polyhedron(patches)
+// Description:
+//   Takes a list of two or more bezier patches and attempts to make a complete polyhedron from them.
+// Arguments:
+//   patches = A list of rectangular bezier patches.
+//   tris = A list of triangular bezier patches.
+//   vertices = Vertex list for additional non-bezier faces.  Default: []
+//   faces = Additional non-bezier faces.  Default: []
+//   splinesteps = Number of steps to divide each bezier segment into. Default: 16
+// Example:
+//   patch1 = [
+//   	[[18,18,0], [33,  0,  0], [ 67,  0,  0], [ 82, 18,0]],
+//   	[[ 0,40,0], [ 0,  0, 20], [100,  0, 20], [100, 40,0]],
+//   	[[ 0,60,0], [ 0,100, 20], [100,100,100], [100, 60,0]],
+//   	[[18,82,0], [33,100,  0], [ 67,100,  0], [ 82, 82,0]],
+//   ];
+//   patch2 = [
+//   	[[18,18,0], [33,  0,  0], [ 67,  0,  0], [ 82, 18,0]],
+//   	[[ 0,40,0], [ 0,  0,-50], [100,  0,-50], [100, 40,0]],
+//   	[[ 0,60,0], [ 0,100,-50], [100,100,-50], [100, 60,0]],
+//   	[[18,82,0], [33,100,  0], [ 67,100,  0], [ 82, 82,0]],
+//   ];
+//   bezier_polyhedron([patch1, patch2], splinesteps=8);

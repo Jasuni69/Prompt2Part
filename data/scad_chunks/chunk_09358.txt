@@ -1,0 +1,18 @@
+function posmod(x,m) = (x%m+m)%m;
+
+
+// Function: modrange()
+// Usage:
+//   modrange(x, y, m, [step])
+// Description:
+//   Returns a normalized list of values from `x` to `y`, by `step`, modulo `m`.  Wraps if `x` > `y`.
+// Arguments:
+//   x = The start value to constrain.
+//   y = The end value to constrain.
+//   m = Modulo value.
+//   step = Step by this amount.
+// Examples:
+//   modrange(90,270,360, step=45);   // Outputs [90,135,180,225,270]
+//   modrange(270,90,360, step=45);   // Outputs [270,315,0,45,90]
+//   modrange(90,270,360, step=-45);  // Outputs [90,45,0,315,270]
+//   modrange(270,90,360, step=-45);  // Outputs [270,225,180,135,90]

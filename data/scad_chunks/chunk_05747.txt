@@ -1,0 +1,20 @@
+function _split_2dpolygons_at_each_x(polys, xs, _i=0) =
+    _i>=len(xs)? polys :
+    _split_2dpolygons_at_each_x(
+        [
+            for (poly = polys)
+            each _split_polygon_at_x(poly, xs[_i])
+        ], xs, _i=_i+1
+    );
+
+/// Internal Function: _slice_3dpolygons()
+/// Usage:
+///   splitpolys = _slice_3dpolygons(polys, dir, cuts);
+/// Topics: Geometry, Polygons, Intersections
+/// Description:
+///   Given a list of 3D polygons, a choice of X, Y, or Z, and a cut list, `cuts`, splits all of the polygons where they cross
+///   X/Y/Z at any value given in cuts.
+/// Arguments:
+///   polys = A list of 3D polygons to split.
+///   dir_ind = slice direction, 0=X, 1=Y, or 2=Z
+///   cuts = A list of scalar values for locating the cuts

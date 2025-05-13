@@ -1,0 +1,11 @@
+function _snip(shape_pts, collector, indices, u, v, w, num_of_vertices, count, epsilon) = 
+    let(new_nv = num_of_vertices - 1)
+    _real_triangulate( 
+        shape_pts, 
+        [each collector, [indices[u], indices[v], indices[w]]],  
+        _remove_v(indices, v, num_of_vertices),
+        v, 
+        new_nv,
+        2 * new_nv,
+        epsilon
+    );

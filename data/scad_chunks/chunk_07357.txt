@@ -1,0 +1,34 @@
+module LinEx2(bh=5,h=1,slices=10,s=1,ds=+0.010,dh=+0,fs=1,fh=0.780,twist=0,ft=1,dt=0,hsum=0,lap=0.001,fn=fn,name,help,startSlices,basetwist,rot=0){
+    basetwist=is_undef(basetwist)?(bh+lap)*twist:basetwist;
+    startSlices=is_undef(startSlices)?slices:startSlices;
+    $helpM=0;
+    $info=0;
+    s=is_list(s)?s:[s,s];
+  hsum=hsum?hsum:h;
+    
+    if(slices-1)rotate(-twist*h)Tz(h)scale([s[0],s[1],1])LinEx2(bh=bh,slices=slices-1,s=s*fs-[ds,ds],h=h*fh-dh,ds=ds,dh=dh,hsum=hsum+h*fh-dh,fs=fs,fh=fh,name=name,startSlices=startSlices,twist=twist*ft-dt,ft=ft,dt=dt,fn=fn,help=help,rot=rot+twist*h,basetwist=basetwist,lap=lap)children();
+  
+    Color(1/startSlices*slices)rotate(-basetwist)Tz(bh)linear_extrude(h+lap,twist=twist*(h+lap),scale=s,convexity=5,$fn=fn)children();
+  if(slices==startSlices){
+      linear_extrude(bh+lap,twist=basetwist,convexity=5,$fn=fn)children();
+  MO(!$children);
+
+  }
+ 
+ if(!(slices-1)){
+     InfoTxt("LinEx2",["Höhe",hsum+lap+bh,"Twist",basetwist+rot+twist*h],name);
+     HelpTxt("LinEx2",["bh",bh,"h",h,"slices",slices,"s",s,"ds",ds,"dh",dh,"fs",fs,"fh",fh,"twist",twist,"ft",ft,"dt",dt,"lap",lap,"fn",fn,"name",name],help);
+ }
+
+}
+
+/** Row()
+ * \page Generator
+ * \name module Row()
+ * \brief Row will recursivly create a Row of objects with changing size (d+e*step) by keeping the gap equal
+ * \param e number of objects
+ * \param dist distance of objects
+ * \param step Change of object size
+ * \param d    Start diameter  
+ * \param cut  create cuts of cut size
+*/

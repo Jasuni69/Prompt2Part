@@ -1,0 +1,13 @@
+module L_piece(n, thickness, p = 1.272, spacing = 0) {
+    sides = [for(i = [0:5]) pow(p, n + i) - spacing];
+
+    linear_extrude(thickness)
+    polygon([
+        [0, 0],
+        [sides[5], 0],
+        [sides[5], sides[2]],
+        [sides[3], sides[2]],
+        [sides[3], sides[4]],
+        [0, sides[4]],
+    ]);
+}

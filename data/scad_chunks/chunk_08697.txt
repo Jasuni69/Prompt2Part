@@ -1,0 +1,4 @@
+function _cmd(t, cmd, point, angle, leng) = 
+    cmd == "forward" ? _forward(t, leng) :
+    cmd == "turn" ? _turn(t, angle) :
+    _get(t, cmd);

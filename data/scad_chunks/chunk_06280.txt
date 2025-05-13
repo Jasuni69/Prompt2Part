@@ -1,0 +1,14 @@
+function _bevelSolid(shape, bevel) =
+  let(
+    tX = in_list(RIGHT,          bevel) ? -shape.z : 0,
+    tx = in_list(LEFT,           bevel) ?  shape.z : 0,
+    tY = in_list(BACK,           bevel) ? -shape.z : 0,
+    ty = in_list(FRONT,          bevel) ?  shape.z : 0,
+    bX = in_list(RIGHT + BOTTOM, bevel) ? -shape.z : 0,
+    bx = in_list(LEFT  + BOTTOM, bevel) ?  shape.z : 0,
+    bY = in_list(BACK  + BOTTOM, bevel) ? -shape.z : 0,
+    by = in_list(FRONT + BOTTOM, bevel) ?  shape.z : 0,
+    pathB = path3d(rect(select(shape,0,1)) + [[bX,by],[bx,by],[bx,bY],[bX,bY]]),
+    pathT = path3d(rect(select(shape,0,1)) + [[tX,ty],[tx,ty],[tx,tY],[tX,tY]],shape.z)
+  )
+  [pathB,pathT];

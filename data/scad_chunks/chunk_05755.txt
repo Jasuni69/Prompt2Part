@@ -1,0 +1,130 @@
+function projection(vnf,cut=false,eps=EPSILON) =
+   assert(is_vnf(vnf))
+   cut ?
+         let(
+              vnf_bdy = vnf_halfspace([0,0,1,0],vnf, boundary=true),
+              ind = vnf_bdy[1],
+              pts = path2d(vnf_bdy[0][0])
+         )
+         ind==[] ? []
+                 : [for (path=ind) select(pts, path)]
+  :
+   let(
+        pts = vnf[0],
+        faces = vnf[1], 
+        facets = [for(face=faces)
+                     let(projface = path2d(select(pts,face)))
+                     if (!approx(polygon_area(projface),0,eps=eps))
+                        projface
+                 ]
+   )
+   union(facets);
+
+
+
+// Function: vnf_halfspace()
+// Synopsis: Returns the intersection of the vnf with a half space.
+// SynTags: VNF
+// Topics: VNF Manipulation
+// See Also: vnf_volume(), vnf_area(), vnf_bend() 
+// Usage:
+//   newvnf = vnf_halfspace(plane, vnf, [closed], [boundary]);
+// Description:
+//   Returns the intersection of the vnf with a half space.  The half space is defined by
+//   plane = [A,B,C,D], taking the side where the normal [A,B,C] points: Ax+By+Cz≥D.
+//   If closed is set to false then the cut face is not included in the vnf.  This could
+//   allow further extension of the vnf by join with other vnfs using {{vnf_join()}}.
+//   If your given VNF has holes (missing faces) or is not a complete polyhedron
+//   then closed=true is may produce invalid results when it tries to construct closing faces
+//   on the cut plane.  Set closed=false for such inputs.
+//   .
+//   If you set `boundary=true` then the return is the pair `[vnf,boundary]`, where `vnf` is the
+//   VNF as usual (with `closed=false`) and boundary is a list giving each connected component of the cut
+//   boundary surface.  Each entry in boundary is a list of index values that index into the vnf vertex list (vnf[0]).
+//   This makes it possible to construct mating shapes, e.g. with {{skin()}} or {{vnf_vertex_array()}} that
+//   can be combined using {{vnf_join()}} to make a valid polyhedron.
+//   .
+//   The input to vnf_halfspace() does not need to be a closed, manifold polyhedron.
+//   Because it adds the faces on the cut surface, you can use vnf_halfspace() to cap off an open shape if you
+//   slice through a region that excludes all of the gaps in the input VNF.  
+// Arguments:
+//   plane = plane defining the boundary of the half space
+//   vnf = VNF to cut
+//   closed = if false do not return the cut face(s) in the returned VNF.  Default: true
+//   boundary = if true return a pair [vnf,boundary] where boundary is a list of paths on the cut boundary indexed into the VNF vertex list.  If boundary is true, then closed is set to false.  Default: false
+// Example(3D):
+//   vnf = cube(10,center=true);
+//   cutvnf = vnf_halfspace([-1,1,-1,0], vnf);
+//   vnf_polyhedron(cutvnf);
+// Example(3D):  Cut face has 2 components
+//   vnf = path_sweep(circle(r=4, $fn=16),
+//                    circle(r=20, $fn=64),closed=true);
+//   cutvnf = vnf_halfspace([-1,1,-4,0], vnf);
+//   vnf_polyhedron(cutvnf);
+// Example(3D): Cut face is not simply connected
+//   vnf = path_sweep(circle(r=4, $fn=16),
+//                    circle(r=20, $fn=64),closed=true);
+//   cutvnf = vnf_halfspace([0,0.7,-4,0], vnf);
+//   vnf_polyhedron(cutvnf);
+// Example(3D): Cut object has multiple components
+//   function knot(a,b,t) =   // rolling knot
+//        [ a * cos (3 * t) / (1 - b* sin (2 *t)),
+//          a * sin( 3 * t) / (1 - b* sin (2 *t)),
+//        1.8 * b * cos (2 * t) /(1 - b* sin (2 *t))];
+//   a = 0.8; b = sqrt (1 - a * a);
+//   ksteps = 400;
+//   knot_path = [for (i=[0:ksteps-1]) 50 * knot(a,b,(i/ksteps)*360)];
+//   ushape = [[-10, 0],[-10, 10],[ -7, 10],[ -7, 2],[  7, 2],[  7, 7],[ 10, 7],[ 10, 0]];
+//   knot=path_sweep(ushape, knot_path, closed=true, method="incremental");
+//   cut_knot = vnf_halfspace([1,0,0,0], knot);
+//   vnf_polyhedron(cut_knot);
+// Example(3D,VPR=[80,0,15]): Cut a sphere with an arbitrary plane
+//   vnf1=spheroid(r=50, style="icosa", $fn=16);
+//   vnf2=vnf_halfspace([.8,1,-1.5,0], vnf1);
+//   vnf_polyhedron(vnf2);
+// Example(3D,VPR=[80,0,15]): Cut it again, but with closed=false to leave an open boundary. 
+//   vnf1=spheroid(r=50, style="icosa", $fn=16);
+//   vnf2=vnf_halfspace([.8,1,-1.5,0], vnf1);
+//   vnf3=vnf_halfspace([0,0,-1,0], vnf2, closed=false);
+//   vnf_polyhedron(vnf3);
+// Example(3D,VPR=[80,0,15]): Use {vnf_join()} to combine with a mating vnf, in this case a reflection of the part we made. 
+//   vnf1=spheroid(r=50, style="icosa", $fn=16);
+//   vnf2=vnf_halfspace([.8,1,-1.5,0], vnf1);
+//   vnf3=vnf_halfspace([0,0,-1,0], vnf2, closed=false);
+//   vnf4=vnf_join([vnf3, zflip(vnf3,1)]);
+//   vnf_polyhedron(vnf4);
+// Example(3D): When the input VNF is a surface with a boundary, if you use the default setting closed=true, then vnf_halfspace() tries to construct closing faces from the edges created by the cut.  These faces may be invalid, for example if the cut points are collinear.  In this example the constructed face is a valid face.
+//   patch=[
+//          [[10,-10,0],[1,-1,0],[-1,-1,0],[-10,-10,0]],
+//          [[10,-10,20],[1,-1,20],[-1,-1,20],[-10,-10,20]]
+//         ];
+//   vnf=bezier_vnf(patch);
+//   vnfcut = vnf_halfspace([-.8,0,-1,-14],vnf);
+//   vnf_polyhedron(vnfcut);
+// Example(3D): Setting closed to false eliminates this (possibly invalid) face:
+//   patch=[
+//          [[10,-10,0],[1,-1,0],[-1,-1,0],[-10,-10,0]],
+//          [[10,-10,20],[1,-1,20],[-1,-1,20],[-10,-10,20]]
+//         ];
+//   vnf=bezier_vnf(patch);
+//   vnfcut = vnf_halfspace([-.8,0,-1,-14],vnf,closed=false);
+//   vnf_polyhedron(vnfcut);
+// Example(3D): Here is a VNF that has holes, so it is not a valid manifold. 
+//   outside = linear_sweep(circle(r=30), h=100, caps=false);
+//   inside = yrot(7,linear_sweep(circle(r=10), h=120, caps=false));
+//   open_vnf=vnf_join([outside, vnf_reverse_faces(inside)]);
+//   vnf_polyhedron(open_vnf);
+// Example(3D): By cutting it at each end we can create closing faces, resulting in a valid manifold without holes.
+//   outside = linear_sweep(circle(r=30), h=100, caps=false);
+//   inside = yrot(11,linear_sweep(circle(r=10), h=120, caps=false));
+//   open_vnf=vnf_join([outside, vnf_reverse_faces(inside)]);
+//   vnf = vnf_halfspace([0,0,1,5], vnf_halfspace([0,.7,-1,-75], open_vnf));
+//   vnf_polyhedron(vnf);
+// Example(3D): If boundary=true then the return is a list with the VNF and boundary data.  
+//   vnf = path_sweep(circle(r=4, $fn=16),
+//                    circle(r=20, $fn=64),closed=true);
+//   cut_bnd = vnf_halfspace([-1,1,-4,0], vnf, boundary=true);
+//   cutvnf = cut_bnd[0];
+//   boundary = [for(b=cut_bnd[1]) select(cutvnf[0],b)];
+//   vnf_polyhedron(cutvnf);
+//   stroke(boundary,color="red");

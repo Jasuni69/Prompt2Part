@@ -1,0 +1,1 @@
+function mains_socket_width(type)       = type[1];   //! Width at the base

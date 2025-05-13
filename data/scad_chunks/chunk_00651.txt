@@ -1,0 +1,1 @@
+function nut_dome(type)       = type[8];        //! Dome height and max thread depth if a domed acorn nut

@@ -1,0 +1,26 @@
+function _region_centroid(region,eps=EPSILON) =
+   let(
+       region=force_region(region),
+       parts = region_parts(region),
+       // Rely on region_parts returning all outside polygons clockwise
+       // and inside (hole) polygons counterclockwise, so areas have reversed sign
+       cent_area = [for(R=parts, p=R)
+                       let(A=polygon_area(p,signed=true))
+                       [A*_polygon_centroid(p),A]],
+       total = sum(cent_area)
+   )
+   total[0]/total[1];
+
+
+/// Internal Function: _polygon_centroid()
+/// Usage:
+///   cpt = _polygon_centroid(poly);
+/// Topics: Geometry, Polygons, Centroid
+/// Description:
+///   Given a simple 2D polygon, returns the 2D coordinates of the polygon's centroid.
+///   Given a simple 3D planar polygon, returns the 3D coordinates of the polygon's centroid.
+///   Collinear points produce an error.  The results are meaningless for self-intersecting
+///   polygons or an error is produced.
+/// Arguments:
+///   poly = Points of the polygon from which the centroid is calculated.
+///   eps = Tolerance in geometric comparisons.  Default: `EPSILON` (1e-9)

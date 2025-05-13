@@ -1,0 +1,8 @@
+module position_children(list, t) //! Position children if they are on the Z = 0 plane when transformed by t
+    for(p = list)
+        let(q = t * p)
+            if(abs(transform([0, 0, 0], q).z) < 0.01)
+                multmatrix(q)
+                    children();
+
+// Matrix inversion: https://www.mathsisfun.com/algebra/matrix-inverse-row-operations-gauss-jordan.html

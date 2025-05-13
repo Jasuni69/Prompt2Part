@@ -1,0 +1,12 @@
+module xrot(a=0, p, cp)
+{
+    req_children($children);          
+    assert(is_undef(p), "Module form `xrot()` does not accept p= argument.");
+    if (a==0) {
+        children();  // May be slightly faster?
+    } else if (!is_undef(cp)) {
+        translate(cp) rotate([a, 0, 0]) translate(-cp) children();
+    } else {
+        rotate([a, 0, 0]) children();
+    }
+}

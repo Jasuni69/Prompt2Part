@@ -1,0 +1,36 @@
+function get_profile_shift(desired,teeth1,teeth2,helical=0,pressure_angle=20,mod,diam_pitch,circ_pitch) =
+  let(
+       mod = module_value(mod=mod, circ_pitch=circ_pitch, diam_pitch=diam_pitch),
+       teethsum = teeth1+teeth2,
+       pressure_angle_trans = atan(tan(pressure_angle)/cos(helical)),
+       y = desired/mod - teethsum/2/cos(helical),
+       thing=teethsum*cos(pressure_angle_trans) / (teethsum+2*y*cos(helical)),
+       pa_eff = acos(teethsum*cos(pressure_angle_trans) / (teethsum+2*y*cos(helical)))
+  )
+  teethsum * (_invol(pa_eff)-_invol(pressure_angle_trans))/2/tan(pressure_angle);
+
+
+// Function: auto_profile_shift()
+// Synopsis: Returns the recommended profile shift for a gear.
+// Topics: Gears, Parts
+// See Also: worm(), worm_gear(), pitch_radius(), outer_radius()
+// Usage:
+//   x = auto_profile_shift(teeth, [pressure_angle], [helical], [profile_shift=]);
+//   x = auto_profile_shift(teeth, [pressure_angle], [helical], get_min=);
+//   x = auto_profile_shift(teeth, min_teeth=);
+// Description:
+//   Calculates the recommended profile shift to avoid gear tooth undercutting.  You can set `min_teeth` to a
+//   value to allow small undercutting, and only activate the profile shift for more extreme cases.  Is is common
+//   practice to make gears with 15-17 teeth with undercutting with the standard 20 deg pressure angle.
+//   .
+//   The `get_min` argument returns the minimum profile shift needed to avoid undercutting for the specified
+//   number of teeth.  This will be a negative value for gears with a large number of teeth; such gears can
+//   be given a negative profile shift without undercutting.  
+// Arguments:
+//   teeth = Total number of teeth in the gear.
+//   pressure_angle = The pressure angle of the gear.
+//   helical = helical angle
+//   ---
+//   min_teeth = If given, the minimum number of teeth on a gear that has acceptable undercut.
+//   get_min = If true then return the minimum profile shift to avoid undercutting, which may be a negative value for large gears.  
+//   profile_shift = If numerical then just return this value; if "auto" or not given then compute the automatic profile shift.

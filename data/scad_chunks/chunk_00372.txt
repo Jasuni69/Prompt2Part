@@ -1,0 +1,1 @@
+function circlip_b(type)         = type[6];     //! Widest part of the taper

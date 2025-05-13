@@ -1,0 +1,1 @@
+function light_strip_thickness(type)     = type[8]; //! Metal thickness

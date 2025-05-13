@@ -1,0 +1,9 @@
+function _getautovoxsize(bbox, numvoxels) =
+    let(
+        bbsiz = bbox[1]-bbox[0],
+        bbvol = bbsiz[0]*bbsiz[1]*bbsiz[2],
+        voxvol = bbvol/numvoxels
+    ) voxvol^(1/3);
+
+    
+/// internal function: get voxel size, adjusted if necessary to fit bounding box

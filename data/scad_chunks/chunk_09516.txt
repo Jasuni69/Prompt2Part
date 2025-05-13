@@ -1,0 +1,50 @@
+module threaded_nut(
+	od=16, id=10, h=10,
+	pitch=2, left_handed=false,
+	bevel=false, slop=undef,
+	orient=ORIENT_Z, align=V_CENTER
+) {
+	depth = pitch * cos(30) * 5/8;
+	profile = [
+		[-6/16, -depth/pitch],
+		[-1/16,  0],
+		[-1/32,  0.02],
+		[ 1/32,  0.02],
+		[ 1/16,  0],
+		[ 6/16, -depth/pitch]
+	];
+	trapezoidal_threaded_nut(
+		od=od, id=id, h=h,
+		pitch=pitch, thread_angle=30,
+		profile=profile,
+		left_handed=left_handed,
+		bevel=bevel, slop=slop,
+		orient=orient, align=align
+	);
+}
+
+
+// Section: Buttress Threading
+
+// Module: buttress_threaded_rod()
+// Description:
+//   Constructs a simple buttress threaded screw rod.  This method
+//   makes much smoother threads than the naive linear_extrude method.
+// Arguments:
+//   d = Outer diameter of threaded rod.
+//   l = length of threaded rod.
+//   pitch = Length between threads.
+//   left_handed = if true, create left-handed threads.  Default = false
+//   bevel = if true, bevel the thread ends.  Default: false
+//   bevel1 = if true, bevel the axis-negative end of the thread.  Default: false
+//   bevel2 = if true, bevel the axis-positive end of the thread.  Default: false
+//   internal = If true, this is a mask for making internal threads.
+//   slop = printer slop calibration to allow for tight fitting of parts.  default=0.2
+//   orient = Orientation of the rod.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Z`.
+//   align = Alignment of the rod.  Use the `V_` constants from `constants.scad`.  Default: `V_CENTER`.
+// Example(2D):
+//   projection(cut=true)
+//       buttress_threaded_rod(d=10, l=15, pitch=2, orient=ORIENT_X);
+// Examples(Med):
+//   buttress_threaded_rod(d=10, l=20, pitch=1.25, left_handed=true, $fa=1, $fs=1);
+//   buttress_threaded_rod(d=25, l=20, pitch=2, $fa=1, $fs=1);

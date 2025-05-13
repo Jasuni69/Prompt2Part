@@ -1,0 +1,8 @@
+function _rotate3d(a,v,points) =
+  let(A = is_vec(a) ? to3d(a) : [0,0,a])
+  (!is_vec(a) && is_vec(v)) ?
+    _rotate3d_v(a,unit(to3d(v)),points) :
+    _rotate3d_xyz(A,points);
+
+// rotate a list of 3d points by angle vector a
+// a = [pitch,roll,yaw] in degrees

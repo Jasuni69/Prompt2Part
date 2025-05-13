@@ -1,0 +1,12 @@
+function _convex_hull_iterative_2d(points, polygon, remaining, _i=0) =
+	(_i >= len(remaining))? polygon : let (
+		// pick a point
+		i = remaining[_i],
+		// find the segments that are in conflict with the point (point not inside)
+		conflicts = _find_conflicting_segments(points, polygon, points[i])
+		// no conflicts, skip point and move on
+	) (len(conflicts) == 0)? _convex_hull_iterative_2d(points, polygon, remaining, _i+1) : let(
+		// find the first conflicting segment and the first not conflicting
+		// conflict will be sorted, if not wrapping around, do it the easy way
+		polygon = _remove_conflicts_and_insert_point(polygon, conflicts, i)
+	) _convex_hull_iterative_2d(points, polygon, remaining, _i+1);

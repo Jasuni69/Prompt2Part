@@ -1,0 +1,10 @@
+module lead_positions(p, z) {
+    if(is_list(p))
+        for($x = [-1, 1], $y = [-1, 1])
+            translate([$x * p.x / 2, $y * p.y / 2, z])
+                children();
+    else
+        for($x = [-1, 1])
+            translate([$x * p / 2, 0, z])
+                children();
+}

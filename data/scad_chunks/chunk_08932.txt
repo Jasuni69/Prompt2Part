@@ -1,0 +1,8 @@
+function gyroid_point(n, x, y) =
+    let(
+		z1 = 70,
+		z2 = 200,
+		f1 = gyroid(x, y, z1),
+		f2 = gyroid(x, y, z2)
+	)
+    _gyroid_point(n + 3, x, y, z1, f1, z2, f2);

@@ -1,0 +1,1 @@
+function scaleXYPoints(pts, pos_scale=[1,1,1], neg_scale=[1,1,1]) = [for(pt=pts) [pt[0]<0? pt[0]*neg_scale[0]: pt[0]*pos_scale[0],pt[1]<0? pt[1]*neg_scale[1]: pt[1]*pos_scale[1],pt[2]<0? pt[2]*neg_scale[2]: pt[2] * pos_scale[2]]];

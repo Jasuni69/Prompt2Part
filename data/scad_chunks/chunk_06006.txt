@@ -1,0 +1,85 @@
+module regular_polyhedron(
+    name=undef,
+    index=undef,
+    type=undef,
+    faces=undef,
+    facetype=undef,
+    hasfaces=undef,
+    side=undef,
+    ir=undef,
+    mr=undef,
+    or=undef,
+    r=undef,
+    d=undef,
+    anchor=CENTER,
+    rounding=0,
+    repeat=true,
+    facedown=true,
+    draw=true,
+    rotate_children=true,
+    stellate = false,
+    longside=undef,       // special parameter for trapezohedron
+    h=undef,height=undef  // special parameter for trapezohedron
+) {
+    dummy=assert(is_num(rounding) && rounding>=0, "'rounding' must be nonnegative");
+    entry = regular_polyhedron_info(
+        "fullentry", name=name, index=index,
+        type=type, faces=faces, facetype=facetype,
+        hasfaces=hasfaces, side=side,
+        ir=ir, mr=mr, or=or,
+        r=r, d=d,
+        anchor=anchor, 
+        facedown=facedown,
+        stellate=stellate,
+        longside=longside, h=h, height=height
+    );
+    assert(len(entry)>0, "No polyhedra meet your specification");
+    scaled_points = entry[0];
+    translation = entry[1];
+    face_triangles = entry[2];
+    faces = entry[3];
+    face_normals = entry[4];
+    in_radius = entry[5];
+    translate(translation){
+        if (draw){
+            if (rounding==0)
+                polyhedron(scaled_points, faces = face_triangles);
+            else {
+                fn = segs(rounding);
+                rounding = rounding/cos(180/fn);
+                adjusted_scale = 1 - rounding / in_radius;
+                minkowski(){
+                    sphere(r=rounding, $fn=fn);
+                    polyhedron(adjusted_scale*scaled_points, faces = face_triangles);
+                }
+            }
+        }
+        if ($children>0) {
+            maxrange = repeat ? len(faces)-1 : $children-1;
+            for(i=[0:1:maxrange]) {
+                // Would like to orient so an edge (longest edge?) is parallel to x axis
+                facepts = select(scaled_points, faces[i]);
+                $center = -mean(facepts);
+                cfacepts = move($center, p=facepts);
+                $face = rotate_children
+                          ? path2d(frame_map(z=face_normals[i], x=facepts[0]-facepts[1], reverse=true, p=cfacepts))
+                          : cfacepts;
+                $faceindex = i;
+                translate(-$center)
+                if (rotate_children) {
+                    frame_map(z=face_normals[i], x=facepts[0]-facepts[1])
+                    children(i % $children);
+                } else {
+                    children(i % $children);
+                }
+            }
+        }
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Some internal functions used to generate polyhedra data
+//
+// All permutations and even permutations of three items
+//

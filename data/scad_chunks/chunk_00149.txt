@@ -1,0 +1,6 @@
+module panel_meters()
+    layout([for(p = panel_meters) pmeter_bezel(p).x], 10)
+        panel_meter(panel_meters[$i]);
+
+if($preview)
+    panel_meters();

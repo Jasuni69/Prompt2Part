@@ -1,0 +1,14 @@
+module test_vector_angle() {
+	vecs = [[10,0,0], [-10,0,0], [0,10,0], [0,-10,0], [0,0,10], [0,0,-10]];
+	for (a=vecs, b=vecs) {
+		if(a==b) {
+			assert(vector_angle(a,b)==0);
+		} else if(a==-b) {
+			assert(vector_angle(a,b)==180);
+		} else {
+			assert(vector_angle(a,b)==90);
+		}
+	}
+	assert(abs(vector_angle([10,10,0],[10,0,0])-45) < eps);
+}
+test_vector_angle();

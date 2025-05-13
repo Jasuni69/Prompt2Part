@@ -1,0 +1,1 @@
+function invertFaces(faces) = [ for(f=faces) reverseList(f) ];

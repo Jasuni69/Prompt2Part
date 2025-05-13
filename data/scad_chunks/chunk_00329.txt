@@ -1,0 +1,9 @@
+module microswitch_wire_positions(type, skip = undef) { //! Place children at the leg hole positions
+    leg = microswitch_leg(type);
+    legs = microswitch_legs(type);
+    for(i = [0 : len(legs) - 1])
+        if(i != skip)
+            let(pos = legs[i])
+                translate(leg[3] ? pos + leg[4] : pos - [leg.x, leg.y] / 6)
+                    children();
+}

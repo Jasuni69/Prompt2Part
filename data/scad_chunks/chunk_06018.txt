@@ -1,0 +1,60 @@
+function xcopies(spacing, n, l, sp, p=_NO_ARG) =
+    assert(is_undef(n) || num_defined([l,spacing])==1, "When n is given must give exactly one of spacing or l")
+    assert(is_def(n) || num_defined([l,spacing])>=1, "When n is not given must give at least one of spacing or l")  
+    let(
+        dir = RIGHT,
+        sp = is_finite(sp)? (sp*dir) : sp,
+        mats = is_vector(spacing)
+          ? let(sp = default(sp,[0,0,0])) [for (n = spacing) translate(sp + n*dir)]
+          : line_copies(l=u_mul(l,dir), spacing=u_mul(spacing,dir), n=n, p1=sp)
+    )
+    p==_NO_ARG? mats : [for (m = mats) apply(m, p)];
+
+
+// Function&Module: ycopies()
+// Synopsis: Places copies of children along the Y axis. 
+// SynTags: MatList, Trans
+// Topics: Transformations, Distributors, Translation, Copiers
+// See Also: move_copies(), xcopies(), zcopies(), line_copies(), grid_copies(), rot_copies(), xrot_copies(), yrot_copies(), zrot_copies(), arc_copies(), sphere_copies()
+//
+// Usage:
+//   ycopies(spacing, [n], [sp=]) CHILDREN;
+//   ycopies(l=, [n=], [sp=]) CHILDREN;
+//   ycopies(LIST) CHILDREN;
+// Usage: As a function to translate points, VNF, or Bezier patches
+//   copies = ycopies(spacing, [n], [sp=], p=);
+//   copies = ycopies(l=, [n=], [sp=], p=);
+//   copies = ycopies(LIST, p=);
+// Usage: Get Translation Matrices
+//   mats = ycopies(spacing, [n], [sp=]);
+//   mats = ycopies(l=, [n=], [sp=]);
+//   mats = ycopies(LIST);
+// Description:
+//   When called as a module, places `n` copies of the children along a line on the Y axis.
+//   When called as a function, *without* a `p=` argument, returns a list of transformation matrices, one for each copy.
+//   When called as a function, *with* a `p=` argument, returns a list of transformed copies of `p=`.
+//
+// Arguments:
+//   spacing = Given a scalar, specifies a uniform spacing between copies. Given a list of scalars, each one gives a specific position along the line. (Default: 1.0)
+//   n = Number of copies to place on the line. (Default: 2)
+//   ---
+//   l = If given, the length to place copies over.
+//   sp = If given as a point, copies will be place on a line back from starting position `sp`.  If given as a scalar, copies will be placed on a line back from starting position `[0,sp,0]`.  If not given, copies will be placed along a line that is centered at [0,0,0].
+//   p = Either a point, pointlist, VNF or Bezier patch to be translated when used as a function.
+//
+// Side Effects:
+//   `$pos` is set to the relative centerpoint of each child copy, and can be used to modify each child individually.
+//   `$idx` is set to the index number of each child being copied.
+//
+// Examples:
+//   ycopies(20) sphere(3);
+//   ycopies(20, n=3) sphere(3);
+//   ycopies(spacing=15, l=50) sphere(3);
+//   ycopies(n=4, l=30, sp=[10,0,0]) sphere(3);
+// Example:
+//   ycopies(10, n=3) {
+//       cube(size=[1,3,1],center=true);
+//       cube(size=[3,1,1],center=true);
+//   }
+// Example:
+//   ycopies([1,2,3,5,7]) sphere(d=1);

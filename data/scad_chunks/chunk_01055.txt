@@ -1,0 +1,5 @@
+function screw_insert(screw, short = false, i = 0) =  //! Find insert to fit specified screw, defaults to longest but can specify the shortest
+    let(d = screw_radius(screw) * 2, list = short ? short_inserts : inserts)
+        i >= len(list) ? undef
+                       : insert_screw_diameter(list[i]) == d ? list[i]
+                                                             : screw_insert(screw, short, i + 1);

@@ -1,0 +1,17 @@
+function pathLength(points,start=0,end=0,close=0,length=0)= let(end=end>start?end:len(points)-(close?0:1))
+  start<end?pathLength(points=points,start=start+1,end=end,close=close,
+  length=length+norm(points[(start+1)%len(points)]-points[start])):length;
+
+/*
+p=kreis(5,rand=0,fn=6,endPoint=1);
+echo(pathLength(p,close=0),PI*10);
+Points(p);
+// */
+
+/** \name string2num
+\page Functions
+string2num() converts charcter from a string into numbers
+\param string input string
+\param start start of extraction
+\param length number of characters to extract
+*/

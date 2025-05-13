@@ -1,0 +1,1 @@
+function cable_clip_offset(screw, cable, insert = false, nut = false) = cable_clip_width(screw, insert, nut) / 2 + cable_width(cable) / 2; //! The offset of the cable from the screw.

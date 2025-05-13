@@ -1,0 +1,18 @@
+function _general_plane_line_intersection(plane, line, eps=EPSILON) =
+    let(
+        a = plane*[each line[0],-1],         //  evaluation of the plane expression at line[0]
+        b = plane*[each(line[1]-line[0]),0]  // difference between the plane expression evaluation at line[1] and at line[0]
+    )
+    approx(b,0,eps)                          // is  (line[1]-line[0]) "parallel" to the plane ?
+      ? approx(a,0,eps)                      // is line[0] on the plane ?
+        ? [line,undef]                       // line is on the plane
+        : undef                              // line is parallel but not on the plane
+      : [ line[0]-a/b*(line[1]-line[0]), -a/b ];
+
+
+/// Internal Function: normalize_plane()
+/// Usage:
+///   nplane = normalize_plane(plane);
+/// Topics: Geometry, Planes
+/// Description:
+///   Returns a new representation [A,B,C,D] of `plane` where norm([A,B,C]) is equal to one.

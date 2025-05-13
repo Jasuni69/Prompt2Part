@@ -1,0 +1,16 @@
+function _hex_offset_ring(d, lev=0) =
+    (lev == 0)? [[0,0]] :
+    reverse(subdivide_path(hexagon(r=lev*d), refine=lev));
+
+
+/// Function: _hex_offsets()
+/// Usage:
+///   _hex_offsets(n, d)
+/// Description:
+///   Returns the centerpoints for the optimal hexagonal packing
+///   of at least `n` circular items, of diameter `d`.  Will return
+///   enough points to fill out the last ring, even if that is more
+///   than `n` points.
+/// Arguments:
+///   n = Number of items to bundle.
+///   d = How far to space each point away from others.

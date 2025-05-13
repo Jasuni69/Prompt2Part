@@ -1,0 +1,2 @@
+module encloseOnly()
+	if(!$enlosing) children();

@@ -1,0 +1,18 @@
+function _bezcorner(points, parm) =
+        let(
+                P = is_list(parm)?
+                        let(
+                                d = parm[0],
+                                k = parm[1],
+                                prev = unit(points[0]-points[1]),
+                                next = unit(points[2]-points[1])
+                        ) [
+                                points[1]+d*prev,
+                                points[1]+k*d*prev,
+                                points[1],
+                                points[1]+k*d*next,
+                                points[1]+d*next
+                        ] : _smooth_bez_fill(points,parm),
+                N = max(3,$fn>0 ?$fn : ceil(bezier_length(P)/$fs))
+        )
+        bezier_curve(P,N,endpoint=true);

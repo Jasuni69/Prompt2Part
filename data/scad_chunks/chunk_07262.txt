@@ -1,0 +1,46 @@
+module M(skewZX=0,skewZY=0,skewXZ=0,skewXY=0,skewYZ=0,skewYX=+0,scale=1,scaleXY=1,scaleXZ=1,scaleYZ=1,help=false,skewxy,skewxz,skewyx,skewyz,skewzx,skewzy,scalexy,scalexz,scaleyz){
+    scale=is_list(scale)?scale:scale*[1,1,1];
+    skewXY=is_undef(skewxy)?skewXY:skewxy;
+    skewXZ=is_undef(skewxz)?skewXZ:skewxz;
+    skewYX=is_undef(skewyx)?skewYX:skewyx;
+    skewYZ=is_undef(skewyz)?skewYZ:skewyz;
+    skewZX=is_undef(skewzx)?skewZX:skewzx;
+    skewZY=is_undef(skewzy)?skewZY:skewzy;
+    
+    scaleXY=is_undef(scalexy)?scaleXY:scalexy;
+    scaleXZ=is_undef(scalexz)?scaleXZ:scalexz;
+    scaleYZ=is_undef(scaleyz)?scaleYZ:scaleyz;
+    
+    scaleX=scale.x*scaleXY*scaleXZ;
+    scaleY=scale.y*scaleXY*scaleYZ;
+    scaleZ=scale.z*scaleXZ*scaleYZ;
+    
+    multmatrix([
+    [scaleX,skewYX,skewZX,0],
+    [skewXY,scaleY,skewZY,0],    
+    [skewXZ,skewYZ,scaleZ,0],
+    [0,0,0,1.0],    
+    ])children();
+    
+    MO(!$children);
+    HelpTxt("M",["skewZX",skewZX,"skewZY",skewZY,"skewXZ",skewXZ,"skewXY",skewXY,"skewYZ",skewYZ,"skewYX",skewYX,"scale",scale,"scaleXY",scaleXY,"scaleXZ",scaleXZ,"scaleYZ",scaleYZ],help);
+}
+
+/** 
+\name Polar
+\page Modifier
+Polar() object  multiply children polar (e=number, x/y=radial distance)
+\param e number objects (cloned children)
+\param x,y,z radius (distance) of objects
+\param rot   rotate polar
+\param rotE  rotate objects
+\param end   for degree
+\param dr    delta rotate objects according to position
+\param mitte add center object
+\param v     rotation axis
+\param es    element distance
+\param name, help  name help
+*/
+
+//Polar(5,[3,3],v=[0,1,1])cube();
+//Polar(3,10)square([$r*2,.1],true);

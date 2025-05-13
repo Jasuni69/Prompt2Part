@@ -1,0 +1,11 @@
+module bbox_back_blank(type, sheet = false) { //! 2D template for the back
+    bb = sheet_thickness(bbox_base_sheet(type));
+    t = sheet_thickness(bbox_sheets(type));
+
+    difference() {
+        translate([0, -bb / 2])
+            sheet_2D(subst_sheet(type, sheet), bbox_width(type), bbox_height(type) + bb);
+
+        bbox_drill_holes(type, rotate([-90, 0, 0]) * translate([0, -bbox_depth(type) / 2]));
+    }
+}

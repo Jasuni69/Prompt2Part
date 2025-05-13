@@ -1,0 +1,1 @@
+function knob_pointer(type)  = type[12]; //! Pointer outside radius, [point width, back width] and height height

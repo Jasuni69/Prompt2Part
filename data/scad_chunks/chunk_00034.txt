@@ -1,0 +1,55 @@
+module PlotFunction(FuncN, minx_stepx_maxx, miny_stepy_maxy) {
+  minx = minx_stepx_maxx[0];
+  stepx = minx_stepx_maxx[1];
+  maxx = minx_stepx_maxx[2] + 0.001*stepx;
+  miny = miny_stepy_maxy[0];
+  stepy = miny_stepy_maxy[1];
+  maxy = miny_stepy_maxy[2] + 0.001*stepy;
+  minplot = 0.0005*(stepx+stepy);
+
+  pointarrays = concat(
+    [concat(  // Close miny edge of plot.
+      [[maxx, miny-0.001*stepy, 0]],
+      [[minx, miny-0.001*stepy, 0]],
+      [
+        for (x = [minx:stepx:maxx])
+          [x, miny-0.001*stepy, 0.0001]
+      ]
+    )],
+
+    [ for (y = [miny:stepy:maxy])
+      concat(
+        [[maxx, y, 0]],
+        [[minx, y, 0]],
+        [
+          for (x = [minx:stepx:maxx]) let(
+              z = CallFunc(x, y, FuncN),
+              zchecked = z < minplot ? minplot : z
+            )
+            [x, y, zchecked]
+        ]
+      )
+    ],
+
+    [concat(  // Close maxy edge of plot.
+      [[maxx, maxy+0.001*stepy, 0]],
+      [[minx, maxy+0.001*stepy, 0]],
+      [
+        for (x = [minx:stepx:maxx])
+          [x, maxy+0.001*stepy, 0.0001]
+      ]
+    )]
+  );
+
+  PlotClosePoints(pointarrays);
+}
+
+
+// Plots the numbered function PolarFunc1 through PolarFunc9, where
+// PolarFuncN is 1 through 9.  Each function is a function of radius and
+// angle.
+// max_r is the outer radius, and min_step is the smallest step size between
+// points.
+// To guarantee a properly manifold shape, the routine will only render
+// strictly positive values (z>0) of the defined function.  Add an offset if
+// needed to achieve this.

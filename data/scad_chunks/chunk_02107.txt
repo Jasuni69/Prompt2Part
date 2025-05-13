@@ -1,0 +1,1 @@
+function fan_guard_corner_r(type) = washer_diameter(screw_washer(fan_screw(type))) / 2 + 0.5; //! Corner radius of the guard

@@ -1,0 +1,5 @@
+module polyline(p, width=0.3) {
+  for(i=[0:max(0,len(p)-1)]){
+    color([i*1/len(p),1-i*1/len(p),0,0.5])line(p[i],p[listWrap(i+1,len(p) )],width);
+  }
+} // polyline plotter

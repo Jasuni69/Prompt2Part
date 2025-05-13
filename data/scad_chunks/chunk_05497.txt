@@ -1,0 +1,3 @@
+function _remove_undefined_vals(list) =
+        let(ind=search([undef],list,0)[0])
+        list_remove(list, concat(ind, add_scalar(ind,-1)));

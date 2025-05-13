@@ -1,0 +1,11 @@
+function shape_ellipse(axes) =
+    let(
+        axes0 = axes[0],
+        axes1 = axes[1],
+        frags = __frags(axes0),
+        step_a = 360 / frags
+    ) 
+    [
+        for(a = [each [0:frags - 1]] * step_a) 
+        [axes0 * cos(a), axes1 * sin(a)]
+    ];

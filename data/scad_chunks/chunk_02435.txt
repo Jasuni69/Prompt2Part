@@ -1,0 +1,16 @@
+module feet_assembly()
+assembly("feet") {
+    base_assembly();
+
+    foot_positions()
+        foot_assembly(base_thickness, foot);
+}
+//
+//! 1. Solder wires to the IEC terminals: -
+//!     * Use wire rated for 13A, e.g. 1.5mm<sup>2</sup>, the easiest source is stripping 13A rated flex.
+//!     * Attach one green & yellow to the earth, one blue to neutral and two brown to the live.
+//!     * The earth, neutral and one of the live wires should be long enough to protrude through the appropriate 4mm jack holes far enough to be able to strip and solder them to the jacks.
+//!     * The second brown needs to be long enough to reach the socket.
+//! 1. Cover the the joints with heatshrink sleeving and shrink it with a hot air gun.
+//! 1. Attach the IEC inlet using two 12mm M3 countersunk cap screws, washers and nyloc nuts on the back.
+//

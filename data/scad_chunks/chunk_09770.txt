@@ -1,0 +1,16 @@
+module yscale(y) scale([1,y,1]) children();
+
+
+// Module: zscale()
+//
+// Description:
+//   Scales children by the given factor on the Z axis.
+//
+// Usage:
+//   zscale(z) ...
+//
+// Arguments:
+//   z = Factor to scale by along the Z axis.
+//
+// Example:
+//   zscale(3) sphere(r=10);

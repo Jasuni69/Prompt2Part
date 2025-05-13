@@ -1,0 +1,250 @@
+module YAPPgenerate()
+//===========================================================
+{
+  echo("YAPP==========================================");
+  echo("YAPP:PCB(s):");
+  for (thePCB=pcb)
+  {
+    echo(str("YAPP:   pcbLength(\"",thePCB[0],"\") = ", pcbLength(thePCB[0])));
+    echo(str("YAPP:   pcbWidth(\"",thePCB[0],"\") = ", pcbWidth(thePCB[0])));
+    echo(str("YAPP:   pcbThickness(\"",thePCB[0],"\") = ", pcbThickness(thePCB[0])));
+    echo(str("YAPP:   standoffHeight(\"",thePCB[0],"\") = ", standoffHeight(thePCB[0])));
+    echo(str("YAPP:   standoffPinDiameter(\"",thePCB[0],"\") = ", standoffPinDiameter(thePCB[0])));
+    echo(str("YAPP:   standoffDiameter(\"",thePCB[0],"\") = ", standoffDiameter(thePCB[0])));
+    echo(str("YAPP:   standoffHoleSlack(\"",thePCB[0],"\") = ", standoffHoleSlack(thePCB[0])));
+   echo("YAPP------------------------------------------");
+ }  
+  echo("YAPP==========================================");
+  echo("YAPP:", paddingFront=paddingFront);
+  echo("YAPP:", paddingBack=paddingBack);
+  echo("YAPP:", paddingRight=paddingRight);
+  echo("YAPP:", paddingLeft=paddingLeft);
+  echo("YAPP==========================================");
+  echo("YAPP:", buttonWall=buttonWall);
+  echo("YAPP:", buttonPlateThickness=buttonPlateThickness);
+  echo("YAPP:", buttonSlack=buttonSlack);
+  echo("YAPP==========================================");
+  echo("YAPP:", baseWallHeight=baseWallHeight);
+  echo("YAPP:", lidWallHeight=lidWallHeight);
+  echo("YAPP:", wallThickness=wallThickness);
+  echo("YAPP:", basePlaneThickness=basePlaneThickness);
+  echo("YAPP:", lidPlaneThickness=lidPlaneThickness);
+  echo("YAPP:", ridgeHeight=ridgeHeight);
+  echo("YAPP:", roundRadius=roundRadius);
+  echo("YAPP==========================================");
+  echo("YAPP:", shellLength=shellLength);
+  echo("YAPP:", shellInsideLength=shellInsideLength);
+  echo("YAPP:", shellWidth=shellWidth);
+  echo("YAPP:", shellInsideWidth=shellInsideWidth);
+  echo("YAPP:", shellHeight=shellHeight);
+  echo("YAPP:", shellInsideHeight=shellInsideHeight);
+  echo("YAPP==========================================");
+  echo("YAPP:", shiftLid=shiftLid);
+  echo("YAPP:", onLidGap=onLidGap);
+  echo("YAPP==========================================");
+  echo(str("YAPP: Version:", Version));
+  echo("YAPP:   copyright by Willem Aandewiel");
+  echo("YAPP==========================================");
+  echo("YAPP:  Predefined Shapes:");
+  
+  for (shape=preDefinedShapes)
+  {
+     echo(str("YAPP:    ",shape[0]));
+  }
+  echo("YAPP:  Predefined Masks:");
+  
+  for (mask=preDefinedMasks)
+  {
+     echo(str("YAPP:    ",mask[0]));
+  }
+  echo("YAPP==========================================");
+
+  $fn=facetCount;
+  
+  //-- Perform sanity checks
+
+  assert((baseWallHeight >= ridgeHeight), str("ridgeHeight ", ridgeHeight, " must be less than or equal to baseWallHeight ", baseWallHeight) );
+  
+  sanityCheckList(pcbStands, "pcbStands", 2);
+  sanityCheckList(connectors, "connectors", 7);
+  sanityCheckList(cutoutsBase, "cutoutsBase", 6, 5, [yappRectangle, yappCircle, yappPolygon, yappRoundedRect, yappCircleWithFlats, yappCircleWithKey]);
+  sanityCheckList(cutoutsBase, "cutoutsLid", 6, 5, [yappRectangle, yappCircle, yappPolygon, yappRoundedRect, yappCircleWithFlats, yappCircleWithKey]);
+  sanityCheckList(cutoutsBase, "cutoutsFront", 6, 5, [yappRectangle, yappCircle, yappPolygon, yappRoundedRect, yappCircleWithFlats, yappCircleWithKey]);
+  sanityCheckList(cutoutsBase, "cutoutsBack", 6, 5, [yappRectangle, yappCircle, yappPolygon, yappRoundedRect, yappCircleWithFlats, yappCircleWithKey]);
+  sanityCheckList(cutoutsBase, "cutoutsLeft", 6, 5, [yappRectangle, yappCircle, yappPolygon, yappRoundedRect, yappCircleWithFlats, yappCircleWithKey]);
+  sanityCheckList(cutoutsBase, "cutoutsRight", 6, 5, [yappRectangle, yappCircle, yappPolygon, yappRoundedRect, yappCircleWithFlats, yappCircleWithKey]);
+  sanityCheckList(snapJoins, "snapJoins", 3, 2, [yappLeft, yappRight, yappFront, yappBack]);
+  sanityCheckList(lightTubes, "lightTubes", 7, 6, [yappCircle, yappRectangle]);
+  sanityCheckList(pushButtons, "pushButtons", 9);
+  sanityCheckList(boxMounts, "boxMounts", 5);
+  sanityCheckList(labelsPlane, "labelsPlane", 8, 4, [yappLeft, yappRight, yappFront, yappBack, yappLid, yappBase]);
+  sanityCheckList(imagesPlane, "imagesPlane", 6, 4, [yappLeft, yappRight, yappFront, yappBack, yappLid, yappBase]);
+
+  // Show the origins as needed
+  if ($preview && showOriginCoordBox)
+  {
+    genOriginBars("red", "darkRed", [yappCoordBox]);
+  } // showOriginCoordBox
+  if ($preview && showOriginCoordBoxInside)
+  {
+    genOriginBars("green", "darkgreen", [yappCoordBoxInside]);
+  } // showOriginCoordBoxInside
+  
+  if ($preview && showOriginCoordPCB)
+  {
+    // Loop through the PCB's
+    for ( thePCB = pcb ) {
+      genOriginBars("blue", "darkblue", [yappCoordPCB, undef, thePCB[0]]);
+    }  
+    //qwqw
+  } // showOriginCoordPCB
+
+  difference() // Inspection cuts
+  {
+    union()
+    {
+      if (printBaseShell) 
+      {        
+        if ($preview && showPCB)
+        {
+          showPCBs();
+        }
+        if (printMessages) echo ("* Print base *");
+// ****************************************************************               
+// xxxxx
+// Comment out difference() to see objects instead of cutting them from the base for debugging
+        difference()  // (a)
+        {
+       
+          // Draw the base shell
+          baseShell();
+
+          // Remove parts of it
+          cutoutsForScrewHoles(yappPartBase);
+          makeRidgeExt(yappPartBase,true);
+          makeCutouts(yappPartBase);
+
+          // Draw the labels that are carved into the case
+          color("Red") drawLabels(yappPartBase, true);
+          color("Red") drawImages(yappPartBase, true);
+
+        } //  difference(a)
+        
+        // Draw the post base hooks
+        posZ00 = (baseWallHeight) + basePlaneThickness;
+        translate([(shellLength/2), shellWidth/2, posZ00])
+        {
+          minkowskiBox(yappPartBase, shellInsideLength, shellInsideWidth, baseWallHeight, roundRadius, basePlaneThickness, wallThickness, false);
+        }
+        
+      } // if printBaseShell ..
+      
+      if ($preview && showOrientation) 
+      {
+        showOrientation();
+      }
+                  
+     if (printMessages) echo ("* Print lid *");
+     if (showSideBySide || !$preview)
+      {
+        if (printMessages) echo ("***  Side by side  ***");
+        //-- lid side-by-side
+        mirror([0,0,1])
+        {
+          mirror([0,1,0])
+          {
+            translate([0, (5 + shellWidth+(shiftLid/2))*-2, 0])
+            {
+              if (printLidShell)
+              {
+                drawLid();
+              } // printLidShell()
+              // Add button extenders
+              buildButtons(false);
+              addDisplayMounts(2); //-- Generate the clips
+            } // translate
+          } //  mirror  
+        } //  mirror  
+      }
+      else  // lid on base
+      {
+        if (printMessages) echo ("***  Print lid on base  ***");
+        translate([0, 0, (baseWallHeight+basePlaneThickness+
+                          lidWallHeight+lidPlaneThickness+onLidGap)])
+        {
+          if (printLidShell)
+          {
+            drawLid();
+          } // printLidShell()
+          // Add button extenders
+          buildButtons(false);
+       //   addDisplayMounts(3); // Does Nothing
+        } //  translate ..
+      } // lid on top off Base  
+    } //union
+      
+    if ($preview) 
+    {
+      //--- show inspection cut
+      if (inspectX != 0)
+      {
+        maskLength = shellLength * 3;
+        maskWidth = shellWidth * 3;
+        maskHeight = (baseWallHeight + lidWallHeight+ ridgeHeight) *2;
+        color("Salmon",1)
+        if (!inspectXfromBack)
+        {
+          translate([inspectX, -shellWidth/2,-maskHeight/4])
+          cube([maskLength, maskWidth, maskHeight]);
+        }
+        else
+        {
+          translate([-maskLength + inspectX, -shellWidth/2,-maskHeight/4])
+          cube([maskLength, maskWidth, maskHeight]);
+        }
+      } //inspectX
+     
+      //--- show inspection cut
+      if (inspectY != 0)
+      {
+        maskLength = shellLength * 3;
+        maskWidth = shellWidth * 3;
+        maskHeight = (baseWallHeight + lidWallHeight+ ridgeHeight) *2;
+        color("Salmon",1)
+        if (!inspectYfromLeft)
+        {
+          translate([-shellLength/2, inspectY, -maskHeight/4])
+          cube([maskLength, maskWidth, maskHeight]);
+        }
+        else
+        {
+          translate([-shellLength/2,-maskWidth + inspectY,-maskHeight/4])
+          cube([maskLength, maskWidth, maskHeight]);
+        }
+      } //inspectY
+
+      //--- show inspection cut
+      if (inspectZ != 0)
+      {
+        maskLength = shellLength * 3;
+        maskWidth = shellWidth * 3;
+        maskHeight = (baseWallHeight + lidWallHeight+ ridgeHeight) *2;
+        
+        color("Salmon",1)
+        if (inspectZfromBottom)
+        {
+          translate([-shellLength/2, -shellWidth/2, inspectZ])
+          cube([maskLength, maskWidth, maskHeight]);
+        }
+        else
+        {
+          translate([-shellLength/2,-shellWidth/2,-maskHeight + inspectZ])
+          cube([maskLength, maskWidth, maskHeight]);
+        }
+      } //inspectZ
+    } // $preview
+  }// Inspection cuts 
+} //-- YAPPgenerate()
+
+
+//===========================================================

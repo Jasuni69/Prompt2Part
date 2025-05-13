@@ -1,0 +1,4 @@
+function typeOf(obj)=
+  (obj!=undef && len(obj) == 4 && obj[3]==_prototype_type())
+  ? _prototype_type()
+  : lastOf(obj);

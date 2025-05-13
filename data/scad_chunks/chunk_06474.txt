@@ -1,0 +1,37 @@
+function xmove(x=0, p=_NO_ARG) =
+    assert(is_finite(x), "Invalid number")
+    move([x,0,0],p=p);
+
+
+// Function&Module: fwd()
+//
+// Synopsis: Translates children forwards (Y-).
+// SynTags: Trans, Path, VNF, Mat
+// Topics: Affine, Matrices, Transforms, Translation
+// See Also: move(), left(), right(), back(), down(), up()
+//
+// Usage: As Module
+//   fwd(y) CHILDREN;
+// Usage: Translate Points
+//   pts = fwd(y, p);
+// Usage: Get Translation Matrix
+//   mat = fwd(y);
+//
+// Description:
+//   If called as a module, moves/translates all children forward (in the Y- direction) by the given amount.
+//   If called as a function with the `p` argument, returns the translated VNF, point or list of points.
+//   If called as a function without the `p` argument, returns an affine3d translation matrix.
+//
+// Arguments:
+//   y = Scalar amount to move forward.
+//   p = Either a point, or a list of points to be translated when used as a function.
+//
+// Example:
+//   #sphere(d=10);
+//   fwd(20) sphere(d=10);
+//
+// Example(NORENDER):
+//   pt1 = fwd(20, p=[23,42]);           // Returns: [23,22]
+//   pt2 = fwd(20, p=[15,23,42]);        // Returns: [15,3,42]
+//   pt3 = fwd(3, p=[[1,2,3],[4,5,6]]);  // Returns: [[1,-1,3], [4,2,6]]
+//   mat3d = fwd(4);  // Returns: [[1,0,0,0],[0,1,0,-4],[0,0,1,0],[0,0,0,1]]

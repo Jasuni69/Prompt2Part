@@ -1,0 +1,10 @@
+function _triangulate_real_triangulate_sub(shape_pts, collector, indices, v, num_of_vertices, count, epsilon) = 
+    let(
+        // idxes of three consecutive vertices
+        u = _zero_or_value(num_of_vertices, v),     
+        vi = _zero_or_value(num_of_vertices, u + 1), 
+        w = _zero_or_value(num_of_vertices, vi + 1) 
+    )
+    _snipable(shape_pts, u, vi, w, num_of_vertices, indices, epsilon) ? 
+        _snip(shape_pts, collector, indices, u, vi, w, num_of_vertices, count, epsilon) : 
+        _real_triangulate(shape_pts, collector, indices, vi, num_of_vertices, count, epsilon);

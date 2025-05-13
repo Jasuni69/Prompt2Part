@@ -1,0 +1,3 @@
+function limit(vt, magnitude) = 
+    let(m = norm(vt))
+    m > magnitude ? vt / m * magnitude : vt;

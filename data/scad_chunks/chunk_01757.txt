@@ -1,0 +1,2 @@
+function pcb_component_position(type, name, index = 0) = //! Return x y position of specified component
+    [for(comp = pcb_components(type), p = [pcb_coord(type, [comp.x, comp.y])]) if(comp[3] == name) [p.x, p.y]][index];

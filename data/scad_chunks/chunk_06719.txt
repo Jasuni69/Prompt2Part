@@ -1,0 +1,12 @@
+module test_f_2arg() {
+    assert_equal(str(f_2arg(function (a,b) a+b)), "function(a, b) (((a == undef) && (b == undef)) ? function(x, y) target_func(x, y) : ((a == undef) ? function(x) target_func(x, b) : ((b == undef) ? function(x) target_func(a, x) : function() target_func(a, b))))");
+    assert_equal(str(f_2arg(function (a,b) a+b)(3)), "function(x) target_func(a, x)");
+    assert_equal(str(f_2arg(function (a,b) a+b)(a=3)), "function(x) target_func(a, x)");
+    assert_equal(str(f_2arg(function (a,b) a+b)(b=3)), "function(x) target_func(x, b)");
+    assert_equal(str(f_2arg(function (a,b) a+b)(3,4)), "function() target_func(a, b)");
+    assert_equal(f_2arg(function (a,b) a+b)()(4,2), 6);
+    assert_equal(f_2arg(function (a,b) a+b)(3)(7), 10);
+    assert_equal(f_2arg(function (a,b) a+b)(a=2)(7), 9);
+    assert_equal(f_2arg(function (a,b) a/b)(a=8)(2), 4);
+}
+test_f_2arg();

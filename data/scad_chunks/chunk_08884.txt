@@ -1,0 +1,24 @@
+function gray_scott(uv, feed, kill, Du, Dv, uy_ly, rx_lx, space_x, space_y) =
+    [
+		for(y = [0:space_y - 1])
+		let(
+			uy = uy_ly[y][0],
+			ly = uy_ly[y][1],
+			ruv = uv[y],
+			sum_of_ruv_ul = uv[uy] + uv[ly]
+		)
+		[
+			for(x = [0:space_x - 1])
+			let(
+				rx = rx_lx[x][0],
+				lx = rx_lx[x][1],
+				cu = ruv[x][0],
+				cv = ruv[x][1],
+				reaction = cu * (cv ^ 2)
+			)
+			[
+				cu + Du * (sum_of_ruv_ul[x][0] + ruv[rx][0]+ ruv[lx][0] - 4 * cu) - reaction + feed * (1 - cu), 
+				cv + Dv * (sum_of_ruv_ul[x][1] + ruv[rx][1] + ruv[lx][1] - 4 * cv) + reaction - (feed + kill) * cv
+			]
+		]
+	];

@@ -1,0 +1,1 @@
+function bearing_rod_dia(type)          = type[3];   //! Internal diameter

@@ -1,0 +1,3 @@
+function _trim_lines(lines, epsilon) = 
+    let(leng = len(lines))
+    leng > 2 ? _trim_sub(lines, leng, epsilon) : _collect_pts_from(lines, leng);

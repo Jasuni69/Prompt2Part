@@ -1,0 +1,1 @@
+function nut_max_width (options, kind = DEFAULT_NUT_KIND) = nut_width_across_corners(options);

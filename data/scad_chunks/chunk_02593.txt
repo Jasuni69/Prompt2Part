@@ -1,0 +1,4 @@
+function augment(m) = let(l = len(m), n = identity(l)) [ // Augment a matrix by adding an identity matrix to the right
+    for(i = [0 : l - 1])
+        concat(m[i], n[i])
+];

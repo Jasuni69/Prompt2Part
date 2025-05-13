@@ -1,0 +1,166 @@
+module rotate_sweep(
+    shape, angle=360,
+    texture, tex_size=[5,5], tex_counts, tex_reps,
+    tex_inset=false, tex_rot=0,
+    tex_scale, tex_depth, tex_samples,
+    tex_taper, shift=[0,0],
+    style="min_edge",
+    caps, closed, tex_extra, tex_aspect, pixel_aspect,
+    cp="centroid",
+    convexity=10,
+    atype="hull",
+    anchor="origin",
+    spin=0,
+    orient=UP, start=0, 
+    _tex_inhibit_y_slicing=false
+) {
+    dummy =
+       assert(num_defined([closed,caps])<2, "In rotate_sweep the `closed` paramter has been replaced by `caps` with the opposite meaning.  You cannot give both.")
+       assert(num_defined([tex_reps,tex_counts])<2, "In rotate_sweep() the 'tex_counts' parameters has been replaced by 'tex_reps'.  You cannot give both.")
+       assert(num_defined([tex_scale,tex_depth])<2, "In rotate_sweep() the 'tex_scale' parameter has been replaced by 'tex_depth'.  You cannot give both.")
+       assert(!is_path(shape) || caps || len(shape)>=3, "'shape' is a path and caps=false, but a closed path requires three points");
+    caps = is_def(caps) ? caps
+         : is_def(closed) ? !closed
+         : false;
+    tex_reps = is_def(tex_counts)? echo("In rotate_sweep() the 'tex_counts' parameter is deprecated and has been replaced by 'tex_reps'")tex_counts
+             : tex_reps;
+    tex_depth = is_def(tex_scale)? echo("In rotate_sweep() the 'tex_scale' parameter is deprecated and has been replaced by 'tex_depth'")tex_scale
+              : default(tex_depth,1);
+    region = force_region(shape);
+    check = assert(is_region(region), "Input is not a region or polygon.");
+    bounds = pointlist_bounds(flatten(region));
+    min_x = bounds[0].x;
+    max_x = bounds[1].x;
+    min_y = bounds[0].y;
+    max_y = bounds[1].y;
+    h = max_y - min_y;
+    check2 = assert(min_x>=0, "Input region must exist entirely in the X+ half-plane.");
+    if (!is_undef(texture)) {
+        _textured_revolution(
+            shape,
+            texture=texture,
+            tex_size=tex_size,
+            counts=tex_reps,
+            tex_scale=tex_depth,
+            inset=tex_inset,
+            rot=tex_rot,
+            samples=tex_samples,
+            taper=tex_taper,
+            shift=shift,tex_extra=tex_extra,tex_aspect=tex_aspect, pixel_aspect=pixel_aspect, 
+            closed=!caps,
+            inhibit_y_slicing=_tex_inhibit_y_slicing,
+            angle=angle,
+            style=style,
+            atype=atype, anchor=anchor, 
+            spin=spin, orient=orient, start=start
+        ) children();
+    } else {
+        region = is_path(shape) && caps ? [deduplicate([[0,shape[0].y], each shape, [0,last(shape).y]])]
+               : region;
+        steps = ceil(segs(max_x) * angle / 360) + (angle<360? 1 : 0);
+        skmat = down(min_y) * skew(sxz=shift.x/h, syz=shift.y/h) * up(min_y);
+        transforms = [
+            if (angle==360) for (i=[0:1:steps-1]) skmat * rot([90,0,start+360-i*360/steps]),
+            if (angle<360) for (i=[0:1:steps-1]) skmat * rot([90,0,start+angle-i*angle/(steps-1)]),
+        ];
+        sweep(
+            region, transforms,
+            closed=angle==360,
+            caps=angle!=360,
+            style=style, cp=cp,
+            convexity=convexity,
+            atype=atype, anchor=anchor,
+            spin=spin, orient=orient
+        ) children();
+    }
+}
+
+
+
+// Function&Module: spiral_sweep()
+// Synopsis: Sweep a path along a helix.
+// SynTags: VNF, Geom
+// Topics: Extrusion, Sweep, Spiral
+// See Also: thread_helix(), linear_sweep(), rotate_sweep(), sweep(), path_sweep(), offset_sweep()
+// Usage: As Module
+//   spiral_sweep(poly, h, r|d=, turns, [taper=], [center=], [taper1=], [taper2=], [internal=], ...)[ATTACHMENTS];
+//   spiral_sweep(poly, h, r1=|d1=, r2=|d2=, turns, [taper=], [center=], [taper1=], [taper2=], [internal=], ...)[ATTACHMENTS];
+// Usage: As Function
+//   vnf = spiral_sweep(poly, h, r|d=, turns, ...);
+//   vnf = spiral_sweep(poly, h, r1=|d1=, r1=|d2=, turns, ...);
+// Description:
+//   Takes a closed 2D polygon path, centered on the XY plane, and sweeps/extrudes it along a 3D spiral path
+//   of a given radius, height and degrees of rotation.  The origin in the profile traces out the helix of the specified radius.
+//   If turns is positive the path will be right-handed;  if turns is negative the path will be left-handed.
+//   Such an extrusion can be used to make screw threads.  
+//   .
+//   The lead_in options specify a lead-in section where the ends of the spiral scale down to avoid a sharp cut face at the ends.
+//   You can specify the length of this scaling directly with the lead_in parameters or as an angle using the lead_in_ang parameters.
+//   If you give a positive value, the extrusion is lengthenend by the specified distance or angle; if you give a negative
+//   value then the scaled end is included in the extrusion length specified by `turns`.  If the value is zero then no scaled ends
+//   are produced.  The shape of the scaled ends can be controlled with the lead_in_shape parameter.  Supported options are "sqrt", "linear"
+//   "smooth" and "cut".  
+//   .
+//   The inside argument changes how the extrusion lead-in sections are formed.  If it is true then they scale
+//   toward the outside, like would be needed for internal threading.  If internal is fale then the lead-in sections scale
+//   toward the inside, like would be appropriate for external threads.  
+// Arguments:
+//   poly = Array of points of a polygon path, to be extruded.
+//   h = height of the spiral extrusion path
+//   r = Radius of the spiral extrusion path
+//   turns = number of revolutions to include in the spiral
+//   ---
+//   d = Diameter of the spiral extrusion path.
+//   d1/r1 = Bottom inside diameter or radius of spiral to extrude along.
+//   d2/r2 = Top inside diameter or radius of spiral to extrude along.
+//   lead_in = Specify linear length of the lead-in scaled section of the spiral.  Default: 0
+//   lead_in1 = Specify linear length of the lead-in scaled section of the spiral at the bottom
+//   lead_in2 = Specify linear length of the lead-in scaled section of the spiral at the top
+//   lead_in_ang = Specify angular  length of the lead-in scaled section of the spiral
+//   lead_in_ang1 = Specify angular length of the lead-in scaled section of the spiral at the bottom
+//   lead_in_ang2 = Specify angular length of the lead-in scaled section of the spiral at the top
+//   lead_in_shape = Specify the shape of the thread lead in by giving a text string or function.  Default: "sqrt"
+//   lead_in_shape1 = Specify the shape of the thread lead-in at the bottom by giving a text string or function.  
+//   lead_in_shape2 = Specify the shape of the thread lead-in at the top by giving a text string or function.
+//   lead_in_sample = Factor to increase sample rate in the lead-in section.  Default: 10
+//   internal = if true make internal threads.  The only effect this has is to change how the extrusion lead-in section are formed. When true, the extrusion scales toward the outside; when false, it scales toward the inside.  Default: false
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top toward, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+// Example:
+//   poly = [[-10,0], [-3,-5], [3,-5], [10,0], [0,-30]];
+//   spiral_sweep(poly, h=200, r=50, turns=3, $fn=36);
+_leadin_ogive=function (x,L) 
+     let( minscale = .05,
+          r=(L^2+(1-minscale^2))/2/(1-minscale),
+          scale = sqrt(r^2-(L*(1-x))^2) -(r-1)
+     )
+     x>1 ? [1,1]
+   : x<0 ? [lerp(minscale,1,.25),0] 
+   : [lerp(scale,1,.25),scale];     
+
+_leadin_cut = function(x,L) x>0 ? [1,1] : [1,0];
+
+_leadin_sqrt = function(x,L)
+     let(end=0.05)   // Smallest scale at the end
+     x>1 ? [1,1]
+   : x<0 ? [lerp(end,1,.25),0]   
+   : let(  
+          s = sqrt(x + end^2 * (1-x))
+     )
+     [lerp(s,1,.25),s];    // thread width scale, thread height scale
+
+_leadin_linear = function(x,L)
+     let(minscale=.1)
+     x>1 ? [1,1]
+   : x<0 ? [lerp(minscale,1,.25),0]
+   : let(scale = lerp(minscale,1,x))
+     [lerp(scale,1,.25),scale];
+
+_lead_in_table = [
+     ["default", _leadin_sqrt],
+     ["sqrt", _leadin_sqrt],
+     ["cut", _leadin_cut],
+     ["smooth", _leadin_ogive],
+     ["linear", _leadin_linear]
+];

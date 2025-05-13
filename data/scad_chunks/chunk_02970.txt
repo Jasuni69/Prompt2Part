@@ -1,0 +1,23 @@
+function getVectorInVector(identifier, setArray) = 
+  ( setArray[0][0][0] == identifier) ? setArray[0] : 
+  ( setArray[1][0][0] == identifier) ? setArray[1] : 
+  ( setArray[2][0][0] == identifier) ? setArray[2] : 
+  ( setArray[3][0][0] == identifier) ? setArray[3] : 
+  ( setArray[4][0][0] == identifier) ? setArray[4] : 
+  ( setArray[5][0][0] == identifier) ? setArray[5] : 
+  ( setArray[6][0][0] == identifier) ? setArray[6] : 
+  ( setArray[7][0][0] == identifier) ? setArray[7] : 
+  ( setArray[8][0][0] == identifier) ? setArray[8] : 
+  ( setArray[9][0][0] == identifier) ? setArray[9] : 
+  ( setArray[10][0][0] == identifier) ? setArray[10] : 
+  ( setArray[11][0][0] == identifier) ? setArray[11] : 
+  ( setArray[12][0][0] == identifier) ? setArray[12] : 
+  ( setArray[13][0][0] == identifier) ? setArray[13] : 
+  ( setArray[14][0][0] == identifier) ? setArray[14] : 
+  ( setArray[15][0][0] == identifier) ? setArray[15] : 
+  ( setArray[16][0][0] == identifier) ? setArray[16] : 
+  ( setArray[17][0][0] == identifier) ? setArray[17] : 
+  ( setArray[18][0][0] == identifier) ? setArray[18] : 
+  ( setArray[19][0][0] == identifier) ? setArray[19] : false ;  
+  
+// Extract the Coordinate System from a list falling back to a default if none is found.

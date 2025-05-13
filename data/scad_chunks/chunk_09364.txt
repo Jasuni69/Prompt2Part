@@ -1,0 +1,10 @@
+function hypot(x,y,z=0) = norm([x,y,z]);
+
+
+// Function: hypot3()
+// Status: DEPRECATED, use `norm([x,y,z])` instead.
+// Description: Calculate hypotenuse length of 3D triangle.
+// Arguments:
+//   x = Length on the X axis.
+//   y = Length on the Y axis.
+//   z = Length on the Z axis.

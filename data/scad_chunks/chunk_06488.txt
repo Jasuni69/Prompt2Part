@@ -1,0 +1,62 @@
+function rot(a=0, v, cp, from, to, reverse=false, p=_NO_ARG) =
+    assert(is_undef(from)==is_undef(to), "from and to must be specified together.")
+    assert(is_undef(from) || is_vector(from, zero=false), "'from' must be a non-zero vector.")
+    assert(is_undef(to) || is_vector(to, zero=false), "'to' must be a non-zero vector.")
+    assert(is_undef(v) || is_vector(v, zero=false), "'v' must be a non-zero vector.")
+    assert(is_undef(cp) || is_vector(cp), "'cp' must be a vector.")
+    assert(is_finite(a) || is_vector(a), "'a' must be a finite scalar or a vector.")
+    assert(is_bool(reverse))
+    let(
+        m = let(
+                from = is_undef(from)? undef : point3d(from),
+                to = is_undef(to)? undef : point3d(to),
+                cp = is_undef(cp)? undef : point3d(cp),
+                m1 = !is_undef(from) ?
+                        assert(is_num(a)) 
+                        affine3d_rot_from_to(from,to) * affine3d_rot_by_axis(from,a)
+                   : !is_undef(v)?
+                        assert(is_num(a))
+                        affine3d_rot_by_axis(v,a)
+                   : is_num(a) ? affine3d_zrot(a)
+                   : affine3d_zrot(a.z) * affine3d_yrot(a.y) * affine3d_xrot(a.x),
+                m2 = is_undef(cp)? m1 : (move(cp) * m1 * move(-cp)),
+                m3 = reverse? rot_inverse(m2) : m2
+            ) m3
+    )
+    p==_NO_ARG ? m : apply(m, p);
+
+
+
+
+// Function&Module: xrot()
+//
+// Synopsis: Rotates children around the X axis using the right-hand rule.
+// SynTags: Trans, Path, VNF, Mat
+// Topics: Affine, Matrices, Transforms, Rotation
+// See Also: rot(), yrot(), zrot(), tilt()
+//
+// Usage: As Module
+//   xrot(a, [cp=]) CHILDREN;
+// Usage: As a function to rotate points
+//   rotated = xrot(a, p, [cp=]);
+// Usage: As a function to return rotation matrix
+//   mat = xrot(a, [cp=]);
+//
+// Description:
+//   Rotates around the X axis by the given number of degrees.  If `cp` is given, rotations are performed around that centerpoint.
+//   * Called as a module, rotates all children.
+//   * Called as a function with a `p` argument containing a point, returns the rotated point.
+//   * Called as a function with a `p` argument containing a list of points, returns the list of rotated points.
+//   * Called as a function with a [bezier patch](beziers.scad) in the `p` argument, returns the rotated patch.
+//   * Called as a function with a [VNF structure](vnf.scad) in the `p` argument, returns the rotated VNF.
+//   * Called as a function without a `p` argument, returns the affine3d rotational matrix.
+//
+// Arguments:
+//   a = angle to rotate by in degrees.
+//   p = If called as a function, this contains data to rotate: a point, list of points, bezier patch or VNF.
+//   ---
+//   cp = centerpoint to rotate around. Default: [0,0,0]
+//
+// Example:
+//   #cylinder(h=50, r=10, center=true);
+//   xrot(90) cylinder(h=50, r=10, center=true);

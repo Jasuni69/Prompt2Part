@@ -1,0 +1,1 @@
+function pocket_handle_wall(type)      = type[4]; //! Wall thickness

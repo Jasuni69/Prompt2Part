@@ -1,0 +1,19 @@
+function xyz_to_cylindrical(x,y=undef,z=undef) = let(
+		p = is_scalar(x)? [x, default(y,0), default(z,0)] : point3d(x)
+	) [norm([p.x,p.y]), atan2(p.y,p.x), p.z];
+
+
+// Function: spherical_to_xyz()
+// Usage:
+//   spherical_to_xyz(r, theta, phi);
+//   spherical_to_xyz([r, theta, phi]);
+// Description:
+//   Convert spherical coordinates to 3D cartesian coordinates.
+//   Returns [X,Y,Z] cartesian coordinates.
+// Arguments:
+//   r = distance from origin.
+//   theta = angle in degrees, counter-clockwise of X+ on the XY plane.
+//   phi = angle in degrees from the vertical Z+ axis.
+// Examples:
+//   xyz = spherical_to_xyz(20,30,40);
+//   xyz = spherical_to_xyz([40,60,50]);

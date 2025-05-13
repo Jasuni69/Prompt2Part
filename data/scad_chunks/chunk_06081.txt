@@ -1,0 +1,9 @@
+function _segment_good(path,pathseg_unit,pathseg_len, d, seg,alpha ,index=0) =
+    index == len(alpha) ? false :
+    _point_dist(path,pathseg_unit,pathseg_len, alpha[index]*seg[0]+(1-alpha[index])*seg[1]) > d ? true :
+    _segment_good(path,pathseg_unit,pathseg_len,d,seg,alpha,index+1);
+
+
+// Input is the path, the path segments normalized to unit length, the length of each path segment
+// and a test point.  Computes the (minimum) distance from the path to the point, taking into
+// account that the minimal distance may be anywhere along a path segment, not just at the ends.

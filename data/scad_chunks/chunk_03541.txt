@@ -1,0 +1,11 @@
+function height(h) =	setType($type_geomInfoHeight,[h]);
+
+
+//sets chamfer parameters for a direct child
+// objects of box() or tube()
+//chamfer (up=-1) box(side=10) chamfers the top side of the box
+// chamfer (down= -1) chamfersthe bottom side
+// sides are chamfered to the same value  unless changed by side=xxx
+// i.e. chamfer(up=-1,sides=0) to disable chamfering of sides
+// chamfer (up=1) grows the side by the same amount instead of chamfering
+//allowing to get chamfered conaves (inner corners between objects)

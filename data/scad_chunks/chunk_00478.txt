@@ -1,0 +1,1 @@
+function iec_body_w(type)   = type[4];  //! Body width

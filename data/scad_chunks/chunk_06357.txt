@@ -1,0 +1,19 @@
+function _point_left_of_line2d(point, line, eps=EPSILON) =
+    assert( is_vector(point,2) && is_vector(line*point, 2), "\nImproper input." )
+//    cross(line[0]-point, line[1]-line[0]);
+    _tri_class([point,line[1],line[0]],eps);
+    
+
+// Function: is_collinear()
+// Synopsis: Determine if points are collinear.
+// Topics: Geometry, Points, Collinearity
+// See Also: is_collinear(), is_point_on_line(), point_line_distance(), line_from_points()
+// Usage:
+//   bool = is_collinear(a, [b, c], [eps]);
+// Description:
+//   Returns true if the points `a`, `b` and `c` are co-linear or if the list of points `a` is collinear.
+// Arguments:
+//   a = First point or list of points.
+//   b = Second point or undef; it should be undef if `c` is undef
+//   c = Third point or undef.
+//   eps = Tolerance in geometric comparisons.  Default: `EPSILON` (1e-9)

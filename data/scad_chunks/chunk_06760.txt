@@ -1,0 +1,7 @@
+module test_f_sqr() {
+    _test_fn1arg(
+        function (a) f_sqr(a),
+        [[-5,25],[5,25],[9,81]]
+    );
+}
+test_f_sqr();

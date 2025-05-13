@@ -1,0 +1,2 @@
+module use_svg(name)                //! Import an SVG to make a build panel
+    assert(false);                  // Here for documentation only, real version in core.scad

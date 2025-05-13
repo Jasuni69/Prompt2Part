@@ -1,0 +1,7 @@
+function visitable_dirs(maze, dirs, currentCell) =
+    [
+	    for(dir = dirs)
+		let(nxcs = nextCells(maze, currentCell, dir))
+		if(some(nxcs, isVisitable))
+		dir
+	];

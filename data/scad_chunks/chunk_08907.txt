@@ -1,0 +1,6 @@
+function startAngle(cx, cy, spiral) = 
+    let(
+        center = spiral_center(spiral),
+        sa = (atan2((cy - center.y), (cx - center.x)) - spiral_startAngle(spiral)) % 360
+    )
+    abs((sa + spiral_angleSign(spiral) * 360) % 360);

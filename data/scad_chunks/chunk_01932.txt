@@ -1,0 +1,84 @@
+module box_bezel(type, bottom) { //! Generates top and bottom bezel STLs
+    feet = bottom && box_feet(type);
+    t = box_sheet_slot(type);
+    outset =  box_outset(type);
+    inset = box_inset(type);
+    inner_r = box_sheet_r(type);
+    cgap = box_corner_gap(type);
+    foot_height = cgap + sheet_thickness(box_base_sheet(type)) + washer_thickness(box_washer(type)) + screw_head_height(box_screw(type)) + box_profile_overlap(type) + 2;
+    foot_length = box_corner_rad(type) * 2;
+    height = box_bezel_height(type, bottom);
+    foot_extension = foot_height - height;
+
+    stl(box_bc_name(type, bottom ? "bottom_bezel" : "top_bezel"))
+        difference() {
+            w = box_width(type);
+            d = box_depth(type);
+            translate_z(-box_profile_overlap(type)) difference() {
+                tw = w + 2 * outset;
+                td = d + 2 * outset;
+                rounded_rectangle([tw, td, feet ? foot_height : height], box_corner_rad(type));
+                //
+                // Remove edges between the feet
+                //
+                if(feet)
+                    hull() {
+                        translate_z(height + 0.5)
+                            cube([w - 2 * foot_length, td + 1, 1], center = true);
+
+                        translate_z(foot_height + 1)
+                            cube([w - 2 * (foot_length - foot_extension), td + 1, 1], center = true);
+                    }
+                if(feet)
+                    hull() {
+                        translate_z(height + 0.5)
+                            cube([tw + 1, d - 2 * foot_length, 1], center = true);
+
+                        translate_z(foot_height + 1)
+                            cube([tw + 1, d - 2 * (foot_length - foot_extension), 1], center = true);
+                    }
+            }
+            //
+            // slots for side panels
+            //
+            translate_z(-box_profile_overlap(type))
+                linear_extrude(2 * box_profile_overlap(type), center = true)
+                    for(i = [-1, 1]) {
+                        translate([i * (w + t - sheet_slot_clearance) / 2, 0])
+                             square([t, d - 2 * cgap], center = true);
+
+                        translate([0, i * (d + t - sheet_slot_clearance) / 2])
+                             square([w - 2 * cgap, t], center = true);
+                    }
+            //
+            // recess for top / bottom panel
+            //
+            translate_z(cgap)
+                rounded_rectangle([w + bezel_clearance, d + bezel_clearance, height], inner_r + bezel_clearance / 2);
+            //
+            // leave plastic over the corner profiles
+            //
+            translate_z(-box_profile_overlap(type) - 1)
+                linear_extrude(box_profile_overlap(type) + cgap + 2)
+                    union() {
+                        difference() {
+                            square([w - 2 * inset,
+                                    d - 2 * inset], center = true);
+
+                            box_corner_quadrants(type, w, d);
+                        }
+                        box_screw_hole_positions(type)
+                            poly_circle(screw_clearance_radius(box_screw(type)));
+                    }
+            //
+            // Optional child to subtract
+            //
+            if($children && !bottom)
+                translate_z(-box_profile_overlap(type))
+                    children();
+         }
+}
+
+dowel_length = 20;
+dowel_wall = extrusion_width * 3;
+dowel_h_wall = layer_height * 6;

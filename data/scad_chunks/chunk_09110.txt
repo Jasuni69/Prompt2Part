@@ -1,0 +1,4 @@
+function visitOUT(maze, next, currentCell) = update_maze(
+    maze, 
+	cell(next[0], next[1], CCW_WALL, VISITED, next[4], next[5], next[6], next[7])
+);

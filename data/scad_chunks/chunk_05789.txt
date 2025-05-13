@@ -1,0 +1,69 @@
+module cubetruss_joiner(w=1, vert=true, size, strut, clipthick, anchor=CENTER, spin=0, orient=UP) {
+    size = is_undef(size)? $cubetruss_size : size;
+    strut = is_undef(strut)? $cubetruss_strut_size : strut;
+    clipthick = is_undef(clipthick)? $cubetruss_clip_thickness : clipthick;
+    clipsize = 0.5;
+    s = [cubetruss_dist(w,1,size,strut)+2*clipthick, cubetruss_dist(2,0,size,strut)-0.1, strut+clipthick];
+    attachable(anchor,spin,orient, size=s, offset=[0,0,-(clipthick-strut)/2]) {
+        down(clipthick) {
+            // Base
+            cube([w*(size-strut)+strut+2*clipthick, size, clipthick], anchor=BOT);
+
+            xcopies(w*(size-strut)+strut+clipthick) {
+                cube([clipthick, size, clipthick+strut*3/4], anchor=BOT);
+            }
+
+            // Use feet
+            ycopies(size) {
+                cubetruss_foot(w=w, size=size, strut=strut, clipthick=clipthick, anchor=BOT);
+            }
+
+            if (vert) {
+                // Vert Walls
+                xcopies(w*(size-strut)+strut+clipthick) {
+                    up(clipthick-0.01) {
+                        prismoid([clipthick, size], [clipthick, 2*strut+2*clipthick], h=size*0.6, anchor=BOT);
+                    }
+                }
+
+                // Vert Wall Clips
+                up(size/2) {
+                    xflip_copy(offset=(w*(size-strut)+strut+0.02)/2) {
+                        yflip_copy(offset=strut+get_slop()/2) {
+                            yrot(-90) {
+                                back_half() {
+                                    prismoid([size/3.5, clipthick*2], [size/3.5-4*2*clipsize, 0.1], h=2*clipsize, anchor=BOT);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        children();
+    }
+}
+
+
+// Module: cubetruss_uclip()
+// Synopsis: Creates a joiner that can connect two cubetrusses end-to-end.
+// SynTags: Geom
+// Topics: Trusses, CubeTruss, FDM Optimized, Parts
+// See Also: cubetruss_segment(), cubetruss_support(), cubetruss(), cubetruss_corner()
+// Usage:
+//   cubetruss_uclip(dual, [size=], [strut=], [clipthick=]) [ATTACHMENTS];
+// Description:
+//   Creates a small clip that can snap around one or two adjacent struts.
+// Arguments:
+//   dual = If true, create a clip to clip around two adjacent struts.  If false, just fit around one strut.  Default: true
+//   size = The length of each side of the cubetruss cubes.  Default: `$cubetruss_size` (usually 30)
+//   strut = The width of the struts on the cubetruss cubes.  Default: `$cubetruss_strut_size` (usually 3)
+//   clipthick = The thickness of the clips.  Default: `$cubetruss_clip_thickness` (usually 1.6)
+//   ---
+//   $slop = Make fit looser by this amount
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+// Examples:
+//   cubetruss_uclip(dual=false);
+//   cubetruss_uclip(dual=true);

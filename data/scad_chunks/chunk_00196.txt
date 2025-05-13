@@ -1,0 +1,7 @@
+module layouts() {
+    linear_extrude(eps)
+        layout(diams, gap = 1)
+            circle(d = diams[$i]);
+}
+
+rotate([70, 0, 315]) layouts();

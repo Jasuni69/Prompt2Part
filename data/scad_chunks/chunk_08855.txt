@@ -1,0 +1,30 @@
+function sub_kite(tile) = 
+	let(
+	    PHI = 1.618033988749895,
+	    x = tile_x(tile),
+		y = tile_y(tile),
+		angle = tile_angle(tile),
+		size = tile_size(tile),
+		n_size = tile_size(tile) / PHI,
+		r = PHI * size
+	)
+	[
+		for(i = 0, sign = 1; i < 2; i = i + 1, sign = -sign)
+		let(a = angle - 36 * sign)
+		each [
+			tile(
+				DART,
+				x,
+				y,
+				between_360(angle - 4 * 36 * sign),
+				n_size
+			),
+			tile(
+				KITE,
+				x + r * cos(a),
+				y + r * sin(a),
+				between_360(angle + 3 * 36 * sign),
+				n_size
+			)
+		]
+	];

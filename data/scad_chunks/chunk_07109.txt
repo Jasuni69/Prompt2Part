@@ -1,0 +1,1 @@
+function quadratic_gosper    (levels=2,  step=1) = lsystem_turtle(levels=levels, step=step, angle=90,  "-YF",       [["X", "XFX-YF-YF+FX+FX-YF-YFFX+YF+FXFXYF-FX+YF+FXFX+YF-FXYF-YF-FX+FX+YFYF-"], ["Y", "+FXFX-YF-YF+FX+FXYF+FX-YFYF-FX-YF+FXYFYF-FX-YFFX+FX+YF-YF-FX+FX+YFY"]]);

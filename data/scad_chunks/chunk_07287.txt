@@ -1,0 +1,32 @@
+module InfoTxt(name,string,info,help=false){
+  $tab=is_undef($tab)?0:$tab;
+  info=is_undef(info)?is_undef($info)?false:
+                                $info:
+  info;
+  
+  //  https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/User-Defined_Functions_and_Modules#Function_Literals
+ noInfo=is_undef($noInfo)?false:$noInfo; 
+ idx=is_undef($idx)?false:is_list($idx)?norm($idx):$idx;
+ idxON=is_undef($idxON)?false:$idxON?true:false;
+ joinArray= function(in,out="",pos=0) pos>=len(in)?out: // scad version > 2021
+        joinArray(in=in,out=str(out,in[pos]),pos=pos +1);   
+    
+
+ // current version info
+  infoText=[for(i=[0:2:len(string)-1])str(string[i],"=",string[i+1],i<len(string)-2?", ":"")];
+      
+if(info&&(!idx||idxON)&&!noInfo)if(is_list(string))echo( 
+ str(is_string(info)?$tab?"⏩\t":
+                          "🟩\t••":
+                     "",$tab?" ╞▷   ":
+                             "",b($tab,false)>1?" ┗▶   ":
+                                                " ",info," ",name," ",
+joinArray(infoText)));
+
+else HelpTxt(titel="InfoTxt",string=["name",name,"string","[text,variable]","info",info],help=1);
+
+HelpTxt(titel="InfoTxt",string=["name",name,"string","[text,variable]","info",info],help=help);
+}
+
+
+// display the module variables in a copyable format

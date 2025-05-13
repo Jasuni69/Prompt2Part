@@ -1,0 +1,17 @@
+module roundedRectangle2D(width,length,radius)
+{
+  if (radius > width/2 || radius > length/2) 
+  {
+      echo("Warning radius too large");
+  }
+  hull() 
+  {
+    translate ([(-width/2) + radius, (-length/2) + radius,0]) circle(r=radius);
+    translate ([(+width/2) - radius, (-length/2) + radius,0]) circle(r=radius);
+    translate ([(-width/2) + radius, (+length/2) - radius,0]) circle(r=radius);
+    translate ([(+width/2) - radius, (+length/2) - radius,0]) circle(r=radius);
+  }
+} //-- roundedRectangle2D()
+
+
+//===========================================================

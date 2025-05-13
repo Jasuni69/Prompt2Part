@@ -1,0 +1,16 @@
+function vnf_reverse_faces(vnf) =
+    [vnf[0], [for (face=vnf[1]) reverse(face)]];
+
+
+// Function: vnf_quantize()
+// Synopsis: Quantizes the vertex coordinates of a VNF.
+// SynTags: VNF
+// Topics: VNF Manipulation
+// See Also: vnf_reverse_faces(), vnf_merge_points(), vnf_drop_unused_points(), vnf_triangulate(), vnf_slice() 
+// Usage:
+//   vnf2 = vnf_quantize(vnf,[q]);
+// Description:
+//   Quantizes the vertex coordinates of the VNF to the given quanta `q`.
+// Arguments:
+//   vnf = The VNF to quantize.
+//   q = The quanta to quantize the VNF coordinates to.

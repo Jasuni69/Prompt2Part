@@ -1,0 +1,1 @@
+function microswitch_button_pos(type)= type[10];    //! Button position at operating point

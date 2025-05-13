@@ -1,0 +1,45 @@
+module Tesselation(size=[40,40],d=5,dist=1,dicke=0,pat=0,tile=1,rad=0,rot=0,ofs=[0,0],alt=[0,0],fn=6,center=true,name, help,obj){
+
+dist=is_list(dist)?dist:[dist,dist];
+d=is_list(d)?d:d*[1,1];
+radius=is_num(size)?size/2:0;
+size=is_list(size)?size:size*[1,1];
+alt=is_list(alt)?b(alt,false):b(alt,false)*[1,1];
+e=[max(1,size.x/(d.x+dist.x)),max(1,size.y/(d.y+dist.y))];
+tile=$children?100:is_undef(obj)?tile:obj;
+center=is_list(center)?center:[center,center];
+$d=d;
+$r=d/2;
+$info=false;
+
+HelpTxt("Tesselation",["size",size,"d",d,"dist",dist,"dicke",dicke,"pat",pat,"tile",tile,"rad",rad,"rot",rot,"ofs",ofs,"alt",alt,"fn",fn,"center",center,"name",name],help);
+
+if(pat==0)rotate(alt.y+alt.x+rot)Tile()children();
+
+if(pat==1)Grid(e=e,es=d+dist,center=center)rotate(($idx.y%2?0:alt.y)+($idx.x%2?0:alt.x)+rot)
+      if(radius?norm($pos)<=radius-max(d)/2
+      :abs($pos.x)<=(size.x-max(d))/2&&abs($pos.y)<=(size.y-max(d))/2
+      )
+Tile()children();
+
+if(pat==2)HexGrid(e=[e.x,e.y*sqrt(3)/2]*2,es=[(d.x+dist.x)*sqrt(3)/2,(d.y+dist.y)],center=center)rotate(($idx.y%2?0:alt.y)+($idx.x%2?0:alt.x)+rot)
+      if(radius?norm($pos)<=radius-max(d)/2
+      :abs($pos.x)<=((center.x?size.x:size.x*2)-max(d))/2&&abs($pos.y)<=((center.y?size.y:size.y*2)-max(d))/2
+      )
+      
+      Tile(d=fn==6?umkreis(6,d):d)children();
+//Penrose
+  if(pat==3)Polar(fn)Penrose(radius=max(size)/2,dicke=dicke,fn=fn,chld=tile,case=1,d=max(d) )rotate(rot)Tile()children();
+
+//Cairo tile diagonal
+  if(pat==4){
+   dist=max(dist);
+  es=[max(d),max(d)*2]*1.5;
+  e=[ceil(size.x/es.x),ceil(size.y/es.y)];
+   
+    HexGrid(e=[e.x,e.y],es=es,center=center)
+       if(abs($pos.x)<=size.x/2-es.x&&abs($pos.y)<=size.y/2-es.y/2)
+       Tile()children();
+  }
+// Rectangle Tiling
+ if(pat==5)RectTiling(size=size,dicke=dicke,chld=tile,d=max(d))rotate(rot)Tile()children();

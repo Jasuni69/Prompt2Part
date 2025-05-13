@@ -1,0 +1,59 @@
+module apply_folding_hinges_and_snaps(thick, foldangle=90, hinges=[], snaps=[], sockets=[], snaplen=5, snapdiam=5, hingegap=undef, layerheight=0.2)
+{
+    hingegap = default(hingegap, layerheight)+2*get_slop();
+    difference() {
+        children();
+        for (hinge = hinges) {
+            translate(hinge[1]) {
+                living_hinge_mask(
+                    l=hinge[0], thick=thick, layerheight=layerheight,
+                    foldangle=foldangle, hingegap=hingegap, spin=hinge[2]
+                );
+            }
+        }
+    }
+    for (snap = snaps) {
+        translate(snap[0]) {
+            snap_lock(
+                thick=thick, snaplen=snaplen, snapdiam=snapdiam,
+                layerheight=layerheight, foldangle=foldangle,
+                hingegap=hingegap, spin=snap[1]
+            );
+        }
+    }
+    for (socket = sockets) {
+        translate(socket[0]) {
+            snap_socket(
+                thick=thick, snaplen=snaplen, snapdiam=snapdiam,
+                layerheight=layerheight, foldangle=foldangle,
+                hingegap=hingegap, spin=socket[1]
+            );
+        }
+    }
+}
+
+
+
+// Module: snap_lock()
+// Synopsis: Creates a snap-lock shape.
+// SynTags: Geom
+// Topics: Hinges, Parts
+// See Also: knuckle_hinge(), living_hinge_mask(), snap_lock(), snap_socket()
+// Usage:
+//   snap_lock(thick, [snaplen=], [snapdiam=], [layerheight=], [foldangle=], [hingegap=], [$slop=], [anchor=], [spin=], [orient=]) [ATTACHMENTS];
+// Description:
+//   Creates the central snaplock part.
+// Arguments:
+//   thick = Thickness in mm of the material to make the hinge in.
+//   ---
+//   snaplen = Length of locking snaps.
+//   snapdiam = Diameter/width of locking snaps.
+//   layerheight = The expected printing layer height in mm.
+//   foldangle = The interior angle in degrees of the joint to be created with the hinge.  Default: 90
+//   hingegap = Size in mm of the gap at the bottom of the hinge, to make room for folding.
+//   $slop = increase size of hinge gap by double this amount
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+// Example:
+//   snap_lock(thick=3, foldangle=60);

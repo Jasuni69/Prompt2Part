@@ -1,0 +1,50 @@
+function _prototype_PackedGeomerty() =
+       definePrototype("type.PackedGeometry",/*index=*/undef,
+           [
+              definePrototype("type.Geometry.solid",/*index*/0,
+              [
+              false
+              ])
+              ,definePrototype("type.Geometry.tube",/*index=*/1,
+              [
+                0/*wall*/
+               ,10/*d*/
+               ,10/*lx=d*/
+               ,10/*ly=d*/
+               ,10/*h*/
+               ,undef/*d1*/
+               ,undef/*d2*/
+               ,false/*solid*/
+               ,false//useGeom
+              ])
+              ,definePrototype("type.Geometry.chamfer",/*index=*/2,
+              [
+                  [] //-1, -2, -2, 7
+                 ,[]
+                 ,true //disable
+              ])
+              ,definePrototype("type.Geometry.align",/*index*/3,
+              [
+              NOCHANGE
+              ])
+              ,definePrototype("type.Geometry.stacking",/*index*/4,
+              [
+              [0,0,0]//$stackDirection=
+              ,[0,0,0]//direction*abs(mergeBy),//$stackOverlap
+              ,[0,0,0]//direction*abs(spaceBy) //$stackSpaceBy])
+              ])
+              ,definePrototype("type.Geometry.height",/*index*/5,
+              [
+              undef
+              ])
+              ,definePrototype("type.Geometry.currentPartStack",/*index*/6,
+              [
+              "main",undef,undef
+              ])
+             /*        ,definePrototype("type.Geometry.noHull",<n+1>,
+              [
+              false
+              ])
+              */
+
+           ]);

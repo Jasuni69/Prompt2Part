@@ -1,0 +1,1 @@
+function rd_boxc_colours(type) = type[5]; //! Case colour and resin fill colour

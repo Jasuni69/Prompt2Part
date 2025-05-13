@@ -1,0 +1,14 @@
+module pocket_handle_holes(type, h = 0) { //! Panel cutout and screw holes
+    hand = pocket_handle_hand_size(type);
+    w = pocket_handle_wall(type);
+    slot = [hand.x + 2 * w, hand.y + 2 * w];
+    t = pocket_handle_panel_t(type);
+    clearance = norm([slot.y, t]) - slot.y + 0.2; // has to be enough clearance for the diagonal to swing it in
+
+    extrude_if(h) {
+        pocket_handle_hole_positions(type)
+            drill(screw_clearance_radius(pocket_handle_screw(type)), 0);
+
+        rounded_square([slot.x  + clearance, slot.y + clearance], pocket_handle_rad(type) + w + clearance / 2);
+    }
+}

@@ -1,0 +1,15 @@
+function _cfrac_to_pq(cfrac,p=0,q=1,ind) =
+    is_undef(ind) ? _cfrac_to_pq(cfrac,p,q,len(cfrac)-1)
+  : ind==0 ? [p+q*cfrac[0], q]
+  : _cfrac_to_pq(cfrac, q, cfrac[ind]*q+p, ind-1);
+
+
+// Section: Hyperbolic Trigonometry
+
+// Function: sinh()
+// Synopsis: Returns the hyperbolic sine of the given value.
+// Topics: Math, Trigonometry
+// See Also: sinh(), cosh(), tanh(), asinh(), acosh(), atanh()
+// Usage:
+//   a = sinh(x);
+// Description: Takes a value `x`, and returns the hyperbolic sine of it.

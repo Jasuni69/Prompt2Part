@@ -1,0 +1,26 @@
+module Kreis(r=10,dicke=0,grad=360,grad2,fn,center=true,sek=false,r2=0,rand2,rcenter=0,rot=0,t=[0,0],name,help,d,b,fs=fs,fa=fa,rand,id){
+    r=is_undef(d)?r:d/2;
+    d=2*r;
+    dicke=is_undef(rand)?is_undef(id)?dicke:(d-id)/2
+                        :rand;
+    
+    grad=is_undef(b)?grad:r==0?0:b/(2*PI*r)*360;
+    b=2*r*PI*grad/360;
+    
+    points=kreis(r=r,rand=dicke,grad=grad,grad2=grad2,fn=fn,center=center,sek=sek,r2=r2,rand2=rand2,rcenter=rcenter,rot=grad==360?center?rot:rot+90:center?rot+180:rot+90,t=t,fs=fn?undef:fs,endPoint=grad==360?false:true,fa=fa);
+    
+    path=dicke&&grad==360&&is_num(fn)?[[for(i=[0:fn]) i],[for(i=[fn:len(points)-1]) i]]
+              :[[for(i=[0:len(points)-1]) i]];
+    
+   polygon(points=points ,paths=path,convexity=5);
+    
+    HelpTxt("Kreis",["r",r,"dicke",dicke,"grad",grad,"grad2",grad2,"fn",fn,"center",center,"sek",sek,"r2",r2,"rand2",rand2,"rcenter",rcenter,"rot",rot,"t",t,"name",name,"d",d,", b",b,"id",id,"fs",fs],help);
+    
+
+    if(!rcenter){
+      if(dicke>0)InfoTxt("Kreis",["id",2*(r-abs(dicke)),"od",2*r],name);
+      if(dicke<0)InfoTxt("Kreis",["id",2*r,"od",2*(r+abs(dicke))],name); 
+    }
+    else if(dicke)InfoTxt("Kreis",["id",2*r-abs(dicke)," od=",2*r+abs(dicke)],name);   
+
+}

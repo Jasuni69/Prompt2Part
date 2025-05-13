@@ -1,0 +1,10 @@
+module _test_fn1arg(dafunc,tests) {
+    assert_equal(str(dafunc()),    "function(x) target_func(x)");
+    assert_equal(str(dafunc(3)),   "function() target_func(a)");
+    for (test = tests) {
+        a = test[0];
+        r = test[1];
+        assert_equal(dafunc(a)(), r);
+        assert_equal(dafunc()(a), r);
+    }
+}

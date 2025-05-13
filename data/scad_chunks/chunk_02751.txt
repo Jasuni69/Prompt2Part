@@ -1,0 +1,48 @@
+module aluProGusset(tg,screws=false) {
+	// sits on z=0
+	// faces along y+ and z+	
+	
+	w = tg[0];
+	t = tg[1];
+	slotw = tg[2];
+	sloth = tg[3];
+	sloto = tg[4];
+	nib = tg[5];
+	
+	vitamin(str(tg[6],": ",tg[6]));
+	
+	color(grey80)
+	render()
+	union() {
+		// ends
+		for (i=[0,1])
+			mirror([0,-i,i])
+			linear_extrude(t) {
+				difference() {
+					translate([-w/2,0,0]) square([w,w]);
+					translate([(-w/2+slotw)/2,sloto,0]) square([slotw,sloth]);
+				}
+			}
+			
+		// nibs - must add these at some point!
+		
+		//sides
+		for (i=[0,1])
+			mirror([i,0,0])
+			translate([w/2-t/2,t,t])
+			rotate([0,-90,0])
+			right_triangle(width=w-t, height=w-t, h=t, center = true);
+	}
+	
+	if (screws) {
+		for (i=[0,1])
+			mirror([0,-i,i]) {
+				translate([0,12,t]) screw(M4_cap_screw,8);
+				translate([0,12,0]) aluProTwistLockNut(BR_20x20_TwistLockNut);
+			}
+	}
+}
+
+
+//BR_20x20_TwistLockNut = [5.8,11.3,4,0.8,1.5];
+// aligned such that the origin is level with the surface of the profile when the nut is locked

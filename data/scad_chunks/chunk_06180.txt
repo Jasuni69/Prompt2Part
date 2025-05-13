@@ -1,0 +1,1 @@
+function _nominal_diam(spec) = struct_val(spec,"diameter")+default(struct_val(spec,"shaft_oversize"),0);

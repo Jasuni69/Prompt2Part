@@ -1,0 +1,8 @@
+module test_affine3d_skew_xz() {
+    for(za = [-89:3:89]) {
+        for(xa = [-89:3:89]) {
+            assert(affine3d_skew_xz(xa=xa, za=za) == [[1,0,tan(xa),0],[0,1,0,0],[tan(za),0,1,0],[0,0,0,1]]);
+        }
+    }
+}
+test_affine3d_skew_xz();

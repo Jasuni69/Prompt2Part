@@ -1,0 +1,1 @@
+function light_strip_leds(type)          = type[3]; //! Total number of LEDs

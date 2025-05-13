@@ -1,0 +1,29 @@
+module rotate_extrude_bezier(bezier, splinesteps=16, N=3, convexity=10, angle=360, orient=ORIENT_Z, align=V_CENTER)
+{
+	maxx = max([for (pt = bezier) abs(pt[0])]);
+	maxy = max([for (pt = bezier) abs(pt[1])]);
+	orient_and_align([maxx*2,maxx*2,0], orient, align) {
+		rotate_extrude(convexity=convexity, angle=angle) {
+			bezier_polygon(bezier, splinesteps, N);
+		}
+	}
+}
+
+
+
+// Module: revolve_bezier_solid_to_axis()
+// Usage:
+//   revolve_bezier_solid_to_axis(bezier, [splinesteps], [N], [convexity], [angle], [orient], [align]);
+// Description:
+//   Takes a 2D bezier and rotates it around the X axis, forming a solid.
+// Arguments:
+//   bezier = array of points for the bezier path to rotate.
+//   splinesteps = number of segments to divide each bezier segment into. default=16
+//   N = number of points in each bezier segment.  default=3 (cubic)
+//   convexity = max number of walls a line could pass through, for preview.  default=10
+//   angle = Degrees of sweep to make.  Default: 360
+//   orient = Orientation of the extrusion.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_X`.
+//   align = Alignment of the extrusion.  Use the `V_` constants from `constants.scad`.  Default: `V_CENTER`.
+// Example(FlatSpin):
+//   path = [ [0, 10], [33, 10], [66, 40], [100, 40] ];
+//   revolve_bezier_solid_to_axis(path, splinesteps=32, $fn=72);

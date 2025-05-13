@@ -1,0 +1,16 @@
+module svg(name) {                      //! Name an svg that will appear on the BOM, there needs to a module named `<name>_svg` to make it
+    if(bom_mode() && is_undef($in_svg)) {
+        if(is_undef($dxf_colour))
+            echo(str("~", name, ".svg"));
+        else
+            echo(str("~", name, ".svg(colour='", $dxf_colour, "')"));
+    }
+    if($children)
+        if(is_undef($pose))
+            let($in_svg = true)
+                children();
+        else {
+            path = is_undef($target) ? "/svgs/" : str("/", $target, "/svgs/");
+            import(str($cwd, path, name, ".svg"));
+        }
+}

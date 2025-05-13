@@ -1,0 +1,23 @@
+function f_min3(a,b,c) = f_3arg(function(a,b,c) min(a,b,c))(a,b,c);
+
+
+// Function: f_max3()
+// Synopsis: Returns a function to calculate the maximum of three values.
+// Topics: Function Literals, Math Operators
+// See Also: f_min(), f_max(), f_min2(), f_max2(), f_min3(), f_max3()
+// Usage:
+//   fn = f_max3();
+//   fn = f_max3(a=);
+//   fn = f_max3(b=);
+//   fn = f_max3(c=);
+//   fn = f_max3(a=,b=);
+//   fn = f_max3(b=,c=);
+//   fn = f_max3(a=,c=);
+//   fn = f_max3(a=,b=,c=);
+// Description:
+//   A factory that generates function literals based on `min(a,b,c)`, where any
+//   or all of the `a`, `b`, or`c` arguments can be replaced with constants.
+// Arguments:
+//   a = If given, replaces the first argument.
+//   b = If given, replaces the second argument.
+//   c = If given, replaces the third argument.

@@ -1,0 +1,2 @@
+function coreXY_plain_idler_offset(type)    = //! Offset of y-carriage plain idler
+    [ (pulley_od(coreXY_plain_idler(type)) + pulley_od(coreXY_drive_pulley(type))) / 2 + coreXY_drive_pulley_x_alignment(type), pulley_od(coreXY_plain_idler(type))/2, 0 ];

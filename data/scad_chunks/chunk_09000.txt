@@ -1,0 +1,19 @@
+function delaunay_addpoint(d, p, _indices_hash) =
+    let(
+	    idx = len(delaunay_coords(d)),
+		ndelaunay = delaunayAddCoords(d, p),
+		badTriangles = delaunayBadTriangles(ndelaunay, p, _indices_hash)
+	)
+	adjustNeighbors(
+		delBadTriangles(ndelaunay, badTriangles, _indices_hash), 
+		[
+		    for(b = delaunayBoundaries(ndelaunay, badTriangles, _indices_hash)) 
+			let(edge = b[0])
+			[
+			    [idx, edge[0], edge[1], ihash(idx, edge[0], edge[1])], // t
+				edge,                    
+				b[1]                     // delaunayTri
+			]
+		], 
+		_indices_hash
+	);

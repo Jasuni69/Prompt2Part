@@ -1,0 +1,7 @@
+function _rotate_p(p, a) =
+    let(angle = __to_ang_vect(a))
+    len(p) == 3 ? 
+        _rotate_p_3d(p, angle) :
+        __to2d(
+            _rotate_p_3d(__to3d(p), angle)
+        );

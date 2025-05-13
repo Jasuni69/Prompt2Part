@@ -1,0 +1,18 @@
+function f_neq(a,b) = f_2arg_simple(function (a,b) a!=b)(a,b);
+
+
+// Function: f_approx()
+// Synopsis: Returns a function to compare if `a` is approximately equal to `b`.
+// Topics: Function Literals, Comparators
+// See Also: f_cmp(), f_gt(), f_lt(), f_gte(), f_lte(), f_eq(), f_neq(), f_approx(), f_napprox()
+// Usage:
+//   fn = f_approx();
+//   fn = f_approx(b);
+//   fn = f_approx(a,b);
+// Description:
+//   A factory that generates function literals based on `approx(a,b)`, where
+//   one or both arguments can be replaced with constants.
+// Example:
+//   fn_approx = f_approx();       // = function(a,b) approx(a,b);
+//   fn_approx3 = f_approx(3);     // = function(a) approx(a,3);
+//   fn_3approx4 = f_approx(3,4);  // = function() approx(3,4);

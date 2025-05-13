@@ -1,0 +1,79 @@
+module tag_diff(tag="",remove="remove", keep="keep")
+{
+    req_children($children);
+    assert(is_string(remove),"remove must be a string of tags");
+    assert(is_string(keep),"keep must be a string of tags");
+    assert(is_string(tag),"tag must be a string");
+    assert(undef==str_find(tag," "),str("Tag string \"",tag,"\" contains a space, which is not allowed"));
+    $tag=str($tag_prefix,tag);
+    if (_is_shown())
+      show_all(){
+         difference() {
+            hide(str(remove," ",keep)) children();
+            show_only(remove) children();
+         }
+         show_only(keep)children();
+      }
+}
+
+
+// Module: intersect()
+// Synopsis: Perform an intersection operation on children using tags rather than hierarchy to control what happens.
+// Topics: Attachments
+// See Also: tag(), force_tag(), recolor(), show_only(), hide(), diff(), tag_diff(), tag_intersect()
+// Usage:
+//   intersect([intersect], [keep]) PARENT() CHILDREN;
+// Description:
+//   Performs an intersection operation on its children, using tags to
+//   determine what happens.  This is specifically intended to address
+//   the situation where you want intersections involving a parent and
+//   child object, something that is impossible with the native
+//   intersection() module.  This module treats the children in three
+//   groups: objects matching the tags listed in `intersect`, objects
+//   matching tags listed in `keep`, and the remaining objects that
+//   don't match any of the listed tags.  The intersection is computed
+//   between the union of the `intersect` tagged objects and union of the objects that don't
+//   match any of the listed tags.  Finally the objects listed in `keep` are
+//   unioned with the result.  Attachable objects should be tagged using {{tag()}}
+//   and non-attachable objects with {{force_tag()}}.
+//   .
+//   Note that `intersect()` invokes its children three times.
+//   .
+//   For a step-by-step explanation of attachments, see the [Attachments Tutorial](Tutorial-Attachments).
+// Arguments:
+//   intersect = String containing space delimited set of tag names of children to intersect.  Default: "intersect"
+//   keep = String containing space delimited set of tag names of children to keep whole.  Default: "keep"
+// Example:
+//   intersect("mask", keep="axle")
+//     sphere(d=100) {
+//         tag("mask")cuboid([40,100,100]);
+//         tag("axle")xcyl(d=40, l=100);
+//     }
+// Example: Combining tag operators can be tricky.  Here the {{diff()}} operation keeps two tags, "fullkeep" and "keep".  Then `intersect()` intersects the "keep" tagged item with everything else, but keeps the "fullkeep" object.
+//   $fn=32;
+//   intersect("keep","fullkeep")
+//     diff(keep="fullkeep keep")
+//       cuboid(10){
+//         tag("remove")cyl(r=4,h=11);
+//         tag("keep") position(RIGHT)cyl(r=8,h=12);
+//         tag("fullkeep")cyl(r=1,h=12);
+//     }
+// Example: In this complex example we form an intersection, subtract an object, and keep some objects.  Note that for the small cylinders on either side, marking them as "keep" or removing their tag gives the same effect.  This is because without a tag they become part of the intersection and the result ends up the same.  For the two cylinders at the back, however, the result is different.  With "keep" the cylinder on the left appears whole, but without it, the cylinder at the back right is subject to intersection.
+//   $fn=64;
+//   diff()
+//     intersect(keep="remove keep")
+//       cuboid(10,$thing="cube"){
+//         tag("intersect"){
+//           position(RIGHT) cyl(r=5.5,h=15)
+//              tag("")cyl(r=2,h=10);
+//           position(LEFT) cyl(r=5.54,h=15)
+//              tag("keep")cyl(r=2,h=10);
+//         }
+//         // Untagged it is in the intersection
+//         tag("") position(BACK+RIGHT)
+//           cyl(r=2,h=10,anchor=CTR);
+//         // With keep the full cylinder appears
+//         tag("keep") position(BACK+LEFT)
+//           cyl(r=2,h=10,anchor=CTR);
+//         tag("remove") cyl(r=3,h=15);
+//       }

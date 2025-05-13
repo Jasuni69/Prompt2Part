@@ -1,0 +1,1 @@
+function star_washer_diameter(type)   = type[5]; //! Star version size

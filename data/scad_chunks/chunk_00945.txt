@@ -1,0 +1,1 @@
+function faceplate_hole_pitch(type)     = type[4]; //! Screw hole pitch

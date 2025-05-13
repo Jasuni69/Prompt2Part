@@ -1,0 +1,15 @@
+function qr_factor(A, pivot=false) =
+    assert(is_matrix(A), "Input must be a matrix." )
+    let(
+        m = len(A),
+        n = len(A[0])
+    )
+    let(
+        qr = _qr_factor(A, Q=ident(m),P=ident(n), pivot=pivot, col=0, m = m, n = n),
+        Rzero = let( R = qr[1]) [
+            for(i=[0:m-1]) [
+                let( ri = R[i] )
+                for(j=[0:n-1]) i>j ? 0 : ri[j]
+            ]
+        ]
+    ) [qr[0], Rzero, qr[2]];

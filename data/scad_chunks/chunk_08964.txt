@@ -1,0 +1,10 @@
+function compatibilities_of_tiles(sample) =
+    let(
+		width = len(sample[0]), 
+		height = len(sample),
+		rx = [0:width - 1]
+	)
+	hashset_elems(hashset([
+		for(y = [0:height - 1], x = rx, dir = neighbor_dirs(x, y, width, height))
+		[sample[y][x], sample[y + dir.y][x + dir.x], dir] // neighbor_compatibilities
+	], number_of_buckets = width * height));

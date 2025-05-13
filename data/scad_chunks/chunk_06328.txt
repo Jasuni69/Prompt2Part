@@ -1,0 +1,47 @@
+module rounding_angled_corner_mask(r, ang=90, d, anchor=CENTER, spin=0, orient=UP)
+{
+    deprecate("rounding_corner_mask");
+    zflip()rounding_corner_mask(r=r,ang=ang,d=d,anchor=anchor,spin=spin,orient=orient)
+       children();
+}
+
+
+// Module: rounding_cylinder_mask()
+// Synopsis: Creates a shape to round the end of a cylinder.
+// SynTags: Geom
+// Topics: Masking, Rounding, Cylinders
+// See Also: rounding_hole_mask(), rounding_corner_mask(), default_tag(), diff()
+// Usage:
+//   rounding_cylinder_mask(r|d=, rounding);
+// Description:
+//   Create a mask that can be used to round the end of a cylinder.
+//   Difference it from the cylinder to be rounded.  The center of the
+//   mask object should align exactly with the center of the end of the
+//   cylinder to be rounded.
+// Arguments:
+//   r = Radius of cylinder.
+//   rounding = Radius of the edge rounding.
+//   ---
+//   d = Diameter of cylinder.
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+// Side Effects:
+//   Tags the children with "remove" (and hence sets `$tag`) if no tag is already set.
+// Example:
+//   difference() {
+//     cylinder(r=50, h=50, center=false);
+//     up(50) #rounding_cylinder_mask(r=50, rounding=10);
+//   }
+// Example:
+//   difference() {
+//     cylinder(r=50, h=50, center=false);
+//     up(50) rounding_cylinder_mask(r=50, rounding=10);
+//   }
+// Example: Masking by Attachment
+//   diff()
+//   cyl(h=30, d=30) {
+//       attach(TOP)
+//         #tag("remove")
+//           rounding_cylinder_mask(d=30, rounding=5);
+//   }

@@ -1,0 +1,121 @@
+function worm_gear(
+    circ_pitch,
+    teeth,
+    worm_diam,
+    worm_starts=1,
+    worm_arc=45,
+    crowning=0.1,
+    left_handed=false,
+    pressure_angle,
+    backlash=0,
+    clearance,
+    profile_shift="auto",
+    slices=10,
+    gear_spin=0,
+    pitch,
+    diam_pitch,
+    mod,
+    get_thickness=false,
+    anchor=CTR,
+    spin=0,
+    orient=UP
+) =
+    let(
+        circ_pitch = _inherit_gear_pitch("worm_gear()", pitch, circ_pitch, diam_pitch, mod),
+        PA = _inherit_gear_pa(pressure_angle),
+        profile_shift = auto_profile_shift(teeth,PA,profile_shift=profile_shift)
+    )
+    assert(is_finite(worm_diam) && worm_diam>0)
+    assert(is_integer(teeth) && teeth>7)
+    assert(is_finite(worm_arc) && worm_arc>0 && worm_arc <= 60)
+    assert(is_integer(worm_starts) && worm_starts>0)
+    assert(is_bool(left_handed))
+    assert(is_finite(backlash))
+    assert(is_finite(crowning) && crowning>=0)
+    assert(clearance==undef || (is_finite(clearance) && clearance>=0))
+    assert(is_finite(profile_shift))
+    let(
+        gear_arc = 2 * PA,
+        helical = asin(worm_starts * circ_pitch / PI / worm_diam),
+        full_tooth = apply(
+            zrot(90) * scale(0.99),
+            _gear_tooth_profile(
+                circ_pitch, teeth=teeth,
+                pressure_angle=PA,
+                profile_shift=-profile_shift,
+                clearance=clearance,
+                helical=helical,
+                center=true
+            )
+        ),
+        ftl = len(full_tooth),
+        tooth_half1 = (select(full_tooth, 0, ftl/2-1)),
+        tooth_half2 = (select(full_tooth, ftl/2, -1)),
+        tang = 360 / teeth,
+        rteeth = quantdn(teeth * gear_arc / 360, 2) / 2 + 0.5,
+        pr = pitch_radius(circ_pitch, teeth, helical=helical),
+        oslices = slices * 4,
+        rows = [
+            for (data = [[tooth_half1,1], [tooth_half2,-1]])
+            let (
+                tooth_half = data[0],
+                dir = data[1]
+            )
+            for (pt = tooth_half) [
+                for (i = [0:1:oslices])
+                let (
+                    u = i / oslices,
+                    w_ang = worm_arc * (u - 0.5),
+                    g_ang_delta = w_ang/360 * tang * worm_starts * (left_handed?1:-1),
+                    m = zrot(dir*rteeth*tang+g_ang_delta, cp=[worm_diam/2+pr,0,0]) *
+                        left(crowning) *
+                        yrot(w_ang) *
+                        right(worm_diam/2+crowning) *
+                        zrot(-dir*rteeth*tang+g_ang_delta, cp=[pr,0,0]) *
+                        xrot(180)
+                ) apply(m, point3d(pt))
+            ]
+        ],
+        midrow = len(rows)/2,
+        goodcols = [
+            for (i = idx(rows[0]))
+            let(
+                p1 = rows[midrow-1][i],
+                p2 = rows[midrow][i]
+            )
+            if (p1.y > p2.y) i
+        ],
+        dowarn = goodcols[0]==0? 0 : echo("Worm gear tooth arc reduced to fit."),
+        truncrows = [for (row = rows) [ for (i=goodcols) row[i] ] ],
+        zs = column(flatten(truncrows),2),
+        minz = min(zs),
+        maxz = max(zs),
+        zmax = max(abs(minz), abs(maxz))+0.05,
+        twang1 = v_theta(truncrows[0][0]),
+        twang2 = v_theta(last(truncrows[0])),
+        twang = modang(twang1 - twang2) / (maxz-minz),
+        resampled_rows = [for (row = truncrows) resample_path(row, n=slices, keep_corners=30, closed=false)],
+        tooth_rows = [
+            for (row = resampled_rows) [
+                zrot(twang*(zmax-row[0].z), p=[row[0].x, row[0].y, zmax]),
+                each row,
+                zrot(twang*(-zmax-last(row).z), p=[last(row).x, last(row).y, -zmax]),
+            ],
+        ]
+    )
+    get_thickness? zmax*2 :
+    let(
+        gear_rows = [
+            for (i = [0:1:teeth-1])
+            let(
+                m = zrot(i*tang) *
+                    back(pr) *
+                    zrot(-90) *
+                    left(worm_diam/2)
+            )
+            for (row = tooth_rows)
+            apply(m, row)
+        ],
+        vnf1 = vnf_vertex_array(transpose(gear_rows), col_wrap=true, caps=true),
+        vnf = apply(zrot(gear_spin), vnf1)
+    ) reorient(anchor,spin,orient, r=pr, h=2*zmax, p=vnf);

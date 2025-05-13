@@ -1,0 +1,7 @@
+module test_binomial() {
+    assert_equal(binomial(1), [1,1]);
+    assert_equal(binomial(2), [1,2,1]);
+    assert_equal(binomial(3), [1,3,3,1]);
+    assert_equal(binomial(5), [1,5,10,10,5,1]);
+}
+test_binomial();

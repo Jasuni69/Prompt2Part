@@ -1,0 +1,27 @@
+function _min_states_coord(wf, lt, leng, m, i = 1) = 
+    i == leng ? m :
+	let(coord = lt[i])
+	_min_states_coord(wf, lt, leng, len(wf_eigenstates_at(wf, m.x, m.y)) <= len(wf_eigenstates_at(wf, coord.x, coord.y)) ? m : coord, i + 1);
+
+wf_coord_weights_min_leng = function(wf, notCollaspedCoords)
+    let(
+		coord = _min_states_coord(wf, notCollaspedCoords, len(notCollaspedCoords), notCollaspedCoords[0]),
+		all_weights = wf_weights(wf),
+		weights = [for(state = wf_eigenstates(wf)[coord.y][coord.x]) get_state_weight(all_weights, state)]
+	)
+    [each coord, weights];
+
+wf_coord_weights_min_entropy = function(wf, notCollaspedCoords)
+    let(
+		coord_entropy_weights_lt = [
+			for(coord = notCollaspedCoords)
+			let(x = coord.x, y = coord.y)
+			[x, y, wf_entropy_weights(wf, x, y)] 
+		],
+		min_coord_entropy_weights = _coord_entropy_weights(
+			coord_entropy_weights_lt, 
+			len(coord_entropy_weights_lt), 
+			coord_entropy_weights_lt[0]
+		)
+	)
+    [min_coord_entropy_weights.x, min_coord_entropy_weights.y, min_coord_entropy_weights[2][1]];

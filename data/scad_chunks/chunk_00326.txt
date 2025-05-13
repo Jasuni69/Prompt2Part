@@ -1,0 +1,1 @@
+function microswitch_right_extent(type) = let(leg = microswitch_leg(type)) max([microswitch_length(type) / 2, for(pos = microswitch_legs(type)) pos.x + leg.x / 2]); //! How far legs extend right

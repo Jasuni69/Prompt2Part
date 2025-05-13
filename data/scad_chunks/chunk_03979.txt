@@ -1,0 +1,1 @@
+function RESETALIGN(align2=NOCHANGE,align3=NOCHANGE) = align(RESET,align2,align3);

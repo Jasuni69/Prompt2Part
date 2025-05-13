@@ -1,0 +1,24 @@
+module box_holes() {
+    translate([pcb_x, 0]) {
+        linear_extrude(height = top_thickness + eps)
+            pcb_shape(clearance);
+
+        rpi_holes()
+            teardrop_plus(r = screw_pilot_hole(pcb_screw), h = 7 - 1.6, center = false);
+    }
+    feet_positions()
+        teardrop(r = screw_pilot_hole(foot_screw(foot)), h = 10, center = true);
+
+    grills = 7;
+    bar = 1.6;
+    x = pcb_x + pcb_length(pcb) / 2 + 2 * wall +  pbox_ridges(box).y + 2 * eps;
+    w = width / 2 - x;
+    d = depth - case_inner_rad;
+    pitch = d / (grills - 1);
+    for(i = [0 : grills -1])
+        let(w = i == 0 || i == grills -1 ? w - 1 : w)
+            translate([x + w / 2, -d / 2 + i * pitch])
+                rounded_rectangle([w, pitch - bar, 10], 1);
+
+    slots();
+}

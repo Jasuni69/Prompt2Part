@@ -1,0 +1,33 @@
+module assert_approx(got, expected, info) {
+    no_children($children);
+    if (!approx(got, expected)) {
+        echo();
+        echo(str("EXPECT: ", _valstr(expected)));
+        echo(str("GOT   : ", _valstr(got)));
+        if (same_shape(got, expected)) {
+            echo(str("DELTA : ", _valstr(got - expected)));
+        }
+        if (is_def(info)) {
+            echo(str("INFO  : ", _valstr(info)));
+        }
+        assert(approx(got, expected));
+    }
+}
+
+
+// Module: assert_equal()
+// Synopsis: Assert that a value is expected.
+// See Also: no_children(), no_function(), no_module(), assert_approx()
+// Topics: Error Checking, Debugging
+// Usage:
+//   assert_equal(got, expected, [info]);
+// Description:
+//   Tests if the value gotten is what was expected.  If not, then the expected and received values
+//   are printed to the console and an assertion is thrown to stop execution.
+//   Returns true if both 'got' and 'expected' are 'nan'.
+// Arguments:
+//   got = The value actually received.
+//   expected = The value that was expected.
+//   info = Extra info to print out to make the error clearer.
+// Example:
+//   assert_approx(3*9, 27, str("a=",3,", b=",9));

@@ -1,0 +1,10 @@
+module hookBaseInside()
+{
+  //if (printMessages) echo("hookBaseInside() ..");
+  sphere(15); //qqqqq
+  
+} //-- hookBaseInside()
+
+
+
+YAPPgenerate();

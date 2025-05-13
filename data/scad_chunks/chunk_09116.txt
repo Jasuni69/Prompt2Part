@@ -1,0 +1,15 @@
+function visit_cells(maze, current_idx, dir, cell_idxs, cells_leng, rows, seed, i = 0) = 
+    i == cells_leng ? maze :
+	let(cell_idx = cell_idxs[i])
+	isVisitable(cell_from(maze, cell_idx)) ? 
+	    let(mz = visitNext(maze, cell_from(maze, cell_idx), cell_from(maze, current_idx), dir))
+	    visit_cells(
+		    backtracker(
+			    mz, 
+				cell_from(mz, cell_idx),
+				rows,
+				seed
+		    ), 
+			cell_from(maze, current_idx), dir, cell_idxs, cells_leng, rows, i + 1
+		) : 
+		visit_cells(maze, cell_from(maze, current_idx), dir, cell_idxs, cells_leng, rows, seed, i + 1);

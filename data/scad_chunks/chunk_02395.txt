@@ -1,0 +1,13 @@
+module ribbon_clamp_assembly(ways, screw = screw)  //! Printed part with inserts in place
+pose([55, 180, 25])
+assembly(let(screw_d = screw_radius(screw) * 2)str("ribbon_clamp_", str_ways(ways), str_screw_d(screw_d)), ngb = true) {
+    h = ribbon_clamp_height(screw, ways);
+    insert = screw_insert(screw);
+
+    stl_colour(pp1_colour) render()
+        translate_z(h) vflip() ribbon_clamp(ways, screw);
+
+    ribbon_clamp_hole_positions(ways, screw)
+        vflip()
+            insert(insert);
+}

@@ -1,0 +1,1 @@
+function handle_length() = pitch + dia;     //! Outside length

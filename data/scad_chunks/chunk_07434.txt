@@ -1,0 +1,21 @@
+module FlatMesh(size=[20,30],fz,base=5,res=1,randSize=0,amp=[1],freq=[2],delta=[0],seed=42,faceOpt,center=[0,0,1],fs=1,bricks=false,help){
+center=v3(center);
+size=is_num(size)?[size,size]:size;
+amp=is_list(amp)?amp:[amp];
+freq=is_list(freq)?freq:[freq];
+res=is_num(res)?[ceil(res*size.x/fs),ceil(res*size.y/fs)]:res;
+f=freq/max(res)*360;
+delta=delta;
+step=[size.x/res.x, size.y/res.y];
+
+HelpTxt("FlatMesh",["size",size,"fz",fz,"base",base,"res",res,"randSize",randSize,"amp",amp,"freq",freq,"delta",delta,"seed",seed,"faceOpt",faceOpt,"center",center,"fs",fs,"bricks",bricks],help);
+
+//amp=[0.08,.15,.5,.5,.5,.5,.5];//[0,0,0,1,1,0,0];//
+//f=[15,20,10,5,6,2];
+//delta=[1,1.5,2,1.75,.5,.3,.1]*3600*$t;
+
+randSize=is_num(randSize)?[1,1]*randSize:randSize;
+//delta=[1,1.5,2,1.75,.5,.3,0,randSize.x,randSize.y];//*$t*1000;
+deltaRand=[delta[8%len(delta)],delta[9%len(delta)]];
+
+// random

@@ -1,0 +1,1 @@
+function fan_guard_width(type) = max(2 * (fan_hole_pitch(type) + fan_guard_corner_r(type)), fan_bore(type) + 4 * fan_guard_wall()); //! Width of the guard

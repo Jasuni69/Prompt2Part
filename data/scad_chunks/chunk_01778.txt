@@ -1,0 +1,1 @@
+function hot_end_groove(type)             = type[9];    //! Groove length

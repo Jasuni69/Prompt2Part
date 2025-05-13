@@ -1,0 +1,1 @@
+function faston_size(type)          = type[2];  //! Size of the receptacle part

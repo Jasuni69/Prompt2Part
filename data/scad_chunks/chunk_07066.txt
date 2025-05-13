@@ -1,0 +1,11 @@
+module test_default() {
+    assert(default(undef,23) == 23);
+    assert(default(true,23) == true);
+    assert(default(false,23) == false);
+    assert(default(-123,23) == -123);
+    assert(default(0,23) == 0);
+    assert(default(123,23) == 123);
+    assert(default("",23) == "");
+    assert(default("foo",23) == "foo");
+}
+test_default();

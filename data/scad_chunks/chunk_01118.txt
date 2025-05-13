@@ -1,0 +1,1 @@
+function rocker_size(type)     = [rocker_width(type), rocker_height(type), rocker_depth(type)]; //! Width, height, and depth in a vector

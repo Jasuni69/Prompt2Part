@@ -1,0 +1,11 @@
+function pb_bezier_quadratic_curve(p0, c, p1, n = $pb_spline, skip_first=false) = [for(t = [skip_first? 1: 0 : n]) let(t0=t/n, t1=pow(1 - t0, 2), t2=pow(t0, 2)) [p0[0] * t1 + 2 * c[0] * t0 * (1 - t0) + p1[0] * t2, p0[1] * t1 + 2 * c[1] * t0 * (1 - t0) + p1[1] * t2]];
+
+//  function pb_bezier_cubic_curve(p0, c0, c1, p1, n)
+//
+//  Generates a Bezier cubic curve from p0 to p1 using two control points c0 and c1. The curve is approximated by a 2D point list containing n points.
+//  p0      (list)   List of two numbers representing the 2D start point of the curve.
+//  c0      (list)   List of two numbers representing a 2D control point shaping the curve and defining the entry tangent.
+//  c1      (list)   List of two numbers representing a 2D control point shaping the curve and defining the exit tangent.
+//  p1      (list)   List of two numbers representing the 2D end point of the curve.
+//  n       (number) The number of points that should be returned.
+//  return  (list)   List of 2D points resembling the cubic curve.

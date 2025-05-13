@@ -1,0 +1,39 @@
+function v_lookup(x, v) =
+    is_num(v[0][1])? lookup(x,v) :
+    let(
+        i = lookup(x, [for (i=idx(v)) [v[i].x,i]]),
+        vlo = v[floor(i)],
+        vhi = v[ceil(i)],
+        lo = vlo[1],
+        hi = vhi[1]
+    )
+    assert(is_vector(lo) && is_vector(hi),
+        "\nResult values must all be numbers, or all be vectors.")
+    assert(len(lo) == len(hi), "\nVector result values must be the same length.")
+    vlo.x == vhi.x? vlo[1] :
+    let( u = (x - vlo.x) / (vhi.x - vlo.x) )
+    lerp(lo,hi,u);
+
+
+// Section: Vector Properties
+
+
+// Function: unit()
+// Synopsis: Returns the unit length of a given vector.
+// Topics: Vectors, Math
+// See Also: v_abs(), v_floor(), v_ceil(), v_round()
+// Usage:
+//   v = unit(v, [error]);
+// Description:
+//   Returns the unit length normalized version of vector v.  If passed a zero-length vector,
+//   asserts an error unless `error` is given, in which case the value of `error` is returned.
+// Arguments:
+//   v = The vector to normalize.
+//   error = If given, and input is a zero-length vector, this value is returned.  Default: Assert error on zero-length vector.
+// Example:
+//   v1 = unit([10,0,0]);   // Returns: [1,0,0]
+//   v2 = unit([0,10,0]);   // Returns: [0,1,0]
+//   v3 = unit([0,0,10]);   // Returns: [0,0,1]
+//   v4 = unit([0,-10,0]);  // Returns: [0,-1,0]
+//   v5 = unit([0,0,0],[1,2,3]);    // Returns: [1,2,3]
+//   v6 = unit([0,0,0]);    // Asserts an error.

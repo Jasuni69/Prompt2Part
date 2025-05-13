@@ -1,0 +1,1 @@
+function involute(r, u) = let(a = degrees(u), c = cos(a), s = sin(a)) r * [c + u * s, s - u * c]; //! Involute of circle radius r at angle u in radians

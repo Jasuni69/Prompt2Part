@@ -1,0 +1,13 @@
+module gridfinity_partition(type, cols = 1, rows = 1, wall = 1.6, iwall = squeezed_wall, bwall = 1, corner_r = 4) { //! Passed as child to hollow out specified partitions
+    size = gridfinity_bin_size_mm(type);
+    wx = (size.x - 2 * wall - (cols - 1) * iwall) / cols;
+    wy = (size.y - 2 * wall - (rows - 1) * iwall) / rows;
+    h = size.z - gridfinity_base_z() - bwall;
+
+    for(x = [0 : cols - 1], y = [0 : rows - 1])
+        translate([-size.x / 2 + wall + x * (wx + iwall) + wx / 2,
+                   -size.y / 2 + wall + y * (wy + iwall) + wy / 2,
+                   size.z + eps])
+        vflip()
+            rounded_top_rectangle([wx, wy, h + eps], corner_r, corner_r);
+}

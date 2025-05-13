@@ -1,0 +1,6 @@
+function wf_collapse(wf, x, y, weights) =
+    let(
+		states = wf_eigenstates(wf)[y][x],
+		threshold = rand() * sum(weights)
+	)		
+	_wf_collapse(wf, x, y, states, weights, len(states), threshold);

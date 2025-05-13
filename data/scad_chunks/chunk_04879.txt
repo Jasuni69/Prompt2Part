@@ -1,0 +1,7 @@
+function _solve2eq(eq1, eq2) = 
+  let (a=eq1[0], b=eq1[1], c = eq1[2], d=eq2[0], e=eq2[1], f=eq2[2])
+  let (det=a*e-b*d)
+  [ (e*c-b*f)/det, (-d*c+a*f)/det ];
+
+// given a corner as two line segments, AB and BC, find the new corner B' that results 
+// when both line segments are offet.  Works by generating two equations and then solving

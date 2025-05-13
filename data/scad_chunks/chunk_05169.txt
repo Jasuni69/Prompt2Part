@@ -1,0 +1,52 @@
+function mean_angle(angle1,angle2) =
+    assert(is_vector([angle1,angle2]), "\nInputs must be finite numbers.")
+    let(
+        ang1 = posmod(angle1,360),
+        ang2 = posmod(angle2,360)
+    )
+    approx(abs(ang1-ang2),180) ? posmod(angle1+90,360)
+  : abs(ang1-ang2)<=180 ? (ang1+ang2)/2
+  : posmod((ang1+ang2-360)/2,360);
+
+
+// Function: fit_to_range()
+// Synopsis: Scale the values in an array to span a range.
+// Topics: Math, Bounds, Scaling
+// See Also: fit_to_box()
+// Usage:
+//   a = fit_to_range(M, minval, maxval);
+// Description:
+//   Given a vector or list of vectors, scale the values so that they span the full range from `minval` to
+//   `maxval`. If `minval>maxval`, then the output is a rescaled mirror image of the input.
+// Arguments:
+//   M = vector or list of vectors to scale. A list of vectors needn't be a rectangular matrix; the vectors can have different lengths.
+//   minval = Minimum value of the rescaled data range.
+//   maxval = Maximum value of the rescaled data range.
+// Example:
+//   a =  [0.0066, 0.194, 0.598, 0.194, 0.0066];
+//   v = fit_to_range(a,5,10);
+//   // Returns: [5, 6.584, 10, 6.584, 5]
+//   
+//   b = [ [20,20,0], [40,80,20], [60,40,20] ];
+//   m = fit_to_range(b,-10,10);
+//   // Returns:  [[-5,-5,-10], [0,10,-5], [5,0,-5]]
+//   
+//   c = [2,3,4,5,6];
+//   inv = fit_to_range(c, 20, 8); // inverted range!
+//   // Returns:  [20, 17, 14, 11, 8]
+// Example(3D): A texture tile that spans the range [-1,1] is rescaled to span [0,1], resulting in the edges of the texture (which were at z=0) to be raised due to raising the minimu from -1 to 0.
+//   tex = [
+//       [0,0,0, 0, 0, 0,0,0,0],
+//       [0,1,1, 1, 1, 1,1,1,0],
+//       [0,1,0, 0, 0, 0,0,1,0],
+//       [0,1,0,-1,-1,-1,0,1,0],
+//       [0,1,0,-1, 0,-1,0,1,0],
+//       [0,1,0,-1,-1,-1,0,1,0],
+//       [0,1,0, 0, 0, 0,0,1,0],
+//       [0,1,1, 1, 1, 1,1,1,0],
+//       [0,0,0, 0, 0, 0,0,0,0]
+//   ];
+//   left(5) textured_tile(tex,
+//       [9,9,2],tex_reps=1, anchor=BOTTOM);
+//   right(5) textured_tile(fit_to_range(tex,0,1),
+//       [9,9,2],tex_reps=1, anchor=BOTTOM);

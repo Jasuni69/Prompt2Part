@@ -1,0 +1,7 @@
+module test_reverse_polygon() {
+    path = circle(d=100);
+    rpath = concat([path[0]], reverse(select(path,1,-1)));
+    assert(reverse_polygon(path) == rpath);
+    assert(reverse_polygon(rpath) == path);
+}
+*test_reverse_polygon();

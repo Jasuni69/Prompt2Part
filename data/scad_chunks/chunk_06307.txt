@@ -1,0 +1,8 @@
+module mask2d_chamfer(edge, angle, inset=0, excess=0.01, mask_angle=90, flat_top=false, x, y, h, w, height, width, anchor=CENTER,spin=0) {
+    path = mask2d_chamfer(x=x, y=y, edge=edge, angle=angle, height=height, h=h, excess=excess, w=w,
+                          inset=inset, mask_angle=mask_angle, flat_top=flat_top,width=width);
+    attachable(anchor,spin, two_d=true, path=path, extent=true) {
+        polygon(path);
+        children();
+    }
+}

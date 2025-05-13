@@ -1,0 +1,16 @@
+function _check_point_in_ear(point, tests) =
+	let(
+		result=[
+			(point*tests[0][0])-tests[0][1],
+			(point*tests[1][0])-tests[1][1],
+			(point*tests[2][0])-tests[2][1]
+		]
+	)
+	(result[0]>0 && result[1]>0 && result[2]>0)? result[0] : -1
+;
+
+
+// Function: normalize_vertex_perimeter()
+// Description: Removes the last item in an array if it is the same as the first item.
+// Arguments:
+//   v = The array to normalize.

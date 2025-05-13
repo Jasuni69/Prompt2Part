@@ -1,0 +1,3 @@
+function invert(poly) =
+  let(faces = poly[1])
+  [ poly[0], [for (face = faces) reverse(face)] ];

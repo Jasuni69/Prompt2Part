@@ -1,0 +1,44 @@
+function xflip_copy(offset=0, x=0, p=_NO_ARG) =
+    mirror_copy(v=[1,0,0], offset=offset, cp=[x,0,0], p=p);
+
+
+// Function&Module: yflip_copy()
+// Synopsis: Makes a copy of children mirrored across the Y axis.
+// SynTags: MatList, Trans
+// Topics: Transformations, Distributors, Translation, Copiers
+// See Also: xflip_copy(), zflip_copy(), mirror_copy(), path_copies(), move_copies(), xcopies(), ycopies(), zcopies(), line_copies(), grid_copies() 
+//
+// Usage:
+//   yflip_copy([offset], [y]) CHILDREN;
+// Usage: As a function to translate points, VNF, or Bezier patches
+//   copies = yflip_copy([offset], [y], p=);
+// Usage: Get Translation Matrices
+//   mats = yflip_copy([offset], [y]);
+//
+// Description:
+//   When called as a module, makes a copy of the children, mirrored across the Y axis.
+//   When called as a function, *without* a `p=` argument, returns a list of transformation matrices, one for each copy.
+//   When called as a function, *with* a `p=` argument, returns a list of transformed copies of `p=`.
+//
+// Arguments:
+//   offset = Distance to offset children back, before copying.
+//   y = The Y coordinate of the mirroring plane.  Default: 0
+//   ---
+//   p = Either a point, pointlist, VNF or Bezier patch to be translated when used as a function.
+//
+// Side Effects:
+//   `$orig` is true for the original instance of children.  False for the copy.
+//   `$idx` is set to the index value of each copy.
+//
+//
+// Example:
+//   yflip_copy() xrot(-90) cylinder(h=20, r1=4, r2=0);
+//   color("blue",0.25) cube([15,0.01,15], center=true);
+//
+// Example:
+//   yflip_copy(offset=5) xrot(-90) cylinder(h=20, r1=4, r2=0);
+//   color("blue",0.25) cube([15,0.01,15], center=true);
+//
+// Example:
+//   yflip_copy(y=-5) xrot(-90) cylinder(h=20, r1=4, r2=0);
+//   color("blue",0.25) fwd(5) cube([15,0.01,15], center=true);

@@ -1,0 +1,1 @@
+function variac_screws(type)         = type[8];     //! Number of screws

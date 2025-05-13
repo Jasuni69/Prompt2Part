@@ -1,0 +1,1 @@
+function rd_coil_wire(type)   = type[2]; //! Wire pitch, diameter and length

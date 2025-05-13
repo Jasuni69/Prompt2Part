@@ -1,0 +1,18 @@
+module box_corner_profile_2D(type) { //! The 2D shape of the corner profile.
+    t = box_sheet_slot(type);
+    inset = box_corner_gap(type) + box_profile_overlap(type);
+    difference() {
+        union() {
+            quadrant(box_hole_inset(type) + box_boss_r(type), box_boss_r(type));     // inside corner
+
+            translate([inset, inset])
+                rotate(180)
+                    quadrant(box_profile_overlap(type) + box_corner_rad(type), box_corner_rad(type)); // outside corner
+        }
+        translate([box_corner_gap(type), -t + sheet_slot_clearance / 2])
+            square([100, t]);
+
+        translate([-t + sheet_slot_clearance / 2, box_corner_gap(type)])
+            square([t, 100]);
+    }
+}

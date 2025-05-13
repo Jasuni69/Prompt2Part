@@ -1,0 +1,1 @@
+function light_strip_aperture(type)      = type[7]; //! Inside width

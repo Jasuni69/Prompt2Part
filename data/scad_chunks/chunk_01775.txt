@@ -1,0 +1,1 @@
+function hot_end_insulator_length(type)   = type[6];    //! Length of the insulator

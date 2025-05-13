@@ -1,0 +1,121 @@
+module Pin(l=10,d=5,cut=true,cutDepth=1,cutDeg,mitte=true,grad=60,lippe=0.25,spiel=0,center=true,deg=45,flat=false,print=false,fn=0,fs=fs,name,help){
+spiel2=0.1;
+$info=false;
+d=d;
+id=d+spiel*2;
+nib=is_num(lippe)?[lippe,lippe]:lippe;
+rdiff=nib+[1,1]*(spiel+spiel2);
+
+rdiffCenter=(is_bool(mitte)?min(lippe):mitte)+spiel+spiel2;
+
+cut=is_list(cut)?cut:[cut,cut];
+deg=is_list(deg)?deg:[deg,deg];
+grad=is_list(grad)?grad:[grad,grad];
+pol=[is_bool(cut[0])?flat?round(d/2)*2
+                         :round(d)
+                    :cut[0],
+     is_bool(cut[1])?flat?round(d/2)*2
+                         :round(d)
+                    :cut[1]];
+
+flat=is_bool(flat)?flat?cos(45)*id/2*2:0
+                  :flat;
+
+il=is_list(l)?l:[l/2,l/2];// input l
+l=is_num(l)?[l/2+spiel2*tan(deg[0]),l/2+spiel2*tan(deg[1])]:l+spiel2*[tan(deg[0]),tan(deg[1])];    
+hkomplett=[
+  l[0]+(grad[0]<90?tan(grad[0])*rdiff[0]:10),
+  l[1]+(grad[1]<90?tan(grad[1])*rdiff[1]:10)
+  ];
+
+cutDepth=is_num(cutDepth)?cutDepth*[1,1]:cutDepth;
+
+// cut width for flat 
+flatCut=[
+max(nib[0]*2+.2,Kathete(id/2,flat/2)*2-2 ),
+max(nib[1]*2+.2,Kathete(id/2,flat/2)*2-2 )
+];
+
+// notches cut Length
+cutH=[
+  min(hkomplett[0]-nib[0],rdiff[0]*(tan(grad[0])+tan(deg[0]) )+3-spiel+cutDepth[0]),
+  min(hkomplett[1]-nib[1],rdiff[1]*(tan(grad[1])+tan(deg[1]) )+3-spiel+cutDepth[0])
+  ];
+  
+
+cutH2=[min(cutH[0]/2,cutDepth[0]),min(cutH[1]/2,cutDepth[1])];
+
+// wedge angle
+cutDeg=is_num(cutDeg)?cutDeg*[1,1]:cutDeg;
+degCut=is_undef(cutDeg)?[min(flat?90:120,360/pol[0]),min(flat?90:120,360/pol[1])]:cutDeg;
+
+Tz(print?flat?flat/2:id/2+max(nib):0)rotate(print?[0,90]:[0,0])
+ translate([0,0,center?0:l[0]+tan(grad[0])*rdiff[0]]){
+//bottom
+  if(il[0])mirror([0,0,1])difference(){
+      union(){
+          cylinder(l[0]+.001,d=id,$fn=fn,$fs=fs);
+          Tz(l[0]-.001)Kegel(id+rdiff[0]*2,id,h=grad[0]==90?10:0,grad=grad[0],fn=fn,fs=fs);
+          if(deg[0])Tz(l[0])R(180)Kegel(id+rdiff[0]*2,id-1,grad=deg[0],fn=fn,fs=fs);
+          if(mitte) difference(){
+            Kegel(id+rdiffCenter*2,id-1,grad=45,fn=fn,fs=fs);
+            linear_extrude(height=rdiffCenter*2,center=true,convexity=3)Kreis(r=id,rand=id/2-rdiffCenter+spiel+spiel2,fn=fn,fs=fs);
+          }
+      }
+    if(cut[0])  Tz(hkomplett[0]-cutH[0]+.01)Polar(pol[0],d-cutDepth[0])
+      LinEx(cutH[0],cutH2[1],0,grad=45,$d=d,center=0)
+        offset(-spiel)T(-d/2)Tri(h=$d,top=+1,tang=0,center=0,grad=degCut[0],r=0.3,fn=12);
+        
+    Tz(rdiffCenter) linear_extrude(hkomplett[0],center=false,convexity=3)Kreis(r=id,rand=id/2-rdiff[0]+spiel+spiel2,fn=fn,fs=fs);
+    if(flat){
+      MKlon(flat/2+d/2)cube([d-spiel*2,d*2,vSum(hkomplett)*3],true);
+      if(cut[0])Tz(l[0]-min(l[0]-0.5,3))R(0,-90)linear_extrude(id*2,center=true)Quad(hkomplett[0],flatCut[0],center=[0,1]);
+    }
+  }
+//top
+  if(il[1])difference(){
+      union(){
+          cylinder(l[1]+.001,d=id,$fn=fn,$fs=fs);
+          Tz(l[1]-.001)Kegel(id+rdiff[1]*2,id,grad=grad[1],h=grad[1]==90?10:0,fn=fn,fs=fs);
+          if(deg[1])Tz(l[1])R(180)Kegel(id+rdiff[1]*2,id-1,grad=deg[1],fn=fn,fs=fs);
+          if(mitte)difference(){
+            Kegel(id+rdiffCenter*2,id-1,grad=45,fn=fn,fs=fs);
+            linear_extrude(height=rdiffCenter*2,center=true,convexity=3)Kreis(r=id,rand=id/2-rdiffCenter+spiel+spiel2,fn=fn,fs=fs);
+          }
+      }
+    if(cut[1]) Tz(hkomplett[1]-cutH[1]+.01)Polar(pol[1],d-cutDepth[1])
+      LinEx(cutH[1],cutH2[1],0,grad=45,$d=d,center=false)
+        offset(-spiel)T(-$d/2)Tri(h=$d,top=+1,center=+0,tang=0,grad=degCut[1],r=0.3,fn=12);
+        
+    Tz(rdiffCenter) linear_extrude(hkomplett[1],center=false,convexity=3)Kreis(r=id,rand=id/2-rdiff[1]+spiel+spiel2,fn=fn,fs=fs);
+    if(flat){
+      MKlon(flat/2+d/2)cube([d-spiel*2,d*2,vSum(hkomplett)*2],true);
+      if(cut[1])Tz(l[1]-min(l[1]-0.5,3))R(0,-90)linear_extrude(id*2,center=true)Quad(hkomplett[1],flatCut[1],center=[0,1]);
+    }
+  }
+}
+//if(achse)cylinder(h=achse,d=d+rdiff*2,center=true);
+
+InfoTxt("Pin",["l",l[0]+l[1],"reale höhe",vSum(hkomplett),"halb",str(l,"/",hkomplett),"plusCap",str((tan(grad[0])+tan(grad[1]))*rdiff," (",tan(grad[0])*rdiff,"/",tan(grad[1])*rdiff,")"),"Lippe",lippe],name);
+
+HelpTxt("Pin",["l",l,"d",d,"cut",cut,"cutDepth",cutDepth,"cutDeg",cutDeg,"mitte",mitte,"grad",grad,"lippe",lippe,"spiel",spiel,"center",center,"deg",deg,"flat",flat,"print",print,"fn",fn,"fs",fs,"name",name],help);
+
+}
+
+
+
+//Klammer(grad=[100,130],rad2=[2,+4],breite=2)T($x/2)circle(d=$x);
+//Klammer(grad=[100,130],rad2=[2,4],breite=2);
+
+
+/** \page Products \name Klammer
+\brief Klammer() creates a clip
+\param l arm length
+\param grad center angle
+\param d inner diameter hole
+\param rad2 second radius
+\param offen angle open ↦ deg2
+\param deg2 second angle
+\param dicke, breite thickness
+\param fn,fs,fa  segment control
+*/

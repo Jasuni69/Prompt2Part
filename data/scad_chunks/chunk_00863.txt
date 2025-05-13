@@ -1,0 +1,1 @@
+function hdr_ra_height(type)    = type[12]; //! Height of right angle connector

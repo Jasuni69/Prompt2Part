@@ -1,0 +1,30 @@
+function find_all(func, list) =
+    assert(is_function(func))
+    assert(is_list(list))
+    [for (indexnum=idx(list)) if (func(list[indexnum])) indexnum];
+
+
+// Function: find_first()
+// Synopsis: Returns the index of the first item in a list, after `start`, that a given function returns true for.
+// Topics: Function Literals, Searching
+// See Also: find_all(), filter(), binsearch(), find_all()
+// Usage:
+//   idx = find_first(func, list, [start=]);
+// Description:
+//   Finds the index of the first item in `list`, after index `start`,  which the function literal in `func` will return true for.
+//   The signature of the function literal in `func` is `function (x)`, and it is expected to return true when the
+//   value compares as matching.  It should return false otherwise.  If you need to find *all* matching items in the
+//   list, you should use {{find_all()}} instead.
+// Arguments:
+//   func = The function literal to use to check each item in `list`.  Expects the signature `function (x)`, and a boolean return value.
+//   list = The list to search.
+//   ---
+//   start = The first item to check.
+// Example:
+//   data = [8,5,3,7,4,2,9];
+//   echo(find_first(f_lte(4), data));
+//   // ECHO: 2
+// Example:
+//   data = [8,5,3,7,4,2,9];
+//   echo(find_first(f_lte(4), data, start=3));
+//   // ECHO: 4

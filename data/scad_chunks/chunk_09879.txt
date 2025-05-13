@@ -1,0 +1,6 @@
+module test_simplify_path()
+{
+	path = [[-20,10],[-10,0],[-5,0],[0,0],[5,0],[10,0], [10,10]];
+	assert(simplify_path(path) == [[-20,10],[-10,0],[10,0], [10,10]]);
+}
+test_simplify_path();

@@ -1,0 +1,1 @@
+function hot_end_duct_radius(type)        = type[10];   //! Require radius to clear the heater block

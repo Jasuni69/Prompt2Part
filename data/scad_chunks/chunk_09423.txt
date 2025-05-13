@@ -1,0 +1,19 @@
+function polar_to_xy(r,theta=undef) = let(
+		rad = theta==undef? r[0] : r,
+		t = theta==undef? r[1] : theta
+	) rad*[cos(t), sin(t)];
+
+
+// Function: xy_to_polar()
+// Usage:
+//   xy_to_polar(x,y);
+//   xy_to_polar([X,Y]);
+// Description:
+//   Convert 2D cartesian coordinates to polar coordinates.
+//   Returns [radius, theta] where theta is the angle counter-clockwise of X+.
+// Arguments:
+//   x = X coordinate.
+//   y = Y coordinate.
+// Examples:
+//   plr = xy_to_polar(20,30);
+//   plr = xy_to_polar([40,60]);

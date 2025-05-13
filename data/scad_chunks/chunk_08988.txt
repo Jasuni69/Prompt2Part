@@ -1,0 +1,7 @@
+function _snipable_sub(shape_pts, n, u, v, w, a, b, c, indices, p = 0) = 
+    p == n || (
+        (((p == u) || (p == v) || (p == w)) && _snipable_sub(shape_pts, n, u, v, w, a, b, c, indices, p + 1)) || 
+        (_snipable_sub(shape_pts, n, u, v, w, a, b, c, indices, p + 1) && !_in_triangle(a, b, c, shape_pts[indices[p]]))
+    );
+
+// remove the elem at idx v from indices

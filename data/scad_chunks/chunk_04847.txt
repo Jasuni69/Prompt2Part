@@ -1,0 +1,14 @@
+module S(cx2, cy2, x, y, n=$pb_spline){
+    args = is_num(cx2)? [cx2, cy2, x, y] : cx2;
+    data = _pb_smooth_cubic(pb_last($pb_pts), args, false, $pb_angle, $pb_ctrl_pts,$pb_spline);
+    $pb_pts = concat($pb_pts, data[0]);
+    $pb_angle = data[2];
+    $pb_ctrl_pts = data[3];
+    if (pb_do_render($children, parent_module(0))) pb_draw();
+    children();     
+}
+
+//  function _pb_quadratic(last, args, rel, angle,ctrl_pt)
+//
+//  Generates multiple points forming line segments approximating one or multiple discrete cubic Bezier curves.
+//

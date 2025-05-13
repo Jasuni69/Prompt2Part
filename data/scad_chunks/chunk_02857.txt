@@ -1,0 +1,7 @@
+    cube([110,60,5]);
+
+  color("BurlyWood")
+    translate([11,16,5])
+      outward_bevel_extrude(10,bevel_bottom=1.5)
+        text("ABC",size=30);
+}

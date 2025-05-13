@@ -1,0 +1,24 @@
+module test_parse_num() {
+    assert(parse_num("") == 0);
+    assert(parse_num("1/2") == 1/2);
+    assert(parse_num("+1/2") == 1/2);
+    assert(parse_num("-1/2") == -1/2);
+    assert(parse_num("7/8") == 7/8);
+    assert(parse_num("+7/8") == 7/8);
+    assert(parse_num("-7/8") == -7/8);
+    assert(parse_num("1 1/2") == 1 + 1/2);
+    assert(parse_num("+1 1/2") == 1 + 1/2);
+    assert(parse_num("-1 1/2") == -(1 + 1/2));
+    assert(parse_num("768 3/4") == 768 + 3/4);
+    assert(parse_num("+768 3/4") == 768 + 3/4);
+    assert(parse_num("-768 3/4") == -(768 + 3/4));
+    assert(parse_num("19") == 19);
+    assert(parse_num("+19") == 19);
+    assert(parse_num("-19") == -19);
+    assert(parse_num("3/0") == INF);
+    assert(parse_num("-3/0") == -INF);
+    assert(parse_num("3.14159") == 3.14159);
+    assert(parse_num("-3.14159") == -3.14159);
+    assert(is_nan(parse_num("0/0")));
+}
+test_parse_num();

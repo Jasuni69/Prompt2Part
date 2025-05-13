@@ -1,0 +1,14 @@
+function _zdominant_sub(x, y, z, endz, a, s, xd, yd) = 
+    z == endz ? [] : [
+        [x, y, z],
+        each _zdominant_sub(
+            _zdominant_x(x, xd, s.x), 
+            _zdominant_y(y, yd, s.y), 
+            z + s.z,
+            endz, 
+            a, 
+            s, 
+            _zdominant_xd(xd, a.x, a.z), 
+            _zdominant_yd(yd, a.y, a.z)
+        )
+    ];

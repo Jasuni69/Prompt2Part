@@ -1,0 +1,25 @@
+module e3d_hot_end_assembly(type, filament, naked = false, resistor_wire_rotate = [0,0,0], bowden = false) {
+    bundle = 3.2;
+
+    e3d_hot_end(type, filament, naked, resistor_wire_rotate, bowden);
+
+    // Wire and ziptie
+    if(!naked)
+        rotate(10) {
+            dia =  hot_end_insulator_diameter(type);
+            scale([1, (bundle + dia) / dia])
+                translate([0, -bundle / 2, -7])
+                    rotate(-110)
+                        ziptie(small_ziptie, dia / 2);
+
+            translate([0, -dia / 2 - bundle / 2, 20])
+                scale([0.7, bundle / 6.4])
+                    difference() {
+                        tubing(HSHRNK64, 60);
+
+                        translate_z(20)
+                            cube([10, 10, 60], center = true);
+                    }
+    }
+
+}

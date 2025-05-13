@@ -1,0 +1,56 @@
+function metaballs(spec, bounding_box, voxel_size, voxel_count, isovalue=1, closed=true, exact_bounds=false, show_stats=false, _debug=false) =
+    assert(all_defined([spec, bounding_box]), "\nThe parameters spec and bounding_box must both be defined.")
+    assert(num_defined([voxel_size, voxel_count])<=1, "\nOnly one of voxel_size or voxel_count can be defined.")
+    assert(is_undef(voxel_size) || (is_finite(voxel_size) && voxel_size>0) || (is_vector(voxel_size) && all_positive(voxel_size)), "\nvoxel_size must be a positive number, a 3-vector of positive values, or not given.")
+    assert(is_finite(isovalue) || (is_list(isovalue) && len(isovalue)==2 && is_num(isovalue[0]) && is_num(isovalue[1])), "\nIsovalue must be a number or a range; a number is the same as [number,INF].")
+    assert(len(spec)%2==0, "\nThe spec parameter must be an even-length list of alternating transforms and functions")
+    let(
+        isoval = is_list(isovalue) ? isovalue : [isovalue, INF],
+        funclist = _mb_unwind_list(spec),
+        nballs = len(funclist)/2,
+        dummycheck = [
+            for(i=[0:len(spec)/2-1]) let(j=2*i)
+                assert(is_matrix(spec[j],4,4), str("\nspec entry at position ", j, " must be a 4×4 matrix."))
+                assert(is_function(spec[j+1]) || is_list(spec[j+1]), str("\nspec entry at position ", j+1, " must be a function literal or a metaball list.")) 0
+        ],
+        // set up transformation matrices in advance
+        transmatrix = [
+            for(i=[0:nballs-1])
+                let(j=2*i)
+                transpose(select(matrix_inverse(funclist[j]), 0,2))
+        ],
+
+        // new voxel or bounding box centered around original, to fit whole voxels
+        bbox0 = is_num(bounding_box)
+            ? let(hb=0.5*bounding_box) [[-hb,-hb,-hb],[hb,hb,hb]]
+            : bounding_box,
+        autovoxsize = is_def(voxel_size) ? voxel_size : _getautovoxsize(bbox0, default(voxel_count,22^3)),
+        voxsize = _getvoxsize(autovoxsize, bbox0, exact_bounds),
+        newbbox = _getbbox(voxsize, bbox0, exact_bounds),
+        bbcheck = assert(all_positive(newbbox[1]-newbbox[0]), "\nbounding_box must be a vector range [[xmin,ymin,zmin],[xmax,ymax,zmax]]."),
+
+        // set up field array
+        bot = newbbox[0],
+        top = newbbox[1],
+        halfvox = 0.5*voxsize,
+        // accumulate metaball contributions using matrices rather than sums
+        xset = [bot.x:voxsize.x:top.x+halfvox.x],
+        yset = list([bot.y:voxsize.y:top.y+halfvox.y]),
+        zset = list([bot.z:voxsize.z:top.z+halfvox.z]),
+        allpts = [for(x=xset, y=yset, z=zset) [x,y,z,1]],
+        trans_pts = [for(i=[0:nballs-1]) allpts*transmatrix[i]],
+        allvals = [for(i=[0:nballs-1]) [for(pt=trans_pts[i]) funclist[2*i+1][0](pt)]],
+        //total = _sum(allvals,allvals[0]*EPSILON),
+        total = _sum(slice(allvals,1,-1), allvals[0]),
+        fieldarray = list_to_matrix(list_to_matrix(total,len(zset)),len(yset)),
+        surface = isosurface(fieldarray, isoval, newbbox, voxsize, closed=closed, exact_bounds=true, show_stats=show_stats, _mball=true)
+    ) _debug ? [
+        surface, [
+            for(i=[0:2:len(funclist)-1])
+                let(fl=funclist[i+1][1])
+                    [ fl[0], apply(funclist[i], fl[1]) ]
+        ]
+    ]
+    : surface;
+
+/// internal function: unwrap nested metaball specs in to a single list

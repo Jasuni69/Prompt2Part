@@ -1,0 +1,30 @@
+function str_strip(s,c,start,end) =
+  let(
+      nstart = (is_undef(start) && !end) ? true : start,
+      nend = (is_undef(end) && !start) ? true : end,
+      startind = nstart ? _str_count_leading(s,c) : 0,
+      endind = len(s) - (nend ? _str_count_trailing(s,c) : 0)
+  )
+  substr(s,startind, endind-startind);
+
+
+
+// Function: str_pad()
+// Synopsis: Pads a string to a given length.
+// Topics: Strings
+// See Also: suffix(), str_find(), substr_match(), starts_with(), ends_with(), str_split(), str_join(), str_strip()
+// Usage:
+//   padded = str_pad(str, length, char, [left]);
+// Description:
+//   Pad the given string `str` with to length `length` with the specified character,
+//   which must be a length 1 string.  If left is true then pad on the left, otherwise
+//   pad on the right.  If the string is longer than the specified length the full string
+//   is returned unchanged.
+// Arguments:
+//   str = string to pad
+//   length = length to pad to
+//   char = character to pad with.  Default: " " (space)
+//   left = if true, pad on the left side.  Default: false
+// Example:
+//   s1=str_pad("hello", 10, "*");            // Returns: "hello*****"
+//   s2=str_pad("hello", 10, "*", left=true); // Returns: "*****hello"

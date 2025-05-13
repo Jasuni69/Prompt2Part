@@ -1,0 +1,6 @@
+module corner_blocks()
+    for(i = [0 : len(screws) - 1])
+        translate([i * 30, 0])
+            do_corner_block(screws[i]);
+
+corner_blocks();

@@ -1,0 +1,2 @@
+module pcb_screw_positions(type)  //! Positions children at the mounting hole positions
+    pcb_hole_positions(type, false) children();

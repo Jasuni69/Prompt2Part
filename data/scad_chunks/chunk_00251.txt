@@ -1,0 +1,5 @@
+module ldrs()
+    layout([for(l = ldrs) ldr_diameter(l)], 5)
+        LDR(ldrs[$i]);
+
+ldrs();

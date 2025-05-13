@@ -1,0 +1,8 @@
+module cylinder_half( cd, ch, cfn=$fn ) {
+    translate([ch,0,0]) rotate([0,-90,0])
+    intersection() {
+        cube( [cd/2, cd, ch] );
+        translate( [0,cd/2,0] ) cylinder( d=cd, h=ch, $fn=cfn );
+    }
+}
+// capsule shape

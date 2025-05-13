@@ -1,0 +1,1 @@
+function c3_r(r1, r2) = (r1 * r2) / (r1 + r2 + 2 * sqrt(r1 * r2));

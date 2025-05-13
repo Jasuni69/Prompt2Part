@@ -1,0 +1,10 @@
+module showPlane(plane, size=[100,100,0.05]) {
+    n = plane[0];
+    w = plane[1];
+    up = [0, 0, 1];
+    a = acos(n * up);
+    v = cross(n, up);
+    //echo("nup", n,up);
+    rotate(a=-a, v=v) translate([0,0,w])
+      cube(size, center=true);
+}

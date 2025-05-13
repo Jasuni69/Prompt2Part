@@ -1,0 +1,1 @@
+function fixing_block_h_hole(screw = def_screw) = translate(fixing_block_depth(screw) / 2) * rotate([90, 0, 0]); //! Returns transform to position the horizontal screw

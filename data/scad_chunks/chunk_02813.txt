@@ -1,0 +1,15 @@
+function to_string_with_separators(s,i=0) =
+  len(s) > 0 ?
+    let( a = s[i] >= "0" && s[i] <= "9" ? s[i] : "#")
+    i < len(s)-1 ?
+      str(a, to_string_with_separators(s,i+1)) :
+      str(a, "#") :  // add trailing #
+    "#";         // return a # if string is empty
+
+// ======================================
+// to_list_of_numbers
+// ======================================
+// string       : a string with digits and "#"
+// sep_list     : is list of indexes for the "#"
+// string_index : index in the string
+// sep_index    : index in the separator list

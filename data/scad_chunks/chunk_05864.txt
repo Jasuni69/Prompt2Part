@@ -1,0 +1,13 @@
+function _turtle3d_rotation(command,angle,center) =
+  let(
+      myangle = (ends_with(command,"right") || ends_with(command,"up") ? -1 : 1 ) * angle
+  )
+  ends_with(command,"xrot") ? xrot(myangle,cp=center) :
+  ends_with(command,"yrot") ? yrot(myangle,cp=center) :
+  ends_with(command,"zrot") ? zrot(myangle,cp=center) :
+  ends_with(command,"right") || ends_with(command,"left") ? zrot(myangle,cp=center) :
+                                                            yrot(myangle,cp=center);
+
+// The turtle3d state maintains two lists of transformations that must be updated together. 
+// This function updates the state by appending a list of transforms and list of pre-transforms
+// to the state.

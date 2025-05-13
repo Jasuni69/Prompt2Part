@@ -1,0 +1,48 @@
+function mask2d_teardrop(r, angle=45, inset=[0,0], mask_angle=90, excess=0.01, flat_top=false, d, h, height, cut, joint, anchor=CENTER, spin=0) =  
+    assert(one_defined([r,height,d,h,cut,joint],"r,height,d,h,cut,joint"))
+    assert(is_finite(angle) && angle>mask_angle-90 && angle<90)
+    assert(is_finite(mask_angle) && mask_angle>0 && mask_angle<180)
+    assert(all_nonnegative([excess]), "excess must be a nonnegative value")
+    assert(is_finite(inset)||is_vector(inset,2))
+    assert(is_bool(flat_top))
+    let(
+        inset = is_list(inset)? inset : [inset,inset],
+        r = get_radius(r=r,d=d,dflt=undef),
+        h = one_defined([h,height],"h,hight",dflt=undef),
+        // compute [joint length, radius] for different types of input
+        jr = is_def(h) ? assert(all_positive([h]), "height / h must be a positive value")
+                         (flat_top ? (h+inset.x*cos(mask_angle))/sin(mask_angle)*[1,tan(mask_angle/2)]
+                                   : h/sin(mask_angle)*[1,tan(mask_angle/2)])
+           : is_def(r) ?  assert(all_positive([r]), "r / d must be a positive value")
+                          [r/tan(mask_angle/2), r]
+           : is_def(joint) ? assert(all_positive([joint]), "joint must be a positive value")
+                             joint*[1, tan(mask_angle/2)]
+           : assert(all_positive([cut]),"cut must be a positive value")
+             let(circ_radius=cut/(1/sin(mask_angle/2)-1))
+             [circ_radius/tan(mask_angle/2), circ_radius],
+        dist=jr[0],
+        radius=jr[1],
+        outside_corner = _inset_corner(
+                            [
+                              dist*[cos(mask_angle),sin(mask_angle)],
+                              [0,0],
+                              [dist,0]
+                            ],
+                            mask_angle, inset, excess, flat_top),
+
+        arcpts = arc(r=radius, corner=outside_corner[1]),
+        arcpts2 = [
+            for (i = idx(arcpts))
+              if(i==0 || v_theta(arcpts[i]-arcpts[i-1]) <= angle-90)
+                arcpts[i]
+        ],
+        line1 = [last(arcpts2), last(arcpts2) + polar_to_xy(1, angle-90)],
+        line2 = [[0,inset.y], [100,inset.y]],
+        ipt = line_intersection(line1,line2),
+        path = deduplicate([
+                             [ipt.x, -excess],
+                             each select(outside_corner[0],1,-1),
+                             each arcpts2,
+                             ipt
+                           ], closed=true)
+    ) reorient(anchor,spin, two_d=true, path=path, extent=false, p=path);

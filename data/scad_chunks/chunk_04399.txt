@@ -1,0 +1,2 @@
+function span(range=180,allButLast = false,totalPieces=$totalPieces)
+	= ($valPtr * ((totalPieces==1)? 0:(range / (totalPieces -(allButLast?0:1)) ) ));

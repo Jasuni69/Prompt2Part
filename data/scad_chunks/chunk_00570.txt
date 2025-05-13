@@ -1,0 +1,1 @@
+function spring_colour(type) = type[8]; //! The colour

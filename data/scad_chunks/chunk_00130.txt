@@ -1,0 +1,7 @@
+module pcb_mounts()
+    if($preview)
+        pcb_mount_assembly(PI_IO, 3);
+    else
+        pcb_mount(PI_IO);
+
+pcb_mounts();

@@ -1,0 +1,9 @@
+function _getautopixsize(bbox, numpixels) =
+    let(
+        bbsiz = bbox[1]-bbox[0],
+        bbarea = bbsiz[0]*bbsiz[1],
+        pixarea = bbarea/numpixels
+    ) sqrt(pixarea);
+
+    
+/// internal function: get pixel size, adjusted if necessary to fit bounding box

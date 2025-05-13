@@ -1,0 +1,50 @@
+cutoutsBack =   
+[
+//-- 0, 1,             2,             3, 4, 5
+    [5, 2, shellWidth-10, shellHeight-4, 3, yappRoundedRect]
+];
+
+
+cutoutsLeft =  
+[
+];
+
+
+
+//===================================================================
+//  *** Push Buttons ***
+//-------------------------------------------------------------------
+//  Default origin = yappCoordPCB: PCB[0,0,0]
+//
+//  Parameters:
+//   Required:
+//    p(0) = posx
+//    p(1) = posy
+//    p(2) = capLength 
+//    p(3) = capWidth 
+//    p(4) = capRadius 
+//    p(5) = capAboveLid
+//    p(6) = switchHeight
+//    p(7) = switchTravel
+//    p(8) = poleDiameter
+//   Optional:
+//    p(9) = Height to top of PCB : Default = standoffHeight + pcbThickness
+//    p(10) = Shape  {yappRectangle | yappCircle | yappPolygon | yappRoundedRect 
+//                    | yappCircleWithFlats | yappCircleWithKey} : Default = yappRectangle
+//    p(11) = angle : Default = 0
+//    p(12) = filletRadius          : Default = 0/Auto 
+//    p(13) = buttonWall            : Default = 2.0;
+//    p(14) = buttonPlateThickness  : Default= 2.5;
+//    p(15) = buttonSlack           : Default= 0.25;
+//    n(a) = { <yappCoordPCB> | yappCoordBox | yappCoordBoxInside } 
+//    n(b) = { yappLeftOrigin, <yappGlobalOrigin> }
+//-------------------------------------------------------------------
+pushButtons = 
+[
+   [20,pcbWidth/2, 
+    8, // Width
+    8, // Length
+    4, // Radius
+    0, // Cap above Lid
+    5, // Switch Height
+    0.5, // Switch travel

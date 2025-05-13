@@ -1,0 +1,20 @@
+function __are_regions_equal(region1, region2, i) =
+    i >= len(region1)? true :
+    !_is_polygon_in_list(region1[i], region2)? false :
+    __are_regions_equal(region1, region2, i+1);
+
+
+/// Internal Function: _region_region_intersections()
+/// Usage:
+///    risect = _region_region_intersections(region1, region2, [closed1], [closed2], [eps]
+/// Description:
+///    Returns a pair of sorted lists such that risect[0] is a list of intersection
+///    points for every path in region1, and similarly risect[1] is a list of intersection
+///    points for the paths in region2.  For each path the intersection list is
+///    a sorted list of the form [PATHIND, SEGMENT, U].  You can specify that the paths in either
+///    region be regarded as open paths if desired.  Default is to treat them as
+///    regions and hence the paths as closed polygons.
+///    .
+///    Included as intersection points are points where region1 touches itself at a vertex or
+///    region2 touches itself at a vertex.  (The paths are assumed to have no self crossings.
+///    Self crossings of the paths in the regions are not returned.)

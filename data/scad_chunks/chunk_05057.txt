@@ -1,0 +1,27 @@
+function mb_torus(r_maj, r_min, cutoff=INF, influence=1, negative=false, hide_debug=false, d_maj, d_min, or,od,ir,id) =
+   assert(is_num(cutoff) && cutoff>0, "\ncutoff must be a positive number.")
+   assert(is_finite(influence) && influence>0, "\ninfluence must be a positive number.")
+   let(
+        _or = get_radius(r=or, d=od, dflt=undef),
+        _ir = get_radius(r=ir, d=id, dflt=undef),
+        _r_maj = get_radius(r=r_maj, d=d_maj, dflt=undef),
+        _r_min = get_radius(r=r_min, d=d_min, dflt=undef),
+        r_maj = is_finite(_r_maj)? _r_maj :
+            is_finite(_ir) && is_finite(_or)? (_or + _ir)/2 :
+            is_finite(_ir) && is_finite(_r_min)? (_ir + _r_min) :
+            is_finite(_or) && is_finite(_r_min)? (_or - _r_min) :
+            assert(false, "Bad major size parameter."),
+        r_min = is_finite(_r_min)? _r_min :
+            is_finite(_ir)? (maj_rad - _ir) :
+            is_finite(_or)? (_or - maj_rad) :
+            assert(false, "\nBad minor size parameter."),
+       neg = negative ? -1 : 1,
+       vnf = [neg, hide_debug ? debug_tetra(0.02) : torus(r_maj,r_min,$fn=20)]
+   ) 
+   !is_finite(cutoff) && influence==1 ? [function(point) _mb_torus_basic(point, r_maj, r_min, neg), vnf]
+ : !is_finite(cutoff) ? [function(point) _mb_torus_influence(point, r_maj, r_min, 1/influence, neg), vnf]
+ : influence==1 ? [function(point) _mb_torus_cutoff(point, r_maj, r_min, cutoff, neg), vnf]
+ : [function(point) _mb_torus_full(point, r_maj, r_min, cutoff, 1/influence, neg), vnf];
+
+
+/// metaball octahedron

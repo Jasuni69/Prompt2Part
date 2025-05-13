@@ -1,0 +1,1 @@
+function is_homogenous(l, depth=10) = is_homogeneous(l, depth);

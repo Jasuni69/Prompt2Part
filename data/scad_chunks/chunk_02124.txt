@@ -1,0 +1,1 @@
+function pbox_wall(type)       = type[1]; //! Wall thickness

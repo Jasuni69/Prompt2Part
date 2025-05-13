@@ -1,0 +1,57 @@
+module DPfeil(l=40,b=undef,shift=0,grad=35,d=0,txt,rot,center=true,name,help){
+ 
+ l=is_list(l)?l:[l,l/8];
+ shift=is_list(shift)?shift:[shift,txt?-shift:0];
+ lP=[l[0]/2-l[1],l[1]]; 
+ b=is_list(b)?b:[is_undef(b)?l[0]/20:b,2*(lP[1]-(d?0:shift[0]))*tan(grad/2)];
+ //center=is_bool(center)?center?[1,1]:[0,0]:is_list(center)?center:[center,center];
+ d=d?max(abs(d),abs(b[1]))*sign(d) : 0;
+ txt=txt==true?str(l[0],"mm") : txt;
+ txtL=txt?len(str(txt)) * b[1] *0.675 +.25 : 0;
+ rot=is_num(rot)?rot:rot?90:0;
+
+if(!d)T(center?0:l[0]/2)MKlon(max(0.1,(l[0]-lP[1]*2)/2 ))Pfeil(l=[lP[0]-(rot&&abs(rot)!=180?b[1]/2:lP[0]>txtL/2?txtL/2:0) ,lP[1]],b=b,shift=shift,grad=grad,d=d,center=true,name=name,help=false);
+
+if(d)T(y=center?0:d/2)MKlon(mx=1)rotate(-gradB(b=min(lP[0],PI*d/2-lP[1]),r=d/2))Pfeil(l=[min(lP[0]-txtL/2,PI*d/2-lP[1]-txtL/2),lP[1]],b=b,shift=shift,grad=grad,d=d,center=true,name=name,help=false);
+
+if(txt)T(center?0:d?[0,d/2]:l[0]/2,!rot&&lP[0]<txtL/2?b[1]:0)rotate(rot)Text(h=0,text=txt,size=b[1],center=true,cy=d?false:true,radius=d?d/2-b[1]/2:0,viewPos=false,name=false,trueSize="body");
+
+//InfoTxt("DPfeil",["Winkel",2*atan((b[1]/2)/(l[1]-shift[0]))],name);    
+HelpTxt("DPfeil",[   
+    "l",l,
+    "b",b,
+    "shift",shift,
+    "grad",grad,
+    "d",d,
+    "txt",txt,
+    "rot",rot,
+    "center",center,
+    "name",name],help);
+
+}
+
+
+
+
+
+/*
+CycloidZahn(z=2.0,f=2,d=1,linear=true,spiel=0.04);
+//CycloidZahn(z=4.4,f=5,d=10,kreisDivisor=4);
+// */
+//CycloidZahn(modul=4,z=4.4,f=5,d=10,kreisDivisor=5,scale=2);
+
+/** \page Polygon \name CycloidZahn
+CycloidZahn() creates the polygon for a gear teeth
+\param modul gear modul
+\param z number teeth
+\param d center hole
+\param linear  rack or pinion
+\param center  center at center or pitch circle 
+\param spiel clearance
+\param fn fs  fragments
+\param fnd fragments for center circle
+\param kreisDivisor cutting tooth tip
+\param f divider of teeth intersection ⇒ narrower teeth
+\param scale stretch teeth //experimental
+\param name help name help switch
+*/

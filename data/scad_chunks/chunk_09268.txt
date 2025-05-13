@@ -1,0 +1,10 @@
+function _convex_hull_upper_chain(points, chain, m, t, i) =
+    let(current_m = _convex_hull_upper_m(chain, points[i], m, t))
+    i == 2 ? slice(chain, 0, current_m) :
+        _convex_hull_upper_chain(
+            points,
+            [each slice(chain, 0, current_m), points[i]],
+            current_m + 1,
+            t,
+            i - 1
+        );

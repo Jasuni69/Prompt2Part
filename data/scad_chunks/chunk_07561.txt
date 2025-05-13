@@ -1,0 +1,13 @@
+function revP(points)=[for(p=[len(points)-1:-1:0])points[p]];
+
+/** \page Functions
+arc() creates points on an arc
+\param r radius
+\param deg angle
+\param r2 end radius at deg
+\param rot rotate
+\param t   translate
+\param z   add z value ⇒vec3
+\param fn fragments
+\param rev reverse point order
+*/

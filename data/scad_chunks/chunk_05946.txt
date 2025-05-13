@@ -1,0 +1,45 @@
+function _extreme_angle_fragment(seg, fragments, rightmost=true, eps=EPSILON) =
+    !fragments? [undef, []] :
+    let(
+        delta = seg[1] - seg[0],
+        segang = atan2(delta.y,delta.x),
+        frags = [
+            for (i = idx(fragments)) let(
+                fragment = fragments[i],
+                fwdmatch = approx(seg[1], fragment[0], eps=eps),
+                bakmatch =  approx(seg[1], last(fragment), eps=eps)
+            ) [
+                fwdmatch,
+                bakmatch,
+                bakmatch? reverse(fragment) : fragment
+            ]
+        ],
+        angs = [
+            for (frag = frags)
+                (frag[0] || frag[1])? let(
+                    delta2 = frag[2][1] - frag[2][0],
+                    segang2 = atan2(delta2.y, delta2.x)
+                ) modang(segang2 - segang) : (
+                    rightmost? 999 : -999
+                )
+        ],
+        fi = rightmost? min_index(angs) : max_index(angs)
+    ) abs(angs[fi]) > 360? [undef, fragments] : let(
+        remainder = [for (i=idx(fragments)) if (i!=fi) fragments[i]],
+        frag = frags[fi],
+        foundfrag = frag[2]
+    ) [foundfrag, remainder];
+
+
+/// Internal Function: _assemble_a_path_from_fragments()
+/// Usage:
+///   _assemble_a_path_from_fragments(subpaths);
+/// Description:
+///   Given a list of paths, assembles them together into one complete closed polygon path, and
+///   remainder fragments.  Returns [PATH, FRAGMENTS] where FRAGMENTS is the list of remaining
+///   unused path fragments.
+/// Arguments:
+///   fragments = List of paths to be assembled into complete polygons.
+///   rightmost = If true, assemble paths using rightmost turns. Leftmost if false.
+///   startfrag = The fragment to start with.  Default: 0
+///   eps = The epsilon error value to determine whether two points coincide.  Default: `EPSILON` (1e-9)

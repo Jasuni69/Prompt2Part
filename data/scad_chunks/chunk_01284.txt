@@ -1,0 +1,103 @@
+module sbr_bearing_block(type) { //! Draw the specified SBR bearing block
+    vitamin(str("sbr_bearing_block(", type[0], "): ", type[0], " bearing block"));
+
+    T = type[1];
+    h = sbr_hole_offset(type);
+    H = sbr_side_height(type);
+
+    W = sbr_size(type)[0];
+    G = sbr_size(type)[1];
+    M = sbr_size(type)[2];
+    J = sbr_screw_separation_x(type);
+    K = sbr_screw_separation_z(type);
+    S1 = sbr_screw(type);
+    I = type[11];           // screw length
+
+    S2 = type[15];
+    S2L = type[16];
+
+    bearing = sbr_bearing(type);
+    clip = sbr_circlip(type);
+    chamfer = 1.5;
+    A = type[9];            // size of chamfered overhang - vertical
+    Ah = A + chamfer * 2;   // size of chamfered overhand - horizontal - not given in drawings
+
+    width = W - (2 * chamfer);
+    height = G - chamfer;
+
+    boltHoleRadius = screw_radius(S1);
+    setScrewRadius = screw_radius(S2);
+
+    color(sks_bearing_block_colour) {
+        render() difference() {
+            linear_extrude(M, center = true, convexity=2) {
+                cutoutheight = 15; // chosen to fit SBR16, may not work with others
+                bearingRadius = bearing_dia(bearing) / 2;
+                bearingTheta = open_bearing_theta(bearing);
+                bearingOpening = open_bearing_width(bearing);
+                bearingOpeningBig = bearingOpening + (tan(bearingTheta/2) * cutoutheight);
+                // center section with bearing hole
+                difference() {
+                    translate([-width/2, -(H-h - chamfer)])
+                        square([width, height]);
+                    circle(r = bearingRadius);
+                    for(m = [0, 1])
+                        mirror([m, 0, 0])
+                            translate([0, h - (cutoutheight/2) - H + G + 0.1])
+                                right_trapezoid(bearingOpening/2, bearingOpeningBig/2, cutoutheight/2);
+                }
+                // add the sides
+                for(m = [0, 1])
+                    mirror([m, 0, 0]) {
+                        translate([-(W/2) + chamfer, -((H-h))]) {
+                            difference() {
+                                union() {
+                                    right_trapezoid(Ah - chamfer,Ah,chamfer);
+                                    rotate([0,0,90])
+                                        right_trapezoid(A + chamfer,A,chamfer);
+                                }
+                                translate([-(chamfer +0.1), -0.1,0])
+                                    right_trapezoid(chamfer/2 + 0.2, 0, chamfer/2+ 0.2);
+                            }
+                        }
+                    }
+            }
+            // bolt holes
+            for(x = [-J / 2, J / 2])
+                translate([x, h - H + I/2 - 0.1, 0])
+                    rotate([90, 0, 0])
+                        for (y = [-K / 2, K / 2])
+                            translate([0, y])
+                                cylinder(r = boltHoleRadius, h=I + 0.1, center=true);
+
+            // set screw holes
+            translate([-width/2 + S2L/2 - 0.1,0,0])
+                rotate([0,90,0])
+                    cylinder(r = setScrewRadius, h=S2L, center=true);
+
+            translate([0,-(H-h) + chamfer + S2L/2 -0.1,0])
+                rotate([0,90,90])
+                    cylinder(r = setScrewRadius, h=S2L, center=true);
+
+        }
+    }
+    not_on_bom() no_explode() {
+        spacer = sbr_spacer(type);
+        for(end = spacer ? [-1, 1] : 0)
+            translate_z(end * (bearing_length(bearing) + spacer) / 2)
+                rotate([0,0,-90])
+                    linear_bearing(bearing);
+
+        for(end = [-1, 1])
+            translate_z(end * ((spacer ? 2 * bearing_length(bearing) + spacer : bearing_length(bearing)) + circlip_thickness(clip)) / 2)
+                rotate(180)
+                    internal_circlip(clip);
+
+        translate([-width/2 - 0.1,0,0])
+            rotate([0,90,180])
+               screw(S2, S2L);
+        translate([0,-(H-h) + chamfer - 0.1,0])
+            rotate([0,90,270])
+                screw(S2, S2L);
+    }
+}

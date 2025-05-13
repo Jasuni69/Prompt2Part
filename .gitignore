@@ -6,4 +6,5 @@ __pycache__/
 .venv/
 venv/
 output.scad
-output.stl 
+output.stl
+scad_library/ 

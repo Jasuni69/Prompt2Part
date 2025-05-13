@@ -1,0 +1,13 @@
+module fastons()
+    for(i = [0, len(fastons) - 1])
+        translate([i * 20, 0])
+            let(f = fastons[i]) {
+                rotate(180)
+                    faston(f);
+
+                translate([10, 0])
+                    rotate(180)
+                        faston(f, true);
+            }
+
+fastons();

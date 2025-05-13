@@ -1,0 +1,20 @@
+function _rotate3d_xyz(a, points) =
+  let(
+    cosa = cos(a.z), sina = sin(a.z),
+    cosb = cos(a.y), sinb = sin(a.y),
+    cosc = cos(a.x), sinc = sin(a.x),
+    Axx = cosa*cosb,
+    Axy = cosa*sinb*sinc - sina*cosc,
+    Axz = cosa*sinb*cosc + sina*sinc,
+    Ayx = sina*cosb,
+    Ayy = sina*sinb*sinc + cosa*cosc,
+    Ayz = sina*sinb*cosc - cosa*sinc,
+    Azx = -sinb,
+    Azy = cosb*sinc,
+    Azz = cosb*cosc
+  )
+  [for (p = points)
+    let( pz = (p.z == undef) ? 0 : p.z )
+    [Axx*p.x + Axy*p.y + Axz*pz,
+     Ayx*p.x + Ayy*p.y + Ayz*pz,
+     Azx*p.x + Azy*p.y + Azz*pz] ];

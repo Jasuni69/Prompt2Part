@@ -1,0 +1,4 @@
+function euler(R) = let(ay = asin(-R[2][0]), cy = cos(ay)) //! Convert a rotation matrix to an Euler rotation vector.
+    cy ? [ atan2(R[2][1] / cy, R[2][2] / cy), ay, atan2(R[1][0] / cy, R[0][0] / cy) ]
+       : R[2][0] < 0 ? [atan2( R[0][1],  R[0][2]),  90, 0]
+                     : [atan2(-R[0][1], -R[0][2]), -90, 0];

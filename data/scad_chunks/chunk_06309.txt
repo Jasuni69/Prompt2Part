@@ -1,0 +1,7 @@
+module mask2d_rabbet(size, mask_angle=90, excess=0.01, anchor=CTR, spin=0) {
+    path = mask2d_rabbet(size=size, mask_angle=mask_angle, excess=excess);
+    attachable(anchor,spin, two_d=true, path=path, extent=false) {
+        polygon(path);
+        children();
+    }
+}

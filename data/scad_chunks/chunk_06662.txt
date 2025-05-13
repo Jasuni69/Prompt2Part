@@ -1,0 +1,9 @@
+module test_suffix() {
+    assert(suffix("abcdefghi",0) == "");
+    assert(suffix("abcdefghi",1) == "i");
+    assert(suffix("abcdefghi",2) == "hi");
+    assert(suffix("abcdefghi",3) == "ghi");
+    assert(suffix("abcdefghi",6) == "defghi");
+    assert(suffix("abc",4) == "abc");
+}
+test_suffix();

@@ -1,0 +1,1 @@
+function servo_motor_cap(type)       = type[2]; //! Diameter height and corner radius of encoder cover

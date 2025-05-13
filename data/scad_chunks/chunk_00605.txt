@@ -1,0 +1,1 @@
+function 7_segment_pins(type)       = type[3]; //! [x, y] array of pins

@@ -1,0 +1,1 @@
+function gt_box_w(type)        = type[11];  //! Width inside the cable entry box

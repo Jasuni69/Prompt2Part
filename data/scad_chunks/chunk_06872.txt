@@ -1,0 +1,8 @@
+module test_skew() {
+    m = affine3d_skew(sxy=2, sxz=3, syx=4, syz=5, szx=6, szy=7);
+    assert_approx(skew(sxy=2, sxz=3, syx=4, syz=5, szx=6, szy=7), m);
+    assert_approx(skew(sxy=2, sxz=3, syx=4, syz=5, szx=6, szy=7, p=[1,2,3]), apply(m,[1,2,3]));
+    // Verify that module at least doesn't crash.
+    skew(undef,2,3,4,5,6,7) union(){};
+}
+test_skew();

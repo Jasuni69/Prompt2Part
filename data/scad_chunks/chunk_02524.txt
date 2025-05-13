@@ -1,0 +1,4 @@
+function tangent(path, before, i, after) = unit(unit(path[i] - path[before]) + unit(path[after] - path[i]));
+//
+// Calculate the twist per segment caused by rotate_from_to() instead of a simple Euler rotation around Z.
+//

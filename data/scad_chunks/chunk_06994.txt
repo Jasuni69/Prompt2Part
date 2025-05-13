@@ -1,0 +1,18 @@
+module test_shuffle() {
+    nums1 = count(100);
+    nums2 = shuffle(nums1,33);
+    nums3 = shuffle(nums2,99);
+    assert(sort(nums2)==nums1);
+    assert(sort(nums3)==nums1);
+    assert(nums1!=nums2);
+    assert(nums2!=nums3);
+    assert(nums1!=nums3);
+    str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    shufstr = shuffle(str,12);
+    assert(shufstr != str && sort(shufstr)==str);
+}
+test_shuffle();
+
+
+
+// Sets

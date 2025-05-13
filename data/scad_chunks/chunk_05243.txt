@@ -1,0 +1,32 @@
+module hsl(h,s=1,l=0.5,a=1)
+{
+  req_children($children);  
+  color(hsl(h,s,l),a) children();
+}
+
+
+// Function&Module: hsv()
+// Synopsis: Sets the color of children to a hue, saturation, value and optional alpha channel value.
+// SynTags: Trans
+// See Also: hsl(), recolor(), color_this()
+// Topics: Colors, Colorspace
+// Usage:
+//   hsv(h,[s],[v],[a]) CHILDREN;
+//   rgb = hsv(h,[s],[v],[a]);
+// Description:
+//   When called as a function, returns the `[R,G,B]` color for the given hue `h`, saturation `s`, and
+//   value `v` from the HSV colorspace.  If you supply the `a` value then you'll get a length 4 list
+//   `[R,G,B,A]`.  When called as a module, sets the color using the color() module to the given hue
+//   `h`, saturation `s`, and value `v` from the HSV colorspace.
+// Arguments:
+//   h = The hue, given as a value between 0 and 360.  0=red, 60=yellow, 120=green, 180=cyan, 240=blue, 300=magenta.
+//   s = The saturation, given as a value between 0 and 1.  0 = grayscale, 1 = vivid colors.  Default: 1
+//   v = The value, between 0 and 1.  0 = darkest black, 1 = bright.  Default: 1
+//   a = Specifies the alpha channel as a value between 0 and 1.  0 = fully transparent, 1=opaque.  Default: 1
+// Side Effects:
+//   When called as a module, sets the color of all children.
+// Example:
+//   hsv(h=120,s=1,v=1) sphere(d=60);
+// Example:
+//   rgb = hsv(h=270,s=0.75,v=0.9);
+//   color(rgb) cube(60, center=true);

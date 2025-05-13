@@ -1,0 +1,36 @@
+function _make_offset_polyhedron(path,offsets, offset_type, flip_faces, quality, check_valid, cap=true,
+                                 offsetind=0, vertexcount=0, vertices=[], faces=[] )=
+    offsetind==len(offsets)? 
+        let(
+            bottom = count(len(path),vertexcount),
+            oriented_bottom = !flip_faces? bottom : reverse(bottom)
+        )
+        [
+         vertices,
+         [each faces,
+          if (cap) oriented_bottom]
+        ]
+  :
+        let(
+            this_offset = offsetind==0? offsets[0][0] : offsets[offsetind][0] - offsets[offsetind-1][0],
+            delta = offset_type=="delta" || offset_type=="chamfer" ? this_offset : undef,
+            r = offset_type=="round"? this_offset : undef,
+            do_chamfer = offset_type == "chamfer",
+            vertices_faces = offset(
+                    path, r=r, delta=delta, chamfer = do_chamfer, closed=true,
+                    check_valid=check_valid, quality=quality,
+                    return_faces=true,
+                    firstface_index=vertexcount,
+                    flip_faces=flip_faces
+            )
+        )
+        _make_offset_polyhedron(
+                vertices_faces[0], offsets, offset_type,
+                flip_faces, quality, check_valid, cap, 
+                offsetind+1, vertexcount+len(path),
+                vertices=concat(
+                        vertices,
+                        path3d(vertices_faces[0],offsets[offsetind][1])
+                ),
+                faces=concat(faces, vertices_faces[1])
+        );

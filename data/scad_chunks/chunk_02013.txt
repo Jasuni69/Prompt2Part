@@ -1,0 +1,7 @@
+function drag_chain_cam_x(type) = // how far the cam sticks out
+    let(s = drag_chain_size(type),
+        r =  drag_chain_outer_size(type).z / 2,
+        wall =  drag_chain_wall(type),
+        cam_r = s.x - 2 * drag_chain_clearance(type) - wall - r,  // inner_x_normal - clearance - r
+        twall = drag_chain_twall(type)
+    )   min(sqrt(max(sqr(cam_r) - sqr(r - twall), 0)), r);

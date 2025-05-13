@@ -1,0 +1,4 @@
+function box_bc_name(type, suffix) = let(name = box_name(type)) name == "box" ? suffix : str(name, "_", suffix); // Backwards compatible name
+
+grill_hole = 5;
+grill_gap = 1.9;

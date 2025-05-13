@@ -1,0 +1,13 @@
+module _honeycomb(shape, spacing=10, hex_wall=1) 
+{
+        hex = hexagon(id=spacing-hex_wall, spin=180/6);
+        bounds = pointlist_bounds(shape);
+        size = bounds[1] - bounds[0];
+        hex_rgn2 = grid_copies(spacing=spacing, size=size, stagger=true, p=hex);
+        center = (bounds[0] + bounds[1]) / 2;
+        hex_rgn = move(center, p=hex_rgn2);
+        difference(){
+            polygon(shape);
+            region(hex_rgn);
+        }
+}

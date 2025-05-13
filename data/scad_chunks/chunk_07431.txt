@@ -1,0 +1,66 @@
+module Anschluss(h=10,d1=10,d2=15,rad=5,rad2,grad=30,r1,r2,center=true,fn=0,fs=fs,fa=fa,fn2=0,grad2=0,x0=0,wand, use2D=false,name,help,old=false,dicke,hRef=0){
+     
+    wand=is_undef(dicke)?wand:dicke; 
+    center=is_bool(center)?center?1:0:center;
+    rad2=is_undef(rad2)?is_list(rad)?rad[1]:rad:rad2;
+    rad=is_list(rad)?rad[0]:rad;
+    r1=is_undef(r1)?d1/2:r1;
+    r2=is_undef(r2)?d2/2:r2;
+    l1=assert(h,"h can't be undef")is_list(h)?h[0]:h/2;
+    l2=is_list(h)?h[1]:h/2;
+    grad2=is_list(grad2)?grad2:[grad2,grad2];
+    use2D=is_parent(needs2D)?true: use2D;
+    $helpM=false;
+   
+   if (!wand){ 
+    if(use2D)SBogen(extrude=(center?center>0?(r1+r2)/2:r2:r1),grad=abs(grad),dist=r2-r1,l1=l1,l2=l2,r1=rad,r2=rad2,center=center,fn=fn2,fs=fs,fa=fa,grad2=grad2,name=name,x0=x0,lRef=hRef,messpunkt=false);
+    else
+    RotEx(fn=fn,fs=fs,fa=fa,cut=x0<0?true:false)
+        SBogen(extrude=(center?center>0?(r1+r2)/2:r2:r1),grad=abs(grad),dist=r2-r1,l1=l1,l2=l2,r1=rad,r2=rad2,center=center,fn=fn2,fs=fs,fa=fa,grad2=grad2,name=name,x0=x0,lRef=hRef,messpunkt=false);
+       
+
+   } else if(old)difference(){
+        if (wand<0)Anschluss(h=h,r1=r1-wand,r2=r2-wand,rad=rad+(r2>r1?wand:-wand),rad2=rad2+(r2>r1?-wand:wand),grad=grad,center=center,fn=fn,fn2=fn2,grad2=grad2,x0=x0, use2D=use2D,name=0,help=0);  
+
+       Tz($preview&&!center&&wand<0?-0.05:0) Anschluss(h=wand<0&&$preview?h*1.01:h,r1=r1,r2=r2,rad=rad,rad2=rad2,grad=grad,center=center,fn=fn,fn2=fn2,grad2=grad2,x0=wand>0?x0:x0-0.1, use2D=use2D,name=name,help=0);
+
+        if (wand>0)Tz($preview&&!center?-0.05:0)  Anschluss(h=wand>0&&$preview?h*1.01:h,r1=r1-wand,r2=r2-wand,rad=rad+(r2>r1?wand:-wand),rad2=rad2+(r2>r1?-wand:wand),grad=grad,center=center,fn=fn,fn2=fn2,grad2=grad2,x0=x0-0.1, use2D=use2D,name=0,help=0);  
+      
+   }  
+   
+   if(!old&&wand)
+    if(!use2D)RotEx(fn=fn,fs=fs,fa=fa)Ansch();
+    else Ansch();
+   
+   module Ansch()render()difference(){ // new generation 
+   if(wand<0)SBogen(extrude=(center?center>0?(r1+r2)/2:r2:r1)-wand,grad=abs(grad),dist=r2-r1,l1=l1,l2=l2,r1=rad+(r2>r1?wand:-wand), use2D=0,r2=rad2+(r2>r1?-wand:wand),center=center,fn=fn2,fs=fs,fa=fa,grad2=grad2,name=name,x0=x0,lRef=hRef,messpunkt=false);
+   
+   SBogen(extrude=(center?center>0?(r1+r2)/2:r2:r1),grad=abs(grad),dist=r2-r1,l1=l1,l2=l2,r1=rad, use2D=0,r2=rad2,center=center,fn=fn2,fs=fs,fa=fa,grad2=grad2,name=name,x0=wand>0?x0:x0-.1,lRef=hRef,messpunkt=false);
+   
+   if(wand>0)SBogen(extrude=(center?center>0?(r1+r2)/2:r2:r1)-wand,grad=abs(grad),dist=r2-r1,l1=l1,l2=l2,r1=rad+(r2>r1?wand:-wand), use2D=0,r2=rad2+(r2>r1?-wand:wand),center=center,fn=fn2,fs=fs,fa=fa,grad2=grad2,name=name,x0=x0-0.1,lRef=hRef,messpunkt=false);
+   }
+    
+
+  HelpTxt("Anschluss",[
+   "h",h,
+   "d1",d1,
+   "d2",d2,
+   "rad",rad,
+   "rad2",rad2,
+   "grad",grad,
+   "r1",r1,
+   "r2",r2,
+   "center",center,
+   "fn",fn,
+   "fn2",fn2,
+   "grad2",grad2,
+   "x0",x0,
+   "hRef",hRef,
+   "dicke",dicke,
+   "use2D", use2D,
+   "name",name]
+   ,help);
+}
+
+
+// WIP!!

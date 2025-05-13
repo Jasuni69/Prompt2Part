@@ -1,0 +1,1 @@
+function dist(leng, r, a) = abs(leng - r * (MAX_ANGLE - a) / MAX_ANGLE);

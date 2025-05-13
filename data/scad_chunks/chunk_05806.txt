@@ -1,0 +1,91 @@
+module generic_screw(
+    screwsize=3,
+    screwlen=10,
+    headsize=6,
+    headlen=3,
+    pitch=undef,
+    anchor="base",
+    spin=0,
+    orient=UP
+) {
+    sides = max(12, segs(screwsize/2));
+    anchors = [
+        named_anchor("countersunk", [0,0,(headlen+screwlen)/2-0.01]),
+        named_anchor("base", [0,0,-headlen/2+screwlen/2])
+    ];
+    attachable(anchor,spin,orient, d=screwsize, l=headlen+screwlen, anchors=anchors) {
+        down(headlen/2-screwlen/2) {
+            down(screwlen/2) {
+                if (pitch == undef) {
+                    cylinder(r=screwsize/2, h=screwlen+0.05, center=true, $fn=sides);
+                } else {
+                    threaded_rod(d=screwsize, l=screwlen+0.05, pitch=pitch, $fn=sides);
+                }
+            }
+            cylinder(r=headsize/2, h=headlen, center=false, $fn=sides*2);
+        }
+        children();
+    }
+}
+
+
+// Module: metric_bolt()
+// Description:
+//   Makes a standard metric screw model.
+// Arguments:
+//   size = Diameter of threaded part of screw.
+//   headtype = One of `"hex"`, `"pan"`, `"button"`, `"round"`, `"countersunk"`, `"oval"`, `"socket`".  Default: `"socket"`
+//   l = Length of screw, except for the head.
+//   shank = Length of unthreaded portion of the shaft.
+//   pitch = If given, render threads of the given pitch.  If 0, then no threads.  Overrides coarse argument.
+//   details = If true model should be rendered with extra details.  (Default: false)
+//   coarse = If true, make coarse threads instead of fine threads.  Default = true
+//   flange = Radius of flange beyond the head.  Default = 0 (no flange)
+//   phillips = If given, the size of the phillips drive hole to add.  (ie: "#1", "#2", or "#3")
+//   torx = If given, the size of the torx drive hole to add.  (ie: 10, 20, 30, etc.)
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+// Named Anchors:
+//   "base" = At the base of the head.
+//   "countersunk" = At the head height that would be just barely exposed when countersunk.
+//   "shank" = At the bottom start of the unthreaded shank.
+// Example: Bolt Head Types
+//   ydistribute(40) {
+//       xdistribute(30) {
+//           // Front Row, Left to Right
+//           metric_bolt(headtype="pan", size=10, l=15, details=true, phillips="#2");
+//           metric_bolt(headtype="button", size=10, l=15, details=true, phillips="#2");
+//           metric_bolt(headtype="round", size=10, l=15, details=true, phillips="#2");
+//       }
+//       xdistribute(30) {
+//           // Back Row, Left to Right
+//           metric_bolt(headtype="socket", size=10, l=15, details=true);
+//           metric_bolt(headtype="hex", size=10, l=15, details=true, phillips="#2");
+//           metric_bolt(headtype="countersunk", size=10, l=15, details=true, phillips="#2");
+//           metric_bolt(headtype="oval", size=10, l=15, details=true, phillips="#2");
+//       }
+//   }
+// Example: Details
+//   metric_bolt(size=10, l=15, details=true, $fn=32);
+// Example: No Details Except Threads
+//   metric_bolt(size=10, l=15);
+// Example: No Details, No Threads
+//   metric_bolt(size=10, l=15, pitch=0);
+// Example: Fine Threads
+//   metric_bolt(size=10, l=15, coarse=false);
+// Example: Flange
+//   metric_bolt(size=10, l=15, flange=5);
+// Example: Shank
+//   metric_bolt(size=10, l=25, shank=10);
+// Example: Hex Head with Phillips
+//   metric_bolt(headtype="hex", size=10, l=15, phillips="#2");
+// Example: Hex Head with Torx
+//   metric_bolt(headtype="hex", size=10, l=15, torx=50);
+// Example(FlatSpin,VPD=100): Standard Anchors
+//   metric_bolt(headtype="oval", size=10, l=15, shank=5, details=true, phillips="#2")
+//       show_anchors(5, custom=false);
+// Example(FlatSpin,VPD=100): Custom Named Anchors
+//   expose_anchors(0.125)
+//     metric_bolt(headtype="oval", size=10, l=15, shank=5, details=true, phillips="#2")
+//       show_anchors(5, std=false);

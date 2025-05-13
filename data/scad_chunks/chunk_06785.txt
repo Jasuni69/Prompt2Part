@@ -1,0 +1,21 @@
+module test_f_is_num() {
+    testfn = f_is_num();
+    for (test = [
+        [undef,   false],
+        [false,   false],
+        [true,    false],
+        [-4.5,    true],
+        [-4,      true],
+        [0,       true],
+        [1.5,     true],
+        [3,       true],
+        [INF,     true],
+        [-INF,    true],
+        [NAN,     false],
+        ["foo",   false],
+        [[4,5,6], false]
+    ]) {
+        assert(testfn(test[0]) == test[1]);
+    }
+}
+test_f_is_num();

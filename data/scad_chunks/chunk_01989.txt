@@ -1,0 +1,5 @@
+module ssr_shroud_hole_positions(type)                                      //! Place children at the screw hole positions
+    for($side = [-1, 1])
+        translate([-ssr_length(type) / 2 -boss_r, $side * ssr_shroud_pitch(type) / 2])
+            vflip()
+                children();

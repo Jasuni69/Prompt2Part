@@ -1,0 +1,1 @@
+function display_ribbon(type)       = type[10]; //! Keep out region for ribbon cable

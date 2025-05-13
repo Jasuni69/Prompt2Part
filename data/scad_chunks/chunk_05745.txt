@@ -1,0 +1,8 @@
+function _shift_cut_plane(vnf,dir,cut,off=0.001) =
+    let(
+        I = ident(3),
+        dir_ind = ord(dir)-ord("X"),
+        verts = vnf[0],
+        on_cut = [for (x = verts * I[dir_ind]) if(approx(x,cut,eps=1e-4)) 1] != []
+    ) !on_cut? cut :
+    _shift_cut_plane(vnf,dir,cut+off);

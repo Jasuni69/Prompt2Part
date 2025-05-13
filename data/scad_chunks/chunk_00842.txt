@@ -1,0 +1,1 @@
+function bb_bore(type)            = type[1]; //! Internal diameter

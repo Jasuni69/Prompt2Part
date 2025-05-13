@@ -1,0 +1,1 @@
+function gm_holes(type)        = type[12]; //! List of hole positions

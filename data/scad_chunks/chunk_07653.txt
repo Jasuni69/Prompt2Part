@@ -1,0 +1,92 @@
+module PolyH(points,loop,end=true,pointEnd=false,convexity=5,faceOpt=+0,flip=true,name,help){
+loop=is_undef(loop)||loop<3?1:loop;
+points=assert(!is_undef(points))points;
+lp=len(points);
+loops=pointEnd?pointEnd==1||pointEnd==2?(lp-1)/loop:
+                                        (lp-2)/loop:
+               lp/loop;
+  
+fBottom=pointEnd==2||b(pointEnd,bool=true)==false?[[for(i=flip?[loop -1:-1:0]:[0:loop-1])i]]:[];
+fTop=   pointEnd==1||b(pointEnd,bool=true)==false?[[for(i=flip?[0:loop -1]:[loop-1:-1:0])i+lp-(loop)]]:[];
+
+fBodyFlip=loops>1?[for(lev=[0:loops -2],i=[0:loop -1])[
+  i          +loop*lev,
+  (i +1)%loop+loop*lev,
+  (i +1)%loop+loop*(lev+1),
+  i          +loop*(lev+1)
+]]:[];
+
+fBody=loops>1?[for(lev=[0:loops -2],i=[0:loop -1])[
+  i          +loop*(lev+1),
+  (i +1)%loop+loop*(lev+1),
+  (i +1)%loop+loop*lev,
+  i          +loop*lev
+]]:[];
+
+
+fBody1=loops>1?[for(lev=[0:loops -2],i=[0:loop -1])each[[
+  
+  i          +loop*lev,
+  (i +1)%loop+loop*lev,
+  //(i +1)%loop+loop*(lev+1),
+  i          +loop*(lev+1)
+],
+[
+  //i          +loop*lev,
+  (i +1)%loop+loop*lev,
+  (i +1)%loop+loop*(lev+1),
+  i          +loop*(lev+1)
+]]
+]:[];
+
+fBody2=loops>1?[for(lev=[0:loops -2],i=[0:loop -1])each[[
+  
+  //i          +loop*(lev+1),
+  i          +loop*lev,
+  (i +1)%loop+loop*lev,
+  (i +1)%loop+loop*(lev+1),
+  
+],
+[
+  i          +loop*lev,
+  //(i +1)%loop+loop*lev,
+  (i +1)%loop+loop*(lev+1),
+  i          +loop*(lev+1)
+]]
+]:[];
+
+
+
+faces=loop>1?end?concat(
+                  fBottom,
+                  pointEnd==2?[for(i=[0:loop -1])[lp-i -2,lp-1,lp-(i+1)%loop -2]]:fTop,
+                  faceOpt?faceOpt==-1||faceOpt==2?fBody2:fBody1:flip?fBodyFlip:fBody
+                ):
+                faceOpt?faceOpt==-1||faceOpt==2?fBody2:fBody1:flip?fBodyFlip:fBody:
+            [[for(i=[0:lp-1])i]]
+;
+
+pointyFaces=(pointEnd==true||pointEnd==1)&&loops>=1?[ 
+if(pointEnd==true||pointEnd==1) for(i=[0:loop -1])[(i + 1)%loop + 1,i +1,0],//bottom
+if(pointEnd==true||pointEnd==2) for(i=[0:loop -1])[lp-i -2,lp-1,lp-(i+1)%loop -2],//top  
+if(loops>1)for(lev=[0:loops -2],i=[0:loop -1])let(pE=1)[
+  pE + i          +loop*lev,
+  pE + (i +1)%loop+loop*lev,
+  pE + (i +1)%loop+loop*(lev+1),
+  pE + i          +loop*(lev+1)
+]
+]:[];
+
+
+if(loop>1)polyhedron(points,(pointEnd==true||pointEnd==1)&&loop>1?pointEnd==1?concat(pointyFaces,fTop):
+                                                                              pointyFaces:
+                                                                 faces,convexity=convexity);
+  else hull()polyhedron(points,faces,convexity=convexity);
+    
+InfoTxt("PolyH",["loops",loops,"points",lp],loop>1?name:false);
+InfoTxt("PolyH using hull—",["points",lp],loop==1?name:false);
+  
+
+HelpTxt("PolyH",["points",[[0,0,0],[1,2,3]],"loop",loop,"end",end,"pointEnd",pointEnd,"convexity",convexity,"faceOpt",faceOpt,"flip",flip,"name",name],help);
+  
+}

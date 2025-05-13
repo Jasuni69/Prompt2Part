@@ -1,0 +1,5 @@
+function sum(v, dflt=0) =
+    v==[]? dflt :
+    assert(is_consistent(v), "\nInput to sum is non-numeric or inconsistent.")
+    is_finite(v[0]) || is_vector(v[0]) ? [for(i=v) 1]*v :
+    _sum(v,v[0]*0);

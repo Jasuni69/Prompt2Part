@@ -1,0 +1,1 @@
+function countersinkHeight(conn) = (conn[4] / 2) / tan (countersinkAngle / 2);

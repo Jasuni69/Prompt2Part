@@ -1,0 +1,23 @@
+module pms5003() {
+    vitamin("pms5003(): PMS5003 particle detector");
+
+    w = pms5003.x;
+    d = pms5003.y;
+    h = pms5003.z;
+    t = 0.1;
+    color("silver")
+        difference() {
+            linear_extrude(height = h, center = true)
+                difference() {
+                    square([w, d], center = true);
+
+                    for(x = [-1, 1], y = [-1, 1])
+                        translate([x * w / 2, y * d / 2])
+                            square(2, center = true);
+                }
+            cube([w + 2 * eps, d + 2 * eps, t * 2], center = true);
+         }
+
+    color("black")
+        rounded_rectangle([w - 2 * t, d - 2 * t, h - 2 * t], r = 1, center = true);
+}

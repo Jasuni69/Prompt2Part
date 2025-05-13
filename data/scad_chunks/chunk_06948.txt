@@ -1,0 +1,5 @@
+module test_c_norm(){
+  assert_equal(c_norm([3,4]), 5);
+  assert_approx(c_norm([[3,4],[5,6]]), 9.273618495495704);
+}
+test_c_norm();

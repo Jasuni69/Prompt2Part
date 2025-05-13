@@ -1,0 +1,3 @@
+function pcb_coord(type, p) = let(l = pcb_length(type), w = pcb_width(type)) //! Convert offsets from the edge to coordinates relative to the centre
+    [(p.x >= 0 ? p.x : l + p.x) - l / 2,
+     (p.y >= 0 ? p.y : w + p.y) - w / 2];

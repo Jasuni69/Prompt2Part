@@ -1,0 +1,68 @@
+module diff(remove="remove", keep="keep")
+{
+    req_children($children);
+    assert(is_string(remove),"remove must be a string of tags");
+    assert(is_string(keep),"keep must be a string of tags");
+    if (_is_shown())
+    {
+        difference() {
+            hide(str(remove," ",keep)) children();
+            show_only(remove) children();
+        }
+    }
+    show_int(keep)children();
+}
+
+
+// Module: tag_diff()
+// Synopsis: Performs a {{diff()}} and then sets a tag on the result.
+// Topics: Attachments
+// See Also: tag(), force_tag(), recolor(), show_only(), hide(), diff(), intersect(), tag_intersect()
+// Usage:
+//   tag_diff([tag], [remove], [keep]) PARENT() CHILDREN;
+// Description:
+//   Perform a differencing operation in the manner of {{diff()}} using tags to control what happens,
+//   and then tag the resulting difference object with the specified tag.  This forces the specified
+//   tag to be resolved at the level of the difference operation.  In most cases, this is not necessary,
+//   but if you have kept objects and want to operate on this difference object as a whole object using
+//   more tag operations, you will probably not get the results you want if you simply use {{tag()}}.
+//   .
+//   For a step-by-step explanation of attachments, see the [Attachments Tutorial](Tutorial-Attachments).
+// Arguments:
+//   tag = Tag string to apply to this difference object.  Default: `""` (no tag)
+//   remove = String containing space delimited set of tag names of children to difference away.  Default: `"remove"`
+//   keep = String containing space delimited set of tag names of children to keep; that is, to union into the model after differencing is completed.  Default: `"keep"`
+// Side Effects:
+//   Sets `$tag` to the tag you specify, possibly with a scope prefix.
+// Example: In this example we have a difference with a kept object that is then subtracted from a cube, but we don't want the kept object to appear in the final output, so this result is wrong:
+//   diff("rem"){
+//     cuboid([20,10,30],anchor=FRONT);
+//     tag("rem")diff("remove","keep"){
+//       cuboid([10,10,20]);
+//       tag("remove")cuboid([11,11,5]);
+//       tag("keep")cuboid([2,2,20]);
+//     }
+//   }
+// Example: Using tag_diff corrects the problem:
+//   diff("rem"){
+//     cuboid([20,10,30],anchor=FRONT);
+//       tag_diff("rem","remove","keep"){
+//         cuboid([10,10,20]);
+//         tag("remove")cuboid([11,11,5]);
+//         tag("keep")cuboid([2,2,20]);
+//       }
+//   }
+// Example: This concentric cylinder example uses "keep" and produces the wrong result.  The kept cylinder gets kept in the final output instead of subtracted.  This happens even when we make sure to change the `keep` argument at the top level {{diff()}} call.
+//   diff("rem","nothing")
+//     cyl(r=8,h=6)
+//       tag("rem")diff()
+//         cyl(r=7,h=7)
+//           tag("remove")cyl(r=6,h=8)
+//           tag("keep")cyl(r=5,h=9);
+// Example: Changing to tag_diff() causes the kept cylinder to be subtracted, producing the desired result:
+//   diff("rem")
+//     cyl(r=8,h=6)
+//       tag_diff("rem")
+//         cyl(r=7,h=7)
+//           tag("remove")cyl(r=6,h=8)
+//           tag("keep")cyl(r=5,h=9);

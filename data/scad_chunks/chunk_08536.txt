@@ -1,0 +1,9 @@
+function _case0120_isobands(cell_pts, lower, upper) = [
+    [
+        interpolated_pt(cell_pts[0], cell_pts[3], lower),
+        interpolated_pt(cell_pts[0], cell_pts[3], upper),
+        interpolated_pt(cell_pts[2], cell_pts[3], upper),
+        [cell_pts[2].x, cell_pts[2].y, cell_pts[2].z],
+        interpolated_pt(cell_pts[1], cell_pts[2], lower)
+    ]
+];

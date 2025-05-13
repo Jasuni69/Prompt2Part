@@ -1,0 +1,1 @@
+function pillar_x_pitch(pcb) = pcb_length(pcb) + 2 * clearance + 2 * (pillar_r - overlap) / sqrt(2); //! x pitch of screw pillars

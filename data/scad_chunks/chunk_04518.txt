@@ -1,0 +1,10 @@
+module nutcatch_sidecut (options, kind = "hexagon", height_clearance = 0, width_clearance = 0, length = A_LOT) {
+  n = nut_data(options, kind);
+  h = n.thickness + height_clearance;
+  w = n.width + width_clearance;
+
+  _nut(options, kind, height_clearance, width_clearance);
+  translate([0, -w / 2]) {
+    cube([length, w, h]);
+  }
+}

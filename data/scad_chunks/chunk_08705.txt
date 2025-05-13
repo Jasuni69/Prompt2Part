@@ -1,0 +1,6 @@
+function _forward(turtle, leng) = 
+    _turtle(
+        _get_x(turtle) + leng * cos(_get_angle(turtle)), 
+        _get_y(turtle) + leng * sin(_get_angle(turtle)), 
+        _get_angle(turtle)
+    );

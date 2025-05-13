@@ -1,0 +1,23 @@
+function poly_mult(p,q) = 
+  is_undef(q) ?
+    len(p)==2 
+        ? poly_mult(p[0],p[1]) 
+    : poly_mult(p[0], poly_mult(list_tail(p)))
+  :
+  assert( is_vector(p) && is_vector(q),"Invalid arguments to poly_mult")
+    p*p==0 || q*q==0
+    ? [0]
+    : _poly_trim(convolve(p,q));
+
+    
+// Function: poly_div()
+// Synopsis: Returns the polynomial quotient and remainder results of dividing two polynomials.
+// Topics: Math
+// See Also: quadratic_roots(), polynomial(), poly_mult(), poly_div(), poly_add(), poly_roots()
+// Usage:
+//    [quotient,remainder] = poly_div(n,d)
+// Description:
+//    Computes division of the numerator polynomial by the denominator polynomial and returns
+//    a list of two polynomials, [quotient, remainder].  If the division has no remainder then
+//    the zero polynomial [0] is returned for the remainder.  Similarly if the quotient is zero
+//    the returned quotient is [0].

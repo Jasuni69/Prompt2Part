@@ -1,0 +1,1 @@
+function rocker_bezel(type)    = type[10];  //! Bezel width

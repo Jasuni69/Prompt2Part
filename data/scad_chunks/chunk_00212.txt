@@ -1,0 +1,16 @@
+module bracket_test(bracket)
+    rotate([90, 0, 180]) {
+        extrusion = extrusion_corner_bracket_extrusion(bracket);
+        eWidth = extrusion_width(extrusion);
+        size = extrusion_corner_bracket_size(bracket);
+
+        extrusion_corner_bracket_assembly(bracket);
+
+        translate([-eWidth / 2, 0])
+            rotate([-90, 0, 0])
+                extrusion(extrusion, size.y, false, cornerHole = eWidth > 20);
+
+        translate([-eWidth, -eWidth / 2])
+            rotate([0, 90, 0])
+                extrusion(extrusion, eWidth + size.x, false, cornerHole = eWidth > 20);
+    }

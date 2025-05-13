@@ -1,0 +1,1 @@
+function toLeft(align2=NOCHANGE,align3=NOCHANGE)= align(TOLEFT,align2,align3);

@@ -1,0 +1,1 @@
+function opengrab_screw_depth() = 4;                             //! Max screw depth in pillars

@@ -1,0 +1,3 @@
+function _create_cmd(arg1, arg2) = 
+    is_undef(arg1) && is_undef(arg2) ? _create_default() : 
+    !is_undef(arg1) && !is_undef(arg2) ? _create(arg1, arg2) : undef;

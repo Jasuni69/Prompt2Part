@@ -1,0 +1,20 @@
+module test(){
+  pts1 =  [[35, -8], [35, 7], [20, 12], [-10, 60], [-25, 65], [-40, 60], [-30, 50], [-21, 18], [-21, -18], [-30, -50], [-40, -60], [-25, -65], [-10, -60], [20, -13]];
+  pts2 = offset_pts(pts1, -0.5);
+  difference(){
+      translate([0,0,1]) color("red") polygon(pts1);
+      polygon(pts2);
+  }
+  polygon(pts2);
+}
+
+test();
+  
+  
+ 
+//  Helper functions
+
+// given two points, a, b, find equation for line that is parallel to line 
+// segment but offset to the right by offset dist
+// equation is of the form c*x+d*y=e
+// represented as array [ c, d, e ]

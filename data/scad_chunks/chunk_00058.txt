@@ -1,0 +1,39 @@
+big = manifold ? 1e3 : inf;     // Not too big for manifold
+eps = 1/128;     // small fudge factor to stop CSG barfing on coincident faces.
+
+fa = is_undef($vitamin_fa) ? 6    : $vitamin_fa;          // Used for drawing vitamins, rather than printing.
+fs = is_undef($vitamin_fs) ? 0.25 : $vitamin_fs;
+fn = 32;
+
+$fa = $fa == 12 ? 6 : $fa;          // Defaults for printing
+$fs = $fs == 2 ? extrusion_width / 2 : $fs;
+
+
+// Some additional named colours
+silver           = [0.75, 0.75, 0.75];
+gold             = [255, 215,   0] / 255;
+brass            = [255, 220, 100] / 255;
+copper           = [230, 140,  51] / 255;
+
+/*
+ * Enums
+ */
+//
+// Screws
+//
+hs_cap    = 0;
+hs_pan    = 1;
+hs_cs     = 2;     // counter sunk
+hs_hex    = 3;
+hs_grub   = 4;     // pulley set screw
+hs_cs_cap = 5;
+hs_dome   = 6;
+//
+// Face enumeration
+//
+f_bottom = 0;
+f_top    = 1;
+f_left   = 2;
+f_right  = 3;
+f_front  = 4;
+f_back   = 5;

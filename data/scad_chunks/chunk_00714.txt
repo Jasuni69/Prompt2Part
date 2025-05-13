@@ -1,0 +1,1 @@
+function belt_tooth_height(type) = type[4]; //! Tooth height

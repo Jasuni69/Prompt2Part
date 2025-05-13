@@ -1,0 +1,11 @@
+module slots (d, scl, hsz, t=wall_thick ) {
+    // vent slots constrained within scaled space
+    sd = d*scl;
+    iv = hsz;
+    xcx = sd.x / iv; 
+    xrt = (d.x*(1.0-scl)/2); yrt = (d.y*(1.0-scl)/2);
+    for (ix=[0:xcx]) {
+        xpt = ix * iv;
+        translate( [xrt+xpt,yrt,0]) cube( [t, sd.y, d.z] );
+    }
+}

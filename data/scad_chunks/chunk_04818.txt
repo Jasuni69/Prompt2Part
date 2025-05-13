@@ -1,0 +1,6 @@
+function pb_splitCommandLists(cmds=[], _i=0, _p=[], _r=[]) = _i==len(cmds)? _r  : let(
+    n = cmds[_i][0] =="m" || cmds[_i][0] =="M"? true : false,
+    _r = n && _p!=[]? concat(_r, [_p]) : _r,
+    _p = n? [cmds[_i]] : concat(_p,[cmds[_i]]),
+    r = _i==len(cmds)-1? concat(_r, [_p]) : _r
+) pb_splitCommandLists(cmds, _i+1, _p, r);

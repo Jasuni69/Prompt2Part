@@ -1,0 +1,8 @@
+function vMin(v=[0],min=0)=is_list(min)?assert(len(v)==len(min))[for(i=[0:len(v)-1])min(v[i],min[i])]
+                                       :[for(i=v)min(min, i) ];
+
+/** \page Functions \name vAdd
+vAdd gives you the addition of a number with a vector/list constituents 
+\param v vector or list
+\param add added value
+*/

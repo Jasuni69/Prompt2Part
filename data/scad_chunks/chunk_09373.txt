@@ -1,0 +1,10 @@
+function sum(v, i=0, tot=undef) = i>=len(v)? tot : sum(v, i+1, ((tot==undef)? v[i] : tot+v[i]));
+
+
+// Function: sum_of_squares()
+// Description:
+//   Returns the sum of the square of each element of a vector.
+// Arguments:
+//   v = The vector to get the sum of.
+// Example:
+//   sum_of_squares([1,2,3]);  // returns 14.

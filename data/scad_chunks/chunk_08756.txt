@@ -1,0 +1,2 @@
+function _put(buckets, b_numbers, bucket, key, value, b_idx) = 
+    [for(i = 0; i < b_numbers; i = i + 1) i == b_idx ? [each bucket, [key, value]] : buckets[i]];

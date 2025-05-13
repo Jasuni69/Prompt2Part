@@ -1,0 +1,89 @@
+module Kegel(d,d2=0,d1,v=1,grad=0,h=0,r1,r2,rad=0,x0=0,x1,lap=0,fn,fn2,fs=fs,fa=fa,center=false, use2D=false,name,help,deg)
+{
+
+ix=is_list(x1)?x1:[x1,x1];// outer lap radius for negative rad
+grad=is_num(deg)?deg:grad;
+
+use2D=is_parent(needs2D)?true: use2D;
+lap=is_list(lap)?lap:[is_list(rad)&&rad[0]<0?max(.1,lap):lap,is_list(rad)&&rad[1]<0?max(+0.1,lap):lap];
+dHelp=d?d:d1?d1:r1?2*r1:0;
+r2=r2?r2:d2?d2/2:0;
+v=grad?min(100000,max( -100000,tan(grad)) ):h&&r2?h/(dHelp/2-r2):v;
+d2=h&&(is_num(d)||is_num(d1)||is_num(r1))?h/-v*2+(is_num(r1)?2*r1:is_num(d)?d:d1):is_num(r2)?2*r2:d2;
+d1=is_undef(d1)&&is_undef(d)&&is_undef(r1)&&h?h/v*2+(is_num(r2)?2*r2:d2):is_num(r1)?r1*2:is_undef(d1)?is_num(d)?d:0:d1;
+height=abs((d1-d2)/2*v);
+
+rList=is_list(rad)?concat(rad[0],rad[1],rad[2]?min(height,rad[2]):0,rad[3]?min(height,rad[3]):0)
+                  :[rad,rad,0,0];
+Echo(str("rad[2]+rad[3]>height ",rad[2],"+",rad[3],"=",rad[2]+rad[3],">",height),color="redring",condition=rad[2]+rad[3]>height);
+
+x0=is_num(x0)?(x0<min(d1,d2)/2||x0>max(d1,d2)/2)&&x0>0?[x0,x0]:[0,0]:x0;
+
+deg=grad?grad:atan(v);
+
+c=abs(max(d1,d2)-(max(x0)+rList[d1>d2?2:3])*2);
+hc=abs(c/2*v);
+ri=c*hc/(2*Hypotenuse(c/2,hc)+c);
+
+
+rLim=[ min(ri, height) , min(height, abs(min(d1,d2)/2-max(x0)-rList[d1>d2?3:2])*(1+tan(abs(90-abs(deg)))) ) ];
+
+
+rad=[min( rList[0],abs(rLim[d1>d2?0:1]) ), min( rList[1],rLim[d1>d2?1:0] ), rList[2], rList[3] ];
+
+
+pointsEdge=[
+[x0[0],0],[d1/2,0],
+[d2/2,height],[x0[1],height]
+]-[for([0:3])[0,1]*(center?height/2:0)];
+
+
+// with lap
+pointsEdgeLap=[
+[x0[0],-lap[0]],if(lap[0])[d1/2,-lap[0]], [d1/2,0],
+[d2/2,height],if(lap[1])[d2/2,height+lap[1]], [x0[1],height+lap[1]]
+]-[for([0:5])[0,1]*(center?height/2:0)];
+
+// for negative r  (TODO calc x1 and x2 )
+pointsEdge2=
+let(r1=rad[0],r2=rad[1], x1=r1<0?ix[0]?ix[0]:max(d2,d1)/2+abs(r1)*sin(deg):d1/2, x2=r2<0?ix[1]?ix[1]:max(d1,d2)/2+abs(r2)*sin(deg):d2/2 )
+[
+[x0[0],-lap[0]],if(lap[0])[x1,-lap[0]],if(r1<0)[x1,0],[d1/2,0],
+[d2/2,height],if(r2<0)[x2,height],if(lap[1])[x2,height+lap[1]],[x0[1],height+lap[1]]
+]-[for([0:7])[0,1]*(center?height/2:0)];
+
+
+points=min(rad)<0?polyRund(pointsEdge2,r=[rad[2],if(lap[0])0,if(rad[0]<0)0, abs(rad[0]), abs(rad[1]),if(rad[1]<0)0,if(lap[1])0, rad[3]],fs=fs,fa=fa,minF=5,fn=fn2)
+        :max(lap)>0&&max(rad)>0?polyRund(pointsEdgeLap,r=[rad[2],if(lap[0])0, abs(rad[0]), abs(rad[1]),if(lap[1])0, rad[3]],fs=fs,fa=fa,minF=5,fn=fn2)
+        :max(rad)>0?polyRund(pointsEdge,r=[rad[2], rad[0], rad[1], rad[3]],fs=fs,fa=fa,minF=5,fn=fn2)
+        :max(lap)?pointsEdgeLap:pointsEdge;
+
+/*
+ideg=[deg+90,deg];
+points2=[ WIP
+[0,0],
+each arc(r=rad[0],deg=ideg[0],t=[d1/2-(rad[0]*cos(ideg[0])),rad[0] ],rot=-90,fn=fs2fn(rad[0],grad=ideg[0],fs=fs,minf=5)),
+each arc(r=rad[1],deg=ideg[1],t=[d2/2,height-rad[1] ],rot=90-deg,fn=fs2fn(rad[1],grad=ideg[0],fs=fs,minf=5)),
+[0,height]
+];
+*/
+
+
+if(use2D&&(d1||d2))polygon(points);
+ else {
+  if((max(rad)||min(rad)||max(lap))&&(d1||d2) || (d1||d2)&&max(x0)){
+    RotEx(fn=fn?fn:fs2fn(r=max(d1,d2)/2,fs=fs),fs=fs,fa=fa)polygon(points);
+  }else {
+
+  if(d1-d2&&!(d2<0))cylinder (abs((d1-d2)/2*v),d1=d1,d2=d2,$fn=fn,$fs=fs,center=center);
+  //if(d2>d1)cylinder (abs((d2-d1)/2*v),d1=d1,d2=d2,$fn=fn,center=center);
+  if(d1==d2&&d2!=0)cylinder (h?h:10,d1=d1,d2=d2,$fn=fn,$fs=fs,center=center);
+  }
+  if(!d1&&!d2&&is_undef(r1))color("magenta")%cylinder(5,5,0,$fn=fn,$fs=fs,center=center);
+}
+
+ if(d2<0||d1<0)Echo(str("‼ negativ ∅",name,"  Kegel d1=",negRed(d1)," d2=",negRed(d2)),color="red");    
+ InfoTxt("Kegel",["höhe",height,"Kegelverhältniss",str((d1-d2)/height, "= 1:", v/2),"Steigung",str(v*100,"/",1/v*100,"% = ",atan(v),"°/",90-atan(v),"°"),"Spitzenwinkel",str(2*(90-atan(v)),"°"),"d1",negRed(d1),"d2",negRed(d2)],name);
+     
+ HelpTxt("Kegel",["d",d,"d2",d2,"d1",d1,"v",v,"deg",deg,"h",h,"r1",r1,"r2",r2,"rad",rad,"x0",x0,"x1",x1,"lap",lap,"fn",fn,"fn2",fn2,"fs",fs,"fa",fa,"center",center,"use2D", use2D,"name=",name],help);
+}

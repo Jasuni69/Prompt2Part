@@ -1,0 +1,1 @@
+function catenary(t, a) = let(u = argsinh(t)) a * [u, cosh(u)]; //! Parametric catenary function linear along the length of the curve.

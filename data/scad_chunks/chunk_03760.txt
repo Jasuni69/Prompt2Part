@@ -1,0 +1,5 @@
+function multAll(list, c = 0) =
+ list[0][0]==undef? list //checks if there is no list but only matrix element then returns it
+ :( c < (len(list) - 1)
+ ? (list[c] * multAll(list, c + 1))
+ : list[c]);

@@ -1,0 +1,41 @@
+module downcyl(r=undef, h=undef, l=undef, d=undef, d1=undef, d2=undef, r1=undef, r2=undef)
+{
+	h = first_defined([l, h, 1]);
+	down(h/2) {
+		cylinder(r=r, r1=r1, r2=r2, d=d, d1=d1, d2=d2, h=h, center=true);
+	}
+}
+
+
+
+// Module: xcyl()
+//
+// Description:
+//   Creates a cylinder oriented along the X axis.
+//
+// Usage:
+//   xcyl(l|h, r|d, [align|center]);
+//   xcyl(l|h, r1|d1, r2|d2, [align|center]);
+//
+// Arguments:
+//   l / h = Length of cylinder along oriented axis. (Default: `1.0`)
+//   r = Radius of cylinder.
+//   r1 = Optional radius of left (X-) end of cylinder.
+//   r2 = Optional radius of right (X+) end of cylinder.
+//   d = Optional diameter of cylinder. (use instead of `r`)
+//   d1 = Optional diameter of left (X-) end of cylinder.
+//   d2 = Optional diameter of right (X+) end of cylinder.
+//   align = The side of the origin to align to.  Use `V_` constants from `constants.scad`. Default: `V_CENTER`
+//   center = If given, overrides `align`.  A `true` value sets `align=V_CENTER`, `false` sets `align=ALIGN_POS`.
+//
+// Example: By Radius
+//   ydistribute(50) {
+//       xcyl(l=35, r=10);
+//       xcyl(l=35, r1=15, r2=5);
+//   }
+//
+// Example: By Diameter
+//   ydistribute(50) {
+//       xcyl(l=35, d=20);
+//       xcyl(l=35, d1=30, d2=10);
+//   }

@@ -1,0 +1,19 @@
+function bezier_patch(patch, splinesteps=16, vertices=[], faces=[]) =
+	let(
+		base = len(vertices),
+		pts = [for (v=[0:splinesteps], u=[0:splinesteps]) bezier_patch_point(patch, u/splinesteps, v/splinesteps)],
+		new_vertices = concat(vertices, pts),
+		new_faces = [
+			for (
+				v=[0:splinesteps-1],
+				u=[0:splinesteps-1],
+				i=[0,1]
+			) let (
+				v1 = u+v*(splinesteps+1) + base,
+				v2 = v1 + 1,
+				v3 = v1 + splinesteps + 1,
+				v4 = v3 + 1,
+				face = i? [v1,v3,v2] : [v2,v3,v4]
+			) face
+		]
+	) [new_vertices, concat(faces, new_faces)];

@@ -1,0 +1,5 @@
+module use_dxf(name) {               //! Import a DXF to make a build panel
+    dxf(name);
+    path = is_undef($target) ? "../dxfs/" : str($cwd, "/", $target, "/dxfs/");
+    import(str(path, name, ".dxf"));
+}

@@ -1,0 +1,2 @@
+module cableClampSm(hMargin=margin(0),marginUp=0,xyMargin=margin(0,1),x=4,y=5.4,h=10.6) 
+	cableClamp(hMargin,marginUp,xyMargin,x,y,h)children();

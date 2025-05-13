@@ -1,0 +1,15 @@
+function fs2fn(r,grad=360,fs=fs,minf=3,fa=fa)=
+  let(
+    fs=max(is_undef(fs)?$fs:fs,0.001),
+    fa=is_undef(fa)?$fa:fa,
+    minf=r&&grad?minf:0
+  )
+  ceil(
+    min(
+      max(
+        minf,
+        assert(is_num(r)&&is_num(grad)&&fs,str("fs2fn uses r=",r,", grad=",grad," ,fs=",fs))PI*abs(r)*2/360*abs(grad) / fs
+      ),
+      max(minf,1 / fa * abs(grad))
+    )
+  );

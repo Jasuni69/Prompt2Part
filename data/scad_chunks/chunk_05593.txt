@@ -1,0 +1,15 @@
+function f_exp(a)   = f_1arg(function(a) exp(a))(a);
+
+
+// Function: f_sqr()
+// Synopsis: Returns a function to calculate the square of a given number.
+// Topics: Function Literals, Math Operators
+// See Also: f_abs(), f_sign(), f_ln(), f_log(), f_exp(), f_sqr(), f_sqrt()
+// Usage:
+//   fn = f_sqr();
+//   fn = f_sqr(a);
+// Description:
+//   A factory that generates function literals based on `a*a`, where the `a`
+//   argument can optionally be replaced with a constant.
+// Arguments:
+//   a = If given, replaces the argument.

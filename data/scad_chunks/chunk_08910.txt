@@ -1,0 +1,3 @@
+function setMagnitude(vt, magnitude) = unit_vector(vt) * magnitude;
+
+// node

@@ -1,0 +1,10 @@
+module line_copies(spacing, n, l, p1, p2)
+{
+    req_children($children);
+    pts = line_copies(spacing=spacing, n=n, l=l, p1=p1, p2=p2, p=[0,0,0]);
+    for (i=idx(pts)) {
+        $idx = i;
+        $pos = pts[i];
+        translate($pos) children();
+    }
+}

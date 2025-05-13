@@ -1,0 +1,1 @@
+function pbox_inclusion(type) = pbox_base(type) ? base_overlap - base_outset : 0; //! How far the ledge for the base extends inwards

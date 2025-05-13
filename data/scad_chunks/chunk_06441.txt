@@ -1,0 +1,36 @@
+function _support_diff(p1,p2,d) =
+    let( p1d = p1*d, p2d = p2*d )
+    p1[search(max(p1d),p1d,1)[0]] - p2[search(min(p2d),p2d,1)[0]];
+
+
+// Section: Rotation Decoding
+
+// Function: rot_decode()
+// Synopsis: Extract axis and rotation angle from a rotation matrix. 
+// Topics: Affine, Matrices, Transforms
+// Usage:
+//   info = rot_decode(rotation,[long]); // Returns: [angle,axis,cp,translation]
+// Description:
+//   Given an input 3D rigid transformation operator (one composed of just rotations and translations) represented
+//   as a 4x4 matrix, compute the rotation and translation parameters of the operator.  Returns a list of the
+//   four parameters, the angle, in the interval [0,180], the rotation axis as a unit vector, a centerpoint for
+//   the rotation, and a translation.  If you set `parms = rot_decode(rotation)` then the transformation can be
+//   reconstructed from parms as `move(parms[3]) * rot(a=parms[0],v=parms[1],cp=parms[2])`.  This decomposition
+//   makes it possible to perform interpolation.  If you construct a transformation using `rot` the decoding
+//   may flip the axis (if you gave an angle outside of [0,180]).  The returned axis is a unit vector, and
+//   the centerpoint lies on the plane through the origin that is perpendicular to the axis.  It may be different
+//   than the centerpoint you used to construct the transformation.
+//   .
+//   If you set `long` to true then return the reversed rotation, with the angle in [180,360].
+// Arguments:
+//   rotation = rigid transformation to decode
+//   long = if true return the "long way" around, with the angle in [180,360].  Default: false
+// Example:
+//   info = rot_decode(rot(45));
+//          // Returns: [45, [0,0,1], [0,0,0], [0,0,0]]
+//   info = rot_decode(rot(a=37, v=[1,2,3], cp=[4,3,-7])));
+//          // Returns: [37, [0.26, 0.53, 0.80], [4.8, 4.6, -4.6], [0,0,0]]
+//   info = rot_decode(left(12)*xrot(-33));
+//          // Returns: [33, [-1,0,0], [0,0,0], [-12,0,0]]
+//   info = rot_decode(translate([3,4,5]));
+//          // Returns: [0, [0,0,1], [0,0,0], [3,4,5]]

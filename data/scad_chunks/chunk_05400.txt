@@ -1,0 +1,139 @@
+function named_anchor(name, pos, orient, spin, rot, flip, info) =
+  assert(num_defined([orient,spin])==0 || num_defined([rot,flip])==0, "Cannot mix orient or spin with rot or flip")
+  assert(num_defined([pos,rot])>0, "Must give pos or rot")
+  is_undef(rot) ? [name, pos, default(orient,UP), default(spin,0), if (info) info]
+ : 
+  let(
+      flip = default(flip,false),
+      pos = default(pos,apply(rot,CTR)),
+      rotpart = _force_rot(rot),
+      dummy = assert(approx(det4(rotpart),1), "Input rotation is not a rotation matrix"),
+      dir = flip ? apply(rotpart,DOWN)
+                 : apply(rotpart,UP),
+      rot = flip? affine3d_rot_by_axis(apply(rotpart,BACK),180)*rot
+                      : rot,
+      decode=rot_decode(rot(to=UP,from=dir)*_force_rot(rot)),
+      spin = decode[0]*sign(decode[1].z)
+  )
+  [name, pos, dir, spin, if (info) info];
+  
+
+// Function: attach_geom()
+// Synopsis: Returns the internal geometry description of an attachable object.
+// Topics: Attachments
+// See Also: reorient(), attachable()
+// Usage: Null/Point Geometry
+//   geom = attach_geom(...);
+// Usage: Square/Trapezoid Geometry
+//   geom = attach_geom(two_d=true, size=, [size2=], [shift=], ...);
+// Usage: Circle/Oval Geometry
+//   geom = attach_geom(two_d=true, r=|d=, ...);
+// Usage: 2D Path/Polygon/Region Geometry
+//   geom = attach_geom(two_d=true, region=, [extent=], ...);
+// Usage: Cubical/Prismoidal Geometry
+//   geom = attach_geom(size=, [size2=], [shift=], ...);
+// Usage: Cylindrical Geometry
+//   geom = attach_geom(r=|d=, l=|h=, [axis=], ...);
+// Usage: Conical Geometry
+//   geom = attach_geom(r1|d1=, r2=|d2=, l=, [axis=], ...);
+// Usage: Spheroid/Ovoid Geometry
+//   geom = attach_geom(r=|d=, ...);
+// Usage: Extruded 2D Path/Polygon/Region Geometry
+//   geom = attach_geom(region=, l=|h=, [extent=], [shift=], [scale=], [twist=], ...);
+// Usage: VNF Geometry
+//   geom = attach_geom(vnf=, [extent=], ...);
+//
+// Description:
+//   Given arguments that describe the geometry of an attachable object, returns the internal geometry description.
+//   This will probably not not ever need to be called by the end user.
+//
+// Arguments:
+//   ---
+//   size = If given as a 3D vector, contains the XY size of the bottom of the cuboidal/prismoidal volume, and the Z height.  If given as a 2D vector, contains the front X width of the rectangular/trapezoidal shape, and the Y length.
+//   size2 = If given as a 2D vector, contains the XY size of the top of the prismoidal volume.  If given as a number, contains the back width of the trapezoidal shape.
+//   shift = If given as a 2D vector, shifts the top of the prismoidal or conical shape by the given amount.  If given as a number, shifts the back of the trapezoidal shape right by that amount.  Default: No shift.
+//   scale = If given as number or a 2D vector, scales the top of the shape, relative to the bottom.  Default: `[1,1]`
+//   twist = If given as number, rotates the top of the shape by the given number of degrees clockwise, relative to the bottom.  Default: `0`
+//   r = Radius of the cylindrical/conical volume.  Can be a scalar, or a list of sizes per axis.
+//   d = Diameter of the cylindrical/conical volume.  Can be a scalar, or a list of sizes per axis.
+//   r1 = Radius of the bottom of the conical volume.  Can be a scalar, or a list of sizes per axis.
+//   r2 = Radius of the top of the conical volume.  Can be a scalar, or a list of sizes per axis.
+//   d1 = Diameter of the bottom of the conical volume.  Can be a scalar, a list of sizes per axis.
+//   d2 = Diameter of the top of the conical volume.  Can be a scalar, a list of sizes per axis.
+//   l/h = Length of the cylindrical, conical or extruded region volume along axis.
+//   vnf = The [VNF](vnf.scad) of the volume.
+//   region = The region to generate a shape from.
+//   extent = If true, calculate anchors by extents, rather than intersection.  Default: true.
+//   cp = If given, specifies the centerpoint of the volume.  Default: `[0,0,0]`
+//   offset = If given, offsets the perimeter of the volume around the centerpoint.
+//   anchors = If given as a list of anchor points, allows named anchor points.
+//   two_d = If true, the attachable shape is 2D.  If false, 3D.  Default: false (3D)
+//   axis = The vector pointing along the axis of a geometry.  Default: UP
+//   override = Function that takes an anchor and returns a pair `[position,direction,spin]` to use for that anchor to override the normal one.  You can also supply a lookup table that is a list of `[anchor, [position, direction,spin]]` entries.  If the direction/position/spin that is returned is undef then the default will be used.
+//
+// Example(NORENDER): Null/Point Shape
+//   geom = attach_geom();
+//
+// Example(NORENDER): Cubical Shape
+//   geom = attach_geom(size=size);
+//
+// Example(NORENDER): Prismoidal Shape
+//   geom = attach_geom(
+//       size=point3d(botsize,h),
+//       size2=topsize, shift=shift
+//   );
+//
+// Example(NORENDER): Cylindrical Shape, Z-Axis Aligned
+//   geom = attach_geom(r=r, h=h);
+//
+// Example(NORENDER): Cylindrical Shape, Y-Axis Aligned
+//   geom = attach_geom(r=r, h=h, axis=BACK);
+//
+// Example(NORENDER): Cylindrical Shape, X-Axis Aligned
+//   geom = attach_geom(r=r, h=h, axis=RIGHT);
+//
+// Example(NORENDER): Conical Shape, Z-Axis Aligned
+//   geom = attach_geom(r1=r1, r2=r2, h=h);
+//
+// Example(NORENDER): Conical Shape, Y-Axis Aligned
+//   geom = attach_geom(r1=r1, r2=r2, h=h, axis=BACK);
+//
+// Example(NORENDER): Conical Shape, X-Axis Aligned
+//   geom = attach_geom(r1=r1, r2=r2, h=h, axis=RIGHT);
+//
+// Example(NORENDER): Spherical Shape
+//   geom = attach_geom(r=r);
+//
+// Example(NORENDER): Ovoid Shape
+//   geom = attach_geom(r=[r_x, r_y, r_z]);
+//
+// Example(NORENDER): Arbitrary VNF Shape, Anchored by Extents
+//   geom = attach_geom(vnf=vnf);
+//
+// Example(NORENDER): Arbitrary VNF Shape, Anchored by Intersection
+//   geom = attach_geom(vnf=vnf, extent=false);
+//
+// Example(NORENDER): 2D Rectangular Shape
+//   geom = attach_geom(two_d=true, size=size);
+//
+// Example(NORENDER): 2D Trapezoidal Shape
+//   geom = attach_geom(two_d=true, size=[x1,y], size2=x2, shift=shift, override=override);
+//
+// Example(NORENDER): 2D Circular Shape
+//   geom = attach_geom(two_d=true, r=r);
+//
+// Example(NORENDER): 2D Oval Shape
+//   geom = attach_geom(two_d=true, r=[r_x, r_y]);
+//
+// Example(NORENDER): Arbitrary 2D Region Shape, Anchored by Extents
+//   geom = attach_geom(two_d=true, region=region);
+//
+// Example(NORENDER): Arbitrary 2D Region Shape, Anchored by Intersection
+//   geom = attach_geom(two_d=true, region=region, extent=false);
+//
+// Example(NORENDER): Extruded Region, Anchored by Extents
+//   geom = attach_geom(region=region, l=height);
+//
+// Example(NORENDER): Extruded Region, Anchored by Intersection
+//   geom = attach_geom(region=region, l=length, extent=false);
+//

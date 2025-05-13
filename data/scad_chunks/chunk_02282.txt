@@ -1,0 +1,8 @@
+module corner_block_M20_assembly() corner_block_assembly(M2_cap_screw);
+
+//
+//! 1. Lay the blocks out and place an M2.5 insert in each upward facing hole.
+//! 1. Push them home with a soldering iron with a conical bit heated to 200&deg;C.
+//! When removing the iron it helps to twist it a little anti-clockwise to release it from the thread.
+//! 1. Lay the blocks on each of their other two flat sides and repeat.
+//

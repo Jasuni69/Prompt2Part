@@ -1,0 +1,1 @@
+function smd_pot_contacts(type) = type[2]; //! Contacts width, depth, pitch and width, depth, gap for center contact

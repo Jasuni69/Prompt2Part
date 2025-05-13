@@ -1,0 +1,9 @@
+function zigZag(e=5,x=50,y=5,mod=2,delta=+0,base=2,shift=0)=[for(i=[0:e*mod])[i%mod<mod/2+delta?i*x/(e*mod):i*x/(e*mod)+shift,i%mod<mod/2+delta?base:y],[x,0],[0,0]];
+
+/** \page Functions
+tangentenP() calculates the distance of a circle center for tangents
+\param grad the center angle of the circle
+\param rad the radius for the tangent
+\param r  the radius of the circle 
+\param deg alternative angle of the tangents
+*/

@@ -1,0 +1,8 @@
+function constrain(v, minval, maxval) = min(maxval, max(minval, v));
+
+
+// Function: min_index()
+// Usage:
+//   min_index(vals);
+// Description:
+//   Returns the index of the minimal value in the given list.

@@ -1,0 +1,4 @@
+function linear_extrude(height=100, center=false, convexity=1, twist=0, slices, scale=1.0, poly) =
+  is_poly_vector(poly) ?
+    [for (p = poly) _linear_extrude(height=height,center=center,convexity=convexity,twist=twist,slices=slices,scale=scale,poly=poly)] :
+    _linear_extrude(height=height,center=center,convexity=convexity,twist=twist,slices=slices,scale=scale,poly=poly);

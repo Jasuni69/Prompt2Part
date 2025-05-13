@@ -1,0 +1,1 @@
+function battery_contact(type)       = type[10]; //! Contact type

@@ -1,0 +1,6 @@
+module sphere(r = 1, d = undef) {                   //! Override `sphere` so that has vertices on all three axes. Has the advantage of giving correct dimensions when hulled
+    R = is_undef(d) ? r : d / 2;
+    rotate_extrude($fn = r2sides4n(R))
+        rotate(-90)
+            semi_circle(R);
+}

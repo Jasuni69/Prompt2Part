@@ -1,0 +1,24 @@
+module rubber_duck_debugging(detail, object, font_size, thickness, bend_angle, pitch_angle) {
+    r = font_size * len(object) * 0.85 * 360 / bend_angle / 2 / PI;
+    difference() {
+	    if($preview) {
+			%duck(detail);
+		}
+		else {
+			duck(detail);
+		}
+		rotate([-pitch_angle, 0, 0])
+		translate([0, r - 36, -font_size / 2])
+		rotate(180 + (180 - bend_angle) / 2)
+		bend_extrude(
+			size = [font_size * len(object) * 0.85, font_size * 1.25], thickness = thickness, 
+			angle = bend_angle
+		)
+		translate([0, font_size / 3])
+			text(
+			    object, 
+				size = font_size, 
+				font = "Courier New:style=Bold"
+			);
+	}
+}

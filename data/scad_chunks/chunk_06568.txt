@@ -1,0 +1,77 @@
+module shape_compare(eps=1/1024) {
+    assert($children==2,"Must give exactly two children");
+    union() {
+        difference() {
+            children(0);
+            if (eps==0) {
+                children(1);
+            } else {
+                minkowski() {
+                    children(1);
+                    spheroid(r=eps, style="octa");
+                }
+            }
+        }
+        difference() {
+            children(1);
+            if (eps==0) {
+                children(0);
+            } else {
+                minkowski() {
+                    children(0);
+                    spheroid(r=eps, style="octa");
+                }
+            }
+        }
+    }
+}
+
+
+// Section: C-Style For Loop Helpers
+//   You can use a list comprehension with a C-style for loop to iteratively make a calculation.
+//   .
+//   The syntax is: `[for (INIT; CONDITION; NEXT) RETVAL]` where:
+//   - INIT is zero or more `let()` style assignments that are evaluated exactly one time, before the first loop.
+//   - CONDITION is an expression evaluated at the start of each loop.  If true, continues with the loop.
+//   - RETVAL is an expression that returns a list item for each loop.
+//   - NEXT is one or more `let()` style assignments that is evaluated at the end of each loop.
+//   .
+//   Since the INIT phase is only run once, and the CONDITION and RETVAL expressions cannot update
+//   variables, that means that only the NEXT phase can be used for iterative calculations.
+//   Unfortunately, the NEXT phase runs *after* the RETVAL expression, which means that you need
+//   to run the loop one extra time to return the final value.  This tends to make the loop code
+//   look rather ugly.  The `looping()`, `loop_while()` and `loop_done()` functions
+//   can make this somewhat more legible.
+//   .
+//   ```openscad
+//   function flat_sum(l) = [
+//       for (
+//           i = 0,
+//           total = 0,
+//           state = 0;
+//           
+//           looping(state);
+//           
+//           state = loop_while(state, i < len(l)),
+//           total = total +
+//               loop_done(state) ? 0 :
+//               let( x = l[i] )
+//               is_list(x) ? flat_sum(x) : x,
+//           i = i + 1
+//       ) if (loop_done(state)) total;
+//   ].x;
+//   ```
+
+
+// Function: looping()
+// Synopsis: Returns true if the argument indicates the current C-style loop should continue.
+// Topics: Iteration
+// See Also: loop_while(), loop_done()
+// Usage:
+//   bool = looping(state);
+// Description:
+//   Returns true if the `state` value indicates the current loop should continue.  This is useful
+//   when using C-style for loops to iteratively calculate a value.  Used with `loop_while()` and
+//   `loop_done()`.  See [Looping Helpers](utility.scad#section-c-style-for-loop-helpers) for an example.
+// Arguments:
+//   state = The loop state value.

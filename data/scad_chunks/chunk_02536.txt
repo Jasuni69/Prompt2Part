@@ -1,0 +1,3 @@
+function before(path1, path2) =  //! Translate `path1` so its end meets the start of `path2` and then concatenate
+    let(end = len(path1) - 1, offset = path2[0] - path1[end])
+        concat([for(i = [0 : end - 1]) path1[i] + offset], path2);

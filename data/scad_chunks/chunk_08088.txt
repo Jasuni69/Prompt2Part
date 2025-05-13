@@ -1,0 +1,21 @@
+module one_segment(body_r, body_fn, one_scale_data) {
+    // scales
+    rotate([-90, 0, 0])
+        dragon_body_scales(body_r, body_fn, one_scale_data);
+
+
+    points = [[0, 0, 0], [0, .1, 1], [0, 1, 1.5]] * 5.5;
+    path = bezier_curve(0.1, points);
+
+    // dorsal fin
+    translate([0, 3.2, -3]) 
+    rotate([-65, 0, 0]) 
+    path_extrude([[0, -.25], [0.5, 0], [0, .75], [-0.5, 0]] * 5.5, path, scale = .05);        
+            
+    // belly    
+    translate([0, -2.5, .8]) 
+    rotate([-5, 0, 0]) 
+    scale([1, 1, 1.4])  
+        sphere(5.8, $fn = 8); 
+    
+}

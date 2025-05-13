@@ -1,0 +1,23 @@
+module rect(size=1, rounding=0, atype="box", chamfer=0, anchor=CENTER, spin=0, corner_flip = false) {
+    errchk = assert(in_list(atype, ["box", "perim"]));
+    size = [for (c = force_list(size,2)) max(0,c)];
+    if (!all_positive(size)) {
+        attachable(anchor,spin, two_d=true, size=size) {
+            union();
+            children();
+        }
+    } else if (rounding==0 && chamfer==0) {
+        attachable(anchor, spin, two_d=true, size=size) {
+            square(size, center=true);
+            children();
+        }
+    } else {
+        pts_over = rect(size=size, rounding=rounding, chamfer=chamfer, atype=atype, corner_flip = corner_flip, _return_override=true);
+        pts = pts_over[0];
+        override = pts_over[1];
+        attachable(anchor, spin, two_d=true, size=size,override=override) {
+            polygon(pts);
+            children();
+        }
+    }
+}

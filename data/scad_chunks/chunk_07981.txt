@@ -1,0 +1,26 @@
+module fern_leaf_stencil(radius, height, thickness, width, min_leng, k1, k2) {
+    $fn = 48;
+
+    linear_extrude(thickness) 
+    difference() {
+        union() {
+            translate([radius, 0])
+            scale([1, 0.5, 1])
+            hollow_out(radius / 3) 
+                circle(radius / 1.5);
+                
+            circle(radius);
+        }
+        translate([-radius, 0]) 
+            fern_leaf(
+                t2d(point = [0, 0], angle = 0), 
+                radius / 5, min_leng, k1, k2, width
+            );
+    }
+
+    linear_extrude(height) 
+    hollow_out(thickness) 
+        circle(radius + thickness);
+}
+
+fern_leaf_stencil(radius, height, thickness, width, min_leng, k1, k2);

@@ -1,0 +1,36 @@
+function difference(regions=[],b=undef,c=undef,eps=EPSILON) =
+     let(regions = _list_three(regions,b,c))
+     len(regions)==0? []
+   : len(regions)==1? regions[0]
+   : regions[0]==[] ? []
+   : let(regions=[for (r=regions) is_path(r)? [r] : r])
+     difference([
+                 _filter_region_parts(regions[0],regions[1],["OU", "I"], eps=eps),                
+                 for (i=[2:1:len(regions)-1]) regions[i]
+                ],
+                eps=eps
+     );
+
+
+// Function&Module: intersection()
+// Synopsis: Performs a Boolean intersection operation.
+// SynTags: Geom, Region
+// Topics: Boolean Operations, Regions, Polygons, Shapes2D, Shapes3D
+// See Also: difference(), union(), diff(), intersect(), exclusive_or()
+// Usage:
+//   intersection() CHILDREN;
+//   region = intersection(regions);
+//   region = intersection(REGION1,REGION2);
+//   region = intersection(REGION1,REGION2,REGION3);
+// Description:
+//   When called as a function, and given a list of {{regions}} or {{polygons}} returns the
+//   intersection of all given regions.  Result is a single region.
+//   When called as the built-in module, makes the intersection of all the given children.
+// Arguments:
+//   regions = List of regions to intersect.
+// Example(2D):
+//   shape1 = move([-8,-8,0], p=circle(d=50));
+//   shape2 = move([ 8, 8,0], p=circle(d=50));
+//   for (shape = [shape1,shape2])
+//       stroke(shape,width=0.5, color="red", closed=true);
+//   color("green") region(intersection(shape1,shape2));

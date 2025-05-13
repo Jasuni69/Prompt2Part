@@ -1,0 +1,16 @@
+function matrix3_skew(xa, ya) = [
+	[1,       tan(xa), 0],
+	[tan(ya), 1,       0],
+	[0,       0,       1]
+];
+
+
+
+// Function: matrix4_skew_xy()
+// Usage:
+//   matrix4_skew_xy(xa, ya)
+// Description:
+//   Returns the 4x4 matrix to perform a skew transformation along the XY plane..
+// Arguments:
+//   xa = Skew angle, in degrees, in the direction of the X axis.
+//   ya = Skew angle, in degrees, in the direction of the Y axis.

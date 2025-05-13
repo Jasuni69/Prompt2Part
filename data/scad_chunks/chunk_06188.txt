@@ -1,0 +1,103 @@
+function _ISO_thread_tolerance(diameter, pitch, internal=false, tolerance=undef) =
+  let(
+    P = pitch,
+    H = P*sqrt(3)/2,
+    tolerance = first_defined([tolerance, internal?"6H":"6g"]),
+
+    pdiam = diameter - 2*3/8*H,          // nominal pitch diameter
+    mindiam = diameter - 2*5/8*H,        // nominal minimum diameter
+
+    EI = [   // Fundamental deviations for nut thread
+          ["G", 15+11*P],
+          ["H", 0],            // Standard practice
+         ],
+
+    es = [    // Fundamental deviations for bolt thread
+          ["e", -(50+11*P)],   // Exceptions if P<=0.45mm
+          ["f", -(30+11*P)],
+          ["g", -(15+11*P)],   // Standard practice
+          ["h", 0]             // Standard practice for tight fit
+         ],
+
+    T_d6 = 180*pow(P,2/3)-3.15/sqrt(P),
+    T_d = [  // Crest diameter tolerance for major diameter of bolt thread
+           [4, 0.63*T_d6],
+           [6, T_d6],
+           [8, 1.6*T_d6]
+          ],
+
+    T_D1_6 = 0.2 <= P && P <= 0.8 ? 433*P - 190*pow(P,1.22) :
+             P > .8 ? 230 * pow(P,0.7) : undef,
+    T_D1 = [ // Crest diameter tolerance for minor diameter of nut thread
+             [4, 0.63*T_D1_6],
+             [5, 0.8*T_D1_6],
+             [6, T_D1_6],
+             [7, 1.25*T_D1_6],
+             [8, 1.6*T_D1_6]
+           ],
+
+    rangepts = [0.99, 1.4, 2.8, 5.6, 11.2, 22.4, 45, 90, 180, 300],
+    d_ind = floor(lookup(diameter,hstack(rangepts,count(len(rangepts))))),
+    avgd = sqrt(rangepts[d_ind]* rangepts[d_ind+1]),
+
+    T_d2_6 = 90*pow(P, 0.4)*pow(avgd,0.1),
+    T_d2 = [ // Pitch diameter tolerance for bolt thread
+             [3, 0.5*T_d2_6],
+             [4, 0.63*T_d2_6],
+             [5, 0.8*T_d2_6],
+             [6, T_d2_6],
+             [7, 1.25*T_d2_6],
+             [8, 1.6*T_d2_6],
+             [9, 2*T_d2_6],
+           ],
+
+    T_D2 = [  // Tolerance for pitch diameter of nut thread
+              [4, 0.85*T_d2_6],
+              [5, 1.06*T_d2_6],
+              [6, 1.32*T_d2_6],
+              [7, 1.7*T_d2_6],
+              [8, 2.12*T_d2_6]
+           ],
+
+    internal = is_def(internal) ? internal : tolerance[1] != downcase(tolerance[1]),
+    internalok = !internal || (
+                               len(tolerance)==2 && str_find("GH",tolerance[1])!=undef && str_find("45678",tolerance[0])!=undef),
+    tol_str = str(tolerance,tolerance),
+    externalok = internal || (
+                              (len(tolerance)==2 || len(tolerance)==4)
+                                                          && str_find("efgh", tol_str[1])!=undef
+                                                          && str_find("efgh", tol_str[3])!=undef
+                                                          && str_find("3456789", tol_str[0]) != undef
+                                                          && str_find("468", tol_str[2]) !=undef)
+  )
+  assert(internalok,str("Invalid ISO internal thread tolerance, ",tolerance,".  Must have form <digit><letter>"))
+  assert(externalok,str("invalid ISO external thread tolerance, ",tolerance,".  Must have form <digit><letter> or <digit><letter><digit><letter>"))
+  let(
+    tol_num_pitch = parse_num(tol_str[0]),
+    tol_num_crest = parse_num(tol_str[2]),
+    tol_letter = tol_str[1]
+  )
+  assert(tol_letter==tol_str[3],str("Invalid tolerance, ",tolerance,".  Cannot mix different letters"))
+  internal ?
+    let(  // Nut case
+      fdev = struct_val(EI,tol_letter)/1000,
+      Tdval = struct_val(T_D1, tol_num_crest)/1000,
+      Td2val = struct_val(T_D2, tol_num_pitch)/1000,
+      bot=[diameter+fdev, diameter+fdev+Td2val+H/6],
+      xdiam = [mindiam+fdev,mindiam+fdev+Tdval],
+      pitchdiam = [pdiam + fdev, pdiam+fdev+Td2val]
+    )
+    [["pitch",P],["d_minor",xdiam], ["d_pitch",pitchdiam], ["d_major",bot],["basic",[mindiam,pdiam,diameter]]]
+  :
+    let( // Bolt case
+      fdev = struct_val(es,tol_letter)/1000,
+      Tdval = struct_val(T_d, tol_num_crest)/1000,
+      Td2val = struct_val(T_d2, tol_num_pitch)/1000,
+      mintrunc = P/8,
+      d1 = diameter-5*H/4,
+      maxtrunc = H/4 - mintrunc * (1-cos(60-acos(1-Td2val/4/mintrunc)))+Td2val/2,
+      bot = [diameter-2*H+2*mintrunc+fdev, diameter-2*H+2*maxtrunc+fdev],
+      xdiam = [diameter+fdev,diameter+fdev-Tdval],
+      pitchdiam = [pdiam + fdev, pdiam+fdev-Td2val]
+    )
+    [["pitch",P],["d_major",xdiam], ["d_pitch",pitchdiam], ["d_minor",bot],["basic",[mindiam,pdiam,diameter]]];

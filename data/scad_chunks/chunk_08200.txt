@@ -1,0 +1,8 @@
+module test_along_with_default_angles() {
+    echo("==== test_along_with_default_angles  ====");
+
+    $fn = 24;
+    points = shape_circle(radius = 50);
+    along_with(points, method = "EULER_ANGLE") 
+        sphere(5);
+}

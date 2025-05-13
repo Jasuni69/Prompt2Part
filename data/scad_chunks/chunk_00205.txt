@@ -1,0 +1,11 @@
+module veroboard_test() translate([vero_length(z_vb) / 2, vero_width(z_vb) / 2]) {
+    vflip()
+        veroboard_assembly(z_vb);
+
+    translate([30, 0])
+        rotate(180)
+            veroboard_fastened_assembly(z_vb, 12, 3);
+}
+
+if($preview)
+    veroboard_test();

@@ -1,0 +1,22 @@
+function is_bezier_patch(x) =
+    is_list(x) && is_list(x[0]) && is_vector(x[0][0]) && len(x[0]) == len(x[len(x)-1]);  
+
+
+// Function: bezier_patch_flat()
+// Synopsis: Creates a flat bezier patch.
+// Topics: Bezier Patches
+// See Also: bezier_patch_points()
+// Usage:
+//   patch = bezier_patch_flat(size, [N=], [spin=], [orient=], [trans=]);
+// Description:
+//   Returns a flat rectangular bezier patch of degree `N`, centered on the XY plane.
+// Arguments:
+//   size = scalar or 2-vector giving the X and Y dimensions of the patch. 
+//   ---
+//   N = Degree of the patch to generate.  Since this is flat, a degree of 1 should usually be sufficient.  Default: 1
+//   orient = A direction vector.  Point the patch normal in this direction.  
+//   spin = Spin angle to apply to the patch
+//   trans = Amount to translate patch, after orient and spin. 
+// Example(3D):
+//   patch = bezier_patch_flat(size=[100,100]);
+//   debug_bezier_patches([patch], size=1, showcps=true);

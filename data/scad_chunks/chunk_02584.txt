@@ -1,0 +1,1 @@
+function transform(v, m) = vec3(m * [v.x, v.y, v.z, 1]); //! Apply 4x4 transform to a 3 vector by extending it and cropping it again

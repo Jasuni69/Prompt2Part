@@ -1,0 +1,1 @@
+function gAll(listOfSteps=[UNITY])= multAll(listOfSteps);

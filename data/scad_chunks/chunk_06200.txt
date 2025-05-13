@@ -1,0 +1,28 @@
+function nut_info(name, shape, thickness, thread, hole_oversize=0, width, _origin) =
+  assert(is_undef(thickness) || (is_num(thickness) && thickness>0) ||
+           in_list(_downcase_if_str(thickness),["thin","normal","thick","undersized","din"]),
+          "thickness must be a positive number of one of \"thin\", \"thick\", \"normal\", \"undersized\", or \"DIN\"")
+  let(
+      shape = _downcase_if_str(default(shape,"hex")),
+      thickness = _downcase_if_str(default(thickness, "normal"))
+  )
+  assert(is_string(name), str("Nut nameification must be a string ",name))
+  assert(in_list(shape, ["hex","square"]), "Nut shape must be \"hex\" or \"square\"")
+  assert(is_undef(width) || (is_num(width) && width>0), "Specified width must be a positive number")
+  let(
+      type = _parse_screw_name(name),
+      thread = is_undef(thread) || thread==true ? "coarse"
+             : thread==false || thread=="none" ? 0
+             : thread,
+      nutdata = type[0]=="english" ? _nut_info_english(type[1],type[2], thread, shape, thickness, width)
+              : type[0]=="metric" ?  _nut_info_metric(type[1],type[2], thread, shape, thickness, width)
+              : []
+  )
+  _struct_reset(nutdata, [["name", name],
+                          ["shaft_oversize",hole_oversize],
+                          ["width", width],
+                          ["origin",_origin]
+                         ]);
+
+
+// Nut data is from ASME B18.2.2, mostly Table A-1

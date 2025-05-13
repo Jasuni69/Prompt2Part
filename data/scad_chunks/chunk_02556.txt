@@ -1,0 +1,21 @@
+function rounded_polygon_arcs(points, tangents) = //! Compute the arcs at the points, for each point [angle, rotate_angle, length]
+    let(
+        len = len(points)
+    ) [ for (i = [0: len-1])
+        let(
+            p1 = vec2(tangents[(i - 1 + len) % len][1]),
+            p2 = vec2(tangents[i][0]),
+            p = vec2(points[i]),
+            v1 = p1 - p,
+            v2 = p2 - p,
+            sr = points[i][2],
+            r = abs(sr),
+            a = r < 0.001 ? 0 : let( aa = acos(limit((v1 * v2) / sqr(r), -1, 1)) ) cross(v1, v2) * sign(sr) <= 0 ? aa : 360 - aa,
+            l = PI * a * r / 180,
+            v0 = [r, 0],
+            v = let (
+                vv = norm(v0 - v2) < 0.001 ? 0 : abs(v2.y) < 0.001 ? 180 :
+                        let( aa = acos( limit((v0 * v2) / sqr(r), -1, 1)) ) cross(v0, v2) * sign(sr) <= 0 ? aa : 360 - aa
+            ) sr > 0 ? 360 - vv : vv - a
+        ) [a, v % 360, l]
+    ];

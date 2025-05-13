@@ -1,0 +1,47 @@
+module conv_hull(keep="keep")
+{
+    req_children($children);
+    assert(is_string(keep),"keep must be a string of tags");
+    if (_is_shown())
+        hull() hide(keep) children();
+    show_int(keep) children();
+}
+
+
+// Module: tag_conv_hull()
+// Synopsis: Performs a {{conv_hull()}} and then sets a tag on the result.
+// Topics: Attachments
+// See Also: tag(), recolor(), show_only(), hide(), diff(), intersect()
+// Usage:
+//   tag_conv_hull([tag], [keep]) CHILDREN;
+// Description:
+//   Perform a convex hull operation in the manner of {{conv_hull()}} using tags to control what happens,
+//   and then tag the resulting hull object with the specified tag.  This forces the specified
+//   tag to be resolved at the level of the hull operation.  In most cases, this is not necessary,
+//   but if you have kept objects and want to operate on the hull object as a whole object using
+//   more tag operations, you will probably not get the results you want if you simply use {{tag()}}.
+//   .
+//   For a step-by-step explanation of attachments, see the [Attachments Tutorial](Tutorial-Attachments).
+// Arguments:
+//   tag = Tag string to apply to this convex hull object.  Default: `""` (no tag)
+//   keep = String containing space delimited set of tag names of children to keep out of the hull.  Default: "keep"
+// Side Effects:
+//   Sets `$tag` to the tag you specify, possibly with a scope prefix.
+// Example: With a regular tag, the kept object is not handled as desired:
+//   diff(){
+//      cuboid([30,30,9])
+//        tag("remove")conv_hull("remove")
+//          cuboid(10,anchor=LEFT+FRONT){
+//            position(RIGHT+BACK)cyl(r=4,h=10);
+//            tag("keep")position(FRONT+LEFT)cyl(r=4,h=10);
+//          }
+//   }
+// Example: Using `tag_conv_hull()` fixes the problem:
+//   diff(){
+//      cuboid([30,30,9])
+//        tag_conv_hull("remove")
+//          cuboid(10,anchor=LEFT+FRONT){
+//            position(RIGHT+BACK)cyl(r=4,h=10);
+//            tag("keep")position(FRONT+LEFT)cyl(r=4,h=10);
+//          }
+//   }

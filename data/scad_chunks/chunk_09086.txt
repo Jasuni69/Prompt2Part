@@ -1,0 +1,1 @@
+function get_ri(cell) = cell[0];

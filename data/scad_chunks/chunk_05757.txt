@@ -1,0 +1,17 @@
+function _assemble_paths(vertices, edges, paths=[],i=0) =
+     i==len(edges) ? paths :
+     norm(vertices[edges[i][0]]-vertices[edges[i][1]])<EPSILON ? _assemble_paths(vertices,edges,paths,i+1) :
+     let(    // Find paths that connects on left side and right side of the edges (if one exists)
+         left = [for(j=idx(paths)) if (approx(vertices[last(paths[j])],vertices[edges[i][0]])) j],
+         right = [for(j=idx(paths)) if (approx(vertices[edges[i][1]],vertices[paths[j][0]])) j]
+     )
+     assert(len(left)<=1 && len(right)<=1)
+     let(
+          keep_path = list_remove(paths,concat(left,right)),
+          update_path = left==[] && right==[] ? edges[i]
+                      : left==[] ? concat([edges[i][0]],paths[right[0]])
+                      : right==[] ?  concat(paths[left[0]],[edges[i][1]])
+                      : left != right ? concat(paths[left[0]], paths[right[0]])
+                      : paths[left[0]]
+     )
+     _assemble_paths(vertices, edges, concat(keep_path, [update_path]), i+1);

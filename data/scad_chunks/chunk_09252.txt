@@ -1,0 +1,1 @@
+function __fast_fibonacci(nth) = __fast_fibonacci_2_elems(nth)[0];

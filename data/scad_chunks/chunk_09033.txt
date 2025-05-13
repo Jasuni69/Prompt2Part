@@ -1,0 +1,7 @@
+function _m_rotation_impl(a, v) = 
+    (a == 0 || a == [0, 0, 0] || a == [0] || a == [0, 0]) ? [
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        FINAL_ROW
+    ] : (is_undef(v) ? __m_rotation_xyz_rotation(a) : __m_rotation_q_rotation(a, v));

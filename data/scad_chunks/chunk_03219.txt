@@ -1,0 +1,15 @@
+module SmoothCorner(height, width, inner_curv=0) {
+  $fa = ($fa >= 12) ? 1 : $fa;
+  $fs = ($fs >= 2) ? 0.4 : $fs;
+
+  translate([width+inner_curv, width+inner_curv, 0])
+    rotate([0, 0, 180])
+    rotate_extrude(angle=90, convexity=10)
+    translate([width/2+inner_curv, 0, 0])
+    hull() {
+      translate([0, width/2, 0])
+        circle(r=width/2);
+      translate([0, height-width/2, 0])
+        circle(r=width/2);
+    }
+}

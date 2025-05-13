@@ -1,0 +1,15 @@
+function _build_cell(cell_radius, cell) = 
+    let(
+        x = get_x(cell),
+        y = get_y(cell),
+        walls = [
+            if(!mask(cell)) each _row_wall(cell_radius, x, y),
+            if(top_wall(cell) || top_right_wall(cell)) _build_top(cell_radius),
+            if(right_wall(cell) || top_right_wall(cell)) _right_wall(cell_radius, x)
+        ],
+        cell_p = _cell_position(cell_radius, x, y)
+    )
+    [
+        for(wall = walls) 
+        [for(p = wall) cell_p + p]
+    ];

@@ -1,0 +1,1 @@
+function rail_end_screw(type)  = type[9];   //! Screw used for ends only (Countersink used for better location)

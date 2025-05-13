@@ -1,0 +1,33 @@
+module ReuleauxIntersect(h=2,rU=5,2D=false,help){
+  
+  HelpTxt("ReuleauxIntersect",["h",h,"rU",rU,"2D",2D],help);
+        
+teilradius=rU/(sqrt(3)/3);
+rI=teilradius-rU;
+if(2D)union()
+        {
+            Polar(3,n=0)intersection(){
+                T(rU)circle(r=rU);
+                rotate(120)T(rU)circle(r=rU);        
+                }
+                
+            difference(){        
+                circle(r=rU*0.521);    
+                Polar(3,rU,n=0)circle(r=rI);
+            }
+        }        
+if(!2D)linear_extrude(height=h,convexity=10,center=true){
+    union()
+        {
+            Polar(3,n=0)intersection(){
+                T(rU)circle(r=rU);
+                rotate(120)T(rU)circle(r=rU);        
+                }
+                
+            difference(){        
+                circle(r=rU*0.521);    
+                Polar(3,rU,n=0)circle(r=rI);
+            }
+        }
+    }    
+}

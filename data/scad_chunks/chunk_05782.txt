@@ -1,0 +1,4 @@
+function echo_struct(struct,name="") =
+    let( keylist = [for(entry=struct) str("  ",entry[0],": ",entry[1],"\n")])
+    echo(str("\nStructure ",name,"\n",str_join(keylist)))
+    undef;

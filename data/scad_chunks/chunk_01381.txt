@@ -1,0 +1,1 @@
+function led_diameter(type) = type[1]; //! Body diameter

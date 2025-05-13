@@ -1,0 +1,50 @@
+hideBaseWalls       = false;    //-> false
+showOrientation     = true;
+showPCB             = false;
+showSwitches        = false;
+showPCBmarkers      = false;
+showShellZero       = false;
+showCenterMarkers   = false;
+inspectX            = 0;        //-> 0=none (>0 from Back)
+inspectY            = 0;        //-> 0=none (>0 from Right)
+inspectZ            = 0;        //-> 0=none (>0 from Bottom)
+inspectXfromBack    = true;     // View from the inspection cut foreward
+inspectYfromLeft    = true;     //-> View from the inspection cut to the right
+inspectZfromTop     = false;    //-> View from the inspection cut down
+//-- C O N T R O L ---------------------------------------
+
+
+
+
+
+
+//===================================================================
+//  *** Cutouts ***
+//    There are 6 cutouts one for each surface:
+//      cutoutsBase, cutoutsLid, cutoutsFront, cutoutsBack, cutoutsLeft, cutoutsRight
+//-------------------------------------------------------------------
+//  Default origin = yappCoordBox: box[0,0,0]
+//
+//                        Required                Not Used        Note
+//                      +-----------------------+---------------+------------------------------------
+//  yappRectangle       | width, length         | radius        |
+//  yappCircle          | radius                | width, length |
+//  yappRoundedRect     | width, length, radius |               |     
+//  yappCircleWithFlats | width, radius         | length        | length=distance between flats
+//  yappCircleWithKey   | width, length, radius |               | width = key width length=key depth
+//  yappPolygon         | width, length         | radius        | yappPolygonDef object must be provided
+//
+//  Parameters:
+//   Required:
+//    (0) = from Back
+//    (1) = from Left
+//    (2) = width
+//    (3) = length
+//    (4) = radius
+//    (5) = shape : {yappRectangle | yappCircle | yappPolygon | yappRoundedRect | yappCircleWithFlats | yappCircleWithKey}
+//  Optional:
+//    (6) = depth : Default = 0/Auto : 0 = Auto (plane thickness)
+//    (7) = angle : Default = 0
+//    (n) = { yappPolygonDef } : Required if shape = yappPolygon specified -
+//    (n) = { yappMaskDef } : If a yappMaskDef object is added it will be used as a mask for the cutout.
+//    (n) = { <yappCoordBox> | yappCoordPCB }

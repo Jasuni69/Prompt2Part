@@ -1,0 +1,98 @@
+module rack(
+    pitch,
+    teeth,
+    thickness,
+    backing,
+    width, bottom,
+    pressure_angle,
+    backlash = 0.0,
+    clearance,
+    helical,
+    herringbone = false,
+    profile_shift = 0,
+    gear_travel = 0,
+    circ_pitch,
+    diam_pitch,
+    mod,
+    anchor = CENTER,
+    spin = 0,
+    orient = UP
+) {
+    pitch = _inherit_gear_pitch("rack()",pitch, circ_pitch, diam_pitch, mod, warn=false);
+    PA = _inherit_gear_pa(pressure_angle);
+    helical = _inherit_gear_helical(helical);
+    thickness = _inherit_gear_thickness(thickness);
+    checks=
+        assert(is_integer(teeth) && teeth>0)
+        assert(is_finite(thickness) && thickness>0)
+        assert(is_finite(PA) && PA>=0 && PA<90, "Bad pressure_angle value.")
+        assert(clearance==undef || (is_finite(clearance) && clearance>=0))
+        assert(is_finite(backlash) && backlash>=0)
+        assert(is_finite(helical) && abs(helical)<90)
+        assert(is_bool(herringbone))
+        assert(is_finite(profile_shift))
+        assert(is_finite(gear_travel));
+    trans_pitch = pitch / cos(helical);
+    a = _adendum(pitch, profile_shift);
+    d = _dedendum(pitch, clearance, profile_shift);
+    bottom = is_def(bottom) ?
+                 assert(is_finite(bottom) && bottom>d, "bottom is invalid or too small for teeth")
+                 bottom
+           : is_def(width) ?
+                 assert(is_finite(width) && width>a+d, "width is invalid or too small for teeth")
+                 width - a
+           : is_def(backing) ?
+                 assert(all_positive([backing]), "backing must be a positive value")
+                 backing+d
+           : 2*d+a;  // default case
+    l = teeth * trans_pitch;
+    anchors = [
+        named_anchor("root",        [0,0,-d],            BACK),
+        named_anchor("root-left",   [-l/2,0,-d],         LEFT),
+        named_anchor("root-right",  [ l/2,0,-d],         RIGHT),
+        named_anchor("root-front",  [0,-thickness/2,-d], FWD),
+        named_anchor("root-back",   [0, thickness/2,-d], BACK),
+    ];
+    endfix = sin(helical)*thickness/2;
+    override = function(anchor)
+        anchor.z==1 ? [ [anchor.x*l/2-endfix*anchor.y,anchor.y*thickness/2,a], undef, undef]
+      : anchor.x!=0 ? [ [anchor.x*l/2-endfix*anchor.y,anchor.y*thickness/2,anchor.z*bottom], undef,undef]
+      :               undef;
+    size = [l, thickness, 2*bottom];
+    attachable(anchor,spin,orient, size=size, anchors=anchors, override=override) {
+        right(gear_travel)
+        xrot(90) {
+            if (herringbone) {
+                zflip_copy()
+                skew(axz=-helical) 
+                linear_extrude(height=thickness/2, center=false, convexity=teeth*2) {
+                    rack2d(
+                        pitch = pitch,
+                        teeth = teeth,
+                        bottom = bottom,
+                        pressure_angle = PA,
+                        backlash = backlash,
+                        clearance = clearance,
+                        helical = helical,
+                        profile_shift = profile_shift
+                    );
+                }
+            } else {
+                skew(axz=helical)
+                linear_extrude(height=thickness, center=true, convexity=teeth*2) {
+                    rack2d(
+                        pitch = pitch,
+                        teeth = teeth,
+                        bottom = bottom,
+                        pressure_angle = PA,
+                        backlash = backlash,
+                        clearance = clearance,
+                        helical = helical,
+                        profile_shift = profile_shift
+                    );
+                }
+            }
+        }
+        children();
+    }
+}

@@ -1,0 +1,1 @@
+function pot_spigot_r(type) = let(sp = pot_spigot(type)) sp.x > 2 * spigot_r ? spigot_r : 0;

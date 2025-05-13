@@ -1,0 +1,6 @@
+module gap() {
+    gap = pcb_component_position(pcb, "-chip");
+
+    translate([gap.x, -gap.y])
+        square([17.5, 20], center = true);
+}

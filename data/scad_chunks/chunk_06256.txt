@@ -1,0 +1,24 @@
+module teardrop(h, r, ang=45, cap_h, r1, r2, d, d1, d2, cap_h1, cap_h2, l, length, height, circum=false, realign=false,
+                chamfer, chamfer1, chamfer2,anchor=CENTER, spin=0, orient=UP, bot_corner1, bot_corner2, bot_corner=0)
+{
+    length = one_defined([l, h, length, height],"l,h,length,height");
+    dummy=assert(is_finite(length) && length>0, "length must be positive");
+    r1 = get_radius(r=r, r1=r1, d=d, d1=d1);
+    r2 = get_radius(r=r, r1=r2, d=d, d1=d2);
+    tip_y1 = r1/cos(90-ang);
+    tip_y2 = r2/cos(90-ang);
+    _cap_h1 = min(default(cap_h1, tip_y1), tip_y1);
+    _cap_h2 = min(default(cap_h2, tip_y2), tip_y2);
+    capvec = unit([0, _cap_h1-_cap_h2, length]);
+    anchors = [
+        named_anchor("cap",      [0,0,(_cap_h1+_cap_h2)/2], capvec),
+        named_anchor("cap_fwd",  [0,-length/2,_cap_h1],         unit((capvec+FWD)/2)),
+        named_anchor("cap_back", [0,+length/2,_cap_h2],         unit((capvec+BACK)/2), 180),
+    ];
+    attachable(anchor,spin,orient, r1=r1, r2=r2, l=length, axis=BACK, anchors=anchors)
+    {
+        vnf_polyhedron(teardrop(ang=ang,cap_h=cap_h,r1=r1,r2=r2,cap_h1=cap_h1,cap_h2=cap_h2,circum=circum,realign=realign,
+                                length=length, chamfer1=chamfer1,chamfer2=chamfer2,chamfer=chamfer,bot_corner1=bot_corner1, bot_corner2=bot_corner2,bot_corner=bot_corner));
+        children();
+    }
+}

@@ -1,0 +1,14 @@
+function keep(dataList=[], indexes = [], _i=0, _data=[]) = let(
+    a = assert(max(indexes) < len(dataList[_i]), str("Index ",max(indexes)," in indexes list is too large for given data ",dataList[_i])),
+    d = [for(i=indexes) dataList[_i][i]],
+    _data = concat(_data, [d])) _i<len(dataList)-1? keep(dataList, indexes, _i+1, _data) : _data;
+
+
+//  function rotatePoint(pt, angle)
+//
+//  Rotates a 2D point around the z axis relative to the origin. Input can either be a 2D or 3D point.
+//  will be a 3D point.
+
+//  pt       (point)  Array with X and Y value.
+//  angle    (number) Angle around which the 2D point is rotated. Angle is in degrees.
+//  return   (point)  Resulting rotated point.

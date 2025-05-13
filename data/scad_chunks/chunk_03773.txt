@@ -1,0 +1,4 @@
+module clear (col)
+{
+	color($removing?undef:col,$removing?undef:0.4)children();
+}

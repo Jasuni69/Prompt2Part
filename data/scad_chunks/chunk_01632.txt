@@ -1,0 +1,1 @@
+function faston_wire_crimp_l(type)  = type[6];  //! Length of the wire crimp

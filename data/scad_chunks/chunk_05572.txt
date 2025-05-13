@@ -1,0 +1,20 @@
+function f_max3(a,b,c) = f_3arg(function(a,b,c) max(a,b,c))(a,b,c);
+
+
+
+//////////////////////////////////////////////////////////////////////
+// Section: Trigonometry Operators
+
+
+// Function: f_sin()
+// Synopsis: Returns a function to calculate the sine of a value.
+// Topics: Function Literals, Math Operators
+// See Also: f_sin(), f_cos(), f_tan(), f_asin(), f_acos(), f_atan(), f_atan2()
+// Usage:
+//   fn = f_sin();
+//   fn = f_sin(a);
+// Description:
+//   A factory that generates function literals based on `sin(a)`, where the `a`
+//   argument can optionally be replaced with a constant.
+// Arguments:
+//   a = If given, replaces the argument.

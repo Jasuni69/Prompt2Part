@@ -1,0 +1,15 @@
+function f_round(a) = f_1arg(function(a) round(a))(a);
+
+
+// Function: f_ceil()
+// Synopsis: Returns a function to calculate the integer ceiling of a given number.
+// Topics: Function Literals, Math Operators
+// See Also: f_floor(), f_ceil(), f_round()
+// Usage:
+//   fn = f_ceil();
+//   fn = f_ceil(a);
+// Description:
+//   A factory that generates function literals based on `ceil(a)`, where the `a`
+//   argument can optionally be replaced with a constant.
+// Arguments:
+//   a = If given, replaces the argument.

@@ -1,0 +1,15 @@
+module test_f_is_def() {
+    testfn = f_is_def();
+    for (test = [
+        [undef,   false],
+        [false,   true],
+        [true,    true],
+        [0,       true],
+        [3,       true],
+        ["foo",   true],
+        [[4,5,6], true]
+    ]) {
+        assert(testfn(test[0]) == test[1]);
+    }
+}
+test_f_is_def();

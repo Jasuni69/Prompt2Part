@@ -1,0 +1,31 @@
+function _get_cp(geom) =
+    let(cp=select(geom,-3))
+    is_vector(cp) ? cp
+  : let(
+        is_vnf = in_list(geom[0],["vnf_extent","vnf_isect"])
+    )
+    cp == "centroid" ? (
+       is_vnf && len(geom[1][1])==0
+          ? [0,0,0]
+          : centroid(geom[1])
+    )
+  : let(points = is_vnf?geom[1][0]:flatten(force_region(geom[1])))
+    cp=="mean" ? mean(points)
+  : cp=="box" ? mean(pointlist_bounds(points))
+  : assert(false,"Invalid cp specification");
+
+
+
+/// Internal Function: _find_anchor()
+/// Usage:
+///   anchorinfo = _find_anchor(anchor, geom);
+/// Topics: Attachments
+/// See Also: reorient(), attachable()
+/// Description:
+///   Calculates the anchor data for the given `anchor` vector or name, in the given attachment
+///   geometry.  Returns `[ANCHOR, POS, VEC, ANG]` where `ANCHOR` is the requested anchorname
+///   or vector, `POS` is the anchor position, `VEC` is the direction vector of the anchor, and
+///   `ANG` is the angle to align with around the rotation axis of th anchor direction vector.
+/// Arguments:
+///   anchor = Vector or named anchor string.
+///   geom = The geometry description of the shape.

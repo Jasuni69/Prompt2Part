@@ -1,0 +1,29 @@
+function ___is_polygon_in_list(poly, polys, i) =
+    i >= len(polys)? false :
+    are_polygons_equal(poly, polys[i])? true :
+    ___is_polygon_in_list(poly, polys, i+1);
+
+
+// Section: Convex Hull
+
+// This section originally based on Oskar Linde's Hull:
+//   - https://github.com/openscad/scad-utils
+
+
+// Function: hull()
+// Synopsis: Convex hull of a list of 2d or 3d points.
+// SynTags: Ext
+// Topics: Geometry, Hulling
+// See Also: hull_points(), hull2d_path(), hull3d_faces()
+// Usage:
+//   face_list_or_index_list = hull(points);
+// Description:
+//   Takes a list of 2D or 3D points (but not both in the same list) and returns either the list of
+//   indexes into `points` that forms the 2D convex hull perimeter path, or the list of faces that
+//   form the 3d convex hull surface.  Each face is a list of indexes into `points`.  If the input
+//   points are collinear, the indexes of the two extrema points are returned.  If the input
+//   points are coplanar, then a simple list of vertex indices forming a planar perimeter is
+//   returned. Otherwise a list of faces is returned, where each face is a simple list of
+//   vertex indices for the perimeter of the face.
+// Arguments:
+//   points = The set of 2D or 3D points to find the hull of.

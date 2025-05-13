@@ -1,0 +1,57 @@
+module prismoid(
+	size1=[1,1], size2=[1,1], h=1, shift=[0,0],
+	orient=ORIENT_Z, align=ALIGN_POS, center=undef
+) {
+	eps = 0.001;
+	s1 = [max(size1[0], eps), max(size1[1], eps)];
+	s2 = [max(size2[0], eps), max(size2[1], eps)];
+	shiftby = point3d(shift);
+	orient_and_align([s1[0], s1[1], h], orient, align, center, noncentered=ALIGN_POS) {
+		polyhedron(
+			points=[
+				[+s2[0]/2, +s2[1]/2, +h/2] + shiftby,
+				[+s2[0]/2, -s2[1]/2, +h/2] + shiftby,
+				[-s2[0]/2, -s2[1]/2, +h/2] + shiftby,
+				[-s2[0]/2, +s2[1]/2, +h/2] + shiftby,
+				[+s1[0]/2, +s1[1]/2, -h/2],
+				[+s1[0]/2, -s1[1]/2, -h/2],
+				[-s1[0]/2, -s1[1]/2, -h/2],
+				[-s1[0]/2, +s1[1]/2, -h/2],
+			],
+			faces=[
+				[0, 1, 2],
+				[0, 2, 3],
+				[0, 4, 5],
+				[0, 5, 1],
+				[1, 5, 6],
+				[1, 6, 2],
+				[2, 6, 7],
+				[2, 7, 3],
+				[3, 7, 4],
+				[3, 4, 0],
+				[4, 7, 6],
+				[4, 6, 5],
+			],
+			convexity=2
+		);
+	}
+}
+
+
+// Module: trapezoid()
+// Status: DEPRECATED, use `prismoid()` instead.
+//
+// Description:
+//   Creates a rectangular prismoid shape.
+//
+// Usage:
+//   trapezoid(size1, size2, h, [shift], [orient], [align|center]);
+//
+// Arguments:
+//   size1 = [width, length] of the axis-negative end of the prism.
+//   size2 = [width, length] of the axis-positive end of the prism.
+//   h = Height of the prism.
+//   shift = [x, y] amount to shift the center of the top with respect to the center of the bottom.
+//   orient = Orientation of the prismoid.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Z`.
+//   align = Alignment of the prismoid by the axis-negative (size1) end.  Use the `V_` constants from `constants.scad`.  Default: `V_UP`
+//   center = If given, overrides `align`.  A true value sets `align=V_CENTER`, false sets `align=V_UP`.

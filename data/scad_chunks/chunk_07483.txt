@@ -1,0 +1,27 @@
+module Servo(r=0,narbe=1,help)
+ {
+
+     cube([12.5,22.5+1.5,23],true);
+     translate([+0,0,(-23/2+2.5/2)+16])cube([12.5,32.5,2.5],true);
+     color([.8,0.4,.6,1])translate([+0,-5,2.8])cylinder(26.0,d1=12,d2=12,$fn=36,center=true);
+       color([.8,0.3,.6,1])translate([+0,+0.7,2.7])cylinder(26.0,d=5.5,$fn=36,center=true);  
+     color([.8,0.3,.6,1])translate([+0,+1.4,2.7])cylinder(26.0,d=5.5,$fn=36,center=true);
+     color([.8,.8,.6,1])translate([+0,-5,3.5])cylinder(30.0,d=5,$fn=12,center=true);
+     if (narbe==1)
+         { translate([+0,-5,17.3])rotate([+0,0,r])scale([0.2,1.0,1])cylinder(3,d=35,center=true); // servoarm Oval
+             translate([+0,-5,17.3])rotate([+0,0,r])cube([18,4.1,3.0],true);//servoarm
+         }
+        if (narbe==2)
+         { translate([+0,-5,18.2])rotate([+0,0,r])scale([1,1,1])color([.8,.8,.8,0.5])cylinder(6,d=35,center=true); // servoarm Rund        
+     
+         }
+     if (narbe==3)
+         {
+             color([.8,.8,.8,1])translate([+0,-5,49])cylinder(70,d1=4,d2=4,$fn=36,center=true);//Mitte Drehachse 
+         }
+     color([.8,0.5,.2,1])translate([+0,-11.8,-3.4])scale([1,0.15,1])cylinder(16,d=12.5,$fn=36,center=true);//cut für kabel
+        translate([+0,14,6]) cylinder(10.0,d=1.8,$fn=6,center=true);    //Schraubenlöcher 
+         translate([+0,-14,6]) cylinder(10.0,d=1.8,$fn=6,center=true);    //Schraubenlöcher     
+         
+  HelpTxt("Servo",["r",r,"narbe",narbe],help);
+ }

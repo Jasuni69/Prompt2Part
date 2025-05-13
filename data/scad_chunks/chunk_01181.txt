@@ -1,0 +1,2 @@
+function camera_lens_height(type) = //! The height of the lens stack
+     let(lenses = camera_lens(type), lens = lenses[len(lenses) - 1][0]) lens.y + lens.z;

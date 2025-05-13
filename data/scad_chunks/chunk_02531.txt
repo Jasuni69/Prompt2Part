@@ -1,0 +1,8 @@
+function sweep(path, profile, loop = false, twist = 0) = //! Generate the point list and face list of the swept volume
+    let(
+        npoints = len(path),
+        facets = len(profile),
+        points = skin_points(profile, path, loop, twist),
+        skin_faces = skin_faces(points, npoints, facets, loop),
+        faces = loop ? skin_faces : concat([cap(facets)], skin_faces, [cap(facets, npoints - 1)])
+    ) [points, faces];

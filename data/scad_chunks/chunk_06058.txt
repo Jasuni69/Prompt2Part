@@ -1,0 +1,117 @@
+function is_region(x) = is_list(x) && is_path(x.x);
+
+
+// Function: is_valid_region()
+// Synopsis: Returns true if the input is a valid {{region}}.
+// Topics: Regions, Paths, Polygons, List Handling
+// See Also: is_region(), is_1region(), is_region_simple()
+// Usage:
+//   bool = is_valid_region(region, [eps]);
+// Description:
+//   Returns true if the input is a valid {{region}}, meaning that it is a list of simple {{polygons}} whose segments do not cross each other.
+//   This test can be time consuming with regions that contain many {{points}}.
+//   It differs from `is_region()`, which simply checks that the object is a list whose first entry is a path
+//   because it searches all the list polygons for any self-intersections or intersections with each other.  
+//   Also returns true if given a single simple polygon.  Use {{make_region()}} to convert sets of self-intersecting polygons into
+//   a region.  
+// Arguments:
+//   region = region to check
+//   eps = tolerance for geometric comparisons.  Default: `EPSILON` = 1e-9
+// Example(2D,NoAxes):  In all of the examples each polygon in the region appears in a different color.  Two non-intersecting squares make a valid region.
+//   region = [square(10), right(11,square(8))];
+//   rainbow(region)stroke($item, width=.2,closed=true);
+//   back(11)text(is_valid_region(region) ? "region" : "non-region", size=2);
+// Example(2D,NoAxes):  Nested squares form a region
+//   region = [for(i=[3:2:10]) square(i,center=true)];
+//   rainbow(region)stroke($item, width=.2,closed=true);
+//   back(6)text(is_valid_region(region) ? "region" : "non-region", size=2,halign="center");
+// Example(2D,NoAxes):  Also a region:
+//   region= [square(10,center=true), square(5,center=true), right(10,square(7))];
+//   rainbow(region)stroke($item, width=.2,closed=true);
+//   back(8)text(is_valid_region(region) ? "region" : "non-region", size=2);
+// Example(2D,NoAxes):  The squares cross each other, so not a region
+//   object = [square(10), move([8,8], square(8))];
+//   rainbow(object)stroke($item, width=.2,closed=true);
+//   back(17)text(is_valid_region(object) ? "region" : "non-region", size=2);
+// Example(2D,NoAxes): A union is one way to fix the above example and get a region. Union is run here on two simple polygons, which are valid regions themselves and hence acceptable inputs to union.
+//   region = union([square(10), move([8,8], square(8))]);
+//   rainbow(region)stroke($item, width=.25,closed=true);
+//   back(12)text(is_valid_region(region) ? "region" : "non-region", size=2);
+// Example(2D,NoAxes):  Not a region due to a self-intersecting (non-simple) hourglass polygon
+//   object = [move([-2,-2],square(14)), [[0,0],[10,0],[0,10],[10,10]]];
+//   rainbow(object)stroke($item, width=.2,closed=true);
+//   move([-1.5,13])text(is_valid_region(object) ? "region" : "non-region", size=2);
+// Example(2D,NoAxes):  Breaking hourglass in half fixes it.  Now it's a region:
+//   region = [move([-2,-2],square(14)), [[0,0],[10,0],[5,5]], [[5,5],[0,10],[10,10]]];
+//   rainbow(region)stroke($item, width=.2,closed=true);
+// Example(2D,NoAxes):  A single polygon corner touches an edge, so not a region:
+//   object = [[[-10,0], [-10,10], [20,10], [20,-20], [-10,-20],
+//              [-10,-10], [0,0], [10,-10], [10,0]]];
+//   rainbow(object)stroke($item, width=.3,closed=true);
+//   move([-4,12])text(is_valid_region(object) ? "region" : "non-region", size=3);
+// Example(2D,NoAxes):  Corners touch in the same polygon, so the polygon is not simple and the object is not a region.
+//   object = [[[0,0],[10,0],[10,10],[-10,10],[-10,0],[0,0],[-5,5],[5,5]]];
+//   rainbow(object)stroke($item, width=.3,closed=true);
+//   move([-10,12])text(is_valid_region(object) ? "region" : "non-region", size=3);
+// Example(2D,NoAxes):  The shape above as a valid region with two polygons:
+//   region = [  [[0,0],[10,0],[10,10],[-10,10],[-10,0]],
+//               [[0,0],[5,5],[-5,5]]  ];
+//   rainbow(region)stroke($item, width=.3,closed=true);
+//   move([-5.5,12])text(is_valid_region(region) ? "region" : "non-region", size=3);
+// Example(2D,NoAxes):  As with the "broken" hourglass, Touching at corners is OK.  This is a region.
+//   region = [square(10), move([10,10], square(8))];
+//   rainbow(region)stroke($item, width=.25,closed=true);
+//   back(12)text(is_valid_region(region) ? "region" : "non-region", size=2);
+// Example(2D,NoAxes): These two squares share part of an edge, hence not a region
+//   object = [square(10), move([10,2], square(7))];
+//   stroke(object[0], width=0.2,closed=true);
+//   color("red")dashed_stroke(object[1], width=0.25,closed=true);
+//   back(12)text(is_valid_region(object) ? "region" : "non-region", size=2);
+// Example(2D,NoAxes): These two squares share a full edge, hence not a region
+//   object = [square(10), right(10, square(10))];
+//   stroke(object[0], width=0.2,closed=true);
+//   color("red")dashed_stroke(object[1], width=0.25,closed=true);
+//   back(12)text(is_valid_region(object) ? "region" : "non-region", size=2);
+// Example(2D,NoAxes): Sharing on edge on the inside, also not a regionn
+//   object = [square(10), [[0,0], [2,2],[2,8],[0,10]]];
+//   stroke(object[0], width=0.2,closed=true);
+//   color("red")dashed_stroke(object[1], width=0.25,closed=true);
+//   back(12)text(is_valid_region(object) ? "region" : "non-region", size=2);
+// Example(2D,NoAxes): Crossing at vertices is also bad
+//   object = [square(10), [[10,0],[0,10],[8,13],[13,8]]];
+//   rainbow(object)stroke($item, width=.2,closed=true);
+//   back(14)text(is_valid_region(object) ? "region" : "non-region", size=2);
+// Example(2D,NoAxes): One polygon touches another in the middle of an edge
+//   object = [square(10), [[10,5],[15,0],[15,10]]];
+//   rainbow(object)stroke($item, width=.2,closed=true);
+//   back(11)text(is_valid_region(object) ? "region" : "non-region", size=2);
+// Example(2D,NoAxes): The polygon touches the side, but the side has a vertex at the contact point so this is a region
+//   poly1 = [ each square(30,center=true), [15,0]];
+//   poly2 = right(10,circle(5,$fn=4));
+//   poly3 = left(0,circle(5,$fn=4));
+//   poly4 = move([0,-8],square([10,3]));
+//   region = [poly1,poly2,poly3,poly4];
+//   rainbow(region)stroke($item, width=.25,closed=true);
+//   move([-5,16.5])text(is_valid_region(region) ? "region" : "non-region", size=3);
+//   color("black")move_copies(region[0]) circle(r=.4);
+// Example(2D,NoAxes): The polygon touches the side, but not at a vertex so this is not a region
+//   poly1 = fwd(4,[ each square(30,center=true), [15,0]]);
+//   poly2 = right(10,circle(5,$fn=4));
+//   poly3 = left(0,circle(5,$fn=4));
+//   poly4 = move([0,-8],square([10,3]));
+//   object = [poly1,poly2,poly3,poly4];
+//   rainbow(object)stroke($item, width=.25,closed=true);
+//   move([-9,12.5])text(is_valid_region(object) ? "region" : "non-region", size=3);
+//   color("black")move_copies(object[0]) circle(r=.4);
+// Example(2D,NoAxes): The inner polygon touches the middle of the edges, so not a region
+//   poly1 = square(20,center=true);
+//   poly2 = circle(10,$fn=8);
+//   object=[poly1,poly2];
+//   rainbow(object)stroke($item, width=.25,closed=true);
+//   move([-10,11.4])text(is_valid_region(object) ? "region" : "non-region", size=3);
+// Example(2D,NoAxes): The above shape made into a region using {{difference()}} now has four components that touch at corners
+//   poly1 = square(20,center=true);
+//   poly2 = circle(10,$fn=8);
+//   region = difference(poly1,poly2);
+//   rainbow(region)stroke($item, width=.25,closed=true);
+//   move([-5,11.4])text(is_valid_region(region) ? "region" : "non-region", size=3);

@@ -1,0 +1,1 @@
+function scs_block_side_height(type)    = type[7];  //! Height of the side of the block, this determines the minimum screw length

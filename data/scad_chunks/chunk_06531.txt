@@ -1,0 +1,21 @@
+function is_range(x) = !is_list(x) && is_finite(x[0]) && is_finite(x[1]) && is_finite(x[2]) ;
+
+
+// Function: valid_range()
+// Synopsis: Returns true if the argument is a valid range.
+// Topics: Type Checking
+// See Also: typeof(), is_type(), is_str(), is_def(), is_int(), is_range()
+// Usage:
+//   bool = valid_range(x);
+// Description:
+//   Returns true if its argument is a valid range (deprecated ranges excluded).
+// Arguments:
+//   x = value to check
+// Example:
+//   bool = is_range(undef);   // Returns: false
+//   bool = is_range(false);   // Returns: false
+//   bool = is_range(42);      // Returns: false
+//   bool = is_range([3,4,5]); // Returns: false
+//   bool = is_range("foo");   // Returns: false
+//   bool = is_range([3:5]);   // Returns: true
+//   bool = is_range([3:1]);   // Returns: false

@@ -1,0 +1,17 @@
+module DrawLine(Point1,Point2,line_width=0.5)
+{
+  /*
+  d = Point1 - Point2;
+  l = norm(d);
+  a = atan2(d.y, d.x) + 180;
+  translate(Point1)
+    rotate(a)
+      translate([0,-line_width/2])
+        square([l,line_width]);
+  */
+
+  hull()
+    for (pos = [Point1,Point2])
+      translate(pos)
+        circle(d = line_width);
+}

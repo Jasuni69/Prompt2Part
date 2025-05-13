@@ -1,0 +1,5 @@
+function f_is_patch(a) = f_1arg(function (a) is_patch(a))(a);
+
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

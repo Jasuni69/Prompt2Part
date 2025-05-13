@@ -1,0 +1,20 @@
+function _full_faces(pts,faces) =
+    let(
+        normals = [for(face=faces) quant(_facenormal(pts,face),1e-12)],
+        groups = _unique_groups(normals),
+        faces = [for(entry=groups) unique(flatten(select(faces, entry)))],
+        facenormals = [for(entry=groups) normals[entry[0]]],
+        ordered_faces = [
+            for(i=idx(faces))
+              let(
+                  facepts = select(pts, faces[i]),
+                  center = mean(facepts),
+                  rotatedface = rot(from=facenormals[i], to=[0,0,1], p=move(-center, p=facepts)),
+                  clockwise = sortidx([for(pt=rotatedface) -atan2(pt.y,pt.x)])
+              )
+            select(faces[i],clockwise)
+        ]
+    ) [ordered_faces, facenormals];
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

@@ -1,0 +1,3 @@
+function cleanup_path(list,eps=EPSILON) =
+  echo("***** Function cleanup_path() has been replaced by list_unwrap() and will be removed in a future version *****")
+  list_unwrap(list,eps);

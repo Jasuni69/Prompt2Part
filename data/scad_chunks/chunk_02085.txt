@@ -1,0 +1,11 @@
+module insert_foot_assembly(type = insert_foot) //! Printed part with insert in place
+assembly("insert_foot", ngb = true) {
+    screw = foot_screw(type);
+    insert = screw_insert(screw);
+
+    vflip()
+        stl_colour(pp4_colour) insert_foot(type);
+
+    translate_z(-foot_thickness(type))
+        insert(insert);
+}

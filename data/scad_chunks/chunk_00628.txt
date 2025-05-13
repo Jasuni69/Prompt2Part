@@ -1,0 +1,1 @@
+function tx_height(type)            = type[4];  //! Bounding height of the transformer

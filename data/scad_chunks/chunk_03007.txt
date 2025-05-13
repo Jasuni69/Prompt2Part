@@ -1,0 +1,9 @@
+module hookLidOutside()
+{
+  //if (printMessages) echo("hookLidOutside() ..");
+  
+} // hookLidOutside()
+
+//===========================================================
+//===========================================================
+// origin = box(0,0,0)

@@ -1,0 +1,1 @@
+function smd_inductor_lead_z(type) = type[3]; //! Top of lead frame from top

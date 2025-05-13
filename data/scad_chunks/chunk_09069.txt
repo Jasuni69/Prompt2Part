@@ -1,0 +1,11 @@
+function carve_down(x, y, z, cells, layers) = 
+    let(
+        z_minus_one = z - 1,
+        nz = z_minus_one < 0 ? z_minus_one + layers : z_minus_one
+    )
+    update(
+        cells, 
+        [x, y, nz, Y_X_WALL, UNVISITED]
+    );
+
+// 0(right), 1(top), 2(left), 3(bottom), 4(up), 5(down)

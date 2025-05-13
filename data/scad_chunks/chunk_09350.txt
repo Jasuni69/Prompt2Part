@@ -1,0 +1,11 @@
+function BBox(pointarrays) = let(
+    inf = 1e300*1e300,
+    minmax = function(p, a=0, b=0, res=[[inf, inf, inf], [-inf, -inf, -inf]])
+      a >= len(p) ? res :
+      minmax(p, b >= len(p[a])-1 ? a+1 : a, (b+1) % len(p[a]),
+        [[min(res[0][0], p[a][b][0]), min(res[0][1], p[a][b][1]),
+          min(res[0][2], p[a][b][2])],
+         [max(res[1][0], p[a][b][0]), max(res[1][1], p[a][b][1]),
+          max(res[1][2], p[a][b][2])]])
+  )
+  minmax(pointarrays);

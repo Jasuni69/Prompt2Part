@@ -1,0 +1,14 @@
+function array_fit(v, length, fill) = let(l=len(v)) (l==length)? v : (l>length)? array_trim(v,length) : array_pad(v,length,fill);
+
+
+// Function: enumerate()
+// Description:
+//   Returns a list, with each item of the given list `l` numbered in a sublist.
+//   Something like: `[[0,l[0]], [1,l[1]], [2,l[2]], ...]`
+// Arguments:
+//   l = List to enumerate.
+//   idx = If given, enumerates just the given subindex items of `l`.
+// Example:
+//   enumerate(["a","b","c"]);  // Returns: [[0,"a"], [1,"b"], [2,"c"]]
+//   enumerate([[88,"a"],[76,"b"],[21,"c"]], idx=1);  // Returns: [[0,"a"], [1,"b"], [2,"c"]]
+//   enumerate([["cat","a",12],["dog","b",10],["log","c",14]], idx=[1:2]);  // Returns: [[0,"a",12], [1,"b",10], [2,"c",14]]

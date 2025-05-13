@@ -1,0 +1,1 @@
+function iec_spade_depth(type) = iec_depth(type) + max([for(spade = iec_spades(type)) spade[1]]);

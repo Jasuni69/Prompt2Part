@@ -1,0 +1,1 @@
+function pocket_handle_hand_size(type) = type[0]; //! Size of the hole for the fingers

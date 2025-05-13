@@ -1,0 +1,51 @@
+module Torus2(m=5,trx=10,a=1,rq=1,d=5,w=2,name,new=true,help)//m=feinheit,trx = abstand mitte,rq = sin verschiebung , a=amplitude, w wellen
+{
+
+//if(new&&w==2)rotate(90/w)WaveEx(grad=360,trx=trx-a/2*1,try=trx+a/2*1,f=w,tf=w,fv=0,tfv=0,r=d/2,ta=a/2,a=-rq/2);
+if(new)rotate(-90/w)WaveEx(grad=360,trx=trx,try=trx,f=w,tf=-w,fv=0,tfv=180,r=d/2,ta=a,a=rq/2,fn=360/m);    
+
+if(!new)echo("<H3> <font color=red> For Torus2 use 'new=true' (WaveEx)");
+Echo("obsolete Torus2 use WaveEx()",color="red",useVersion>23);
+if(new)echo("<H4> <font color=green>Torus2 is using WaveEx");    
+if(!new)rotate ([0,0,0])for (i=[0:m:360])
+    { 
+
+        hull()
+        {
+        rotate ([0,0,i])translate([trx+(sin(w*i)*a),0,0])rotate([90,0,0])cylinder(.01,d1=sin(w*i)*rq+d,d2=0,$fn=200/m,center=false);
+            
+        rotate ([0,0,i-m])translate([trx+(sin(w*(i-m))*a),0,0])rotate([90,0,0])cylinder(.01,d1=sin(w*(i-m))*rq+d,$fn=200/m,d2=0,center=false);
+        } 
+    }
+ 
+
+ InfoTxt("Torus2",["Wellen",w,"amplitude",a,"Radius",trx],name);
+ HelpTxt("Torus2",["m",m,"trx",trx,"a",a,"rq",rq,"d",d,"w",w,"name",name],help);
+}
+
+
+/** \name Kegel
+\page Objects
+Kegel() creates a cone
+\param d or d1  base diameter
+\param d2 top diameter
+\param v  slope
+\param grad  slope in degree
+\param h height (optional)
+\param r1,r2  optional ⇒ d1,d2
+\param rad edge radius
+\param x0  center can move outside for negative form
+\param x1 lap radius for negative rad [r1,r2]
+\param lap overlap extrusion
+\param fn,fs fragments, fragment size
+\param center center
+\param name,help  name help
+*/
+
+//Kegel(rad=[.5,1],d=8,grad=53,d2=0.1,center=+0);
+
+//Kegel(rad=0.2*[1,1,1,1],x0=2,d=10,d2=5);
+
+//Kegel(5,2,rad=-[.5,.25],lap=[1,1]);
+
+//Kegel(5,2,rad=[.5,-.25],lap=[0,+1], use2D=1);

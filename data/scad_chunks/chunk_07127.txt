@@ -1,0 +1,7 @@
+module Hex(size=7.0)R(180){
+  difference(){
+    Prisma(25,z=5);
+    HexGrid(6,es=size+2)Kassette(gon=6,size=size,r=.25,r1=1,r2=.75);
+  }
+  
+}

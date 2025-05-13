@@ -1,0 +1,3 @@
+function RotZt(t) = RotZ(360*t);
+
+// Provides the variation in height of the roller coaster track.

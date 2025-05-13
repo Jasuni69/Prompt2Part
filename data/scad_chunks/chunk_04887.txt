@@ -1,0 +1,13 @@
+function circlePoints(r=undef, d=undef, z=undef) = let(
+    _r = r!=undef? r : d!=undef? d*0.5 : 1,
+    _c = _pu_segmentsPerCircle(_r),
+    _s = 360 / _c
+) [for(i=[0:_c-1]) let(_cos = cos(i*_s), _sin = sin(i*_s)) z==undef? [_cos * _r, _sin * _r,] : [_cos * _r, _sin * _r, z]];
+
+//  function appendValueToPoints(pts, value)
+//
+//  Appends a value to every point in the list. Typically used when you want to turn a 2D point list into a 3D point list.
+
+//  pts      (list)   List of points.
+//  value    (number) Value to be apended to every point in the list.
+//  return   (point)  Resulting list of points with the extra value.

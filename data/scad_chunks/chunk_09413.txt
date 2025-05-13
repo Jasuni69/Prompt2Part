@@ -1,0 +1,19 @@
+function vector_axis(v1,v2) =
+	let(
+		eps = 1e-6,
+		v1 = point3d(v1/norm(v1)),
+		v2 = point3d(v2/norm(v2)),
+		v3 = (norm(v1-v2) > eps && norm(v1+v2) > eps)? v2 :
+			(norm(vabs(v2)-V_UP) > eps)? V_UP :
+			V_RIGHT
+	) normalize(cross(v1,v3));
+
+
+// Section: Coordinates Manipulation
+
+// Function: point2d()
+// Description:
+//   Returns a 2D vector/point from a 2D or 3D vector.
+//   If given a 3D point, removes the Z coordinate.
+// Arguments:
+//   p = The coordinates to force into a 2D vector/point.

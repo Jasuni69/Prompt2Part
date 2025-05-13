@@ -1,0 +1,1 @@
+function z_y_x_wall(cell) = get_type(cell) == Z_Y_X_WALL;

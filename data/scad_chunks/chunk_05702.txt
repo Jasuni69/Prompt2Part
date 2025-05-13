@@ -1,0 +1,12 @@
+function _squircle_fg(size, squareness) = [
+    let(
+        sq = _linearize_squareness(squareness),
+        size = is_num(size) ? [size,size] : point2d(size),
+        aspect = size[1] / size[0],
+        r = 0.5 * size[0],
+        astep = $fn>=12 ? 90/round($fn/4) : 360/48
+    ) for(a=[360:-astep:0.01]) let(
+        theta = a + sq * sin(4*a) * 30/PI, // tighter angle steps at corners
+        p = squircle_radius_fg(sq, r, theta)
+    ) p*[cos(theta), aspect*sin(theta)]
+];

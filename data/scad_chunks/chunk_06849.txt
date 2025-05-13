@@ -1,0 +1,20 @@
+module test_xyz_to_altaz() {
+    assert(approx(xyz_to_altaz(   0,100,   0),[  0,  0,100]));
+    assert(approx(xyz_to_altaz(   0,  0, 100),[ 90,  0,100]));
+    assert(approx(xyz_to_altaz(   0,  0,-100),[-90,  0,100]));
+    assert(approx(xyz_to_altaz( 100,  0,   0),[  0, 90,100]));
+    assert(approx(xyz_to_altaz(-100,  0,   0),[  0,-90,100]));
+    assert(approx(xyz_to_altaz(100*sqrt(2)/2,0,100*sqrt(2)/2),[ 45, 90,100]));
+    assert(approx(xyz_to_altaz(100*sqrt(2)/2,0,-100*sqrt(2)/2),[-45, 90,100]));
+    assert(approx(xyz_to_altaz([   0,100,   0]),[  0,  0,100]));
+    assert(approx(xyz_to_altaz([   0,  0, 100]),[ 90,  0,100]));
+    assert(approx(xyz_to_altaz([   0,  0,-100]),[-90,  0,100]));
+    assert(approx(xyz_to_altaz([ 100,  0,   0]),[  0, 90,100]));
+    assert(approx(xyz_to_altaz([-100,  0,   0]),[  0,-90,100]));
+    assert(approx(xyz_to_altaz([100*sqrt(2)/2,0,100*sqrt(2)/2]),[ 45, 90,100]));
+    assert(approx(xyz_to_altaz([100*sqrt(2)/2,0,-100*sqrt(2)/2]),[-45, 90,100]));
+}
+test_xyz_to_altaz();
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

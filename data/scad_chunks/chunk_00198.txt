@@ -1,0 +1,26 @@
+module rails()
+    layout([for(r = rails) carriage_width(rail_carriages(r)[0])], 10)
+        rotate(-90) {
+            rail = rails[$i];
+            carriages = rail_carriages(rail);
+            carriage = carriages[0];
+            screw = rail_screw(rail);
+            nut = screw_nut(screw);
+            washer = screw_washer(screw);
+
+            rail_assembly(carriage, length, pos * carriage_travel(carriage, length) / 2, $i<2 ? grey(20) : "green", $i<2 ? grey(20) : "red");
+
+            if(len(carriages) > 1)
+                translate([-carriage_travel(carriages[1], length) / 2, 0])
+                    carriage(carriages[1]);
+
+            rail_screws(rail, length, sheet + nut_thickness(nut, true) + washer_thickness(washer));
+
+            rail_hole_positions(rail, length, 0)
+                translate_z(-sheet)
+                    vflip()
+                        nut_and_washer(nut, true);
+         }
+
+if($preview)
+    rails();

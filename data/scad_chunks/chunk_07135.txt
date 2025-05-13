@@ -1,0 +1,50 @@
+include<ub.scad>//->http://v.gd/ubaer or https://github.com/UBaer21/UB.scad
+/*[Hidden]*/
+  useVersion=22.185;
+  designVersion=1.2;
+  $info=true;
+  fn=36;
+  
+/*[ Points ]*/
+
+pointsOcta=octa(10);
+
+
+// show Points
+Points(pointsOcta,hull=false,center=false);
+
+// make Polyhedron
+PolyH(pointsOcta);
+
+
+// move Points
+
+pointsTrans=mPoints(pointsOcta,r=45,t=30,s=2);
+
+PolyH(pointsTrans);
+
+
+// 2D
+
+points2D =quad();
+points2Dtrans=mPoints(points2D,r=45,t=15);
+
+%T(50)union(){
+  polygon(points2D);
+  polygon(points2Dtrans);
+}
+
+// 2D point corner rounding
+p1=[
+[0,0],
+[10,0],
+[10,10],
+[5,5],
+[0,10],
+];
+
+
+%T(80)union(){
+Points(p1,hull=true);
+T(15)PolyDeg(p1,rad=1,txt=.5);
+T(0,15)PolyRund(p1,r=1,ir=2,ofs=0,delta=0,messpunkt=true);

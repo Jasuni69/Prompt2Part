@@ -1,0 +1,84 @@
+module Caliper(l=20,in=1,s,center=true,messpunkt=true,translate=[0,0,0],end=1,h=1.1,render=false,l2,txt,size=$vpd/15,help){
+    
+    s=s?s:size;
+    txt=is_undef(txt)?str(l,"mm"):str(txt);
+    center=is_bool(center)?center?1:0:center;
+    textl=in>1?s/3:s/4*(len(str(txt)));// end=0 use own def
+    line=s/20;
+    translate=v3(translate);
+    t=v3(translate);
+    //l2=is_undef(l2)?s:l2;
+    
+    
+    if($preview||render)translate(translate)translate(in>1?center?[0,0]:[0,l/2]:center?[0,0]:[l/2,0]){
+      if(end==1&&h)Col(5){
+        rotate(in?in==2?90:in==3?-90:180:0)linear_extrude(h,center=true)Mklon(tx=l/2,mz=0)polygon([[max(-5,-l/3),0],[0,s],[0,0]]);
+        rotate(in?in==2?90:in==3?-90:180:0)linear_extrude(h,center=true)Mklon(tx=-l/2,mz=0)polygon([[max(-5,-l/3),0],[0,-s],[0,0]]);
+        
+        Text(h=h+.1,text=txt,center=true,size=s/4);
+        }
+     else if(end==2&&h)Col(3)union(){
+        rotate(in?in==2?90:in==3?-90:180:0)MKlon(tx=l/2)T(-(l-textl)/4,0)cube([max(l-textl,.01)/2,line,h],center=true);
+        rotate(in?in==2?90:in==3?-90:180:0)MKlon(tx=l/2)T(-line/2)cube([line,s,h],center=true);    
+        translate([(l<textl+1&&in<2)?l/2+textl/2+1:0,l<textl+1&&in>1?l/2+textl/2+1:0,0])Text(h=h+.1,text=txt,center=true,size=s/4);
+         if(l<textl+1)
+             if(in<2)translate([.5,0])square([l+.5,line],true);
+                else translate([0,.5])square([line,l+.5],true);
+         
+        }
+        else Col(1)union(){
+            s=s==$vpd/15?5:s;
+            line=s/20;
+            l2=is_undef(l2)?s:l2;
+            textl=in>1?s/3:s/3*len(txt);
+            textOut=l<textl+s||(abs(translate.y)>l/2&&in==2||in==3)||(abs(translate.x)>l/2&&in!=2&&in!=3);
+            textOffset=l<textl+s?l/2+textl/2+1:0;
+            diffT=in!=2&&in!=3? t.x:-t.y;
+            
+            // text line
+        if(l-textl>0)rotate(in?in==2?90:in==3?-90:180:0){
+         if(!textOut&&l-textl - diffT*2>0) T(-l/2)T((l-textl)/4 +diffT/2,0)square([(l-textl)/2-diffT,line],center=true);
+         if(!textOut&&l-textl + diffT*2>0) T( l/2)T(-(l-textl)/4 +diffT/2,0)square([(l-textl)/2+diffT,line],center=true);
+        }
+            //End lines
+        translate(in!=2&&in!=3?[-translate.x,0]:[0,-translate.y])rotate(in?in==2?90:in==3?-90:180:0){MKlon(tx=l/2){
+           T(+line/2) square([line,l2],center=true);
+           Pfeil([0,min(l/3,s/2)],b=[line,l2],center=[-1,1],name=false);
+        }
+        if(textOut) square([l,line],true); // Verbindung Pfeile
+   // text pos
+        translate(in!=2&&in!=3?[(in?1:-1) * -translate.x,0]:[(in==2?1:-1)*translate.y,0]){
+          translate([textOffset,0])rotate(in>1?-90:180) Text(h=0,text=txt,center=true,size=s/4,name=false);
+        }
+   // verbindung text ausserhalb
+        tOutDist=(in!=2&&in!=3)? t.x *(in   ?-1:1) + textOffset :
+                                 t.y *(in==3?-1:1) + textOffset ;                                
+                                
+        if(textOut&&tOutDist)rotate(tOutDist<0?180:0)translate([0,-line/2])square([abs(tOutDist)-textl/2 ,line]);
+        }
+        
+        // verlängerungen translate auf 0
+       if(translate.y&&in!=2&&in!=3)translate([-translate.x,0])MKlon(tx=l/2) mirror([0,translate.y>0?1:0,0])square([line,abs(translate.y)],false);
+       if(translate.x&&(in==2||in==3))translate([0,-translate.y])MKlon(ty=l/2) mirror([translate.x>0?1:0,0,0])square([abs(translate.x),line],false);    
+       //if(translate.x) mirror([translate.x>0?1:0,0,0])T(l/2,-line/2)square([abs(translate.x),line],false);
+
+        }
+    }
+ Echo("Caliper will render",color="warning",condition=render);  
+if(h&&end)    
+Pivot(messpunkt=messpunkt,p0=translate,active=[1,1,1,1,norm(translate)]);
+    
+    HelpTxt("Caliper",[
+    "l",l,
+    "in",in,
+    "size",size,
+    "center",center,
+    "messpunkt",messpunkt,
+    "translate",translate,
+    "end",end,
+    "h",h,
+    "render",render,
+    "l2",l2,
+    "txt",txt]
+    ,help);
+}

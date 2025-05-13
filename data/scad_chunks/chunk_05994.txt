@@ -1,0 +1,13 @@
+module _pin_nub(r, nub, h)
+{
+    L = h / 4;
+    rotate_extrude(){
+      polygon(
+       [[ 0,-nub/2],
+        [-r,-nub/2],
+        [-r-nub, nub/2],
+        [-r-nub, nub/2+L],
+        [-r, h],
+        [0, h]]);
+     }
+}

@@ -1,0 +1,1 @@
+function display_pcb_offset(type)   = type[6];  //! 3D offset of the PCB centre

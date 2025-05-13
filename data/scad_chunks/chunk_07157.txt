@@ -1,0 +1,42 @@
+module MicroSD(ofs=0.15,h=.8,center=false,notch=true,help){
+/*
+full-size SD card	32 x 24 x 2.1 mm	2g
+miniSD card	21.5 x 20 x 1.4 mm	0.8g
+microSD card	15 x 11 x 1 mm
+*/
+HelpTxt("MicroSD",["ofs",ofs,"h",h,"center",center,"notch",notch],help);
+p=[
+[0,0],
+[9.7,0],
+[9.7,5.1],
+[11,6.2],
+if(notch)[11,8],// notch
+if(notch)[10.3,8.5],//< notch
+if(notch)[10.3,9.5],//< notch
+if(notch)[11,10],// notch
+[11,15],
+[0,15],
+];
+
+  T(center?[-11/2,0,-h/2-ofs]:0){
+    linear_extrude(h+ofs*2,center=false)offset(ofs)polygon(p);
+    
+    T(-ofs,15-1.8+ofs,.001)intersection(){
+      mirror([0,0,1])linear_extrude(.3)offset(ofs)offset(-ofs)square([11+ofs*2,1.8]);
+      T(11/2,25-ofs)cylinder(5,d=50,center=true);
+    }
+  }
+
+}
+
+/** \name Plug
+Plug() creates a Plug for a tube
+\param dia  diameter
+\param h    height
+\param wall wall thickness
+\param lip  tube wall thickness
+\param rad  radius of the top
+\param clips number of clips
+\param infoPos imprint of the diameter position
+\param info  true for imprint diameter
+*/

@@ -1,0 +1,36 @@
+function is_region_simple(region, eps=EPSILON) =
+   let(region=force_region(region))
+   assert(is_region(region), "\nInput is not a region.")
+   [for(p=region) if (!is_path_simple(p,closed=true,eps=eps)) 1] == []
+   &&
+   [for(i=[0:1:len(region)-2])
+       if (_region_region_intersections([region[i]], list_tail(region,i+1), eps=eps)[0][0] != []) 1
+   ] ==[];
+  
+  
+// Function: make_region()
+// Synopsis: Converts lists of intersecting {{polygons}} into valid {{regions}}.
+// SynTags: Region
+// Topics: Regions, Paths, Polygons, List Handling
+// See Also: force_region(), region()
+// 
+// Usage:
+//   region = make_region(polys, [nonzero], [eps]);
+// Description:
+//   Takes a list of {{polygons}} that may intersect themselves or cross each other 
+//   and converts it into a properly defined {{region}} without these defects.
+// Arguments:
+//   polys = list of polygons to use
+//   nonzero = set to true to use nonzero rule for polygon membership.  Default: false
+//   eps = Epsilon for geometric comparisons.  Default: `EPSILON` (1e-9)
+// Example(2D,NoAxes):  The pentagram is self-intersecting, so it is not a region.  Here it becomes five triangles:
+//   pentagram = turtle(["move",100,"left",144], repeat=4);
+//   region = make_region(pentagram);
+//   rainbow(region)stroke($item, width=1,closed=true);
+// Example(2D,NoAxes):  Alternatively with the nonzero option you can get the perimeter:
+//   pentagram = turtle(["move",100,"left",144], repeat=4);
+//   region = make_region(pentagram,nonzero=true);
+//   rainbow(region)stroke($item, width=1,closed=true);
+// Example(2D,NoAxes):  Two crossing squares become two L-shaped components
+//   region = make_region([square(10), move([5,5],square(8))]);
+//   rainbow(region)stroke($item, width=.3,closed=true);

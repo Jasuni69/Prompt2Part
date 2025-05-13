@@ -1,0 +1,1 @@
+function box_corner_overlap(type) = box_wall(type);

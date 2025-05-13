@@ -1,0 +1,11 @@
+module widget(thickness) {
+    vitamin(str("widget(", thickness, "): Rivet like thing for ", thickness, "mm sheets"));
+    t = 1;
+    color("silver") {
+        cylinder(d = 3, h = thickness + 2 * eps, center = true);
+
+        for(end = [-1, 1])
+            translate_z(end * (thickness / 2 + t / 2 + eps))
+                cylinder(d = 4, h = t, center = true);
+    }
+}

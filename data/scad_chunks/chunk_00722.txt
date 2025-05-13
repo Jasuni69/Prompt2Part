@@ -1,0 +1,1 @@
+function pi_base_width(type)    = type[1]; //! Width of the base

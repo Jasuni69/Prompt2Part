@@ -1,0 +1,9 @@
+function hsl(h,s=1,l=0.5,a) =
+    let(
+        h=posmod(h,360)
+    ) [
+        for (n=[0,8,4])
+          let(k=(n+h/30)%12)
+          l - s*min(l,1-l)*max(min(k-3,9-k,1),-1),
+        if (is_def(a)) a
+    ];

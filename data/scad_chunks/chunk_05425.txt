@@ -1,0 +1,25 @@
+function _edges(v, except=[]) =
+    v==[] ? EDGES_NONE :
+    (is_string(v) || is_vector(v) || _is_edge_array(v))? _edges([v], except=except) :
+    (is_string(except) || is_vector(except) || _is_edge_array(except))? _edges(v, except=[except]) :
+    except==[]? _normalize_edges(sum([for (x=v) _edge_set(x)])) :
+    _normalize_edges(
+        _normalize_edges(sum([for (x=v) _edge_set(x)])) -
+        sum([for (x=except) _edge_set(x)])
+    );
+
+
+/// Internal Module: _show_edges()
+/// Topics: Edges, Debugging
+/// Usage:
+///   _show_edges(edges, [size=], [text=], [txtsize=]);
+/// Description:
+///   Draws a semi-transparent cube with the given edges highlighted in red.
+/// Arguments:
+///   edges = The edges to highlight.
+///   size = The scalar size of the cube.
+///   text = The text to show on the front of the cube.
+///   txtsize = The size of the text.
+/// See Also: _edges(), EDGES_NONE, EDGES_ALL
+/// Example:
+///   _show_edges(size=30, edges=["X","Y"]);

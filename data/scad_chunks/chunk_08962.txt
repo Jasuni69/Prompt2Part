@@ -1,0 +1,8 @@
+function generate(nbr_dirs, compatibilities, wf, notCollaspedCoords, collapsing_method) =
+	len(notCollaspedCoords) == 0 ? collapsed_tiles(wf) :
+	let(
+		coord_weights = collapsing_method(wf, notCollaspedCoords),
+		weights = coord_weights[2],
+		nwf = propagate(nbr_dirs, compatibilities, wf_collapse(wf, coord_weights.x, coord_weights.y, weights), coord_weights)
+	)
+	generate(nbr_dirs, compatibilities, nwf, wf_not_collapsed_coords(nwf, notCollaspedCoords), collapsing_method);

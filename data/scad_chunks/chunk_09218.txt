@@ -1,0 +1,1 @@
+function _zdominant_yd(yd, ay, az) = (yd >= 0 ? yd - az : yd) + ay;

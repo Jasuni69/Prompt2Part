@@ -1,0 +1,1 @@
+function rocker_pivot(type)    = type[11];  //! Pivot distance from the back of the flange

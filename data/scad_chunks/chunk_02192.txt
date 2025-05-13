@@ -1,0 +1,4 @@
+module bbox_base(type)  //! Default base, can be overridden to customise
+    render_2D_sheet(bbox_base_sheet(type))
+        dxf(str(bbox_name(type), "_base"))
+            bbox_base_blank(type);

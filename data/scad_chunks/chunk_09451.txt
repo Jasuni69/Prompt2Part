@@ -1,0 +1,20 @@
+function matrix3_apply(pts, matrices) = let(m = matrix3_mult(matrices)) [for (p = pts) point2d(m * concat(point2d(p),[1]))];
+
+
+// Function: matrix4_apply()
+// Usage:
+//   matrix4_apply(pts, matrices)
+// Description:
+//   Given a list of transformation matrices, applies them in order to the points in the point list.
+// Arguments:
+//   pts = A list of 3D points to transform.
+//   matrices = A list of 4x4 matrices to apply, in order.
+// Example:
+//   npts = matrix4_apply(
+//     pts = [for (x=[0:3]) [5*x,0,0]],
+//     matrices =[
+//       matrix4_scale([2,1,1]),
+//       matrix4_zrot(90),
+//       matrix4_translate([5,5,10])
+//     ]
+//   );  // Returns [[5,5,10], [5,15,10], [5,25,10], [5,35,10]]

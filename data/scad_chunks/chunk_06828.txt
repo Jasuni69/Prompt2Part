@@ -1,0 +1,6 @@
+module test_bosl_version_str() {
+    assert(is_string(bosl_version_str()));
+    v = bosl_version();
+    assert(bosl_version_str() == str(v[0],".",v[1],".",v[2]));
+}
+test_bosl_version_str();

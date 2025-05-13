@@ -1,0 +1,2 @@
+function rabbit_clip(type, length, width,  snap, thickness, depth, compression=0.1,  clearance=.1, lock=false, lock_clearance=0,
+                   splinesteps=8, anchor, orient, spin=0) = no_function("rabbit_clip");

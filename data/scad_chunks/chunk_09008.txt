@@ -1,0 +1,13 @@
+function delaunayBadTriangles(d, p, _indices_hash) = 
+    let(circles = delaunay_circles(d)) 
+	[
+        for(t = hashmap_keys(delaunay_triangles(d)))
+		if(inCircumcircle(t, p, circles, _indices_hash))
+		t
+    ];
+
+/* 
+    is p in t?
+    t: triangle indices
+	circles: a hashmap
+*/

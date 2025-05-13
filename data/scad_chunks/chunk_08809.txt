@@ -1,0 +1,3 @@
+function _neighbors(fcord, seed, grid_w, gw, gh) = 
+    let(range = [-1:1])
+    [for(y = range, x = range) cell_pt(fcord, grid_w, seed, x, y, gw, gh)];

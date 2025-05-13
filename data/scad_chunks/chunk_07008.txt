@@ -1,0 +1,13 @@
+module test__is_edge_array() {
+    assert(_is_edge_array([[0,0,0,0],[0,0,0,0],[0,0,0,0]]));
+    assert(_is_edge_array([[1,1,1,1],[1,1,1,1],[1,1,1,1]]));
+    assert(!_is_edge_array([[1,1,1],[1,1,1],[1,1,1]]));
+    assert(!_is_edge_array([[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1]]));
+    assert(!_is_edge_array([[1,1,1,1],[1,1,1,1]]));
+    assert(!_is_edge_array([1,1,1,1]));
+    assert(!_is_edge_array("foo"));
+    assert(!_is_edge_array(42));
+    assert(!_is_edge_array(true));
+    assert(_is_edge_array(_edges(["X","Y"])));
+}
+test__is_edge_array();

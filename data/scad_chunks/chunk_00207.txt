@@ -1,0 +1,50 @@
+
+test_pcb = ["test_pcb", "Test PCB",
+    100, 250, 1.6, // length, width, thickness
+    3,      // Corner radius
+    2.75,   // Mounting hole diameter
+    5.5,    // Pad around mounting hole
+    "green",// Color
+    true,   // True if the parts should be separate BOM items
+    // hole offsets
+    [ [3, 3], [3, -3], [-3, 3], [-3, -3] ],
+    // components
+    [
+        [ 20, -5,  180, "trimpot10"],
+        [ 20, -18,  90, "trimpot10", true],
+        [ 19,  2,   90, "smd_led", LED1206, "blue"],
+        [ 16,  2,   90, "smd_led", LED0805, "red"],
+        [ 13,  2,   90, "smd_led", LED0603, "orange"],
+        [ 10,  2,  -90, "smd_res", L2012C, "1u"],
+        [ 19,  6,  -90, "smd_res", RES1206, "1M"],
+        [ 16,  6,  -90, "smd_res", RES0805, "1K"],
+        [ 13,  6,  -90, "smd_res", RES0603, "100"],
+        [ 10,  6,  -90, "smd_res", RES0502, "10"],
+        [  7,  6,  -90, "smd_res", RES0402, "1"],
+        [ 19, 10,   90, "smd_cap", CAP1206, 1.5, "1uF"],
+        [ 16, 10,   90, "smd_cap", CAP0805, 1.0, "100nF"],
+        [ 13, 10,   90, "smd_cap", CAP0603, 0.7, "10nF"],
+        [ 10, 10,   90, "smd_cap", CAP0502, 0.6, "10nF"],
+        [  7, 10,   90, "smd_cap", CAP0402, 0.5, "10nF"],
+        [ 19, 16,  -90, "smd_tant", TANT_C, "107C"],
+        [ 13, 16,  -90, "smd_tant", TANT_B, "106A"],
+        [  7, 16,  -90, "smd_tant", TANT_A, "105e"],
+        [ 32,  3,  -90, "smd_diode",DO214AC, "SS34"],
+        [ 26,  2,  -90, "smd_pot", TC33X1, "10K"],
+        [ 26,  6,  -90, "smd_coax",U_FL_R_SMT_1],
+        [  8, 23,    0, "smd_250V_fuse", OMT250, "2A 250V"],
+
+        [ 26, 10,  -90, "smd_sot", SOT23, "2N7000"],
+        [ 28, 16,  -90, "smd_sot", SOT223, "LM117"],
+
+        [ 30, 30,  -90, "smd_qfp", QFP50P1200X1200X160_64N, "ATSAM4S4BA"],
+
+        [ 45,  35,   0, "2p54header", 4, 1],
+        [ 60,  35,   0, "2p54header", 5, 1, false, "blue" ],
+        [ 60,  40, 180, "2p54header", 5, 1, false, undef, true],
+        [ 80,  33,   0, "2p54boxhdr", 4, 2],
+        [ 80,  40,   0, "2p54boxhdr", 4, 2, false, true, true],
+        [ 45,  30,   0, "2p54socket", 4, 1, false, 0, false, "red" ],
+        [ 60,  30,   0, "2p54socket", 6, 1],
+
+        [ 59,  60, 180, "led", LED3mm, "red"],

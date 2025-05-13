@@ -1,0 +1,3 @@
+function set_wallType(cell, wallType) = [
+    cell[0], cell[1], wallType, cell[3], cell[4], cell[5], cell[6], cell[7]
+];

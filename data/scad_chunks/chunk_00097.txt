@@ -1,0 +1,14 @@
+module widget_stl() {
+    stl("widget")
+        union() {
+            difference() {
+                rounded_rectangle([30, 30, 3], 2, true);
+                for(x = [-10,10])
+                    for (y=[-10,10])
+                        translate([x,y,-1.5])
+                            cylinder(r=2, h=3.5);
+            }
+
+            render() insert_boss(insert, height, 2.2);
+        }
+}

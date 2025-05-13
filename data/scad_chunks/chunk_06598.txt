@@ -1,0 +1,12 @@
+module test_is_collinear() {
+    assert(is_collinear([-10,-10], [-15, -16], [10,10]) == false);
+    assert(is_collinear([[-10,-10], [-15, -16], [10,10]]) == false);
+    assert(is_collinear([-10,-10], [-15, -15], [10,10]) == true);
+    assert(is_collinear([[-10,-10], [-15, -15], [10,10]]) == true);
+    assert(is_collinear([-10,-10], [ -3,   0], [10,10]) == false);
+    assert(is_collinear([-10,-10], [  0,   0], [10,10]) == true);
+    assert(is_collinear([-10,-10], [  3,   0], [10,10]) == false);
+    assert(is_collinear([-10,-10], [ 15,  15], [10,10]) == true);
+    assert(is_collinear([-10,-10], [ 15,  16], [10,10]) == false);
+}
+*test_is_collinear();

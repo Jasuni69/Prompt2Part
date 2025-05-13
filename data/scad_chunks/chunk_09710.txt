@@ -1,0 +1,7 @@
+function Q_Conj(q) = [-q.x, -q.y, -q.z, q[3]];
+
+
+// Function: Q_Norm()
+// Usage:
+//   Q_Norm(q)
+// Description: Returns the `norm()` "length" of quaternion `q`.

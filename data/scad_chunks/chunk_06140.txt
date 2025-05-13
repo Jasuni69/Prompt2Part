@@ -1,0 +1,78 @@
+function half_of(p, v=UP, cp) =
+    is_vnf(p) ?
+       assert(is_vector(v) && (len(v)==3 || len(v)==4),str("Must give 3-vector or plane specification",v))
+       assert(select(v,0,2)!=[0,0,0], "vector v must be nonzero")
+       let(
+            plane = is_vector(v,4) ? assert(cp==undef, "Don't use cp with plane definition.") v
+                  : is_undef(cp) ? [each v, 0]
+                  : is_num(cp) ? [each v, cp*(v*v)/norm(v)]
+                  : assert(is_vector(cp,3),"Centerpoint must be a 3-vector")
+                    [each v, cp*v]
+       )
+       vnf_halfspace(plane, p)
+   : is_path(p) || is_region(p) ?
+      let(
+          v = (v==UP)? BACK : (v==DOWN)? FWD : v,
+          cp = is_undef(cp) ? [0,0]
+             : is_num(cp) ? v*cp
+             : assert(is_vector(cp,2) || (is_vector(cp,3) && cp.z==0),"Centerpoint must be 2-vector")
+               cp
+      )
+      assert(is_vector(v,2) || (is_vector(v,3) && v.z==0),"Must give 2-vector")
+      assert(!all_zero(v), "Vector v must be nonzero")
+      let(
+          v=unit(v), 
+          bounds = pointlist_bounds(is_region(p)?flatten(p):p),
+          L = 2*max(norm(bounds[0]-cp), norm(bounds[1]-cp)),
+          u = [-v.y,v.x],
+          box = [cp+u*L, cp+(v+u)*L, cp+(v-u)*L, cp-u*L]
+      )
+      intersection(box,p)
+   : assert(false, "Input must be a region, path or VNF");
+
+
+
+/*  This code cut 3d paths but leaves behind connecting line segments
+    is_path(p) ?
+        //assert(len(p[0]) == d, str("path must have dimension ", d))
+        let(z = [for(x=p) (x-cp)*v])
+        [ for(i=[0:len(p)-1]) each concat(z[i] >= 0 ? [p[i]] : [],
+            // we assume a closed path here;
+            // to make this correct for an open path,
+            // just replace this by [] when i==len(p)-1:
+            let(j=(i+1)%len(p))
+            // the remaining path may have flattened sections, but this cannot
+            // create self-intersection or whiskers:
+            z[i]*z[j] >= 0 ? [] : [(z[j]*p[i]-z[i]*p[j])/(z[j]-z[i])]) ]
+        :
+*/
+
+
+// Function&Module: left_half()
+// Synopsis: Masks the right half of an object along the Y-Z plane, leaving the left half.
+// SynTags: Geom, VNF, Path, Region
+// Topics: Partitions, Masking
+// See Also: back_half(), front_half(), right_half(), top_half(), bottom_half(), half_of(), intersection()
+//
+// Usage: as module
+//   left_half([s], [x]) CHILDREN;
+//   left_half(planar=true, [s], [x]) CHILDREN;
+// Usage: as function
+//   result = left_half(p, [x]);
+//
+// Description:
+//   Slices an object at a vertical Y-Z cut plane, and masks away everything that is right of it.
+//   The `s` parameter is needed for the module version to control the size of the masking cube.
+//   If `s` is too large then the preview display will flip around and display the wrong half,
+//   but if it is too small it won't fully mask your model.  
+//
+// Arguments:
+//   p = VNF, region or path to slice (function version)
+//   s = Mask size to use.  Use a number larger than twice your object's largest axis.  If you make this too large, OpenSCAD's preview rendering may display the wrong half.  (Module version)  Default: 100
+//   x = The X coordinate of the cut-plane.  Default: 0
+//   planar = If true, perform a 2D operation.  (Module version)  Default: false. 
+// Examples:
+//   left_half() sphere(r=20);
+//   left_half(x=-8) sphere(r=20);
+// Example(2D):
+//   left_half(planar=true) circle(r=20);

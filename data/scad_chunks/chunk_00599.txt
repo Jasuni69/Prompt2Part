@@ -1,0 +1,3 @@
+washers = [M2_washer, M2p5_washer, M3_washer, M3p5_washer, M4_washer, M5_washer, M6_washer, M8_washer, M3_rubber_washer];
+
+use <washer.scad>

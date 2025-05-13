@@ -1,0 +1,61 @@
+function reorient(
+    anchor, spin, orient,
+    size, size2, shift,
+    r,r1,r2, d,d1,d2, l,h,
+    vnf, path, region,
+    extent=true,
+    offset=[0,0,0],
+    cp=[0,0,0],
+    anchors=[],
+    two_d=false,
+    axis=UP, override, 
+    geom,
+    p=undef
+) = 
+    assert(is_undef(anchor) || is_vector(anchor) || is_string(anchor), str("Invalid anchor: ",anchor))
+    assert(is_undef(spin) || is_finite(spin), str("Invalid spin: ",spin))
+    assert(is_undef(orient) || is_vector(orient,3), str("Invalid orient: ",orient))
+    let(
+        anchor = default(anchor, CENTER),
+        spin =   default(spin,   0),
+        orient = default(orient, UP),
+        region = !is_undef(region)? region :
+            !is_undef(path)? [path] :
+            undef,
+        geom = is_def(geom)? geom :
+            attach_geom(
+                size=size, size2=size2, shift=shift,
+                r=r, r1=r1, r2=r2, h=h,
+                d=d, d1=d1, d2=d2, l=l,
+                vnf=vnf, region=region, extent=extent,
+                cp=cp, offset=offset, anchors=anchors,
+                two_d=two_d, axis=axis, override=override
+            ),
+        $attach_to = undef,
+        $anchor_override= undef,
+        $attach_alignment = undef
+    ) _attach_transform(anchor,spin,orient,geom,p);
+
+
+// Function: named_anchor()
+// Synopsis: Creates an anchor data structure.
+// Topics: Attachments
+// See Also: reorient(), attachable()
+// Usage:
+//   a = named_anchor(name, pos, [orient], [spin]);
+//   a = named_anchor(name, [pos], rot=, [flip=]);
+// Description:
+//   Creates an anchor data structure.  You can specify the position, orient direction and spin directly.
+//   Alternatively for the 3D case you can give a 4x4 rotation matrix which can specify the orient and spin, and optionally
+//   the position, using a translation component of the matrix.  If you specify `pos` along with `rot` then the position you
+//   give overrides any translation included in `rot`.  For a step-by-step explanation of attachments,
+//   see the [Attachments Tutorial](Tutorial-Attachments).
+// Arguments:
+//   name = The string name of the anchor.  Lowercase.  Words separated by single dashes.  No spaces.
+//   pos = The [X,Y,Z] position of the anchor.
+//   orient = A vector pointing in the direction parts should project from the anchor position.  Default: UP
+//   spin = If needed, the angle to rotate the part around the direction vector.  Default: 0
+//   ---
+//   info = structure listing info to be propagated to the attached child, e.g. "edge_anchor"
+//   rot = A 4x4 rotations matrix, which may include a translation
+//   flip = If true, flip the anchor the opposite direction.  Default: false

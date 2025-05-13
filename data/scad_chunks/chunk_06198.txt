@@ -1,0 +1,86 @@
+module nut_trap_inline(length, spec, shape, l, height, h, nutwidth, anchor, orient, spin) {
+  tempspec = _get_spec(spec, "nut_info", "nut_trap", shape=shape, thickness=undef);
+  nutdata = _struct_reset(tempspec, [["width", nutwidth]]);
+  $screw_spec = is_def(spec) ? nutdata : $screw_spec;
+  dummy = _validate_nut_spec(nutdata);
+  length = one_defined([l,length,h,height],"l,length,h,height");
+  assert(is_num(length) && length>0, "length must be a positive number");
+  nutwidth = struct_val(nutdata,"width")+2*get_slop();
+  default_tag("remove"){
+    if (shape=="square")
+      cuboid([nutwidth,nutwidth,length], anchor=anchor, orient=orient, spin=spin) children();
+    else
+      linear_sweep(hexagon(id=nutwidth),height=length, anchor=anchor,orient=orient, spin=spin) children();
+  }
+}
+
+
+
+// Section: Screw and Nut Information
+
+
+// Function: screw_info()
+// Synopsis: Returns the dimensions and other info for the given screw.
+// Topics: Threading, Screws
+// See Also: screw(), screw_hole()
+// Usage:
+//   info = screw_info(name, [head], [drive], [thread=], [drive_size=], [oversize=], [head_oversize=])
+// Description:
+//   Look up screw characteristics for the specified screw type.
+//   See [screw and nut parameters](#section-screw-and-nut-parameters) for details on the parameters that define a screw.
+//   .
+//   The `oversize=` parameter adds the specified amount to the screw and head diameter to make an
+//   oversized screw.  Does not affect length, thread pitch or head height.
+//   .
+//   Note that flat head screws are defined by two different diameters, the theoretical maximum diameter, "head_size_sharp"
+//   and the actual diameter, "head_size".  The screw form is defined using the theoretical maximum, which gives
+//   sharp circular edge at the top of the screw.  Real screws have a flat chamfer around the edge.  
+// Figure(2D,Med,NoAxes,VPD=39,VPT=[0,-4,0],VPR=[0,0,0]):  Flat head screw geometry
+//   polysharp = [[0, -5.07407], [4.92593, -5.07407], [10, 0], [10, 0.01], [0, 0.01]];
+//   color("blue"){
+//       xflip_copy()polygon(polysharp);
+//       back(1/2)stroke([[-10,0],[10,0]],endcaps="arrow2",width=.15);    
+//       back(1.7)text("\"head_size_sharp\"", size=.75,anchor=BACK);
+//   }
+//   poly= [[0, -5.07407], [4.92593, -5.07407], [9.02, -0.98], [9.02, 0.01], [0, 0.01]];
+//   xflip_copy()polygon(poly);
+//   rect([10,10],anchor=TOP);
+//   color("black"){
+//     fwd(1/2)stroke([[-9.02,0],[9.02,0]],endcaps="arrow2",width=.15);
+//     fwd(1)text("\"head_size\"", size=.75,anchor=BACK);
+//   }  
+// Continues:
+//   The output is a [struct](structs.scad) with the following fields:
+//   . 
+//   Field              | What it is
+//   ------------------ | ---------------
+//   "type"           | Always set to "screw_info"
+//   "system"         | Either `"UTS"` or `"ISO"` (used for correct tolerance computation).
+//   "origin"         | Module that generated the structure
+//   "name"           | Screw name used to make the structure
+//   "diameter"       | The nominal diameter of the screw shaft in mm.
+//   "pitch"          | The thread pitch in mm.  (0 for no threads)
+//   "head"           | The type of head (a string)
+//   "head_size"      | Size of the head (usually diameter) in mm.
+//   "head_size_sharp"| Theoretical head diameter for a flat head screw if it is made with sharp edges (or for countersinks)
+//   "head_angle"     | Countersink angle for flat heads.
+//   "head_height"    | Height of the head beyond the screw's nominal length.  The screw's total length is "length" + "head_height".  For flat heads "head_height" is zero, because they do not extend the screw.  
+//   "drive"          | The drive type (`"phillips"`, `"torx"`, `"slot"`, `"hex"`, `"none"`)
+//   "drive_size"     | The drive size, either a drive number (phillips, torx) or a dimension in mm (hex, slot).
+//   "drive_depth"    | Depth of the drive recess.
+//   "length"         | Length of the screw in mm measured in the customary fashion.  For flat head screws the total length and for other screws, the length from the bottom of the head to the screw tip.
+//   "thread_len"     | Length of threaded portion of screw in mm
+//   "shaft_oversize"| Amount to oversize the threads
+//   "head_oversize"   | Amount to oversize the head
+//   .
+//   If you want to define a custom drive for a screw you will need to provide the drive size and drive depth.  
+//
+// Arguments:
+//   name = screw specification, e.g. "M5x1" or "#8-32".  See [screw naming](#subsection-screw-naming).
+//   head = head type.  See [screw heads](#subsection-screw-heads)  Default: none
+//   drive = drive type.  See [screw heads](#subsection-screw-heads) Default: none
+//   ---
+//   thread = thread type or specification. See [screw pitch](#subsection-standard-screw-pitch). Default: "coarse"
+//   drive_size = size of drive recess to override computed value
+//   shaft_oversize = amount to increase screw diameter for clearance holes.  Default: 0
+//   head_oversize = amount to increase head diameter for countersink holes.  Default: 0

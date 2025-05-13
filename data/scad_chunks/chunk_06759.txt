@@ -1,0 +1,7 @@
+module test_f_log() {
+    _test_fn1arg(
+        function (a) f_log(a),
+        [[1,0],[100,2],[10000,4]]
+    );
+}
+test_f_log();

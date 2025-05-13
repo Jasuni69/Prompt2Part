@@ -1,0 +1,14 @@
+module test_struct_val() {
+    st = [["Foo",91],["Bar",28],[true,99],["Baz",9],[[5,4],3], [7,92]];
+    assert(struct_val(st,"Foo") == 91);
+    assert(struct_val(st,"Bar") == 28);
+    assert(struct_val(st,"Baz") == 9);
+    assert(struct_val(st,"Baz",5) == 9);
+    assert(struct_val(st,"Qux") == undef);
+    assert(struct_val(st,"Qux",5) == 5);
+    assert(struct_val(st,[5,4])==3);
+    assert(struct_val(st,true)==99);
+    assert(struct_val(st,5) == undef);
+    assert(struct_val(st,7) == 92);
+}
+test_struct_val();

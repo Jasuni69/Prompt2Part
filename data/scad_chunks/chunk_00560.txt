@@ -1,0 +1,22 @@
+module ttrack_bolt(type, length) {
+    L = tbolt_head_length(type);
+    W = tbolt_head_width(type);
+    T = tbolt_head_thickness(type);
+    distance = L - W;
+
+    D = tbolt_thread(type);
+    pitch = metric_coarse_pitch(D);
+
+    vitamin(str(tbolt_description(type), ":", "M", D, " x ", length, "mm"));
+
+    color(silver) {
+        hull()
+            for (x = [-1, 1])
+                translate([x * distance/2, 0, 0])
+                    cylinder(d=W, h=T, center=true);
+
+        translate_z((length/2))
+            male_metric_thread(D, pitch, length - T, center = true, top = -1, bot = 0, solid = true, colour = undef);
+    }
+
+}

@@ -1,0 +1,28 @@
+function partNameTextSelector(t=$t) =
+          let(partSets=[
+             "screws,base,mountEnds"  ,"base"
+            ,"screws,base"            ,"base"
+            ,"base,mountEnds(count=2)","mountEnds"
+            ,"mountEnds(count=1)"     ,"screws"
+            ]) partSets[round(t*len(partSets))];
+
+//this is the actual call to the library to render parts
+//with names returned by the partNameTextSelector function
+assemble(partNameTextSelector($t))
+      mount(); //everything in this demo (but screws) is constructed
+              //inside mount() module
+              //which is coded below
+
+//if you do not want animations
+//you can specify part names directly instead, like:
+// assemble("screws,base,mountEnds(count=1)") mount();
+
+
+//the autocolor()function used below is passed this custom olor table
+partColors= [
+                          ["base",khaki,0.5]
+                          ,["mountEnds",pink,.6]
+                          ,["screws",black,.5]
+                        ];
+
+//here in this module we construct everything

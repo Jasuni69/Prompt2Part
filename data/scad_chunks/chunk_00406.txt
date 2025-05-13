@@ -1,0 +1,6 @@
+module variac_holes(type, h = 100) {    //! Drill panel holes for specified variac
+    variac_hole_positions(type)
+        drill(screw_clearance_radius(variac_screw(type)), h);
+
+    drill(variac_shaft_dia(type) / 2 + 1, h);
+}

@@ -1,0 +1,3 @@
+function box_bezel_height(type, bottom) = //! Bezel height for top or bottom
+    let(t1 = sheet_thickness(box_base_sheet(type)), t2 = sheet_thickness(box_top_sheet(type)))
+        box_corner_rad(type) + box_profile_overlap(type) + (bottom ? max(t1, t2) : t2) - sheet_thickness(box_sheets(type));

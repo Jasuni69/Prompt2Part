@@ -1,0 +1,1 @@
+function screw_thread_diameter(type)  = type[13];    //! Thread diameter, if different from nominal diameter

@@ -1,0 +1,39 @@
+function while(init, cond, func) =
+    assert(is_function(cond))
+    assert(is_function(func))
+    let( a = function(x,i) cond(i,x) ? a(func(i,x),i+1) : x )
+    a(init,0);
+
+
+// Function: for_n()
+// Synopsis: Iteratively calls a work function `n` times, returning the final result.
+// Topics: Function Literals, Looping, Iteration
+// See Also: map(), filter(), reduce(), accumulate(), while()
+// Usage:
+//   x = for_n(n, init, func);
+// Description:
+//   Given the function literal `func`, with the signature `function (i,x)`, repeatedly calls it `n` times.
+//   If `n` is given as a scalar, the `i` value will traverse the range `[0:1:n-1]`, one value per call.
+//   If `n` is given as a range, the `i` value will traverse the given range, one value per call.
+//   The `x` value for the first  iteration is given in `init`, and in all subsequent iterations `x` will be the result of the previous call.
+//   In pseudo-code, this is effectively:
+//   ```
+//   function for_n(n, init, func):
+//       x = init;
+//       if is_range(n):
+//           iterate i over range n:
+//               x = func(i,x);
+//       else:
+//           iterate i from 0 to n-1 by 1:
+//               x = func(i,x);
+//       return x;
+//   ```
+// Arguments:
+//   n = The number of iterations to perform, or, if given as a range, the range to traverse.
+//   init = The initial value to pass as `x` to the function in `func`.
+//   func = The function literal to call, with signature `function (i,x)`.
+// Example:
+//   fib = function(n) for_n(
+//       n, [],
+//       function(i,x) x? [x[1], x[0]+x[1]] : [0,1]
+//   )[1];

@@ -1,0 +1,2 @@
+module box_right_blank(type, sheet = false) //! Generates a 2D template for the right sheet, `sheet` can be set to override the type
+    sheet_2D(subst_sheet(type, sheet), box_depth(type) - sheet_reduction(type), box_height(type) - sheet_reduction(type), 1);

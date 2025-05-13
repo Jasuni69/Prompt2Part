@@ -1,0 +1,6 @@
+function inCircumcircle(t, p, circles, _indices_hash) = 
+    let(
+	    c = hashmap_get(circles, t, hash = _indices_hash),
+		v = cc_center(c) - p
+	)
+	v * v <= cc_rr(c);

@@ -1,0 +1,1 @@
+function chamfer_cylinder_mask(r, chamfer, d, ang=45, from_end=false, anchor=CENTER, spin=0, orient=UP) = no_function("chamfer_cylinder_mask");

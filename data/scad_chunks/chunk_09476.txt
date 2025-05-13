@@ -1,0 +1,5 @@
+function Len(v) = is_array(v)? len(v) : undef;
+
+
+// Function: remove_undefs()
+// Description: Removes all `undef`s from a list.

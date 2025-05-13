@@ -1,0 +1,1 @@
+function ringterm_screw(type)        = type[7];    //! Screw type

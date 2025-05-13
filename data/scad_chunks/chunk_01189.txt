@@ -1,0 +1,1 @@
+function leadnut_flange_offset(type) = type[7];     //! Offset of the flange from the top

@@ -1,0 +1,1 @@
+function antenna_gap(type)      = type[10]; //! Space for left panel, washers and nuts when screwed on fully.

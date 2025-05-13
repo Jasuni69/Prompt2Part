@@ -1,0 +1,16 @@
+function square_threaded_nut(
+    nutwidth, id, h,
+    pitch,
+    left_handed=false,
+    bevel,bevel1,bevel2,bevang=30,
+    ibevel,ibevel1,ibevel2,
+    height,thickness,    
+    length, l,
+    blunt_start, blunt_start1, blunt_start2,
+    lead_in, lead_in1, lead_in2,
+    lead_in_ang, lead_in_ang1, lead_in_ang2,
+    end_len, end_len1, end_len2,
+    lead_in_shape="default",
+    starts=1,
+    anchor, spin, orient
+) = no_function("square_threaded_nut");

@@ -1,0 +1,29 @@
+function _list_shape_recurse(v) =
+    let( alen = [for(vi=v) is_list(vi) ? len(vi): -1] )
+    v==[] || max(alen)==-1 ? [] :
+    let( add = max(alen)!=min(alen) ? undef : alen[0] ) 
+    concat( add, _list_shape_recurse(flatten(v)));
+
+
+// Function: list_shape()
+// Synopsis: Returns the dimensions of an array.
+// Topics: Matrices, List Handling
+// See Also: is_homogenous()
+// Usage:
+//   dims = list_shape(v, [depth]);
+// Description:
+//   Returns the size of a multi-dimensional array, a list of the lengths at each depth.
+//   If the returned value has `dims[i] = j` then it means the ith index ranges of j items.
+//   The return `dims[0]` is equal to the length of v.  Then `dims[1]` is equal to the
+//   length of the lists in v, and in general, `dims[i]` is equal to the length of the items
+//   nested to depth i in the list v.  If the length of items at that depth is inconsistent, then
+//   `undef` is returned.  If no items exist at that depth then `0` is returned.  Note that
+//   for simple vectors or matrices it is faster to compute `len(v)` and `len(v[0])`.  
+// Arguments:
+//   v = list to get shape of
+//   depth = depth to compute the size of.  If not given, returns a list of sizes at all depths. 
+// Example:
+//   a = list_shape([[[1,2,3],[4,5,6]],[[7,8,9],[10,11,12]]]);     // Returns [2,2,3]
+//   b = list_shape([[[1,2,3],[4,5,6]],[[7,8,9],[10,11,12]]], 0);  // Returns 2
+//   c = list_shape([[[1,2,3],[4,5,6]],[[7,8,9],[10,11,12]]], 2);  // Returns 3
+//   d = list_shape([[[1,2,3],[4,5,6]],[[7,8,9]]]);                // Returns [2,undef,3]

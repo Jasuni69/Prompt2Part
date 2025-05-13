@@ -1,0 +1,8 @@
+module ttrack_place_bolt(type, pos, bolt = undef) { //! Place a T-Bolt relative to the centre of the track
+    bolt = is_undef(bolt) ? ttrack_fixture(type) : bolt;
+
+    T = tbolt_head_thickness(bolt);
+    translate([0,pos,-(ttrack_top_thickness(type)/2) - T])
+        rotate([0,0,90])
+            children();
+}

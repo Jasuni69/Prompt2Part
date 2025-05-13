@@ -1,0 +1,1 @@
+function faston_insul_crimp_l(type) = type[11]; //! Length of the insulation crimp

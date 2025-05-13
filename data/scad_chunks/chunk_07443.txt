@@ -1,0 +1,57 @@
+module KBS(e=2,grad=2,center=true,male=true,female=false,rot=0,n=4,top=false,knob,knobH,fKnob,fKnobH,dist,bh,name,help){
+male=female?false:male;
+d=is_undef(knob)?4.8:knob;//knobs on top of blocks
+fd=is_undef(fKnob)?d:fKnob;//fknobs on bottom of blocks  
+h=is_undef(knobH)?2:knobH;// knob height
+
+    
+ks=is_undef(dist)?8.0:dist; // spacing
+rand=1.5;
+bh=is_undef(bh)?9.6:bh;// block height
+roof_thickness=1;//1.05
+pin_diameter=3;        //pin for bottom blocks with width or length of 1
+post_diameter=6.5;
+reinforcing_width=1.5;
+axle_spline_width=2.0;
+axle_diameter=5;
+  
+fh=is_undef(fKnobH)?bh/3-roof_thickness:fKnobH;  
+  
+e=is_list(e)?e:[e,e];    
+
+ if(e.z)linear_extrude(e.z*bh,scale=1,convexity=5)hull()Grid(e=e,es=[ks,ks,0],center=center,name=false)square(d+rand*2,center=center);
+ if(male||female)Grid(e=e,es=[ks,ks,0],center=center,name=false){
+    
+   if(male)translate([0,0,e.z?e.z*bh+h:h])rotate(180,[1,0])linear_extrude(h,scale=(d/2-h/tan(90-grad))/(d/2),convexity=5) circle(d=d);
+        // for holes on bottom
+    else {
+      h=fh;
+      d=fd;
+
+        translate([0,0,(e.z?e.z*bh:0)-.001]){
+          linear_extrude(h,scale=(d/2-(h)/tan(90+grad))/(d/2),convexity=5)rotate(180/n+rot)Rund(d/3)circle(d=Umkreis(n,d),$fn=n);//;square(d,center=center);
+      if(top)Tz(h-.001)linear_extrude(is_bool(top)?1:top,scale=0,convexity=5)scale((d/2-(h)/tan(90+grad))/(d/2))rotate(180/n+rot)Rund(d/3)circle(d=Umkreis(n,d),$fn=n);
+      }
+    }
+ }
+InfoTxt("KBS",["size",str(
+    str(d+rand*2+ks*(e.x-1),"×",d+rand*2+ks*(e.y-1),e.z?str("×",e.z*bh):"")
+    ,grad?str(" diff ",grad,"° bei h=2mm ",tan(grad)*2):
+       ""
+    )],name);
+ 
+HelpTxt("KBS",["e",e,"grad",grad,"center",center,"male",male,"female",female,"rot",rot,"n",n,"top",top,"knob",knob,"knobH",knobH,"fKnob",fKnob,"fKnobH",fKnobH,"dist",dist,"bh",bh,"name",name],help);    
+}
+
+
+/** \page Products \name GT2Pulley
+GT2Pulley() creates a Pulley for GT2 Belts
+\param h belt height
+\param z number tooth
+\param achse  center hole diameter
+\param center  center pulley -1=outside 0 || false=inside 1 || true=center
+\param fn  fragments 
+\param name help name help
+*/
+
+// GT2Pulley(h=6.5,z=16,achse=5,center=-1);

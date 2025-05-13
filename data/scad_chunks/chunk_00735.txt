@@ -1,0 +1,10 @@
+module pi_cutout(type) { //! Shape to subtract for fitting a photo interrupter
+    hull() {
+        pi_hole_locations(type)
+            cylinder(h = pi_base_height(type), d = pi_base_width(type));
+    }
+    translate([-pi_base_width(type)/2, -(pi_gap_width(type)/2 + pi_stem_width(type)), 0])
+        cube([pi_base_width(type), pi_stem_width(type), pi_gap_height(type) + pi_base_height(type)]);
+    translate([-pi_base_width(type)/2, pi_gap_width(type)/2, 0])
+        cube([pi_base_width(type), pi_stem_width(type), pi_gap_height(type) + pi_base_height(type)]);
+};

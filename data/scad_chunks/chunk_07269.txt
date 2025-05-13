@@ -1,0 +1,25 @@
+module RotEx(grad=360,fn,fs=fs,fa=fa,center=false,cut=false,convexity=5,help=false){
+  fnrotex=$fn;
+    rotate(center?sign(grad)*-min(abs(grad)/2,180):grad>=360?180:0)
+  rotate_extrude(angle=grad,convexity=convexity, $fa =fn?abs(grad/fn):fa,$fs=fs,$fn=is_num(fn)&&fn<5&&grad==360?fn:0)intersection(){
+    $fn=fnrotex;
+    $fa=fa;
+    $fs=fs;
+           children();
+           if(cut)translate([cut==-1?-1000:0,-500])square(1000);
+    }
+
+    MO(!$children);   
+    HelpTxt("RotEx",["grad",grad,"fn",fn,"center",center,"cut",cut,"convexity",convexity],help);
+}
+
+/** \name Grid \page Modifier
+Grid() children(); creates a grid of children
+\param e elements [x,y]
+\param es element spacing [x,y]
+\param s total space ↦ es
+\param center true/false 
+*/
+// multiply children in a given matrix (e= number es =distance)
+
+//Grid(e=[3,2],es=20)Text($idx2);

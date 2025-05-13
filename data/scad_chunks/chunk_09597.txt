@@ -1,0 +1,23 @@
+module filleted_cylinder(h=1, r=undef, d=undef, r1=undef, r2=undef, d1=undef, d2=undef, fillet=0.25, center=false) {
+	deprecate("filleted_cylinder()", "cyl()");
+	cyl(l=h, r=r, d=d, r1=r1, r2=r2, d1=d1, d2=d2, fillet=fillet, orient=ORIENT_Z, center=center);
+}
+
+
+
+// Module: rcylinder()
+// Status: DEPRECATED, use `cyl(..., fillet)` instead.
+//
+// Usage:
+//   rcylinder(h, r|d, fillet, [center]);
+//
+// Description:
+//   Creates a cylinder with filletted (rounded) ends.
+//   Basically a shortcut for `filleted_cylinder()`.
+//
+// Arguments:
+//   h = height of cylinder. (Default: 1.0)
+//   r = radius of cylinder. (Default: 1.0)
+//   d = diameter of cylinder. (Use instead of r)
+//   fillet = radius of the edge filleting. (Default: 0.25)
+//   center = boolean.  If true, cylinder is centered. (Default: false)

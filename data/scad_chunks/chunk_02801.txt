@@ -1,0 +1,42 @@
+module DefaultRender(list,width)
+{
+  if(len(list)==2)
+  {
+    hull()
+      for(point=[list[0],list[1]])
+        translate(point,$fn=20)
+          circle(d=width);
+  }
+  else if(len(list)==1)
+  {
+    translate(list[0],$fn=20)
+      circle(d=width);
+  }
+}
+
+//    // CustomRender()
+//    // ---------------
+//    // An example of a CustomRender function.
+//    module CustomRender(list,width)
+//    {
+//      if(len(list)==2)
+//      {
+//        for(i=[0:0.3:1])
+//          translate((1-i)*list[0] + i*list[1])
+//            square(width,center=true);
+//      }
+//      else if(len(list)==1)
+//      {
+//        translate(list[0],$fn=20)
+//          square(width,center=true);
+//      }
+//    }
+
+
+// GetFontIndex
+// ------------
+// Helper function to find the character data.
+// If the character was not found, then the index 0 is used.
+//
+// search(match_value,list,number of returns,index column)
+//

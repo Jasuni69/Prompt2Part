@@ -1,0 +1,111 @@
+module Cycloid(modul=1,z=5,fn=36,option=+0,l=0,delta=0,d=0,fnd,linear=false,name,help,zahn){
+    z=is_undef(zahn)?z:zahn;
+    r=modul*z/2;
+    rCav=r;
+    rVex=r;
+    e=z*2;
+
+    linear=is_bool(linear)?linear==true?modul:false:linear;
+    //r=modul*e;
+    fn2=fn*abs(e);
+    r2=modul/4-l;//r/(e)-l;
+    r2Vex=r2+delta;
+    r2Cav=r2+delta;   
+    step1=360/fn2;
+    step2=step1*e; 
+    step2Cav=-step1*(e-1);   
+   // delta=+180;
+    fnd=is_undef(fnd)&&d? fs2fn(r=d/2,fs=fs,fa=fa):fnd;
+
+if(linear){
+    if(name) echo(str(is_string(name)?"<H3>":"",name," Zahnstangenlänge=",r*PI*2," Zahnabschnitt=",r*PI*2/z));
+    box=[[PI*2*r,-linear],[0,-linear]];
+    pointsEpi=[for(i=[0:fn2])[PI*2*r*i/fn2+r2Vex*-sin(i*step2),r2-r2Vex*cos(i*step2)]];
+    pointsHyp=[for(i=[0:fn2])[PI*2*r*i/fn2+r2Cav*-sin(i*step2),-r2-r2Cav*-cos(i*step2)]];    
+    if(option==1)color("pink")polygon(concat(box,pointsEpi));
+    if(option==-1)color("cyan")polygon(concat(box,pointsHyp)); 
+    points=[for(z=[0:2:e-2])each[for(i=[fn*z:fn*(z+1)])pointsEpi[i]
+,for(i=[fn*(z+1):fn*(z+2)])pointsHyp[i]]];     
+    if(!option)color("orange")polygon(concat(box,points));   
+}
+
+  
+if(!linear){
+    
+  if(d) InfoTxt("Cycloid",["ZahnkreisRadius",str(r,"mm"),"fn Kreis rot",str(180/e,"°"),"d",d,"fnd",fnd],name);
+     else InfoTxt("Cycloid",["ZahnkreisRadius",str(r,"mm")],name);
+ 
+   
+ pointsEX=[for(i=[0:fn2])
+    let(iw=i%fn2)
+    [
+    (rVex+r2)*cos(iw*step1)-r2Vex*cos(iw*(step2+step1)),
+    (rVex+r2)*sin(iw*step1)-r2Vex*sin(iw*(step2+step1))
+    ]
+ ];
+ pointsCAV=[for(i=[0:fn2])
+    let(iw=i%fn2)
+    [
+    (rCav-r2)*cos(iw*step1)+r2Cav*cos(iw*step2Cav),
+    (rCav-r2)*sin(iw*step1)+r2Cav*sin(iw*step2Cav)
+    ]
+ ]; 
+ 
+ 
+pointsRand=kreis(r=d/2,rand=0,fn=fnd);
+ 
+if(option==1)color("pink")polygon(
+    d?concat(pointsRand,pointsEX):pointsEX
+   ,paths=
+    d?[[for(i=[0:len(pointsRand)-1])i],
+    [for(i=[len(pointsRand):len(pointsEX)-1+len(pointsRand)])i]]:
+    [[for(i=[0:len(pointsEX)-1])i]]
+    ,convexity=5
+
+);
+if(option==-1)color("cyan")polygon(
+  d?concat(pointsRand,pointsCAV):pointsCAV
+   ,paths=
+    d?[[for(i=[0:len(pointsRand)-1])i],
+    [for(i=[len(pointsRand):len(pointsCAV)-1+len(pointsRand)])i]]:
+    [[for(i=[0:len(pointsCAV)-1])i]]
+    ,convexity=5);    
+
+points=[for(z=[0:2:e -2])each[
+          for(i=[fn*z:fn*(z+1)])pointsEX[i],
+          for(i=[fn*(z+1):fn*(z+2)])pointsCAV[i]
+       ] ];
+
+pointsSingle=d<r*2?[
+                //for(i=[0:fn -1])pointsCAV[i+fn*(z*2-1)],
+                each mPoints([for(i=[floor(fn/2):fn -1])pointsCAV[i]],r=-180/z),
+                for(i=[+0:fn-1])pointsEX[i],
+                each mPoints([for(i=[0:ceil(fn/2) ])pointsCAV[i]],r=180/z),
+                //for(i=[0:fn -1])pointsCAV[i+fn],
+                if(!d) [0,0]
+             ]:
+             [
+                each mPoints([for(i=[floor(fn/2):fn -1])pointsEX[i]],r=-180/z),
+                for(i=[0:fn -1])pointsCAV[i],
+                each mPoints([for(i=[0:ceil(fn/2) ])pointsEX[i]],r=180/z)
+             ]
+             ;
+
+
+if(!option)color("orange")rotate(-180/e)
+    polygon(d?concat(pointsRand,points):points
+   ,paths=
+    d?[[for(i=[0:len(pointsRand)-1])i],
+    [for(i=[len(pointsRand):len(points)-1+len(pointsRand)])i]]:
+    [[for(i=[0:len(points)-1])i]]
+    ,convexity=5);
+    
+  if(option==2){ 
+    points2=d?concat(kreis(r=-d/2,rand=0,grad=360/z ,center=true,rot=-90/z,fn=max(d*3,fn)),pointsSingle):pointsSingle;
+    rotate(-180/e) polygon(points=points2,paths=[[for(i=[0:len(points2)-1])i]]);
+  }
+}
+HelpTxt("Cycloid",["modul",modul,"z",z,"fn",fn,"option",option,"l",l,"delta",delta,"d",d,"fnd",fnd,"linear",linear,"name",name],help);
+}
+
+/// circle of circles

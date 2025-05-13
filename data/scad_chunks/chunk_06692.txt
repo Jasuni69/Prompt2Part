@@ -1,0 +1,9 @@
+module test_deduplicate() {
+    assert_equal(deduplicate([8,3,4,4,4,8,2,3,3,8,8]), [8,3,4,8,2,3,8]);
+    assert_equal(deduplicate(closed=true, [8,3,4,4,4,8,2,3,3,8,8]), [8,3,4,8,2,3]);
+    assert_equal(deduplicate("Hello"), "Helo");
+    assert_equal(deduplicate([[3,4],[7,1.99],[7,2],[1,4]],eps=0.1), [[3,4],[7,2],[1,4]]);
+    assert_equal(deduplicate([], closed=true), []);
+    assert_equal(deduplicate([[1,[1,[undef]]],[1,[1,[undef]]],[1,[2]],[1,[2,[0]]]]), [[1, [1,[undef]]],[1,[2]],[1,[2,[0]]]]);
+}
+test_deduplicate();

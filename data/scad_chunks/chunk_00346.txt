@@ -1,0 +1,26 @@
+module mains_socket_holes(type, h = 0, earth = true, small = false) { //! Panel cutout
+    mains_socket_hole_positions(type)
+        drill(screw_clearance_radius(mains_socket_screw(type)), h);
+
+    extrude_if(h)
+        offset(cnc_bit_r) offset(-cnc_bit_r) difference() {
+            offset(-7) face_plate(type);
+
+            for(side = [-1, 1])
+                hull()
+                    for(x = [1, 2])
+                        translate([side * mains_socket_pitch(type) / x, 0])
+                            if(small)
+                                square([2 * 4.5, mains_socket_top_w(type)], true);
+                            else
+                                circle(4.5);
+
+            if(earth)
+                mains_socket_earth_position(type)
+                    circle(d = washer_diameter(screw_washer(earth_screw)) + 2);
+        }
+
+    if(earth)
+        mains_socket_earth_position(type)
+            drill(screw_clearance_radius(earth_screw), h);
+}

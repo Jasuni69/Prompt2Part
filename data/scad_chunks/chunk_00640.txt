@@ -1,0 +1,1 @@
+function tx_bobbin_radius(type)     = type[16]; //! Bobbin corner radius

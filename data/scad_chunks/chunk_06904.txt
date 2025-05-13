@@ -1,0 +1,12 @@
+module test_constrain() {
+    assert_equal(constrain(-2,-1,1), -1);
+    assert_equal(constrain(-1.75,-1,1), -1);
+    assert_equal(constrain(-1,-1,1), -1);
+    assert_equal(constrain(-0.75,-1,1), -0.75);
+    assert_equal(constrain(0,-1,1), 0);
+    assert_equal(constrain(0.75,-1,1), 0.75);
+    assert_equal(constrain(1,-1,1), 1);
+    assert_equal(constrain(1.75,-1,1), 1);
+    assert_equal(constrain(2,-1,1), 1);
+}
+test_constrain();

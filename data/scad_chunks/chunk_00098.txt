@@ -1,0 +1,8 @@
+module widget_dxf() {
+    dxf("widget")
+        difference() {
+            sheet_2D(sheet, 20, 20, 1);
+
+            drill(screw_clearance_radius(screwM3), 0);
+        }
+}

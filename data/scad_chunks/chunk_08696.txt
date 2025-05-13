@@ -1,0 +1,7 @@
+function _cmdline(cmd, t, arg) = 
+    is_undef(arg) ? _get(t, cmd) : 
+    cmd == "forward" ? _forward(t, arg) : 
+    cmd == "turn" ? _turn(t, arg) :
+    cmd == "point" ? _set_point(t, arg) : 
+    cmd == "angle" ? _set_angle(t, arg) :  
+    assert(false, "unknown command");

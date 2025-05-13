@@ -1,0 +1,1 @@
+function pbox_depth(type)      = type[10]; //! Internal depth

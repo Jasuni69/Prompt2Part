@@ -1,0 +1,40 @@
+module Line(p0=[0,0,0],p1=[10,10,0],d=.5,center=false, use2D=false,text=false,fn=8,h,help=false){
+  p0=p0[2]==undef?concat(p0,[0]):p0;
+  p1=p1[2]==undef?concat(p1,[0]):p1;
+p1t=p1-p0;    
+  
+  h=is_undef(h)?0:h;
+x= p1t[0]; y = p1t[1]; z = p1t[2]; // point coordinates of end of cylinder
+ 
+length = norm([x,y,z]);  // radial distance
+b = length?acos(z/length):0; // inclination angle
+c = atan2(y,x);     // azimuthal angle
+
+points=center?[-p1t+p0,p0,p1]:[p0,p1t/2+p0,p1]; // for d=0  1d polyhedron
+
+if(d)
+  if(use2D&&length&&!h)translate(p0)rotate([0,b-90,c])translate([0,center?0:-d/2,0]) square([center?length*2:length,d],center=center?true:false);
+  else if(h&&length)translate(p0)rotate([0,b-90,c])translate([0,center?0:-d/2,0]) linear_extrude(h,center=center)square([center?length*2:length,d],center=center?true:false);
+  
+  else if(!use2D&&!h&&length)translate(p0)rotate([0, b, c])
+      cylinder(h=center?length*2:length,d=d,$fn=fn,center=center?true:false);
+      
+if(!d) polyhedron(points,[[0,1,2]]);
+//Points(points);
+
+  if (text&&$preview)
+    %color("slategrey")translate(center?p0:p0+p1t/2)rotate($vpr)
+      text(str(runden(center?length*2:length,3),"mm"),size=b(text,false));
+  
+HelpTxt("Line",[
+  "p0",p0,
+  "p1",p1,
+  "d",d,
+  "center",center,
+  "use2D", use2D,
+  "text",text,
+  "fn",fn,
+  "h",h
+  ],help);  
+  
+}

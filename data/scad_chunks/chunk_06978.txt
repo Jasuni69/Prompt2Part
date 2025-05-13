@@ -1,0 +1,12 @@
+module test_list_tail() {
+    list = [1,2,3,4];
+    assert_equal(list_tail(list), [2,3,4]);
+    assert_equal(list_tail([1]), []);
+    assert_equal(list_tail([]), []);
+    assert_equal(list_tail(list,-3), [2,3,4]);
+    assert_equal(list_tail(list,2), [3,4]);
+    assert_equal(list_tail(list,3), [4]);
+    assert_equal(list_tail(list,6), []);
+    assert_equal(list_tail(list,-6), [1,2,3,4]);
+}
+test_list_tail();

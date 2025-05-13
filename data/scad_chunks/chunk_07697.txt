@@ -1,0 +1,152 @@
+module GewindeV4(
+dn=6,
+p=1,
+kern,
+breite,
+rad1,
+rad2,
+winkel=60,
+wand=+1,
+mantel,
+h,
+gb,
+innen=false,
+grad=180*7,
+start=fn/3,// Einfädelstrecke
+end,
+korrektur=true,// verbreiterung durch gangwinkel
+profil=false,
+fn2=4,
+fn=fn,
+cyl=true,
+tz=0,
+konisch=0,
+center=true,
+rund=false,
+ratio,
+spiel=.1,//unused used at Gewinde innen=true
+g=1,// only for  autosize
+name,
+help
+){
+  halbWinkel=is_list(winkel)?winkel:[winkel/2,winkel/2];
+  Kwinkel=[90-halbWinkel[0],90-halbWinkel[1]];// Komplement winkel
+    //winkel=is_list(winkel)?[90-winkel[0],90-winkel[1]]:[90-winkel/2,90-winkel/2];
+    
+    gver=pow(g,1.5);//autocalc for g
+    center=is_num(center)?center:center==true?1:0;
+    start=round(start);
+    end=is_undef(end)?start:round(end);
+
+    kern=is_undef(kern)?innen?round((dn-p*1.08/gver)*100)/100:round((dn-p*1.225/gver*+1)*100)/100:kern;
+    dn=is_undef(dn)?innen?round((kern+p*1.08/gver)*100)/100:round((kern+p*1.225/gver)*100)/100:dn;
+    wand=is_undef(mantel)?innen?wand:wand>kern/2?0:wand:abs(mantel-kern)/2;
+    d1=innen?-kern:dn;//Gewindespitzen
+    d2=innen?-dn:kern;//Gewindetäler
+    grad=max(//windungen
+      is_undef(h)?grad-(grad%(360/fn)):(h-p)/p*360-(((h-p)/p*360)%(360/fn)-360/fn),
+    360/fn*(start+end))
+    ;
+  
+    mantel=is_undef(mantel)?innen?d2-wand*2:wand?kern-wand*2:kern/2+0.0001:innen?-max(mantel,0.0001):max(mantel,0.0001);//innenloch /aussenmantel
+    winkelP=atan(p/((d1+d2)/2*PI));//Steigungswinkel
+    profilkorrekturY=korrektur?1/sin(90+winkelP):1;
+    gb=is_undef(gb)?p/profilkorrekturY:gb; // gangBreite axial
+    gangH=(d1-d2)/2; // gang Höhe radial (H)
+    h=grad*p/360+p;
+    flankenBreite=[tan(halbWinkel[0])*gangH,tan(halbWinkel[1])*gangH];
+    gi=grad<360/g?1:g;
+    breite=is_undef(ratio)||!ratio?is_undef(breite)?gb/gi/8:
+                                                    breite:
+                                   (gb/gi-flankenBreite[0]-flankenBreite[1])/2*(b(ratio,false));
+
+
+    breite2=gb/gi -breite -flankenBreite[0] -flankenBreite[1];
+
+    rad1Max=min(breite /2/tan(Kwinkel[0]/2),breite /2/tan(Kwinkel[1]/2));
+    rad2Max=min(breite2/2/tan(Kwinkel[0]/2),breite2/2/tan(Kwinkel[1]/2));
+    
+    Echo(str(name," Gewinde rad1 zu groß ",rad1,">",rad1Max),color="red",
+      condition=is_num(rad1)&&rad1>rad1Max);
+    Echo(str(name," Gewinde rad2 zu groß ",rad2,">",rad2Max),color="red",
+      condition=is_num(rad2)&&rad2>rad2Max);                
+
+    rad1=min(rad1Max,b(rund,false)==1||b(rund,false)==2?rad1Max:
+              is_undef(rad1)?p/20/gi:
+                             rad1);
+
+    rad2=min(rad2Max,b(rund,false)==1||b(rund,false)==3?rad2Max:
+              is_undef(rad2)?p/10/gi:
+                             rad2);
+
+    step=180/max(start,end,1);
+
+
+InfoTxt(innen?" Innengewinde ":" Außengewinde ",[
+"dn",dn,//"(",innen?d2:d1,")
+ "Steigung",p,
+ "Kern",kern,
+ "Mantel",mantel,
+ "Winkel",winkel[0]==winkel[1]?halbWinkel[0]*2:halbWinkel,
+ "Gangwinkel",winkelP,
+ "h",h,
+str(grad/360," Windungen ("),str(grad,"°)"),
+"Ganghöhe",gangH]
+,name);
+
+ /*tangYold=[rad1*sin(winkel[0])-tan(90-winkel[0])*(rad1-cos(winkel[0])*rad1), 
+           rad1*sin(winkel[1])-tan(90-winkel[1])*(rad1-cos(winkel[1])*rad1)];// */
+  tangY=[tan(Kwinkel[0]/2)*rad1,tan(Kwinkel[1]/2)*rad1];
+
+
+Echo(str(name," Gewinde Überlappung! breite2",negRed(breite2)),color=breite==0?"warning":"red",condition=0>=breite2);
+//Echo(str(name," Gewinde Zero breite2",negRed(breite2)),color="red",condition=0==breite2);
+
+Echo(str(name," Gewinde breite=",breite," is bigger (",(tangY[0]+tangY[1]),
+  ") rad1(",rad1,"),rad1 max=",rad1Max,
+  " p/16= ",p/16),condition=tangY[0]+tangY[1]>breite);
+  
+//,if (breite==0&&rad1>p/16)echo(str("<b><font color=red>",name," Gewinde breite=0 rad1>p/16= ",p/16));
+
+HelpTxt("Gewinde",
+["p",p
+,"dn",dn
+,"kern",kern
+,"breite",breite
+,"rad1",rad1
+,"rad2",rad2
+,"winkel",halbWinkel[0]==halbWinkel[1]?halbWinkel[0]*2:halbWinkel
+,"wand",wand
+,"mantel",abs(mantel)
+,"h",h
+,"gb",gb // gang breite gesamt
+,"innen",innen
+,"grad",grad
+,"start",start// Einfädelstrecke
+,"end",end
+,"korrektur",korrektur// verbreiterung durch gangwinkel
+,"profil",profil // 2D Ansicht
+,"fn2",fn2
+,"fn",fn
+,"cyl",cyl
+,"tz",tz
+,"konisch",konisch
+,"center",center
+,"rund",rund
+,"ratio",ratio
+,"spiel",spiel
+,"g",g
+,"name",name   
+],help);
+
+points=[
+    for(i=[0:max(start+1,end+1,5)])vollwelle(fn=fn2,l=gb,h=start?gangH*(0.5+sin(i*step-90)/2):gangH,r=rad1,r2=rad2,tMitte=breite,
+      grad=start?[max(Kwinkel[0]*sin(i*.5*step+0),1),max(Kwinkel[1]*sin(i*.5*step+0),1)]:
+                 Kwinkel,
+      grad2=[-konisch,konisch],extrude=d2/2,x0=mantel/2,xCenter=-1)   
+    ];
+ 
+profilnr=start;
+pointskorr=[for(i=[0:len(points[profilnr])-1])[points[profilnr][i][0],points[profilnr][i][1]*profilkorrekturY]];
+
+detail=fn*grad/360;

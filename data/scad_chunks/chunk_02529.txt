@@ -1,0 +1,1 @@
+function quad(p, a, b, c, d) = norm(p[a] - p[c]) > norm(p[b] - p[d]) ? [[b, c, d], [b, d, a]] : [[a, b, c], [a, c, d]];

@@ -1,0 +1,27 @@
+module pot_nut(type, washer = true) { //! Draw the nut for a potentiometer and possibly a washer
+    nut = pot_nut(type);
+    washer = washer ? pot_washer(type) : false;
+    nut_z = washer ? washer[1] : 0;
+    thread_d = pot_thread_d(type);
+    vflip() explode(23, explode_children = true) {
+        if(washer)
+            color(washer[2])
+                linear_extrude(washer[1])
+                    difference() {
+                        circle(d = washer.x);
+
+                        circle(d =  thread_d);
+
+                        serations = washer[3];
+                        if(serations)
+                            for(i = [1 : serations])
+                                rotate(i * 360 / serations)
+                                    translate([thread_d / 2, 0])
+                                        square([(washer.x - thread_d) / 2, PI * thread_d / (2 * serations)], center = true);
+                    }
+
+        if(nut)
+            translate_z(nut_z + exploded() * 10)
+                draw_nut(nut.x / cos(30), thread_d, nut[1], pot_thread_p(type), nut[2], show_threads && exploded());
+    }
+}

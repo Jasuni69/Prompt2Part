@@ -1,0 +1,30 @@
+function fillet_path(pts, fillet, maxerr=0.1) = concat(
+	[pts[0], pts[0]],
+	(len(pts) < 3)? [] : [
+		for (p = [1 : len(pts)-2]) let(
+			p1 = pts[p],
+			p0 = (pts[p-1]+p1)/2,
+			p2 = (pts[p+1]+p1)/2
+		) for (pt = fillet3pts(p0, p1, p2, fillet, maxerr=maxerr)) pt
+	],
+	[pts[len(pts)-1], pts[len(pts)-1]]
+);
+
+
+// Function: bezier_close_to_axis()
+// Usage:
+//   bezier_close_to_axis(bezier, [N], [axis]);
+// Description:
+//   Takes a 2D bezier path and closes it to the specified axis.
+// Arguments:
+//   bezier = The 2D bezier path to close to the axis.
+//   N = The degree of the bezier curves.  Cubic beziers have N=3.  Default: 3
+//   axis = The axis to close to, "X", or "Y".  Default: "X"
+// Example(2D):
+//   bez = [[50,30], [40,10], [10,50], [0,30], [-10, 10], [-30,10], [-50,20]];
+//   closed = bezier_close_to_axis(bez);
+//   trace_bezier(closed, size=1);
+// Example(2D):
+//   bez = [[30,50], [10,40], [50,10], [30,0], [10, -10], [10,-30], [20,-50]];
+//   closed = bezier_close_to_axis(bez, axis="Y");
+//   trace_bezier(closed, size=1);

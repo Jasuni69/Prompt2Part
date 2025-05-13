@@ -1,0 +1,18 @@
+function find_convex_vertex(points, face, facenorm, i=0) =
+	let(count=len(face),
+		p0=points[face[i]],
+		p1=points[face[(i+1)%count]],
+		p2=points[face[(i+2)%count]]
+	)
+	(len(face)>i)?
+		(cross(p1-p0, p2-p1)*facenorm>0)? (i+1)%count : find_convex_vertex(points, face, facenorm, i+1)
+	: //This should never happen since there is at least 1 convex vertex.
+		undef
+;
+
+
+// Function: point_in_ear()
+// Description: Determine if a point is in a clipable convex ear.
+// Arguments:
+//   points = Array of vertices for the polyhedron.
+//   face = The face, given as a list of indices into the vertex array `points`.

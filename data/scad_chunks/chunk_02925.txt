@@ -1,0 +1,20 @@
+module chamferedRectangle2D(x,y,clip)
+{
+  if (clip > x/2 || clip > y/2) 
+  {
+      echo("Warning radius too large");
+  }
+  
+  translate([-x/2,-y/2,0])
+  polygon([[clip,0],
+    [x-clip,0],
+    [x,clip],
+    [x,y-clip],
+    [x-clip,y],
+    [clip,y],
+    [0,y-clip],
+    [0,clip],
+    [clip,0]
+]);
+  
+} //-- roundedRectangle2D()

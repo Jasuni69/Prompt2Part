@@ -1,0 +1,46 @@
+function NutThickness(diameter) =
+  (diameter <= 64) ?
+    lookup(diameter, [
+      [2, 1.6],
+      [2.5, 2],
+      [3, 2.4],
+      [3.5, 2.8],
+      [4, 3.2],
+      [5, 4.7],
+      [6, 5.2],
+      [7, 6.0],
+      [8, 6.8],
+      [10, 8.4],
+      [12, 10.8],
+      [14, 12.8],
+      [16, 14.8],
+      [18, 15.8],
+      [20, 18.0],
+      [22, 21.1],
+      [24, 21.5],
+      [27, 23.8],
+      [30, 25.6],
+      [33, 28.7],
+      [36, 31.0],
+      [42, 34],
+      [48, 38],
+      [56, 45],
+      [64, 51]
+    ]) :
+    diameter * 51 / 64;
+
+
+// This generates a closed polyhedron from an array of arrays of points,
+// with each inner array tracing out one loop outlining the polyhedron.
+// pointarrays should contain an array of N arrays each of size P outlining a
+// closed manifold.  The points must obey the right-hand rule.  For example,
+// looking down, the P points in the inner arrays are counter-clockwise in a
+// loop, while the N point arrays increase in height.  Points in each inner
+// array do not need to be equal height, but they usually should not meet or
+// cross the line segments from the adjacent points in the other arrays.
+// (N>=2, P>=3)
+// Core triangles:
+//   [j][i], [j+1][i], [j+1][(i+1)%P]
+//   [j][i], [j+1][(i+1)%P], [j][(i+1)%P]
+//   Then triangles are formed in a loop with the middle point of the first
+//   and last array.

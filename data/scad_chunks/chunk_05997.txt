@@ -1,0 +1,74 @@
+function _pin_size(size) =
+  is_undef(size) ? [] :
+  let(sizeok = in_list(size,["tiny", "small","medium", "large", "standard"]))
+  assert(sizeok,"Pin size must be one of \"tiny\", \"small\", \"medium\" or \"standard\"")
+  size=="standard" || size=="large" ?
+     struct_set([], ["length", 10.8,
+                     "diameter", 7,
+                     "snap", 0.5,
+                     "nub_depth", 1.8,
+                     "thickness", 1.8,
+                     "preload", 0.2]):
+  size=="medium" ?
+     struct_set([], ["length", 8,
+                     "diameter", 4.6,
+                     "snap", 0.45,
+                     "nub_depth", 1.5,
+                     "thickness", 1.4,
+                     "preload", 0.2]) :
+  size=="small" ?
+     struct_set([], ["length", 6,
+                     "diameter", 3.2,
+                     "snap", 0.4,
+                     "nub_depth", 1.2,
+                     "thickness", 1.0,
+                     "preload", 0.16]) :
+  size=="tiny" ?
+     struct_set([], ["length", 4,
+                     "diameter", 2.5,
+                     "snap", 0.25,
+                     "nub_depth", 0.9,
+                     "thickness", 0.8,
+                     "preload", 0.1]):
+  undef;
+
+
+// Module: snap_pin()
+// Synopsis: Creates a snap-pin that can slot into a {{snap_pin_socket()}} to join two parts.
+// SynTags: Geom
+// Topics: Joiners, Parts
+// See Also: snap_pin_socket(), joiner(), dovetail(), snap_pin(), rabbit_clip()
+// Usage:
+//    snap_pin(size, [pointed=], [anchor=], [spin=], [orient]=) [ATTACHMENTS];
+//    snap_pin(r=|radius=|d=|diameter=, l=|length=, nub_depth=, snap=, thickness=, [clearance=], [preload=], [pointed=]) [ATTACHMENTS];
+// Description:
+//    Creates a snap pin that can be inserted into an appropriate socket to connect two objects together.  You can choose from some standard
+//    pin dimensions by giving a size, or you can specify all the pin geometry parameters yourself.  If you use a standard size you can
+//    override the standard parameters by specifying other ones.  The pins have flat sides so they can
+//    be printed.  When oriented UP the shaft of the pin runs in the Z direction and the flat sides are the front and back.  The default
+//    orientation (FRONT) and anchor (FRONT) places the pin in a printable configuration, flat side down on the xy plane.
+//    The tightness of fit is determined by `preload` and `clearance`.  To make pins tighter increase `preload` and/or decrease `clearance`.
+//    .
+//    The "large" or "standard" size pin has a length of 10.8 and diameter of 7.  The "medium" pin has a length of 8 and diameter of 4.6.  The "small" pin
+//    has a length of 6 and diameter of 3.2.  The "tiny" pin has a length of 4 and a diameter of 2.5.
+//    .
+//    This pin is based on https://www.thingiverse.com/thing:213310 by Emmett Lalishe
+//    and a modified version at https://www.thingiverse.com/thing:3218332 by acwest
+//    and distributed under the Creative Commons - Attribution - Share Alike License
+// Arguments:
+//    size = text string to select from a list of predefined sizes, one of "standard", "medium", "small", or "tiny".
+//    ---
+//    pointed = set to true to get a pointed pin, false to get one with a rounded end.  Default: true
+//    r/radius = radius of the pin
+//    d/diameter = diameter of the pin
+//    l/length = length of the pin
+//    nub_depth = the distance of the nub from the base of the pin
+//    snap = how much snap the pin provides (the nub projection)
+//    thickness = thickness of the pin walls
+//    pointed = if true the pin is pointed, otherwise it has a rounded tip.  Default: true
+//    clearance = how far to shrink the pin away from the socket walls.  Default: 0.2
+//    preload = amount to move the nub towards the pin base, which can create tension from the misalignment with the socket.  Default: 0.2
+// Example: Pin in native orientation
+//    snap_pin("standard", anchor=CENTER, orient=UP, thickness = 1, $fn=40);
+// Example: Pins oriented for printing
+//    xcopies(spacing=10, n=4) snap_pin("standard", $fn=40);

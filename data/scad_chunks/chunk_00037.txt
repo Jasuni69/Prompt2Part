@@ -1,0 +1,14 @@
+function CallFunc(x, y, n) = 
+  (n == 1) ? Func1(x, y) :
+  (n == 2) ? Func2(x, y) :
+  (n == 3) ? Func3(x, y) :
+  (n == 4) ? Func4(x, y) :
+  (n == 5) ? Func5(x, y) :
+  (n == 6) ? Func6(x, y) :
+  (n == 7) ? Func7(x, y) :
+  (n == 8) ? Func8(x, y) :
+  (n == 9) ? Func9(x, y) :
+  FunctionNumberOutOfRange;
+
+
+// Relays function calls to PolarFunc1 through PolarFunc9

@@ -1,0 +1,5 @@
+module test_str_join() {
+    assert(str_join(["abc", "D", "ef", "ghi"]) == "abcDefghi");
+    assert(str_join(["abc", "D", "ef", "ghi"], "--") == "abc--D--ef--ghi");
+}
+test_str_join();

@@ -1,0 +1,1 @@
+function strap_height(type) = wall + max(insert_length(strap_insert(type)) - strap_key(type), strap_thickness(type) + clearance); //! Height of the ends

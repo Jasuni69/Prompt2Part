@@ -1,0 +1,10 @@
+function torus_knot(p, q, phi_step) = 
+    [
+        for(phi = 0; phi < 6.283185307179586; phi = phi + phi_step)
+        let(
+            deg_qp = degrees(q * phi),
+            deg_pp = degrees(p * phi),
+            r = cos(deg_qp) + 2
+        )
+        [r * cos(deg_pp), r * sin(deg_pp), -sin(deg_qp)]
+    ];

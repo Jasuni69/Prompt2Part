@@ -1,0 +1,8 @@
+module top_symbol() {
+    // design your own symbol
+    translate([-0.01295, -0.0275]) {
+        linear_extrude(.2, center = true)     
+        scale([0.975, 1.75])
+            text("🏔", font = "Segoe UI Emoji", size = 0.45 * 0.7, halign = "center"); 
+    }
+}

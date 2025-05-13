@@ -1,0 +1,1 @@
+function vec3(v) = [v.x, v.y, v.z]; //! Return a 3 vector with the first three elements of `v`

@@ -1,0 +1,1 @@
+function washer_id(type) = washer_size(type) + 0.1; //! Inside diameter

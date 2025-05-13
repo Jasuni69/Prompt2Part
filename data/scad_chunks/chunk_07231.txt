@@ -1,0 +1,14 @@
+function wall(soll=.5,min=1.25,even=false,line=line,nozzle,name)=
+  let (
+    line=is_num(nozzle)?nozzle:line,
+    isoll=abs(soll),
+    perimeterHi=ceil(isoll/line),
+    perimeterLow=floor(isoll/line),
+    min=isoll<line(2,line=line)?max(min,runden(isoll/line,2)):min,
+    walls=max(min,even?max(2,perimeterHi%2?perimeterLow:perimeterHi) : round(isoll/line))
+    )
+  (is_undef($idx)||$idx==0)&&$info||name?echo(name=name,perimeterShells=walls,soll=soll,ist=line(walls,line=line),min=min)line(walls, line=line)*sign(soll) : line(walls, line=line)*sign(soll);
+  
+  
+  
+/*

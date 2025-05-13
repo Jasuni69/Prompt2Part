@@ -1,0 +1,11 @@
+module test_starts_with() {
+    assert(!starts_with("", "abc"));
+    assert(!starts_with("", "123"));
+    assert(!starts_with("defabc", "abc"));
+    assert(!starts_with("123def", "def"));
+    assert(!starts_with("def123def", "123"));
+    assert(starts_with("abcdef", "abc"));
+    assert(starts_with("abcabc", "abc"));
+    assert(starts_with("123def", "123"));
+}
+test_starts_with();

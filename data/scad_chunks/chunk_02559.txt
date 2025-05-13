@@ -1,0 +1,11 @@
+function line_intersection(l0, l1) = //! Return the point where two 2D lines intersect or undef if they don't.
+    assert(Len(l0) == 2 && Len(l1) == 2, "Two 2D vectors expected")
+    let(
+        p0 = l0[0], p1 = l0[1], p2 = l1[0], p3 = l1[1],
+        v1 = p1 - p0,
+        v2 = p3 - p2,
+        v3 = p0 - p2,
+        det = v1.x * v2.y - v2.x * v1.y,
+        s = det ? (-v1.y * v3.x + v1.x * v3.y) / det : inf,
+        t = det ? ( v2.x * v3.y - v2.y * v3.x) / det : inf
+    ) s >= 0 && s <= 1 && t >= 0 && t <= 1 ? p0 + t * v1 : undef;

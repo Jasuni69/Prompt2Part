@@ -1,0 +1,1 @@
+function dist_gt(p1, p2, leng) = let(v = p2 - p1) v * v > leng ^ 2;

@@ -1,0 +1,1 @@
+function antenna_top_d(type)    = type[3];  //! Diameter at the top

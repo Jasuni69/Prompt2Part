@@ -1,0 +1,50 @@
+
+//-- Edit these parameters for your own board dimensions
+wallThickness       = 1.8;
+basePlaneThickness  = 1.2;
+lidPlaneThickness   = 1.7;
+
+//-- Total height of box = basePlaneThickness + lidPlaneThickness 
+//--                     + baseWallHeight + lidWallHeight
+//-- space between pcb and lidPlane :=
+//--      (baseWallHeight+lidWall_heigth) - (standoff_heigth+pcbThickness)
+//--      (6.2 + 4.5) - (3.5 + 1.5) ==> 5.7
+baseWallHeight    = 6.5;
+lidWallHeight     = 5.5;
+
+//-- pcb dimensions
+pcbLength         = 68.5;
+pcbWidth          = 53.3;
+pcbThickness      = 1.5;
+                            
+//-- padding between pcb and inside wall
+paddingFront      = 2;
+paddingBack       = 2;
+paddingRight      = 2;
+paddingLeft       = 2;
+
+//-- ridge where base and lid off box can overlap
+//-- Make sure this isn't less than lidWallHeight
+ridgeHeight       = 3.5;
+roundRadius       = 2.0;
+
+//-- How much the PCB needs to be raised from the base
+//-- to leave room for solderings and whatnot
+standoffHeight    = 3.5;
+pinDiameter       = 3.0;
+standoffDiameter  = 5.2;
+
+
+//-- C O N T R O L -------------//-> Default ---------
+showSideBySide      = false;     //-> true
+previewQuality      = 5;        //-> from 1 to 32, Default = 5
+renderQuality       = 8;        //-> from 1 to 32, Default = 8
+onLidGap            = 5;
+shiftLid            = 1;
+hideLidWalls        = false;    //-> false
+colorLid            = "yellow";   
+hideBaseWalls       = false;    //-> false
+colorBase           = "gray";
+showPCB             = false;
+showSwitches        = false;
+showPCBmarkers      = false;

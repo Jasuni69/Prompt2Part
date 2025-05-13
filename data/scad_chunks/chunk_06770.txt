@@ -1,0 +1,7 @@
+module test_f_chr() {
+    _test_fn1arg(
+        function (a) f_chr(a),
+        [[65,"A"],[97,"a"],[70,"F"],[102,"f"],[48,"0"],[57,"9"]]
+    );
+}
+test_f_chr();

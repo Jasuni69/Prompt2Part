@@ -1,0 +1,1 @@
+function NEMA_shaft_bore(type)   = type[15]; //! Hollow shaft in non-zero

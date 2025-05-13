@@ -1,0 +1,12 @@
+module assert_in_list(argname, val, l, idx=undef) {
+	succ = search([val], l, num_returns_per_match=1, index_col_num=idx) != [[]];
+	if (!succ) {
+		msg = str(
+			"In argument '", argname, "', ",
+			(is_str(val)? str("\"", val, "\"") : val),
+			" must be one of ",
+			(is_def(idx)? [for (v=l) v[idx]] : l)
+		);
+		assertion(succ, msg);
+	}
+}

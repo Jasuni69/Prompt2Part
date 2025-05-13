@@ -1,0 +1,1 @@
+function pocket_handle_rad(type)       = type[5]; //! Min corner rad

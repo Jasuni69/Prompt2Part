@@ -1,0 +1,11 @@
+module alignSkin(direction = ZCENTER) g(alignSkin(direction));
+
+//-----------------------------------------------------------
+//changes alignment of the children objects
+//normally all box() or tube() objects are centered like
+//in cube(... , center=true)
+// but you can change this by adding for example a toRight() predicate
+//to create an object to the right of current reference point
+// changed by move() or translate()
+//i.e. toRight() toUp() box(side = 10);
+//shothand align() function calls

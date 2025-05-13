@@ -1,0 +1,82 @@
+function bezpath_offset(offset, bezier, N=3) =
+    assert(is_vector(offset,2))
+    assert(is_path(bezier,2), "\nbezpath_offset() works only on 2D bezier paths.")
+    assert(is_int(N))
+    assert(len(bezier)%N == 1, str("\nA degree ",N," bezier path should have a multiple of ",N," points in it, plus 1."))
+    let(
+        backbez = reverse([ for (pt = bezier) pt+offset ]),
+        bezend = len(bezier)-1
+    ) concat(
+        list_head(bezier),
+        lerpn(bezier[bezend], backbez[0], N, false),
+        list_head(backbez),
+        lerpn(backbez[bezend], bezier[0], N+1)
+    );
+
+
+
+// Section: Cubic Bezier Path Construction
+
+// Function: bez_begin()
+// Synopsis: Calculates starting bezier path control points.
+// Topics: Bezier Paths
+// See Also: bez_tang(), bez_joint(), bez_end()
+// Usage:
+//   pts = bez_begin(pt, a, r, [p=]);
+//   pts = bez_begin(pt, VECTOR, [r], [p=]);
+// Description:
+//   This is used to create the first endpoint and control point of a cubic bezier path.
+// Arguments:
+//   pt = The starting endpoint for the bezier path.
+//   a = If given a scalar, specifies the theta (XY plane) angle in degrees from X+.  If given a vector, specifies the direction and possibly distance of the first control point.
+//   r = Specifies the distance of the control point from the endpoint `pt`.
+//   ---
+//   p = If given, specifies the number of degrees away from the Z+ axis.
+// Example(2D): 2D Bezier Path by Angle
+//   bezpath = flatten([
+//       bez_begin([-50,  0],  45,20),
+//       bez_tang ([  0,  0],-135,20),
+//       bez_joint([ 20,-25], 135, 90, 10, 15),
+//       bez_end  ([ 50,  0], -90,20),
+//   ]);
+//   debug_bezier(bezpath);
+// Example(2D): 2D Bezier Path by Vector
+//   bezpath = flatten([
+//       bez_begin([-50,0],[0,-20]),
+//       bez_tang ([-10,0],[0,-20]),
+//       bez_joint([ 20,-25], [-10,10], [0,15]),
+//       bez_end  ([ 50,0],[0, 20]),
+//   ]);
+//   debug_bezier(bezpath);
+// Example(2D): 2D Bezier Path by Vector and Distance
+//   bezpath = flatten([
+//       bez_begin([-30,0],FWD, 30),
+//       bez_tang ([  0,0],FWD, 30),
+//       bez_joint([ 20,-25], 135, 90, 10, 15),
+//       bez_end  ([ 30,0],BACK,30),
+//   ]);
+//   debug_bezier(bezpath);
+// Example(3D,FlatSpin,VPD=200): 3D Bezier Path by Angle
+//   bezpath = flatten([
+//       bez_begin([-30,0,0],90,20,p=135),
+//       bez_tang ([  0,0,0],-90,20,p=135),
+//       bez_joint([20,-25,0], 135, 90, 15, 10, p1=135, p2=45),
+//       bez_end  ([ 30,0,0],-90,20,p=45),
+//   ]);
+//   debug_bezier(bezpath);
+// Example(3D,FlatSpin,VPD=225): 3D Bezier Path by Vector
+//   bezpath = flatten([
+//       bez_begin([-30,0,0],[0,-20, 20]),
+//       bez_tang ([  0,0,0],[0,-20,-20]),
+//       bez_joint([20,-25,0],[0,10,-10],[0,15,15]),
+//       bez_end  ([ 30,0,0],[0,-20,-20]),
+//   ]);
+//   debug_bezier(bezpath);
+// Example(3D,FlatSpin,VPD=225): 3D Bezier Path by Vector and Distance
+//   bezpath = flatten([
+//       bez_begin([-30,0,0],FWD, 20),
+//       bez_tang ([  0,0,0],DOWN,20),
+//       bez_joint([20,-25,0],LEFT,DOWN,r1=20,r2=15),
+//       bez_end  ([ 30,0,0],DOWN,20),
+//   ]);
+//   debug_bezier(bezpath);

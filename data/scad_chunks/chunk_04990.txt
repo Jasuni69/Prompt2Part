@@ -1,0 +1,38 @@
+function law_of_cosines(a, b, c, C) =
+    // Triangle Law of Cosines:
+    //   c^2 = a^2 + b^2 - 2*a*b*cos(C)
+    assert(num_defined([c,C]) == 1, "Must give exactly one of c= or C=.")
+    is_undef(c) ? sqrt(a*a + b*b - 2*a*b*cos(C)) :
+    acos(constrain((a*a + b*b - c*c) / (2*a*b), -1, 1));
+
+
+// Function: law_of_sines()
+// Synopsis: Applies the Law of Sines for an arbitrary triangle.
+// Topics: Geometry, Trigonometry, Triangles
+// See Also: law_of_cosines()
+// Usage:
+//   B = law_of_sines(a, A, b);
+//   b = law_of_sines(a, A, B=);
+// Description:
+//   Applies the Law of Sines for an arbitrary triangle.  Given two triangle side lengths and the
+//   angle between them, returns the angle of the corner opposite of the second side.  Given a side
+//   length, the opposing angle, and a second angle, returns the length of the side opposite of the
+//   second angle.
+// Figure(2D):
+//   stroke([[-50,0], [10,60], [50,0]], closed=true);
+//   color("black") {
+//       translate([ 33,35]) text(text="a", size=8, halign="center", valign="center");
+//       translate([  0,-6]) text(text="b", size=8, halign="center", valign="center");
+//       translate([-22,35]) text(text="c", size=8, halign="center", valign="center");
+//   }
+//   color("blue") {
+//       translate([-37, 6]) text(text="A", size=8, halign="center", valign="center");
+//       translate([  9,51]) text(text="B", size=8, halign="center", valign="center");
+//       translate([ 38, 6]) text(text="C", size=8, halign="center", valign="center");
+//   }
+// Arguments:
+//   a = The length of the first side.
+//   A = The angle in degrees of the corner opposite of the first side.
+//   b = The length of the second side.
+//   ---
+//   B = The angle in degrees of the corner opposite of the second side.

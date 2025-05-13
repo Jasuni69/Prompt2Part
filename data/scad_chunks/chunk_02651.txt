@@ -1,0 +1,6 @@
+module render_if(render = true, convexity = 2)      //! Renders an object if `render` is true, otherwise leaves it unrendered
+    if (render)
+        render(convexity = convexity)
+            children();
+    else
+        children();

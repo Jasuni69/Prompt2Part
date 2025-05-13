@@ -1,0 +1,1 @@
+function BLDC_shaft_length(type)                = type[4]; //! Total shaft length

@@ -1,0 +1,1 @@
+function box_feet(type)        = type[6]; //! True to enable feet on the bottom bezel

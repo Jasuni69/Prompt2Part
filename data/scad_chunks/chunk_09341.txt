@@ -1,0 +1,30 @@
+module CloseLoop(pointarrays) {
+  function recurse_avg(arr, n=0, p=[0,0,0]) = (n>=len(arr)) ? p :
+    recurse_avg(arr, n+1, p+(arr[n]-p)/(n+1));
+
+  N = len(pointarrays);
+  P = len(pointarrays[0]);
+  NP = N*P;
+
+  faces_loop = [
+    for (j=[0:N-1], i=[0:P-1], t=[0:1])
+      t==0 ?
+        [j*P+i, ((j+1)%N)*P+i, ((j+1)%N)*P+(i+1)%P] :
+        [j*P+i, ((j+1)%N)*P+(i+1)%P, j*P+(i+1)%P]
+  ];
+
+  points = [
+    for (i=[0:NP-1])
+      pointarrays[floor(i/P)][i%P]
+  ];
+
+  polyhedron(points=points, faces=faces_loop, convexity=8);
+}
+
+
+// Perform an affine transformation of matrix M on coordinate v.
+//
+// [Scale X]          [Shear X along Y] [Shear X along Z] [Translate X]
+// [Shear Y along X]  [Scale Y]         [Shear Y along Z] [Translate Y]
+// [Shear Z along X]  [Shear Z along Y] [Scale Z]         [Translate Z]
+// or rotation matrix [[cos,-sin],[sin,cos]] in the 2 axes for a plane.

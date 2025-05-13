@@ -1,0 +1,1 @@
+function ssr_shroud_screw(type) = screw;                                    //! Screw used to fasten

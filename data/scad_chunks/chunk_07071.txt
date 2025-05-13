@@ -1,0 +1,19 @@
+module test_all_defined() {
+    assert(!all_defined([undef,undef,undef,undef,undef]));
+    assert(!all_defined([3,undef,undef,undef,undef]));
+    assert(!all_defined([undef,3,undef,undef,undef]));
+    assert(!all_defined([undef,undef,3,undef,undef]));
+    assert(!all_defined([undef,undef,undef,3,undef]));
+    assert(!all_defined([undef,undef,undef,undef,3]));
+    assert(!all_defined([3,undef,undef,undef,3]));
+    assert(all_defined([3,3,3,3,3]));
+    assert(!all_defined(["foo",undef,undef,undef,undef]));
+    assert(!all_defined([undef,"foo",undef,undef,undef]));
+    assert(!all_defined([undef,undef,"foo",undef,undef]));
+    assert(!all_defined([undef,undef,undef,"foo",undef]));
+    assert(!all_defined([undef,undef,undef,undef,"foo"]));
+    assert(!all_defined(["foo",undef,undef,undef,"foo"]));
+    assert(all_defined(["foo","foo","foo","foo","foo"]));
+    assert(!all_defined([undef,undef,true,false,undef]));
+}
+test_all_defined();

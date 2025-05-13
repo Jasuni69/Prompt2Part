@@ -1,0 +1,13 @@
+function echo_error(msg, pfx="ERROR") =
+	f_echo(str("<p style=\"background-color: #ffb0b0\"><b>", pfx, ":</b> ", msg, "</p>"));
+
+
+// Module: echo_warning()
+// Usage:
+//   echo_warning(msg, [pfx]);
+// Description:
+//   Emulates printing of a warning message.  The text will be shaded yellow.
+//   You can also use this as a function call from a function.
+// Arguments:
+//   msg = The message to print.
+//   pfx = The prefix to print before `msg`.  Default: `WARNING`

@@ -1,0 +1,1 @@
+function Len(x) = is_list(x) ? len(x) : 0;                                          //! Returns the length of a list or 0 if `x` is not a list

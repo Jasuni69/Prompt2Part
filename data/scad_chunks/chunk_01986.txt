@@ -1,0 +1,1 @@
+function ssr_shroud_width(type) = ssr_width(type) + 2 * wall + clearance;   //! Outside width of shroud

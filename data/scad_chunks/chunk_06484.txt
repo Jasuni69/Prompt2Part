@@ -1,0 +1,3 @@
+function up(z=0, p=_NO_ARG) =
+    assert(is_finite(z), "Invalid number")
+    move([0,0,z],p=p);

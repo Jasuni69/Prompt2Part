@@ -1,0 +1,3 @@
+function vx_difference(points1, points2) =
+    let(set = hashset(points2, hash = _pt3_hash))
+    [for(p = points1) if(!hashset_has(set, p, hash = _pt3_hash)) p];

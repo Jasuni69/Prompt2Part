@@ -1,0 +1,25 @@
+module pcb_utils() {
+    let($solder = [1, 0, 1.6])
+        solder();
+
+    r = 2;
+    h = 10;
+
+    color(grey(20))
+        cylinder(r = r, h = h);
+
+    color("silver")
+        vflip()
+            cylinder(d = 0.6, h = 3, $fs = fs, $fa = fa);
+
+    color("white")
+        translate_z(h / 2)
+            cylindrical_wrap(r = r)
+                resize([0, h * .8], auto = true)
+                    rotate(90)
+                        text("Hello", halign = "center", valign = "center");
+}
+
+if($preview)
+    rotate(-45)
+        pcb_utils();

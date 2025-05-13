@@ -1,0 +1,43 @@
+module half_joiner_clear(h=20, w=10, a=30, clearance=0, overlap=0.01, orient=ORIENT_Y, align=V_CENTER)
+{
+	dmnd_height = h*1.0;
+	dmnd_width = dmnd_height*tan(a);
+	guide_size = w/3;
+	guide_width = 2*(dmnd_height/2-guide_size)*tan(a);
+
+	orient_and_align([w, guide_width, h], orient, align, orig_orient=ORIENT_Y) {
+		yspread(overlap, n=overlap>0? 2 : 1) {
+			difference() {
+				// Diamonds.
+				scale([w+clearance, dmnd_width/2, dmnd_height/2]) {
+					xrot(45) cube(size=[1,sqrt(2),sqrt(2)], center=true);
+				}
+				// Blunt point of tab.
+				yspread(guide_width+4) {
+					cube(size=[(w+clearance)*1.05, 4, h*0.99], center=true);
+				}
+			}
+		}
+		if (overlap>0) cube([w+clearance, overlap+0.001, h], center=true);
+	}
+}
+
+
+
+// Module: half_joiner()
+// Usage:
+//   half_joiner(h, w, l, [a], [screwsize], [guides], [slop], [orient], [align])
+// Description:
+//   Creates a half_joiner object that can be attached to half_joiner2 object.
+// Arguments:
+//   h = Height of the half_joiner.
+//   w = Width of the half_joiner.
+//   l = Length of the backing to the half_joiner.
+//   a = Overhang angle of the half_joiner.
+//   screwsize = Diameter of screwhole.
+//   guides = If true, create sliding alignment guides.
+//   slop = Printer specific slop value to make parts fit more closely.
+//   orient = Orientation of the shape.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Y`.
+//   align = Alignment of the shape by the axis-negative (size1) end.  Use the `V_` constants from `constants.scad`.  Default: `V_CENTER`.
+// Example:
+//   half_joiner(screwsize=3, orient=ORIENT_X);

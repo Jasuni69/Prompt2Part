@@ -1,0 +1,23 @@
+function f_napprox(a,b) = f_2arg_simple(function (a,b) !approx(a,b))(a,b);
+
+
+
+//////////////////////////////////////////////////////////////////////
+// Section: Logic Operators
+
+
+// Function: f_or()
+// Synopsis: Returns a function to check if either `a` or `b` is true.
+// Topics: Function Literals, Logic, Boolean Operations
+// See Also: f_or(), f_and(), f_nor(), f_nand(), f_xor(), f_not()
+// Usage:
+//   fn = f_or();
+//   fn = f_or(a=);
+//   fn = f_or(b=);
+//   fn = f_or(a=,b=);
+// Description:
+//   A factory that generates function literals based on `a || b`, where
+//   either or both of the `a` or `b` arguments can be replaced with constants.
+// Arguments:
+//   a = If given, replaces the first argument.
+//   b = If given, replaces the second argument.

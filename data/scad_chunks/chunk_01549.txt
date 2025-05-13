@@ -1,0 +1,1 @@
+function rd_electrolytic_crimp(type)   = type[3]; //! Width and height of crimp

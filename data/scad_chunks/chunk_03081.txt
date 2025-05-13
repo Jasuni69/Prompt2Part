@@ -1,0 +1,50 @@
+];
+
+//-------------------------------------------------------------------                            
+//-- padding between pcb and inside wall
+paddingFront        = 2;
+paddingBack         = 2;
+paddingRight        = 2;
+paddingLeft         = 2;
+
+//-- Edit these parameters for your own box dimensions
+wallThickness       = 2.0;
+basePlaneThickness  = 1.5;
+lidPlaneThickness   = 1.5;
+
+//-- Total height of box = lidPlaneThickness 
+//                       + lidWallHeight 
+//--                     + baseWallHeight 
+//                       + basePlaneThickness
+//-- space between pcb and lidPlane :=
+//--      (bottonWallHeight+lidWallHeight) - (standoffHeight+pcbThickness)
+baseWallHeight      = 25;
+lidWallHeight       = 23;
+
+//-- ridge where base and lid off box can overlap
+//-- Make sure this isn't less than lidWallHeight
+ridgeHeight         = 5.0;
+ridgeSlack          = 0.2;
+roundRadius         = 3.0;
+
+// Box Types are 0-4 with 0 as the default
+// 0 = All edges rounded with radius (roundRadius) above
+// 1 = All edges sqrtuare
+// 2 = All edges chamfered by (roundRadius) above 
+// 3 = Square top and bottom edges (the ones that touch the build plate) and rounded vertical edges
+// 4 = Square top and bottom edges (the ones that touch the build plate) and chamfered vertical edges
+// 5 = Chanfered top and bottom edges (the ones that touch the build plate) and rounded vertical edges
+boxType             = 0; // Default type 0
+
+// Set the layer height of your printer
+printerLayerHeight  = 0.2;
+
+
+//---------------------------
+//--     C O N T R O L     --
+//---------------------------
+// -- Render --
+renderQuality             = 8;          //-> from 1 to 32, Default = 8
+
+// --Preview --
+previewQuality            = 5;          //-> from 1 to 32, Default = 5

@@ -1,0 +1,27 @@
+module back_assembly() pose([ 228.60, 0.00, 24.30 ])
+assembly("back") {
+    translate(pms5003_pos)
+        explode(-50)
+            rotate([90, 0, 0])
+                pms5003();
+
+    explode(-20, explode_children = true)
+        translate(fan_pos) {
+            explode(-20)
+                fan(fan);
+
+            translate_z(-fan_depth(fan) / 2)
+                stl_colour(pp4_colour)
+                    render()
+                        fan_duct_stl();
+        }
+
+    translate_z(height + top_thickness + base_thickness + eps) vflip()
+        stl_colour(show_box ? pp1_colour : pp2_colour) render() enviro_plus_case_base_stl();
+}
+
+//! * Solder the fan wires to the veroboard assembly
+//!
+//! ![FanWires](docs/fan_connection.jpg)
+//!
+//! * Slide the back assembly into the case and secure with four M2 x 6mm cap screws and washers.

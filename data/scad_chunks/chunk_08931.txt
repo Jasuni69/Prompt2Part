@@ -1,0 +1,1 @@
+function gyroid(x, y, z) = sin(x) * cos(y) + sin(y) * cos(z) + sin(z) * cos(x);

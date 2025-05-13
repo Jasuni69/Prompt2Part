@@ -1,0 +1,27 @@
+module hookLidInside()
+{
+  echo("hookLidInsidePost(switchBox) ..");
+  
+  translate([(47.5+wallThickness+paddingFront)
+                , (38.5+wallThickness+paddingRight+paddingLeft)
+                , (switchWallHeight+0)/-2])
+  {
+    difference()
+    {
+      //-- [49.5, 41.5, 12, 14, 0, yappRectangle, yappCenter]   //-- switchBlock
+      //-- [49.5, 41.5, 13, 15, 0, yappRectangle, yappCenter]   //-- switchBlock
+
+      color("blue") cube([switchLength, switchWidth, switchWallHeight], center=true);
+      color("red")  cube([switchLength-switchWallThickness, 
+                            switchWidth-switchWallThickness, switchWallHeight+1], center=true);
+    }
+  }
+  
+  
+} // hookLidInside(dummy)
+  
+
+//----------------------------------------------------------
+
+//---- This is where the magic happens ----
+YAPPgenerate();

@@ -1,0 +1,4 @@
+function quantup(x,y) =
+    assert( is_finite(y) && y>0, "\nThe quantum `y` must be a positive value.")
+    is_num(x) ? ceil(x/y)*y 
+              : _ceilall(x/y)*y;

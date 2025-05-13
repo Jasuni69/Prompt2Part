@@ -1,0 +1,81 @@
+function config_nbrs(maze) =
+	let(
+		outmost = len(maze) - 1,
+		mz_empty_outs = [ // config empty outwards except outmost row
+			for(row = maze)
+			[
+				for(c = row)
+					get_ri(c) < outmost ? set_outwards(c, []) : c
+			]
+		],
+		cell_outwards_lt = [
+			for(row = mz_empty_outs, c = row)
+				let(
+					ri = get_ri(c),
+					ci = get_ci(c),
+					r_leng = len(mz_empty_outs[ri])
+				)
+				if(ri > 0) 
+					[
+					    [ri - 1, floor(ci / (r_leng / len(mz_empty_outs[ri - 1])))], 
+						[ri, ci]
+					]
+		],
+		mz_cw_ccw_inward = [ // config cw, ccw, inward nbrs
+			for(row = mz_empty_outs)
+			[
+				for(c = row)
+				let(
+					ri = get_ri(c),
+					ci = get_ci(c),
+					r_leng = len(mz_empty_outs[ri]),
+					cw = [ri, ci > 0 ? (ci - 1) : (ci - 1 + r_leng)],
+					ccw = [ri, (ci + 1) % r_leng]
+				)
+				ri > 0 ? 
+					let(
+						ratio = r_leng / len(mz_empty_outs[ri - 1]),
+						inward = [ri - 1, floor(ci / ratio)]
+					)
+					[ri, ci, c[2], c[3], inward, c[5], cw, ccw] : 
+					[ri, ci, c[2], c[3], c[4], c[5], cw, ccw]
+			]
+		]
+	)
+	config_outwards(mz_cw_ccw_inward, cell_outwards_lt);
+
+// function isVisitable(cell) = cell[3];
+isVisitable = function(cell) cell[3];
+
+// dirs
+IN = 0;  
+OUT = 1;  
+CW = 2;  
+CCW = 3;  
+
+_rand_dir_table = [
+    [0, 1, 2, 3],
+    [0, 1, 3, 2],
+    [0, 2, 1, 3],
+    [0, 2, 3, 1],
+    [0, 3, 1, 2],
+    [0, 3, 2, 1],
+    [1, 0, 2, 3],
+    [1, 0, 3, 2],
+    [1, 2, 0, 3],
+    [1, 2, 3, 0],
+    [1, 3, 0, 2],
+    [1, 3, 2, 0],
+    [2, 0, 1, 3],
+    [2, 0, 3, 1],
+    [2, 1, 0, 3],
+    [2, 1, 3, 0],
+    [2, 3, 0, 1],
+    [2, 3, 1, 0],
+    [3, 0, 1, 2],
+    [3, 0, 2, 1],
+    [3, 1, 0, 2],
+    [3, 1, 2, 0],
+    [3, 2, 0, 1],
+    [3, 2, 1, 0]
+];

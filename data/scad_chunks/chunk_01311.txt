@@ -1,0 +1,10 @@
+module gm_shaft_shape(type) {
+    shaft = gm_shaft(type);
+    r =  shaft.x / 2;
+    difference() {
+        circle(r);
+
+        translate([-r + shaft.y, -r - 1])
+            square([shaft.x, 2 *(r + 1)]);
+    }
+}

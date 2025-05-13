@@ -1,0 +1,85 @@
+module acme_threaded_nut(
+    nutwidth, id, h, tpi, pitch,
+    starts=1,
+    left_handed=false,shape="hex",
+    bevel,bevel1,bevel2,bevang=30,
+    ibevel,ibevel1,ibevel2,
+    height,thickness,
+    length, l,
+    blunt_start, blunt_start1, blunt_start2,
+    lead_in, lead_in1, lead_in2,
+    lead_in_ang, lead_in_ang1, lead_in_ang2,
+    end_len, end_len1, end_len2,
+    lead_in_shape="default",
+    anchor, spin, orient
+) {
+    dummy = assert(num_defined([pitch,tpi])==1,"Must give exactly one of pitch and tpi");
+    pitch = is_undef(pitch) ? INCH/tpi : pitch;
+    dummy2=assert(is_num(pitch) && pitch>=0);
+    trapezoidal_threaded_nut(
+        nutwidth=nutwidth, id=id, h=h, pitch=pitch,
+        thread_depth = pitch/2, 
+        thread_angle=29,shape=shape, 
+        left_handed=left_handed,
+        bevel=bevel,bevel1=bevel1,bevel2=bevel2,
+        ibevel=ibevel,ibevel1=ibevel1,ibevel2=ibevel2,
+        height=height,thickness=thickness,
+        blunt_start=blunt_start, blunt_start1=blunt_start1, blunt_start2=blunt_start2,
+        lead_in=lead_in, lead_in1=lead_in1, lead_in2=lead_in2, lead_in_shape=lead_in_shape,
+        lead_in_ang=lead_in_ang, lead_in_ang1=lead_in_ang1, lead_in_ang2=lead_in_ang2,
+        end_len=end_len, end_len1=end_len1, end_len2=end_len2,
+        l=l,length=length,
+        starts=starts,
+        anchor=anchor,
+        spin=spin,
+        orient=orient
+    ) children();
+}
+
+
+
+
+// Section: Pipe Threading
+
+// Module: npt_threaded_rod()
+// Synopsis: Creates NPT pipe threading.
+// SynTags: Geom
+// Topics: Threading, Screws
+// See Also: acme_threaded_rod()
+// Usage:
+//   npt_threaded_rod(size, [internal=], ...) [ATTACHMENTS];
+// Description:
+//   Constructs a standard NPT pipe end threading. If `internal=true`, creates a mask for making
+//   internal pipe threads.  Tapers smaller upwards if `internal=false`.  Tapers smaller downwards
+//   if `internal=true`.  If `hollow=true` and `internal=false`, then the pipe threads will be
+//   hollowed out into a pipe with the apropriate internal diameter.
+// Arguments:
+//   size = NPT standard pipe size in inches.  1/16", 1/8", 1/4", 3/8", 1/2", 3/4", 1", 1+1/4", 1+1/2", or 2".  Default: 1/2"
+//   ---
+//   left_handed = If true, create left-handed threads.  Default = false
+//   bevel = if true, bevel the thread ends.  Default: false
+//   bevel1 = if true bevel the bottom end.
+//   bevel2 = if true bevel the top end. 
+//   hollow = If true, create a pipe with the correct internal diameter.
+//   internal = If true, make this a mask for making internal threads.
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//   $slop = The printer-specific slop value, which adds clearance (`4*$slop`) to internal threads.
+// Example(2D): The straight gray rectangle reveals the tapered threads.  
+//   projection(cut=true) npt_threaded_rod(size=1/4, orient=BACK);
+//   right(.533*INCH/2) color("gray") rect([2,0.5946*INCH],anchor=LEFT);
+// Examples(Med):
+//   npt_threaded_rod(size=3/8, $fn=72);
+//   npt_threaded_rod(size=1/2, $fn=72, bevel=true);
+//   npt_threaded_rod(size=1/2, left_handed=true, $fn=72);
+//   npt_threaded_rod(size=3/4, hollow=true, $fn=96);
+// Example:
+//   diff("remove"){
+//      cuboid([40,40,40])
+//      tag("remove"){
+//        up(.01)position(TOP)
+//            npt_threaded_rod(size=3/4, $fn=96, internal=true, $slop=0.1, anchor=TOP);
+//        cyl(d=3/4*INCH, l=42, $fn=32);
+//      }
+//   }

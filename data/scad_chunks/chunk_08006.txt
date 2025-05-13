@@ -1,0 +1,9 @@
+function dragon_curve(n = 10, angle = 90, leng = 1, heading = 0, start = [0, 0]) = 
+    let(
+        axiom = "FX",
+        rules = [
+            ["X", "X+YF+"],
+            ["Y", "-FX-Y"]
+        ]
+    )
+    lsystem2(axiom, rules, n, angle, leng, heading, start);

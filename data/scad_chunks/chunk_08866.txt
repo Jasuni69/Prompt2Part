@@ -1,0 +1,6 @@
+function _sub_obtuse(a, b, c) =
+	let(
+		PHI = 1.618033988749895,
+		r = b + (c - b) / PHI
+	) 
+	[["OBTUSE", r, c, a], each _sub_acute(b, a, r)];

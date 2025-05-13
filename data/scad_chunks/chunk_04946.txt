@@ -1,0 +1,24 @@
+function transpose(M, reverse=false) =
+    assert( is_list(M) && len(M)>0, "Input to transpose must be a nonempty list.")
+    is_list(M[0])
+    ?   let( len0 = len(M[0]) )
+        assert([for(a=M) if(!is_list(a) || len(a)!=len0) 1 ]==[], "Input to transpose has inconsistent row lengths." )
+        reverse
+        ? [for (i=[0:1:len0-1]) 
+              [ for (j=[0:1:len(M)-1]) M[len(M)-1-j][len0-1-i] ] ] 
+        : [for (i=[0:1:len0-1]) 
+              [ for (j=[0:1:len(M)-1]) M[j][i] ] ] 
+    :  assert( is_vector(M), "Input to transpose must be a vector or list of lists.")
+           M;
+
+
+// Function: outer_product()
+// Synopsis: Compute the outer product of two vectors. 
+// Topics: Linear Algebra, Matrices
+// See Also: submatrix(), determinant()
+// Usage:
+//   x = outer_product(u,v);
+// Description:
+//   Compute the outer product of two vectors, which is a matrix.
+// Usage:
+//   M = outer_product(u,v);

@@ -1,0 +1,27 @@
+function _bbox_faces(v0, voxsize, bbox) = let(
+    a = v_abs(v0-bbox[0]),
+    bb1 = bbox[1] - voxsize,
+    b = v0-bb1
+) [
+    if(a[0]<EPSILON) 1,
+    if(a[1]<EPSILON) 2,
+    if(a[2]<EPSILON) 3,
+    if(b[0]>=-EPSILON) 4,
+    if(b[1]>=-EPSILON) 5,
+    if(b[2]>=-EPSILON) 6
+];
+/// End of bounding-box face-clipping stuff
+/// -----------------------------------------------------------
+
+
+/// isosurface_cubes() - private function, called by isosurface()
+/// This implements a marching cubes algorithm, sacrificing some memory in favor of speed.
+/// Return a list of voxel cube structures that have one or both surfaces isovalmin or isovalmax intersecting them, and cubes inside the isosurface volume that are at the bounds of the bounding box.
+/// The cube structure is:
+/// [cubecoord, cubeindex_isomin, cubeindex_isomax, cf, bfaces]
+/// where
+///     cubecoord is the [x,y,z] coordinate of the front left bottom corner of the voxel.
+///     cubeindex_isomin and cubeindex_isomax are the index IDs of the voxel corresponding to the min and max iso surface intersections.
+///     cf (corner function) is vector containing the 8 field strength values at each corner of the voxel cube.
+///     bfaces is an array of faces corresponding to the sides of the bounding box - this is empty most of the time; it has data only where the isosurface is clipped by the bounding box.
+/// The bounding box 'bbox' is expected to be quantized for the voxel size already, and `voxsize` is a 3-vector.

@@ -1,0 +1,41 @@
+function plane_from_points(points, check_coplanar=false, eps=EPSILON, fast) =
+    assert( is_path(points,dim=3), "\nImproper 3d point list." )
+    assert( is_finite(eps) && (eps>=0), "\nThe tolerance should be a non-negative value." )
+    len(points) == 3
+      ? plane3pt(points[0],points[1],points[2]) 
+      : let(
+            dep = is_def(fast) ? echo("In plane_from_points() the 'fast' parameter is deprecated; use 'check_coplanar' instead.") true : false,
+            check = dep ? fast : check_coplanar,
+            covmix = _covariance_evec_eval(points,2),
+            pm     = covmix[0], // point mean
+            evec   = covmix[1], // eigenvector corresponding to smallest eigenvalue
+            eval0  = covmix[2], // smallest eigenvalue
+            plane  = [ each evec, pm*evec]
+        )
+        check && _pointlist_greatest_distance(points,plane)>eps*eval0 ? undef :
+        plane ;
+
+
+// Function: plane_from_polygon()
+// Synopsis: Given a 3d planar polygon, returns directed plane.  
+// Topics: Geometry, Planes, Polygons
+// See Also: plane3pt(), plane3pt_indexed(), plane_from_normal(), plane_from_points(), plane_from_polygon()
+// Usage:
+//   plane = plane_from_polygon(points, [check_coplanar], [eps]);
+// Description:
+//   Given a 3D planar polygon, returns the normalized cartesian equation of its plane. 
+//   Returns [A,B,C,D] where Ax+By+Cz=D is the equation of the plane where norm([A,B,C])=1.
+//   If not all the points in the polygon are coplanar, then [] is returned.
+//   If `check_coplanar=true` and the points in the list are collinear or not coplanar, then `undef` is returned.
+//   if `check_coplanar=false`, then the coplanarity test is skipped and a plane passing through 3 non-collinear arbitrary points is returned.
+//   The normal direction is determined by the order of the points and the right hand rule.
+// Arguments:
+//   poly = The planar 3D polygon to find the plane of.
+//   check_coplanar = If false, doesn't verify that all points in the polygon are coplanar.  Default: true
+//   eps = Tolerance in geometric comparisons.  Default: `EPSILON` (1e-9)
+// Example(3D):
+//   xyzpath = rot(45, v=[0,1,0], p=path3d(star(n=5,step=2,d=100), 70));
+//   plane = plane_from_polygon(xyzpath);
+//   #stroke(xyzpath,closed=true,width=3);
+//   cp = centroid(xyzpath);
+//   move(cp) rot(from=UP,to=plane_normal(plane)) anchor_arrow(45);

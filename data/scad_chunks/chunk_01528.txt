@@ -1,0 +1,55 @@
+module rd_xtal(type, value, z = 0, pitch = undef, tail = 3) { //! Draw a crystal
+    vitamin(str("rd_xtal(", type[0], ", \"", value, "\"): Crystal ", type[0], " ", value));
+    s = rd_xtal_size(type);
+    r = len(s) < 4 ? s.y / 2 - eps : s[3];
+    f = rd_xtal_flange(type);
+    cp = rd_xtal_pitch(type);
+    p = is_undef(pitch) ? cp : pitch;
+    d = rd_xtal_lead_d(type);
+    r2 = 0.2;
+
+    $fs = fs; $fa = fa;
+    color(silver) {
+        translate_z(z) {
+            if(s.y) {
+                rounded_rectangle([s.x, s.y, s.z - r2], r);
+
+                translate_z(s.z - r2)
+                    rounded_top_rectangle([s.x, s.y, r2], r, r2);
+            }
+            else
+                rounded_cylinder(r = s.x / 2, h = s.z, r2 = r2);
+
+            if(f) {
+                rounded_rectangle([s.x + 2 * f.x, s.y + 2 * f.x, f[1]], r + f.x);
+
+                if(is_list(cp))
+                    translate([-s.x / 2 - f.x, -s.y / 2 - f.x])
+                        cube([r + f.x, r + f.x, f[1]]); // Pin 1 marked by sharp corner on 4 pin packages
+            }
+        }
+        radial_leads(cp, p, z, d, tail);
+    }
+
+    color(grey(10)) {
+        if(!is_undef(value))
+            if(s.y)
+                translate_z(z + s.z)
+                    linear_extrude(eps)
+                        resize([s.x * 0.75, s.y / 2])
+                            text(value, halign = "center", valign = "center");
+            else
+                translate_z(z + s.z / 2)
+                    let($fn = 32)
+                        cylindrical_wrap(s.x / 2)
+                            rotate(-90)
+                               resize([s.z * 0.9, s.x * PI / 4])
+                                    text(value, halign = "center", valign = "center");
+        if(s.y)
+            lead_positions(cp, z)
+                cylinder(d = d * 4, h = 2 * eps, center = true);
+        else
+            translate_z(z)
+                cylinder(d = (s.x + cp) / 2, h = 2 * eps, center = true);
+    }
+}

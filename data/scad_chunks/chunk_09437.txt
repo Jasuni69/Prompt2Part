@@ -1,0 +1,13 @@
+function matrix4_translate(v) = [
+	[1, 0, 0, v.x],
+	[0, 1, 0, v.y],
+	[0, 0, 1, v.z],
+	[0 ,0, 0,   1]
+];
+
+
+// Function: matrix3_scale()
+// Description:
+//   Returns the 3x3 matrix to perform a 2D scaling transformation.
+// Arguments:
+//   v = 2D vector of scaling factors.  [X,Y]

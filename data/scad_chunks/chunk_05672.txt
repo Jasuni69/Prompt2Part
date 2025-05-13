@@ -1,0 +1,18 @@
+function _ellipse_refine(a,b,N, _theta=[]) =
+   len(_theta)==0? _ellipse_refine(a,b,N,lerpn(0,360,N,endpoint=false))
+   :
+   let(
+       pts = [for(t=_theta) [a*cos(t),b*sin(t)]],
+       lenlist= path_segment_lengths(pts,closed=true),
+       meanlen = mean(lenlist),
+       error = lenlist/meanlen
+   )
+   all_equal(error,EPSILON) ? pts
+   :
+   let(
+        dtheta = [each deltas(_theta),
+                  360-last(_theta)],
+        newdtheta = [for(i=idx(dtheta)) dtheta[i]/error[i]],
+        adjusted = [0,each cumsum(list_head(newdtheta / sum(newdtheta) * 360))]
+   )
+   _ellipse_refine(a,b,N,adjusted);

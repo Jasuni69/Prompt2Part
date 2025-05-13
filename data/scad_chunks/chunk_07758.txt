@@ -1,0 +1,45 @@
+module Halbrund(h=10,d=3+2*spiel,d2,x=1.0-spiel,doppel=false,name,help)
+{
+   d2=is_undef(d2)?doppel?d-x*2:d-x:d2;
+   x=is_undef(d2)?x:doppel?(d-d2)/2:d-d2;    
+if(h){difference()
+{
+  if($children)children();   
+  if(!doppel)difference()
+    {
+        cylinder(d=d,h=h*2,center=true,$fn=36);
+        translate([d/2-x, -25, -50])cube([50,50,100],center=false);
+    }
+  else intersection()
+    {
+        cylinder(d=d,h=h*2,center=true,$fn=36);
+        cube([d2,d+1,100],center=true);
+        //translate([-d/2+x-50, -25, -50])cube([50,50,100],center=false);
+    } 
+    
+}
+}
+else difference(){
+ if($children)children(); 
+ if(!doppel) difference()
+    {
+        circle(d=d,$fn=36);
+        translate([d/2-x, -25])square([50,50],center=false);
+    }
+    else intersection(){
+        circle(d=d,$fn=36);
+        square([d2,d+1],center=true);
+    }
+}
+  if (name)echo(str(is_string(name)?"<H3>":"",name," Halbrund",h?str(" l= ",h): " h=0↦2D"," ∅= ",(d)," Abgeflacht um= ",x," ↦",d2));  
+     
+ HelpTxt("Halbrund",[
+ "h",h,
+"d",d,
+"d2",d2,
+"x",x,
+"doppel",doppel,
+"name",name],
+help); 
+    
+}

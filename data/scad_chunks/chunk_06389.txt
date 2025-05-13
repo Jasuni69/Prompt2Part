@@ -1,0 +1,4 @@
+function circle_line_intersection(r, cp, line, bounded=false, d, eps=EPSILON) =
+  assert(_valid_line(line,2), "\nInvalid 2d line.")
+  assert(is_vector(cp,2), "\nCircle center must be a 2-vector")
+  _circle_or_sphere_line_intersection(r, cp, line, bounded, d, eps);

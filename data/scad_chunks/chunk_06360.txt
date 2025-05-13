@@ -1,0 +1,24 @@
+function segment_distance(seg1, seg2,eps=EPSILON) =
+    assert( is_matrix(concat(seg1,seg2),4), "\nInputs should be two valid segments." )
+    convex_distance(seg1,seg2,eps);
+
+
+// Function: line_normal()
+// Synopsis: Return normal vector to given line. 
+// Topics: Geometry, Lines
+// See Also: line_intersection(), line_from_points()
+// Usage:
+//   vec = line_normal([P1,P2])
+//   vec = line_normal(p1,p2)
+// Description:
+//   Returns the 2D normal vector to the given 2D line. This is otherwise known as the perpendicular vector counter-clockwise to the given ray.
+// Arguments:
+//   p1 = First point on 2D line.
+//   p2 = Second point on 2D line.
+// Example(2D):
+//   p1 = [10,10];
+//   p2 = [50,30];
+//   n = line_normal(p1,p2);
+//   stroke([p1,p2], endcap2="arrow2");
+//   color("green") stroke([p1,p1+10*n], endcap2="arrow2");
+//   color("blue") move_copies([p1,p2]) circle(d=2, $fn=12);

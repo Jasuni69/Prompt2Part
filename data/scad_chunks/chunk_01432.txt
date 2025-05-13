@@ -1,0 +1,1 @@
+function ringterm_hole(type)         = type[5];    //! Wire hole diameter

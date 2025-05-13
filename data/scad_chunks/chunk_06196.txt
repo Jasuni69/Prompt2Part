@@ -1,0 +1,99 @@
+module nut(spec, shape, thickness, nutwidth, thread, tolerance, hole_oversize, 
+           bevel,bevel1,bevel2,bevang=15,ibevel,ibevel1,ibevel2,blunt_start, blunt_start1, blunt_start2, anchor=BOTTOM, spin=0, orient=UP, oversize=0)
+{
+   dummyA = assert(is_undef(nutwidth) || (is_num(nutwidth) && nutwidth>0));
+   
+   tempspec = _get_spec(spec, "nut_info", "nut", 
+                        thread=thread, shape=shape, thickness=thickness);
+   spec=_struct_reset(tempspec,[
+                                ["width", nutwidth],
+                                ["shaft_oversize", hole_oversize],
+                               ]);
+   dummy=_validate_nut_spec(spec);
+   $screw_spec = spec;
+   shape = struct_val(spec, "shape");
+   pitch =  struct_val(spec, "pitch") ;
+   threadspec = pitch==0 ? undef : thread_specification(spec, internal=true, tolerance=tolerance);
+   nutwidth = struct_val(spec, "width");
+   thickness = struct_val(spec, "thickness");
+   threaded_nut(
+        nutwidth=nutwidth,
+        id=pitch==0 ? _nominal_diam(spec)
+          : [mean(struct_val(threadspec, "d_minor")),
+             mean(struct_val(threadspec, "d_pitch")),
+             mean(struct_val(threadspec, "d_major"))],
+        pitch = pitch, 
+        h=thickness,
+        shape=shape, 
+        bevel=bevel,bevel1=bevel1,bevel2=bevel2,bevang=bevang,
+        ibevel=ibevel,ibevel1=ibevel1,ibevel2=ibevel2,
+        blunt_start=blunt_start, blunt_start1=blunt_start1, blunt_start2=blunt_start2,         
+        anchor=anchor,spin=spin,orient=orient) children();
+}
+
+
+
+
+
+
+// Module: nut_trap_side()
+// Synopsis: Creates a side nut trap mask.
+// SynTags: Geom
+// Topics: Threading, Screws
+// See Also: screw(), screw_hole()
+// Usage:
+//   nut_trap_side(trap_width, [spec], [shape], [thickness], [nutwidth=], [poke_len=], [poke_diam=], [$slop=], [anchor=], [orient=], [spin=]) [ATTACHMENTS];
+// Description:
+//   Create a nut trap that extends sideways, so the nut slides in perpendicular to the screw axis.
+//   The CENTER anchor is the center of the screw hole location in the trap.  The trap width is
+//   measured from the screw hole center point.  You can optionally create a poke hole to use for
+//   removing the nut by specifying a poke_len value that determines the length of the poke hole, measured
+//   from the screw center.  The diameter of the poke hole defaults to the thickness of the nut.  The nut dimensions
+//   will be increased by `2*$slop` to allow adjusting the fit of the trap for your printer.  
+//   The trap will have a default tag of "remove" if no other tag is in force.  
+// Arguments:
+//   trap_width = width of nut trap, measured from screw center, must be larger than half the nut width  (If spec is omitted this argument must be given by name.)
+//   spec = nut specification, e.g. "M5" or "#8".  See [screw naming](#subsection-screw-naming).  This can also be a screw or nut specification structure of the form produced by {{nut_info()}} or {{screw_info()}}.  
+//   shape = "hex" or "square" to specify the shape of the nut.   Default: "hex"
+//   thickness = "thin", "normal", or "thick".  "DIN" or "undersized" for metric nuts.  See [nuts](#subsection-nuts). Default: "normal"
+//   ---
+//   nutwidth = width of the nut.  Default: determined from tables
+//   poke_len = length of poke hole.  Default: no poke hole
+//   poke_diam = diameter of poke hole.  Default: nut thickness
+//   $slop = extra space left to account for printing over-extrusion.  Default: 0
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `BOTTOM`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+// Side Effects:
+//   `$screw_spec` is set to the spec specification structure. 
+// Example: Basic trap.  Note that screw center is at the origin and the width is measured from the origin.  
+//   nut_trap_side(10, "#8");
+// Example: Trap with poke hole for removing nut.  The poke hole length is also measured from the screw center at the origin
+//   $fn=16;
+//   nut_trap_side(10, "#8", poke_len=10);
+// Example: Trap for square nut
+//   $fn=16;
+//   nut_trap_side(10, "#8", shape="square", poke_len=10);
+// Example: Trap with looser fit
+//   nut_trap_side(10, "#8", $slop=0.1);
+// Example: Trap placed at the bottom of a screw hole
+//   $fn=24;
+//   screw_hole("#8,1") 
+//     position(BOT) nut_trap_side(10,poke_len=8);
+// Example: Trap placed at the bottom of a screw hole 2mm extra screw hole below the trap
+//   $fn=24;
+//   screw_hole("#8,1") 
+//     up(2) position(BOT) nut_trap_side(trap_width=10,poke_len=8);
+// Example: Hole-trap assembly removed from an object
+//   $fn=24;
+//   back_half()
+//   diff()
+//   cuboid(30)
+//      position(TOP)screw_hole("#8,1",anchor=TOP) 
+//        position(BOT) nut_trap_side(trap_width=16);
+// Example: Hole-trap assembly where we position the trap relative to a feature on the model and then position the screw hole through the trap as a child to the trap.  
+//  diff()
+//   cuboid([30,30,20])
+//     position(RIGHT)cuboid([4,20,3],anchor=LEFT)
+//       right(1)position(TOP+LEFT)nut_trap_side(15, "#8",anchor=BOT+RIGHT)
+//         screw_hole(length=20,anchor=BOT);

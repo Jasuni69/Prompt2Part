@@ -1,0 +1,68 @@
+module pillar(type) { //! Draw specified pillar
+    function sex(thread) = thread > 0 ? "M" : "F";
+    function fn(n) = n ? n : $fn;
+
+    sex = str(sex(pillar_bot_thread(type)),"/", sex(pillar_top_thread(type)));
+    height = pillar_height(type);
+    thread_d = pillar_thread(type);
+    bot_thread_l = pillar_bot_thread(type);
+    top_thread_l = pillar_top_thread(type);
+    thread_colour = pillar_i_colour(type);
+    pitch = metric_coarse_pitch(thread_d);
+
+    vitamin(str("pillar(", type[0], "): Pillar ", pillar_name(type), " ", sex, " M", thread_d, "x", height));
+
+    $fa = fa; $fs = fs;
+
+    if(bot_thread_l > 0)
+        translate_z(-bot_thread_l + eps)
+            if(show_threads)
+                male_metric_thread(thread_d, pitch, bot_thread_l, false, top = 0, colour = thread_colour);
+            else
+                color(thread_colour)
+                    cylinder(h = bot_thread_l, d = thread_d);
+
+    if(top_thread_l > 0)
+        translate_z(height - eps)
+            if(show_threads)
+                male_metric_thread(thread_d, pitch, top_thread_l, false, bot = 0, colour = thread_colour);
+            else
+                color(thread_colour)
+                    cylinder(h = top_thread_l, d = thread_d);
+
+    color(thread_colour)  {
+        if(pillar_chamfered(type))
+            draw_nut(pillar_id(type), thread_d, height, 0, thread_colour, false);
+        else
+            linear_extrude(height)
+                difference() {
+                    circle(d = pillar_id(type), $fn = fn(pillar_ifn(type)));
+                    circle(d = thread_d);
+                }
+
+        top = height + min(top_thread_l, 0);
+        bot = -min(bot_thread_l, 0);
+
+        translate_z(bot)
+            cylinder(h = top - bot,  d = thread_d + eps);
+    }
+
+    if(show_threads) {
+        if(top_thread_l < 0)
+            translate_z(height)
+                vflip()
+                    female_metric_thread(thread_d, pitch, -top_thread_l, bot = 1, false, colour = thread_colour);
+
+        if(bot_thread_l < 0)
+            female_metric_thread(thread_d, pitch, -bot_thread_l, false, bot = 1, colour = thread_colour);
+    }
+
+    if(pillar_od(type) > pillar_id(type))
+        color(pillar_o_colour(type)) linear_extrude(height)
+            difference() {
+                circle(d = pillar_od(type), $fn = fn(pillar_ofn(type)));
+
+                circle(d = pillar_id(type), $fn = fn(pillar_ifn(type)));
+            }
+
+}

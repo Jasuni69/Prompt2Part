@@ -1,0 +1,7 @@
+module test_f_add() {
+    _test_fn2arg(
+        function (a,b) f_add(a,b),
+        [[4,3,7],[3,3,6],[3,2,5],[-3,-5,-8],[-3,7,4],[3,-7,-4]]
+    );
+}
+test_f_add();

@@ -1,0 +1,40 @@
+function _edge_set(v) =
+    _is_edge_array(v)? v : [
+    for (ax=[0:2]) [
+        for (b=[-1,1], a=[-1,1]) let(
+            v2=[[0,a,b],[a,0,b],[a,b,0]][ax]
+        ) (
+            is_string(v)? (
+                v=="X"? (ax==0) :   // Return all X axis aligned edges.
+                v=="Y"? (ax==1) :   // Return all Y axis aligned edges.
+                v=="Z"? (ax==2) :   // Return all Z axis aligned edges.
+                v=="ALL"? true :    // Return all edges.
+                v=="NONE"? false :  // Return no edges.
+                let(valid_values = ["X", "Y", "Z", "ALL", "NONE"])
+                assert(
+                    in_list(v, valid_values),
+                    str(v, " must be a vector, edge array, or one of ", valid_values)
+                ) v
+            ) :
+            let(nonz = sum(v_abs(v)))
+            nonz==2? (v==v2) :  // Edge: return matching edge.
+            let(
+                matches = num_true([
+                    for (i=[0:2]) v[i] && (v[i]==v2[i])
+                ])
+            )
+            nonz==1? (matches==1) :  // Face: return surrounding edges.
+            (matches==2)             // Corner: return touching edges.
+        )? 1 : 0
+    ]
+];
+
+
+/// Internal Function: _normalize_edges()
+/// Topics: Edges
+/// Usage:
+///   edges = _normalize_edges(v);
+/// Description:
+///   Normalizes all values in an edge array to be `1`, if it was originally greater than `0`,
+///   or `0`, if it was originally less than or equal to `0`.
+/// See Also:  edges(), EDGES_NONE, EDGES_ALL

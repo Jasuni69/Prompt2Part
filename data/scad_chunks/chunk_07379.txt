@@ -1,0 +1,43 @@
+module Sinuskoerper
+(
+h=10,
+d=33,
+rand=2,
+randamp=1,
+amp=1.5,
+w=4,
+randw=4,
+detail=3,
+vers=0,
+fill=0,
+use2D=0,
+twist=0,
+scale=1
+)
+{
+ if(!use2D)linear_extrude(h,convexity=5,twist=twist,scale=scale)for (i=[0:detail:359.9])
+        
+    {
+        j=i+detail;
+        hull()
+        {
+            rotate(i) T(d/2+amp*sin(i*w))circle(d=rand+randamp*sin((i+vers)*randw),$fn=36);
+            rotate(j) T(d/2+amp*sin(j*w))circle(d=rand+randamp*sin((j+vers)*randw),$fn=36);
+            if(fill)circle(d=d/2,$fn=36);
+            
+        }
+        
+    }
+ if(use2D)for (i=[0:detail:359.9])
+        
+    {
+        j=i+detail;
+        hull()
+        {
+           rotate(i) T(d/2+amp*sin(i*w))circle(d=rand+randamp*sin((i+vers)*randw),$fn=36);
+           rotate(j) T(d/2+amp*sin(j*w))circle(d=rand+randamp*sin((j+vers)*randw),$fn=36);
+            if(fill)circle(d=d/2,$fn=36);
+        }
+        
+    }    
+}

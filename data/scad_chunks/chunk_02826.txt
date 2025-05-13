@@ -1,0 +1,8 @@
+function _Subdivision11(list,divisions) =
+  divisions > 0 && len(list) > 2 ?
+    let (n = len(list)-1)
+    let (list2 = [ for(i=[0:n]) (list[i] + list[(i+1) > n ? 0 : i+1])/2 ])
+    _Subdivision11([ for(i=[0:n]) each [ (list[i] + list2[i])/2, (list2[i] + list[(i+1) > n ? 0 : i+1])/2 ]], divisions-1) : list;
+
+// The basic subdivision with 1,1 weighting.
+// But now for a path with a open begin and end.

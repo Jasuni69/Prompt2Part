@@ -1,0 +1,8 @@
+module Rohr(grad=90,rad=5,d=8,l,l1=10,l2=12,fn=fn,fn2=fn,rand=n(2),name,center=true,messpunkt=messpunkt,spiel=-minVal,help)
+{
+    Bogen(grad=grad,rad=rad,l=l,l1=l1,l2=l2,fn=fn,name=name,help=0,center=center,messpunkt=messpunkt,spiel=spiel)polygon( kreis(r=d/2,rand=rand,fn=fn2));
+    
+    HelpTxt(titel="Rohr",string=["grad",grad,"rad",rad,"d",d,"l",l,"l1",l1,"l2",l2,"fn",fn,"fn2",fn2,"rand",rand,"name",name,"center",center,"messpunkt",messpunkt,"spiel",spiel],help=help);
+    InfoTxt(name="Rohr",string=concat(rand>0?["ID",d-rand*2]:["OD",d-rand*2],["d",d]),info=name);
+
+}

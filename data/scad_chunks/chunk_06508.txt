@@ -1,0 +1,48 @@
+function yflip(p=_NO_ARG, y=0) =
+    assert(is_finite(y))
+    assert(p==_NO_ARG || is_list(p),"Invalid point list")
+    let( v = BACK )
+    y == 0 ? mirror(v,p=p) :
+    let(
+        cp = y * v,
+        m = move(cp) * mirror(v) * move(-cp)
+    )
+    p==_NO_ARG? m : apply(m, p);
+
+
+// Function&Module: zflip()
+//
+// Synopsis: Reflects children across the XY plane.
+// SynTags: Trans, Path, VNF, Mat
+// Topics: Affine, Matrices, Transforms, Reflection, Mirroring
+// See Also: mirror(), xflip(), yflip()
+//
+// Usage: As Module
+//   zflip([z=]) CHILDREN;
+// Usage: As Function
+//   pt = zflip(p, [z]);
+// Usage: Get Affine Matrix
+//   mat = zflip([z=]);
+//
+// Description:
+//   Mirrors/reflects across the origin [0,0,0], along the Z axis.  If `z` is given, reflects across [0,0,z] instead.
+//   * Called as the built-in module, mirrors all children across the line/plane.
+//   * Called as a function with a point in the `p` argument, returns the point mirrored across the line/plane.
+//   * Called as a function with a list of points in the `p` argument, returns the list of points, with each one mirrored across the line/plane.
+//   * Called as a function with a [bezier patch](beziers.scad) in the `p` argument, returns the mirrored patch.
+//   * Called as a function with a [VNF structure](vnf.scad) in the `p` argument, returns the mirrored VNF.
+//   * Called as a function without a `p` argument, returns the affine3d 4x4 mirror matrix.
+//
+// Arguments:
+//   p = If given, the point, path, patch, or VNF to mirror.  Function use only.
+//   z = The Z coordinate of the plane of reflection.  Default: 0
+//
+// Example:
+//   zflip() cylinder(d1=10, d2=0, h=20);
+//   color("blue", 0.25) cube([15,15,0.01], center=true);
+//   color("red", 0.333) cylinder(d1=10, d2=0, h=20);
+//
+// Example:
+//   zflip(z=-5) cylinder(d1=10, d2=0, h=20);
+//   color("blue", 0.25) down(5) cube([15,15,0.01], center=true);
+//   color("red", 0.333) cylinder(d1=10, d2=0, h=20);

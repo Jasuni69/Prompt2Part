@@ -1,0 +1,13 @@
+module test_zrot() {
+    vals = [-270,-135,-90,45,0,30,45,90,135,147,180];
+    path = path3d(pentagon(d=100), 50);
+    for (a=vals) {
+        m = [[cos(a),-sin(a),0,0],[sin(a),cos(a),0,0],[0,0,1,0],[0,0,0,1]];
+        assert_approx(zrot(a), m);
+        assert_approx(zrot(a, p=path[0]), apply(m, path[0]));
+        assert_approx(zrot(a, p=path), apply(m, path));
+        // Verify that module at least doesn't crash.
+        zrot(a) union(){};
+    }
+}
+test_zrot();

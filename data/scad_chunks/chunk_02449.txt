@@ -1,0 +1,19 @@
+module lathe_tool_stand_stl()
+    gridfinity_bin(box) union() {
+        translate_z(box_mm.z)
+            holes() {
+                cube([hole, hole, 2 * (box_mm.z - gridfinity_base_z() - bwall)], true);
+
+                chamfer = 1;
+                chamfer_hole(chamfer)
+                    square([hole, hole], true);
+            }
+
+        translate_z(gridfinity_base_z() + bwall)
+            difference() {
+                rounded_rectangle([box_mm.x - 2 * wall, box_mm.y - 2 * wall, box_mm.z - gridfinity_base_z() - bwall - wall], gridfinity_corner_r() - wall);
+
+                holes()
+                    rounded_rectangle([hole + 2 * wall, hole + 2 * wall, 100], wall, center = true);
+            }
+    }

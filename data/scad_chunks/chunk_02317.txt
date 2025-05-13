@@ -1,0 +1,1 @@
+function strap_thickness(type = strap) = type[1]; //! Thickness of strap

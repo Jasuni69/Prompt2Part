@@ -1,0 +1,8 @@
+function koch_quadratic_type2(n = 4, angle = 90, leng = 1, heading = 0, start = [0, 0]) = 
+    let(
+        axiom = "F",
+        rules = [
+            ["F", "F-F+F+FF-F-F+F"]
+        ]
+    )
+    lsystem2(axiom, rules, n, angle, leng, heading, start);

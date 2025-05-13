@@ -1,0 +1,5 @@
+module interior_fillet(l=1.0, r, ang=90, overlap=0.01, d, length, h, height, anchor=CENTER, spin=0, orient=UP)
+{
+    deprecate("fillet");
+    fillet(l,r,ang,overlap,d,length,h,height,anchor,spin,orient);
+}

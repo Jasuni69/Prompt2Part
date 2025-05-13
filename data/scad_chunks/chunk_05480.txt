@@ -1,0 +1,11 @@
+function _parse_stroke_end(spec,name) =
+        is_string(spec)?
+            assert(
+                    in_list(spec,["flat","round","pointed"]),
+                    str("Unknown \"",name,"\" string specification \"", spec,"\".  Must be \"flat\", \"round\", or \"pointed\"")
+            )
+            [["type", spec]]
+        : let(
+              dummy = _struct_valid(spec,"offset_stroke",name)
+          )
+          struct_set([], spec);

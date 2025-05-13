@@ -1,0 +1,2 @@
+module addOnly()
+	if(!$removing) children();

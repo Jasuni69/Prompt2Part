@@ -1,0 +1,11 @@
+module rotate(a,v)
+{
+  rot3 = is_finite(a) && is_vector(v) && (len(v)==2 || len(v)==3) ? affine3d_rot_by_axis(v,a)
+       : is_finite(a) ? affine3d_zrot(a)
+       : same_shape(a,[0]) ? affine3d_xrot(a.x)
+       : same_shape(a,[0,0]) ? affine3d_yrot(a.y)*affine3d_xrot(a.x)
+       : same_shape(a,[0,0,0])? affine3d_zrot(a.z)*affine3d_yrot(a.y)*affine3d_xrot(a.x)
+       : IDENT;
+  $transform = $transform * rot3;
+  _rotate(a=a,v=v) children();
+}

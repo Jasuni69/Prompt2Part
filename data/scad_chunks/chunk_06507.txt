@@ -1,0 +1,7 @@
+module yflip(p, y=0) {
+    req_children($children);          
+    assert(is_undef(p), "Module form `yflip()` does not accept p= argument.");
+    translate([0,y,0])
+        mirror([0,1,0])
+            translate([0,-y,0]) children();
+}

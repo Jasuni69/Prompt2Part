@@ -1,0 +1,21 @@
+function list_unwrap(list, eps=EPSILON) =
+    assert(is_list(list))
+    len(list)>=2 && are_ends_equal(list,eps=eps)? [for (i=[0:1:len(list)-2]) list[i]] : list;
+
+
+
+// Function: unique()
+// Synopsis: Returns a sorted list with all duplicates removed.
+// Topics: List Handling
+// See Also: shuffle(), sort(), sortidx(), unique_count()
+// Usage:
+//   ulist = unique(list);
+// Description:
+//   Given a string or a list returns the sorted string or the sorted list with all repeated items removed.
+//   The sorting order of non homogeneous lists is the function `sort` order.
+// Arguments:
+//   list = The list to process.
+// Example:
+//   sorted = unique([5,2,8,3,1,3,8,7,5]);  // Returns: [1,2,3,5,7,8]
+//   sorted = unique("axdbxxc");  // Returns: "abcdx"
+//   sorted = unique([true,2,"xba",[1,0],true,[0,0],3,"a",[0,0],2]); // Returns: [true,2,3,"a","xba",[0,0],[1,0]]

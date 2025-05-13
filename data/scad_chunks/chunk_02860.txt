@@ -1,0 +1,29 @@
+  [RIGHT,120],
+  [CIRCLE,16,80],
+  [RIGHT,130],
+  [CIRCLE,11.6,123],
+  [FORWARD,7.6],
+  [LEFT,60],
+  [FORWARD,2],
+];
+path3 = TurtleToPath(turtle3);
+translate([-50,10])
+  polygon(path3);
+
+// Use a turtle to make a door knob.
+turtle4 =
+[
+  [FORWARD,15],
+  [LEFT,180], // reverse direction
+  [CIRCLE,-5,160],
+  [FORWARD,1],
+  [CIRCLE,2.5,160],
+  [SETX,0],
+];
+path4 = TurtleToPath(turtle4);
+translate([40,5])
+  polygon(path4);
+translate([40,40])
+  rotate_extrude()
+    polygon(path4);
+

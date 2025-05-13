@@ -1,0 +1,1 @@
+function hdr_pin_colour(type)   = type[5];  //! Header pin colour

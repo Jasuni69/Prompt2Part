@@ -1,0 +1,35 @@
+function _prismoid_isect(geom, line, bounded, flip=false) =
+   let(
+       size = [for (c = geom[1]) max(0,c)],
+       size2 = [for (c = geom[2]) max(0,c)],
+       shift=point2d(geom[3]),
+       axis=point3d(geom[4]),
+       h=size.z,
+       bot=path3d(rect(point2d(size)),-h/2),
+       top=path3d(move(shift, rect(size2)),h/2),
+       modline = move(shift/2,rot(from=axis,to=UP, p=line)), 
+       isect = [ polygon_line_intersection(top, modline, bounded),
+                 polygon_line_intersection(bot, modline, bounded),
+                 for(i=[0:3]) polygon_line_intersection([top[i], bot[i], select(bot,i+1),select(top,i+1)], modline, bounded)
+               ],
+       faceanch = [TOP, BOT, FWD, LEFT, BACK, RIGHT],
+       hits = [for(i=idx(isect)) if (isect[i]) [faceanch[i], isect[i]]],
+       check = assert(len(hits)>0, "Line does not intersect the prismoid."), 
+       anchor = rot(from=UP,to=axis,p=sum(column(hits,0))),
+       anchlen = sum(v_abs(anchor)), 
+       ipt = hits[0][1],
+       anch = _find_anchor(anchor, geom),
+       anchpt = anch[1],
+       myshift = anchlen==3 ? 0
+               : let(
+                     z = anch[2],
+                     y = rot(from=UP,to=z, p=zrot(anch[3], BACK)),
+                     x = cross(y,z)
+                 )
+                 anchlen==2 ? (ipt-anchpt) * y * RIGHT
+               : (!flip?ident(2):[[0,1],[-1,0]])*[x,y]*(ipt-anchpt)
+      )
+      [anchor, myshift];
+
+// Find intersection with tops of a cone or if those don't intersect,
+// then the sides of a right angle cylinder only.

@@ -1,0 +1,33 @@
+module foot_stl() foot(foot);
+
+rpi_offset = [0, -pcb_width(pcb) / 2 + 0.5, pcb_width(rpi) / 2 + 8.6];
+rpi_holes = [0, 1];
+wall = 2;
+top_thickness = 2;
+base_thickness = 2;
+case_inner_rad = 8;
+
+width = pcb_length(pcb) + 9 + 10;
+pcb_x = -(width - pcb_length(pcb) - 9) / 2;
+depth = pcb_width(pcb) + 9;
+height = pcb_width(rpi) / 2 + rpi_offset.z + 9;
+bulkhead_outset = 2;
+bulkhead_inset = 0.5;
+bulkhead_t = 2;
+clearance = 0.1;
+pcb_screw = alternate_screw(hs_pan, pcb_screw(pcb));
+
+box = pbox(name = "enviro_plus_case", wall = wall, top_t = top_thickness, base_t = base_thickness, screw = M2_cap_screw, radius = case_inner_rad, ridges = [8, 1],
+    size = [width,  depth, height]);
+
+pms5003 = [50, 38, 21];
+pms5003_wall = 1;
+pms5003_pos = [width / 2 - pms5003.x / 2 - pms5003_wall - pbox_screw_inset(box) - insert_boss_radius(screw_insert(pbox_screw(box)), wall) - 0.5,
+               depth / 2 - pms5003.z / 2 - wall - 1,
+               height + top_thickness - pms5003.y / 2];
+
+
+fan_duct_t = 1.7;
+foam_t = 0;
+fan_pos = [pms5003_pos.x - pms5003.x / 2 - pms5003_wall - fan_width(fan) / 2 - fan_duct_t, 1 + foam_t, 12 + top_thickness + fan_depth(fan) / 2];
+fan_socket = 8;

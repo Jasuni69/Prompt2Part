@@ -1,0 +1,1 @@
+function t_insert_top_thickness(type) = type[5];   //! Top thickness for t-track insert

@@ -1,0 +1,26 @@
+function get_metric_bolt_head_height(size) = lookup(size, [
+		[ 1.6,  1.23],
+		[ 2.0,  1.53],
+		[ 2.5,  1.83],
+		[ 3.0,  2.13],
+		[ 4.0,  2.93],
+		[ 5.0,  3.65],
+		[ 6.0,  4.15],
+		[ 8.0,  5.45],
+		[10.0,  6.58],
+		[12.0,  7.68],
+		[14.0,  8.98],
+		[16.0, 10.18],
+		[20.0, 12.72],
+		[24.0, 15.35],
+		[30.0, 19.12],
+		[36.0, 22.92],
+		[42.0, 26.42],
+		[48.0, 30.42],
+		[56.0, 35.50],
+		[64.0, 40.50]
+	]);
+
+
+// Function: get_metric_socket_cap_diam()
+// Description: Returns the diameter of a typical metric socket cap bolt's head, based on the bolt `size`.

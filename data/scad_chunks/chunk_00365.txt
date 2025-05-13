@@ -1,0 +1,1 @@
+function ldr_lead_d(type)      = type[7]; //! The lead diameter

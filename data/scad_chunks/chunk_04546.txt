@@ -1,0 +1,16 @@
+module RodStart(diameter, height, thread_len=0, thread_diam=0, thread_pitch=0) {
+  // A reasonable default.
+  thread_diam = (thread_diam==0) ? 0.75*diameter : thread_diam;
+  thread_len = (thread_len==0) ? 0.5*diameter : thread_len;
+  thread_pitch = (thread_pitch==0) ? ThreadPitch(thread_diam) : thread_pitch;
+
+  cylinder(r=diameter/2, h=height, $fn=24*diameter);
+
+  translate([0, 0, height])
+    ScrewThread(thread_diam, thread_len, thread_pitch,
+      tip_height=thread_pitch, tip_min_fract=0.75);
+}
+
+
+// Solid rod on the bottom, internal threads on the top.
+// Flips around x-axis after printing to pair with RodStart.

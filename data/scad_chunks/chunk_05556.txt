@@ -1,0 +1,15 @@
+function f_xor(a,b) = f_2arg(function(a,b) (!a && b) || (a && !b))(a,b);
+
+
+// Function: f_not()
+// Synopsis: Returns a function to check if `a` is not true.
+// Topics: Function Literals, Logic, Boolean Operations
+// See Also: f_or(), f_and(), f_nor(), f_nand(), f_xor(), f_not()
+// Usage:
+//   fn = f_not();
+//   fn = f_not(a);
+// Description:
+//   A factory that generates function literals based on `!a`, where the `a`
+//   argument can be replaced with a constant.
+// Arguments:
+//   a = If given, replaces the argument.

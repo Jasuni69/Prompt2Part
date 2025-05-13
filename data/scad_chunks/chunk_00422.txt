@@ -1,0 +1,1 @@
+function pulley_screws(type)           = type[14]; //! Number of grub screws

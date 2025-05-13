@@ -1,0 +1,15 @@
+module cell_wall(cell_width, wall_thickness) {
+    hull() {
+        cube(wall_thickness, center = true);
+        
+        translate([cell_width, 0])
+            cube(wall_thickness, center = true);
+            
+        translate([cell_width, cell_width])
+            cube(wall_thickness, center = true);
+        
+        translate([0, cell_width])
+            cube(wall_thickness, center = true);
+    }
+}
+*/

@@ -1,0 +1,38 @@
+module spiral_stack(orig_leng, orig_height, current_leng, leng_diff, min_leng, angle_offset, pre_height = 0, i = 0) {
+    if(current_leng > min_leng) {
+        angle = atan2(leng_diff, current_leng - leng_diff);
+        
+        factor = current_leng / orig_leng;
+        
+        translate([0, 0, pre_height]) 
+        scale(factor) 
+            children();
+         
+        next_square_leng = sqrt(pow(leng_diff, 2) + pow(current_leng - leng_diff, 2));
+        
+        height = factor * orig_height + pre_height;
+        
+        rotate(angle + angle_offset)
+            spiral_stack(
+                orig_leng, 
+                orig_height, 
+                next_square_leng, 
+                leng_diff, 
+                min_leng,
+                angle_offset,                
+                height,
+                i + 1
+            ) children();
+    } 
+}
+
+height = stick_diameter * layer_offset;
+$fn = stick_fn;
+
+spiral_stack(inner_square_leng, stick_diameter * 2, inner_square_leng, leng_diff, min_leng, angle_offset)
+    stick_square(
+        inner_square_leng, 
+        stick_leng, 
+        height, 
+        cap_style
+    );

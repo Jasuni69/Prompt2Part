@@ -1,0 +1,19 @@
+function gear_dist_skew(teeth1,teeth2,helical1,helical2,profile_shift1,profile_shift2,pressure_angle=20,
+                        mod, circ_pitch, diam_pitch, backlash=0) =
+  assert(all_nonnegative([teeth1,teeth2]),"Must give nonnegative values for teeth")
+  assert(teeth1>0 || teeth2>0, "One of the teeth counts must be nonzero")
+  let(
+      profile_shift1 = auto_profile_shift(teeth1,pressure_angle,helical1,profile_shift=profile_shift1),
+      profile_shift2 = auto_profile_shift(teeth2,pressure_angle,helical2,profile_shift=profile_shift2),
+      mod = module_value(circ_pitch=circ_pitch, diam_pitch=diam_pitch, mod=mod)
+  )
+  teeth1==0 || teeth2==0? pitch_radius(mod=mod, teeth=teeth1+teeth2, helical=teeth1?helical1:helical2) + (profile_shift1+profile_shift2)*mod
+  :
+  let(
+      pa_normal_eff = _working_normal_pressure_angle_skew(teeth1,profile_shift1,helical1,teeth2,profile_shift2,helical2,pressure_angle),
+      dist_adj = 0.5*(teeth1/cos(helical1)^3+teeth2/cos(helical2)^3)*(cos(pressure_angle)/cos(pa_normal_eff)-1)
+  )
+  mod*(teeth1/2/cos(helical1)+teeth2/2/cos(helical2)+dist_adj)
+      // This expression is a guess based on finding the cross section where pressure angles match so that there is a single
+      // pressure angle to reference the movement by. 
+      + backlash * cos((helical1-helical2)/2) / tan(pressure_angle);

@@ -1,0 +1,50 @@
+    0, // rotation
+    yappDefault,//snapDiameter
+    yappDefault,
+    yappCenter,  
+  ],  
+  [ // This is for a 1620A 2x20 LCD Display - Mounted through the lid
+    100, //xPos
+    25, // yPos
+    80, // displayWidth
+    35.9, //displayHeight
+    2.2, //pinInsetH
+    2.2, //pinInsetV
+    2.7, //pinDiameter
+    2.7, //postOverhang
+    5.8, //walltoPCBGap
+    1.5, //pcbThickness
+    71.5, //windowWidth
+    24.2, //windowHeight
+    0, //windowOffsetH
+    -0.9, //windowOffsetV
+    false, //bevel
+    0, // rotation
+    5.0,//snapDiameter
+    yappDefault,
+    yappCenter,  
+  ],
+  [ // This is for a 1620A 2x20 LCD Display - Mounted under the lid
+    100, //xPos
+    75, // yPos
+    80, // displayWidth
+    35.9, //displayHeight
+    2.2, //pinInsetH
+    2.2, //pinInsetV
+    2.7, //pinDiameter
+    2.7, //postOverhang
+    7.3, //walltoPCBGap
+    1.5, //pcbThickness
+    67.0, //windowWidth
+    17.0, //windowHeight
+    0, //windowOffsetH
+    -0.9, //windowOffsetV
+    true, //bevel
+    0, // rotation
+    5.0,//snapDiameter
+    yappDefault,
+    yappCenter,  
+  ],
+  */
+  [ // This is for a 2004A 4x20 LCD Display - Mounted under the lid
+    80, //xPos

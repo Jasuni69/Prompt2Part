@@ -1,0 +1,1 @@
+function ribbon_clamp_screw_depth(screw = screw) = insert_length(screw_insert(screw)) + 1;

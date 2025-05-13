@@ -1,0 +1,35 @@
+function bez_joint(pt,a1,a2,r1,r2,p1,p2) =
+    assert(is_finite(r1) || is_vector(a1))
+    assert(is_finite(r2) || is_vector(a2))
+    assert(len(pt)==3 || (is_undef(p1) && is_undef(p2)))
+    let(
+        r1 = is_num(r1)? r1 : norm(a1),
+        r2 = is_num(r2)? r2 : norm(a2),
+        p1 = default(p1, 90),
+        p2 = default(p2, 90)
+    ) [
+        if (is_vector(a1)) (pt+r1*unit(a1))
+        else if (is_finite(a1)) (pt+spherical_to_xyz(r1,a1,p1))
+        else assert(false, "\nBad arguments."),
+        pt,
+        if (is_vector(a2)) (pt+r2*unit(a2))
+        else if (is_finite(a2)) (pt+spherical_to_xyz(r2,a2,p2))
+        else assert(false, "\nBad arguments.")
+    ];
+
+
+// Function: bez_end()
+// Synopsis: Calculates ending bezier path control points.
+// Topics: Bezier Paths
+// See Also: bez_tang(), bez_joint(), bez_end()
+// Usage:
+//   pts = bez_end(pt, a, r, [p=]);
+//   pts = bez_end(pt, VECTOR, [r], [p=]);
+// Description:
+//   This is used to create the approaching control point, and the endpoint of a cubic bezier path.
+//   See {{bez_begin()}} for examples.
+// Arguments:
+//   pt = The starting endpoint for the bezier path.
+//   a = If given a scalar, specifies the theta (XY plane) angle in degrees from X+.  If given a vector, specifies the direction and possibly distance of the first control point.
+//   r = Specifies the distance of the control point from the endpoint `pt`.
+//   p = If given, specifies the number of degrees away from the Z+ axis.

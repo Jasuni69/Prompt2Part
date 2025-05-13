@@ -1,0 +1,1 @@
+function NEMA_cap_heights(type)  = type[10]; //! Height of the end cap at the corner and the side

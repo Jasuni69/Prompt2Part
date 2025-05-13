@@ -1,0 +1,1 @@
+function box_corner_gap(type) = 3; //! Gap between box_sheets at the corners to connect inside and outside profiles

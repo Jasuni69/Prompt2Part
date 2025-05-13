@@ -1,0 +1,9 @@
+module Angle(a){
+    data = _pb_angle([a],false, $pb_angle);
+    $pb_angle = data[2];
+    $pb_ctrl_pts = data[3];
+    if (pb_do_render($children, parent_module(0))) pb_draw();
+    children();  
+}
+
+//  Inserts a fillet at the current point with the given radius and optional fixed number of segments. set radius to negative to turn the fillet outwards

@@ -1,0 +1,1 @@
+function pulley_flange_thickness(type) = type[10]; //! Flange thickness

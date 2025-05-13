@@ -1,0 +1,13 @@
+function assertion(succ, msg) =
+	(version_num() > 20190100)? let(FAILED=succ) assert(FAILED, msg) : 0;
+
+
+// Module: echo_error()
+// Usage:
+//   echo_error(msg, [pfx]);
+// Description:
+//   Emulates printing of an error message.  The text will be shaded red.
+//   You can also use this as a function call from a function.
+// Arguments:
+//   msg = The message to print.
+//   pfx = The prefix to print before `msg`.  Default: `ERROR`

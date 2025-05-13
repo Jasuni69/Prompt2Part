@@ -1,0 +1,16 @@
+function _ydominant_sub(x, y, z, endy, a, s, xd, zd) = 
+    y == endy ? [] : [
+        [x, y, z],
+        each _ydominant_sub(
+            _ydominant_x(x, xd, s.x), 
+            y + s.y,
+            _ydominant_z(z, zd, s.z), 
+            endy, 
+            a, 
+            s, 
+            _ydominant_xd(xd, a.x, a.y), 
+            _ydominant_zd(zd, a.y, a.z)
+        )
+    ];
+
+// z-dominant

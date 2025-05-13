@@ -1,0 +1,24 @@
+module genOriginPart(color1, color2, coordSystem)
+{
+  origin=(coordSystem[0]==yappCoordBox) ? [0,0,0]
+          : (coordSystem[0]==yappCoordBoxInside) ? [wallThickness,wallThickness,basePlaneThickness]
+          : (coordSystem[0]==yappCoordPCB) ? [getPCB_X(coordSystem[2]),getPCB_Y(coordSystem[2]),getPCB_Z(coordSystem[2])]
+          : undef;
+  
+  translate(origin)
+  union()
+  {
+    translate([-origin[0],0,0])
+    rotate([0,90,0])
+      genMarkerBar(color1, color2, "X");
+    translate([0,-origin[1],0])
+    rotate([-90,0,0])
+      genMarkerBar(color1, color2, "Y");
+    //-- Z doesn't need to rotate 
+    translate([0,0,-origin[2]])
+    genMarkerBar(color1, color2, "Z");
+  }
+}//-- genOriginPart()
+
+
+//===========================================================

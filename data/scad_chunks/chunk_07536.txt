@@ -1,0 +1,14 @@
+function pathPoints(points=[[0,0,0],[0,10,0],[10,0,0]],path=[[0,0,0],[0,+10,10]],twist=0,scale=1,open=true,2D=false,rev=false)=
+  let(
+    pathLen=len(path)-1,
+    scale=is_list(scale)?scale:[scale,scale],
+    points=2D?[for(iPoint=points)[iPoint.x,iPoint.y]]:
+              len(points[0])==3?points:[for(iPoint=points)concat(iPoint,0)]
+    )
+  [for (i=rev?[pathLen:-1:0] : [0:pathLen],jPoints=points)
+    mPoints (  mPoints(jPoints,r=i*twist/pathLen) ,
+      r=vektorWinkel( path[ open? max(0,i-1): (i==0?pathLen -1:i-1)], path[open?min(i+1,pathLen):(i+1)%pathLen])+[-90,0,0],
+      s=[1+i*(-1+scale.x)/pathLen,1+i*(-1+scale.y)/pathLen])
+    + v3(path[i])];
+
+//version prior β22|130

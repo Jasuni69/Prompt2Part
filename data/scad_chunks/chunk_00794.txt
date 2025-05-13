@@ -1,0 +1,1 @@
+function smd_soic_lead_size(type)  = type[6];    //! Lead width, foot depth, lead thickness

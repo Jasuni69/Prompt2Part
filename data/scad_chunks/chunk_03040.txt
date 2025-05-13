@@ -1,0 +1,50 @@
+hideBaseWalls       = false;    //-> false
+showOrientation     = true;
+showPCB             = true;
+showSwitches        = false;
+showPCBmarkers      = false;
+showShellZero       = false;
+showCenterMarkers   = false;
+inspectX            = 0;        //-> 0=none (>0 from Back)
+inspectY            = 0;        //-> 0=none (>0 from Right)
+inspectZ            = 0;        //-> 0=none (>0 from Bottom)
+inspectXfromBack    = true;     // View from the inspection cut foreward
+inspectYfromLeft    = true;     //-> View from the inspection cut to the right
+inspectZfromTop     = false;    //-> View from the inspection cut down
+//-- C O N T R O L ---------------------------------------
+
+
+
+//  *** Masks ***
+//------------------------------------------------------------------
+//  Parameters:
+//    maskName = [yappMaskDef,[
+//     p(0) = Grid pattern :{ yappPatternSquareGrid, yappPatternHexGrid }  
+//     p(1) = horizontal Repeat : if yappPatternSquareGrid then 0 = no repeat one 
+//                                shape per column, if yappPatternHexGrid 0 is not valid
+//     p(2) = vertical Repeat :   if yappPatternSquareGrid then 0 = no repeat one shape 
+//                                per row, if yappPatternHexGrid 0 is not valid
+//     p(3) = grid rotation
+//     p(4) = openingShape : {yappRectangle | yappCircle | yappPolygon | yappRoundedRect}
+//     p(5) = openingWidth, :  if yappPatternSquareGrid then 0 = no repeat one shape per 
+//                             column, if yappPatternHexGrid 0 is not valid
+//     p(6) = openingLength,   if yappPatternSquareGrid then 0 = no repeat one shape per 
+//                             row, if yappPatternHexGrid 0 is not valid
+//     p(7) = openingRadius
+//     p(8) = openingRotation
+//     p(9) = shape polygon : Required if openingShape = yappPolygon
+//   ]];
+//------------------------------------------------------------------
+
+// Custom Mask definition
+maskCustom1 = [yappMaskDef, 
+  [
+    yappPatternSquareGrid,// pattern
+    10,                   // hRepeat
+    10,                   // vRepeat
+    0,                    // rotation
+    yappCircle,           // openingShape
+    0,                    // openingWidth, 
+    0,                    // openingLength, 
+    1,                    // openingRadius
+    0,                    // openingRotation

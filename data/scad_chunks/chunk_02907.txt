@@ -1,0 +1,38 @@
+module lightTubeCutout()
+{
+  for(tube=lightTubes)
+  {
+    if (printMessages) echo ("Tube Def",tube=tube);
+    //-- Get the desired coordinate system    
+    theCoordSystem = getCoordSystem(tube, yappCoordPCB);  
+  
+    standoff_Height = standoffHeight(theCoordSystem[2]);
+    pcb_Thickness = pcbThickness(theCoordSystem[2]);
+    
+    xPos = translate2Box_X (tube[0], yappLid, theCoordSystem);
+    yPos = translate2Box_Y (tube[1], yappLid, theCoordSystem);
+    
+    tLength         = tube[2];
+    tWidth          = tube[3];
+    tWall           = tube[4];
+    tAbvPcb         = tube[5];
+    shape           = tube[6];
+    lensThickness   = getParamWithDefault(tube[7],0);
+    toTopOfPCB      = getParamWithDefault(tube[8], standoff_Height+pcb_Thickness);
+
+    cutoutDepth = lidPlaneThickness-lensThickness;
+    
+    pcbTop2Lid = (baseWallHeight+lidWallHeight+lidPlaneThickness)-(toTopOfPCB+tAbvPcb);
+    
+    tmpArray = [[xPos, yPos, tWidth, tLength, tLength/2, shape, 0, 0, yappCoordBox, yappCenter]];
+   
+    if (printMessages) echo ("Tube tempArray",tmpArray);
+    translate([0,0,-lensThickness])
+    {
+      processFaceList(yappLid, tmpArray, yappPartLid, "cutout", true);
+    }
+  } //-- for tubes
+} //-- lightTubeCutout()
+
+
+//===========================================================

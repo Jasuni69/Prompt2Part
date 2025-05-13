@@ -1,0 +1,34 @@
+module GT2Pulley(
+h=6,// Belt h
+z=16,// teeth
+achse=6.6,//hole
+center=true,
+fn=fn,
+name,
+help){
+d=2*z/PI+(0.63-0.254)*2+0.2;
+    
+
+center=is_bool(center)?center?1:0:center;
+T(center?center<0?[0,0,h/2+1.1]:
+            [0,0,0]:
+        [z/PI,z/PI,h/2]){
+if($info)%Ring(h,d=2*z/PI,rand=-.63,center=true);            
+$info=false;            
+LinEx(h+1,center=true)GT(z=z,achse=achse,fn=fn);
+  difference(){
+    MKlon(tz=-h/2-1.1){
+      Pille(.5,d=d,rad2=0,center=false,fn=fn);//cylinder(.5,d=12);
+      Tz(0.499)Kegel(d1=d,d2=d-2.5,grad=25,fn=fn);
+    }
+    Loch(h=h+2.2,h2=.5,deg=45,rad=.25,center=true,d=achse,l=0,cuts=false,fn=fn);
+    *cylinder(h*3,d=achse,center=true);
+    *MKlon(tz=-h/2-1.3)Kegel(achse+0.75);
+  }
+//%Ring(h,d=d,rand=1.38,center=true);
+
+}
+
+InfoTxt("GT2Pulley",["aussenH",h+2.2,"d",d,"radius Riemenmitte",z/PI],name);
+HelpTxt("GT2Pulley",["h",h,"z",z,"achse",achse,"center",center,"fn",fn,"name",name],help);
+}

@@ -1,0 +1,4 @@
+function tubeInfo(geom=$geomInfo) =
+		geom[getTypeIndex($type_geomInfoTube)] [8]
+			?geom[ getTypeIndex($type_geomInfoTube) ]
+			:undef;

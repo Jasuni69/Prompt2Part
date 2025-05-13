@@ -1,0 +1,9 @@
+module Tring(spiel=+0,angle=153,r=5.0,xd=+0.0,h=1.75,top=n(2.5),base=n(4),name=0,help){
+  
+  HelpTxt("Tring",["spiel",spiel,"angle",angle,"r",r,"xd",xd,"h",h,"top",top,"base",base,"name",name],help);
+    
+   T(0,0,-spiel/2) scale([1.005,1,1]){rotate(-angle/2-180)rotate_extrude(angle=angle)T(r)Trapez(h=h+spiel,x1=base+spiel,x2=top+spiel,x2d=xd,d=+1+spiel,name=name);
+   T(0,0,1.25)rotate((360-angle)/2)T(r)R(90)linear_extrude(1,scale=0.7)T(0,-1.25)Trapez(h=h+spiel,x1=base+spiel,x2=top+spiel,x2d=xd,d=+1+spiel,name=name);
+   T(0,0,1.25)rotate((360-angle)/-2)T(r)R(90)mirror([0,0,1])linear_extrude(1,scale=0.7)T(0,-1.25)Trapez(h=h+spiel,x1=base+spiel,x2=top+spiel,x2d=xd,d=+1+spiel,name=name);    
+   }
+}

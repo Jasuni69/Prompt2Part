@@ -1,0 +1,1 @@
+function spade_w(type)     = type[1]; //! Width

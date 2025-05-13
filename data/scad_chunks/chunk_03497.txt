@@ -1,0 +1,5 @@
+function  argInt(paramName,default=undef,currentArgs=$currentPartArgs)=
+let(matched=[for(args = split(currentArgs,","))
+    let(argParts= split(args,"="))
+  if(argParts[0] == paramName) toInt(argParts[1])])
+  len(matched)>0?matched[0]:default;

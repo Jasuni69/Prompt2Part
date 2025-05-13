@@ -1,0 +1,47 @@
+function pointlist_bounds(pts) =
+    assert(is_path(pts,dim=undef,fast=true) , "\nInvalid pointlist." )
+    let(
+        select = ident(len(pts[0])),
+        spread = [
+            for(i=[0:len(pts[0])-1])
+            let( spreadi = pts*select[i] )
+            [ min(spreadi), max(spreadi) ]
+        ]
+    ) transpose(spread);
+
+
+// Function: fit_to_box()
+// Synopsis: Scale the x, y, and/or z coordinantes of a list of points to span a range.
+// Topics: Geometry, Bounding Boxes, Bounds, VNF Manipulation
+// See Also: fit_to_range()
+// Usage:
+//   new_pts = fit_to_box(pts, [x=], [y=], [z=]);
+//   new_vnf = fit_to_box(vnf, [x=], [y=], [z=]);
+// Description:
+//   Given a list of 2D or 3D points, or a VNF structure, rescale and position one or more of the coordinates
+//   to fit within specified ranges. At least one range (`x`, `y`, or `z`) must be specified. A normal use case
+//   for this function is to rescale a VNF texture to fit within `0 <= z <= 1`.
+//   .
+//   While a range is typically `[min_value,max_value]`, the minimum and maximum values can be reversed,
+//   resulting in new coordinates being a rescaled mirror image of the original coordinates.
+// Arguments:
+//   pts = List of points, or a VNF structure.
+//   x = `[min,max]` of rescaled x coordinates. Default: undef
+//   y = `[min,max]` of rescaled y coordinates. Default: undef
+//   z = `[min,max]` of rescaled z coordinates. Default: undef
+// Example(2D): A 2D bezier path (red) rescaled (blue) to fit in a square box centered on the origin.
+//   bez = [
+//       [10,60], [-5,30],
+//       [20,60], [50,50], [100,30],
+//       [50,30], [70,20]
+//   ];
+//   path = bezpath_curve(bez);
+//   newpath = fit_to_box(path, x=[0,40], y=[0,40]);
+//   stroke(path, width=2, color="red");
+//   stroke(square(40), width=1, closed=true);
+//   stroke(newpath, width=2, color="blue");
+// Example(3D): A prismoid (left) is rescaled to fit new x and z bounds. The z bounds minimum and maximum values are reversed, resulting in the new object on the right having inverted z coordinates.
+//   vnf = prismoid(size1=[50,30], size2=[20,20], h=20, shift=[15,5]);
+//   vnf_boxed = fit_to_box(vnf, x=[30,55], z=[5,-15]);
+//   vnf_polyhedron(vnf);
+//   vnf_polyhedron(vnf_boxed);

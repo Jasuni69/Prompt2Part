@@ -1,0 +1,27 @@
+module extrude_2d_hollow(wall=2, height=50, twist=90, slices=60, center=undef, orient=ORIENT_Z, align=V_UP)
+{
+	orient_and_align([0,0,height], orient, align, center) {
+		linear_extrude(height=height, twist=twist, slices=slices, center=true) {
+			difference() {
+				children();
+				offset(r=-wall) {
+					children();
+				}
+			}
+		}
+	}
+}
+
+
+// Module: extrude_2dpath_along_spiral()
+// Description:
+//   Takes a closed 2D polyline path, centered on the XY plane, and
+//   extrudes it along a 3D spiral path of a given radius, height and twist.
+// Arguments:
+//   polyline = Array of points of a polyline path, to be extruded.
+//   h = height of the spiral to extrude along.
+//   r = radius of the spiral to extrude along.
+//   twist = number of degrees of rotation to spiral up along height.
+// Example:
+//   poly = [[-10,0], [-3,-5], [3,-5], [10,0], [0,-30]];
+//   extrude_2dpath_along_spiral(poly, h=200, r=50, twist=1080, $fn=36);

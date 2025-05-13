@@ -1,0 +1,1 @@
+function smd_coax_base_r(type)    = type[2]; //! Corner radius of the base

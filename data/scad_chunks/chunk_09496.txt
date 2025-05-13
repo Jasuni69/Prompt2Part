@@ -1,0 +1,7 @@
+function module_value(mm_per_tooth=5) = mm_per_tooth / PI;
+
+
+// Function: adendum()
+// Description: The height of the gear tooth above the pitch radius.
+// Arguments:
+//   mm_per_tooth = Distance between teeth around the pitch circle, in mm.

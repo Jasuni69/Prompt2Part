@@ -1,0 +1,17 @@
+module PrevPos(on=true,t=[0,0,0],rot=[180,0,0],help){
+if($preview&&on||on==2)translate(v3(t))rotate(v3(rot))children();
+else children();
+
+Echo("Render with PrevPos!",color="warning",condition=on==2);
+
+MO(!$children);
+
+HelpTxt("PrevPos",["on",on,"t",t,"rot",rot],help);
+};
+
+
+
+//Points(octa(5),loop=4,size=0.4);
+//Points(kreis(),mark=[0,1,2,3,4,5,6,7,8],loop=13,start=10);
+//Points(octa(5),mark=[3,4,2,1],hull=.5*0);
+//Points(octa(5),mark=[3,0,2,1],hull=true);

@@ -1,0 +1,4 @@
+function rowswap(m, i, j) = [ // Swap two rows of a matrix
+    for(k = [0 : len(m) - 1])
+        k == i ? m[j] : k == j ? m[i] : m[k]
+];

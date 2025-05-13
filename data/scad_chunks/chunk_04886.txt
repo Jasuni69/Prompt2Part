@@ -1,0 +1,15 @@
+function rectPoints(rect=[1,1], center=false) = let(
+    x=center? -rect[0] * 0.5 : 0,
+    y=center? -rect[1] * 0.5 : 0,
+    pts = [[0+x,0+y],[0+x,rect[1]+y],[rect[0]+x,rect[1]+y],[rect[0]+x, 0+y]]) rect[2]==undef? pts : appendValueToPoints(pts, rect[2]);
+ 
+//  function circlePoints(r=undef, d=undef, z=undef)
+//
+//  Generates a list of 2D points describing the requested circle. The number of points will depend
+//  on the usual openSCAD $fa, $fs, $fn settings.
+//  will be a 3D point.
+
+//  r        (number) Radius of the circle.
+//  d        (number) Diameter of the circle.
+//  z        (number) Z coordinate optional. Causes a 3D point list to be returned.
+//  return   (list)   List of 2D or 3D points forming a circle.

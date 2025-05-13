@@ -1,0 +1,1 @@
+function m_scaling(s) = _m_scaling_impl(s);

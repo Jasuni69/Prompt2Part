@@ -1,0 +1,2 @@
+function pocket_handle(hand_size = [90, 40, 40], slant = 35, screw = M3_cs_cap_screw, panel_t = 3, wall = 4, rad = 4) = //! Construct a pocket_handle property list
+    [hand_size, slant, screw, panel_t, wall, rad];

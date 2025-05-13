@@ -1,0 +1,37 @@
+T(0,0,-50){
+Knurl(
+r=10, // radius zylinder for Knurls
+h=9, // height
+size=[2.4,3,1], // knurl size&depth
+// depth = [-1,1],  // knurl depth ↦ overwrites size.z
+delta=[0,1],  // Knurl center translation
+alt=0,  // alternate positon for next z level
+);
+
+T(20)Knurl(r=2,size=1,scale=2);
+T(40)Knurl(r=10,e=[12,4],depth=[1,0,-1,0],delta=[[0,1],[0,0],[0,-1],[0,0]],alt=1);
+T(70)Knurl(r=10,size=[2.4,3,[1,-2]],delta=[[-.5,.5],[.5,-.5]],alt=1);
+
+
+}
+
+Tz(-80){
+KnurlTri(h=20,e=15,r=10);
+T(30)KnurlTri(h=20,e=15,depth=[-1,1],r=10);
+T(70)KnurlTri(h=20,e=15,depth=-1,scale=1.5,deltaH=-1,r=10);
+
+}
+
+
+Tz(-15)R(45){  // flat knurl  (painful to use)
+union(){
+  Surface(rand=0,waves=true,freqX=2.5,freqY=2.5,res=1,ampX=.5,zBase=1);
+  Surface(rand=0,waves=true,freqX=2.5,freqY=2.5,res=1,ampX=.5,zBase=1,versch=[2,2]);
+}
+T(21)intersection(){
+  Surface(rand=0,waves=true,freqX=2.5,freqY=2.5,res=1,ampX=.5);
+  Surface(rand=0,waves=true,freqX=2.5,freqY=2.5,res=1,ampX=.5,versch=[2,2]);
+}
+
+T(42)Surface(rand=0,waves=true,freqX=2,freqY=2);
+}

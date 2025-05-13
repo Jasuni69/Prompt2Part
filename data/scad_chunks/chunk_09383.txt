@@ -1,0 +1,16 @@
+function replist(val, n, i=0) =
+	is_scalar(n)? [for(j=[1:n]) val] :
+	(i>=len(n))? val :
+	[for (j=[1:n[i]]) replist(val, n, i+1)];
+
+
+// Function: in_list()
+// Description: Returns true if value `x` is in list `l`.
+// Arguments:
+//   x = The value to search for.
+//   l = The list to search.
+//   idx = If given, searches the given subindexes for matches for `x`.
+// Example:
+//   in_list("bar", ["foo", "bar", "baz"]);  // Returns true.
+//   in_list("bee", ["foo", "bar", "baz"]);  // Returns false.
+//   in_list("bar", [[2,"foo"], [4,"bar"], [3,"baz"]], idx=1);  // Returns true.

@@ -1,0 +1,51 @@
+module Round2D(radius=0)
+{
+  offset(-radius)
+    offset(2*radius)
+      offset(delta=-radius)
+        children();
+}
+
+// ==============================================================
+//
+// ------------------------------------------------
+// Subdivision functions
+// ------------------------------------------------
+// Version 1
+// November 13, 2024
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+//
+// Version 2
+// February 2, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+//   A list can now also be 1 or 2 elements long.
+//   That will return those 1 or 2 elements
+//   without subdivision.
+//   Changed how the functions are called
+//   recursively.
+//
+
+// Subdivision
+// -----------
+// Parameters:
+//   list:      A list of coordinates in 2D or 3D. 
+//              But not a 3D surface.
+//              A list of one of two points is 
+//              not subdivided and is returned
+//              in the same way.
+//   divisions: The number of divisions.
+//              0 for no smoothing, 5 is extra smooth.
+//   method:    The subdivision method:
+//              "1"        A basic 1,1 weighted subdivision
+//                         for a closed shape.
+//              "1path"    A basic 1,1 weighted subdivision
+//                         for a path.
+//              "weighted" A weighted average subdivision
+//                         for a closed shape.
+//              "weightedpath"
+//                         A weighted average subdivision
+//                         for a path.
+// Return:
+//   A new list with a smoother shape.

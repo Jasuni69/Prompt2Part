@@ -1,0 +1,8 @@
+module involute_rack_profile(m, z, w, pa = 20, clearance = undef) { //! Calculate rack profile given module, number of teeth and pressure angle
+    p = PI * m;                                     // Pitch
+    hf = 1.25 * m;                                  // Dedendum
+    tooth = involute_rack_tooth_profile(m, pa, clearance);
+    teeth = [for(i = [0 : z - 1], pt = tooth) [pt.x + i * p, pt.y] ];
+
+    polygon(concat([[0, -w], [0, -hf]], teeth, [[z * p, -hf ], [z * p, -w]])); // Add the corners
+}

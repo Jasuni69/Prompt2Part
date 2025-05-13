@@ -1,0 +1,4 @@
+function _case0220_isobands(cell_pts, lower, upper) = 
+    _case2002_isobands(cell_pts, upper, lower);
+
+// single hexagon

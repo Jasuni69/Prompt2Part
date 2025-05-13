@@ -1,0 +1,6 @@
+function _rz_matrix(a) = 
+    let(c = cos(a), s = sin(a)) 
+    [
+        [c, -s],
+        [s,  c],
+    ];

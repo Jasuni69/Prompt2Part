@@ -1,0 +1,71 @@
+function _bez_path_corner(p, curvesize, relative, mincurvesize=0.001) =
+is_collinear(p)
+? lerpn(p[0], lerp(p[0],p[2],5/6), 6)
+: let(
+    p1 = p[0], p2 = p[1], p3 = p[2],
+    a0 = 0.5*vector_angle(p1, p2, p3),
+    d1 = norm(p1-p2),
+    d3 = norm(p3-p2),
+    tana = tan(a0),
+    rmin = min(d1, d3) * tana,
+    rmax = max(d1, d3) * tana,
+    // A "perfect" unit circle quadrant constructed from cubic bezier points [1,0], [1,d], [d,1], [0,1], with d=0.55228474983 has exact radius=1 at 0°, 45°, and 90°, with a maximum radius (at 22.5° and 67.5°) of 1.00026163152; nearly a perfect circle arc.
+    fleg = let(a2=a0*a0)
+    // model of "perfect" circle leg lengths for a bezier unit circle arc depending on arc angle a0; the model error is ~1e-5
+        -4.4015E-08 * a2*a0 // tiny term, but reduces error by an order of magnitude
+        +0.0000113366 * a2
+        -0.00680018 * a0
+        +0.552244,
+    leglenmin = rmin * fleg,
+    leglenmax = rmax * fleg,
+    cp = circle_2tangents(rmin, p1, p2, p3)[0], // circle center
+    middir = unit(cp-p2), // unit vector from corner pointing to circle center
+    bzmid = cp - rmin*middir, // location of bezier point joining both halves of curve
+    maxcut = norm(bzmid-p2), // maximum possible distance from corner to curve
+    roundness = max(mincurvesize, relative ? curvesize : min(1, curvesize/maxcut)),
+    bzdist = maxcut * roundness, // distance from corner to tip of curve
+    cornerlegmin = min(leglenmin, bzdist*tana),
+    cornerlegmax = min(leglenmax, bzdist*tana),
+    p21unit = unit(p1-p2),
+    p23unit = unit(p3-p2),
+    midto12unit = unit(p21unit-p23unit),
+    // bezier points around the corner p1,p2,p3 (p2 is the vertex):
+    // bz0 is p1
+    // bz1 is on same leg as p1
+    // bz2 is on line perpendicular to bisector for first half of curve
+    // bz3 is bezier start/end point on the corner bisector
+    // bz4 is on line perpendicular to bisector for second half of curve
+    // bz5 is on same leg as p3
+    // bz6 is p3
+    bz3 = p2 + middir * bzdist, // center control point
+    bz2 = bz3 + midto12unit*(d1<d3 ? cornerlegmin : cornerlegmax),
+    bz1 = p1 - (d1<=d3 ? leglenmin : leglenmax)*p21unit,
+    bz4 = bz3 - midto12unit*(d3<d1 ? cornerlegmin : cornerlegmax),
+    bz5 = p3 - (d3<=d1 ? leglenmin : leglenmax)*p23unit
+) [p1, bz1, bz2, bz3, bz4, bz5]; // do not include last control point
+
+
+
+// Function: bezpath_close_to_axis()
+// Synopsis: Closes a 2D bezier path to the specified axis.
+// SynTags: Path
+// Topics: Bezier Paths
+// See Also: bezpath_offset()
+// Usage:
+//   bezpath = bezpath_close_to_axis(bezpath, [axis], [N]);
+// Description:
+//   Takes a 2D bezier path and closes it to the specified axis.
+// Arguments:
+//   bezpath = The 2D bezier path to close to the axis.
+//   axis = The axis to close to, "X", or "Y".  Default: "X"
+//   N = The degree of the bezier curves.  Cubic beziers have N=3.  Default: 3
+// Example(2D):
+//   bez = [[50,30], [40,10], [10,50], [0,30],
+//          [-10, 10], [-30,10], [-50,20]];
+//   closed = bezpath_close_to_axis(bez);
+//   debug_bezier(closed);
+// Example(2D):
+//   bez = [[30,50], [10,40], [50,10], [30,0],
+//          [10, -10], [10,-30], [20,-50]];
+//   closed = bezpath_close_to_axis(bez, axis="Y");
+//   debug_bezier(closed);

@@ -1,0 +1,10 @@
+module panel_meter_button(type) { //! Draw panel meter button
+    size = pmeter_button_size(type);
+    r = pmeter_button_r(type);
+    color(pmeter_button_colour(type))
+        translate(pmeter_button_pos(type))
+            if(size.x)
+                rounded_rectangle(pmeter_button_size(type), r);
+            else
+                cylinder(r = r, h = size.z);
+}

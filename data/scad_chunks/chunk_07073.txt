@@ -1,0 +1,13 @@
+module test_get_radius() {
+    assert(get_radius(r1=100,d1=undef,r=undef,d=undef,dflt=23) == 100);
+    assert(get_radius(r1=undef,d1=200,r=undef,d=undef,dflt=23) == 100);
+    assert(get_radius(r1=undef,d1=undef,r=100,d=undef,dflt=23) == 100);
+    assert(get_radius(r1=undef,d1=undef,r=undef,d=200,dflt=23) == 100);
+    assert(get_radius(r1=50,d1=undef,r=undef,d=undef,dflt=23) == 50);
+    assert(get_radius(r1=undef,d1=100,r=undef,d=undef,dflt=23) == 50);
+    assert(get_radius(r1=undef,d1=undef,r=50,d=undef,dflt=23) == 50);
+    assert(get_radius(r1=undef,d1=undef,r=undef,d=100,dflt=23) == 50);
+    assert(get_radius(r1=undef,d1=undef,r=undef,d=undef,dflt=23) == 23);
+    assert(get_radius(r1=undef,d1=undef,r=undef,d=undef,dflt=undef) == undef);
+}
+test_get_radius();

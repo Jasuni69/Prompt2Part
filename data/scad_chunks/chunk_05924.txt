@@ -1,0 +1,103 @@
+function _sum_preserving_round(data, index=0) =
+    index == len(data)-1 ? list_set(data, len(data)-1, round(data[len(data)-1])) :
+    let(
+        newval = round(data[index]),
+        error = newval - data[index]
+    ) _sum_preserving_round(
+        list_set(data, [index,index+1], [newval, data[index+1]-error]),
+        index+1
+    );
+
+
+// Function: subdivide_path()
+// Synopsis: Subdivides a path to produce a more finely sampled path.
+// SynTags: Path
+// Topics: Paths, Path Subdivision
+// See Also: subdivide_and_slice(), resample_path(), jittered_poly()
+// Usage:
+//   newpath = subdivide_path(path, n|refine=|maxlen=, [method=], [closed=], [exact=]);
+// Description:
+//   Takes a {{path}} as input (closed or open) and subdivides the path to produce a more
+//   finely sampled path.  You control the subdivision process by using the `maxlen` arg
+//   to specify a maximum segment length, or by specifying `n` or `refine`, which request
+//   a certain {{point}} count in the output.
+//   .
+//   You can specify the point count using the `n` option, where
+//   you give the number of points you want in the output, or you can use
+//   the `refine` option, where you specify a resampling factor.  If `refine=3` then
+//   the number of points would increase by a factor of three, so a four point square would
+//   have 12 points after subdivision.  With point-count subdivision, the new points can be distributed
+//   proportional to length (`method="length"`), which is the default, or they can be divided up evenly among all the path segments
+//   (`method="segment"`).  If the extra points don't fit evenly on the path then the
+//   algorithm attempts to distribute them as uniformly as possible, but the result may be uneven.
+//   The `exact` option, which is true by default, requires that the final point count is
+//   exactly as requested.  For example, if you subdivide a four point square and request `n=13` then one edge will have
+//   an extra point compared to the others.  
+//   If you set `exact=false` then the
+//   algorithm will favor uniformity and the output path may have a different number of
+//   points than you requested, but the sampling will be uniform.   In our example of the
+//   square with `n=13`, you will get only 12 points output, with the same number of points on each edge.
+//   .
+//   The points are always distributed uniformly on each segment.  The `method="length"` option does
+//   means that the number of points on a segment is based on its length, but the points are still
+//   distributed uniformly on each segment, independent of the other segments.  
+//   With the `"segment"` method you can also give `n` as a vector of counts.  This 
+//   specifies the desired point count on each segment: with vector valued `n` the `subdivide_path`
+//   function places `n[i]-1` points on segment `i`.  The reason for the -1 is to avoid
+//   double counting the endpoints, which are shared by pairs of segments, so that for
+//   a closed polygon the total number of points will be sum(n).  Note that with an open
+//   path there is an extra point at the end, so the number of points will be sum(n)+1.
+//   .
+//   If you use the `maxlen` option then you specify the maximum length segment allowed in the output.
+//   Each segment is subdivided into the largest number of segments meeting your requirement.  As above,
+//   the sampling is uniform on each segment, independent of the other segments.  With the `maxlen` option
+//   you cannot specify `method` or `exact`.    
+// Arguments:
+//   path = path in any dimension or a 1-region
+//   n = scalar total number of points desired or with `method="segment"` can be a vector requesting `n[i]-1` new points added to segment i.
+//   ---
+//   refine = increase total number of points by this factor (Specify only one of n, refine and maxlen)
+//   maxlen = maximum length segment in the output (Specify only one of n, refine and maxlen)
+//   closed = set to false if the path is open.  Default: True
+//   exact = if true return exactly the requested number of points, possibly sacrificing uniformity.  If false, return uniform point sample that may not match the number of points requested.  (Not allowed with maxlen.) Default: true
+//   method = One of `"length"` or `"segment"`.  If `"length"`, adds vertices in proportion to segment length, so short segments get fewer points.  If `"segment"`, add points evenly among the segments, so all segments get the same number of points.  (Not allowed with maxlen.) Default: `"length"`
+// Example(2D):
+//   mypath = subdivide_path(square([2,2],center=true), 12);
+//   move_copies(mypath)circle(r=.1,$fn=32);
+// Example(2D):
+//   mypath = subdivide_path(square([8,2],center=true), 12);
+//   move_copies(mypath)circle(r=.2,$fn=32);
+// Example(2D):
+//   mypath = subdivide_path(square([8,2],center=true), 12, method="segment");
+//   move_copies(mypath)circle(r=.2,$fn=32);
+// Example(2D):
+//   mypath = subdivide_path(square([2,2],center=true), 17, closed=false);
+//   move_copies(mypath)circle(r=.1,$fn=32);
+// Example(2D): Specifying different numbers of points on each segment
+//   mypath = subdivide_path(hexagon(side=2), [2,3,4,5,6,7], method="segment");
+//   move_copies(mypath)circle(r=.1,$fn=32);
+// Example(2D): Requested point total is 14 but 15 points output due to extra end point
+//   mypath = subdivide_path(pentagon(side=2), [3,4,3,4], method="segment", closed=false);
+//   move_copies(mypath)circle(r=.1,$fn=32);
+// Example(2D): Since 17 is not divisible by 5, a completely uniform distribution is not possible. 
+//   mypath = subdivide_path(pentagon(side=2), 17);
+//   move_copies(mypath)circle(r=.1,$fn=32);
+// Example(2D): With `exact=false` a uniform distribution, but only 15 points
+//   mypath = subdivide_path(pentagon(side=2), 17, exact=false);
+//   move_copies(mypath)circle(r=.1,$fn=32);
+// Example(2D): With `exact=false` you can also get extra points, here 20 instead of requested 18
+//   mypath = subdivide_path(pentagon(side=2), 18, exact=false);
+//   move_copies(mypath)circle(r=.1,$fn=32);
+// Example(2D): Using refine in this example multiplies the point count by 3 by adding 2 points to each edge
+//   mypath = subdivide_path(pentagon(side=2), refine=3);
+//   move_copies(mypath)circle(r=.1,$fn=32);
+// Example(2D): But note that refine doesn't distribute evenly by segment unless you change the method.  with the default method set to `"length"`, the points are distributed with more on the long segments in this example using refine.  
+//   mypath = subdivide_path(square([8,2],center=true), refine=3);
+//   move_copies(mypath)circle(r=.2,$fn=32);
+// Example(2D): In this example with maxlen, every side gets a different number of new points
+//   path = [[0,0],[0,4],[10,6],[10,0]];
+//   spath = subdivide_path(path, maxlen=2, closed=true);
+//   move_copies(spath) circle(r=.25,$fn=12);
+// Example(FlatSpin,VPD=15,VPT=[0,0,1.5]): Three-dimensional paths also work
+//   mypath = subdivide_path([[0,0,0],[2,0,1],[2,3,2]], 12);
+//   move_copies(mypath)sphere(r=.1,$fn=32);

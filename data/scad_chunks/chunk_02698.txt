@@ -1,0 +1,5 @@
+module BOLTS_check_dimension_defined(dim, descr){
+	if(dim == "None"){
+		BOLTS_error(str("Dimension unspecified",descr));
+	}
+}

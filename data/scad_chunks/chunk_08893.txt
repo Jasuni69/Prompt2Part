@@ -1,0 +1,9 @@
+function vt(center, r, startAngle, angleSign, angle) = 
+    let(
+        a = angle * angleSign + startAngle,
+        s = (MAX_ANGLE - angle) / MAX_ANGLE
+    )
+    [
+        center.x + r * cos(a) * s, 
+        center.y + r * sin(a) * s
+    ];

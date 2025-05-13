@@ -1,0 +1,35 @@
+module jhead_hot_end(type, filament) {
+    resistor = RIE1212UB5C5R6;
+    thermistor = Epcos;
+    heater = MK5_heater;
+
+    insulator_length = hot_end_insulator_length(type);
+    inset = hot_end_inset(type);
+    length = hot_end_total_length(type);
+    barrel_length = length - insulator_length;
+    vitamin(str("jhead_hot_end(", type[0], ", ", filament, "): Hot end ", hot_end_part(type), " ", filament, "mm"));
+    //
+    // insulator
+    //
+    translate_z(inset - insulator_length)
+        color(hot_end_insulator_colour(type)) rotate_extrude()
+            difference() {
+                chamfer = 2;
+                hull() {
+                    translate([0, chamfer])
+                        square([hot_end_insulator_diameter(type) / 2, insulator_length - chamfer]);
+
+                    square([hot_end_insulator_diameter(type) / 2 - chamfer, insulator_length]);
+                }
+                square([(filament + 0.2) / 2, insulator_length]);
+
+                translate([hot_end_groove_dia(type) / 2, insulator_length - hot_end_inset(type) - hot_end_groove(type)])
+                    square([100, hot_end_groove(type)]);
+            }
+    //
+    // heater block
+    //
+    rotate(90)
+        translate([-nozzle_x(heater), 0, inset - insulator_length - heater_height(heater) / 2])
+            heater_block(heater, resistor, thermistor);
+}

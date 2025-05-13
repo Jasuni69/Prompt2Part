@@ -1,0 +1,30 @@
+function gear_shorten(teeth1,teeth2,helical=0,profile_shift1="auto",profile_shift2="auto",pressure_angle=20) =
+    teeth1==0 || teeth2==0 ? 0
+  : let(
+         profile_shift1 = auto_profile_shift(teeth1,pressure_angle,helical,profile_shift=profile_shift1),
+         profile_shift2 = auto_profile_shift(teeth2,pressure_angle,helical,profile_shift=profile_shift2),
+         ax = gear_dist(mod=1,teeth1,teeth2,helical,profile_shift1,profile_shift2,pressure_angle=pressure_angle),
+         y = ax - (teeth1+teeth2)/2/cos(helical)
+    )
+    profile_shift1+profile_shift2-y;
+
+
+// Function: gear_shorten_skew()
+// Usage:
+//    shorten = gear_shorten_skew(teeth1, teeth2, helical1, helical2, [profile_shift1], [profile_shift2], [pressure_angle=]);
+// Synopsis: Returns the tip shortening parameter for profile shifted skew axis helical gears.
+// Description:
+//    Compute the gear tip shortening factor for skew axis helical gears that have profile shifts.  This factor depends on both
+//    gears in a pair and when applied, will results in teeth that meet the specified clearance distance.
+//    Generally if you don't apply it the teeth clearance will be decreased due to the profile shifting.
+//    Because it operates pairwise, if a gear mates with more than one other gear, you may have to decide
+//    which shortening factor to use.  The shortening factor is independent of the size of the teeth.
+// Arguments:
+//   teeth1 = Total number of teeth in the first gear.  If given 0, we assume this is a rack or worm.
+//   teeth2 = Total number of teeth in the second gear.  If given 0, we assume this is a rack or worm.
+//   helical1 = The helical angle (from vertical) of the teeth on the first gear. 
+//   helical1 = The helical angle (from vertical) of the teeth on the second gear.
+//   profile_shift1 = Profile shift factor x for the first gear.  Default: "auto"
+//   profile_shift2 = Profile shift factor x for the second gear.  Default: "auto"
+//   ---
+//   pressure_angle = The pressure angle of the gear.

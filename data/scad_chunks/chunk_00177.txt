@@ -1,0 +1,11 @@
+module box2_assembly()
+assembly("box2") {
+    stl_colour(pp1_colour) render() box2_case_stl();
+
+    pbox_inserts(box2);
+
+    pbox_base_screws(box2);
+
+    translate_z(height + top_thickness + base_thickness + eps) vflip()
+         %render() box2_base_stl();
+}

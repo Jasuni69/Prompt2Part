@@ -1,0 +1,1 @@
+function pmeter_aperture(type)    = type[6];  //! Aperture length, width and bevel

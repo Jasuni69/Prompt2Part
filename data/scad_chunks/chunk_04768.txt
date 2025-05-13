@@ -1,0 +1,4 @@
+module _showPoints(poly, r) {
+  points = get_points(poly);
+  for (c = points) translate(c) sphere(r=r);
+}

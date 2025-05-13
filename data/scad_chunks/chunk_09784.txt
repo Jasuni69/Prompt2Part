@@ -1,0 +1,58 @@
+module spread(p1, p2, spacing, l, n)
+{
+	ll = (
+		is_def(l)? scalar_vec3(l, 0) :
+		(is_def(spacing) && is_def(n))? (n * scalar_vec3(spacing, 0)) :
+		(is_def(p1) && is_def(p2))? point3d(p2-p1) :
+		undef
+	);
+	cnt = (
+		is_def(n)? n :
+		(is_def(spacing) && is_def(ll))? floor(norm(ll) / norm(scalar_vec3(spacing, 0)) + 1.000001) :
+		2
+	);
+	spc = (
+		!is_def(spacing)? (ll/(cnt-1)) :
+		is_scalar(spacing) && is_def(ll)? (ll/(cnt-1)) :
+		scalar_vec3(spacing, 0)
+	);
+	assertion(is_def(cnt), "Need two of `spacing`, 'l', 'n', or `p1`/`p2` arguments in `spread()`.");
+	spos = is_def(p1)? point3d(p1) : -(cnt-1)/2 * spc;
+	for (i=[0 : cnt-1]) {
+		pos = i * spc + spos;
+		$pos = pos;
+		$idx = i;
+		translate(pos) children();
+	}
+}
+
+
+// Module: xspread()
+//
+// Description:
+//   Spreads out `n` copies of the children along a line on the X axis.
+//
+// Usage:
+//   xspread(spacing, [n], [sp]) ...
+//   xspread(l, [n], [sp]) ...
+//
+// Arguments:
+//   spacing = spacing between copies. (Default: 1.0)
+//   n = Number of copies to spread out. (Default: 2)
+//   l = Length to spread copies over.
+//   sp = If given, copies will be spread on a line to the right of starting position `sp`.  If not given, copies will be spread along a line that is centered at [0,0,0].
+//
+// Side Effects:
+//   `$pos` is set to the relative centerpoint of each child copy, and can be used to modify each child individually.
+//   `$idx` is set to the index number of each child being copied.
+//
+// Examples:
+//   xspread(20) sphere(3);
+//   xspread(20, n=3) sphere(3);
+//   xspread(spacing=15, l=50) sphere(3);
+//   xspread(n=4, l=30, sp=[0,10,0]) sphere(3);
+// Example:
+//   xspread(10, n=3) {
+//       cube(size=[1,3,1],center=true);
+//       cube(size=[3,1,1],center=true);
+//   }

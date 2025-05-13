@@ -1,0 +1,1 @@
+function antenna_split(type)    = type[5];  //! Split point

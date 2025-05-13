@@ -1,0 +1,14 @@
+module qwart( td, wfn=48, dst=[2,1,2.4]) {
+    // qwart shape
+    intersection () {
+        translate([0,0,0]) cube( [td.x, td.y, td.z] );
+        translate([0,td.y/2,0])
+          scale( [(td.x*dst.x), (td.y*dst.y), (td.z*dst.z)] ) { sphere(d=1, $fn=wfn); }
+    }    
+}
+
+/* =========================
+    bd - bounding box
+    thick - how thick the clip part is (at the top of the bounding box)
+    ra - rotation angle to apply to clip body. 0 is parallel, ~ 10 will have the tip touching base level
+   ========================= */

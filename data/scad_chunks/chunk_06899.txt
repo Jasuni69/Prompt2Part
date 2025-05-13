@@ -1,0 +1,16 @@
+module test_spheroid() {
+    styles=["orig","aligned","stagger","octa","icosa"];
+    for (s=styles)
+      sphere_OK(s);
+    R=10;
+    for (s=["aligned","octa","icosa"]){
+      vnf_in = spheroid(r=R, style=s, circum=false,$fn=20);
+      assert_approx(pointlist_bounds(vnf_in[0]), R*[[-1,-1,-1],[1,1,1]],str("Alignment failed for style ",s));
+    }
+    /*  // No outsphere seems to meet the alignment criterion
+    vnf_out = spheroid(r=R, style="icosa", circum=true, $fn=25);
+    maxR = max([for(v=vnf_out[0]) norm(v)]);
+    assert_approx(pointlist_bounds(vnf_out[0]), maxR*[[-1,-1,-1],[1,1,1]]);
+    */
+}
+test_spheroid();

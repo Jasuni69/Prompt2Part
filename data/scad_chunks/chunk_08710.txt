@@ -1,0 +1,1 @@
+function _get_angle(turtle) = turtle[1];

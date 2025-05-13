@@ -1,0 +1,1 @@
+module smooth_path(path, tangents, size, relsize, method="edges", splinesteps=10, uniform, closed=false) {no_module();}

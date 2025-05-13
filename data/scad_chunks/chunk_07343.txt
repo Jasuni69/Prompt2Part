@@ -1,0 +1,58 @@
+module WKreis(e=12,d1=1,d2,grad=180,r,diff,fn,fs=fs,r1,r2,name,help){
+    
+    d1=is_undef(r1)?is_list(d1)?d1[0]:d1:2*r1;
+    d2=is_undef(d2)&&is_undef(r2)?is_list(d1)?d1[1]:d1:is_undef(r2)?d2:2*r2;
+    r1=d1/2;
+    r2=d2/2;
+    winkel=360/(e*2);
+    
+    grad1=grad+winkel; // konvex
+    grad2=grad-winkel; // konkav
+    
+    diff=is_undef(diff)?0:diff;
+    
+
+    sek1=sin(grad1/2)*d1;
+    sek2=sin(grad2/2)*d2;
+        
+    r=is_undef(r)?Umkreis(e*2,((sek1+sek2)/4)/tan(winkel/2))+(d2>d1?pow(abs(d1/d2-1),+7):0):r; //WIP
+    diff1=-d1/2*cos(grad1/2)+diff;
+    diff2=d2/2*cos(grad2/2)-diff;    
+    
+    rEck=Umkreis(e*2,r);
+    rK1=Kathete(r,sin(grad1/2)*d1/2)+diff1;
+    rK2=Kathete(r,sin(grad2/2)*d2/2)+diff2;
+    umfang=PI*r*2;
+    umfang1=PI*(rK1)*2;
+    umfang2=PI*(rK2)*2;
+    umfangEck=e*(d1+d2);
+    
+    
+    wk=[for(i=[0:e-1])each concat(
+    kreis(r=-d2/2,rot=90-winkel/2+i*winkel*2,rand=0,grad=-grad2,sek=true,t=RotLang(-winkel/2+i*winkel*2,rK2),fn=fn,fs=fs)
+    , kreis(r=d1/2,rot=90+winkel/2+i*winkel*2,rand=0,grad=grad1,sek=true,t=RotLang(winkel/2+i*winkel*2,rK1),fn=fn,fs=fs)
+    )];
+
+   rotate(winkel/2-90) polygon(wk,convexity=5);
+
+    InfoTxt("Wkreis",["länge",str(umfangEck,"mm - Umfang(r=",r,")=",umfang,"mm Grad=",grad1,"°/",grad2,"°"),"\n\tAußen r",str(rK1+d1/2," OD=",2*rK1+d1," — Umfang=",umfang1,"mm Kreismitte=",rK1),"\n\tInnen  r",str(rK2-d2/2," ID =",2*rK2-d2," — Umfang=",umfang2,"mm Kreismitte=",rK2)],name);
+
+HelpTxt("Wkreis",[
+    "e",e,
+    "d1",d1,
+    "d2",d2,
+    "grad",grad,
+    "r",r,
+    "diff",diff,
+    "fn",fn,
+    "fs",fs,
+    "r1",r1,
+    "r2",r2,
+    "name",name],
+help);
+    
+}
+
+//Seg7(n="2-899",ratio=0.7,center=0,deg=45,spiel=+0.0);
+//Seg7(n=[[1,1,1,1,0,1,0],[1,1,1,1,1],[1,1,1,1,0,1,0]],ratio=0.7,center=0,deg=35,spiel=+0.5);
+//Seg7(88,spacing=-1,ratio=.5);

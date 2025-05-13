@@ -1,0 +1,24 @@
+function constrain(v, minval, maxval) = 
+    assert( is_finite(v+minval+maxval), "\nInput must be finite number(s).")
+    min(maxval, max(minval, v));
+
+
+// Function: posmod()
+// Synopsis: Returns the positive modulo of a value.
+// Topics: Math
+// See Also: constrain(), posmod(), modang()
+// Usage:
+//   mod = posmod(x, m)
+// Description:
+//   Returns the positive modulo `m` of `x`. The value returned satisfies `0 <= mod < m`.  
+// Arguments:
+//   x = The value to constrain.
+//   m = Modulo value.
+// Example:
+//   a = posmod(-700,360);  // Returns: 340
+//   b = posmod(-270,360);  // Returns: 90
+//   c = posmod(-120,360);  // Returns: 240
+//   d = posmod(120,360);   // Returns: 120
+//   e = posmod(270,360);   // Returns: 270
+//   f = posmod(700,360);   // Returns: 340
+//   g = posmod(3,2.5);     // Returns: 0.5

@@ -1,0 +1,12 @@
+module test_polyhedron_hull() {
+    echo("==== test_polyhedron_hull ====");
+    polyhedron_hull([
+        [1, 1, 1],
+        [1, 1, 0],
+        [-1, 1, 0],
+        [-1, -1, 0],
+        [1, -1, 0],
+        [0, 0, 1],
+        [0, 0, -1]
+    ]);
+}

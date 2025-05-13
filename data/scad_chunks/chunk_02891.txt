@@ -1,0 +1,330 @@
+module minkowskiBox(shell, L, W, H, rad, plane, wall, preCutouts)
+{
+  //echo("minkowskiBox", shell=shell, L=L, W=W, H=H, rad=rad, plane=plane, wall=wall, preCutouts=preCutouts);
+  iRad = getMinRad(rad, wall);
+  cRad = (rad + iRad)/2;
+  oRad = rad;
+    
+  //--------------------------------------------------------
+  module minkowskiOuterBox(L, W, H, rad, plane, wall)
+  {    
+    if ((shellEdgeTopBottom == yappEdgeRounded) && (shellEdgeVert == yappEdgeRounded))
+    { 
+      minkowski()
+      {
+        cube([L+(wall*2)-(rad*2), W+(wall*2)-(rad*2), (H*2)+(plane*2)-(rad*2)], center=true);
+        sphere(rad*minkowskiErrorCorrection); // Compensate for minkowski error
+      }
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeSquare) && (shellEdgeVert == yappEdgeSquare))
+    {
+      cube([L+(wall*2), W+(wall*2), (H*2)+(plane*2)], center=true);
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeSquare) && (shellEdgeVert == yappEdgeRounded))
+    {
+      linear_extrude((H*2)+(plane*2),center=true)
+//      roundedRectangle2D(width=L+(wall*2),length=W+(wall*2),radius=(iRad*2)-wall/2);
+      roundedRectangle2D(width=L+(wall*2),length=W+(wall*2),radius=rad);
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeSquare) && (shellEdgeVert == yappEdgeChamfered))
+    {
+      linear_extrude((H*2)+(plane*2),center=true)
+      chamferedRectangle2D(L+(wall*2),W+(wall*2),rad);
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeChamfered) && (shellEdgeVert == yappEdgeChamfered))
+    {
+      chamferCube3D(L+(wall*2),W+(wall*2),(H*2)+(plane*2),(rad),(rad),(rad));
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeChamfered) && (shellEdgeVert == yappEdgeRounded))
+    {
+      //--bottom
+      translate([0,0,-((H*2)+(plane*2)-((rad)))/2])
+      mirror([0,0,1])
+      linear_extrude(((rad)), scale = [1-(((rad))/(L+(wall*2))*2),1-(((rad))/(W+(wall*2))*2)],center=true)
+      roundedRectangle2D(width=L+(wall*2),length=W+(wall*2),radius=(rad));
+
+      //--main
+      linear_extrude((H*2)+(plane*2)-(((rad))*2),center=true)
+      roundedRectangle2D(width=L+(wall*2),length=W+(wall*2),radius=(rad));
+
+      //--top
+      translate([0,0,((H*2)+(plane*2)-((rad)))/2])
+      linear_extrude(((rad)), scale = [1-(((rad))/(L+(wall*2))*2),1-(((rad))/(W+(wall*2))*2)],center=true)
+      roundedRectangle2D(width=L+(wall*2),length=W+(wall*2),radius=(rad));
+    } 
+    else 
+    {
+      assert(false, "Unsupported edge combination");
+    } 
+  } //-- minkowskiOuterBox()
+
+  module minkowskiCutBox(L, W, H, rad, plane, wall)
+  {
+    if ((shellEdgeTopBottom == yappEdgeRounded) && (shellEdgeVert == yappEdgeRounded))
+    { 
+      minkowski()
+      {
+        cube([L+(wall)-(rad*2), W+(wall)-(rad*2), (H*2)+(plane)-(rad*2)], center=true);
+        sphere(rad*minkowskiErrorCorrection); // Compensate for minkowski error
+      }
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeSquare) && (shellEdgeVert == yappEdgeSquare))
+    {
+      cube([L+(wall), W+(wall), (H*2)+(plane)], center=true);
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeSquare) && (shellEdgeVert == yappEdgeRounded))
+    {
+      echo("SQ-Rnd Cut", rar=rad);
+      linear_extrude((H*2)+(plane),center=true)
+      roundedRectangle2D(width=L+(wall),length=W+(wall),radius=rad);
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeSquare) && (shellEdgeVert == yappEdgeChamfered))
+    {
+      echo ("SQ-CH-Cut", rad=rad);
+      linear_extrude((H*2)+(plane),center=true)
+      chamferedRectangle2D(L+(wall),W+(wall),(rad));
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeChamfered) && (shellEdgeVert == yappEdgeChamfered))
+    {
+      chamferCube3D(L+(wall),W+(wall),(H*2)+(plane),(rad),(rad),(rad*sqrt(2)));
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeChamfered) && (shellEdgeVert == yappEdgeRounded))
+    {
+      //--echo ("CH-RND-Cut", rad=rad, iRad=iRad, oRad=oRad, cRad=cRad, wall=wall, plane=plane);
+      
+      //--bottom
+      translate([0,0,-((H*2)+plane/2-rad)/2])
+      mirror([0,0,1])
+      linear_extrude( rad+plane/2 //((rad)-plane)
+        , scale = 
+          [1-((cRad)*2/(L)),
+           1-((cRad)*2/(W))],
+        center=true)
+      roundedRectangle2D(width=L+(wall*1),length=W+(wall*1),radius=rad);
+
+      //--main
+      linear_extrude((H*2)+plane*0-rad*2+0.02,center=true)
+      roundedRectangle2D(width=L+(wall*1),length=W+(wall*1),radius=rad);
+
+      //--top
+      translate([0,0,((H*2)+plane/2-rad)/2])
+      linear_extrude( rad+plane/2 //((rad)-plane)
+        , scale = 
+          [1-((cRad)*2/(L)),
+           1-((cRad)*2/(W))],
+        center=true)
+      roundedRectangle2D(width=L+(wall*1),length=W+(wall*1),radius=rad);
+    } 
+    else 
+    {
+      assert(false, "Unsupported edge combination");
+    }
+  } //-- minkowskiCutBox()
+  
+  //--------------------------------------------------------
+  module minkowskiInnerBox(L, W, H, iRad, plane, wall)
+  {
+    echo(iRad=iRad);
+
+    if ((shellEdgeTopBottom == yappEdgeRounded) && (shellEdgeVert == yappEdgeRounded))
+    { 
+      minkowski()
+      {
+        cube([L-((iRad*2)), W-((iRad*2)), (H*2)-((iRad*2))], center=true);
+        sphere(iRad*minkowskiErrorCorrection); // Compensate for minkowski error
+      }
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeSquare) && (shellEdgeVert == yappEdgeSquare))
+    {
+      cube([L, W, (H*2)], center=true);
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeSquare) && (shellEdgeVert == yappEdgeRounded))
+    {
+      linear_extrude(H*2,center=true)
+      roundedRectangle2D(width=L,length=W,radius=iRad);
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeSquare) && (shellEdgeVert == yappEdgeChamfered))
+    {
+      echo ("SQ-CH-Inner", iRad=iRad, wall=wall);
+      
+      linear_extrude(H*2,center=true)
+      chamferedRectangle2D(L,W,iRad);
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeChamfered) && (shellEdgeVert == yappEdgeChamfered))
+    {
+      chamferCube3D(L,W,H*2,iRad,iRad,iRad);
+    } 
+    else if ((shellEdgeTopBottom == yappEdgeChamfered) && (shellEdgeVert == yappEdgeRounded))
+    {
+      vClip = (rad)-(plane/sqrt(2));
+      //echo("CH-RND-inner", iRad=iRad, rad=rad, vClip=vClip);
+      //--bottom
+      translate([0,0,-((H*2)-vClip)/2])
+      mirror([0,0,1])
+      linear_extrude( vClip //((rad)-plane)
+        , scale = 
+          [1-((iRad)*2/(L)),
+           1-((iRad)*2/(W))],
+        center=true)
+      roundedRectangle2D(width=L+(wall*0),length=W+(wall*0),radius=iRad);
+
+      //--main
+      linear_extrude((H*2)-vClip*2+0.02,center=true)
+      roundedRectangle2D(width=L+(wall*0),length=W+(wall*0),radius=iRad);
+
+      //--top
+      translate([0,0,((H*2)-vClip)/2])
+      linear_extrude(vClip, scale =
+          [1-((iRad)*2/(L)),
+           1-((iRad)*2/(W))],
+        center=true)
+      roundedRectangle2D(width=L+(wall*0),length=W+(wall*0),radius=iRad); 
+    } 
+    else 
+    {
+      assert(false, "Unsupported edge combination");
+    } 
+  } //-- minkowskiInnerBox()
+  
+  //--------------------------------------------------------
+  
+  if (preCutouts) 
+  {
+    if (shell==yappPartBase)
+    {
+      if (len(boxMounts) > 0)
+      {
+        difference()
+        {
+          printBoxMounts();
+          minkowskiCutBox(L, W, H, cRad, plane, wall);
+        } // difference()
+      } // if (len(boxMounts) > 0)
+     
+      //-- Objects to be cut to outside the box       
+      //color("Orange")
+      difference()
+      {
+        //-- move it to the origin of the base
+        translate ([-L/2, -W/2, -H])
+          hookBaseOutsidePre();    
+        minkowskiCutBox(L, W, H, cRad, plane, wall);
+      } // difference()
+    
+      //-- draw stuff inside the box
+      //color("LightBlue")
+      intersection()
+      {
+        minkowskiCutBox(L, W, H, cRad, plane, wall);
+        translate ([-L/2, -W/2, -H]) //-baseWallHeight])
+          hookBaseInsidePre();
+      } // intersection()
+
+      //-- The actual box
+      color(colorBase, alphaBase)
+      difference()
+      {
+        minkowskiOuterBox(L, W, H, rad, plane, wall);
+        minkowskiInnerBox(L, W, H, iRad, plane, wall);
+      } // difference
+   
+      //-- Draw the labels that are added (raised) from the case
+      color("DarkGreen") drawLabels(yappPartBase, false);
+      color("DarkGreen") drawImages(yappPartBase, false);
+
+    } // if (shell==yappPartBase)
+    else
+    {
+      //-- Lid
+      if (len(boxMounts) > 0)
+      {
+        difference()
+        {
+          printBoxMounts();
+          minkowskiCutBox(L, W, H, cRad, plane, wall);
+        } // difference()
+      } // if (len(boxMounts) > 0)
+
+      //color("Red")
+      difference()
+      {
+        //-- Objects to be cut to outside the box 
+        //-- move it to the origin of the base
+        translate ([-L/2, -W/2, H])
+        hookLidOutsidePre();
+        minkowskiCutBox(L, W, H, cRad, plane, wall);
+      } // difference()
+      
+      //-- draw stuff inside the box
+      //color("LightGreen")
+      intersection()
+      {
+        minkowskiCutBox(L, W, H, cRad, plane, wall);
+        translate ([-L/2, -W/2, H])
+          hookLidInsidePre();
+      } //intersection()
+
+      //-- The actual box
+      color(colorLid, alphaLid)
+      difference()
+      {
+        minkowskiOuterBox(L, W, H, rad, plane, wall);
+        minkowskiInnerBox(L, W, H, iRad, plane, wall);
+      } // difference  
+
+      //-- Draw the labels that are added (raised) from the case
+      color("DarkGreen") drawLabels(yappPartLid, false);
+      color("DarkGreen") drawImages(yappPartLid, false);
+    }
+  }
+  else // preCutouts
+  {
+    //-- Only add the Post hooks
+    if (shell==yappPartBase)
+    {
+      //color("Orange")
+      difference()
+      {
+        // Objects to be cut to outside the box       
+        // move it to the origin of the base
+        translate ([-L/2, -W/2, -H]) 
+          hookBaseOutside();
+        minkowskiCutBox(L, W, H, cRad, plane, wall);
+      } // difference()
+
+      //draw stuff inside the box
+      //color("LightBlue")
+      intersection()
+      {
+        minkowskiCutBox(L, W, H, cRad, plane, wall);
+        translate ([-L/2, -W/2, -H])
+          hookBaseInside();
+      } // intersection()
+    } // if (shell==yappPartBase)
+    else
+    {
+      //Lid      
+      //color("Red")
+      difference()
+      {
+        //-- Objects to be cut to outside the box 
+        //-- move it to the origin of the base
+        translate ([-L/2, -W/2, H])
+        hookLidOutside();
+        minkowskiCutBox(L, W, H, cRad, plane, wall);
+      } // difference()
+
+      //-- draw stuff inside the box
+      //color("LightGreen")
+      intersection()
+      {
+        translate ([-L/2, -W/2, H])
+          hookLidInside();
+        minkowskiCutBox(L, W, H, cRad, plane, wall);
+      }
+    }
+  } //preCutouts
+} //-- minkowskiBox()
+
+
+//===========================================================

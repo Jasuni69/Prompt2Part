@@ -1,0 +1,17 @@
+function translate2Box_Z (value, face, sourceSystem) =
+  (sourceSystem[0] == yappCoordPCB) && (face==yappBase)         ? value + getPCB_Z(sourceSystem[2]) :
+  (sourceSystem[0] == yappCoordPCB) && (face==yappLeft)         ? value + getPCB_Y(sourceSystem[2])  :
+  (sourceSystem[0] == yappCoordPCB) && (face==yappFront)        ? value + getPCB_X(sourceSystem[2])  :
+  
+  (sourceSystem[0] == yappCoordPCB) && (face==yappLid)          ? value + getPCB_Z(sourceSystem[2]) :
+  (sourceSystem[0] == yappCoordPCB) && (face==yappRight)        ? value + getPCB_Y(sourceSystem[2])  :
+  (sourceSystem[0] == yappCoordPCB) && (face==yappBack)         ? value + getPCB_X(sourceSystem[2])  :
+  
+  (sourceSystem[0] == yappCoordBoxInside) && (face==yappBase)   ? value + basePlaneThickness :
+  (sourceSystem[0] == yappCoordBoxInside) && (face==yappLeft)   ? value + wallThickness :
+  (sourceSystem[0] == yappCoordBoxInside) && (face==yappFront)  ? value + wallThickness :
+  
+  (sourceSystem[0] == yappCoordBoxInside) && (face==yappLid)    ? value + basePlaneThickness :
+  (sourceSystem[0] == yappCoordBoxInside) && (face==yappRight)  ? value + wallThickness :
+  (sourceSystem[0] == yappCoordBoxInside) && (face==yappBack)   ? value + wallThickness :
+  value;

@@ -1,0 +1,1 @@
+function rd_cm_choke_slot(type) = type[3]; //! Slot to hold central separator width, height, thickness

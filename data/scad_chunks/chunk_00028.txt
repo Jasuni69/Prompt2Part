@@ -1,0 +1,3 @@
+function Func4(x, y) = 2.5*(1+cos(y*36))+2;
+// Two-slit interference
+slit_pos = 10;

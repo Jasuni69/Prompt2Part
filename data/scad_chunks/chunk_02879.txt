@@ -1,0 +1,8 @@
+module hookBaseInside()
+{
+  //if (printMessages) echo("hookBaseInside() ..");
+  
+} // hookBaseInside()
+
+//===========================================================
+// origin = box(0,0,0)

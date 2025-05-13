@@ -1,0 +1,74 @@
+module FlatKnurl(size=[20,30,1],h,lambda=2,base=.2,opt=0,center=[+0,0,1],help){
+center=is_bool(center)?center?[1,1,1]:[0,0,1]:center;
+lambda=is_num(lambda)?[lambda,lambda]:lambda;
+size=is_list(size)?len(size)==3?size:[each size.xy,min(lambda)/2]:[size,size,min(lambda)/2];
+s=is_undef(h)?size:[each size.xy,h];
+res=[round(s.x/lambda.x),round(s.y/lambda.y)]*2;
+
+
+  if(opt==1){ // cross in
+    FlatMesh(s,res=res,base=base,fz=function(x,y) x%2?0:s.z,center=center);
+    FlatMesh(s,res=res,base=base,fz=function(x,y) y%2?0:s.z,center=center);
+  }
+
+  if(opt==0)intersection(){ //cross out
+    FlatMesh(s,res=res,base=base,fz=function(x,y) x%2?s.z:0,center=center);
+    FlatMesh(s,res=res,base=base,fz=function(x,y) y%2?s.z:0,center=center);
+  }
+  if(opt==2){ // straight x
+    FlatMesh(s,res=res,base=base,fz=function(x,y) x%2?s.z:0,center=center);
+  }
+  if(opt==3){ // straight y
+    FlatMesh(s,res=res,base=base,fz=function(x,y) y%2?s.z:0,center=center);
+  }  
+  if(opt==4)intersection(){ // diagonal
+    FlatMesh(s,res=res,base=base,fz=function(x,y) (x+y)%2?s.z:0,faceOpt=0,center=center);
+    FlatMesh(s,res=res,base=base,fz=function(x,y) (x+y)%2?s.z:0,faceOpt=1,center=center);
+  }
+  if(opt==5){ // diagonal out
+    FlatMesh(s,res=res,base=base,fz=function(x,y) (x+y)%2?s.z:0,faceOpt=0,center=center);
+    FlatMesh(s,res=res,base=base,fz=function(x,y) (x+y)%2?s.z:0,faceOpt=1,center=center);
+  }
+  if(opt==6||opt==7)FlatMesh(s,res=res,base=base,fz=function(x,y) (x+y)%2?s.z:0,faceOpt=opt==6?0:1,center=center);
+  
+HelpTxt("FlatKnurl",["size",size,"h",h,"lambda",lambda,"base",base,"opt",opt,"center",center],help);
+}
+
+
+
+
+
+/**
+\name Loch
+\page Objects
+Loch() creates the Volume of a slot or elongated hole
+\param h height 
+\param h2 chamfer height [bottom,top]
+\param d  diameter
+\param l elongation
+\param d2  [bottom/top] ↦ h2
+\param deg chamfer degree [bottom,top]
+\param rad  [bottom/top] is max if undef
+\param extrude  ends cylindrical extruded
+\param center  [x,y,z] center options 1=center length,2/3 center arc
+\param fn fragments
+\param cuts Add cuts to create reinforcements
+\param name,help  name help
+*/
+
+/*
+ Loch(h=5,h2=0.75,rad=[1,2.5]*0,deg=[-45,45], use2D=1);
+ T(8) Loch(h=5,h2=.75,rad=[1,2.5],deg=[45,-45], use2D=true);
+   //*/
+ 
+ // LinEx(end=[-1,1])Rund(0,1)Loch(help=1);
+
+ //Loch(rad=4,d=7,h=14,h2=3,deg=-30, use2D=0,cuts=0,fs=0.4);
+//Loch(d=[4,4],h=6,h2=[1,1],deg=45, use2D=1,rad=1,l=[10,10]);
+
+/* //WIP
+Loch(d=[7,5],h=6,h2=[1,1],deg=25, use2D=0,rad=[+4,1.2],l=[10,10],center=[1,0]);
+color("red")T(4.9,2)Kegel(d=7.76,d2=2,grad=90-14.0362);
+color("blue")T(6.473,3)Kegel(d=5,d2=2,grad=65);
+color("blue")T(4.173,3)Kegel(d=2,d2=15,grad=65);
+//*/

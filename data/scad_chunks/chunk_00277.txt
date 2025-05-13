@@ -1,0 +1,1 @@
+function magnet_name(type)  = type[1]; //! Name

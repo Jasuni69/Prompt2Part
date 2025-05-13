@@ -1,0 +1,1 @@
+function ssr_slot_w(type)     = type[8]; //! Width of the screw slot in the body

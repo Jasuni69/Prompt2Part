@@ -1,0 +1,1 @@
+function extrusion_channel_width(type)          = type[6];  //! Channel width

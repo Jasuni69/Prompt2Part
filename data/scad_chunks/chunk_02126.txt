@@ -1,0 +1,1 @@
+function pbox_base(type)       = type[3]; //! Base thickness, can be zero for no base

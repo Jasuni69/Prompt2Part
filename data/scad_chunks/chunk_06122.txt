@@ -1,0 +1,37 @@
+function _skin_distance_match(poly1,poly2) =
+   let(
+      swap = len(poly1)>len(poly2),
+      big = swap ? poly1 : poly2,
+      small = swap ? poly2 : poly1,
+      map_poly = [ for(
+              i=0,
+              bestcost = 1/0,
+              bestmap = -1,
+              bestpoly = -1
+              ;
+              i<=len(big)
+              ;
+              shifted = list_rotate(big,i),
+              result =_dp_distance_array(small, shifted, abort_thresh = bestcost),
+              bestmap = result[0]<bestcost ? result[1] : bestmap,
+              bestpoly = result[0]<bestcost ? shifted : bestpoly,
+              best_i = result[0]<bestcost ? i : best_i,
+              bestcost = min(result[0], bestcost),
+              i=i+1
+              )
+              if (i==len(big)) each [bestmap,bestpoly,best_i]],
+      map = _dp_extract_map(map_poly[0]),
+      smallmap = map[0],
+      bigmap = map[1],
+      // These shifts are needed to handle the case when points from both ends of one curve map to a single point on the other
+      bigshift =  len(bigmap) - max(max_index(bigmap,all=true))-1,
+      smallshift = len(smallmap) - max(max_index(smallmap,all=true))-1,
+      newsmall = list_rotate(repeat_entries(small,unique_count(smallmap)[1]),smallshift),
+      newbig = list_rotate(repeat_entries(map_poly[1],unique_count(bigmap)[1]),bigshift)
+      )
+      swap ? [newbig, newsmall] : [newsmall,newbig];
+
+
+// This function associates vertices but with the assumption that index 0 is associated between the
+// two inputs.  This has quadratic run time.  As above, output is pair of polygons with
+// vertices duplicated as suited to use as input to skin().

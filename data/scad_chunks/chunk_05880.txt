@@ -1,0 +1,22 @@
+function compare_vals(a, b) =
+    (a==b)? 0 :
+    let(t1=_type_num(a), t2=_type_num(b)) (t1!=t2)? (t1-t2) :
+    is_list(a)? compare_lists(a,b) :
+    is_nan(a)? 0 :
+    (a<b)? -1 : (a>b)? 1 : 0;
+
+
+// Function: compare_lists()
+// Synopsis: Compares two lists of values, possibly of different type.
+// Topics: Comparisons, List Handling
+// See Also: compare_vals(), approx(), is_increasing(), is_decreasing()
+// Usage:
+//   test = compare_lists(a, b)
+// Description:
+//   Compare contents of two lists using `compare_vals()`.
+//   Returns a negative number if `a`<`b`.
+//   Returns 0 if `a`==`b`.
+//   Returns a positive number if `a`>`b`.
+// Arguments:
+//   a = First list to compare.
+//   b = Second list to compare.

@@ -1,0 +1,34 @@
+include<ub.scad>
+help2D=true; 
+$helpM=true;
+
+// Trapez();
+// Tri();
+// Tri90(); 
+// Quad();
+// VorterantQ();
+// Linse();
+// Bogendreieck();
+// Reuleaux();
+// Stern();
+// ZigZag();
+// WStern();
+// Superellipse();
+// Flower();
+// Seg7();
+// WKreis();
+// RSternFill();
+// Cycloid();
+// SQ();
+// Vollwelle();
+// CycloidZahn();
+// Nut();
+// DBogen();
+// Pfeil();
+// Rosette();
+// GT();
+// Egg();
+// VarioFill();
+// Welle();
+// Tdrop();
+// Bezier();

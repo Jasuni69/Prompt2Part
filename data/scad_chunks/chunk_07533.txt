@@ -1,0 +1,64 @@
+function is_parent(parent= needs2D, i= 0)=
+is_list(parent)?is_num(search(parent,parentList())[i])?true:
+                                                      i<len(parent)-1?is_parent(parent=parent,i=i+1):
+                                                                      false:
+                is_num(search([parent],parentList())[0]);
+
+
+// multmatrix vector for point multiplications
+
+/*
+[Scale X]          [Shear X along Y]  [Shear X along Z]  [Translate X]
+[Shear Y along X]  [Scale Y]          [Shear Y along Z]  [Translate Y]
+[Shear Z along X]  [Shear Z along Y]  [Scale Z]          [Translate Z]
+*/
+
+
+m = function (r=[0,0,0], t=[0,0,0], s=[1,1,1])//t2=[0,0,0],
+let(
+s=is_num(s)?[s,s,s]:
+            len(s)==2?concat(s,[1]):
+                      s,
+r=is_num(r)?[0,0,r]: is_list(r)?len(r)==3?r:v3(r) : [0,0,0],
+t=is_list(t)?len(t)==2?concat(t,[0]):len(t) == 3?t:v3(t):v3(t),
+//t2=len(t2)==2?concat(t2,[0]):t2,
+
+  rx = function (x)[
+  [1,     0,      0, t.x],
+  [0,cos(x),-sin(x), t.y],
+  [0,sin(x), cos(x), t.z],
+  [0,0,0,0]
+  ],
+
+  ry = function (y) [
+  [ cos(y), 0, sin(y), t.x],
+  [0      , 1, 0     , t.y],
+  [-sin(y), 0, cos(y), t.z],
+  [0,0,0,0]
+  ],
+
+  rz = function (z) [
+  [cos(z), -sin(z), 0, t.x],
+  [sin(z),  cos(z), 0, t.y],
+  [0     ,       0, 1, t.z],
+  [0,0,0,0]
+  ],
+  
+  
+/*
+  mt = function (t2=[0,0,0])[
+  [1, 0, 0, t2.x],
+  [0, 1, 0, t2.y],
+  [0, 0, 1, t2.z],
+  [0, 0, 0, 0]
+  ],
+ */
+  ms = function (s=[ 1, 1, 1],t=t)[
+  [s.x, 0, 0, t.x],
+  [0, s.y, 0, t.y],
+  [0, 0, s.z, t.z],
+  [0, 0, 0, 0]
+  ],
+  out=rz(r.z)*ry(r.y)*rx(r.x)*ms(s) // *mt(t2)*
+)
+out;

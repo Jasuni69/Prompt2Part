@@ -1,0 +1,1 @@
+function smd_soic_lead_pitch(type) = type[4];    //! Lead pitch

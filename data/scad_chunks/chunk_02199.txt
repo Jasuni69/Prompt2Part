@@ -1,0 +1,1 @@
+function hinge_width(type)       = type[1]; //! Width

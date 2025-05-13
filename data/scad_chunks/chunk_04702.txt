@@ -1,0 +1,8 @@
+function webbing(d1, d2, c2, th, r3) = 
+  webbing_shape(d1/2, d2/2, r3 == undef ? webbing_r3(d1/2, d2/2, th, norm(c2)): r3, c2);
+
+  
+// solve the following for r3:  
+// c = sqrt( (r1+r3)^2 - (r3+w)^2 ) + sqrt( (r2+r3)^2 - (r3+w)^2 )
+// c is the distance between centers
+// w is the minimum webbing width

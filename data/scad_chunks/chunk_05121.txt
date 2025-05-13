@@ -1,0 +1,29 @@
+function repeat_entries(list, N, exact=true) =
+    assert(is_list(list) && len(list)>0, "The list cannot be void.")
+    assert((is_finite(N) && N>0) || is_vector(N,len(list)),
+            "Parameter N must be a number greater than zero or vector with the same length of `list`")
+    let(
+        length = len(list),
+        reps_guess = is_list(N)? N : repeat(N/length,length),
+        reps = exact ?
+                 _sum_preserving_round(reps_guess) 
+               : [for (val=reps_guess) round(val)]
+    )
+    [for(i=[0:length-1]) each repeat(list[i],reps[i])];
+
+
+// Function: list_pad()
+// Synopsis: Extend list to specified length.
+// Topics: List Handling
+// See Also: force_list(), scalar_vec3()
+// Usage:
+//   newlist = list_pad(list, minlen, [fill]);
+// Description:
+//   If the list `list` is shorter than `minlen` length, pad it to length with the value given in `fill`.
+// Arguments:
+//   list = A list.
+//   minlen = The minimum length to pad the list to.
+//   fill = The value to pad the list with.  Default: `undef`
+// Example:
+//   list = [3,4,5];
+//   nlist = list_pad(list,5,23);  // Returns: [3,4,5,23,23]

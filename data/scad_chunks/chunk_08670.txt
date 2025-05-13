@@ -1,0 +1,6 @@
+function _chain_turn(cmd, arg1, arg2) = 
+    cmd == "roll" ? _xu_turn(arg1, -arg2) :
+    cmd == "pitch" ? _yu_turn(arg1, -arg2) : 
+    cmd == "turn" || cmd == "zu_turn" ? _zu_turn(arg1, arg2) :
+    cmd == "xu_turn" ? _xu_turn(arg1, arg2) : 
+    cmd == "yu_turn" ? _yu_turn(arg1, arg2) : _chain_one_arg(cmd, arg1);

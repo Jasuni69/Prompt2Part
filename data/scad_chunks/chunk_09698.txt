@@ -1,0 +1,10 @@
+function QuatZ(a=0) = Quat([0,0,1],a);
+
+
+// Function: QuatXYZ()
+// Usage:
+//   QuatXYZ([X,Y,Z])
+// Description:
+//   Creates a quaternion from standard [X,Y,Z] rotation angles in degrees.
+// Arguments:
+//   a = The triplet of rotation angles, [X,Y,Z]

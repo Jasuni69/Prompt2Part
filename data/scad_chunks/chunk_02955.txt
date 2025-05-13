@@ -1,0 +1,1 @@
+function pcbLength(pcbName="Main") = (getVectorBase(pcbName, pcb))[1];

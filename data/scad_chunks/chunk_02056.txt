@@ -1,0 +1,14 @@
+module press_fit_peg(h, w = 5, horizontal = false) {    //! Make a rounded chamfered peg for easy insertion
+    module chamfered_square(w, horizontal) {
+        h = horizontal ? w - bridge_droop : w;
+        rounded_square([w, h], 1);
+    }
+
+    translate_z(-eps)
+        linear_extrude(height = h + eps - layer_height)
+            chamfered_square(w + interference, horizontal);
+
+    translate_z(h - layer_height - eps)
+        linear_extrude(height = layer_height + eps)
+            chamfered_square(w - layer_height, horizontal);
+}

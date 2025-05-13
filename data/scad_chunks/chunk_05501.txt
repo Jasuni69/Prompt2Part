@@ -1,0 +1,4 @@
+function _cyl_hole(r, path) =
+    [for(point=path) cylindrical_to_xyz(concat([r],xscale(360/(2*PI*r),p=point)))];
+
+// Mask profile of 180 deg of a circle to round an edge

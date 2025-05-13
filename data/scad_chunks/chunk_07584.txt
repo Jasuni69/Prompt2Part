@@ -1,0 +1,43 @@
+module PolyDeg(points,rad=1,poly=true,txt=true,help){
+
+c=[
+"darkOrange",
+"Chartreuse",
+"LightSkyBlue",
+"SteelBlue",
+];
+
+HelpTxt("PolyDeg",["points",points,"rad",rad,"poly",poly,"txt",txt],help);
+
+Echo("No Points",color="redring",condition=!is_list(points[2]));
+if(is_list(points[2])&&poly)polygon(points,convexity=5);
+
+if(is_list(points[2]))
+  for(p=[0:len(points)-1])translate(points[p]) {
+    let(
+          offset=0,
+          pBef=points[(p+len(points)-1)%len(points)],
+          pNow=points[p],
+          pNex=points[(p+1)%len(points)],
+          grad1=atan2(pBef.x-pNow.x,pBef.y-pNow.y),
+          grad2=atan2(pNex.x-pNow.x,pNex.y-pNow.y),
+          gradDiff=grad1-grad2,
+          grad=gradDiff<0?abs(gradDiff):360-gradDiff,
+          gradSup=360-grad
+       )
+    %Tz(.1)union(){
+      color(abs(grad)%90?abs(grad)>90?abs(grad)>180?c[3]:c[2]:c[0]:c[1])polygon(kreis(r=rad,grad=grad,rot=grad1,center=false,rand=rad/5));
+      color(abs(gradSup)%90?abs(gradSup)>90?abs(gradSup)>180?c[3]:c[2]:c[0]:c[1])polygon(kreis(r=rad,grad=gradSup,rot=grad2,center=false,rand=-rad/5));
+
+      if(txt)color(abs(gradSup)%90?abs(gradSup)>90?abs(gradSup)>180?c[3]:c[2]:c[0]:c[1])text(str(gradSup,"° "),size=b(txt,false),halign="right");
+      if(txt)color(abs(grad)%90?abs(grad)>90?abs(grad)>180?c[3]:c[2]:c[0]:c[1])text(str(grad,"°"),size=b(txt,false));
+    }
+  }
+}
+
+/** \page Helper
+PrevPos() object position Object for preview only
+\name PrevPos
+\param t translate 
+\param rot rotates
+*/

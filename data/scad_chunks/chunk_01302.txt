@@ -1,0 +1,1 @@
+function gm_shaft_r(type) = gm_shaft(type).x / 2; //! Shaft radius

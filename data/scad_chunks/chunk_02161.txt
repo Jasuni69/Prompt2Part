@@ -1,0 +1,15 @@
+module led_bezel_assembly(type, colour = "red") {//! Led bezel with LED
+    led = led_bezel_led(type);
+    d = led_diameter(led);
+    assembly(str(led[0], "_", colour, "_bezel")) {
+        translate_z(led_bezel_flange_t(type)) {
+            vflip()
+                stl_colour(pp1_colour)
+                    led_bezel(type);
+
+            translate_z(-led_height(led) + (is_num(d) ? d / 2 : 0))
+                explode(-20)
+                    led(led, colour);
+        }
+    }
+}

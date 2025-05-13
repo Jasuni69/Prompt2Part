@@ -1,0 +1,4 @@
+function _parse_positive_number(t) =
+    len(search(".", t)) == 0 ? _parse_positive_int(t) :
+        let(splitted = split_str(t, "."))
+        _parse_positive_int(splitted[0]) + _parse_positive_int(splitted[1]) / 10 ^ (len(splitted[1]));

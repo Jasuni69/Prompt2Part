@@ -1,0 +1,2 @@
+function box(screw, wall, sheets, top_sheet, base_sheet, size, feet = false, shelf_screw = undef, name = "box") = //! Construct a property list for a box.
+ concat([screw, is_undef(shelf_screw) ? screw : shelf_screw, wall, sheets, top_sheet, base_sheet, feet, name], size);

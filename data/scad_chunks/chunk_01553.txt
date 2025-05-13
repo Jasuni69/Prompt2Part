@@ -1,0 +1,72 @@
+module rd_electrolytic(type, value, pitch = undef, z = 0, tail = 3) { //! Draw a radial electrolytic capcacitor
+    vitamin(str("rd_electrolytic(", type[0], ", \"", value, "\"): Electolytic capacitor ", type[0], " ", value));
+
+    size = rd_electrolytic_size(type);
+    crimp = rd_electrolytic_crimp(type);
+    colours = rd_electrolytic_colours(type);
+    opitch = rd_electrolytic_pitch(type);
+    pitch = is_undef(pitch) ? opitch : pitch;
+    lead_d = rd_electrolytic_lead_d(type);
+    jacket_t = 0.2;
+    jacket_ir = size.x * 5 / 16;
+    cross = 0.2 / sqrt(2);
+
+    $fs = fs; $fa = fa;
+    radial_leads(opitch, pitch, z + jacket_t, lead_d, tail);
+
+    x = (size.x - size.y) / 2;
+    h = crimp[0] / 2;
+    r = (h / x - x) / 2;
+
+    stripe_angle = 50;
+
+    module profile()
+        difference() {
+            round(rd_electrolytic_radius(type))
+                difference() {
+                    square([size.x / 2, size.z]);
+
+                    translate([size.x / 2 - x + r, crimp.y])
+                        circle(r);
+                }
+
+            square([jacket_ir, size.z]);
+        }
+
+    translate_z(z) {
+        color(colours[0])
+            rotate(stripe_angle / 2)
+                rotate_extrude(angle = 360 - stripe_angle)
+                    profile();
+
+        color(colours[1]) {
+            rotate(-stripe_angle / 2)
+                rotate_extrude(angle = stripe_angle)
+                    profile();
+
+                z0 = crimp.y + crimp.x / 2;
+                translate_z((size.z + z0) / 2)
+                    cylindrical_wrap(size.x / 2)
+                        rotate(-90)
+                           resize([(size.z - z0) * 0.9, 0], auto = true)
+                                text(value, halign = "center", valign = "center");
+
+        }
+
+        color(silver)
+            translate_z(size.z - 1)
+                render() difference() {
+                    cylinder(r = jacket_ir, h = 1 - jacket_t);
+
+                    translate_z(1 - jacket_t)
+                        for(a = [0, 90])
+                            rotate([45, 0, a])
+                                cube([size.x, cross, cross], center = true);
+
+                }
+
+        color(grey(30))
+            translate_z(jacket_t)
+                cylinder(r = jacket_ir, h = eps);
+    }
+}

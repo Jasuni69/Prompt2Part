@@ -1,0 +1,1 @@
+function bent_cutout_mask(r, thickness, path, radius, convexity=10) = no_function("bent_cutout_mask");

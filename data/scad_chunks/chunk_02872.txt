@@ -1,0 +1,37 @@
+  FontDesigner(font="myFont",fontdefinition=[my_font]);
+
+// Show with custom font to replace the "o" and the "H".
+// If a character is not found, then the default font is used.
+color("Green")
+  translate([20,35])
+    text_subdivision("Hello",font="myFont",fontdefinition=[my_font]);
+
+
+// Example 3
+// ---------
+// A definition of an emoticon with a private UTF-8 character.
+// The first range for private characters is: U+E000 ... U+F8FF
+// The definition for the character may contain a loop.
+my_spring =
+[
+  ["mySpring", "me", "CC0"],
+  [
+    ["\uE000",44,[for(x=[0:4:40]) [[x,0],[x,10],[x+2,10],[x+2,-10],[x+4,-10],[x+4,0]]]],
+  ]
+];
+
+// Show the font with the font designer function.
+translate([150,-60])
+  FontDesigner(font="mySpring",fontdefinition=[my_spring]);
+
+string = "Spring=\uE000";
+color("Red")
+  translate([20,20])
+    text_subdivision(text=string,font="mySpring",weight=1.0,fontdefinition=[my_spring]);
+
+color("LightSteelBlue")
+  translate([100,60])
+    rotate_extrude()
+      translate([4,0])
+        scale([0.4,0.4])
+          text_subdivision("\uE000",font="mySpring",weight=1.0,fontdefinition=[my_spring]);

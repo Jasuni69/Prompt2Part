@@ -1,0 +1,50 @@
+  //Spherical cutout for Joystick
+  [
+    pcbLength("Joystick") - 12.25, //pcbLength("Joystick")/2, //xPos
+    pcbWidth("Joystick")/2, // yPos
+    10-7 + (-lidPlaneThickness/2), // Shift offset in Z to the inside of the lid - offset needed
+    undef, //    p(3) = length
+    14.5, //    Joystick Hat radius
+    yappSphere, //    p(5) = shape 
+    20+lidPlaneThickness, //5 // depth
+    //yappCoordBox,
+    yappCenter,
+    [yappPCBName, "Joystick"], 
+  ]
+
+
+
+// [20,20, 0, 10, 20, yappRing, yappCenter]
+// ,[70,20, 5, 10, 20, yappRing, yappDefault, 0, yappCenter]
+// ,[120,20, -5, 10, 20, yappRing, yappDefault, 45, yappCenter]
+];
+
+cutoutsFront = 
+[
+];  
+
+
+cutoutsBack = 
+[
+];
+
+
+cutoutsLeft = 
+[
+];
+
+cutoutsRight = 
+[
+  [pcbLength("Joystick")/2,  //    p(0) = from Back
+    4,//    p(1) = from Left (height)
+    13.5,//    p(2) = width
+    2.5,//    p(3) = length
+    undef, //    p(4) = radius
+    yappRectangle,//    p(5) = shape : { yappRectangle | yappCircle | yappPolygon | yappRoundedRect 
+    yappCenter,
+    [yappPCBName, "Joystick"], 
+  ],
+];
+
+//===================================================================
+//  *** Snap Joins ***

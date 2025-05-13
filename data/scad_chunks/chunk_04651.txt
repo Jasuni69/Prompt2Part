@@ -1,0 +1,40 @@
+function extrudePolygonWithRadius(radiiPoints,h=5,r1=1,r2=1,fn=4)=
+// this basically calls makeCurvedPartOfPolyHedron twice to get the curved section of the final polyhedron
+// and then goes about assmbling them, as the side faces and the top and bottom face caps are missing
+// radiiPoints= series of [x,y,r] points,
+// h= height of the extrude (total including radius sections)
+// r1,r2= define the radius at the top and bottom of the extrud respectively, negative number flange out the extrude
+// fn= number of subdivisions
+// returns= [polyhedronPoints, polyhedronFaces]
+let(
+  // top is the top curved part of the extrude
+  top=makeCurvedPartOfPolyHedron(radiiPoints,r1,fn),
+  topRadiusPoints=translate3Dcoords(top[0],[0,0,h-abs(r1)]),
+  singeLayerLength=top[2],
+  topRadiusFaces=top[1],
+  radiusPointsLength=len(topRadiusPoints), // is the same length as bottomRadiusPoints
+  // bottom is the bottom curved part of the extrude
+  bottom=makeCurvedPartOfPolyHedron(radiiPoints,r2,fn),
+  // Z axis needs to be multiplied by -1 to flip it so the radius is going in the right direction [1,1,-1]
+  bottomRadiusPoints=translate3Dcoords(bottom[0],[0,0,abs(r2)],[1,1,-1]),
+  // becaues the points will be all concatenated into the same array, and the bottom points come second, than
+  // the original indices the faces are points towards are wrong and need to have an offset applied to them
+  bottomRadiusFaces=offsetAllFacesBy(bottom[1],radiusPointsLength),
+  // all of the side panel of the extrusion, connecting points from the inner layers of each
+  // of the curved sections
+  sideFaces=[for(i=[0:singeLayerLength-1])[
+    i,
+    listWrap(i+1,singeLayerLength),
+    radiusPointsLength + listWrap(i+1,singeLayerLength),
+    radiusPointsLength + i
+  ]],
+  // both of these caps are simple every point from the last layer of the radius points
+  topCapFace=[for(i=[0:singeLayerLength-1])radiusPointsLength-singeLayerLength+i],
+  bottomCapFace=[for(i=[0:singeLayerLength-1])radiusPointsLength*2-singeLayerLength+i],
+  finalPolyhedronPoints=concat(topRadiusPoints,bottomRadiusPoints),
+  finalPolyhedronFaces=concat(topRadiusFaces,invertFaces(bottomRadiusFaces),invertFaces(sideFaces),[topCapFace],invertFaces([bottomCapFace]))
+)
+[
+  finalPolyhedronPoints,
+  finalPolyhedronFaces
+];

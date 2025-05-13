@@ -1,0 +1,1 @@
+function insert_hole_length(type) = round_to_layer(insert_length(type)); //! Length of the insert rounded to layer height

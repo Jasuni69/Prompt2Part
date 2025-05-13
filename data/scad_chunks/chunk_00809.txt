@@ -1,0 +1,1 @@
+function smd_inductor_z(type)      = type[2]; //! Height above PCB surface

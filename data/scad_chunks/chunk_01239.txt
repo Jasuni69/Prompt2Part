@@ -1,0 +1,9 @@
+module vero_components(type, cutouts = false, angle = undef)
+    for(comp = vero_components(type))
+        vero_grid_pos(type, comp.x, comp.y)
+            if(comp[3][0] == "-")
+                vflip()
+                    pcb_component(comp, cutouts, angle);
+            else
+                translate_z(vero_thickness(type))
+                    pcb_component(comp, cutouts, angle);

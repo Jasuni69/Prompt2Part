@@ -1,0 +1,50 @@
+showPCB                   = false;      // Show the PCB in red : only in preview 
+showSwitches              = false;      // Show the switches (for pushbuttons) : only in preview 
+showButtonsDepressed      = false;       // Should the buttons in the Lid On view be in the pressed position
+showOriginCoordBox        = false;      // Shows red bars representing the origin for yappCoordBox : only in preview 
+showOriginCoordBoxInside  = false;      // Shows blue bars representing the origin for yappCoordBoxInside : only in preview 
+showOriginCoordPCB        = false;      // Shows blue bars representing the origin for yappCoordBoxInside : only in preview 
+showMarkersPCB            = false;      // Shows black bars corners of the PCB : only in preview 
+showMarkersCenter         = false;      // Shows magenta bars along the centers of all faces  
+inspectX                  = 8;          //-> 0=none (>0 from Back)
+inspectY                  = 0;          //-> 0=none (>0 from Right)
+inspectZ                  = 0;          //-> 0=none (>0 from Bottom)
+inspectXfromBack          = true;       //-> View from the inspection cut foreward
+inspectYfromLeft          = true;       //-> View from the inspection cut to the right
+inspectZfromBottom        = true;       //-> View from the inspection cut up
+//---------------------------
+//--     C O N T R O L     --
+//---------------------------
+
+
+//===================================================================
+//  *** Connectors ***
+//  Standoffs with hole through base and socket in lid for screw type connections.
+//-------------------------------------------------------------------
+//  Default origin = yappCoordPCB : pcb[0,0,0]
+//  
+//  Parameters:
+//   Required:
+//    p(0) = posx
+//    p(1) = posy
+//    p(2) = StandHeight : From specified origin 
+//    p(3) = screwDiameter
+//    p(4) = screwHeadDiameter (don't forget to add extra for the fillet)
+//    p(5) = insertDiameter
+//    p(6) = outsideDiameter
+//   Optional:
+//    p(7) = insert Depth : default to entire connector
+//    p(8) = PCB Gap : Default if yappCoordPCB then pcbThickness else 0
+//    p(9) = filletRadius : Default = 0/Auto(0 = auto size)
+//    n(a) = { yappAllCorners, yappFrontLeft | <yappBackLeft> | yappFrontRight | yappBackRight }
+//    n(b) = { <yappCoordPCB> | yappCoordBox | yappCoordBoxInside }
+//    n(c) = { yappNoFillet }
+//    n(d) = { yappCountersink }
+//    n(e) = [yappPCBName, "XXX"] : Specify a PCB. Defaults to [yappPCBName, "Main"]
+//    n(f) = { yappThroughLid = changes the screwhole to the lid and the socket to the base}
+//-------------------------------------------------------------------
+connectors   =
+[
+//  [ 10, 10, 4, 3, 5, 4, 7, yappAllCorners], // All of the corners of the PCB inset 10,10
+//  [ 8, 8, 4, 3, 5, 4, 7, yappCoordBox], //Defaults to yappBackLeft of yappCoordBox
+//  [ 8-wallThickness, 28, 4, 3, 5, 4, 7, 5, 1.6, yappBackLeft, yappCoordBoxInside], // Shifted so that they all aligh for inspection cut

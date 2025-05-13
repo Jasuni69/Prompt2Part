@@ -1,0 +1,2 @@
+function _turtle(point, angle) = 
+    [is_undef(point) ? [0, 0] : point, is_undef(angle) ? 0 : angle];

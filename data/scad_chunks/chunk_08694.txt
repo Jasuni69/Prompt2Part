@@ -1,0 +1,4 @@
+function _get(t, cmd) =
+    cmd == "angle" ? _get_angle(t) : 
+    cmd == "point" ? _get_pt(t) : 
+    assert(false, "unknown command");

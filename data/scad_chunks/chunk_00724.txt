@@ -1,0 +1,1 @@
+function pi_base_height(type)   = type[3]; //! Height of the base

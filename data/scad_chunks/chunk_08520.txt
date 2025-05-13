@@ -1,0 +1,2 @@
+function _case0112_isobands(cell_pts, lower, upper) = 
+    _case2110_isobands(cell_pts, upper, lower);

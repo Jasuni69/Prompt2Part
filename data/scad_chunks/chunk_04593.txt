@@ -1,0 +1,23 @@
+module base_box( d, top_inset=false, f=corner_fn ) {
+    b=corner_radius;
+    tb= top_inset ? top_inset : b;
+    hull() {
+        translate( [b,b,0] ) cylinder( r=b, r2=tb, h=d.z, $fn=f );
+        translate( [b,d.y-b,0] ) cylinder( r=b, r2=tb,h=d.z, $fn=f  );
+        translate( [d.x-b,b,0] ) cylinder( r=b, r2=tb,h=d.z, $fn=f  );
+        translate( [d.x-b,d.y-b,0] ) cylinder( r=b, r2=tb,h=d.z, $fn=f  );
+    }
+}
+
+/* =========================
+
+    hingebox_half( d, topflag=false ) - make the bottom or top half of the box
+
+    d - [x,y,z] box def
+    topflag - boolean;  top or not
+
+   ========================= */
+
+
+// =========================
+// If you find this code to be terse, sorry. You should see my C.

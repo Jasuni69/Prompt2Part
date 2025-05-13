@@ -1,0 +1,4 @@
+function movePlace(x=0,y=0,z=0,vector=[0,0,0,0])= [ [1, 0, 0, x+vector[0]],
+      					[0, 1, 0, y+vector[1]],
+       					[0, 0, 1, z+vector[2]],
+       						[0,0,0,1]];

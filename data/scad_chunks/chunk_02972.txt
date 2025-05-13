@@ -1,0 +1,19 @@
+function translate2Box_X (value, face, sourceSystem) =
+  (sourceSystem[0] == yappCoordPCB) && (face==yappLid)          ? value + getPCB_X(sourceSystem[2]) :
+  (sourceSystem[0] == yappCoordPCB) && (face==yappLeft)         ? value + getPCB_X(sourceSystem[2]) :
+  (sourceSystem[0] == yappCoordPCB) && (face==yappFront)        ? value + getPCB_Y(sourceSystem[2]) :
+  (sourceSystem[0] == yappCoordPCB) && (face==yappBase)         ? (sourceSystem[1] == yappAltOrigin) ? shellLength - (value  + getPCB_X(sourceSystem[2])) - wallThickness - paddingFront : value + getPCB_X(sourceSystem[2]) :
+  (sourceSystem[0] == yappCoordPCB) && (face==yappRight)        ? (sourceSystem[1] == yappAltOrigin) ? shellLength - (value  + getPCB_X(sourceSystem[2])) - wallThickness - paddingFront : value + getPCB_X(sourceSystem[2]) :
+  (sourceSystem[0] == yappCoordPCB) && (face==yappBack)         ? (sourceSystem[1] == yappAltOrigin) ? shellWidth  - (value  + getPCB_Y(sourceSystem[2])) - wallThickness - paddingRight : value + getPCB_Y(sourceSystem[2]) :
+  
+  (sourceSystem[0] == yappCoordBoxInside) && (face==yappBase)   ? value + wallThickness :
+  (sourceSystem[0] == yappCoordBoxInside) && (face==yappLeft)   ? value + wallThickness :
+  (sourceSystem[0] == yappCoordBoxInside) && (face==yappFront)  ? value + wallThickness :
+  (sourceSystem[0] == yappCoordBoxInside) && (face==yappLid)    ? (sourceSystem[1] == yappAltOrigin) ? shellInsideLength - value + wallThickness : value + wallThickness :
+  (sourceSystem[0] == yappCoordBoxInside) && (face==yappRight)  ? (sourceSystem[1] == yappAltOrigin) ? shellInsideLength - value + wallThickness : value + wallThickness :
+  (sourceSystem[0] == yappCoordBoxInside) && (face==yappBack)   ? (sourceSystem[1] == yappAltOrigin) ? shellWidth - value - wallThickness : value + wallThickness :
+
+  (sourceSystem[0] == yappCoordBox) && (face==yappLid)          ? (sourceSystem[1] == yappAltOrigin) ? shellLength - value : value :
+  (sourceSystem[0] == yappCoordBox) && (face==yappRight)        ? (sourceSystem[1] == yappAltOrigin) ? shellLength - value : value :
+  (sourceSystem[0] == yappCoordBox) && (face==yappBack)         ? (sourceSystem[1] == yappAltOrigin) ? shellWidth  - value : value :
+  value;

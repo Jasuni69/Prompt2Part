@@ -1,0 +1,24 @@
+function linear_solve3(A,b) =
+  // Arg sanity checking adds 7% overhead
+  assert(b*0==[0,0,0], "Input b must be a 3-vector")
+  assert(A*0==[[0,0,0],[0,0,0],[0,0,0]],"Input A must be a 3x3 matrix")
+  let(
+      Az = [for(i=[0:2])[A[i][0], A[i][1], b[i]]],
+      Ay = [for(i=[0:2])[A[i][0], b[i], A[i][2]]],
+      Ax = [for(i=[0:2])[b[i], A[i][1], A[i][2]]],
+      detA = det3(A)
+  )
+  detA==0 ? undef : [det3(Ax), det3(Ay), det3(Az)] / detA;
+
+
+// Function: matrix_inverse()
+// Synopsis: General matrix inverse. 
+// Topics: Matrices, Linear Algebra
+// See Also: linear_solve(), linear_solve3(), matrix_inverse(), rot_inverse(), back_substitute(), cholesky()
+// Usage:
+//    mat = matrix_inverse(A)
+// Description:
+//    Compute the matrix inverse of the square matrix `A`.  If `A` is singular, returns `undef`.
+//    Note that if you just want to solve a linear system of equations you should NOT use this function.
+//    Instead use {{linear_solve()}}, or use {{qr_factor()}}.  The computation
+//    will be faster and more accurate.

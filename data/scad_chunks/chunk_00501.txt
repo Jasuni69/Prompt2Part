@@ -1,0 +1,17 @@
+module iec_assembly(type, thickness) {  //! Assembly with fasteners given panel thickness
+    screw = iec_screw(type);
+    screw_length = thickness ? screw_length(screw, iec_flange_t(type) + thickness, 1, nyloc = true)
+                             : insert_screw_length;
+
+    iec(type);
+
+    iec_screw_positions(type) {
+        translate_z(iec_flange_t(type))
+            screw(screw, screw_length);
+
+        if(thickness)
+            translate_z(-thickness)
+                vflip()
+                    nut_and_washer(screw_nut(screw), true);
+    }
+}

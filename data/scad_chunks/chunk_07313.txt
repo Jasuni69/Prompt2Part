@@ -1,0 +1,32 @@
+function vorterantQ(size=20,r=.15,z,fn=50,fn2=10) =
+let(rad=size/2,r=max(min(size/sqrt(2),r),0))
+  [
+  each arc(r=size/sqrt(2)-r,deg=90-90/fn,rot=-45,t=[-rad+r*sqrt(2),0],fn=fn-1,z=z),
+  each arc(r=r,deg=90-90/fn2,rot=+45,t=[0, rad-tangentenP(grad=90,rad=r,r=r) ],fn=fn2-1,z=z),
+  each -arc(r=size/sqrt(2)-r,deg=90-90/fn,rot=-45,t=[-rad+r*sqrt(2),0],fn=fn-1,z=is_num(z)?-z:undef),
+  each -arc(r=r,deg=90-90/fn2,rot=+45,t=[0, rad-tangentenP(grad=90,rad=r,r=r) ],fn=fn2-1,z=is_num(z)?-z:undef),
+  ];
+
+
+/*
+size=10;
+vP=concat(
+[for(z=[0:.2:25]) each mPoints(vorterantQ(size=size,r=.15+size/2/sqrt(2)*transition(z,5),z=z,fn2=50),r=z/3*30) ],
+[for(z=[25.2:.2:30]) each mPoints(vorterantQ(size=size,r=.15+size/2/sqrt(2)*transition(30-z,5),z=z,fn2=50),r=z/3*30) ]
+);
+difference(){
+  PolyH(vP,loop=50*4,flip=false);
+  Loch(30,.25,d=3.2,rad=.5);
+}
+//*/
+
+
+
+/** \name Reuleaux
+\page Polygons
+Reuleaux creates a Reuleaux triangle
+\param rU Edge radius 
+\param fs fn  fraqments size / number
+*/
+
+//Reuleaux();

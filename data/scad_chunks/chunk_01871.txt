@@ -1,0 +1,1 @@
+function cable_wires(cable)     = cable[0]; //! Number of wires in a bundle

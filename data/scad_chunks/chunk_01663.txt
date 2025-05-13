@@ -1,0 +1,5 @@
+function blower_exit_offset(type) =   //! Offset of exit's centre from the edge
+    blower_casing_is_square(type) ? len(blower_screw_holes(type)) > 2 ? blower_length(type) / 2
+                                                                      : blower_wall_left(type) + blower_exit(type) / 2
+                                  : blower_exit(type) / 2;
+fan_colour = grey(20);

@@ -1,0 +1,1 @@
+function meter_shunt_y(type) = meter_pos(type) - meter_pcb_size(type).y / 2; //! Shunt y coordinate

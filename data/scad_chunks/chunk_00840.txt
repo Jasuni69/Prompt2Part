@@ -1,0 +1,55 @@
+module smd_250V_fuse(type, value) { //! Draw an SMD mains fuse
+    size = smd_250V_fuse_size(type);
+    step = smd_250V_fuse_step(type);
+    base = smd_250V_fuse_base(type);
+    z = smd_250V_fuse_z(type);
+
+    vitamin(str("smd_250V_fuse(", type[0], ", \"", value, "\"): SMD fuse: ", type[0], " ", value));
+
+    color("LightYellow")
+        translate_z(z) {
+            gcube(base);
+
+            translate_z(base.z)
+                gcube([size.x - step.x * 2, size.y, size.z - base.z]);
+
+            for(end = [-1, 1], side = [-1,1]) {
+                translate([end * (size.x / 2 - step.x / 2), side * (size.y / 2 - step.y / 2)])
+                    gcube(step);
+
+                translate([end * (size.x / 2 - step.x / 2 - eps), 0])
+                    gcube([step.x, size.y, base.z]);
+
+            }
+        }
+
+    color(silver) {
+        contact_h = step.z - 0.2;
+        fuse_d = size.y - 2 * step.y;
+
+        for(end = [-1, 1])
+            translate([end * (size.x / 2 - step.x), 0, contact_h / 2])
+                rotate([90, 0, 0])
+                    linear_extrude(size.y - 2 * step.y, center = true)
+                        difference() {
+                            rounded_square([step.x * 2, contact_h], 0.2, $fn = fn);
+
+                            translate([-step.x * end, 0])
+                                square([step.x * 2, contact_h], center = true);
+                        }
+
+        translate_z(step.z - fuse_d / 2)
+            rotate([0, 90, 0])
+                linear_extrude(size.x - (2 * step.x - eps), center = true)
+                    scale([1, size.y / fuse_d - eps])
+                    rotate(90)
+                        semi_circle(fuse_d / 2);
+
+    }
+
+    color("black")
+        translate_z(z + size.z)
+            linear_extrude(eps)
+                resize([(size.x - 2 * step.x) * 0.9, size.y / 2])
+                    text(value, halign = "center", valign = "center");
+}

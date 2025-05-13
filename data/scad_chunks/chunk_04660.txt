@@ -1,0 +1,81 @@
+function beamChain(radiiPoints,offset1=0,offset2,mode=0,minR=0,startAngle,endAngle)= 
+  /*This function takes a series of radii points and plots points to run along side at a consistant distance, think of it as offset but for line instead of a polygon
+  radiiPoints=radii points,
+  offset1 & offset2= The two offsets that give the beam it's thickness. When using with mode=2 only offset1 is needed as there is no return path for the polygon
+  minR=min radius, if all of your radii are set properly within the radii points this value can be ignored
+  startAngle & endAngle= Angle at each end of the beam, different mode determine if this angle is relative to the ending legs of the beam or absolute.
+  mode=1 - include endpoints startAngle&2 are relative to the angle of the last two points and equal 90deg if not defined
+  mode=2 - Only the forward path is defined, useful for combining the beam with other radii points, see examples for a use-case.
+  mode=3 - include endpoints startAngle&2 are absolute from the x axis and are 0 if not defined
+  negative radiuses only allowed for the first and last radii points
+  
+  As it stands this function could probably be tidied a lot, but it works, I'll tidy later*/
+  let(
+    offset2undef=offset2==undef?1:0,
+    offset2=offset2undef==1?0:offset2,
+    CWorCCW1=sign(offset1)*CWorCCW(radiiPoints),
+    CWorCCW2=sign(offset2)*CWorCCW(radiiPoints),
+    offset1=abs(offset1),
+    offset2b=abs(offset2),
+    Lrp3=len(radiiPoints)-3,
+    Lrp=len(radiiPoints),
+    startAngle=mode==0&&startAngle==undef?
+      getAngle(radiiPoints[0],radiiPoints[1])+90:
+      mode==2&&startAngle==undef?
+      0:
+      mode==0?
+      getAngle(radiiPoints[0],radiiPoints[1])+startAngle:
+      startAngle,
+    endAngle=mode==0&&endAngle==undef?
+            getAngle(radiiPoints[Lrp-1],radiiPoints[Lrp-2])+90:
+        mode==2&&endAngle==undef?
+            0:
+        mode==0?
+            getAngle(radiiPoints[Lrp-1],radiiPoints[Lrp-2])+endAngle:
+            endAngle,
+    OffLn1=[for(i=[0:Lrp3]) offset1==0?radiiPoints[i+1]:parallelFollow([radiiPoints[i],radiiPoints[i+1],radiiPoints[i+2]],offset1,minR,mode=CWorCCW1)],
+    OffLn2=[for(i=[0:Lrp3]) offset2==0?radiiPoints[i+1]:parallelFollow([radiiPoints[i],radiiPoints[i+1],radiiPoints[i+2]],offset2b,minR,mode=CWorCCW2)],
+
+    Rp1=abs(radiiPoints[0].z),
+    Rp2=abs(radiiPoints[Lrp-1].z),
+    
+    endP1aAngle = getAngle(radiiPoints[0],radiiPoints[1]),
+    endP1a=findPoint(endP1aAngle,         OffLn1[0],              startAngle,radiiPoints[0],     Rp1),
+
+    endP1bAngle = getAngle(radiiPoints[Lrp-1],radiiPoints[Lrp-2]),
+    endP1b=findPoint(endP1bAngle, OffLn1[len(OffLn1)-1],  endAngle,radiiPoints[Lrp-1], Rp2),
+
+    endP2aAngle = getAngle(radiiPoints[0],radiiPoints[1]),
+    endP2a=findPoint(endP2aAngle,         OffLn2[0],              startAngle,radiiPoints[0],     Rp1),
+
+    endP2bAngle = getAngle(radiiPoints[Lrp-1],radiiPoints[Lrp-2]),
+    endP2b=findPoint(endP2bAngle, OffLn2[len(OffLn1)-1],  endAngle,radiiPoints[Lrp-1], Rp2),
+
+    absEnda=getAngle(endP1a,endP2a),
+    absEndb=getAngle(endP1b,endP2b),
+    negRP1a=[cos(absEnda)*radiiPoints[0].z*10+endP1a.x,        sin(absEnda)*radiiPoints[0].z*10+endP1a.y,       0.0],
+    negRP2a=[cos(absEnda)*-radiiPoints[0].z*10+endP2a.x,       sin(absEnda)*-radiiPoints[0].z*10+endP2a.y,      0.0],
+    negRP1b=[cos(absEndb)*radiiPoints[Lrp-1].z*10+endP1b.x,    sin(absEndb)*radiiPoints[Lrp-1].z*10+endP1b.y,   0.0],
+    negRP2b=[cos(absEndb)*-radiiPoints[Lrp-1].z*10+endP2b.x,   sin(absEndb)*-radiiPoints[Lrp-1].z*10+endP2b.y,  0.0],
+    OffLn1b=(mode==0||mode==2)&&radiiPoints[0].z<0&&radiiPoints[Lrp-1].z<0?
+        concat([negRP1a],[endP1a],OffLn1,[endP1b],[negRP1b])
+      :(mode==0||mode==2)&&radiiPoints[0].z<0?
+        concat([negRP1a],[endP1a],OffLn1,[endP1b])
+      :(mode==0||mode==2)&&radiiPoints[Lrp-1].z<0?
+        concat([endP1a],OffLn1,[endP1b],[negRP1b])
+      :mode==0||mode==2?
+        concat([endP1a],OffLn1,[endP1b])
+      :
+        OffLn1,
+    OffLn2b=(mode==0||mode==2)&&radiiPoints[0].z<0&&radiiPoints[Lrp-1].z<0?
+        concat([negRP2a],[endP2a],OffLn2,[endP2b],[negRP2b])
+      :(mode==0||mode==2)&&radiiPoints[0].z<0?
+        concat([negRP2a],[endP2a],OffLn2,[endP2b])
+      :(mode==0||mode==2)&&radiiPoints[Lrp-1].z<0?
+        concat([endP2a],OffLn2,[endP2b],[negRP2b])
+      :mode==0||mode==2?
+        concat([endP2a],OffLn2,[endP2b])
+      :
+        OffLn2
+    )//end of let()
+  offset2undef==1?OffLn1b:concat(OffLn2b,revList(OffLn1b));

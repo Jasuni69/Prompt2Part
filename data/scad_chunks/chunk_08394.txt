@@ -1,0 +1,2 @@
+function _nz_worley_chebyshev(p, cells) =
+    min([for(cell = cells) _chebyshev(cell, p)]);

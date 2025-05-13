@@ -1,0 +1,9 @@
+module NEMA_screw_positions(type, n = 4) { //! Positions children at the screw holes
+    pitch = NEMA_hole_pitch(type);
+
+    for($i = [0 : 1 : min(n - 1, 4)])
+        rotate($i * 90)
+            translate([pitch / 2, pitch / 2])
+                rotate($i * -90)
+                    children();
+}

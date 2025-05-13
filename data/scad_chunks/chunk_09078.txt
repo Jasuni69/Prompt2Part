@@ -1,0 +1,1 @@
+function _build_top_left(cell_radius) = _hex_seg(cell_radius, 120, 180);

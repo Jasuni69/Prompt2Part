@@ -1,0 +1,3 @@
+function findInList(list=[],elem=$currentBody) =
+		let(found=[for(i=[0:len(list)-1])
+						if(list[i]==elem)i])found;

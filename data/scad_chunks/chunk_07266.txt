@@ -1,0 +1,17 @@
+module Mklon(tx=0,ty=0,tz=0,rx=0,ry=0,rz=0,mx=0,my=0,mz=1)
+{
+    mx=tx?1:mx;
+    my=ty?1:my;
+    mz=tz?1:mz;
+  $idx=0;
+    translate([tx,ty,tz])rotate([rx,ry,rz])children(); 
+    union(){
+        $helpM=0;
+        $info=0;
+        $idx=1;
+        $idxON=false;
+    translate([-tx,-ty,-tz])rotate([-rx,-ry,-rz])mirror([mx,my,mz]) children(); }   
+   MO(!$children);
+}
+
+// Clone Object

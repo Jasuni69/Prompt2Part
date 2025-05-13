@@ -1,0 +1,1 @@
+function psu_shroud_pitch(type)  = psu_shroud_width(type) - 2 * boss_r - eps;

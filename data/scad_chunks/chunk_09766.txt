@@ -1,0 +1,27 @@
+module xrot(a=0, cp=undef)
+{
+	if (a==0) {
+		children();  // May be slightly faster?
+	} else if (is_def(cp)) {
+		translate(cp) rotate([a, 0, 0]) translate(-cp) children();
+	} else {
+		rotate([a, 0, 0]) children();
+	}
+}
+
+
+// Module: yrot()
+//
+// Description:
+//   Rotates children around the Y axis by the given number of degrees.
+//
+// Usage:
+//   yrot(a, [cp]) ...
+//
+// Arguments:
+//   a = angle to rotate by in degrees.
+//   cp = centerpoint to rotate around. Default: [0,0,0]
+//
+// Example:
+//   #cylinder(h=50, r=10, center=true);
+//   yrot(90) cylinder(h=50, r=10, center=true);

@@ -1,0 +1,27 @@
+function bezpath_points(bezpath, curveind, u, N=3) =
+    bezier_points(select(bezpath,curveind*N,(curveind+1)*N), u);
+
+
+// Function: bezpath_curve()
+// Synopsis: Converts bezier path into a path of points. 
+// SynTags: Path
+// Topics: Bezier Paths
+// See Also: bezier_points(), bezier_curve(), bezpath_points()
+// Usage:
+//   path = bezpath_curve(bezpath, [splinesteps], [N], [endpoint])
+// Description:
+//   Computes a number of uniformly distributed points along a bezier path.
+// Arguments:
+//   bezpath = A bezier path to approximate.
+//   splinesteps = Number of straight lines to split each bezier curve into. default=16
+//   N = The degree of the bezier curves.  Cubic beziers have N=3.  Default: 3
+//   endpoint = If true, include the last point of the bezier path.  Default: true
+// Example(2D):
+//   bez = [
+//       [0,0], [-5,30],
+//       [20,60], [50,50], [110,30],
+//       [60,25], [70,0], [80,-25],
+//       [80,-50], [50,-50]
+//   ];
+//   path = bezpath_curve(bez);
+//   stroke(path,dots=true,dots_color="red");

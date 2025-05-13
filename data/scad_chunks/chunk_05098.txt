@@ -1,0 +1,15 @@
+function _showstats_contour(pixelsize, bbox, isovalmin, isovalmax, pixels, pathlist) = let(
+    v = column(pixels, 0), // extract pixel vertices
+    x = column(v,0),    // extract x values
+    y = column(v,1),    // extract y values
+    xmin = min(x),
+    xmax = max(x)+pixelsize.x,
+    ymin = min(y),
+    ymax = max(y)+pixelsize.y,
+    npts = sum([for(p=pathlist) len(p)]),
+    npix = len(pixels)
+) echo(str("\nContour statistics:\n   Isovalue = ", [isovalmin,isovalmax], "\n   Pixel size = ", pixelsize,
+    "\n   Pixels found containing surface = ", npix, "\n   Total path vertices = ", npts,
+    "\n   Pixel bounding box for all data = ", bbox,
+    "\n   Pixel bounding box for contour = ", [[xmin,ymin], [xmax,ymax]],
+    "\n")) 0;

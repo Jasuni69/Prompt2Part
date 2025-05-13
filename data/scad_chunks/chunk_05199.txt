@@ -1,0 +1,14 @@
+function c_real(z) = 
+     is_vector(z,2) ? z.x
+   : is_num(z[0][0]) ? z*[1,0]
+   : [for(vec=z) vec * [1,0]];
+
+
+// Function: c_imag()
+// Synopsis: Returns the imaginary part of a complex number, vector or matrix..
+// Topics: Math, Complex Numbers
+// See Also: complex(), c_mul(), c_div(), c_conj(), c_real(), c_imag(), c_ident(), c_norm()
+// Usage:
+//   x = c_imag(z)
+// Description:
+//   Returns imaginary part of a complex number, vector or matrix.

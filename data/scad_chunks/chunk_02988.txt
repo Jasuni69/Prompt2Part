@@ -1,0 +1,19 @@
+module self_forming_screw(h=10, d=3,center=false) {
+    main_height=h;
+    main_diameter=d;
+    difference() {
+        main_cylinder(main_height, main_diameter,center=center);
+        // Vytvorenie troch výrezov do valca
+        // Create three cutouts in the cylinder
+        for (i = [0 : 2]) {
+            rotate([0, 0, i * 120])
+            translate([hole_distance(main_diameter), 0, 0])
+                rounded_hole_cylinder(main_height, main_diameter);
+        }
+    }
+}
+
+// Volanie hlavneho modulu s parametrami
+// Calling the main module with parameters
+//--self_forming_screw(h=15, d=6,center=false);
+//-- Self Forming thread functions - END

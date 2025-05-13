@@ -1,0 +1,6 @@
+function _shape_star_impl(r1, r2, n) = 
+    let(
+       outer_points = __outer_points_shape_star(r1, r2, n),
+       inner_points = __inner_points_shape_star(r1, r2, n)
+    )
+   [for(i = [0:len(outer_points) - 1]) each [outer_points[i], inner_points[i]]];

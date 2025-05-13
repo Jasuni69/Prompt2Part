@@ -1,0 +1,31 @@
+function spherical_to_xyz(r,theta,phi) =
+    theta != undef
+      ? assert(is_num(r) && is_num(theta) && is_num(phi), "\nBad arguments.")
+        r*[cos(theta)*sin(phi), sin(theta)*sin(phi), cos(phi)]
+      : assert(is_list(r), "\nBad arguments.")
+        is_num(r.x)
+          ? spherical_to_xyz(r.x, r.y, r.z)
+          : [for(p = r) spherical_to_xyz(p.x, p.y, p.z)];
+
+
+// Function: xyz_to_spherical()
+// Usage:
+//   r_theta_phi = xyz_to_spherical(x,y,z)
+//   r_theta_phi = xyz_to_spherical([X,Y,Z])
+//   r_theta_phis = xyz_to_spherical([[X,Y,Z], [X,Y,Z], ...])
+// Topics: Coordinates, Points, Paths
+// Synopsis: Convert 3D cartesian coordinates to spherical coordinates. 
+// See Also: cylindrical_to_xyz(), spherical_to_xyz(), xyz_to_cylindrical(), altaz_to_xyz(), xyz_to_altaz()
+// Description:
+//   Called with three arguments, converts the `x`, `y`, and `z` 3D cartesian coordinate into a `[RADIUS,THETA,PHI]` spherical coordinate.
+//   Called with one `[X,Y,Z]` vector argument, converts the 3D cartesian coordinate into a `[RADIUS,THETA,PHI]` spherical coordinate.
+//   Called with a list of `[X,Y,Z]` vector arguments, converts each 3D cartesian coordinate into `[RADIUS,THETA,PHI]` spherical coordinates.
+//   Theta is the angle counter-clockwise of X+ on the XY plane.  Phi is the angle down from the Z+ pole.
+// Arguments:
+//   x = X coordinate.
+//   y = Y coordinate.
+//   z = Z coordinate.
+// Example:
+//   sph = xyz_to_spherical(20,30,40);
+//   sph = xyz_to_spherical([40,50,70]);
+//   sphs = xyz_to_spherical([[40,50,70], [25,-14,27]]);

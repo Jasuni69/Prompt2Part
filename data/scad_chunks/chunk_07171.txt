@@ -1,0 +1,1 @@
+function inkreis(eck,rU)=assert(is_num(eck)&&is_num(rU),str("inkreis() input need to be numbers rU=",rU," eck=",eck) )cos(180/eck)*rU;

@@ -1,0 +1,1 @@
+function screw_nut_radius(type) = screw_nut(type) ? nut_radius(screw_nut(type)) : 0; //! Radius of matching nut

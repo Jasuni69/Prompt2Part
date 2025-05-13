@@ -1,0 +1,2 @@
+module decorate_top( d ) { center_scale( d, 0.3)  { translate([3,18,-1]) surface("cymraeg.png");
+   }}

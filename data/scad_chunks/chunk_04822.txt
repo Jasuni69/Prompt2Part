@@ -1,0 +1,30 @@
+function pb_fillet(pts, index, radius, segments=0) = let(
+    a = index==0? pts[len(pts)-1] : pts[index-1],
+    b = pts[index],
+    c = index == len(pts)-1? pts[0]:pts[index+1],
+    ba = a-b,
+    bc = c-b,
+    l1 = norm(ba),
+    l2 = norm(bc),
+    cos_angle = ba * bc / (l1 * l2),
+    tan_half_angle = sqrt((1 - cos_angle) / (1 + cos_angle)),
+    bf_length = abs(radius) / tan_half_angle,
+    ba_u = ba/l1,
+    bc_u = bc/l2,
+    bf = ba_u*bf_length,
+    bg = bc_u*bf_length,
+    f = b + bf,
+    g = b + bg,
+    e1=assert(tan_half_angle!=0, "Fillet is not possible on angles of 0 degrees"),
+    e2=assert(bf_length<l1 || bf_length<l2, str("Fillet can not be applied. Max radius is ",min(l1, l2))),
+    sig = sign(ba[0] * bc[1] - ba[1] * bc[0]) * (radius<0? -1 : 1),
+    ps = pb_curveBetweenPoints(f, g, abs(radius) * sig, segments)[0]
+) ps;
+
+//  Calculates a balanced symetrical chamfer for a given point  
+//  pts     (list)   List of 2D points.
+//  index   (number) Index to the point for which a chamfer is required.
+//  size    (number) Size for the requested chamfer width
+//  return  (list)   List of two points representing the chamfer line that can replace the given point by index.
+//                   The original point is returned when size is zero or when either point adjacent to index
+//                   sharing the same coordinates.

@@ -1,0 +1,1 @@
+function ringterm_crimp_length(type) = type[8];    //! If non-zero the length of the crimp tube

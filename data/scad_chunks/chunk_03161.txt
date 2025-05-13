@@ -1,0 +1,50 @@
+  ["Main",              
+    pcbLength,pcbWidth,    
+    0,0,    
+    pcbThickness,  
+    standoffHeight, 
+    standoffDiameter, 
+    standoffPinDiameter, 
+    standoffHoleSlack]
+ ,["Joystick",
+    26,34,        //Length, Width
+    0, //xPos
+    0, // yPos  
+    1.6,          //pcbThickness
+    -16, // Negative measures from inside of lid 
+    7,            //standoffDiameter
+    3.0           //standoffPinDiameter
+  ]
+];
+
+//-------------------------------------------------------------------
+
+
+//-- Edit these parameters for your own box dimensions
+wallThickness       = 2.0;
+basePlaneThickness  = 1.25;
+lidPlaneThickness   = 1.25;
+
+//-- Total height of box = lidPlaneThickness 
+//                       + lidWallHeight 
+//--                     + baseWallHeight 
+//                       + basePlaneThickness
+//-- space between pcb and lidPlane :=
+//--      (bottonWallHeight+lidWallHeight) - (standoffHeight+pcbThickness)
+baseWallHeight      = 4;
+lidWallHeight       = 20;
+
+//-- ridge where base and lid off box can overlap
+//-- Make sure this isn't less than lidWallHeight
+ridgeHeight         = 2.0;
+ridgeSlack          = 0.2;
+roundRadius         = 4.0;
+
+//-- C O N T R O L -------------//-> Default ---------
+showSideBySide      = true;     //-> true
+previewQuality      = 5;        //-> from 1 to 32, Default = 5
+renderQuality       = 8;        //-> from 1 to 32, Default = 8
+onLidGap            = 0;
+shiftLid            = 5;
+colorLid            = "gray";   
+alphaLid            = 1;//0.2;   

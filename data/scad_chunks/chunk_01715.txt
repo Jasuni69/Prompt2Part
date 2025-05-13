@@ -1,0 +1,10 @@
+module pcb_hole_positions(type, all = true) { // Position children at the hole positions, including holes not used for screws
+    holes = pcb_holes(type);
+
+    for($i = [0 : 1 : len(holes) - 1]) {
+        hole = holes[$i];
+        if(len(hole) == 2 || all)
+            translate(pcb_coord(type, hole))
+                children();
+   }
+}

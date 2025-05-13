@@ -1,0 +1,1 @@
+function box_shelf_insert(type) = screw_insert(box_shelf_screw(type));

@@ -1,0 +1,7 @@
+module minkowski_text(t, size, font, r_round_edge) {
+    $fn = 24;
+    minkowski() {
+        text(t, font = font, size = size);
+        circle(r_round_edge);
+    }
+}

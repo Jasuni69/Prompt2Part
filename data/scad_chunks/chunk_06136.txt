@@ -1,0 +1,26 @@
+module _textured_revolution(
+    shape, texture, tex_size, tex_scale=1,
+    inset=false, rot=false, shift=[0,0],
+    taper, closed=true, angle=360,
+    style="min_edge", atype="intersect",tex_aspect, pixel_aspect, 
+    inhibit_y_slicing=false,tex_extra,
+    convexity=10, counts, samples, start=0,
+    anchor=CENTER, spin=0, orient=UP
+) {
+    dummy = assert(in_list(atype, _ANCHOR_TYPES), "Anchor type must be \"hull\" or \"intersect\"");
+    vnf = _textured_revolution(
+        shape, texture, tex_size=tex_size,
+        tex_scale=tex_scale, inset=inset, rot=rot,
+        taper=taper, closed=closed, style=style,tex_aspect=tex_aspect, pixel_aspect=pixel_aspect, 
+        shift=shift, angle=angle,tex_extra=tex_extra,
+        samples=samples, counts=counts, start=start, 
+        inhibit_y_slicing=inhibit_y_slicing
+    );
+    geom = atype=="intersect"
+          ? attach_geom(vnf=vnf, extent=false)
+          : attach_geom(vnf=vnf, extent=true);
+    attachable(anchor,spin,orient, geom=geom) {
+        vnf_polyhedron(vnf, convexity=convexity);
+        children();
+    }
+}

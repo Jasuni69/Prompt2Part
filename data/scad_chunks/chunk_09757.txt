@@ -1,0 +1,17 @@
+module zmove(z=0) translate([0,0,z]) children();
+
+
+// Module: left()
+//
+// Description:
+//   Moves children left (in the X- direction) by the given amount.
+//
+// Usage:
+//   left(x) ...
+//
+// Arguments:
+//   x = Scalar amount to move left.
+//
+// Example:
+//   #sphere(d=10);
+//   left(20) sphere(d=10);

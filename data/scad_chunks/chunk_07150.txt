@@ -1,0 +1,84 @@
+module AxialBearing(id=10,od=25,ball,r,h=7,part=0,dicke=1.2,numBalls,h2=[0,0],clip=.3,cage=true
+,chamfer=.5,help){
+
+$info=false;
+bR=r?r:id/4+od/4;
+ball=min((od-id)/2-dicke*2,is_num(ball)?ball:h-dicke*2);
+//clip=.3;// overlap to snap fit balls
+ring=cage?is_num(cage)?cage:dicke:0; // cage thickness
+h2=is_list(h2)?h2:[h2,h2];
+
+n=numBalls?numBalls:floor(360/gradS(r=bR,s=ball+spiel));
+// groove center 
+r2=[bR+ball/2-clip-spiel/2-(ring?(ring+spiel)/2:0),
+    bR-ball/2+clip+spiel/2+(ring?(ring+spiel)/2:0)];
+    
+HelpTxt("AxialBearing",["id",id,"od",od,"ball",ball,"r",r,"h",h,"part",part,"dicke","numBalls",numBalls,"h2",h2,"clip",clip,"cage",cage,"chamfer",chamfer],help);
+
+if(part==3)echo(numberBall=n,ballDiameter=ball);
+
+//Balls
+if(part==3)Polar(n,bR)T($preview?[0,0,h/2]:[$idx%2?2:.5,0,ball/2])sphere(d=ball);
+
+//Cage
+if(part==4&&cage) difference(){
+  Anschluss(rad=[2,2+ring],h=h,grad=40,dicke=ring,r1=r2[1]+ring/2,r2=r2[0]+ring/2,center=0);
+  Tz(h/2)Polar(n,bR)sphere(d=ball+spiel*2);
+}
+
+
+if(part<3)Tz($preview?0:h2[0])
+  difference(){
+    union(){
+    if(part==1||part==0)Tz(-h2[0])union(){
+      LinEx(h+vSum(h2),chamfer,$d=od,grad=45)circle($r);
+      children();
+      }
+    if(part==2||part==0)Tz(-h2[0])LinEx(h+vSum(h2),0,$d=bR*2+ball-spiel*2-clip*2-(ring?ring*2+spiel*2:0),grad=45)circle($r);
+    }
+    Tz(-h2[0])Loch(h=h+vSum(h2),h2=[chamfer,chamfer],d=id,rad=.5);
+    Tz(h/2)Torus(trx=bR,d=ball,fn=0);
+    union(){ 
+      if(part==1)Tz(h+h2[1])Torus(trx=r2[0],d=chamfer+spiel+(ring?ring+spiel:0),fn2=4,fn=0);
+      if(part==1)Tz(-h2[0])Torus(trx=r2[1],d=chamfer+spiel+(ring?ring+spiel:0),fn2=4,fn=0);
+      if(part==2)Tz(h+h2[1])Torus(trx=r2[1],d=chamfer+spiel+(ring?ring+spiel:0),fn2=4,fn=0);
+      if(part==2)Tz(-h2[0])Torus(trx=r2[0],d=chamfer+spiel+(ring?ring+spiel:0),fn2=4,fn=0);
+    }
+    if(part==1){
+      Tz(h/2)cylinder(h+h2[1],d=bR*2+ball-clip*2);
+      Tz(h/2-ball/2+clip)cylinder(h+h2[1],r=bR);
+      cylinder(h+vSum(h2)*2,d=bR*2-ball+clip*2+spiel*2+(ring?ring*2+spiel*2:0),center=true);
+    }
+    if(part==2){
+      Tz(h/2)Ring(h=h+h2[1],ir=bR-ball/2+clip,r=od);
+      Tz(h/2-ball/2+clip)Ring(h=h+h2[1],ir=bR,r=od);
+    }
+
+  }
+}
+
+
+
+
+
+
+
+
+
+/** \name VQRotor
+\brief VQRotor() creates a vorterant rotor
+\example VQRotor();
+\param size diameter 
+\param h height
+\param transH transition zone
+\param twist twist of rotor(without transition)
+\param d hole diameter
+\param star true↦star cut hole
+\param fnz fraqments in z
+\param minR minimum edge radius
+\param transR transition radius (optional)
+\param name,help name, help switch
+*/
+
+//VQRotor(star=true,d=2);
+//VQRotor(transH=[20,5],transR=[2,5]);

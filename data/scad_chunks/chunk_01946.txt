@@ -1,0 +1,4 @@
+module box_base(type)   //! Default base, can be overridden to customise
+    render_2D_sheet(box_base_sheet(type))
+        dxf(str(box_name(type), "_base"))
+            box_base_blank(type);

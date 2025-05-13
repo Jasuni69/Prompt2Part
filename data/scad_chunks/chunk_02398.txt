@@ -1,0 +1,1 @@
+module ribbon_clamp_8_2_stl() ribbon_clamp(8, M2_dome_screw);

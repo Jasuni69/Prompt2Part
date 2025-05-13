@@ -1,0 +1,4 @@
+function pulley_extent(type) = max(pulley_flange_dia(type), pulley_hub_dia(type)) / 2;                          //! Largest diameter
+
+T_angle = 40;
+GT_r = 0.555;

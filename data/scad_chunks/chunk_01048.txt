@@ -1,0 +1,4 @@
+function screw_head_depth(type, d = 0) =             //! How far a counter sink head will go into a straight hole diameter d
+    screw_head_height(type)
+        ? 0
+        : let(r = screw_radius(type)) screw_head_radius(type) - max(r, d / 2) + r / 5;

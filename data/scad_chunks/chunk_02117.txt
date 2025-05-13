@@ -1,0 +1,5 @@
+function pocket_handle_flange(type) = //! Size of the flange
+    let(w = pocket_handle_wall(type),
+        f = washer_diameter(screw_washer(pocket_handle_screw(type))) + 2 + w,
+        s = pocket_handle_hand_size(type))
+             [s.x + 2 * f, s.y + 2 * f, w];

@@ -1,0 +1,77 @@
+module doChamfer(lx,ly,lz,chamferInfo=chamferInfo(),tube=false,box=false,childFn=$fn,tubeData=tubeInfo())
+{
+//i[0] = -1 at bottom ,1 at top; i[1] =chamferRadius,
+
+//echo("doChamfer.chamferInfo:",chamferInfo);
+
+useTubeData = (!lx && !ly && !lz && tube);
+lx= !useTubeData?lx:tubeData[2];
+ly= !useTubeData?ly:tubeData[3];
+lz= !useTubeData?lz:tubeData[4];//=h
+
+//echo("chamf:",chamferInfo);
+disable = chamferInfo[2];
+
+if(!disable)
+	for( i = [chamferInfo[0] , chamferInfo[1]] )
+{
+    r=i[1];
+	  rSide=i[2];
+	  fnCorner=i[3];
+	  up( (lz==undef )?0:((lz/2-abs(r))*i[0]))
+	  mirror([0,0,i[0]>0?0:1])
+	 	 linear_extrude(height=abs(r)
+			,slices=1
+			,scale=[(lx+2*r)/lx,(ly+2*r)/ly])
+  	resize(tube?0:[lx,ly])
+		  offset(r = abs( tube?0:rSide ), $fn = fnCorner)
+		{
+		    if((!box && !tube) || disable)
+				    projection(cut=false)
+					  {
+               $fn=childFn;
+               children();
+            }
+			  else if(box) square([lx,ly],center=true,$fn=childFn);
+			  else if(tube) circle(d=lx,$fn=childFn);
+		}
+}
+//addOnly()children();
+if(!disable)
+  intersection()
+	{
+		  for(i=[chamferInfo[0],chamferInfo[1]])
+		  {
+			    r=i[1];
+			    rSide=i[2];
+				  fnCorner=i[3];
+	         //echo(rSide);
+		      mirror([0,0,i[0]>0?0:1])
+	  	        down(chamferInfo[1]==undef?lz/2:0.02)
+	               linear_extrude(
+                   height=(chamferInfo[1]==undef?lz:lz/2)
+                            -abs(r)+.05
+              ,slices=1)
+			             resize(tube?0:[lx,ly])
+			                 offset(r=abs(tube?0:rSide),$fn=fnCorner)
+			        {
+		              if((!box && !tube) )
+				             projection(cut=false)
+					           {
+                       $fn=childFn;
+                       children();
+                     }
+			            else if(box) square([lx,ly],center=true,$fn=childFn);
+			            else if(tube) circle(d=lx,$fn=childFn);
+		          }
+		  }
+
+	    if(!box && !tube)
+      {
+          echo(box,tube);
+        	children();
+      }
+	}
+else  children();
+
+}

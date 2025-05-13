@@ -1,0 +1,1 @@
+function box_intrusion(type) = box_hole_inset(type) + box_boss_r(type); //! Corner profile intrusion

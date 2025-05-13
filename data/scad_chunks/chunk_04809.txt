@@ -1,0 +1,10 @@
+function pb_groupsOf(n, list=[], skip=0, drop=0, only_groups=true) = list==[]? list : let(l=len(list), remain=((l-skip-drop) % n), 
+    result = [skip<1? [] : [for(i=[0:skip-1]) list[i]],
+    [for(j=[skip:n:l-drop-n]) [for(k=[0:n-1]) list[j+k]]],
+    drop>0 || (remain>0&&!only_groups) ? [for(m=[l-remain-drop:l-1]) list[m]] : []] ) result;
+
+//  function pb_is_CW(pts)
+//
+//  Tests if pts forms a Clock Wise (CW) or Counter Clock Wize (CCW) winding
+//  pts     (list)  A list of 2D points assumed a closed polyline.
+//  return  (bool)  true if pts is a wound Clock Wize otherwise false.

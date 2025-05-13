@@ -1,0 +1,50 @@
+function _dedendum(
+    circ_pitch,
+    clearance,
+    profile_shift=0,
+    diam_pitch,
+    mod,
+    pitch
+) = let(
+        mod = module_value(circ_pitch, mod, pitch, diam_pitch),
+        clearance = default(clearance, 0.25 * mod)
+    )
+    mod * (1 - profile_shift) + clearance;
+
+
+// Function: pitch_radius()
+// Synopsis: Returns the pitch radius for a gear.
+// Topics: Gears, Parts
+// See Also: spur_gear(), diametral_pitch(), circular_pitch(), module_value(), outer_radius()
+// Usage:
+//   pr = pitch_radius(pitch, teeth, [helical]);
+//   pr = pitch_radius(mod=, teeth=, [helical=]);
+// Description:
+//   Calculates the pitch radius for the gear.  Two mated gears will have their centers spaced apart
+//   by the sum of the two gear's pitch radii.
+// Arguments:
+//   circ_pitch = The circular pitch, the distance between teeth centers around the pitch circle.
+//   teeth = The number of teeth on the gear.
+//   helical = The helical angle (from vertical) of the teeth on the gear.  Default: 0
+//   ---
+//   mod = The module of the gear (pitch diameter / teeth)
+//   diam_pitch = The diametral pitch, or number of teeth per inch of pitch diameter.  The diametral pitch is a completely different thing than the pitch diameter.
+// Example:
+//   pr = pitch_radius(circ_pitch=5, teeth=11);
+//   pr = pitch_radius(circ_pitch=5, teeth=11, helical=30);
+//   pr = pitch_radius(diam_pitch=10, teeth=11);
+//   pr = pitch_radius(mod=2, teeth=20);
+//   pr = pitch_radius(mod=2, teeth=20, helical=30);
+// Example(2D,Med,NoScales,VPT=[-0.20531,0.133721,0.658081],VPR=[0,0,0],VPD=82.6686):
+//   $fn=144;
+//   teeth=17; circ_pitch = 5;
+//   pr = pitch_radius(circ_pitch, teeth);
+//   stroke(spur_gear2d(circ_pitch, teeth), width=0.2);
+//   color("blue") dashed_stroke(circle(r=pr), width=0.2);
+//   color("black") {
+//       stroke([[0,0],polar_to_xy(pr,45)],
+//           endcaps="arrow", width=0.3);
+//       fwd(1)
+//           text("Pitch Radius", size=1.5,
+//               halign="center", valign="top");
+//   }

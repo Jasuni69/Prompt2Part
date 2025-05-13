@@ -1,0 +1,1 @@
+function box_wall(type)        = type[2]; //! Wall thickness of 3D parts

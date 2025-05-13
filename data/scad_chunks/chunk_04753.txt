@@ -1,0 +1,12 @@
+function _mirror(normal=[1,0], poly) =
+  let(
+    points = get_points(poly),
+    newPoints = [for (p = points)
+      let(
+        n = normal*normal,
+        t = n == 0 ? 0 : (-p*normal) / n
+      )
+      p + 2*t*normal
+    ]
+  )
+  set_points(poly, newPoints);

@@ -1,0 +1,8 @@
+function _two_args_command(cmd, arg1, arg2) =
+    is_undef(arg2) ? _one_arg_command(cmd, arg1) : 
+    cmd == "pt" ? _set_point(arg1, arg2) : 
+    cmd == "x" ? _set_x(arg1, arg2) : 
+    cmd == "y" ? _set_y(arg1, arg2) : 
+    cmd == "angle" ? _set_angle(arg1, arg2) : 
+    cmd == "forward" ? _forward(arg1, arg2) : 
+    cmd == "turn" ? _turn(arg1, arg2) : undef;

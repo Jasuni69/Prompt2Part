@@ -1,0 +1,7 @@
+module bbox_base_blank(type) { //! 2D template for the base
+    difference() {
+        sheet_2D(bbox_base_sheet(type), bbox_width(type), bbox_depth(type), 1);
+
+        bbox_drill_holes(type, translate(bbox_height(type) / 2));
+    }
+}

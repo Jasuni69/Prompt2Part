@@ -1,0 +1,22 @@
+function null_space(A,eps=1e-12) =
+    assert(is_matrix(A))
+    let(
+        Q_R = qr_factor(transpose(A),pivot=true),
+        R = Q_R[1],
+        zrows = [for(i=idx(R)) if (all_zero(R[i],eps)) i]
+    )
+    len(zrows)==0 ? [] :
+    select(transpose(Q_R[0]), zrows);
+
+// Function: qr_factor()
+// Synopsis: Compute QR factorization of a matrix.
+// Topics: Matrices, Linear Algebra
+// See Also: linear_solve(), linear_solve3(), matrix_inverse(), rot_inverse(), back_substitute(), cholesky()
+// Usage:
+//   qr = qr_factor(A,[pivot]);
+// Description:
+//   Calculates the QR factorization of the input matrix A and returns it as the list [Q,R,P].  This factorization can be
+//   used to solve linear systems of equations.  The factorization is `A = Q*R*transpose(P)`.  If pivot is false (the default)
+//   then P is the identity matrix and A = Q*R.  If pivot is true then column pivoting results in an R matrix where the diagonal
+//   is non-decreasing.  The use of pivoting is supposed to increase accuracy for poorly conditioned problems, and is necessary
+//   for rank estimation or computation of the null space, but it may be slower.

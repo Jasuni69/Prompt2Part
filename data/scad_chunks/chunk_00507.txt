@@ -1,0 +1,1 @@
+function spring_washer_diameter(type) = type[6]; //! Spring washer size

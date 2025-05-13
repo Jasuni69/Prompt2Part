@@ -1,0 +1,133 @@
+module Draw7Segment(string,spacing=1.2,angle=8,shrink=0.12,style=0,_index=0,_xpos=0)
+{
+  skew = 
+  [
+    [1, tan(angle), 0, 0],
+    [0, 1, 0, 0 ],
+    [0, 0, 1, 0 ],
+    [0, 0, 0, 1 ] 
+  ];
+
+  if(_index < len(string))
+  {
+    char = string[_index];
+    code = search(char,seven_segment_conversion,1,0);
+    
+    // When it is not found in the list,
+    // then the code is empty and len(code) is zero.
+    if(len(code)==0)
+    {
+       // Advance to next character in the list.
+       Draw7Segment(string=string,
+              spacing=spacing,
+              angle=angle,
+              shrink=shrink,
+              style=style,
+              _index=_index+1,
+              _xpos=_xpos);
+    }
+    else
+    {
+      segments = seven_segment_conversion[code[0]][1];
+ 
+      // When a special character is used, then the
+      // length of the string is just one.
+      char  = segments[0];
+      dot            = (char==".");
+      visiblecolon   = (char==":");
+      invisiblecolon = (char==";");
+      space          = (char==" ");
+
+      translate([_xpos,0])
+      {
+        if(dot)
+        {
+          // The multmatrix can not be used,
+          // because that would skew the round circle.
+          //
+          // The position of the next digit is not changed by the dot.
+          // Somehow try to squeeze the dot between the digits.
+
+          // How much is available?
+          available = spacing + shrink;
+          r1 = min(_diameter_dot,available)/2;
+          r2 = max(r1,_diameter_dot/4);  
+          translate([-spacing/2+r2*tan(angle),r2])
+            offset(-0.7*shrink/2)
+              circle(r=r2);
+        }
+        else if(visiblecolon)
+        {
+          // The multmatrix can not be used,
+          // because that would skew the round circle.
+          y1 = 3.5;
+          x1 = _diameter_colon/2+y1*tan(angle);
+          y2 = 6.5;
+          x2 = _diameter_colon/2+y2*tan(angle);
+          translate([x1,y1])
+            offset(-shrink/2)
+              circle(d=_diameter_colon);
+          translate([x2,y2])
+            offset(-shrink/2)
+              circle(d=_diameter_colon);
+        }
+        else if(space || invisiblecolon)
+        {
+          // Nothing is printed.
+          // This "else if" has to be here,
+          // to avoid that something is printed.
+        }
+        else
+        {
+          // Use a multi matrix operation for skew.
+          multmatrix(skew)
+          {
+            // Print each segment.
+            for(segment=segments)
+            {
+              i = ord(segment)-ord("a");
+              list = (style == 0) ? TurtleToPath(turtle_seven_segment[i]) :
+                     (style == 1) ? simple_seven_segment[i] : [];
+
+              offset(-shrink/2)
+                polygon(list);
+
+            }
+          } 
+        }
+      }
+
+      colon = (visiblecolon || invisiblecolon);
+
+      // The two designs have a different width.
+      width = (style == 0) ? _digit_width_turtle :
+              (style == 1) ? _digit_width_simple : 0;
+
+      offset1 = dot   ? 0 : width+spacing;
+      offset2 = colon ? (_diameter_colon+spacing) : offset1;
+      new_xpos = _xpos + offset2;
+      Draw7Segment(string=string,
+                  spacing=spacing,
+                  angle=angle,
+                  shrink=shrink,
+                  style=style,
+                  _index=_index+1,
+                  _xpos=new_xpos);
+    }
+  }
+}
+
+// Clock7Segment
+// -------------
+// A function to print the time as 12:34 or 12:34:56
+// Parameters:
+//   hours
+//     Preferably 0 to 23
+//     Default 0.
+//   minutes
+//     Preferably 0 to 59
+//   seconds
+//     Preferably 0 to 59
+//   colon
+//     true for one or two colons in the middle,
+//     false for no visible colon.

@@ -1,0 +1,8 @@
+module test_is_homogeneous(){
+    assert(is_homogeneous([[1,["a"]], [2,["b"]]])==true);
+    assert(is_homogeneous([[1,["a"]], [2,[true]]])==false);
+    assert(is_homogeneous([[1,["a"]], [2,[true]]],1)==true);
+    assert(is_homogeneous([[1,["a"]], [2,[true]]],2)==false);
+    assert(is_homogeneous([[1,["a"]], [true,["b"]]])==false);
+}
+test_is_homogeneous();

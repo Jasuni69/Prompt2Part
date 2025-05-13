@@ -1,0 +1,93 @@
+module smd_pot(type, value) { //! Draw an SMD pot
+    vitamin(str("smd_pot(", type[0], ", \"", value, "\"): ", type[0], " package ", value));
+
+    size = smd_pot_size(type);
+    contacts = smd_pot_contacts(type);
+    contacts_pitch = contacts[2];
+    centre_contact_w = contacts[3];
+    centre_contact_d = contacts[4];
+    centre_contact_gap = contacts[5];
+    wiper = smd_pot_wiper(type);
+    wiper_r1 = wiper.x / 2; // outer radius
+    wiper_y = wiper.y;
+    wiper_t = wiper.z;
+    wiper_h = wiper[3];
+    wiper_r2 = wiper[4] / 2;   // inner radius at the top
+    wiper_r3 = wiper[5] / 2;   // inner radius at the bottom
+    wiper_r4 = wiper[6] / 2;   // outer radius of rivet
+    wiper_r5 = wiper[7] / 2;   // inner radius of rivet
+    cross = smd_pot_cross(type);
+    flat = smd_pot_flat(type);
+    track_or = size.x * 0.48;
+    track_ir = track_or * 0.6;
+
+    $fs = fs; $fa = fa;
+
+    color(grey(90))
+        translate_z(size.z / 2)
+            cube(size, center = true);
+
+    color(silver) {
+        for(side = [-1, 1])
+            translate([side * contacts_pitch, -size.y / 2 + contacts.y / 2, size.z / 2])
+                cube([contacts.x, contacts.y, size.z] + 2 * eps * [1,1,1], center = true);
+
+        translate([0, size.y / 2 - centre_contact_d / 2, size.z / 2])
+            render() difference() {
+                cube([centre_contact_w, centre_contact_d + 2 * eps, size.z + 2 * eps], center = true);
+
+                translate_z(size.z / 2)
+                    cube([centre_contact_gap, centre_contact_d + 4 * eps, 2 * eps], center = true);
+            }
+        slope_angle = atan((wiper_h - size.z - wiper_t) / (wiper_r2 - wiper_r3));
+        dx = wiper_t / tan(90 - slope_angle / 2);
+        translate([0, wiper_y]) {
+            render() difference() {
+                rotate_extrude() {
+                    polygon([
+                        [wiper_r5,      size.z + wiper_t],
+                        [wiper_r3,      size.z + wiper_t],
+                        [wiper_r2,      wiper_h],
+                        [wiper_r1,      wiper_h],
+                        [wiper_r1,      wiper_h - wiper_t],
+                        [wiper_r2 + dx, wiper_h - wiper_t],
+                        [wiper_r3 + dx, size.z],
+                        [wiper_r5,      size.z],
+                    ]);
+                    r = (wiper_r4 - wiper_r5) / 2;
+                    translate([wiper_r5 + r, size.z + wiper_t])
+                        circle(r, $fn = fn);
+                }
+
+                translate_z(size.z + wiper_t)
+                    linear_extrude(wiper_h - size.z - wiper_t)
+                        difference() {
+                            union() {
+                                square(cross, center = true);
+
+                                rotate(90)
+                                    square(cross, center = true);
+                            }
+                            circle(wiper_r4 + eps);
+                        }
+
+            }
+            translate([0, -(wiper_r1 + cross.x / 2) / 2, wiper_h - wiper_t / 2])
+                cube([flat, wiper_r1 - cross.x / 2, wiper_t], center = true);
+        }
+    }
+
+    color("black")
+        translate([0, wiper.y, size.z])
+            linear_extrude(eps) {
+                difference() {
+                    sector(track_or, -270 / 2 + 90, 270 / 2 + 90);
+                    circle(track_ir);
+                }
+                track_w = track_or - track_ir;
+                track_l = wiper.y - track_ir / sqrt(2) + size.y / 2 - contacts.y;
+                for(side = [-1, 1])
+                    translate([side * (track_ir / sqrt(2) + track_w / 2), -wiper.y -size.y / 2 + track_l / 2 + contacts.y])
+                        square([track_w, track_l], center = true);
+            }
+}

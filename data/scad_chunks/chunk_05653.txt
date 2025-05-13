@@ -1,0 +1,75 @@
+function worm_dist(d,starts,teeth,mod,profile_shift=0,diam_pitch,circ_pitch,pressure_angle=20,backlash=0) =
+  let(
+      mod = module_value(mod=mod,diam_pitch=diam_pitch,circ_pitch=circ_pitch),
+      lead_angle = asin(mod*starts/d),
+      pitch_diam = mod*teeth/cos(lead_angle)
+  )
+  (d+pitch_diam)/2 + profile_shift*mod
+//   + backlash * (cos(lead_angle)+cos(90-lead_angle)) / tan(pressure_angle);
+//    + backlash * cos(45-lead_angle) / tan(pressure_angle);
+     + backlash * cos(lead_angle) / tan(pressure_angle);
+
+
+
+// Function: gear_dist()
+// Synopsis: Returns the distance between two gear centers for spur gears or parallel axis helical gears.
+// Topics: Gears, Parts
+// See Also: worm(), worm_gear(), pitch_radius(), outer_radius()
+// Usage:
+//   dist = gear_dist(mod=|diam_pitch=|circ_pitch=, teeth1, teeth2, [helical], [profile_shift1], [profile_shift2], [pressure_angle=], [backlash=]);
+// Description:
+//   Calculate the distance between the centers of two spur gears gears or helical gears with parallel axes,
+//   taking into account profile shifting and helical angle.  You can give the helical angle as either positive or negative.  
+//   If you set one of the tooth counts to zero than that gear will be treated as a rack and the distance returned is the
+//   distance between the rack's pitch line and the gear's center.  If you set internal1 or internal2 to true then the
+//   specified gear is a ring gear;  the returned distance is still the distance between the centers of the gears.  
+//   For a regular gear and ring gear to be compatible the ring gear must have more teeth and at least as much profile shift
+//   as the regular gear.
+//   .
+//   The backlash parameter computes the distance offset that produces a total backlash of `2*backlash` in the
+//   two gear mesh system.  This is equivalent to giving the same backlash argument to both gears.  
+// Arguments:
+//   teeth1 = Total number of teeth in the first gear.  If given 0, we assume this is a rack or worm.
+//   teeth2 = Total number of teeth in the second gear.  If given 0, we assume this is a rack or worm.
+//   helical = The value of the helical angle (from vertical) of the teeth on the two gears (either sign).  Default: 0
+//   profile_shift1 = Profile shift factor x for the first gear.  Default: 0
+//   profile_shift2 = Profile shift factor x for the second gear.  Default: 0
+//   ---
+//   mod = The module of the gear (pitch diameter / teeth)
+//   diam_pitch = The diametral pitch, or number of teeth per inch of pitch diameter.  The diametral pitch is a completely different thing than the pitch diameter.
+//   circ_pitch = The circular pitch, the distance between teeth centers around the pitch circle.
+//   internal1 = first gear is an internal (ring) gear.  Default: false
+//   internal2 = second gear is an internal (ring) gear.  Default: false
+//   pressure_angle = The pressure angle of the gear.
+//   backlash = Add extra space to produce a total of 2*backlash between the two gears. 
+// Example(2D,NoAxes): Spur gears (with automatic profile shifting on both)
+//   circ_pitch=5; teeth1=7; teeth2=24;
+//   d = gear_dist(circ_pitch=circ_pitch, teeth1, teeth2);
+//   spur_gear2d(circ_pitch, teeth1, gear_spin=-90);
+//   right(d) spur_gear2d(circ_pitch, teeth2, gear_spin=90-180/teeth2);
+// Example(3D,NoAxes,Med,VPT=[23.9049,5.42594,-4.68026],VPR=[64.8,0,353.5],VPD=140): Helical gears (with auto profile shifting on one of the gears)
+//   circ_pitch=5; teeth1=7; teeth2=24; helical=37;
+//   d = gear_dist(circ_pitch=circ_pitch, teeth1, teeth2, helical);
+//   spur_gear(circ_pitch, teeth1, helical=helical, gear_spin=-90,slices=15);
+//   right(d) spur_gear(circ_pitch, teeth2, helical=-helical, gear_spin=-90-180/teeth2,slices=9);
+// Example(2D,NoAxes): Disable Auto Profile Shifting on the smaller gear
+//   circ_pitch=5; teeth1=7; teeth2=24;
+//   d = gear_dist(circ_pitch=circ_pitch, teeth1, teeth2, profile_shift1=0);
+//   spur_gear2d(circ_pitch, teeth1, profile_shift=0, gear_spin=-90);
+//   right(d) spur_gear2d(circ_pitch, teeth2, gear_spin=90-180/teeth2);
+// Example(2D,NoAxes): Manual Profile Shifting
+//   circ_pitch=5; teeth1=7; teeth2=24; ps1 = 0.5; ps2 = -0.2;
+//   d = gear_dist(circ_pitch=circ_pitch, teeth1, teeth2, profile_shift1=ps1, profile_shift2=ps2);
+//   spur_gear2d(circ_pitch, teeth1, profile_shift=ps1, gear_spin=-90);
+//   right(d) spur_gear2d(circ_pitch, teeth2, profile_shift=ps2, gear_spin=90-180/teeth2);
+// Example(2D,NoAxes): Profile shifted gear and a rack
+//   mod=3; teeth=8;
+//   d = gear_dist(mod=mod, teeth, 0);
+//   rack2d(mod=mod, teeth=5, bottom=9);
+//   back(d) spur_gear2d(mod=mod, teeth=teeth, gear_spin=180/teeth);
+// Example(3D,Med,NoAxes,VPT=[-0.0608489,1.3772,-3.68839],VPR=[63.4,0,29.7],VPD=113.336): Profile shifted helical gear and rack 
+//   mod=3; teeth=8; helical=29;
+//   d = gear_dist(mod=mod, teeth, 0, helical);
+//   rack(mod=mod, teeth=5, helical=helical, orient=FWD);
+//   color("lightblue")
+//     fwd(d) spur_gear(mod=mod, teeth=teeth, helical=-helical, gear_spin=180/teeth);

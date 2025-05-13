@@ -1,0 +1,7 @@
+function _shift_segment(segment, d) =
+    assert(!approx(segment[0],segment[1]),"\nPath has repeated points.")
+    move(d*line_normal(segment),segment);
+
+
+// Extend to segments to their intersection point.  First check if the segments already have a point in common,
+// which can happen if two colinear segments are input to the path variant of `offset()`

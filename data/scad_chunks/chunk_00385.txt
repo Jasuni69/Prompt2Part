@@ -1,0 +1,1 @@
+function terminal_block_length(type, ways) = terminal_block_pitch(type) * ways + terminal_block_divider(type); //! Total length of terminal block

@@ -1,0 +1,16 @@
+function _lcmlist(a) =
+    len(a)==1 ? a[0] :
+    _lcmlist(concat(lcm(a[0],a[1]),list_tail(a,2)));
+
+
+// Function: lcm()
+// Synopsis: Returns the Least Common Multiple of two or more integers.
+// Topics: Math
+// See Also: hypot(), sqr(), log2(), factorial(), binomial(), gcd(), lcm()
+// Usage:
+//   div = lcm(a, b);
+//   divs = lcm(list);
+// Description:
+//   Computes the Least Common Multiple of the two arguments or a list of arguments.  Inputs should
+//   be non-zero integers.  The output is always a positive integer.  It is an error to pass zero
+//   as an argument.

@@ -1,0 +1,1 @@
+function hashset_elems(set) = [for(bucket = set) each bucket];

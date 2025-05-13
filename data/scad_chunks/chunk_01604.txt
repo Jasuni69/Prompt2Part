@@ -1,0 +1,2 @@
+function bezier_cable_length(depth, min_z, pos) = //! Calculate a length that will achieve the desired minimum z
+    bezier_length(adjust_bezier_z(cable_strip_control_points(depth, min_z, pos), min_z));

@@ -1,0 +1,7 @@
+function absArelR(po,pn)=
+  let(
+    th2=atan(po[1]/po[0]),
+    r2=sqrt(sq(po[0])+sq(po[1])),
+    r3=cosineRuleBside(r2,pn[1],th2-pn[0])
+  )
+  [cos(pn[0])*r3,sin(pn[0])*r3,pn[2]];

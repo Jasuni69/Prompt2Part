@@ -1,0 +1,1 @@
+function smd_diode_leads(type)  = type[4]; //! Lead extent in x, width, thickness and gap

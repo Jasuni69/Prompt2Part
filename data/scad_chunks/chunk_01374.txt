@@ -1,0 +1,4 @@
+module thermal_cutout_hole_positions(type) //! Place children at hole positions
+    for(side = [-1, 1])
+        translate([side * tc_hole_pitch(type) / 2, 0])
+            children();

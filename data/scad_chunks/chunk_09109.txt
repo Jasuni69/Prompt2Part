@@ -1,0 +1,11 @@
+function visitIN(maze, next, currentCell) =
+	update_maze(
+		update_maze(
+		    maze, 
+			set_wallType(
+				currentCell, 
+				get_wallType(currentCell) == INWARD_CCW_WALL ? CCW_WALL : NO_WALL
+			)
+		), 
+		set_visited(next)
+	);

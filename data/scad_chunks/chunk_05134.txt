@@ -1,0 +1,30 @@
+function full_flatten(l) =
+    !is_list(l)? l :
+    [for (a=l) if (is_list(a)) (each full_flatten(a)) else a];
+
+
+
+// Section: Set Manipulation
+
+// Function: set_union()
+// Synopsis: Merges two lists, returning a list of unique items.
+// Topics: Set Handling, List Handling
+// See Also: set_difference(), set_intersection()
+// Usage:
+//   s = set_union(a, b, [get_indices]);
+// Description:
+//   Given two sets (lists with unique items), returns the set of unique items that are in either `a` or `b`.
+//   If `get_indices` is true, a list of indices into the new union set are returned for each item in `b`,
+//   in addition to returning the new union set.  In this case, a 2-item list is returned, `[INDICES, NEWSET]`,
+//   where INDICES is the list of indices for items in `b`, and NEWSET is the new union set.
+// Arguments:
+//   a = One of the two sets to merge.
+//   b = The other of the two sets to merge.
+//   get_indices = If true, indices into the new union set are also returned for each item in `b`.  Returns `[INDICES, NEWSET]`.  Default: false
+// Example:
+//   set_a = [2,3,5,7,11];
+//   set_b = [1,2,3,5,8];
+//   set_u = set_union(set_a, set_b);
+//   // set_u now equals [2,3,5,7,11,1,8]
+//   set_v = set_union(set_a, set_b, get_indices=true);
+//   // set_v now equals [[5,0,1,2,6], [2,3,5,7,11,1,8]]

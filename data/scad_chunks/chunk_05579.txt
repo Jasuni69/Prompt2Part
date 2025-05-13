@@ -1,0 +1,20 @@
+function f_atan2(a,b) = f_2arg(function(a,b) atan2(a,b))(a,b);
+
+
+
+//////////////////////////////////////////////////////////////////////
+// Section: String Operators
+
+
+// Function: f_len()
+// Synopsis: Returns a function to calculate the length of a string or list.
+// Topics: Function Literals, String Operators
+// See Also: f_len(), f_chr(), f_ord(), f_str(), f_str2(), f_str3()
+// Usage:
+//   fn = f_len();
+//   fn = f_len(a);
+// Description:
+//   A factory that generates function literals based on `len(a)`, where the `a`
+//   argument can optionally be replaced with a constant.
+// Arguments:
+//   a = If given, replaces the argument.

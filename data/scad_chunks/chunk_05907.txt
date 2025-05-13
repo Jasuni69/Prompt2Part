@@ -1,0 +1,33 @@
+function group_data(groups, values) =
+    assert(all_integer(groups) && all_nonnegative(groups))
+    assert(is_list(values))
+    assert(len(groups)==len(values),
+           "The groups and values arguments should be lists of matching length.")
+    let( sorted = _group_sort_by_index([for(i=idx(groups))[groups[i],values[i]]],0) )
+    // retrieve values and insert []
+    [
+        for (i = idx(sorted))
+        let(
+            a  = i==0? 0 : sorted[i-1][0][0]+1,
+            g0 = sorted[i]
+        )
+        each [
+            for (j = [a:1:g0[0][0]-1]) [],
+            [for (g1 = g0) g1[1]]
+        ]
+    ];
+
+
+// Function: list_smallest()
+// Synopsis: Returns the `k` smallest values in the list, in arbitrary order.
+// Topics: List Handling
+// See Also: group_sort(), shuffle(), sort(), sortidx(), unique(), unique_count()
+// Usage:
+//   small = list_smallest(list, k)
+// Description:
+//   Returns a set of the k smallest items in list in arbitrary order.  The items must be
+//   mutually comparable with native OpenSCAD comparison operations.
+//   You get "undefined operation" errors if you provide invalid input. 
+// Arguments:
+//   list = list to process
+//   k = number of items to return

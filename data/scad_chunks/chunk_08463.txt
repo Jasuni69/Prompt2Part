@@ -1,0 +1,9 @@
+function _tri_subdivide_pts(points, radius, rows) = 
+   let(
+		p0 = points[0],
+		basis = [points[2] - p0, points[1] - p0] / rows
+   )
+   [
+		for(ri = [0:rows], ci = [0:rows - ri])
+		radius * unit_vector(p0 + [ri, ci] * basis)
+   ];

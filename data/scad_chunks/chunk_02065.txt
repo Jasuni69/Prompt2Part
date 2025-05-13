@@ -1,0 +1,1 @@
+function pillar_y_pitch(pcb) = pcb_width(pcb)  + 2 * clearance + 2 * (pillar_r - overlap) / sqrt(2); //! y pitch of screw pillars

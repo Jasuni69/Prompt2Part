@@ -1,0 +1,9 @@
+function dedendum(mm_per_tooth=5, clearance=undef) =
+	(clearance==undef)? (1.25 * module_value(mm_per_tooth)) : (module_value(mm_per_tooth) + clearance);
+
+
+// Function: pitch_radius()
+// Description: Calculates the pitch radius for the gear.
+// Arguments:
+//   mm_per_tooth = Distance between teeth around the pitch circle, in mm.
+//   number of teeth = The number of teeth on the gear.

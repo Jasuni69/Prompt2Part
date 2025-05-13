@@ -1,0 +1,37 @@
+function round5points(rp,fn,debug=0)=
+	rp[2][2]==0&&debug==0?[[rp[2][0],rp[2][1]]]://return the middle point if the radius is 0
+	rp[2][2]==0&&debug==1?0://if debug is enabled and the radius is 0 return 0
+	let(
+    p=getpoints(rp), //get list of points
+    r=[for(i=[1:3]) abs(rp[i][2])],//get the centre 3 radii
+    //start by determining what the radius should be at point 3
+    //find angles at points 2 , 3 and 4
+    a2=cosineRuleAngle(p[0],p[1],p[2]),
+    a3=cosineRuleAngle(p[1],p[2],p[3]),
+    a4=cosineRuleAngle(p[2],p[3],p[4]),
+    //find the distance between points 2&3 and between points 3&4
+    d23=pointDist(p[1],p[2]),
+    d34=pointDist(p[2],p[3]),
+    //find the radius factors
+    F23=(d23*tan(a2/2)*tan(a3/2))/(r[0]*tan(a3/2)+r[1]*tan(a2/2)),
+    F34=(d34*tan(a3/2)*tan(a4/2))/(r[1]*tan(a4/2)+r[2]*tan(a3/2)),
+    newR=min(r[1],F23*r[1],F34*r[1]),//use the smallest radius
+    //now that the radius has been determined, find tangent points and circle centre
+    tangD=newR/tan(a3/2),//distance to the tangent point from p3
+      circD=newR/sin(a3/2),//distance to the circle centre from p3
+    //find the angle from the p3
+    an23=getAngle(p[1],p[2]),//angle from point 3 to 2
+    an34=getAngle(p[3],p[2]),//angle from point 3 to 4
+    //find tangent points
+    t23=[p[2][0]-cos(an23)*tangD,p[2][1]-sin(an23)*tangD],//tangent point between points 2&3
+    t34=[p[2][0]-cos(an34)*tangD,p[2][1]-sin(an34)*tangD],//tangent point between points 3&4
+    //find circle centre
+    tmid=getMidpoint(t23,t34),//midpoint between the two tangent points
+    anCen=getAngle(tmid,p[2]),//angle from point 3 to circle centre
+    cen=[p[2][0]-cos(anCen)*circD,p[2][1]-sin(anCen)*circD]
+  )
+    //circle center by offseting from point 3
+    //determine the direction of rotation
+	debug==1?//if debug in disabled return arc (default)
+    (newR-r[1]):
+	[t23,t34,cen];

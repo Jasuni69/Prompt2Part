@@ -1,0 +1,5 @@
+module BOLTS_check_dimension_positive(dim, message){
+	if(dim < 0){
+		BOLTS_error(message);
+	}
+}

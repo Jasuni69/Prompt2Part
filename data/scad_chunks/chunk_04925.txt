@@ -1,0 +1,11 @@
+module outer(width, length, radius){
+    $fn = 64;
+    m(0,0)
+    fillet(radius)
+    v(width)
+    fillet(radius)
+    h(length)
+    fillet(radius)
+    v(-width)
+    fillet(radius); 
+}

@@ -1,0 +1,31 @@
+function left_half(p,x=0) = half_of(p, LEFT, [x,0,0]);
+
+
+
+// Function&Module: right_half()
+// SynTags: Geom, VNF, Path, Region
+// Synopsis: Masks the left half of an object along the Y-Z plane, leaving the right half.
+// Topics: Partitions, Masking
+// See Also: back_half(), front_half(), left_half(), top_half(), bottom_half(), half_of(), intersection()
+//
+// Usage: as module
+//   right_half([s=], [x=]) CHILDREN;
+//   right_half(planar=true, [s=], [x=]) CHILDREN;
+// Usage: as function
+//   result = right_half(p, [x=]);
+//
+// Description:
+//   Slices an object at a vertical Y-Z cut plane, and masks away everything that is left of it.
+//   The `s` parameter is needed for the module version to control the size of the masking cube.
+//   If `s` is too large then the preview display will flip around and display the wrong half,
+//   but if it is too small it won't fully mask your model.  
+// Arguments:
+//   p = VNF, region or path to slice (function version)
+//   s = Mask size to use.  Use a number larger than twice your object's largest axis.  If you make this too large, OpenSCAD's preview rendering may display the wrong half.  (Module version)  Default: 100
+//   x = The X coordinate of the cut-plane.  Default: 0
+//   planar = If true, perform a 2D operation.  (Module version)  Default: false. 
+// Examples(FlatSpin,VPD=175):
+//   right_half() sphere(r=20);
+//   right_half(x=-5) sphere(r=20);
+// Example(2D):
+//   right_half(planar=true) circle(r=20);

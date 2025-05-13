@@ -1,0 +1,41 @@
+module wire_link(d, l, h = 1, tail = 3, sleeve = false) { //! Draw a wire jumper link. `sleeve` can be a list with the diameter and colour. If `l` is zero then a vertical wire is drawn.
+    vitamin(str("wire_link(", d, ", ", l, arg(h, 1, "h"), arg(tail, 3, "tail"), arg(sleeve, false, "sleeve"),
+                             "): Wire link ", d, "mm x ", l ? str(l / inch(1), "\"") : str(h + tail,"mm"), sleeve ? str(" with ", sleeve[1], " sleeving") : ""));
+    r = d;
+    $fn = fn;
+    color("silver")
+        if(l) {
+            for(side = [-1, 1]) {
+                translate([side * l / 2, 0, -tail])
+                    cylinder(d = d, h = tail + h - r);
+
+                translate([side * (l / 2 - r), 0, h - r])
+                    rotate([90, 0, side * 90 - 90])
+                        rotate_extrude(angle = 90, $fn = fn * 2)
+                            translate([r, 0])
+                                circle(d = d, $fn = fn);
+
+                translate([side * l /2, 0])
+                    if(tail > 1)
+                        solder(ir = d / 2);
+                    else
+                        if(!is_undef($solder))
+                            translate_z(0.1)
+                                solder_meniscus(ir = d / 2, r = $solder.x, h = h - r - 0.1);
+            }
+            translate_z(h)
+                rotate([0, -90, 0])
+                    cylinder(d = d, h = l - 2 * r, center = true);
+        }
+        else {
+            translate_z(-tail)
+                cylinder(d = d, h = tail + h);
+            solder(ir = d / 2);
+        }
+
+    if(sleeve)
+        color(sleeve[1])
+            translate_z(h)
+                rotate([0, 90, 0])
+                    cylinder(d = sleeve[0], h = l - 2 * r, center = true);
+}

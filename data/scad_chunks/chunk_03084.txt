@@ -1,0 +1,6 @@
+module hookLidInside()
+{
+  //if (printMessages) echo("hookLidInside() ..");
+  sphere(20); //qqqqq
+
+} //-- hookLidInside()

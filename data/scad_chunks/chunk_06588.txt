@@ -1,0 +1,7 @@
+module test_plane_offset(){
+    plane = rands(-1,1,4)+[2,0,0,0]; // a valid plane
+    info = info_str([["plane = ",plane]]);
+    assert_approx(plane_offset(plane), _normalize_plane(plane)[3],info);
+    assert_approx(plane_offset([1,1,1,1]), 1/sqrt(3),info);
+}
+*test_plane_offset();

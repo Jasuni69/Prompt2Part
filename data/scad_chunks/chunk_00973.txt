@@ -1,0 +1,12 @@
+module hygrometer_hole(h = 0) { //! Drill the hole for a hygrometer
+    extrude_if(h)
+        round(cnc_bit_r) {
+            intersection() {
+                drill(hygrometer_hole_r, 0);
+
+                rotate(30)
+                    square([slot_w + 2 * cnc_bit_r, 100], center = true);
+            }
+            drill((od + 0.2) / 2, 0);
+        }
+}

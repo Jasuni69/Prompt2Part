@@ -1,0 +1,1 @@
+function bulldog_length(type)    = type[1];     //! Length along the profile

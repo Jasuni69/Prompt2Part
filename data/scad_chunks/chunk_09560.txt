@@ -1,0 +1,35 @@
+module bezier_polyhedron(patches=[], tris=[], splinesteps=16, vertices=[], faces=[])
+{
+	sfc = bezier_surface(patches=patches, tris=tris, splinesteps=splinesteps, vertices=vertices, faces=faces);
+	polyhedron(points=sfc[0], faces=sfc[1]);
+}
+
+
+
+// Module: trace_bezier_patches()
+// Usage:
+//   trace_bezier_patches(patches, [size], [showcps], [splinesteps]);
+//   trace_bezier_patches(tris, [size], [showcps], [splinesteps]);
+//   trace_bezier_patches(patches, tris, [size], [showcps], [splinesteps]);
+// Description:
+//   Shows the surface, and optionally, control points of a list of bezier patches.
+// Arguments:
+//   patches = A list of rectangular bezier patches.
+//   tris = A list of triangular bezier patches.
+//   splinesteps = Number of steps to divide each bezier segment into. default=16
+//   showcps = If true, show the controlpoints as well as the surface.
+//   size = Size to show control points and lines.
+// Example:
+//   patch1 = [
+//   	[[15,15,0], [33,  0,  0], [ 67,  0,  0], [ 85, 15,0]],
+//   	[[ 0,33,0], [33, 33, 50], [ 67, 33, 50], [100, 33,0]],
+//   	[[ 0,67,0], [33, 67, 50], [ 67, 67, 50], [100, 67,0]],
+//   	[[15,85,0], [33,100,  0], [ 67,100,  0], [ 85, 85,0]],
+//   ];
+//   patch2 = [
+//   	[[15,15,0], [33,  0,  0], [ 67,  0,  0], [ 85, 15,0]],
+//   	[[ 0,33,0], [33, 33,-50], [ 67, 33,-50], [100, 33,0]],
+//   	[[ 0,67,0], [33, 67,-50], [ 67, 67,-50], [100, 67,0]],
+//   	[[15,85,0], [33,100,  0], [ 67,100,  0], [ 85, 85,0]],
+//   ];
+//   trace_bezier_patches(patches=[patch1, patch2], splinesteps=8, showcps=true);

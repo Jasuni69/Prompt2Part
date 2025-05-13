@@ -1,0 +1,20 @@
+function is_finite(x) = is_num(x) && !is_nan(0*x);
+
+
+// Function: is_range()
+// Synopsis: Returns true if the argument is a range.
+// Topics: Type Checking
+// See Also: typeof(), is_type(), is_str(), is_def(), is_int()
+// Usage:
+//   bool = is_range(x);
+// Description:
+//   Returns true if its argument is a range
+// Arguments:
+//   x = value to check
+// Example:
+//   bool = is_range(undef);   // Returns: false
+//   bool = is_range(false);   // Returns: false
+//   bool = is_range(42);      // Returns: false
+//   bool = is_range([3,4,5]); // Returns: false
+//   bool = is_range("foo");   // Returns: false
+//   bool = is_range([3:5]);   // Returns: true

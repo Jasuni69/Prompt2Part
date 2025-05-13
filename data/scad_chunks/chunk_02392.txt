@@ -1,0 +1,1 @@
+function str_ways(ways) = is_list(ways) ? str(ways[0], "_", ways[1]) : str(ways);

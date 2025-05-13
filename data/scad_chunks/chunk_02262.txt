@@ -1,0 +1,1 @@
+function corner_block_screw() = def_screw; //! Default screw type

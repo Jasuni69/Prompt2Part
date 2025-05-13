@@ -1,0 +1,1 @@
+function _get_pt(turtle) = turtle[0];

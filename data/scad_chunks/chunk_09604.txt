@@ -1,0 +1,37 @@
+module onion(cap_h=undef, r=undef, d=undef, maxang=45, h=undef, orient=ORIENT_Z, align=V_CENTER)
+{
+	r = get_radius(r=r, d=d, dflt=1);
+	h = first_defined([cap_h, h]);
+	maxd = 3*r/tan(maxang);
+	orient_and_align([r*2,r*2,r*2], orient, align) {
+		rotate_extrude(convexity=2) {
+			difference() {
+				teardrop2d(r=r, ang=maxang, cap_h=h);
+				left(r) square(size=[2*r,maxd], center=true);
+			}
+		}
+	}
+}
+
+
+// Module: narrowing_strut()
+//
+// Description:
+//   Makes a rectangular strut with the top side narrowing in a triangle.
+//   The shape created may be likened to an extruded home plate from baseball.
+//   This is useful for constructing parts that minimize the need to support
+//   overhangs.
+//
+// Usage:
+//   narrowing_strut(w, l, wall, [ang], [orient], [align]);
+//
+// Arguments:
+//   w = Width (thickness) of the strut.
+//   l = Length of the strut.
+//   wall = height of rectangular portion of the strut.
+//   ang = angle that the trianglar side will converge at.
+//   orient = Orientation of the length axis of the shape.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Y`.
+//   align = Alignment of the shape.  Use the `V_` constants from `constants.scad`.  Default: `V_CENTER`.
+//
+// Example:
+//   narrowing_strut(w=10, l=100, wall=5, ang=30);

@@ -1,0 +1,5 @@
+function getLength(sourceSystem) =
+  (sourceSystem[0] == yappCoordPCB) ? pcbLength(sourceSystem[2]): //pcb_Length :
+  (sourceSystem[0] == yappCoordBoxInside) ? shellInsideLength :
+  (sourceSystem[0] == yappCoordBox) ? shellLength :
+  undef;

@@ -1,0 +1,7 @@
+module FlowerOLD(e=8,n=15,r=10,r2=5,fn=720,name,help){
+points=[for(f=[+0:fn])let(i=f*360/fn)RotLang(i,max(r2,r*pow(abs(sin(e*.5*i)),2/n)))];
+
+polygon(points,convexity=5);
+
+if(help)echo(str("<H3><font color=",helpMColor,">Help Flower(e=",e,",n=",n,",r=",r,",r2=",r2,", fn=",fn,",name=",name,",help);"));
+}

@@ -1,0 +1,9 @@
+function quant(x,y) = floor(x/y+0.5)*y;
+
+
+// Function: quantdn()
+// Description:
+//   Quantize a value `x` to an integer multiple of `y`, rounding down to the previous multiple.
+// Arguments:
+//   x = The value to quantize.
+//   y = The multiple to quantize to.

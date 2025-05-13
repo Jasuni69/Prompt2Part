@@ -1,0 +1,100 @@
+module test_polygon_line_intersection() {
+    poly0 = [ [-10,-10, 0],[10,-10, 0],[10,10,0],[0,5,0],[-10,10,0] ];
+    line0 = [ [-3,7.5,0],[3,7.5,0] ]; // a segment on poly0 plane, out of poly0
+    angs  = rands(0,360,3); 
+    poly   = rot(angs,p=poly0);
+    lineon = rot(angs,p=line0);
+    info   = info_str([["angs = ",angs],["line = ",lineon],["poly = ",poly]]);
+    // line on polygon plane
+    assert_approx(polygon_line_intersection(poly,lineon,bounded=[true,true]),
+                  undef, info);
+    assert_approx(polygon_line_intersection(poly,lineon,bounded=[true,false]),
+                  [rot(angs,p=[[5,7.5,0],[10,7.5,0]])], info);
+    assert_approx(polygon_line_intersection(poly,lineon,bounded=[false,true]),
+                  [rot(angs,p=[[-10,7.5,0],[-5,7.5,0]])], info);
+    assert_approx(polygon_line_intersection(poly,lineon,bounded=[false,false]),
+                  rot(angs,p=[[[-10,7.5,0],[-5,7.5,0]],[[5,7.5,0],[10,7.5,0]]]), info);
+    // line parallel to polygon plane
+    linepll = move([0,0,1],lineon);
+    assert_approx(polygon_line_intersection(poly,linepll,bounded=[true,true]),
+                  undef, info);
+    assert_approx(polygon_line_intersection(poly,linepll,bounded=[true,false]),
+                  undef, info);
+    assert_approx(polygon_line_intersection(poly,linepll,bounded=[false,true]),
+                  undef, info);
+    assert_approx(polygon_line_intersection(poly,linepll,bounded=[false,false]),
+                  undef, info);
+    // general case
+    trnsl   = [0,0,1];
+    linegnr = move(trnsl,rot(angs,p=[[5,5,5],[3,3,3]]));
+    polygnr = move(trnsl,rot(angs,p=poly0));
+    assert_approx(polygon_line_intersection(polygnr,linegnr,bounded=[true,true]),
+                  undef, info);
+    assert_approx(polygon_line_intersection(polygnr,linegnr,bounded=[true,false]),
+                  trnsl, info);
+    assert_approx(polygon_line_intersection(polygnr,linegnr,bounded=[false,true]),
+                  undef, info);
+    assert_approx(polygon_line_intersection(polygnr,linegnr,bounded=[false,false]),
+                  trnsl, info);
+
+    sq = path3d(square(10));
+    pentagram = 10*path3d(turtle(["move",10,"left",144], repeat=4));
+    for (tran = [ident(4), skew(sxy=1.2)*scale([.9,1,1.2])*yrot(14)*zrot(37)*xrot(9)])
+    {
+        assert_approx(polygon_line_intersection(apply(tran,sq),apply(tran,[[5,5,-1], [5,5,10]])), apply(tran, [5,5,0]));
+        assert_approx(polygon_line_intersection(apply(tran,sq),apply(tran,[[5,5,1], [5,5,10]])), apply(tran, [5,5,0]));
+        assert(undef==polygon_line_intersection(apply(tran,sq),apply(tran,[[5,5,1], [5,5,10]]),RAY));
+        assert(undef==polygon_line_intersection(apply(tran,sq),apply(tran,[[11,11,-1],[11,11,1]])));
+        assert_approx(polygon_line_intersection(apply(tran,sq),apply(tran,[[5,0,-10], [5,0,10]])), apply(tran, [5,0,0]));
+        assert_equal(polygon_line_intersection(apply(tran,sq),apply(tran,[[5,0,1], [5,0,10]]),RAY), undef);
+        assert_approx(polygon_line_intersection(apply(tran,sq),apply(tran,[[10,0,1],[10,0,10]])), apply(tran, [10,0,0]));
+        assert_approx(polygon_line_intersection(apply(tran,sq),apply(tran,[[1,5,0],[9,6,0]])), apply(tran, [[[0,4.875,0],[10,6.125,0]]]));
+        assert_approx(polygon_line_intersection(apply(tran,sq),apply(tran,[[1,5,0],[9,6,0]]),SEGMENT), apply(tran, [[[1,5,0],[9,6,0]]]));
+        assert_approx(polygon_line_intersection(apply(tran,sq),apply(tran,[[-1,-1,0],[8,8,0]])), apply(tran, [[[0,0,0],[10,10,0]]]));
+        assert_approx(polygon_line_intersection(apply(tran,sq),apply(tran,[[-1,-1,0],[8,8,0]]),SEGMENT), apply(tran, [[[0,0,0],[8,8,0]]]));
+        assert_approx(polygon_line_intersection(apply(tran,sq),apply(tran,[[-1,-1,0],[8,8,0]]),RAY), apply(tran, [[[0,0,0],[10,10,0]]]));
+        assert_approx(polygon_line_intersection(apply(tran,sq),apply(tran,[[-2,4,0], [12,11,0]]),RAY), apply(tran, [[[0,5,0],[10,10,0]]]));
+        assert_equal(polygon_line_intersection(apply(tran,sq),apply(tran,[[-20,0,0],[20,40,0]]),RAY), undef);
+        assert_approx(polygon_line_intersection(apply(tran,sq),apply(tran,[[-1,0,0],[11,0,0]])), apply(tran, [[[0,0,0],[10,0,0]]]));
+    }
+    assert_approx(polygon_line_intersection(path2d(sq),[[1,5],[9,6]],SEGMENT), [[[1,5],[9,6]]]);
+    assert_approx(polygon_line_intersection(path2d(sq),[[1,5],[9,6]],LINE), [[[0,4.875],[10,6.125]]]);
+    assert_approx(polygon_line_intersection(pentagram,[[50,10,-4],[54,12,4]], nonzero=true), [52,11,0]);
+    assert_equal(polygon_line_intersection(pentagram,[[50,10,-4],[54,12,4]], nonzero=false), undef);
+    assert_approx(polygon_line_intersection(pentagram,[[50,-10,-4],[54,-12,4]], nonzero=true), [52,-11,0]);
+    assert_approx(polygon_line_intersection(pentagram,[[50,-10,-4],[54,-12,4]], nonzero=false), [52,-11,0]);
+    assert_approx(polygon_line_intersection(star(8,step=3,od=10), [[-5,3], [5,3]]),
+                                [[[-3.31370849898, 3], [-2.24264068712, 3]],
+                                [[-0.828427124746, 3], [0.828427124746, 3]],
+                                 [[2.24264068712, 3], [3.31370849898, 3]]]);
+
+    tran = skew(sxy=1.2)*scale([.9,1,1.2])*yrot(14)*zrot(37)*xrot(9);
+
+    // assemble multiple edges into one edge
+    assert_approx(polygon_line_intersection(star(r=15,n=8,step=2), [[20,-5],[-5,20]]), [[[15,0],[0,15]]]);
+    assert_approx(polygon_line_intersection(apply(tran,path3d(star(r=15,n=8,step=2))), apply(tran,[[20,-5,0],[-5,20,0]])), apply(tran,[[[15,0,0],[0,15,0]]]));
+    // line going the other direction
+    assert_approx(polygon_line_intersection(star(r=15,n=8,step=2), [[-5,20],[20,-5]]), [[[0,15],[15,0]]]);
+    assert_approx(polygon_line_intersection(apply(tran,path3d(star(r=15,n=8,step=2))), apply(tran,[[-5,20,0],[20,-5,0]])),apply(tran, [[[0,15,0],[15,0,0]]]));
+    // single point
+    assert_approx(polygon_line_intersection(hexagon(r=15), [[15,-10],[15,13]], RAY), [[[15,0]]]);
+    assert_approx(polygon_line_intersection(apply(tran,path3d(hexagon(r=15))), apply(tran,[[15,-10,0],[15,13,0]]), RAY),
+                  [[apply(tran,[15,0,0])]]);
+    // two points
+    assert_approx(polygon_line_intersection(star(r=15,n=8,step=3), rot(22.5,p=[[15,-10],[15,20]],cp=[15,0])), 
+                    [[[15,0]], [[10.6066017178, 10.6066017178]]]);
+    assert_approx(polygon_line_intersection(apply(tran,path3d(star(r=15,n=8,step=3))), apply(tran,rot(22.5,p=[[15,-10,0],[15,20,0]],cp=[15,0,0]))), 
+                    [[apply(tran,[15,0,0])], [apply(tran,[10.6066017178, 10.6066017178,0])]]);
+    // two segments and one point
+    star7 = star(r=25,ir=9,n=7);
+    assert_approx(polygon_line_intersection(star7, [left(10,p=star7[8]), right(50,p=star7[8])]),
+                  [[[-22.5242216976, 10.8470934779]],
+                   [[-5.60077322195, 10.8470934779], [0.997372374838, 10.8470934779]],
+                   [[4.61675816681, 10.8470934779], [11.4280421589, 10.8470934779]]]);
+    assert_approx(polygon_line_intersection(apply(tran,path3d(star7)),
+                        apply(tran, path3d([left(10,p=star7[8]), right(50,p=star7[8])]))),
+                  [[apply(tran,[-22.5242216976, 10.8470934779,0])],
+                   apply(tran,[[-5.60077322195, 10.8470934779,0], [0.997372374838, 10.8470934779,0]]),
+                   apply(tran,[[4.61675816681, 10.8470934779,0], [11.4280421589, 10.8470934779,0]])]);
+}
+*test_polygon_line_intersection();

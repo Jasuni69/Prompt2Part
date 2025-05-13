@@ -1,0 +1,1 @@
+function box_profile_overlap(type) = 3 + sheet_end_clearance / 2;

@@ -1,0 +1,51 @@
+module Coil(
+r=20,
+d=5,
+r2,
+od,
+id,
+grad=3*360,
+p,
+pitch=10,
+h,
+points,
+twist=0,
+scale=1,
+fn=fn,fn2=36,
+center=true,
+open=true,//open Path
+name,
+help){
+
+d=is_num(od)&&is_num(id)?(od-id)/2 : d;
+r=is_undef(points)?is_num(od)?(od-d)/2:is_num(id)?(id+d)/2:r:r;
+r2=is_undef(r2)?r:r2;
+$d=d;
+Echo("Coil using points - od, id, h or d can't compute",color="warning",condition=points&&od||points&&id);
+Echo("Coil intersecting",color="warning",condition=!points&&norm([(r-r2)/grad*360,pitch])<d);
+
+ipoints=is_undef(points)?kreis(d=d,rand=0,fn=fn2,z=0):points;
+
+pitch=is_undef(h)?pitch:(h-d/2-d/2*scale)/grad*360;
+h=pitch*grad/360+d/2+d/2*scale;
+Echo("Coil h < d",color="warning",condition=h<d);
+
+iFN=round(fn*grad/360*max(1,twist/360/3))-1;
+
+path=[for(i=[0: iFN ])
+let(deg=grad/iFN,
+p=is_undef(p)?pitch/360*deg:p/360*deg,
+rDiff=(r2-r)/iFN
+)
+[sin(i*deg)*(r+rDiff*i),cos(i*deg)*(r+rDiff*i),p*i]];
+
+translate([0,0,center?b(center,false)<0?-h/2+d/2
+                               :0
+                      :d/2])
+  PolyH(
+          pathPoints(ipoints,path,twist=twist,scale=scale,open=open),
+        loop=len(ipoints),name=false);
+      
+InfoTxt("Coil",["length",pathLength(path),"heigth(h)",h],name);
+HelpTxt("Coil",["r",r,"d",d,"r2",r2,"od",od,"id",id,"grad",grad,"pitch",is_undef(p)?pitch:p,"h",h,"points","kreis(d=d)","twist",twist,"scale",scale,"fn",fn,"fn2",fn2,"center",center,"open",open],help);
+}

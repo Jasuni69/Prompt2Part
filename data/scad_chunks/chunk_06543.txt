@@ -1,0 +1,28 @@
+function _all_bool(l, i=0, out=true) =
+    i >= len(l) || !out? out :
+    _all_bool(l, i=i+1, out=out && l[i]);
+
+
+// Function: num_true()
+// Synopsis: Returns the number of true entries in the arguemnt list.
+// Topics: Boolean Testing
+// See Also: any(), all()
+// Usage:
+//   seq = num_true(l);
+//   seq = num_true(l, func);  // Requires OpenSCAD 2021.01 or later.
+// Requirements:
+//   Requires OpenSCAD 2021.01 or later to use the `func=` argument.
+// Description:
+//   Returns the number of items in `l` that evaluate as true.  If `func` is given then counts
+//   list entries where the function evaluates as true.  
+//   Items that evaluate as true include nonempty lists, nonempty strings, and nonzero numbers.
+// Arguments:
+//   l = The list to test for true items.
+//   func = An optional function literal of signature (x), returning bool, to test each list item with.
+// Example:
+//   num1 = num_true([0,false,undef]);  // Returns 0.
+//   num2 = num_true([1,false,undef]);  // Returns 1.
+//   num3 = num_true([1,5,false]);      // Returns 2.
+//   num4 = num_true([1,5,true]);       // Returns 3.
+//   num5 = num_true([[0,0], [0,0]]);   // Returns 2.
+//   num6 = num_true([[], [1,0]]);      // Returns 1.

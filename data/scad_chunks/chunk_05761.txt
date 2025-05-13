@@ -1,0 +1,8 @@
+function vnf_hull(vnf) =
+  assert(is_vnf(vnf) || is_path(vnf,3),"\nInput must be a VNF or a 3d path.")
+  let(
+      pts = is_vnf(vnf) ? select(vnf[0],unique(flatten(vnf[1])))
+                        : vnf,
+      faces = hull3d_faces(pts)
+  )
+  [pts, faces];

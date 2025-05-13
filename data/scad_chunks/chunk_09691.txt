@@ -1,0 +1,29 @@
+function torx_rounding_radius(size) = lookup(size, [
+	[  6, 0.383],
+	[  8, 0.510],
+	[ 10, 0.598],
+	[ 15, 0.716],
+	[ 20, 0.859],
+	[ 25, 0.920],
+	[ 30, 1.194],
+	[ 40, 1.428],
+	[ 45, 1.796],
+	[ 50, 1.816],
+	[ 55, 2.667],
+	[ 60, 2.883],
+	[ 70, 3.477],
+	[ 80, 3.627],
+	[ 90, 4.468],
+	[100, 4.925]
+]);
+
+
+// Section: Modules
+
+
+// Module: torx_drive2d()
+// Description: Creates a torx bit 2D profile.
+// Arguments:
+//   size = Torx size.
+// Example(2D):
+//   torx_drive2d(size=30, $fa=1, $fs=1);

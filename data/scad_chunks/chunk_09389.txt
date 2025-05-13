@@ -1,0 +1,30 @@
+function array_subindex(v, idx) = [
+	for(val=v) let(value=[for(i=idx) val[i]])
+		len(value)==1 ? value[0] : value
+];
+
+
+// Function: list_range()
+// Usage:
+//   list_range(n, [s], [e], [step])
+//   list_range(e, [step])
+//   list_range(s, e, [step])
+// Description:
+//   Returns a list, counting up from starting value `s`, by `step` increments,
+//   until either `n` values are in the list, or it reaches the end value `e`.
+// Arguments:
+//   n = Desired number of values in returned list, if given.
+//   s = Starting value.  Default: 0
+//   e = Ending value to stop at, if given.
+//   step = Amount to increment each value.  Default: 1
+// Example:
+//   list_range(4);                  // Returns [0,1,2,3]
+//   list_range(n=4, step=2);        // Returns [0,2,4,6]
+//   list_range(n=4, s=3, step=3);   // Returns [3,6,9,12]
+//   list_range(n=5, s=0, e=10);     // Returns [0, 2.5, 5, 7.5, 10]
+//   list_range(e=3);                // Returns [0,1,2,3]
+//   list_range(e=6, step=2);        // Returns [0,2,4,6]
+//   list_range(s=3, e=5);           // Returns [3,4,5]
+//   list_range(s=3, e=8, step=2);   // Returns [3,5,7]
+//   list_range(s=4, e=8, step=2);   // Returns [4,6,8]
+//   list_range(n=4, s=[3,4], step=[2,3]);  // Returns [[3,4], [5,7], [7,10], [9,13]]

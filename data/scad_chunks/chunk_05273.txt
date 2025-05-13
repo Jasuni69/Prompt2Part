@@ -1,0 +1,35 @@
+function parse_frac(str,mixed=true,improper=true,signed=true) =
+    str == undef ? undef
+  : assert(is_str(str))
+    len(str)==0 ? 0
+  : str[0]==" " ? NAN
+  : signed && str[0]=="-" ? -parse_frac(substr(str,1),mixed=mixed,improper=improper,signed=false)
+  : signed && str[0]=="+" ?  parse_frac(substr(str,1),mixed=mixed,improper=improper,signed=false)
+  : mixed && (str_find(str," ")!=undef || str_find(str,"/")==undef)?   // Mixed allowed and there is a space or no slash
+        let(whole = str_split(str,[" "]))
+        _parse_int_recurse(whole[0],10,len(whole[0])-1) + parse_frac(whole[1], mixed=false, improper=improper, signed=false)
+  : let(split = str_split(str,"/"))
+    len(split)!=2 ? NAN
+  : let(
+        numerator =  _parse_int_recurse(split[0],10,len(split[0])-1),
+        denominator = _parse_int_recurse(split[1],10,len(split[1])-1)
+    )
+    !improper && numerator>=denominator? NAN
+  : denominator<0 ? NAN
+  : numerator/denominator;
+
+
+// Function: parse_num()
+// Synopsis: Parse a float from a decimal or fraction string.
+// Topics: Strings
+// See Also: parse_int(), parse_float(), parse_frac(), parse_num()
+// Usage:
+//   num = parse_num(str);
+// Description:
+//   Converts a string to a number.  The string can be either a fraction (two integers separated by a "/") or a floating point number.
+//   Returns NaN if the conversion fails.
+// Arguments:
+//   str = string to process
+// Example:
+//   parse_num("3/4");    // Returns 0.75
+//   parse_num("3.4e-2"); // Returns 0.034

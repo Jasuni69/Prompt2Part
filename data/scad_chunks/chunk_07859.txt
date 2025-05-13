@@ -1,0 +1,14 @@
+module base(w, base_x_blocks, base_y_blocks) {
+   linear_extrude(w) {
+        translate([0, -w]) 
+            square([base_x_blocks * w, base_y_blocks * w + 2 * w]);
+
+        translate([0, base_y_blocks * w / 2]) 
+        scale(w) 
+        blocks(vx_circle(base_y_blocks / 2, filled = true));
+
+        translate([base_x_blocks * w, base_y_blocks * w / 2]) 
+        scale(w) 
+            blocks(vx_circle(base_y_blocks / 2, filled = true));
+   }   
+}

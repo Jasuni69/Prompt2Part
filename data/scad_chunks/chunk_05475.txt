@@ -1,0 +1,47 @@
+function offset_stroke(path, width=1, rounded=true, start, end, check_valid=true, quality=1, chamfer=false, closed=false,
+                       atype="hull", anchor="origin", spin, cp="centroid") =
+        let(path = force_path(path))
+        assert(is_path(path,2),"path is not a 2d path")
+        let(
+            closedok = !closed || (is_undef(start) && is_undef(end)),
+            start = default(start,"flat"),
+            end = default(end,"flat")
+        )
+        assert(closedok, "Parameters `start` and `end` not allowed with closed path")
+        let(
+            start = closed? [] : _parse_stroke_end(default(start,"flat"),"start"),
+            end = closed? [] : _parse_stroke_end(default(end,"flat"),"end"),
+            width = is_list(width)? reverse(sort(width)) : [1,-1]*width/2,
+            left_r = !rounded? undef : width[0],
+            left_delta = rounded? undef : width[0],
+            right_r = !rounded? undef : width[1],
+            right_delta = rounded? undef : width[1],
+            left_path = offset(
+                    path, delta=left_delta, r=left_r, closed=closed,
+                    check_valid=check_valid, quality=quality,
+                    chamfer=chamfer 
+            ),
+            right_path = offset(
+                    path, delta=right_delta, r=right_r, closed=closed,
+                    check_valid=check_valid, quality=quality,
+                    chamfer=chamfer 
+            )
+         )
+         closed? let(pts = [left_path, right_path])
+                 reorient(anchor=anchor, spin=spin, two_d=true, region=pts, extent=atype=="hull", cp=cp, p=pts)
+         :
+         let(
+             startpath = _stroke_end(width,left_path, right_path, start),
+             endpath = _stroke_end(reverse(width),reverse(right_path), reverse(left_path),end),
+             clipping_ok = startpath[1]+endpath[2]<=len(left_path) && startpath[2]+endpath[1]<=len(right_path)
+         )
+         assert(clipping_ok, "End treatment removed the whole stroke")
+         let(
+             pts = concat(
+                          slice(left_path,startpath[1],-1-endpath[2]),
+                          endpath[0],
+                          reverse(slice(right_path,startpath[2],-1-endpath[1])),
+                          startpath[0]
+                  )
+         ) 
+         reorient(anchor=anchor, spin=spin, two_d=true, path=pts, extent=atype=="hull", cp=cp, p=pts);

@@ -1,0 +1,7 @@
+function vSum(v,start=0,end) = 
+  let(v=is_list(v)?v:[v], end = is_undef(end)?len(v)-1:min(len(v)-1,end) )
+    start<end? v[start]+ vSum(v,start+1,end):
+               v[start];
+
+
+// NACA profile points

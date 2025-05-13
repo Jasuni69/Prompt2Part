@@ -1,0 +1,44 @@
+module SmoothCube(size, smooth_rad) {
+  $fa = ($fa >= 12) ? 1 : $fa;
+  $fs = ($fs >= 2) ? 0.4 : $fs;
+
+  size = is_num(size) ? [size, size, size] : size;
+  smooth_rad = is_num(smooth_rad) ? [smooth_rad, smooth_rad, smooth_rad] :
+    smooth_rad;
+  smooth_base = smooth_rad[0];
+  scales = smooth_rad / smooth_base;
+
+  scalex = scales[0] * ((smooth_rad[0] < size[0]/2) ? 1 : size[0]/(2*smooth_rad[0]));
+  scaley = scales[1] * ((smooth_rad[1] < size[1]/2) ? 1 : size[1]/(2*smooth_rad[1]));
+  scalez = scales[2] * ((smooth_rad[2] < size[2]/2) ? 1 : size[2]/(2*smooth_rad[2]));
+  smoothx = smooth_rad[0] * scalex / scales[0];
+  smoothy = smooth_rad[1] * scaley / scales[1];
+  smoothz = smooth_rad[2] * scalez / scales[2];
+
+  hull() {
+    translate([smoothx, smoothy, smoothz])
+      scale([scalex, scaley, scalez])
+      sphere(r=smooth_base);
+    translate([size[0]-smoothx, smoothy, smoothz])
+      scale([scalex, scaley, scalez])
+      sphere(r=smooth_base);
+    translate([smoothx, size[1]-smoothy, smoothz])
+      scale([scalex, scaley, scalez])
+      sphere(r=smooth_base);
+    translate([smoothx, smoothy, size[2]-smoothz])
+      scale([scalex, scaley, scalez])
+      sphere(r=smooth_base);
+    translate([size[0]-smoothx, size[1]-smoothy, smoothz])
+      scale([scalex, scaley, scalez])
+      sphere(r=smooth_base);
+    translate([size[0]-smoothx, smoothy, size[2]-smoothz])
+      scale([scalex, scaley, scalez])
+      sphere(r=smooth_base);
+    translate([smoothx, size[1]-smoothy, size[2]-smoothz])
+      scale([scalex, scaley, scalez])
+      sphere(r=smooth_base);
+    translate([size[0]-smoothx, size[1]-smoothy, size[2]-smoothz])
+      scale([scalex, scaley, scalez])
+      sphere(r=smooth_base);
+  }
+}

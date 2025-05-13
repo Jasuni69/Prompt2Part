@@ -1,0 +1,22 @@
+function rand_int(minval, maxval, n, seed=undef) =
+    assert( is_finite(minval+maxval+n) && (is_undef(seed) || is_finite(seed) ), "\nInput must be finite numbers.")
+    assert(maxval >= minval, "\nMax value cannot be smaller than minval.")
+    let (rvect = is_def(seed) ? rands(minval,maxval+1,n,seed) : rands(minval,maxval+1,n))
+    [for(entry = rvect) floor(entry)];
+
+
+// Function: random_points()
+// Synopsis: Returns a list of random points.
+// Topics: Random, Points
+// See Also: rand_int(), random_points(), random_polygon(), spherical_random_points()
+// Usage:
+//    points = random_points(n, dim, [scale], [seed]);
+// Description:
+//    Generate `n` uniform random points of dimension `dim` with data ranging from -scale to +scale.  
+//    The `scale` may be a number, in which case the random data lies in a cube,
+//    or a vector with dimension `dim`, in which case each dimension has its own scale.  
+// Arguments:
+//    n = number of points to generate. Default: 1
+//    dim = dimension of the points. Default: 2
+//    scale = the scale of the point coordinates. Default: 1
+//    seed = an optional seed for the random generation.

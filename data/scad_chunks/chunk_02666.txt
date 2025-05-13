@@ -1,0 +1,3 @@
+module poly_tube(or, ir, h, center = false) //! Make a tube adjusted to have the correct internal radius
+    extrude_if(h, center)
+        poly_ring(or, ir);

@@ -1,0 +1,8 @@
+module scale(v)
+{
+  s3 = is_finite(v) ? affine3d_scale([v,v,v])
+     : is_vector(v) ? affine3d_scale(v)
+     : IDENT;
+  $transform = $transform * s3;
+  _scale(v) children();
+}

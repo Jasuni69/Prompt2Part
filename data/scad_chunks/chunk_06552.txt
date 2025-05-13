@@ -1,0 +1,15 @@
+function u_sub(a,b) = is_undef(a) || is_undef(b)? undef : a - b;
+
+
+// Function: u_mul()
+// Synopsis: Returns the product of 2 numbers if both are defined, otherwise returns undef.
+// Topics: Undef Handling
+// See Also: u_add(), u_sub(), u_div()
+// Usage:
+//   x = u_mul(a, b);
+// Description:
+//   Multiplies `a` by `b`, returning the result, or undef if either value is `undef`.
+//   This emulates the way undefs used to be handled in versions of OpenSCAD before 2020.
+// Arguments:
+//   a = First value.
+//   b = Second value.

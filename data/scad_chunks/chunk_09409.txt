@@ -1,0 +1,12 @@
+function normalize(v) = v/norm(v);
+
+
+// Function: vector2d_angle()
+// Status: DEPRECATED, use `vector_angle()` instead.
+// Usage:
+//   vector2d_angle(v1,v2);
+// Description:
+//   Returns angle in degrees between two 2D vectors.
+// Arguments:
+//   v1 = First 2D vector.
+//   v2 = Second 2D vector.

@@ -1,0 +1,12 @@
+function testPoly(s=10)=[
+[0,0],
+[s,0],
+[s,s],
+[s/2,s/2],
+[0,s]
+];
+
+/** \page Functions \name triUmkreis
+\brief triUmkreis() will give the center [x,y] of the circle containing 3 points
+\param points points [[a],[b],[c]]
+*/

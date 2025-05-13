@@ -1,0 +1,9 @@
+function offsetPoints(pts, dist) = 
+  _os_offset_poly(_os_iterative_remove_edges(pts, dist), dist);
+   
+//  Orders the members of each point in the points list and removes or adds members as required.
+//  The return value is a 1D,2D or 3D points list
+//  pts      (list)   List of zero or more 1D, 2D or 3D points.
+//  order    (list)   Index list for member order. [0,1,2] causes no change. [1,0,2] swaps X and Y
+//  defaults (list)   List of member values if none is found. This makes it possible to turn 2D lists into 3D lists
+//  return   (list)   re-ordered list of 1D, 2D or 3D points.

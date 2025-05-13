@@ -1,0 +1,50 @@
+//    (n) = { <yappCoordBox>, yappCoordPCB }
+//    (n) = { yappNoFillet }
+//-------------------------------------------------------------------
+
+connectors   =
+  [
+  //  [9, 15, 10, 2.5, 6 + 1.25, 4.0, 9, 0, yappFrontRight]
+  // ,[9, 15, 10, 2.5, 6+ 1.25, 4.0, 9, 0, yappFrontLeft]
+  // ,[34, 15, 10, 2.5, 6+ 1.25, 4.0, 9, 0, yappFrontRight]
+  // ,[34, 15, 10, 2.5, 6+ 1.25, 4.0, 9, 0, yappFrontLeft]
+  ];
+
+//===================================================================
+//  *** Box Mounts ***
+//  Mounting tabs on the outside of the box
+//-------------------------------------------------------------------
+//  Default origin = yappCoordBox: box[0,0,0]
+//
+//  Parameters:
+//   Required:
+//    p(0) = pos : position along the wall : [pos,offset] : vector for position and offset X.
+//                    Position is to center of mounting screw in leftmost position in slot
+//    p(1) = screwDiameter
+//    p(2) = width of opening in addition to screw diameter 
+//                    (0=Circular hole screwWidth = hole twice as wide as it is tall)
+//    p(3) = height
+//   Optional:
+//    p(4) = filletRadius : Default = 0/Auto(0 = auto size)
+//    n(a) = { yappLeft | yappRight | yappFront | yappBack } : one or more
+//    n(b) = { yappNoFillet }
+//    n(c) = { <yappBase>, yappLid }
+//    n(d) = { yappCenter } : shifts Position to be in the center of the opening instead of 
+//                            the left of the opening
+//    n(e) = { <yappGlobalOrigin>, yappLeftOrigin } : Only affects Back and Right Faces
+//-------------------------------------------------------------------
+boxMounts =
+[
+  [shellWidth/2, 3, 10, 3, yappCenter, yappFront, yappBack]//, yappCenter]
+ //  [[10,10], 3, 0, 3, yappFront, yappBack]
+];
+
+
+//===================================================================
+//  *** Cutouts ***
+//    There are 6 cutouts one for each surface:
+//      cutoutsBase, cutoutsLid, cutoutsFront, cutoutsBack, cutoutsLeft, cutoutsRight
+//-------------------------------------------------------------------
+//  Default origin = yappCoordBox: box[0,0,0]
+//
+//                        Required                Not Used        Note

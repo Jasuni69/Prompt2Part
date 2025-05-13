@@ -1,0 +1,1 @@
+function vero_holes(type)          = type[2];   //! Number of holes in each strip

@@ -1,0 +1,7 @@
+module test_f_min3() {
+    _test_fn3arg(
+        function (a,b,c) f_min3(a,b,c),
+        [[8,3,5,3], [-6,-7,5,-7], [-4,13,5,-4]]
+    );
+}
+test_f_min3();

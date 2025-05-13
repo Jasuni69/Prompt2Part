@@ -1,0 +1,415 @@
+module corner_profile(corners=CORNERS_ALL, except=[], r, d, convexity=10) {
+    check1 = assert($parent_geom != undef, "No object to attach to!");
+    r = max(0.01, get_radius(r=r, d=d, dflt=undef));
+    check2 = assert(is_num(r), "Bad r/d argument.");
+    corners = _corners(corners, except=except);
+    vecs = [for (i = [0:7]) if (corners[i]>0) CORNER_OFFSETS[i]];
+    all_vecs_are_corners = all([for (vec = vecs) sum(v_abs(vec))==3]);
+    check3 = assert(all_vecs_are_corners, "All vectors must be corners.");
+    for ($idx = idx(vecs)) {
+        vec = vecs[$idx];
+        anch = _find_anchor(vec, $parent_geom);
+        $attach_to = undef;
+        $attach_anchor = anch;
+        $profile_type = "corner";
+        rotang = vec.z<0?
+            [  0,0,180+v_theta(vec)-45] :
+            [180,0,-90+v_theta(vec)-45];
+        default_tag("remove"){
+            translate(anch[1]) {
+                rot(rotang) {
+                    down(0.01) {
+                        linear_extrude(height=r+0.01, center=false) {
+                            difference() {
+                                translate(-[0.01,0.01]) square(r);
+                                translate([r,r]) circle(r=r*0.999);
+                            }
+                        }
+                    }
+                    translate([r,r]) zrot(180) {
+                        rotate_extrude(angle=90, convexity=convexity) {
+                            right(r) xflip() {
+                                children();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// Section: Making your objects attachable
+
+
+// Module: attachable()
+// Synopsis: Manages the anchoring, spin, orientation, and attachments for an object.
+// Topics: Attachments
+// See Also: reorient()
+// Usage: Square/Trapezoid Geometry
+//   attachable(anchor, spin, two_d=true, size=, [size2=], [shift=], [override=], ...) {OBJECT; children();}
+// Usage: Circle/Oval Geometry
+//   attachable(anchor, spin, two_d=true, r=|d=, ...) {OBJECT; children();}
+// Usage: 2D Path/Polygon Geometry
+//   attachable(anchor, spin, two_d=true, path=, [extent=], ...) {OBJECT; children();}
+// Usage: 2D Region Geometry
+//   attachable(anchor, spin, two_d=true, region=, [extent=], ...) {OBJECT; children();}
+// Usage: Cubical/Prismoidal Geometry
+//   attachable(anchor, spin, [orient], size=, [size2=], [shift=], [override=],  ...) {OBJECT; children();}
+// Usage: Cylindrical Geometry
+//   attachable(anchor, spin, [orient], r=|d=, l=, [axis=], ...) {OBJECT; children();}
+// Usage: Conical Geometry
+//   attachable(anchor, spin, [orient], r1=|d1=, r2=|d2=, l=, [axis=], ...) {OBJECT; children();}
+// Usage: Spheroid/Ovoid Geometry
+//   attachable(anchor, spin, [orient], r=|d=, ...) {OBJECT; children();}
+// Usage: Extruded Path/Polygon Geometry
+//   attachable(anchor, spin, path=, l=|h=, [extent=], ...) {OBJECT; children();}
+// Usage: Extruded Region Geometry
+//   attachable(anchor, spin, region=, l=|h=, [extent=], ...) {OBJECT; children();}
+// Usage: VNF Geometry
+//   attachable(anchor, spin, [orient], vnf=, [extent=], ...) {OBJECT; children();}
+// Usage: Pre-Specified Geometry
+//   attachable(anchor, spin, [orient], geom=) {OBJECT; children();}
+//
+// Description:
+//   Manages the anchoring, spin, orientation, and attachments for OBJECT, located in a 3D volume or 2D area.
+//   A managed 3D volume is assumed to be vertically (Z-axis) oriented, and centered.
+//   A managed 2D area is just assumed to be centered.  The shape to be managed is given
+//   as the first child to this module, and the second child should be given as `children()`.
+//   For example, to manage a conical shape:
+//   ```openscad
+//   attachable(anchor, spin, orient, r1=r1, r2=r2, l=h) {
+//       cyl(r1=r1, r2=r2, l=h);
+//       children();
+//   }
+//   ```
+//   .
+//   If this is *not* run as a child of `attach()` with the `to` argument
+//   given, then the following transformations are performed in order:
+//   * Translates so the `anchor` point is at the origin (0,0,0).
+//   * Rotates around the Z axis by `spin` degrees counter-clockwise.
+//   * Rotates so the top of the part points towards the vector `orient`.
+//   .
+//   If this is called as a child of `attach(from,to)`, then the info
+//   for the anchor points referred to by `from` and `to` are fetched,
+//   which will include position, direction, and spin.  With that info,
+//   the following transformations are performed:
+//   * Translates this part so its anchor position matches the parent's anchor position.
+//   * Rotates this part so its anchor direction vector exactly opposes the parent's anchor direction vector.
+//   * Rotates this part so its anchor spin matches the parent's anchor spin.
+//   .
+//   In addition to handling positioning of the attachable object, 
+//   this module is also responsible for handing coloring of objects with {{recolor()}} and {{color_this()}}, and
+//   it is responsible for processing tags and determining whether the object should
+//   display or not in the current context.  The determination based on the tags of whether to display the attachable object
+//   often occurs in this module, which means that an object which does not display (e.g. a "remove" tagged object
+//   inside {{diff()}}) cannot have internal {{tag()}} calls that change its tags and cause submodel
+//   portions to display: the entire object simply does not run.  If you want the use the attachable object's internal tags outside
+//   of the attachable object you can set `expose_tags=true` which delays the determination to display objects to the children.
+//   For this to work correctly, all of the children must be attachables.  An example situation where you should set
+//   `expose_tags=true` is when you want to have negative space in an attachable object that gets removed from the parent via
+//   a "remove" tagged component of your attachable.  
+//   .
+//   Application of {{recolor()}} and {{color_this()}} also happens in this module and normally it applies to the
+//   entire attachable object, so coloring commands that you give internally in the first child to `attachable()` have no effect.
+//   Generally it makes sense that if a user specifies a color for an attachable object, the entire object is displayed
+//   in that color, but if you want to retain control of color for sub-parts of an attachable object, you can use
+//   the `keep_color=true` option, which delays the assignment of colors to the child level.  For this to work
+//   correctly, all of the sub-parts of your attachable object must be attachables.  Also note that this option could
+//   be confusing to users who don't understand why color commands are not working on the object.
+//   .
+//   Note that anchors created by attachable() are generally intended for use by the user-supplied children of the attachable object, but they
+//   are available internally and can be used in the object's definition.  
+//   .
+//   For a step-by-step explanation of attachments, see the [Attachments Tutorial](Tutorial-Attachments).
+//
+// Arguments:
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//   ---
+//   size = If given as a 3D vector, contains the XY size of the bottom of the cuboidal/prismoidal volume, and the Z height.  If given as a 2D vector, contains the front X width of the rectangular/trapezoidal shape, and the Y length.
+//   size2 = If given as a 2D vector, contains the XY size of the top of the prismoidal volume.  If given as a number, contains the back width of the trapezoidal shape.
+//   shift = If given as a 2D vector, shifts the top of the prismoidal or conical shape by the given amount.  If given as a number, shifts the back of the trapezoidal shape right by that amount.  Default: No shift.
+//   r = Radius of the cylindrical/conical volume.  Can be a scalar, or a list of sizes per axis.
+//   d = Diameter of the cylindrical/conical volume.  Can be a scalar, or a list of sizes per axis.
+//   r1 = Radius of the bottom of the conical volume.  Can be a scalar, or a list of sizes per axis.
+//   r2 = Radius of the top of the conical volume.  Can be a scalar, or a list of sizes per axis.
+//   d1 = Diameter of the bottom of the conical volume.  Can be a scalar, a list of sizes per axis.
+//   d2 = Diameter of the top of the conical volume.  Can be a scalar, a list of sizes per axis.
+//   l/h = Length of the cylindrical, conical, or extruded path volume along axis.
+//   vnf = The [VNF](vnf.scad) of the volume.
+//   path = The path to generate a polygon from.
+//   region = The region to generate a shape from.
+//   extent = If true, calculate anchors by extents, rather than intersection, for VNFs and paths.  Default: true.
+//   cp = If given, specifies the centerpoint of the volume.  Default: `[0,0,0]`
+//   offset = If given, offsets the perimeter of the volume around the centerpoint.
+//   anchors = If given as a list of anchor points, allows named anchor points.
+//   two_d = If true, the attachable shape is 2D.  If false, 3D.  Default: false (3D)
+//   axis = The vector pointing along the axis of a geometry.  Default: UP
+//   override = Function that takes an anchor and for 3d returns a triple `[position, direction, spin]` or for 2d returns a pair `[position,direction]` to use for that anchor to override the normal one.  You can also supply a lookup table that is a list of `[anchor, [position, direction, spin]]` entries.  If the direction/position/spin that is returned is undef then the default will be used.  This option applies only to the "trapezoid" and "prismoid" geometry types.  
+//   geom = If given, uses the pre-defined (via {{attach_geom()}} geometry.
+//   expose_tags = If true then delay the decision to display or not display this object to the children, which it possible for tags to respond to operations like {{diff()}} used outside the attachble object.  Only works correctly if everything in the attachable is also attachable.  Default: false
+//   keep_color = If true then delay application of color to the children, which means that externally applied color is overridden by color specified within the attachable.  Only works properly if everything in the attachable is also attacahble.  Default: false
+//
+// Side Effects:
+//   `$parent_anchor` is set to the parent object's `anchor` value.
+//   `$parent_spin` is set to the parent object's `spin` value.
+//   `$parent_orient` is set to the parent object's `orient` value.
+//   `$parent_geom` is set to the parent object's `geom` value.
+//   `$parent_size` is set to the parent object's cubical `[X,Y,Z]` volume size.
+//   `$color` is used to set the color of the object
+//   `$save_color` is used to revert color to the parent's color
+//
+// Example(NORENDER): Cubical Shape
+//   attachable(anchor, spin, orient, size=size) {
+//       cube(size, center=true);
+//       children();
+//   }
+//
+// Example(NORENDER): Prismoidal Shape
+//   attachable(
+//       anchor, spin, orient,
+//       size=point3d(botsize,h),
+//       size2=topsize,
+//       shift=shift
+//   ) {
+//       prismoid(botsize, topsize, h=h, shift=shift);
+//       children();
+//   }
+//
+// Example(NORENDER): Cylindrical Shape, Z-Axis Aligned
+//   attachable(anchor, spin, orient, r=r, l=h) {
+//       cyl(r=r, l=h);
+//       children();
+//   }
+//
+// Example(NORENDER): Cylindrical Shape, Y-Axis Aligned
+//   attachable(anchor, spin, orient, r=r, l=h, axis=BACK) {
+//       cyl(r=r, l=h);
+//       children();
+//   }
+//
+// Example(NORENDER): Cylindrical Shape, X-Axis Aligned
+//   attachable(anchor, spin, orient, r=r, l=h, axis=RIGHT) {
+//       cyl(r=r, l=h);
+//       children();
+//   }
+//
+// Example(NORENDER): Conical Shape, Z-Axis Aligned
+//   attachable(anchor, spin, orient, r1=r1, r2=r2, l=h) {
+//       cyl(r1=r1, r2=r2, l=h);
+//       children();
+//   }
+//
+// Example(NORENDER): Conical Shape, Y-Axis Aligned
+//   attachable(anchor, spin, orient, r1=r1, r2=r2, l=h, axis=BACK) {
+//       cyl(r1=r1, r2=r2, l=h);
+//       children();
+//   }
+//
+// Example(NORENDER): Conical Shape, X-Axis Aligned
+//   attachable(anchor, spin, orient, r1=r1, r2=r2, l=h, axis=RIGHT) {
+//       cyl(r1=r1, r2=r2, l=h);
+//       children();
+//   }
+//
+// Example(NORENDER): Spherical Shape
+//   attachable(anchor, spin, orient, r=r) {
+//       sphere(r=r);
+//       children();
+//   }
+//
+// Example(NORENDER): Extruded Polygon Shape, by Extents
+//   attachable(anchor, spin, orient, path=path, l=length) {
+//       linear_extrude(height=length, center=true)
+//           polygon(path);
+//       children();
+//   }
+//
+// Example(NORENDER): Extruded Polygon Shape, by Intersection
+//   attachable(anchor, spin, orient, path=path, l=length, extent=false) {
+//       linear_extrude(height=length, center=true)
+//           polygon(path);
+//       children();
+//   }
+//
+// Example(NORENDER): Arbitrary VNF Shape, by Extents
+//   attachable(anchor, spin, orient, vnf=vnf) {
+//       vnf_polyhedron(vnf);
+//       children();
+//   }
+//
+// Example(NORENDER): Arbitrary VNF Shape, by Intersection
+//   attachable(anchor, spin, orient, vnf=vnf, extent=false) {
+//       vnf_polyhedron(vnf);
+//       children();
+//   }
+//
+// Example(NORENDER): 2D Rectangular Shape
+//   attachable(anchor, spin, orient, two_d=true, size=size) {
+//       square(size, center=true);
+//       children();
+//   }
+//
+// Example(NORENDER): 2D Trapezoidal Shape
+//   attachable(
+//       anchor, spin, orient,
+//       two_d=true,
+//       size=[x1,y],
+//       size2=x2,
+//       shift=shift
+//   ) {
+//       trapezoid(w1=x1, w2=x2, h=y, shift=shift);
+//       children();
+//   }
+//
+// Example(NORENDER): 2D Circular Shape
+//   attachable(anchor, spin, orient, two_d=true, r=r) {
+//       circle(r=r);
+//       children();
+//   }
+//
+// Example(NORENDER): Arbitrary 2D Polygon Shape, by Extents
+//   attachable(anchor, spin, orient, two_d=true, path=path) {
+//       polygon(path);
+//       children();
+//   }
+//
+// Example(NORENDER): Arbitrary 2D Polygon Shape, by Intersection
+//   attachable(anchor, spin, orient, two_d=true, path=path, extent=false) {
+//       polygon(path);
+//       children();
+//   }
+//
+// Example(NORENDER): Using Pre-defined Geometry
+//   geom = atype=="perim"? attach_geom(two_d=true, path=path, extent=false) :
+//       atype=="extents"? attach_geom(two_d=true, path=path, extent=true) :
+//       atype=="circle"? attach_geom(two_d=true, r=r) :
+//       assert(false, "Bad atype");
+//   attachable(anchor, spin, orient, geom=geom) {
+//       polygon(path);
+//       children();
+//   }
+//
+// Example: An object can be designed to attach as negative space using {{diff()}}, but if you want an object to include both positive and negative space then you run into trouble because tags inside the `attachable()` are ignored.  One solution is to call attachable() twice.  This example shows how two calls to  attachable can create an object with positive and negative space.  Note, however, that children in the negative space are differenced away: the highlighted little cube does not survive into the final model.
+//   module thing(anchor,spin,orient) {
+//      tag("remove") attachable(size=[15,15,15],anchor=anchor,spin=spin,orient=orient){
+//        cuboid([10,10,16]);
+//        union(){}   // dummy children
+//      }
+//      attachable(size=[15,15,15], anchor=anchor, spin=spin, orient=orient){
+//        cuboid([15,15,15]);
+//        children();
+//      }
+//   }
+//   diff()
+//     cube([19,10,19])
+//       attach([FRONT],overlap=-4)
+//         thing(anchor=TOP)
+//           # attach(TOP) cuboid(2,anchor=TOP);
+// Example: Here is an example where the "keep" tag allows children to appear in the negative space.  That tag is also needed for this module to produce the desired output.  As above, the tag must be applied outside the attachable() call.
+//   module thing(anchor = CENTER, spin = 0, orient = UP) {
+//      tag("remove") attachable(anchor, spin, orient, d1=0,d2=95,h=33) {
+//          cylinder(h = 33.1, d1 = 0, d2 = 95, anchor=CENTER);
+//          union(){}  // dummy children
+//      }
+//      tag("keep") attachable(anchor, spin, orient,d1=0,d2=95,h=33) {
+//            cylinder(h = 33, d = 10,anchor=CENTER);
+//            children();
+//        }
+//    }
+//    diff()
+//      cube(100)
+//        attach([FRONT,TOP],overlap=-4)
+//          thing(anchor=TOP)
+//            tube(ir=12,h=10);
+// Example: A different way to achieve similar effects to the above to examples is to use the `expose_tags` parameter.  This parameter allows you to use just one call to attachable.  The second example above can also be rewritten like this. 
+//   module thing(anchor,spin,orient) {
+//      attachable(size=[15,15,15],anchor=anchor,spin=spin,orient=orient,expose_tags=true){
+//        union(){
+//          cuboid([15,15,15]);
+//          tag("remove")cuboid([10,10,16]);
+//        }
+//        children();
+//      }
+//   }
+//   diff()
+//     cube([19,10,19])
+//       attach([FRONT],overlap=-4)
+//         thing(anchor=TOP);
+// Example: An advantage of using `expose_tags` is that it can work on nested constructions.  Here the child cylinder is aligned relative to its parent and removed from the calling parent object.
+//   $fn=64;
+//   module thing(anchor=BOT){
+//     attachable(anchor = anchor,d=9,h=6,expose_tags=true){
+//       cyl(d = 9, h = 6) 
+//         tag("remove") 
+//            align(RIGHT+TOP,inside=true) 
+//                 left(1)up(1)cyl(l=11, d=3);
+//       children();
+//     }
+//   }
+//   back_half()
+//     diff()
+//       cuboid(10)
+//         position(TOP)thing(anchor=BOT);
+// Example(3D,NoAxes): Here an attachable module uses {{recolor()}} to change the color of a sub-part, producing the result shown on the left.  But if the caller applies color to the attachable, then both the green and yellow are changed, as shown on the right.  
+//   module thing(anchor=CENTER) {
+//       attachable(anchor,size=[10,10,10]) {
+//           cuboid(10)
+//             position(TOP) recolor("green")
+//               cuboid(5,anchor=BOT);
+//           children();
+//       }
+//   }
+//   move([-15,-15])
+//   thing()
+//     attach(RIGHT,BOT)
+//       recolor("blue") cyl(d=5,h=5);
+//   recolor("pink") thing()
+//     attach(RIGHT,BOT)
+//       recolor("blue") cyl(d=5,h=5);
+// Example(3D,NoAxes): Using the `keep_color=true` option enables the green color to persist, even when the user specifies a color.
+//   module thing(anchor=CENTER) {
+//       attachable(anchor,size=[10,10,10],keep_color=true) {
+//           cuboid(10)
+//             position(TOP) recolor("green")
+//               cuboid(5,anchor=BOT);
+//           children();
+//       }
+//   }
+//   recolor("pink") thing()
+//     attach(RIGHT,BOT)
+//       recolor("blue") cyl(d=5,h=5);
+// Example(3D,NoScale): This example defines named anchors and then uses them internally in the object definition to make a cutout in the socket() object and to attach the plug on the plug() object.  These objects can be connected using the "socket" and "plug" named anchors, which will fit the plug into the socket.
+//   module socket(anchor, spin, orient) {
+//       sz = 50;
+//       prong_size = 10;
+//       anchors = [
+//           named_anchor("socket", [sz/2,.15*sz,.2*sz], RIGHT, 0)
+//       ];
+//       attachable(anchor, spin, orient, size=[sz,sz,sz], anchors=anchors) {
+//           diff() {
+//               cuboid(sz);
+//               tag("remove") attach("socket") zcyl(d=prong_size, h=prong_size*2, $fn=6);
+//           }
+//           children();
+//       }
+//   }
+//   module plug(anchor, spin, orient) {
+//       sz = 30;
+//       prong_size = 9.5;
+//       anchors=[
+//           named_anchor("plug", [0,sz/3,sz/2], UP, 0)
+//       ];
+//       attachable(anchor, spin, orient, size=[sz,sz,sz], anchors=anchors) {
+//          union(){
+//            cuboid(sz);
+//            attach("plug") cyl(d=prong_size, h=prong_size*2,$fn=6);
+//          }
+//          children();
+//       }
+//   }
+//   socket();
+//   right(75) plug();

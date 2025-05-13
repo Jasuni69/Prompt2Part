@@ -1,0 +1,54 @@
+function mirror_copy(v=[0,0,1], offset=0, cp, p=_NO_ARG) =
+    let(
+        cp = is_vector(v,4)? plane_normal(v) * v[3] :
+            is_vector(cp)? cp :
+            is_num(cp)? cp*unit(v) :
+            [0,0,0],
+        nv = is_vector(v,4)? plane_normal(v) : unit(v),
+        off = nv*offset,
+        mats = [
+            translate(off),
+            translate(cp) *
+                mirror(nv) *
+                translate(-cp) *
+                translate(off)
+        ]
+    )
+    p==_NO_ARG? mats : [for (m = mats) apply(m, p)];
+
+
+
+////////////////////
+// Section: Distributing children individually along a line
+///////////////////
+// Module: xdistribute()
+// Synopsis: Distributes each child, individually, out along the X axis.
+// SynTags: Trans
+// See Also: xdistribute(), ydistribute(), zdistribute(), distribute()
+//
+// Usage:
+//   xdistribute(spacing, [sizes]) CHILDREN;
+//   xdistribute(l=, [sizes=]) CHILDREN;
+//
+//
+// Description:
+//   Spreads out the children individually along the X axis. 
+//   Every child is placed at a different position, in order.
+//   This is useful for laying out groups of disparate objects
+//   where you only really care about the spacing between them.
+//
+// Arguments:
+//   spacing = spacing between each child. (Default: 10.0)
+//   sizes = Array containing how much space each child will need.
+//   l = Length to distribute copies along.
+//
+// Side Effects:
+//   `$pos` is set to the relative centerpoint of each child copy, and can be used to modify each child individually.
+//   `$idx` is set to the index number of each child being copied.
+//
+// Example:
+//   xdistribute(sizes=[100, 10, 30], spacing=40) {
+//       sphere(r=50);
+//       cube([10,20,30], center=true);
+//       cylinder(d=30, h=50, center=true);
+//   }

@@ -1,0 +1,21 @@
+module screwM4(h=16,nut=true
+              ,capMargin=3.8,nutMargin=.4,noNut=false)
+clear(grey)
+{
+    if(!noNut)
+      g(align(TODOWN,XCENTER,YCENTER),
+          Z(3.1),solid())
+      tubeFast(d=margin(8.1)
+        ,h=margin(3.1,nutMargin),$fn=6);
+    g(align(TOUP,XCENTER,YCENTER),solid())
+    {
+      tubeFast(dOuter = margin(4),h = h-2.4+.02);
+      Z(h-2.4)
+        tubeFast(d2=7.5,d = margin(4),h = 2.4+.02);
+      Z(h-.02)
+        tubeFast(d=margin(8.2)
+                ,wall=2
+                ,h = .01+removeExtra(capMargin));
+    }
+    children();
+}

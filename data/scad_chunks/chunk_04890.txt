@@ -1,0 +1,1 @@
+function rotatePoint(pt, angle=0) = angle==0? pt : let(_c=cos(angle), _s=sin(angle)) pt[2]==undef? [(_c * pt[0]) + (_s * pt[1]), (_c * pt[1]) - (_s * pt[0])] : [(_c * pt[0]) + (_s * pt[1]), (_c * pt[1]) - (_s * pt[0]), pt[2]];

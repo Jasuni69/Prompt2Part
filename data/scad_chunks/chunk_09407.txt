@@ -1,0 +1,7 @@
+function vdiv(v1, v2) = [for (i = [0:len(v1)-1]) v1[i]/v2[i]];
+
+
+// Function: vabs()
+// Description: Returns a vector of the absolute value of each element of vector `v`.
+// Arguments:
+//   v = The vector to get the absolute values of.

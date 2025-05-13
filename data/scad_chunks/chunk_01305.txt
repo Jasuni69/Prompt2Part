@@ -1,0 +1,1 @@
+function gm_shaft_flat_l(type) = gm_shaft(type)[3]; //! Length of the shaft flat section

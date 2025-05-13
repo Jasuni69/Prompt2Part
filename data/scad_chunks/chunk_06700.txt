@@ -1,0 +1,20 @@
+module test_all_nonnegative() {
+    assert(!all_nonnegative(-2));
+    assert(all_nonnegative(0));
+    assert(all_nonnegative(2));
+    assert(all_nonnegative([0,0,0]));
+    assert(all_nonnegative([0,1,2]));
+    assert(all_nonnegative([3,1,2]));
+    assert(!all_nonnegative([3,-1,2]));
+    assert(!all_nonnegative([-3,-1,-2]));
+    assert(!all_nonnegative([[-5,-7],[-3,-1,-2]]));
+    assert(!all_nonnegative([[-5,-7],[-3,1,-2]]));
+    assert(!all_nonnegative([[5,7],[3,-1,2]]));
+    assert(!all_nonnegative([[5,7],[3,1,2]]));
+    assert(!all_nonnegative([]));
+    assert(!all_nonnegative(true));
+    assert(!all_nonnegative(false));
+    assert(!all_nonnegative("foo"));
+    assert(!all_nonnegative([0:1:2]));
+}
+test_all_nonnegative();

@@ -1,0 +1,12 @@
+module test_ring_extrude_closed() {
+    echo("==== test_ring_extrude_closed ====");
+
+    shape_pts = [
+        [2, -10],
+        [2, 10],
+        [-2, 10],
+        [-2, -10]
+    ];
+
+    ring_extrude(shape_pts, radius = 50, twist = 180);
+}

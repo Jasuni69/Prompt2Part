@@ -1,0 +1,2 @@
+function strap(width = 18, thickness = 2, screw = M3_pan_screw, panel_thickness = 3, extension = 25) = //! Construct a property list for a strap
+ [ width, thickness, screw, panel_thickness, extension ];

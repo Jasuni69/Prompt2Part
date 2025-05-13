@@ -1,0 +1,2 @@
+function offset(points, offset) =                                       //! Offset a 2D polygon, breaks for concave shapes and negative offsets if the offset is more than half the smallest feature size.
+    rounded_polygon([for(p = points) [p.x, p.y, offset]]);

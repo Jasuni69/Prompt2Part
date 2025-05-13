@@ -1,0 +1,8 @@
+function _seg2eq(pa, pb, dist) = 
+  let (ab = [pb[0]-pa[0], pb[1]-pa[1]])
+  let (abl_un = [-ab[1], ab[0]])
+  let (abl_len = sqrt(abl_un[0]*abl_un[0] + abl_un[1]*abl_un[1]))
+  let (abl = [ abl_un[0]/abl_len, abl_un[1]/abl_len ])
+  [ abl[0], abl[1], abl[0]*pa[0] + abl[1]*pa[1] - dist ];
+
+// given two equations for lines, solve two equations to find intersection

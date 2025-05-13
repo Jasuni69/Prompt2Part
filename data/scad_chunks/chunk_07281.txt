@@ -1,0 +1,16 @@
+module ThreeProjection(s=10,cut=true,active=[1,1,1],help){
+    s=is_list(s)?s:[s,s];
+    cut=is_list(cut)?cut:[cut,cut,cut];
+    $info=false;
+    $helpM=false;
+   if(active.z) projection(cut=cut.z)children();
+   if(active.x) translate([s.x,0,0])projection(cut=cut.x)rotate([0,90,0])children();
+   if(active.y) translate([0,s.y,0])projection(cut=cut.y)rotate([-90,0,0])children();
+    %children();
+    MO(!$children);
+    HelpTxt("3Projection",["s",s,"cut",cut,"active",active],help);
+    
+}
+
+
+/// Arranges (and color) list of children for display

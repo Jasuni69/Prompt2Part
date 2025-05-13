@@ -1,0 +1,2 @@
+function bezier_path(v, steps = 100) = //! Returns a Bezier path from control points `v` with `steps` segments
+    [for(i = [0 : steps], t = i / steps) bezier(t, v)];

@@ -1,0 +1,15 @@
+module test_cylindrical_to_xyz() {
+    assert(approx(cylindrical_to_xyz(100,90,10),[0,100,10]));
+    assert(approx(cylindrical_to_xyz(100,270,-10),[0,-100,-10]));
+    assert(approx(cylindrical_to_xyz(100,-90,-10),[0,-100,-10]));
+    assert(approx(cylindrical_to_xyz(100,180,0),[-100,0,0]));
+    assert(approx(cylindrical_to_xyz(100,0,0),[100,0,0]));
+    assert(approx(cylindrical_to_xyz(100,45,10),[100*sqrt(2)/2,100*sqrt(2)/2,10]));
+    assert(approx(cylindrical_to_xyz([100,90,10]),[0,100,10]));
+    assert(approx(cylindrical_to_xyz([100,270,-10]),[0,-100,-10]));
+    assert(approx(cylindrical_to_xyz([100,-90,-10]),[0,-100,-10]));
+    assert(approx(cylindrical_to_xyz([100,180,0]),[-100,0,0]));
+    assert(approx(cylindrical_to_xyz([100,0,0]),[100,0,0]));
+    assert(approx(cylindrical_to_xyz([100,45,10]),[100*sqrt(2)/2,100*sqrt(2)/2,10]));
+}
+test_cylindrical_to_xyz();

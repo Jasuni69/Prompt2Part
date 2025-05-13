@@ -1,0 +1,15 @@
+module CutCorner(insetby, cornerpos=[0,0,0], positives=[undef,undef,undef]) {
+  clearance = 4*insetby + 0.001;
+  positives = positives==[undef,undef,undef] ? cornerpos : positives;
+  angle_offset = (positives[0]?90:0) + (positives[1]?-90:0)
+    + ((positives[0]&&positives[1])?180:0);
+
+  difference() {
+    children();
+    translate(cornerpos)
+    rotate([0, 0, 225+angle_offset])
+    rotate([0, positives[2]?-45:45, 0])
+    translate([-insetby, -clearance/2, -clearance/2])
+    cube([clearance, clearance, clearance]);
+  }
+}

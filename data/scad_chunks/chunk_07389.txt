@@ -1,0 +1,3 @@
+function RotEx(rot=0,punkte=profil(rot=60),verschieb=dn/2,steigung=1,detail=detail)=[for(rotation=[0:detail*rot/360])for(i=[0:len(punkte)-1])
+    concat((punkte[i][0]+verschieb)*sin(rotation*360/detail),punkte[i][1]+rotation/detail*steigung,(punkte[i][0]+verschieb)*cos(rotation*360/detail))
+];

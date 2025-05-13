@@ -1,0 +1,125 @@
+module Prisma(x1=12,y1,z,c1=5,s=1,x2,y2,x2d=0,y2d=0,rad,c2=0,vC=[0,0,1],cRot=0,fnC=0,fnS=0,fs=fs,center=false,r,deg=[50,90],optimize=false,name,help){
+
+
+    helpX1=x1;
+    helpY1=y1;
+    helpX2=x2;
+    helpY2=y2;    
+    helpZ=z;
+    helpS=s;
+    helpC1=c1;
+    
+    simple=(x1==x2||is_undef(x2))&&(y1==y2||is_undef(y2))&&!x2d&&!y2d&&!c2&&vC==[0,0,1]&&!optimize?true:false;
+    
+    center=is_list(center)?v3(center):[1,1,center];
+    rad=is_undef(rad)?[s,s]/2:is_list(rad)?rad:[rad,rad];
+    r=is_undef(r)?c1/2*[1,1,1,1]:is_list(r)?r:[r,r,r,r];
+    
+    x=is_list(x1)?x1[0]:x1;
+    y=is_list(x1)?x1[1]:is_undef(y1)?x1:y1;
+    
+    hErr=optimize?0:s/2-cos(90/ceil((is_num(fnS)&&fnS?fnS:fs2fn(r=s/2,fs=fs,grad=360))/2))*s/2; // missing sphere piece
+    z=(is_undef(x1[2])?is_undef(z)?x:z:x1[2])+ (simple?0:hErr*2);
+    s=min(x,y,is_undef(z)?0:z,max(vSum(rad),0));
+    c1=min(max(r[0]*2,0),x,y);
+    
+    cylinderh=c1?minVal:0;
+    
+    x1=c1-s>0?vC[1]?max(x-cylinderh-s,minVal):max(x-c1,minVal):max(x-s,minVal);
+    y1=c1-s>0?vC[0]?max(y-cylinderh-s,minVal):max(y-c1,minVal):max(y-s,minVal);
+    
+    h=vC[0]||vC[1]?c1?max(z-c1,minVal):max(z-s,minVal):c2?minVal:z-s-cylinderh;
+    //h=z-s-cylinderh;
+    
+    cylinderd2=c2?c2:c1;
+    
+    y2=is_list(x2)?c1-s>0?vC[0]?max(x2[1]-cylinderh-s,minVal):max(x2[1]-c1,minVal):max(x2[1]-s,minVal)
+                  :is_undef(y2)?y1:c1-s>0?vC[0]?max(y2-cylinderh-s,minVal):max(y2-c1,minVal):max(y2-s,minVal);    
+    x2=is_undef(x2)?x1
+                   :is_list(x2)?c1-s>0?vC[1]?max(x2[0]-cylinderh-s,minVal):max(x2[0]-c1,minVal):max(x2[0]-s,minVal):c1-s>0?vC[1]?max(x2-cylinderh-s,minVal):max(x2-c1,minVal):max(x2-s,minVal);
+        
+    
+
+CubePoints = [
+  [-x1/2,-y1/2,  0 ],  //0
+  [ x1/2,-y1/2,  0 ],  //1
+  [ x1/2, y1/2,  0 ],  //2
+  [-x1/2, y1/2,  0 ],  //3
+  [-x2/2+x2d,-y2/2+y2d,  h ],  //4
+  [ x2/2+x2d,-y2/2+y2d,  h ],  //5
+  [ x2/2+x2d, y2/2+y2d,  h ],  //6
+  [-x2/2+x2d, y2/2+y2d,  h ]]; //7
+  
+CubeFaces = [
+  [0,1,2,3],  // bottom
+  [4,5,1,0],  // front
+  [7,6,5,4],  // top
+  [5,6,2,1],  // right
+  [6,7,3,2],  // back
+  [7,4,0,3]]; // left
+  
+ if(simple) T(center.x?0:x/2,center.y?0:y/2)hull() {
+ $info=false;
+
+  if(r[0]==r[1]&&r[2]==r[3]&&r[1]==r[2])for(px=[-1,1]*(x-c1)/2,py=[-1,1]*(y-c1)/2)translate([px,py,0])Pille(l=z,d=max(minVal*4,c1),rad=rad,deg=deg,fs=fs,fn2=is_num(fnS)?fnS/4:undef,fn=fnC,center=center.z,name=name);
+
+  else{
+  translate([-x/2+r[0],-y/2+r[0],0])Pille(l=z,r=max(minVal,r[0]),rad=rad,deg=deg,fs=fs,fn2=is_num(fnS)?fnS/4:undef,fn=fnC,center=center.z,name=name);
+  translate([ x/2-r[1],-y/2+r[1],0])Pille(l=z,r=max(minVal,r[1]),rad=rad,deg=deg,fs=fs,fn2=is_num(fnS)?fnS/4:undef,fn=fnC,center=center.z);
+  translate([ x/2-r[2], y/2-r[2],0])Pille(l=z,r=max(minVal,r[2]),rad=rad,deg=deg,fs=fs,fn2=is_num(fnS)?fnS/4:undef,fn=fnC,center=center.z);
+  translate([-x/2+r[3], y/2-r[3],0])Pille(l=z,r=max(minVal,r[3]),rad=rad,deg=deg,fs=fs,fn2=is_num(fnS)?fnS/4:undef,fn=fnC,center=center.z);
+  
+  }
+  }
+
+ else
+  T(center.x?0:x/2,center.y?0:y/2)translate([0,0,vC[0]||vC[1]?c1?c1/2:s/2:s/2+minVal/2-(center.z?z/2:hErr)])minkowski(){
+        polyhedron( CubePoints, CubeFaces,convexity=5 );
+        if(c1-s>0&&!optimize)rotate(a=90,v=vC)rotate(cRot)cylinder(c2?max(z-s-minVal,minVal):minVal,d1=c1-s,d2=cylinderd2-s,center=c2?false:true,$fn=round(fnC/4)*4,$fs=fs);
+        if(s){
+          if(!optimize)sphere(d=s,$fn=round(fnS/4)*4,$fs=fs);//OctaH(d=s,n=fnS);//
+          else Pille(vSum(rad),deg=deg,rad=rad,d=c1,fs=fs,fn2=is_num(fnS)?fnS/4:undef,fn=fnC);
+          }
+    }
+   vx=((x1+s)-(x2+s))/2/(z-s);
+   vy=((y1+s)-(y2+s))/2/(z-s); 
+   InfoTxt("Prisma",["SteigungX/Y",str(vx*100,"/",vy*100,"%"),"grad",str(atan(vx),"/",atan(vy),"°")],name); 
+    if(vSum(rad)>z)Echo(str(name," Prisma Σrad>z ! ",vSum(rad)," ⇒ ",s),color="red");
+    if(max(rad)*2>x)Echo(str(name," Prisma rad*2>x ! ",max(rad)*2," ⇒ ",s),color="red");
+    if(max(r)*2>x)Echo(str(name," Prisma 2r>x ! ",max(r)*2," ⇒ ",c1),color="red");
+    if(max(rad)*2>y)Echo(str(name," Prisma rad*2>y ! ",max(rad)*2," ⇒ ",s),color="red");
+    if(max(r)*2>y)Echo(str(name," Prisma 2r>y ! ",max(r)*2," ⇒ ",c1),color="red");
+
+    if(s>c1&&c1)Echo(str(name," Prisma s>c1 ! ⇒ C-Rundung = s "),color="warning");
+
+HelpTxt("Prisma",["x1",helpX1,",y1",helpY1,",z",helpZ,"c1",helpC1,"s",helpS,"x2",helpX2,"y2",helpY2,"x2d",x2d,"y2d",y2d,"rad",rad,"c2",c2,"vC",vC,"cRot",cRot,"fnC",fnC,",fnS",fnS,"fs",fs,"center",center,"deg",deg,"optimize",optimize,"name",name],help);
+}
+
+
+/** \name Spirale
+\page Polygons
+ module Spirale()
+ * \brief creates a spiral polygon
+ * ## Examples:
+ * Spirale();  
+ * Spirale(center=0,end=false,diff=5,grad=360);  
+ * Spirale(center=0,end=false,diff=-10,scale=0.5,hull=false,grad=360)circle(1);
+ * \param grad angle of rotation for the spiral
+ * \param diff difference for 360°
+ * \param radius,r1 start radius
+ * \param r2 if given calculates diff for grad
+ * \param rand the width of the spiral
+ * \param fn fraqments for the spiral path
+ * \param exp exponential change
+ * \param center centers diff around radius
+ * \param end if end circles applied false, true, 1 or 2
+ * \param scale scale the end of the spiral
+ * \param name name
+ * \param help=true for help
+*/
+
+/*
+Spirale(exp=1.0,diff=4,radius=10,grad=360,r2=undef,fn=200);
+Tz(-.1)Color()circle(10);
+Tz(-0.09)Color(.1)circle(6);
+// */

@@ -1,0 +1,1 @@
+function camera_lens_offset(type)   = type[3]; //! Offset of the lens center from the PCB centre

@@ -1,0 +1,10 @@
+module BOLTS_hex_socket_neg(t,s){
+	a = s/tan(60);
+	//The fudging here is to avoid coincident faces when subtracting from a
+	//body (see e.g. hex_socket)
+	translate([0,0,t/2-0.01]) union(){
+		rotate([0,0, 30]) cube([a,s,t+0.01],true);
+		rotate([0,0,150]) cube([a,s,t+0.01],true);
+		rotate([0,0,270]) cube([a,s,t+0.01],true);
+	}
+}

@@ -1,0 +1,26 @@
+function bezier_patch_flat(size, N=1, spin=0, orient=UP, trans=[0,0,0]) =
+    assert(N>0)
+    let(size = force_list(size,2))
+    assert(is_vector(size,2))
+    let(
+        patch = [
+            for (x=[0:1:N]) [
+                for (y=[0:1:N])
+                v_mul(point3d(size), [x/N-0.5, 0.5-y/N, 0])
+            ]
+        ],
+        m = move(trans) * rot(a=spin, from=UP, to=orient)
+    ) [for (row=patch) apply(m, row)];
+
+
+
+// Function: bezier_patch_reverse()
+// Synopsis: Reverses the orientation of a bezier patch.
+// Topics: Bezier Patches
+// See Also: bezier_patch_points(), bezier_patch_flat()
+// Usage:
+//   rpatch = bezier_patch_reverse(patch);
+// Description:
+//   Reverses the patch, so that the faces generated from it are flipped back to front.
+// Arguments:
+//   patch = The patch to reverse.

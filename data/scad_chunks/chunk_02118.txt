@@ -1,0 +1,10 @@
+module pocket_handle_hole_positions(type) { //! Place children at screw hole positions
+    f = pocket_handle_flange(type);
+    h = pocket_handle_hand_size(type);
+    x_pitch = (f.x + h.x) / 4;
+    y_pitch = (f.y + h.y) / 4;
+
+    for(x = [-1, 1], y = [-1, 1])
+        translate([x * x_pitch, y * y_pitch])
+            children();
+}

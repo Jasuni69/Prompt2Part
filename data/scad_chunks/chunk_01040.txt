@@ -1,0 +1,1 @@
+function screw_max_thread(type)       = type[8];     //! Maximum thread length

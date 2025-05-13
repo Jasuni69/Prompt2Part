@@ -1,0 +1,2 @@
+module vflip(flip=true)                                                             //! Invert children by doing a 180&deg; flip around the X axis
+    rotate([flip ? 180 : 0, 0, 0]) children();

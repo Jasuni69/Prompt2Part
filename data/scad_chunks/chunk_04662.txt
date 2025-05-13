@@ -1,0 +1,8 @@
+function CWorCCW(p)=
+	let(
+    Lp=len(p),
+	  e=[for(i=[0:Lp-1]) 
+      (p[listWrap(i+0,Lp)].x-p[listWrap(i+1,Lp)].x)*(p[listWrap(i+0,Lp)].y+p[listWrap(i+1,Lp)].y)
+    ]
+  )  
+  sign(polySum(e));

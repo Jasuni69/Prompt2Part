@@ -1,0 +1,67 @@
+module beziers() {
+    //
+    // Make Bezier control points to give specified length
+    //
+    control_points = adjust_bezier_length([[0, 0, 100], [0, 0, 0], [200, 0, 20], [100, -100, 50]], 250);
+    //
+    // Draw control points
+    //
+    color("green")
+        for(p = control_points)
+            translate(p)
+                sphere(1);
+    //
+    // Lines joining the control points
+    //
+    color("red")
+        sweep(control_points, circle_points(0.5, $fn = 64));
+    //
+    // Bezier curve path from control points
+    //
+    curve = bezier_path(control_points);
+    //
+    // Draw the curve
+    //
+    sweep(curve, circle_points(2, $fn = 64));
+    //
+    // Length computed from control points
+    //
+    length = bezier_length(control_points);
+    //
+    // Length computed from curve
+    //
+    length2 = path_length(curve);
+    assert(str(length) == str(length2), str(length, " ", length2));
+    //
+    // Minimum Z
+    //
+    min_z = bezier_min_z(control_points);
+    i = find_min_z(curve);
+    assert(str(min_z) == str(curve[i].z));
+
+    color("blue") {
+        translate(curve[i] + [0, 0, 2])
+            arrow();
+
+        translate(curve[i] - [0, 0, 2])
+            vflip()
+                arrow();
+    }
+
+    translate(control_points[1] - [0, 0, 2])
+        label(str("bezier_length = ", length, ", bezier_min_z = ", bezier_min_z(curve)), valign = "top");
+
+    path1 = [[20, 20,  0], [40, 20, 0]];
+    path2 = [[70, 40, -5], [60, 40, 0]];
+
+    color("green")
+        for(p = concat(path1, path2))
+            translate(p)
+                sphere(1);
+
+    color("orange")
+        sweep(bezier_join(path1, path2, 10), circle_points(0.5, $fn = 64));
+}
+
+if($preview)
+    beziers();

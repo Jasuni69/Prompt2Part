@@ -1,0 +1,93 @@
+function langL(r=5,l=0,z=undef,fn=ifn,fs=0,fa=fa)=l&&!ly?concat(
+  arc(r=r,deg=180,fn=fs?fs2fn(r=r,grad=180,fa=fa,fs=fs):fn,t=[0,0],rot=90,z=z),
+  arc(r=r,deg=180,fn=fs?fs2fn(r=r,grad=180,fa=fa,fs=fs):fn,t=[l,0],rot=-90,z=z)
+  )
+  :ly?concat(
+  arc(r=r,deg=90,fn=fs?fs2fn(r=r,grad=90,fa=fa,fs=fs):fn,t=[l,ly],rot=0,z=z),
+  arc(r=r,deg=90,fn=fs?fs2fn(r=r,grad=90,fa=fa,fs=fs):fn,t=[0,ly],rot=90,z=z),
+  arc(r=r,deg=90,fn=fs?fs2fn(r=r,grad=90,fa=fa,fs=fs):fn,t=[0,0],rot=180,z=z),
+  arc(r=r,deg=90,fn=fs?fs2fn(r=r,grad=90,fa=fa,fs=fs):fn,t=[l,0],rot=-90,z=z)
+  )
+      :arc(r=r,deg=360-360/(ifn360),fn=ifn360-1,z=z);
+
+stepRad=[(deg[0]-degC)/radFn[0],(deg[1]+degC)/(radFn[1])];
+
+
+
+points=concat(
+ extrude[0]?langL(r2[0],l,-extrude[0]):[], // ext
+ langL(r2[0],l,0),                         // base
+ deg[0]==90&&d2[0]?langL(r2[0],l,ih2[0]):[],
+ // center round bottom
+ irad[0]?
+  [for(i=[radFn[0]:-1:0]) each langL(r[0]+radDeltaX[0]+(irad[0]-irad[0]*cos(i*stepRad[0]+rotDeg[0]))*sign(deg[0]),l,z=h2[0]+(radDeltaH[0]-irad[0]*sin(i*stepRad[0]+rotDeg[0]))*sign(deg[0]) )]
+  :langL(r[0],l,h2[0]),                            // else center bottom
+// center round top 
+ irad[1]?
+  [for(i=[0:radFn[1]]) each langL(r[1]+radDeltaX[1]+(irad[1]-irad[1]*cos(i*stepRad[1]+rotDeg[1]))*sign(deg[1]),l,z=h2[0]+hc-(radDeltaH[1]-irad[1]*sin(i*stepRad[1]+rotDeg[1]))*sign(deg[1]) )]
+  : langL(r[1],l,h2[0]+hc),                         // else center top
+ deg[1]==90&&d2[1]?langL(r2[1],l,h-ih2[1]):[],
+ langL(r2[1],l,h),                         // top
+ extrude[1]?langL(r2[1],l,h+extrude[1]):[] // ext
+ );
+ 
+
+
+ points2D=[
+   if(extrude[0])[-r2[0],0-extrude[0]],
+   if(extrude[0])[ r2[0],0-extrude[0]],
+   [ r2[0],0],
+   if(!irad[0]||!deg[0])[ r[0],h2[0]],
+   if(irad[0]&&deg[0])each arc(r=-irad[0],deg=-deg[0]+rotDeg[0],t=[r[0]+radDeltaX[0],h2[0]] + sign(deg[0])*[irad[0],radDeltaH[0]],rot=deg[0]>0?deg[0]:180+deg[0],rev=false,fn=radFn[0]),
+   if(!irad[1]||!deg[1])[ r[1],h2[0]+hc],
+   
+   if(irad[1]&&deg[1])each arc(r=-irad[1],deg=-deg[1]+rotDeg[1],t=[r[1]+radDeltaX[1],h2[0]+hc] + sign(deg[1])*[irad[1],-radDeltaH[1] ],rot=-rotDeg[1] + (deg[1]>0?0:180),rev=false,fn=radFn[1]),
+
+   [ r2[1],vSum(h2)+hc],
+   if(extrude[1])[ r2[1],vSum(h2)+hc+extrude[1]],
+   if(extrude[1])[-r2[1],vSum(h2)+hc+extrude[1]],
+   [-r2[1],vSum(h2)+hc],
+   if(!irad[1]||!deg[1])[-r[1],h2[0]+hc],
+   if(irad[1]&&deg[1])each arc(r=-irad[1],deg=-deg[1]+rotDeg[1],t=[-r[1]-radDeltaX[1],h2[0]+hc] - sign(deg[1])*[irad[1],radDeltaH[1] ],rot=deg[1]>0?180+deg[1]:deg[1],rev=false,fn=radFn[1]),
+   if(!irad[0]||!deg[1])[-r[0],h2[0]],
+   if(irad[0]&&deg[0])each arc(r=-irad[0],deg=-deg[0]+rotDeg[0],t=[-r[0]-radDeltaX[0],h2[0]] - sign(deg[0])*[irad[0],-radDeltaH[0]],rot=-rotDeg[0]+ (deg[0]>0?180:0),rev=false,fn=radFn[0]),
+   [-r2[0],0]
+ ];
+
+// Points(points,help=1);
+if(is_parent(needs2D)||use2D)T(center.x?0:r.x,center.y?-h/2:0)polygon(points2D);
+else
+T(center.x?center.x==2?0:
+                       center.x==3?-lx:
+                                   -lx/2:
+          d[0]/2,
+    center.y?center.y==2?0
+                         :center.y==3?-ly
+                                     :-ly/2
+            :d[0]/2,
+    center.z?-h/2:0){
+    $info=false;
+      PolyH(points=points,loop=ly?4*ifn+4:lx?ifn*2+2:ifn360,flip=0);
+      if(cuts&&max(r2)-max(r)>=1&&max(deg)>=5&&h>1)difference(){
+      gapH=[deg[0]==0?0:1/sin(deg[0]),deg[1]==0?0:1/sin(deg[1])]*.5;
+      cutWidth=0.03;
+      
+        if(l)T(l/2){
+          Linear(e=round(cuts==2?l-max(d)/2:l+max(d)/2),es=1,center=true)Tz(h/2)cube([cutWidth,abs(max(r2*2)),abs(h)-1],true);
+          if(cuts==2){
+            //Tz(h/2)cube([abs(max(r2*2))+l,cutWidth,abs(h)-1],true);
+            MKlon(tx=-l/2)Polar(floor((r+line(2))*PI),-cutWidth/2,end=180)Tz(.5)cube([cutWidth,abs(max(r2)),abs(h)-1]);
+          }
+        }
+        else Polar(floor((min(r)+line(2))*PI*2),-cutWidth/2)Tz(.5)cube([cutWidth,abs(max(r2)),abs(h)-1]);
+        Tz(+gapH[0] -(deg[0]?line(2)/tan(deg[0]):0))Loch(h=h -vSum(gapH) +(deg[0]?line(2)/tan(deg[0]):0)+(deg[1]?line(2)/tan(deg[1]):0),h2=h2,d=d +[1,1]*line(2)*2,l=l,d2=undef,deg=deg,rad=rad-[1,1]*line(2),center=[2,1,0],fn=24,cuts=false,extrude=true);
+      }
+    }
+
+}
+
+
+
+/// chamfer cube
+
+//Ccube();

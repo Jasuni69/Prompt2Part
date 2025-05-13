@@ -1,0 +1,1 @@
+function t_nut_tab(type) = [type[8], type[9]]; //! Sliding t-nut T dimensions

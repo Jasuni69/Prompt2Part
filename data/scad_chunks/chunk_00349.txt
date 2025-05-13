@@ -1,0 +1,5 @@
+module opengrab_side_hole_positions() //! Position children at the two 4mm hole
+    let($d = 4, pitch = width / 2 - 3.5)
+        for($x = [-pitch, pitch])
+            translate([$x, 0])
+                children();

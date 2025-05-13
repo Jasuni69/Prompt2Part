@@ -1,0 +1,1 @@
+function hinge_pin_dia(type)     = type[4]; //! The pin diameter

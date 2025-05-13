@@ -1,0 +1,2 @@
+module rounded_polygon(points, _tangents = undef) //! Draw the rounded polygon from the point list, can pass the tangent list to save it being calculated
+    polygon(rounded_polygon(points, _tangents), convexity = len(points));

@@ -1,0 +1,25 @@
+function path_segment_lengths(path, closed) =
+    is_1region(path) ? path_segment_lengths(path[0], default(closed,true)) :
+    let(closed=default(closed,false))
+    assert(is_path(path),"Invalid path in path_segment_lengths.")
+    assert(is_bool(closed))
+    [
+        for (i=[0:1:len(path)-2]) norm(path[i+1]-path[i]),
+        if (closed) norm(path[0]-last(path))
+    ]; 
+
+
+// Function: path_length_fractions()
+// Synopsis: Returns the fractional distance of each point along the length of a path.
+// Topics: Paths
+// See Also: path_length(), path_segment_lengths()
+// Usage:
+//   fracs = path_length_fractions(path, [closed]);
+// Description:
+//    Returns the distance fraction of each point in the {{path}} along the path, so the first
+//    point is zero and the final point is 1.  If the path is closed the length of the output
+//    will have one extra point because of the final connecting segment that connects the last
+//    point of the path to the first point.
+// Arguments:
+//    path = path in any dimension or a 1-region
+//    closed = set to true if path is closed.  Default: false

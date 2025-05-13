@@ -1,0 +1,29 @@
+module Kugelmantel(d=20,rand=n(2),fn=fn,help)
+{
+    difference()
+    {
+        sphere(d=d,$fn=fn);
+        sphere(d=d-2*rand,$fn=fn);
+        
+    }
+    
+HelpTxt("Kugelmantel",["d",d,
+    "rand",rand, 
+    "fn",fn,
+],help);
+}
+
+/** \page Objects
+\name Kegelmantel
+Kegelmantel() creates a cone blanket 
+\param d,d2  diameter
+\param v, grad  ratio or angle 
+\param h  height optional to d2
+\param rand wallthickness horizontal
+\param loch center hole
+\param center center
+\param fn fragments
+\param name,help  name,help
+*/
+ //Kegelmantel(h=3,rand=-1);
+ //Kegelmantel(rand=1);

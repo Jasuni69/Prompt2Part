@@ -1,0 +1,5 @@
+function rot2_z(a) = //! Generate a 2x2 matrix to rotate around z
+    let(c = cos(a),
+        s = sin(a))
+        [ [ c, -s],
+          [ s,  c] ];

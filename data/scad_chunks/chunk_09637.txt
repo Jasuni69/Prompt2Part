@@ -1,0 +1,36 @@
+function get_lmXuu_bearing_length(size) = lookup(size, [
+		[  4.0,  12.0],
+		[  5.0,  15.0],
+		[  6.0,  19.0],
+		[  8.0,  24.0],
+		[ 10.0,  29.0],
+		[ 12.0,  30.0],
+		[ 13.0,  32.0],
+		[ 16.0,  37.0],
+		[ 20.0,  42.0],
+		[ 25.0,  59.0],
+		[ 30.0,  64.0],
+		[ 35.0,  70.0],
+		[ 40.0,  80.0],
+		[ 50.0, 100.0],
+		[ 60.0, 110.0],
+		[ 80.0, 140.0],
+		[100.0, 175.0]
+	]);
+
+
+// Module: linear_bearing_housing()
+// Description:
+//   Creates a model of a clamp to hold a generic linear bearing cartridge.
+// Arguments:
+//   d = Diameter of linear bearing. (Default: 15)
+//   l = Length of linear bearing. (Default: 24)
+//   tab = Clamp tab height. (Default: 7)
+//   tabwall = Clamp Tab thickness. (Default: 5)
+//   wall = Wall thickness of clamp housing. (Default: 3)
+//   gap = Gap in clamp. (Default: 5)
+//   screwsize = Size of screw to use to tighten clamp. (Default: 3)
+//   orient = Orientation of the housing.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_X`.
+//   align = Alignment of the housing by the axis-negative (size1) end.  Use the `V_` constants from `constants.scad`.  Default: `V_UP`
+// Example:
+//   linear_bearing_housing(d=19, l=29, wall=2, tab=6, screwsize=2.5);

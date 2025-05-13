@@ -1,0 +1,2 @@
+function backwards(steps1=[UNITY],steps2=[UNITY],steps3=[UNITY],steps4=[UNITY])
+         = [matrix_invert(multAll(concat(steps1,steps2,steps3,steps4)))];

@@ -1,0 +1,1 @@
+function extrusion_corner_bracket_base_thickness(type)   = type[2]; //! Thickness of base of bracket

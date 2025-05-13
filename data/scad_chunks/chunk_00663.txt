@@ -1,0 +1,43 @@
+module wingnut(type) { //! Draw a wingnut
+    thread_d = nut_size(type);
+    hole_rad  = thread_d / 2;
+    bottom_rad = nut_radius(type);
+    top_rad = type[4] / 2;
+    thickness = nut_thickness(type);
+    wing_span = type[7];
+    wing_height = type[8];
+    wing_width = type[9];
+    wing_thickness = type[10];
+
+    top_angle = asin((wing_thickness / 2) / top_rad);
+    bottom_angle = asin((wing_thickness / 2) / bottom_rad);
+
+    vitamin(str("wingnut(", type[0], "): Wingnut M", nut_size(type)));
+
+    colour = silver;
+    explode(10) {
+        color(colour) {
+            rotate_extrude()
+                polygon([
+                    [hole_rad, 0],
+                    [bottom_rad, 0],
+                    [top_rad, thickness],
+                    [hole_rad, thickness]
+                ]);
+            for(rot = [0, 180])
+                rotate([90, 0, rot]) linear_extrude(wing_thickness, center = true)
+                    hull() {
+                        translate([wing_span / 2  - wing_width / 2, wing_height - wing_width / 2])
+                            circle(wing_width / 2);
+                        polygon([
+                            [bottom_rad * cos(top_angle) - eps, 0],
+                            [wing_span / 2  - wing_width / 2, wing_height - wing_width / 2],
+                            [top_rad * cos(top_angle) - eps, thickness],
+                        ]);
+                    }
+        }
+
+        if(show_threads)
+            female_metric_thread(thread_d, metric_coarse_pitch(thread_d), thickness, center = false, colour = colour);
+    }
+}

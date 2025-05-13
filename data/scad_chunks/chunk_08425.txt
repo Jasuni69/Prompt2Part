@@ -1,0 +1,2 @@
+function _rotate_p_3d(point, a) =
+    _rotz(_roty(_rotx(point, a.x), a.y), a.z);

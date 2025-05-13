@@ -1,0 +1,71 @@
+module fan(type) { //! Draw specified fan, origin in the centre
+    width = fan_width(type);
+    depth = fan_depth(type);
+    thickness = fan_thickness(type);
+    hole_pitch = fan_hole_pitch(type);
+    corner_radius = width / 2 - hole_pitch;
+    screw = fan_screw(type);
+
+    vitamin(str("fan(fan", width, "x", depth, "): Fan ", width, "mm x ", depth, "mm"));
+
+    module squarish(s, n) {
+        polygon([
+            for(i = [0 : n]) [i * s.x / n,  s.y + (i % 2) * eps],
+            for(i = [0 : n]) [s.x - i * s.x / n, (i % 2) * eps],
+        ]);
+    }
+
+    module shape()
+        difference() {
+            //overall outside
+            rounded_square([width, width], corner_radius);
+
+            //main inside bore, less hub
+            difference() {
+                circle(fan_bore(type) / 2);
+                circle(fan_hub(type) / 2);
+            }
+
+            //Mounting holes
+            fan_hole_positions(type)
+                circle(screw_clearance_radius(screw));
+       }
+
+    color(fan_colour) {
+        middle = depth - 2 * thickness;
+        if(middle > 0) {
+            for(z = [-1, 1])
+                translate_z(z * (depth - thickness) / 2)
+                    linear_extrude(thickness, center = true)
+                        shape();
+
+            linear_extrude(middle, center = true)
+                difference() {
+                    shape();
+                    difference() {
+                        circle(sqrt(2) * width / 2);
+                        circle(d =  fan_outer_diameter(type));
+
+                        if(fan_boss_d(type))
+                            for(i = [-1, 1])
+                                hull()
+                                    for(side = [-1, 1])
+                                        translate([hole_pitch * side * i, hole_pitch * side])
+                                            circle(d = fan_boss_d(type));
+                    }
+                }
+        }
+        else
+            linear_extrude(depth, center = true)
+                shape();
+
+        // Blades
+        blade_ir = fan_hub(type) / 2 - 1;
+        blade_len = fan_bore(type) / 2 - 0.75 - blade_ir;
+        linear_extrude(depth - 1, center = true, convexity = 4, twist = -30, slices = round(depth / 2))
+            for(i = [0 : fan_blades(type) - 1])
+                rotate((360 * i) / fan_blades(type))
+                    translate([blade_ir, -1.5 / 2])
+                        squarish([blade_len, 1.5], round(blade_len / 2));
+    }
+}

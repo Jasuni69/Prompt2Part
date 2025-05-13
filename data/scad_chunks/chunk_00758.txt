@@ -1,0 +1,1 @@
+function psu_terminals(type)         = type[10];    //! How many terminals and the y offset from the back

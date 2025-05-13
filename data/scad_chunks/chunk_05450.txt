@@ -1,0 +1,13 @@
+function bosl_version() = BOSL_VERSION;
+
+
+// Function: bosl_version_num()
+// Synopsis: Returns the BOSL2 version as a float.
+// Topics: Versioning
+// See Also: bosl_version(), bosl_version_str(), bosl_required()
+// Usage:
+//   ver = bosl_version_num();
+// Description:
+//   Returns a floating point number of the version, formatted like M.mmrrrr where M is the major version number,
+//   each m is a zero-padded digit of the minor version number, and each r is a zero-padded digit of the build
+//   revision number.  For example, version 2.1.43 will be returned as `2.010043`.

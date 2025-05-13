@@ -1,0 +1,13 @@
+function patches_scale(patches, v=[1,1,1], cp=[0,0,0]) = [for (patch=patches) patch_scale(patch,v,cp)];
+
+
+// Function: patches_rotate()
+// Usage:
+//   patches_rotate(patch, a, [cp])
+//   patches_rotate(patch, a, v, [cp])
+// Description: Rotates all coordinates in each of a list of rectangular or triangular patches.
+// Arguments:
+//   patches = List of patches to rotate.
+//   a = Rotation angle(s) in degrees.
+//   v = Vector axis to rotate round.
+//   cp = Centerpoint to rotate around.

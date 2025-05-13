@@ -1,0 +1,11 @@
+module test_left() {
+    assert_equal(left(5),[[1,0,0,-5],[0,1,0,0],[0,0,1,0],[0,0,0,1]]);
+    assert_equal(left(0),[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]);
+    assert_equal(left(-5),[[1,0,0,5],[0,1,0,0],[0,0,1,0],[0,0,0,1]]);
+    assert_equal(left(5,p=[1,2,3]),[-4,2,3]);
+    assert_equal(left(0,p=[1,2,3]),[1,2,3]);
+    assert_equal(left(-5,p=[1,2,3]),[6,2,3]);
+    // Verify that module at least doesn't crash.
+    left(-5) left(0) left(5) union(){};
+}
+test_left();

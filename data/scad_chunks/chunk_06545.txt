@@ -1,0 +1,17 @@
+function default(v,dflt=undef) = is_undef(v)? dflt : v;
+
+
+// Function: first_defined()
+// Synopsis: Returns the first value in the argument list that is not 'undef'.
+// Topics: Undef Handling
+// See Also: default(), one_defined(), num_defined(), any_defined(), all_defined()
+// Usage:
+//   val = first_defined(v, [recursive]);
+// Description:
+//   Returns the first item in the list that is not `undef`.
+//   If all items are `undef`, or list is empty, returns `undef`.
+// Arguments:
+//   v = The list whose items are being checked.
+//   recursive = If true, sublists are checked recursively for defined values.  The first sublist that has a defined item is returned.  Default: false
+// Example:
+//   val = first_defined([undef,7,undef,true]);  // Returns: 7

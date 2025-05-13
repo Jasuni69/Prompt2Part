@@ -1,0 +1,19 @@
+module door_latch_stl() { //! Generates the STL for the printed part
+    ridge = 4;
+
+    stl("door_latch")
+        difference() {
+            union() {
+                hull() {
+                    rounded_rectangle([length, width, thickness - tan(30) * (width -  ridge) / 2], rad);
+
+                    translate_z(thickness / 2)
+                        cube([length, ridge, thickness], center = true);
+                }
+
+                cylinder(d = width, h = height);
+            }
+            hanging_hole(nut_trap_depth, screw_clearance_radius(screw))
+                circle(r = nut_trap_radius(screw_nut(screw)), $fn = 6);
+        }
+}

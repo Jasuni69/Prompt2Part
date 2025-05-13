@@ -1,0 +1,42 @@
+module restore(desc)
+{
+   req_children($children);
+   if (is_undef(desc)){
+     T = matrix_inverse($transform);
+     $parent_geom = attach_geom([0,0,0]);
+     multmatrix(T) children();
+   }
+   else{
+     check=assert(is_description(desc), "Invalid description");
+     T = linear_solve($transform, desc[0]);
+     $parent_geom = desc[1];
+     multmatrix(T) children();
+   }
+}
+
+// Function: desc_point()
+// Synopsis: Computes the location in the current context of an anchor point from an attachable description
+// Topics: Descriptions, Attachments
+// See Also: parent(), desc_dist()
+// Usage:
+//   point = desc_point(desc,[p],[anchor]);
+// Description:
+//   Computes the coordinates of the specified point or anchor point in the given description relative to the current transformation state.
+// Arguments:
+//   desc = Description to use to get the point
+//   p = Point or point list to transform.  Default: CENTER (if anchor not given)
+//   ---
+//   anchor = Anchor point (only one) that you want to extract.  Default: CENTER
+// Example(3D): In this example we translate away from the parent object and then compute points on that object.  Note that with OpenSCAD 2021.01 you must use union() or alternatively place the pt1 and pt2 assignments in a let() statement.  This is not necessary in development versions.  
+//  cuboid(10) let(desc=parent())
+//    right(12) up(27)
+//      union(){
+//        pt1 = desc_point(desc,anchor=TOP+BACK+LEFT);
+//        pt2 = desc_point(desc,anchor=TOP+FWD+RIGHT);
+//        stroke([pt1,pt2,CENTER], closed=true, width=.5,color="red");
+//      }
+// Example(3D): Here we compute the point on the parent so we can draw a line anchored on the child object that connects to a computed point on the parent
+//  cuboid(10) let(desc=parent())
+//    attach(FWD,BOT) cuboid([3,3,7])
+//    attach(TOP+BACK+RIGHT, BOT)
+//    stroke([[0,0,0], desc_point(desc,anchor=TOP+FWD+RIGHT)],width=.5,color="red");

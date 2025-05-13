@@ -1,0 +1,9 @@
+function _find_radians(b, pow2_dist, init_radian, n) = 
+    [
+        for(
+            count = 0, radian = init_radian; 
+            count < n; 
+            count = count + 1, radian = radian + _radian_step(b * radian, pow2_dist)
+        )
+        radian
+    ];

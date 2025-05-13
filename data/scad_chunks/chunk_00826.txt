@@ -1,0 +1,1 @@
+function smd_contact_size(type)   = type[7]; //! contact size

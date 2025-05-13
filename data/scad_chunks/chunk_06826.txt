@@ -1,0 +1,9 @@
+module test_bosl_version() {
+    assert(is_vector(bosl_version()));  // Returned value is a vector.
+    assert(len(bosl_version())==3);  //  of three numbers.
+    assert(bosl_version()[0]==2);  // The major version is 2.
+    for (v=bosl_version()) {
+        assert(floor(v)==v);  // All version parts are integers.
+    }
+}
+test_bosl_version();

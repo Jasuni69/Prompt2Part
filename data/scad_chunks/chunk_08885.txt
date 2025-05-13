@@ -1,0 +1,6 @@
+function _reaction_diffusion(feed, kill, generation, uv, Du, Dv, uy_ly, rx_lx, space_x, space_y) = 
+    generation == 0 ? uv :
+	_reaction_diffusion(feed, kill, generation - 1, 
+	    gray_scott(uv, feed, kill, Du, Dv, uy_ly, rx_lx, space_x, space_y), 
+		Du, Dv, uy_ly, rx_lx, space_x, space_y
+	);

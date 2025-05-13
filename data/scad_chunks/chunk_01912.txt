@@ -1,0 +1,1 @@
+function box_sheet_slot(type) = sheet_thickness(box_sheets(type)) + sheet_slot_clearance; // add some clearance

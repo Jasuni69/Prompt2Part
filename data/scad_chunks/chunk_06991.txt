@@ -1,0 +1,4 @@
+module test_max_length() {
+    assert(max_length(["foobar", "bazquxx", "abcd"]) == 7);
+}
+test_max_length();

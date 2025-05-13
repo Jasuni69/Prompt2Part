@@ -1,0 +1,11 @@
+function detailColor(ind)=$colorNames[ind*2+1];
+
+
+// for compatibility: old style coloring system- cumbersome to use
+
+// old style System end
+
+
+
+/*
+//example of Module to show all colors in their typical combinations

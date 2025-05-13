@@ -1,0 +1,50 @@
+alphaLid            = 1;//0.2;   
+colorBase           = "yellow";
+alphaBase           = 1;//0.2;
+hideLidWalls        = false;    //-> false
+hideBaseWalls       = false;    //-> false
+showOrientation     = true;
+showPCB             = true;
+showSwitches        = false;
+showPCBmarkers      = false;
+showShellZero       = false;
+showCenterMarkers   = false;
+inspectX            = 0;        //-> 0=none (>0 from Back)
+inspectY            = 0;        //-> 0=none (>0 from Right)
+inspectZ            = 0;        //-> 0=none (>0 from Bottom)
+inspectXfromBack    = true;     // View from the inspection cut foreward
+inspectYfromLeft    = true;     //-> View from the inspection cut to the right
+inspectZfromTop     = false;    //-> View from the inspection cut down
+//-- C O N T R O L ---------------------------------------
+
+//===================================================================
+// *** PCB Supports ***
+// Pin and Socket standoffs 
+//-------------------------------------------------------------------
+//  Default origin =  yappCoordPCB : pcb[0,0,0]
+//
+//  Parameters:
+//   Required:
+//    p(0) = posx
+//    p(1) = posy
+//   Optional:
+//    p(2) = Height to bottom of PCB : Default = standoffHeight
+//    p(3) = PCB Gap : Default = -1 : Default for yappCoordPCB=pcbThickness, yappCoordBox=0
+//    p(4) = standoffDiameter    Default = standoffDiameter;
+//    p(5) = standoffPinDiameter Default = standoffPinDiameter;
+//    p(6) = standoffHoleSlack   Default = standoffHoleSlack;
+//    p(7) = filletRadius (0 = auto size)
+//    p(8) = Pin Length : Default = 0 -> PCB Gap + standoff_PinDiameter
+//             Indicated length of pin without the half sphere tip. 
+//             Example : pcbThickness() only leaves the half sphere tip above the PCB
+//    n(a) = { <yappBoth> | yappLidOnly | yappBaseOnly }
+//    n(b) = { <yappPin>, yappHole, yappTopPin } 
+//             yappPin = Pin on Base and Hole on Lid 
+//             yappHole = Hole on Both
+//             yappTopPin = Hole on Base and Pin on Lid
+//    n(c) = { yappAllCorners, yappFrontLeft | <yappBackLeft> | yappFrontRight | yappBackRight }
+//    n(d) = { <yappCoordPCB> | yappCoordBox | yappCoordBoxInside }
+//    n(e) = { yappNoFillet } : Removes the internal and external fillets and the Rounded tip on the pins
+//    n(f) = [yappPCBName, "XXX"] : Specify a PCB. Defaults to [yappPCBName, "Main"]
+//-------------------------------------------------------------------
+pcbStands = 

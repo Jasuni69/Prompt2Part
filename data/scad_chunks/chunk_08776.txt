@@ -1,0 +1,1 @@
+function _sort_by_cmp(lt, cmp) = _sort(lt, function(a, b) cmp(a, b) < 0, function(a, b) cmp(a, b) >= 0);

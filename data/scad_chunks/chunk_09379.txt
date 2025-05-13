@@ -1,0 +1,23 @@
+function any(l, i=0, succ=false) =
+	(i>=len(l) || succ)? succ :
+	any(
+		l, i=i+1, succ=(
+			is_array(l[i])? any(l[i]) :
+			!(!l[i])
+		)
+	);
+
+
+// Function: all()
+// Description:
+//   Returns true if all items in list `l` evaluate as true.
+//   If `l` is a lists of lists, `all()` is applied recursively to each sublist.
+// Arguments:
+//   l = The list to test for true items.
+// Example:
+//   all([0,false,undef]);  // Returns false.
+//   all([1,false,undef]);  // Returns false.
+//   all([1,5,true]);       // Returns true.
+//   all([[0,0], [0,0]]);   // Returns false.
+//   all([[0,0], [1,0]]);   // Returns false.
+//   all([[1,1], [1,1]]);   // Returns true.

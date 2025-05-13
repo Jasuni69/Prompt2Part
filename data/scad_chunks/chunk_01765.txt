@@ -1,0 +1,14 @@
+module pcb_spacer(screw, height, wall = 1.8, taper = 0) { //! Generate STL for PCB spacer
+    stl(str("pcb_spacer", round(screw_radius(screw) * 20), round(height * 10), taper ? str("_", taper) : ""));
+
+    ir = screw_clearance_radius(screw);
+    or = corrected_radius(ir) + wall;
+
+    if(height > taper)
+        linear_extrude(height - taper)
+            poly_ring(or, ir);
+
+    if(taper)
+        linear_extrude(height)
+            poly_ring(ir + 2 * extrusion_width, ir);
+}

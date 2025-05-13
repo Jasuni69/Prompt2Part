@@ -1,0 +1,3 @@
+function _pu_segmentsPerCircle(r=1) = $fn>0?($fn>=3?$fn:3):ceil(max(min(360/$fa,abs(r)*2*PI/$fs),5));
+
+//  function distanceBetween calculates the distance between two 2D or 3D points

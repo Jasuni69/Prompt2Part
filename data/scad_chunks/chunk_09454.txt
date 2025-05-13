@@ -1,0 +1,5 @@
+function point_left_of_segment(point, edge) =
+	(edge[1].x-edge[0].x) * (point.y-edge[0].y) - (point.x-edge[0].x) * (edge[1].y-edge[0].y);
+  
+
+// Internal non-exposed function.

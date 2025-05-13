@@ -1,0 +1,12 @@
+function _is_at_left(pt,line,eps=EPSILON) = _tri_class([pt,line[0],line[1]],eps) <= 0;
+
+
+/// Internal Function: _degenerate_tri()
+/// Usage:
+///   degen = _degenerate_tri(triangle);
+/// Topics: Geometry, Triangles
+/// Description:
+///   Return true for a specific kind of degeneracy: any two triangle vertices are equal
+/// Arguments:
+///   tri = A list of three 2d points
+///   eps = Tolerance in the geometrical tests.

@@ -1,0 +1,1 @@
+function spade_hole(type)  = type[3]; //! Hole diameter

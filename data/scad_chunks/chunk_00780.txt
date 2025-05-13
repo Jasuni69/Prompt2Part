@@ -1,0 +1,16 @@
+module smd_capacitor(type, height, value = undef) { //! Draw an SMD capacitor with specified height
+    size = smd_cap_size(type);
+    vitamin(str("smd_capacitor(", type[0], arg(value, undef, "value"), "): SMD capacitor ", smd_size(size), !is_undef(value) ? str(" ", value) : ""));
+
+    cap = smd_cap_end_cap(type);
+
+    t = 0.02;
+    color("tan")
+        translate_z(height / 2)
+            cube([size.x - 2 * cap, size.y - 2 * t, height - 2 * t], center = true);
+
+    color(silver)
+        for(end = [-1, 1])
+            translate([end * (size.x / 2 - cap / 2), 0, height / 2])
+                cube([cap, size.y - 2 * eps, height], center = true);
+}

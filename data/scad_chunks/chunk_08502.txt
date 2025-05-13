@@ -1,0 +1,4 @@
+function _case2000_isobands(cell_pts, lower, upper) = 
+    _case0222_isobands(cell_pts, upper, lower);
+    
+// single rectangle

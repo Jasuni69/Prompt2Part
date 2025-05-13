@@ -1,0 +1,5 @@
+function angle_between_lines(line1,line2) =
+        let(angle = atan2(det2([line1,line2]),line1*line2))
+        angle > 90 ? angle-180 :
+        angle <= -90 ? angle+180 :
+        angle;

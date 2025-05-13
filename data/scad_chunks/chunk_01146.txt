@@ -1,0 +1,1 @@
+function BLDC_height(type)                      = type[2]; //! Height of motor including boss, if any, but excluding prop shaft

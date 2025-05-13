@@ -1,0 +1,1 @@
+function slice_str(str, start, end, s ="") = start >= end ? s : slice_str(str, start + 1, end, str(s, str[start])); // Helper for slice()

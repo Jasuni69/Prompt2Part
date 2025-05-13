@@ -1,0 +1,1 @@
+function BLDC_base_height_2(type)               = type[9]; //! Base height 2

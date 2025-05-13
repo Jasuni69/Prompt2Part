@@ -1,0 +1,1 @@
+function pmeter_tab(type)         = type[7];  //! Tab size

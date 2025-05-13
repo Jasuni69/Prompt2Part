@@ -1,0 +1,61 @@
+module thinning_triangle(h=50, l=100, thick=5, ang=30, strut=5, wall=3, diagonly=false, center, anchor, spin=0, orient=UP)
+{
+    dang = atan(h/l);
+    dlen = h/sin(dang);
+    size = [thick, l, h];
+    anchor = get_anchor(anchor, center, BOT+FRONT, CENTER);
+    attachable(anchor,spin,orient, size=size) {
+        difference() {
+            union() {
+                if (!diagonly) {
+                    translate([0, 0, -h/2])
+                        narrowing_strut(w=thick, l=l, wall=strut, ang=ang);
+                    translate([0, -l/2, 0])
+                        xrot(-90) narrowing_strut(w=thick, l=h-0.1, wall=strut, ang=ang);
+                }
+                intersection() {
+                    cube(size=[thick, l, h], center=true);
+                    xrot(-dang) yrot(180) {
+                        narrowing_strut(w=thick, l=dlen*1.2, wall=strut, ang=ang);
+                    }
+                }
+                cube(size=[wall, l-0.1, h-0.1], center=true);
+            }
+            xrot(-dang) {
+                translate([0, 0, h/2]) {
+                    cube(size=[thick+0.1, l*2, h], center=true);
+                }
+            }
+        }
+        children();
+    }
+}
+
+
+// Module: narrowing_strut()
+// Synopsis: Makes a strut like an extruded baseball home plate.
+// SynTags: Geom
+// Topics: FDM Optimized
+// See Also: sparse_wall(), corrugated_wall(), thinning_wall(), thinning_triangle(), narrowing_strut()
+//
+// Usage:
+//   narrowing_strut(w, l, wall, [ang=]) [ATTACHMENTS];
+//
+// Description:
+//   Makes a rectangular strut with the top side narrowing in a triangle.
+//   The shape created may be likened to an extruded home plate from baseball.
+//   This is useful for constructing parts that minimize the need to support
+//   overhangs.
+//
+// Arguments:
+//   w = Width (thickness) of the strut.
+//   l = Length of the strut.
+//   wall = height of rectangular portion of the strut.
+//   ---
+//   ang = angle that the trianglar side will converge at.
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//
+// Example:
+//   narrowing_strut(w=10, l=100, wall=5, ang=30);

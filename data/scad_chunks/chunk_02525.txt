@@ -1,0 +1,9 @@
+function helical_twist_per_segment(r, pitch, sides) = //! Calculate the twist around Z that rotate_from_to() introduces
+    let(step_angle = 360 / sides,
+        lt = 2 * r * sin(step_angle),               // length of tangent between two facets
+        slope = atan(2 * pitch / sides / lt)        // slope of tangents
+       ) step_angle * sin(slope);                   // angle tangent should rotate around z projected onto axis rotate_from_to() uses
+
+//
+// Generate all the transforms for the profile of the swept volume.
+//

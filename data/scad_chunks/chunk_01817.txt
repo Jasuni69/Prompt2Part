@@ -1,0 +1,71 @@
+module battery(type) { //! Draw a battery
+    vitamin(str("battery(", type[0], "): ", type[1]));
+    len =  battery_length(type);
+
+    l = 6;
+    iw1 = 7;
+    iw2 = 5.7;
+    ih1 = 1;
+    ih2 = 1.85;
+    h = 2.65;
+    t = 0.4;
+
+    $fa = fa; $fs = fs;
+
+    module D() {
+        hull() {
+            translate([-iw1 / 2, h - t - ih1])
+                square([iw1, ih1]);
+
+            translate([-iw2 / 2, h - t - ih2])
+                square([iw2, ih2]);
+        }
+    }
+
+    color(battery_colour(type)) render() difference() {
+        translate_z(-battery_pos_height(type) / 2)
+            cylinder(d = battery_diameter(type), h = len - battery_pos_height(type), center = true);
+
+        if(battery_usb_offset(type))
+            translate([battery_diameter(type) / 2, 0, len / 2 - battery_usb_offset(type) + h / 2])
+                rotate([-90, 0, 90])
+                    linear_extrude(l + 1)
+                        offset(delta = t)
+                            D();
+    }
+    color("gold")
+        translate_z(len / 2 - battery_pos_height(type))
+            rounded_cylinder(r = battery_pos_dia(type) / 2, h = battery_pos_height(type) + eps, r2 = 0.5);
+
+    color("silver") {
+        if(battery_usb_offset(type))
+            translate([battery_diameter(type) / 2 - 1, 0, len / 2 - battery_usb_offset(type) + h / 2])
+                rotate([-90, 0, 90]) {
+                    linear_extrude(l)
+                        difference() {
+                            offset(t) D();
+                            D();
+                       }
+
+                    translate_z(l - 1)
+                        linear_extrude(1)
+                            D();
+                }
+
+        translate_z(-len / 2)
+            vflip()
+                cylinder(d = battery_neg_dia(type), h = eps);
+
+    }
+
+    battery_led_positions(type)
+        color(["red","green","blue"][$i])
+            cylinder(d = 1.5, h = eps);
+
+    color(battery_colour(type) == "white" ? "black" : "white")
+        rotate([0, 0, 90])
+             cylindrical_wrap(battery_diameter(type)/2)
+                resize([0, battery_diameter(type)], auto = true)
+                    rotate(90)
+                        text(battery_type(type), halign = "center", valign = "center");
+}

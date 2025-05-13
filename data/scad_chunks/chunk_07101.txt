@@ -1,0 +1,20 @@
+function _lsystem_to_turtle(s, step=1, angle=90, startang=0) =
+    concat(
+        startang? ["left", startang] : [],
+        ["angle", angle, "length", step],
+        [
+            for (
+                i = 0,
+                slen = len(s);
+
+                i <= slen;
+
+                ch = s[i],
+                cmd = (ch=="A" || ch=="B" || ch=="F")? ["move"] :
+                    (ch=="+")? ["left"] :
+                    (ch=="-")? ["right"] :
+                    [],
+                i=i+1
+            ) if(i>0 && cmd!=[]) each cmd
+        ]
+    );

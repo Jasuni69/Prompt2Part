@@ -1,0 +1,7 @@
+function light_strip_segments(type, max_length) = let( //! Calculate the maximum number of segments that fit in max_length
+        length = light_strip_length(type),
+        seg_length = length * light_strip_grouped(type) / light_strip_leds(type),
+        segs = floor(min(max_length, length) / seg_length)
+    )
+    assert(segs, str("max_length must be at least ", ceil(seg_length), "mm"))
+    segs;

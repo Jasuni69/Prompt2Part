@@ -1,0 +1,142 @@
+module _nutshape(nutwidth, h, shape, bevel1, bevel2)
+{
+   bevel_d=0.9;
+   intersection(){
+       if (shape=="hex")
+         cyl(d=nutwidth, circum=true, $fn=6, l=h, chamfer1=bevel1?0:nutwidth*.01, chamfer2=bevel2?0:nutwidth*.01);
+       else
+         cuboid([nutwidth,nutwidth,h],chamfer=nutwidth*.01, except=[if (bevel1) BOT, if(bevel2) TOP]);
+       fn = quantup(segs(r=nutwidth/2),shape=="hex"?6:4);
+       d = shape=="hex" ? 2*nutwidth/sqrt(3) : sqrt(2)*nutwidth;
+       chamfsize = (d-nutwidth)/2/bevel_d;
+       cyl(d=d*.99,h=h+.01,realign=true,circum=true,$fn=fn,chamfer1=bevel1?chamfsize:0,chamfer2=bevel2?chamfsize:0,chamfang=30);
+   }
+}
+
+
+// Module: thread_helix()
+// Synopsis: Creates a thread helix to add to a cylinder.
+// SynTags: Geom
+// Topics: Threading, Screws
+// See Also: generic_threaded_rod()
+// Usage:
+//     thread_helix(d, pitch, turns=, [thread_depth=], [thread_angle=|flank_angle=], [profile=], [starts=], [internal=], ...) {ATTACHMENTS};
+//     thread_helix(d1=,d2=, pitch=, turns=, [thread_depth=], [thread_angle=|flank_angle=], [profile=], [starts=], [internal=], ...) {ATTACHMENTS};
+// Description:
+//   Creates a right-handed helical thread with optional end tapering.  Unlike
+//   {{generic_threaded_rod()}, this module just generates the thread, and you specify the total
+//   angle of threading that you want, which makes it easy to put complete threads onto a longer
+//   shaft.  It also optionally makes a finely divided taper at the thread ends.  However, it takes
+//   2-3 times as long to render compared to {{generic_threaded_rod()}}.  This module was designed
+//   to handle threads found in plastic and glass bottles.
+//   .
+//   You can specify a thread_depth and flank_angle, in which case you get a symmetric trapezoidal
+//   thread, whose inner diameter (the base of the threads for external threading) is d (so the
+//   total diameter will be d + thread_depth).  This differs from the threaded_rod modules, where
+//   the specified diameter is the outer diameter.  Alternatively you can give a profile, following
+//   the same rules as for general_threaded_rod.  The Y=0 point will align with the specified
+//   diameter, and the profile should range in X from -1/2 to 1/2.  You cannot specify both the
+//   profile and the thread_depth or flank_angle.
+//   .
+//   Unlike {{generic_threaded_rod()}, when internal=true this module generates the threads, not a thread mask.
+//   The profile needs to be inverted to produce the proper thread form.  If you use the built-in trapezoidal
+//   thread you get the inverted thread, designed so that the inner diameter is d.  If you supply a custom profile
+//   you must invert it yourself to get internal threads.  With adequate clearance
+//   this thread will mate with the thread that uses the same parameters but has internal=false.  Note that
+//   unlike the threaded_rod modules, thread_helix does not adjust the diameter for faceting, nor does it
+//   subtract any $slop for clearance.  
+//   .
+//   The lead_in options specify a lead-in section where the ends of the threads scale down to avoid a sharp face at the thread ends.
+//   You can specify the length of this scaling directly with the lead_in parameters or as an angle using the lead_in_ang parameters.
+//   If you give a positive value, the extrusion is lengthenend by the specified distance or angle; if you give a negative
+//   value then the scaled end is included in the extrusion length specified by `turns`.  If the value is zero then no scaled ends
+//   are produced.  The shape of the scaled ends can be controlled with the lead_in_shape parameter.  Supported options are "sqrt", "linear"
+//   "smooth" and "cut".  Lead-in works on both internal and external threads.
+// Figure(2D,Med,NoAxes):
+//   pa_delta = tan(15)/4;
+//      rr1 = -1/2;
+//      z1 = 1/4-pa_delta;
+//      z2 = 1/4+pa_delta;
+//      profile = [
+//                  [-z2, rr1],
+//                  [-z1,  0],
+//                  [ z1,  0],
+//                  [ z2, rr1],
+//                ];
+//      fullprofile = 50*left(1/2,p=concat(profile, right(1, p=profile)));
+//      stroke(fullprofile,width=1);
+//      dir = fullprofile[2]-fullprofile[3];
+//      dir2 = fullprofile[5]-fullprofile[4];
+//      curve = arc(15,angle=[75,87],r=40 /*67.5*/);
+//      avgpt = mean([fullprofile[5]+.1*dir2, fullprofile[5]+.4*dir2]);
+//      color("red"){
+//       stroke([fullprofile[4]+[0,1], fullprofile[4]+[0,37]], width=1);
+//       stroke([fullprofile[5]+.1*dir2, fullprofile[5]+.4*dir2], width=1);
+//       stroke(move(-curve[0]+avgpt,p=curve), width=0.71,endcaps="arrow2");
+//       right(14)back(19)text("flank",size=4,halign="center");
+//       right(14)back(14)text("angle",size=4,halign="center");
+//      }
+// Figure(2D,Med,NoAxes):
+//   pa_delta = tan(15)/4;
+//   rr1 = -1/2;
+//   z1 = 1/4-pa_delta;
+//   z2 = 1/4+pa_delta;
+//   profile = [
+//               [-z2, rr1],
+//               [-z1,  0],
+//               [ z1,  0],
+//               [ z2, rr1],
+//             ];
+//   fullprofile = 50*left(1/2,p=concat(profile, right(1, p=profile)));
+//   stroke(fullprofile,width=1);
+//   dir = fullprofile[2]-fullprofile[3];
+//   dir2 = fullprofile[5]-fullprofile[4];
+//   curve = arc(32,angle=[75,105],r=67.5);
+//   avgpt = mean([fullprofile[5]+.1*dir2, fullprofile[5]+.4*dir2]);
+//   color("red"){
+//    stroke([fullprofile[2]+.1*dir, fullprofile[2]+.4*dir], width=1);
+//    stroke([fullprofile[5]+.1*dir2, fullprofile[5]+.4*dir2], width=1);
+//    stroke(move(-curve[0]+avgpt,p=curve), width=1,endcaps="arrow2");
+//    back(10)text("thread",size=4,halign="center");
+//    back(3)text("angle",size=4,halign="center");
+//   }
+// Arguments:
+//   d = Base diameter of threads.  Default: 10
+//   pitch = Distance between threads.  Default: 2
+//   ---
+//   turns = Number of revolutions to rotate thread around.
+//   thread_depth = Depth of threads from top to bottom.
+//   flank_angle = Angle of thread faces to plane perpendicular to screw.  Default: 15 degrees.
+//   thread_angle = Angle between two thread faces.  
+//   profile = If an asymmetrical thread profile is needed, it can be specified here.
+//   starts = The number of thread starts.  Default: 1
+//   left_handed = If true, thread has a left-handed winding.
+//   internal = if true make internal threads.  The only effect this has is to change how the thread lead_in is constructed. When true, the lead-in section tapers towards the outside; when false, it tapers towards the inside.  Default: false
+//   d1 = Bottom inside base diameter of threads.
+//   d2 = Top inside base diameter of threads.
+//   lead_in = Specify linear length of the lead in section of the threading with blunt start threads
+//   lead_in1 = Specify linear length of the lead in section of the threading at the bottom with blunt start threads
+//   lead_in2 = Specify linear length of the lead in section of the threading at the top with blunt start threads
+//   lead_in_ang = Specify angular length in degrees of the lead in section of the threading with blunt start threads
+//   lead_in_ang1 = Specify angular length in degrees of the lead in section of the threading at the bottom with blunt start threads
+//   lead_in_ang2 = Specify angular length in degrees of the lead in section of the threading at the top with blunt start threads
+//   lead_in_shape = Specify the shape of the thread lead in by giving a text string or function.  Default: "sqrt"
+//   lead_in_sample = Factor to increase sample rate in the lead-in section.  Default: 10
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+// Example(2DMed): Typical Tooth Profile
+//   pitch = 2;
+//   depth = pitch * cos(30) * 5/8;
+//   profile = [
+//       [-6/16, 0           ],
+//       [-1/16, depth/pitch ],
+//       [ 1/16, depth/pitch ],
+//       [ 6/16, 0           ],
+//   ];
+//   stroke(profile, width=0.02);
+// Examples:
+//   thread_helix(d=10, pitch=2, thread_depth=0.75, flank_angle=15, turns=2.5, $fn=72);
+//   thread_helix(d=10, pitch=2, thread_depth=0.75, flank_angle=15, turns=2.5, lead_in=1, $fn=72);
+//   thread_helix(d=10, pitch=2, thread_depth=0.75, flank_angle=15, turns=2, lead_in=2, internal=true, $fn=72);
+//   thread_helix(d=10, pitch=2, thread_depth=0.75, flank_angle=15, turns=1, left_handed=true, lead_in=1, $fn=36);

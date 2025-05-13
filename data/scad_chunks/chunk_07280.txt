@@ -1,0 +1,32 @@
+module Cut(on=1,cut=[+1,+1,+1],t=[+0,0,+0.01],rot=+0,z=0,size=500,color,ghost=false,help){
+
+cut=v3(cut);
+t=v3(t);
+ghost=is_bool(ghost)?ghost?0.15:ghost:ghost;
+size=is_list(size)?size:[1,1,1]*size;
+ghostscale=.9999;
+$idx=0;
+
+intersection(){
+  union()children();
+  if($preview&&on||on==2)color(color)rotate(rot){
+    if(cut.x)color("red")translate([(cut.x>0?-size.x:0) + t.x,- size.y/2               , - size.z/2])cube(size);
+    if(cut.y)color("green")translate([-size.x/2                ,(cut.y>0?0:-size.y) + t.y, - size.z/2])cube(size);
+    if(cut.z)color("blue")translate([-size.x/2                ,- size.y/2               ,(cut.z>0? -size.z:0) + t.z+z])cube(size);
+  }
+}
+
+if(ghost&&on&&$preview){
+ $info=false;
+ $idx=1;
+ 
+ color("lightSkyBlue",alpha=ghost)%scale(ghostscale)children();
+ }
+Echo("»»»»––Cut is rendered! ––«««« \n",color="warning",condition=on==2);
+HelpTxt("Cut",["on",on,"cut",cut,"t",t,"rot",rot,"z",z,"size",size,"color",color,"ghost",ghost],help);
+MO(!$children);     
+}
+
+
+
+/// 3 axis Projection

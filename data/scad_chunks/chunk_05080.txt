@@ -1,0 +1,261 @@
+function mb_ring(r1,r2, cutoff=INF, influence=1, negative=false, hide_debug=false, d1,d2) =
+   assert(is_num(cutoff) && cutoff>0, "\ncutoff must be a positive number.")
+   assert(is_finite(influence) && influence>0, "\ninfluence must be a positive number.")
+   let(
+        _r1 = get_radius(r=r1, d=d1, dflt=undef),
+        _r2 = get_radius(r=r2, d=d2, dflt=undef),
+        dum = assert(is_finite(_r1) && is_finite(_r2), "\nBad ring size parameter."),
+        r_maj = (_r1 + _r2) / 2,
+        r_min = abs(_r1 - _r2) / 2,
+        neg = negative ? -1 : 1,
+        poly = [neg, hide_debug ? square(0.02,true) : ring(r1=_r1,r2=_r2,n=20)]
+   )
+   [function(point) _mb_ring_full(point, r_maj, r_min, cutoff, 1/influence, neg), poly];
+
+
+
+// Function&Module: metaballs2d()
+// Synopsis: Creates a group of 2D metaballs (smoothly connected blobs).
+// SynTags: Geom,Region
+// Topics: Metaballs, Contours, Path Generators (2D), Regions
+// See Also: contour(), metaballs()
+// Usage: As a module
+//   metaballs2d(spec, bounding_box, pixel_size, [isovalue=], [use_centers=], [smoothing=], [exact_bounds=], [show_stats=], [show_box=], [debug=] ...) [ATTACHMENTS];
+// Usage: As a function
+//   region = metaballs2d(spec, bounding_box, pixel_size, [isovalue=], [closed=], [use_centers=], [smoothing=], [exact_bounds=], [show_stats=]);
+// Description:
+//   ![Metaball animation](https://raw.githubusercontent.com/BelfrySCAD/BOSL2/master/images/metaball_demo2d.gif)
+//   .
+//   2D metaball shapes can be useful to create interesting polygons for extrusion. When invoked as a
+//   module, a 2D metaball scene is displayed. When called as a function, a [region](regions.scad) or list of
+//   [paths](paths.scad) is returned.
+//   .
+//   For a full explanation of metaballs, see [introduction](#section-metaballs) above. The
+//   specification method, tranformations, bounding box, and other parameters are the same as in 3D,
+//   but in 2D, pixels replace voxels.
+//   .
+//   See [metaball parameters](#metaball-parameters) for details on the primary parameters common to
+//   `metaballs()` and `metaballs2d()`. The `spec` parameter is described in more detail there. The `spec`
+//   parameter is a 1D list of alternating transforms and metaball functions; for example, the array
+//   `spec= [ left(9), mb_circle(5), right(9), mb_circle(5) ]` defines a scene with two circles of radius
+//   5 shifted 9 units to the left and right of the origin. The `spec` parameter completely defines the
+//   metaballs in your scene, including their position, orientation, and scaling, as well as different shapes.
+//   .
+//   You can create 2D metaballs in a variety of standard shapes using the predefined functions
+//   listed below. If you wish, you can also create custom metaball shapes using your own functions.
+//   For all of the built-in 2D metaballs, three parameters are available to
+//   control the interaction of the metaballs with each other: `cutoff`, `influence`, and `negative`.
+//   .
+//   The `cutoff` parameter specifies the distance beyond which the metaball has no interaction
+//   with other balls. When you apply `cutoff`, a smooth suppression factor begins
+//   decreasing the interaction strength at half the cutoff distance and reduces the interaction to
+//   zero at the cutoff. Depending on the value of `influence`, a cutoff that ends in the middle of
+//   another ball can result in strange shapes, as shown in Example 9, with the metaball
+//   interacting on one side of the boundary and not interacting on the other side. If you scale
+//   a ball, the cutoff value is also scaled.
+//   . 
+//   The `influence` parameter adjusts the strength of the interaction that metaball objects have with
+//   each other. If you increase `influence` of one metaball from its default of 1, then that metaball
+//   interacts with others at a longer range, and surrounding balls grow bigger. The metaball with larger
+//   influence can also grow bigger because it couples more strongly with other nearby balls, but it
+//   can also remain nearly unchanged while influencing others when `isovalue` is greater than 1.
+//   Decreasing influence has the reverse effect. Small changes in influence can have a large
+//   effect; for example, setting `influence=2` dramatically increases the interactions at longer
+//   distances, and you may want to set the `cutoff` argument to limit the range influence.
+//   At the other exteme, small influence values can produce ridge-like artifacts or texture on the
+//   model. Example 8 demonstrates this effect. To avoid these artifacts, keep `influence` above about
+//   0.5 and consider using `cutoff` instead of using small influence.
+//   .
+//   The `negative` parameter, if set to `true`, creates a negative metaball, which can result in
+//   hollows, dents, or reductions in size of other metaballs. 
+//   Negative metaballs are never directly visible; only their effects are visible. The `influence`
+//   argument may also behave in ways you don't expect with a negative metaball. See Examples 16 and 17.
+//   .
+//   ***Built-in 2D metaball functions***
+//   .
+//   Several metaballs are defined for you to use in your models. 
+//   All of the built-in metaballs take positional and named parameters that specify the size of the
+//   metaball (such as height or radius). The size arguments are the same as those for the regular objects
+//   of the same type (e.g. a circle accepts both `r` for radius and the named parameter `d=` for
+//   diameter). The size parameters always specify the size of the metaball **in isolation** with
+//   `isovalue=1`. The metaballs can grow much bigger than their specified sizes when they interact
+//   with each other. Changing `isovalue` also changes the sizes of metaballs. They grow bigger than their
+//   specified sizes, even in isolation, if `isovalue < 1` and smaller than their specified sizes if
+//   `isovalue > 1`.
+//   .
+//   The built-in 2D metaball functions are listed below. As usual, arguments without a trailing `=` can be used positionally; arguments with a trailing `=` must be used as named arguments.
+//   .
+//   * `mb_circle(r|d=)` &mdash; circular metaball, with radius `r` or diameter `d`.  You can create an ellipse using `scale()` as the last transformation entry of the metaball `spec` array. 
+//   * `mb_rect(size, [squareness=])` &mdash; a square/circle hybrid known as a squircle, appearing as a square with rounded edges and corners. The corner sharpness is controlled by the `squareness` parameter ranging from 0 (circular) to 1 (square), and defaults to 0.5. The `size` parameter specifies the dimensions of the squircle that circumscribes the rounded shape, which is tangent to the center of each square side. The `size` parameter may be a scalar or a vector, as in {{squircle()}}. Except when `squareness=1`, the sides are always a little bit curved.
+//   * `mb_trapezoid(h, w1|w=, w2|w=, [ang=], [rounding=])` &mdash; rounded trapezoid metaball with arguments similar to {{trapezoid()}}. Any three of the arguments `h` (height), `w1` (bottom width), `w2` (top width), or `ang` (bottom corner angle) may be specified, and `w` sets both `w1` and `w2` to the same size. The `rounding` argument defaults to 0 (sharp edge) if not specified. Only one rounding value is allowed: the rounding is the same at both ends. For a rounded rectangular shape, consider using `mb_rect()`, or `mb_stadium()`, which are less flexible but have faster execution time.
+//   * `mb_stadium(size)` &mdash; rectangle with rounded caps on the narrow ends. The object is a convex hull of two circles. Set the `size` parameter to `[width,height]` to get an object that fits inside a rectangle of that size. Giving a scalar size produces a circle.
+//   * `mb_connector2d(p1, p2, [r|d=])` &mdash; a stadium shape specified to connect point `p1` to point `p2` (which must be different 2D coordinates). As with `mb_stadium()`, the object is a convex hull of two circles. The points `p1` and `p2` are at the centers of the two round caps. The connectors themselves are still influenced by other metaballs, but it may be undesirable to have them influence others, or each other. If two connectors are connected, the joint may appear swollen unless `influence` or `cutoff` is reduced. Reducing `cutoff` is preferable if feasible, because reducing `influence` can produce interpolation artifacts.
+//   * `mb_ring(r1|d1=, r2|d2=)` &mdash; 2D ring metaball using a subset of {{ring()}} parameters, with inner radius being the smaller of `r1` and `r2`, and outer radius being the larger of `r1` and `r2`. If `cutoff` is applied, it is measured from the circle midway between `r1` and `r2`.
+//   .
+//   In addition to the dimensional arguments described above, all of the built-in functions accept the
+//   following named arguments:
+//   * `cutoff` &mdash; positive value giving the distance beyond which the metaball does not interact with other balls.  Cutoff is measured from the object's center. Default: INF
+//   * `influence` &mdash; a positive number specifying the strength of interaction this ball has with other balls.  Default: 1
+//   * `negative` &mdash; when true, creates a negative metaball. Default: false
+//   * `hide_debug` &mdash; when true, suppresses the display of the underlying metaball shape when `debug=true` is set in the `metaballs()` module. This is useful to hide shapes that may be overlapping others in the debug view. Default: false
+//   .
+//   ***Closed and unclosed paths***
+//   .
+//   The functional form of `metaballs2d()` supports a `closed` parameter. When `closed=true` (the default)
+//   and a polygon is clipped by the bounding box, the bounding box edges are included in the polygon. The
+//   resulting path list is a valid region with no duplicated vertices in any path. The module form of
+//   `metaballs2d()` always closes the polygons.
+//   .
+//   When `closed=false`, paths that intersect the edge of the bounding box end at the bounding box. This
+//   means that the list of paths may include a mixture of closed and open paths. Regardless of whether
+//   any of the output paths are open, all closed paths have identical first and last points so that  closed and
+//   open paths can be distinguished. You can use {{are_ends_equal()}} to determine if a path is closed. A path
+//   list that includes open paths is not a region, because regions are lists of closed polygons. Duplicating the
+//   ends of closed paths can cause problems for functions such as {{offset()}}, which would complain about
+//   repeated points. You can pass a closed path to {{list_unwrap()}} to remove the extra endpoint.
+// Arguments:
+//   spec = Metaball specification in the form `[trans0, spec0, trans1, spec1, ...]`, with alternating transformation matrices and metaball specs, where `spec0`, `spec1`, etc. can be a metaball function or another metaball specification.
+//   bounding_box = The volume in which to perform computations, expressed as a scalar size of a square centered on the origin, or a pair of 2D points `[[xmin,ymin], [xmax,ymax]]` specifying the minimum and maximum box corner coordinates. Unless you set `exact_bounds=true`, the bounding box size may be enlarged to fit whole pixels.
+//   pixel_size = Size of the pixels used to sample the bounding box area, can be a scalar or 2-vector, or omitted if `pixel_count` is set. You may get a non-square pixels of a slightly different size than requested if `exact_bounds=true`.
+//   ---
+//   pixel_count = Approximate number of pixels in the bounding box. If `exact_bounds=true` then the pixels may not be squares. Use with `show_stats=true` to see the corresponding pixel size. Default: 1024 (if `pixel_size` not set)
+//   isovalue = A scalar value specifying the isosurface value (threshold value) of the metaballs. At the default value of 1.0, the internal metaball functions are designd so the size arguments correspond to the size parameter (such as radius) of the metaball, when rendered in isolation with no other metaballs. You can also specify a range for isovalue, such as `[1,1.1]` in which case the metaball is displayed as a shell with the hollow inside corresponding to the higher isovalue. A scalar isovalue is equivalent to the vector `[isovalue,INF]`. Default: 1.0
+//   closed = (Function only) When true, close the path if it intersects the bounding box by adding a closing side. When false, do not add a closing side. Default: true, and always true when called as a module.
+//   use_centers = When true, uses the center value of each pixel as an additional data point to refine the contour path through the pixel. Default: false
+//   smoothing = Number of times to apply a 2-point moving average to the contours. This can remove small zig-zag artifacts resulting from a contour that follows the profile of a triangulated 3D surface when `use_centers` is set. Default: 2 if `use_centers=true`, 0 otherwise.
+//   exact_bounds = When true, shrinks pixels as needed to fit whole pixels inside the requested bounding box. When false, enlarges `bounding_box` as needed to fit whole pixels of `pixel_size`, and centers the new bounding box over the requested box. Default: false
+//   show_stats = If true, display statistics about the metaball isosurface in the console window. Besides the number of pixels that the contour passes through, and the number of segments making up the contour, this is useful for getting information about a possibly smaller bounding box to improve speed for subsequent renders. Default: false
+//   show_box = (Module only) Display the requested bounding box as a transparent rectangle. This box may appear slightly different than specified if the actual bounding box had to be expanded to accommodate whole pixels. Default: false
+//   debug = (Module only) Display the underlying primitive metaball shapes using your specified dimensional arguments, overlaid by the metaball scene rendered as outlines. Positive metaballs appear blue, negative appears orange, and any custom function with no debug polygon defined appears as a gray triangle of radius 5.
+//   cp = (Module only) Center point for determining intersection anchors or centering the shape. Determines the base of the anchor vector. Can be "centroid", "mean", "box" or a 3D point.  Default: "centroid"
+//   anchor = (Module only) Translate so anchor point is at origin (0,0,0). See [anchor](attachments.scad#subsection-anchor).  Default: `"origin"`
+//   spin = (Module only) Rotate this many degrees around the Z axis after anchor. See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = (Module only) Vector to rotate top toward, after spin. See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//   atype = (Module only) Select "hull" or "intersect" anchor type.  Default: "hull"
+// Anchor Types:
+//   "hull" = Anchors to the virtual convex hull of the shape.
+//   "intersect" = Anchors to the surface of the shape.
+// Side Effects:
+//   `$metaball_pathlist` is set to the region (array of contor paths) of the metaball scene.
+// Example(2D,NoAxes): Two circles interacting.
+//   spec = [
+//       left(9), mb_circle(5),
+//       right(9), mb_circle(5)
+//   ];
+//   metaballs2d(spec, pixel_size=1,
+//       bounding_box=[[-16,-7], [16,7]]);
+// Example(2D,NoAxes): Two rounded rectangles (squircles) interacting.
+//   spec = [
+//       move([-8,-6]), mb_rect(10),
+//       move([8,6]), mb_rect(10)
+//   ];
+//   metaballs2d(spec, pixel_size=1,
+//       bounding_box=[[-15,-13], [15,13]]);
+// Example(2D,NoAxes): Two rounded trapezoids interacting.
+//      spec = [
+//          left(10), mb_trapezoid(15, w1=12, w2=8, rounding=2),
+//          right(10), mb_trapezoid(15, w1=12, w2=8, rounding=2)
+//      ];
+//      metaballs2d(spec, pixel_size=1,
+//          bounding_box=[[-17,-10], [17,10]]);
+// Example(2D,NoAxes): Two stadiums interacting. The first stadium of size `[6,16]` has width less than height, which would normally be oriented vertically unless rotated 90° as done here. The second stadum of size `[16,6]` has width greater than height and is already oriented horizontally without rotation.
+//   metaballs2d([
+//       move([-8,4])*zrot(90), mb_stadium([6,16]),
+//       move([8,-4]), mb_stadium([16,6])
+//       ], [[-17,-8], [17,8]], 1);
+// Example(2D,NoAxes): A circle with two connectors.
+//   path = [[-20,0], [0,1], [-3,-10]];
+//   spec = [
+//       move(path[0]), mb_circle(6),
+//       for(seg=pair(path)) each
+//          [IDENT, mb_connector2d(seg[0],seg[1],
+//           2, influence=0.5)]
+//   ];
+//   metaballs2d(spec, pixel_size=1,
+//       bounding_box=[[-27,-13], [4,14]]);
+// Example(2D,NoAxes): Interaction between two rings.
+//    spec = [
+//        move([-7,-3]), mb_ring(3,6),
+//        move([7,3]),   mb_ring(3,7)
+//    ];
+//    pixel_size = 0.5;
+//    boundingbox = [[-14,-11], [16,11]];
+//    metaballs2d(spec, boundingbox, pixel_size);
+// Example(3D,Med): Setting `influence` to less than 0.5 can cause interpolation artifacts in the contour. The only difference between these two circles is `influence`. Both have `cutoff` set to prevent them from affecting each other. The circle on the right has a low influence of 0.02, which translates to a falloff with distance $d$ proportional to $1/d^{50}$. That high exponent increases the *non-linear* nature of the function gradient at the contour isovalue, reducing the accuracy of the *linear* interpolation of where the the contour intersects each pixel, causing bumps to appear. It is usually better to use `cutoff` to limit the range of influence rather than reducing `influence` significantly below 1.
+//   spec = [
+//       left(10), mb_circle(8, cutoff=10, influence=1),
+//       right(10), mb_circle(8, cutoff=10, influence=0.02)
+//   ];
+//   bbox = [[-18,-8], [18,8]];
+//   metaballs2d(spec, bounding_box=bbox, pixel_size=0.4);
+// Example(2D,NoAxes): A positive and negative metaball in close proximity, with the small negative metaball creating a dent in the large positive one. Small green cylinders indicate the center of each metaball. The negative metaball isn't visible because its field is negative; the contour encloses only field values greater than the isovalue of 1.
+//   centers = [[-1,0], [1.25,0]];
+//   spec = [
+//       move(centers[0]), mb_circle(8),
+//       move(centers[1]), mb_circle(3, negative=true)
+//   ];
+//   voxel_size = 0.25;
+//   boundingbox = [[-7,-6], [3,6]];
+//   metaballs2d(spec, boundingbox, voxel_size);
+//   color("green") move_copies(centers) cylinder(h=1,d=1,$fn=16);
+// Example(2D,VPD=105,VPT=[0,15,0]): When a positive and negative metaball interact, the negative metaball reduces the influence of the positive one, causing it to shrink, but not disappear because its contribution approaches infinity at its center. This example shows a large positive metaball near a small negative metaball at the origin. The negative ball has high influence, and a cutoff limiting its influence to 20 units. The negative metaball influences the positive one up to the cutoff, causing the positive metaball to appear smaller inside the cutoff range, and appear its normal size outside the cutoff range. The positive metaball has a small dimple at the origin (the center of the negative metaball) because it cannot overcome the infinite negative contribution of the negative metaball at the origin.
+//   spec = [
+//       back(10), mb_circle(20),
+//       IDENT, mb_circle(2, influence=30,
+//           cutoff=20, negative=true),
+//   ];
+//   pixel_size = 0.5;
+//   boundingbox = [[-20,-1], [20,31]];
+//   metaballs2d(spec, boundingbox, pixel_size);
+// Example(2D,NoAxes,VPD=250,VPT=[0,8,0]): Profile of an airplane, constructed only from metaball circles with scaling. The bounding box is used to clip the wingtips and tail.
+//   bounding_box = [[-55,-50],[35,50]];
+//   spec = [
+//       // fuselage
+//       move([-18,0])*scale([27,4]), mb_circle(1),
+//       // tail
+//       move([30,0])*scale([3,15]),  mb_circle(1),
+//       // wing
+//       move([-15,0])*scale([6,45]), mb_circle(1)
+//   ];
+//   pixel_size = 1;
+//   color("lightblue") zrot(-90)
+//     metaballs2d(spec, bounding_box, pixel_size);
+// Example(2D): This is the 2D version of the 3D Example 20 above, showing a custom metaball defined and passed as a function literal that takes a single [x,y] argument representing a coordinate relative to the metaball center, called `point` here, but can have any name. This distance vector from the origin is calculated internally and always passed to the function. Inside the function, it is converted to a scalar distance `dist`. The function literal expression sets all of your parameters. Only `point` is not set, and it becomes the single parameter to the function literal. The `spec` argument invokes your custom function as a function literal that passes `point` into it.
+//   function threelobe2d(point) =
+//      let(
+//           ang=atan2(point.y, point.x),
+//           dist=norm([point.x,point.y])*(1.3+cos(3*ang))
+//      ) 3/dist;
+//   metaballs2d(
+//       spec = [
+//           IDENT, function (point) threelobe2d(point),
+//           IDENT, mb_circle(r=3)
+//       ],
+//       bounding_box = [[-14,-12],[8,12]],
+//       pixel_size=0.5);
+// Example(2D): Analogous to the 3D Example 21 above, here is a 2D function nearly identical to the previous example, introducing additional dimensional parameters into the function to control its size and number of lobes. If you expiriment with this using different argument values, you should increase the bounding box along with pixel size.
+//   function multilobe2d(point, size, lobes) =
+//      let(
+//           ang=atan2(point.y, point.x),
+//           dist = norm([point.x,point.y])
+//               * (1.3+cos(lobes*ang))
+//      ) size/dist;
+//   metaballs2d(
+//       spec = [
+//           left(7),
+//              function (point) multilobe2d(point,3,4),
+//           right(7)*zrot(60),
+//              function (point) multilobe2d(point,3,3)
+//       ],
+//       bounding_box = [[-16,-13],[18,13]],
+//       pixel_size=0.4);
+// Example(2D,Med,NoAxes: Demonstration of `debug=true` with a variety of metaball shapes. The metaballs themselves are shown as outlines, with the underlying primitive shape shown in blue (for positive metaballs) or orange (for negative metaballs).
+//   spec = [
+//       IDENT,          mb_ring(r1=6, r2=9),
+//       move([15,0]),   mb_circle(3),
+//       IDENT,          mb_connector2d([10,10],[15,15],1),
+//       move([-12,12])*zrot(45),    mb_rect([3,5]),
+//       move([-14,-14])*zrot(-45),  mb_trapezoid(10,w1=7,w2=2,rounding=0.99),
+//       move([10,-10]), mb_circle(2, cutoff=10, negative=true)
+//   ];
+//   metaballs2d(spec, [[-20,-20],[20,17]], pixel_size=0.5, debug=true);

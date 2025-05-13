@@ -1,0 +1,19 @@
+module psu_grill(width, height, grill_hole = 4.5, grill_gap = 1.5, fn = 0, avoid = []) {
+    nx = floor(width / (grill_hole + grill_gap)) + 1;
+    xpitch = width / nx;
+    ny = floor(height / ((grill_hole + grill_gap) * cos(30))) + 1;
+    ypitch = height / ny;
+    r = grill_hole / 2;
+    avoid = avoid ? [for(p = avoid) [[p.x - p[2] / 2 - r, p.y - p[3] / 2 - r], [p.x + p[2] / 2 + r, p.y + p[3] / 2 + r]]] : false;
+
+    function in(regions, x, y) = [for(r = regions) if(x >= r[0].x && x <= r[1].x && y >= r[0].y && y <= r[1].y) true];
+
+    for(y = [0 : ny - 1], x = [0 : nx - 1 - (y % 2)]) {
+        x = -width / 2 + (x + 0.5 + (y % 2) / 2) * xpitch;
+        y = -height / 2 + (y + 0.5) * ypitch;
+        if(!avoid || !in(avoid, x, y))
+            translate([x, y])
+                rotate(30)
+                    circle(r, $fn = fn);
+    }
+}

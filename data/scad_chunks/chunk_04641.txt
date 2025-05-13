@@ -1,0 +1,8 @@
+module polyRoundExtrudeTestShape(points) {
+  // make sure no faces are inverted
+  difference() {
+    translate([0, 0, -2.5]) polyRoundExtrude(points,r1=-1,r2=1);
+    sphere(d=9);
+    translate([0,0,7])sphere(d=9);
+  }
+}

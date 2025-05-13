@@ -1,0 +1,1 @@
+function sclip_arm_length(type)    = type[10]; //! Length of arms

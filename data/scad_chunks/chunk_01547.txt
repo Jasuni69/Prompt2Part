@@ -1,0 +1,1 @@
+function rd_electrolytic_size(type)    = type[1]; //! Diameter, crimp diameter, height

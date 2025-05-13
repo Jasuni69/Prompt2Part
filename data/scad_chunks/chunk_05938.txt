@@ -1,0 +1,12 @@
+function _path_cut_single(path, dist, closed=false, ind=0, eps=1e-7) =
+    // If we get to the very end of the path (ind is last point or wraparound for closed case) then
+    // check if we are within epsilon of the final path point.  If not we're out of path, so we fail
+    ind==len(path)-(closed?0:1) ?
+       assert(dist<eps,"Path is too short for specified cut distance")
+       [select(path,ind),ind+1]
+    :let(d = norm(path[ind]-select(path,ind+1))) d > dist ?
+        [lerp(path[ind],select(path,ind+1),dist/d), ind+1] :
+        _path_cut_single(path, dist-d,closed, ind+1, eps);
+
+// Find normal directions to the path, coplanar to local part of the path
+// Or return a vector parallel to the x-y plane if the above fails

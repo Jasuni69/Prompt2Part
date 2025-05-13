@@ -1,0 +1,9 @@
+function scalar_vec3(v, dflt=undef) =
+	!is_def(v)? undef :
+	is_array(v)? [for (i=[0:2]) default(v[i], default(dflt, 0))] :
+	is_def(dflt)? [v,dflt,dflt] : [v,v,v];
+
+
+
+// Function: f_echo()
+// Description: If possible, echo a message from a function.

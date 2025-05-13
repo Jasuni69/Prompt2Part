@@ -1,0 +1,4 @@
+function processRadiiPoints(rp)=
+  [for(i=[0:len(rp)-1])
+    processRadiiPoints2(rp,i)
+  ];

@@ -1,0 +1,4 @@
+function faces2(points,start=0)=[for(i=[+0:len(points)-1])each[ //start/end Gang komplett
+    [i+start,i+start+1,i+len(points)+start],//skin tri 1
+    [i+start,i+len(points)+start,i+len(points)-1+start]//skin tri 2
+]];

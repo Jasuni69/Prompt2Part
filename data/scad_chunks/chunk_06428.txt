@@ -1,0 +1,34 @@
+function _hull3d_iterative(points, triangles, planes, remaining, _i=0) = //let( EPSILON=1e-12 )
+    _i >= len(remaining) ? triangles : 
+    let (
+        // pick a point
+        i = remaining[_i],
+        // evaluate the triangle plane equations at point i
+        planeq_val = planes*[each points[i], -1],
+        // find the triangles that are in conflict with the point (point not inside)
+        conflicts = [for (i = [0:1:len(planeq_val)-1]) if (planeq_val[i]>EPSILON) i ],
+        // collect the halfedges of all triangles that are in conflict 
+        halfedges = [ 
+            for(c = conflicts, i = [0:2])
+                [triangles[c][i], triangles[c][(i+1)%3]]
+        ],
+        // find the outer perimeter of the set of conflicting triangles
+        horizon = _remove_internal_edges(halfedges),
+        // generate new triangles connecting point i to each horizon halfedge vertices
+        tri2add = [ for (h = horizon) concat(h,i) ],
+        // add tria2add and remove conflict triangles
+        new_triangles = 
+            concat( tri2add,
+                    [ for (i = [0:1:len(planes)-1]) if (planeq_val[i]<=EPSILON) triangles[i] ] 
+                  ),
+        // add the plane equations of new added triangles and remove the plane equations of the conflict ones
+        new_planes = 
+            [ for (t = tri2add) plane3pt_indexed(points, t[0], t[1], t[2]) ,
+              for (i = [0:1:len(planes)-1]) if (planeq_val[i]<=EPSILON) planes[i] ] 
+    ) _hull3d_iterative(
+        points,
+        new_triangles,
+        new_planes,
+        remaining,
+        _i+1
+    );

@@ -1,0 +1,63 @@
+module Servotraeger(SON=1,top=0,help)
+ {
+   HelpTxt("Servotraeger",["SON",SON,"top",top],help);
+    if(!top)translate([0,+0,+35.4]) difference()
+     {
+         minkowski()
+         {
+             translate([-11,+0,-33.9]) cube([29,20,3],center=true);
+             cylinder(1,d=5,$fn=36);
+         }
+        if(SON) #translate([-11,0,-40]) rotate([0,0,-90])Servo(0);
+            else translate([-11,0,-40]) rotate([0,0,-90])Servo(0);
+          * mirror([0,1,0])translate([-11,-30,-40]) rotate([0,0,-90])Servo();
+     }
+                              
+                *minkowski()//Sockel
+                 {
+                     translate([+2,+0,-27.4]) cube([15,9,16],center=true);
+                     cylinder(1,d=5,$fn=36);
+                 }
+
+if (top) difference(){
+    if($children)children();
+        else cylinder(4,d=20);
+    linear_extrude(9,center=true,convexity=5)Rund(1){
+        circle(d=11.5+spiel);
+        T(6)circle(d=5.5+spiel);
+        }
+    T(23/2-(11.5+spiel)/2){
+        R(180)Prisma(23,11.5+spiel,5,c1=1,s=.5);  //Servo
+        R(180)Tz(4.0)Prisma(33,11.5+spiel,100,c1=1,s=.5);  //Servobody unten
+     R(180)  Mklon(tx=28/2,mz=0)linear_extrude(5,center=false,convexity=5)Rund(.35)Stern(5,5.9,0.5);//Schraubenlöcher
+        
+        }
+        cylinder(8,d=9);//Servoachse
+    }   
+        
+   }
+   
+  // Products ΔΔ
+{ // OLD and Replaced modules
+
+
+   
+   module ZylinderOLD(h=10,r=10,fn=150,fnh=150,grad=360,grad2=84,f=10,f2=10,f3=0,a=.5,a3=0,fz=0,az=0,deltaFz=0,deltaF=90,deltaF2=0,deltaF3=0,twist=0,scale=+1,sphere=0,lz,help){
+    stepRot=grad/fn;
+    stepH=h/fnh;
+points=[for(z=[0:fnh],rot=[0:fn])RotLang(
+    rot=rot*stepRot+twist*z/fnh,
+    l=(1+(scale-1)*z/fnh)*(r+a3*sin(rot*stepRot*f3+deltaF3)+a*sin(rot*stepRot*f+deltaF)*cos(z*f2*360/fnh+deltaF2)+az*sin(z*fz*360/fnh+deltaFz)),
+    lz=lz,
+    z=sphere?undef:z*stepH,
+    e=z*grad2/fnh
+    )];
+
+
+faces=[for(i=[0:len(points)-fn-2])[i,i+1,i+2+fn,i+fn+1]];
+    faces2=[[for(i=[fn-1:-1:+0])i],[for(i=[len(points)-fn:len(points)-1])i]];
+  
+//faces=[for(i=[0:len(points)-fn-2])each[[i,i+1,i+fn],[i+1,i+1+fn,i+fn]]];    
+polyhedron(points,concat(faces2,faces),convexity=15);
+HelpTxt("Zylinder",["h=",h,",r=",r,",fn=",fn,",fnh=",fnh,", grad=",grad,",grad2=",grad2,",f=",f,",f2=",f2,", f3=",f3, ",a=",a," a3=",a3," ,fz=",fz,",az=",az,",deltaFz=",deltaFz," ,deltaF=",deltaF," ,deltaF2=",deltaF2," ,deltaF3=",deltaF3,", twist=",twist,",scale=",scale,",sphere=",sphere,",lz=",lz],help); 
+}

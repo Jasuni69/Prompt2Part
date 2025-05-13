@@ -1,0 +1,18 @@
+function complex(list) =
+   is_num(list) ? [list,0] :
+   [for(entry=list) is_num(entry) ? [entry,0] : complex(entry)];
+
+
+// Function: c_mul()
+// Synopsis: Multiplies two complex numbers.
+// Topics: Math, Complex Numbers
+// See Also: complex(), c_mul(), c_div(), c_conj(), c_real(), c_imag(), c_ident(), c_norm()
+// Usage:
+//   c = c_mul(z1,z2)
+// Description:
+//   Multiplies two complex numbers, vectors or matrices, where complex numbers
+//   or entries are represented as vectors: [REAL, IMAGINARY].  All
+//   entries in both arguments must be complex.  
+// Arguments:
+//   z1 = First complex number, vector or matrix
+//   z2 = Second complex number, vector or matrix

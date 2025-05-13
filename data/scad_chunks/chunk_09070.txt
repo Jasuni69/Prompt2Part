@@ -1,0 +1,9 @@
+function carve(dir, x, y, z, cells, layers, rows, columns) =
+    dir == 0 ? carve_right(x, y, z, cells) : 
+    dir == 1 ? carve_top(x, y, z, cells) : 
+    dir == 2 ? carve_left(x, y, z, cells, columns) : 
+    dir == 3 ? carve_bottom(x, y, z, cells, rows) : 
+    dir == 4 ? carve_up(x, y, z, cells) : 
+    /*dir 5*/  carve_down(x, y, z, cells, layers);
+    
+// go maze from (x, y, z)

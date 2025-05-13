@@ -1,0 +1,5 @@
+module test_max_index() {
+    assert(max_index([5,3,9,6,2,7,8,9,1])==2);
+    assert(max_index([5,3,9,6,2,7,8,9,7],all=true)==[2,7]);
+}
+test_max_index();

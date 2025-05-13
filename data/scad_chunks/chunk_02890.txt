@@ -1,0 +1,395 @@
+module printSnapJoins(casePart)
+{
+  if (casePart == yappPartBase) 
+  {
+    //--   The snap itself
+    if (len(snapJoins) > 0) 
+    {
+      assert ((ridgeHeight >= (wallThickness*wallToRidgeRatio)), str("ridgeHeight < ", wallToRidgeRatio, " times wallThickness: no SnapJoins possible"));
+    }
+
+    for (snj = snapJoins)
+    {
+      useCenter = (isTrue(yappCenter, snj));
+      diamondshape = isTrue(yappRectangle, snj);
+
+      snapDiam   = (!diamondshape) ? wallThickness : (wallThickness/sqrt(2));  // fixed
+      sideLength = ((isTrue(yappLeft, snj)) || (isTrue(yappRight, snj))) ? shellLength : shellWidth;
+      snapWidth  = snj[1];
+      snapStart  = (useCenter) ? snj[0] - snapWidth/2 : snj[0];
+      snapZpos = (!diamondshape) ? 
+                  (basePlaneThickness+baseWallHeight)-((wallThickness/2)) 
+                : (basePlaneThickness+baseWallHeight)-((wallThickness));
+      tmpAmin    = (roundRadius)+(snapWidth/2);
+      tmpAmax    = sideLength - tmpAmin;
+      tmpA       = max(snapStart+(snapWidth/2), tmpAmin);
+      snapApos   = min(tmpA, tmpAmax);
+      
+      if(!diamondshape)
+      {
+        if (isTrue(yappLeft, snj))
+        {
+          translate([snapApos-(snapWidth/2),
+                        wallThickness/2,
+                        snapZpos])
+          {
+            rotate([0,90,0])
+              color("blue") cylinder(d=snapDiam, h=snapWidth);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([shellLength-(snapApos+(snapWidth/2)),
+                        wallThickness/2,
+                        snapZpos])
+            {
+              rotate([0,90,0])
+                color("blue") cylinder(d=snapDiam, h=snapWidth);
+            }
+            
+          } // yappSymmetric
+        } // yappLeft
+        
+        if (isTrue(yappRight, snj))
+        {
+          translate([snapApos-(snapWidth/2),
+                        shellWidth-(wallThickness/2),
+                        snapZpos])
+          {
+            rotate([0,90,0])
+              color("blue") cylinder(d=snapDiam, h=snapWidth);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([shellLength-(snapApos+(snapWidth/2)),
+                        shellWidth-(wallThickness/2),
+                        snapZpos])
+            {
+              rotate([0,90,0])
+                color("blue") cylinder(d=snapDiam, h=snapWidth);
+            }
+            
+          } // yappSymmetric
+        } // yappRight
+        
+        if (isTrue(yappBack, snj))
+        {
+          translate([(wallThickness/2),
+                        snapApos-(snapWidth/2),
+                        snapZpos])
+          {
+            rotate([270,0,0])
+              color("blue") cylinder(d=snapDiam, h=snapWidth);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([(wallThickness/2),
+                          shellWidth-(snapApos+(snapWidth/2)),
+                          snapZpos])
+            {
+              rotate([270,0,0])
+                color("blue") cylinder(d=snapDiam, h=snapWidth);
+            }
+            
+          } // yappSymmetric
+        } // yappBack
+        
+        if (isTrue(yappFront, snj))
+        {
+          translate([shellLength-(wallThickness/2),
+                        snapApos-(snapWidth/2),
+                        snapZpos])
+          {
+            rotate([270,0,0])
+              color("blue") cylinder(d=snapDiam, h=snapWidth);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([shellLength-(wallThickness/2),
+                          shellWidth-(snapApos+(snapWidth/2)),
+                          snapZpos])
+            {
+              rotate([270,0,0])
+                color("blue") cylinder(d=snapDiam, h=snapWidth);
+            }
+            
+          } // yappSymmetric
+        } // yappFront
+      }
+      else 
+      {
+        //-- Use Diamond shaped snaps
+        
+        if (isTrue(yappLeft, snj))
+        {
+          translate([snapApos-(snapWidth/2), (wallThickness/2)+0.15, snapZpos])
+          {
+            scale([1,.60, 1])
+              rotate([45,0,0])
+                color("blue") cube([snapWidth, snapDiam, snapDiam]);
+
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([shellLength-(snapApos+(snapWidth/2)),
+                        (wallThickness/2)+0.15,
+                        snapZpos])
+            {
+            scale([1,.60, 1])
+              rotate([45,0,0])
+                color("blue") cube([snapWidth, snapDiam, snapDiam]);
+            }
+            
+          } // yappSymmetric
+        } // yappLeft
+        
+        if (isTrue(yappRight, snj))
+        {
+          translate([snapApos-(snapWidth/2),
+                        shellWidth-((wallThickness/2)+0.15),
+                        snapZpos])
+          {
+            scale([1,.60, 1])
+              rotate([45,0,0])
+                color("blue") cube([snapWidth, snapDiam, snapDiam]);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([shellLength-(snapApos+(snapWidth/2)),
+                        shellWidth-((wallThickness/2)+0.15),
+                        snapZpos])
+            {
+              scale([1,.60, 1])
+                rotate([45,0,0])
+                  color("blue") cube([snapWidth, snapDiam, snapDiam]);
+
+            }
+            
+          } // yappSymmetric
+        } // yappRight
+        
+        if (isTrue(yappBack, snj))
+        {
+          translate([((wallThickness/2)+0.15),
+                        snapApos-(snapWidth/2),
+                        snapZpos])
+          {
+            scale([.60,1, 1])
+              rotate([45,0,90])
+               color("blue") cube([snapWidth, snapDiam, snapDiam]);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([((wallThickness/2)+0.15),
+                          shellWidth-(snapApos+(snapWidth/2)),
+                          snapZpos])
+            {
+              scale([.60,1, 1])
+                rotate([45,0,90])
+                  color("blue") cube([snapWidth, snapDiam, snapDiam]);
+            }
+            
+          } // yappCenter
+        } // yappBack
+        
+        if (isTrue(yappFront, snj))
+        {
+          translate([shellLength-((wallThickness/2)+0.15),
+                        snapApos-(snapWidth/2),
+                        snapZpos])
+          {
+            scale([.60, 1, 1])
+              rotate([45,0,90])
+                color("blue") cube([snapWidth, snapDiam, snapDiam]);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([shellLength-((wallThickness/2)+0.15),
+                          shellWidth-(snapApos+(snapWidth/2)),
+                          snapZpos])
+            {
+              scale([.60, 1, 1])
+                rotate([45,0,90])
+                  color("blue") cube([snapWidth, snapDiam, snapDiam]);
+            }          
+          } // yappCenter
+        } // yappFront
+      } // diamondshape
+    } // for snj .. 
+  } //  Base
+
+  if (casePart == yappPartLid) 
+  {
+    //-- The cutout/reciever 
+    if (len(snapJoins) > 0) 
+    {
+      assert ((ridgeHeight >= (wallThickness*wallToRidgeRatio)), str("ridgeHeight < ", wallToRidgeRatio, " times wallThickness: no SnapJoins possible"));
+    }
+    
+    for (snj = snapJoins)
+    {
+      useCenter = (isTrue(yappCenter, snj));
+      diamondshape = isTrue(yappRectangle, snj);
+      
+      sideLength = ((isTrue(yappLeft, snj)) || (isTrue(yappRight, snj))) ? shellLength : shellWidth;
+      snapWidth  = snj[1]+1;
+      snapStart  = (useCenter) ? (snj[0] - snapWidth/2) : (snj[0]) - 0.5;
+      snapDiam   = (!diamondshape) ? (wallThickness*1.0) : wallThickness/sqrt(2);
+      snapZpos = (!diamondshape) 
+                  ? ((lidPlaneThickness+lidWallHeight)*-1)-(wallThickness*1.0)
+                  : ((lidPlaneThickness+lidWallHeight)*-1)-(wallThickness);
+      tmpAmin    = (roundRadius)+(snapWidth/2);
+      tmpAmax    = sideLength - tmpAmin;
+      tmpA       = max(snapStart+(snapWidth/2), tmpAmin);
+      snapApos   = min(tmpA, tmpAmax);
+
+      if(!diamondshape)
+      {
+        if (isTrue(yappLeft, snj))
+        {
+          translate([snapApos-(snapWidth/2), -0.02, snapZpos])
+          {
+            color("blue") cube([snapWidth, wallThickness+0.04, snapDiam]);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([shellLength-(snapApos+(snapWidth/2)), -0.02, snapZpos])
+            {
+              color("blue") cube([snapWidth, wallThickness+0.04, snapDiam]);
+            }
+          } // yappSymmetric
+        } // yappLeft
+        
+        if (isTrue(yappRight, snj))
+        {
+          translate([snapApos-(snapWidth/2),shellWidth-wallThickness-0.02, snapZpos])
+          {
+            color("blue") cube([snapWidth, wallThickness+0.04, snapDiam]);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([shellLength-(snapApos+(snapWidth/2)), shellWidth-wallThickness-0.02, snapZpos])
+            {
+              color("blue") cube([snapWidth, wallThickness+0.04, snapDiam]);
+            } 
+          } // yappSymmetric
+        } // yappRight
+        
+        if (isTrue(yappBack, snj))
+        {
+          translate([-0.02, snapApos-(snapWidth/2), snapZpos])
+          {
+            color("blue") cube([wallThickness+0.04, snapWidth, snapDiam]);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([-0.02, shellWidth-(snapApos+(snapWidth/2)), snapZpos])
+            {
+              color("blue") cube([wallThickness+0.04, snapWidth, snapDiam]);
+            }
+          } // yappSymmetric
+        } // yappBack
+        
+        if (isTrue(yappFront, snj))
+        {
+          translate([shellLength-wallThickness-0.02, snapApos-(snapWidth/2), snapZpos])
+          {
+            color("blue") cube([wallThickness+0.04, snapWidth, snapDiam]);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([shellLength-wallThickness-0.02, shellWidth-(snapApos+(snapWidth/2)), snapZpos])
+            {
+              color("blue") cube([wallThickness+0.04, snapWidth, snapDiam]);
+            }
+          } // yappSymmetric
+        } // yappFront
+      }
+      else
+      // Use the Diamond Shape
+      {
+        if (printMessages) echo ("making Diamond shaped snaps");
+        if (isTrue(yappLeft, snj))
+        {
+          translate([snapApos-(snapWidth/2)-0.5, (wallThickness/2)+0.15, snapZpos])
+          {
+            scale([1,.60, 1])
+                rotate([45,0,0])
+            color("blue") cube([snapWidth+1, snapDiam, snapDiam]);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+          //  translate([shellLength-(snapApos+(snapWidth/2)+0.5), (wallThickness/2)+0.04, snapZpos])
+            translate([shellLength-(snapApos+(snapWidth/2)+0.5), (wallThickness/2)+0.15, snapZpos])
+            {
+              scale([1,.60, 1])
+                rotate([45,0,0])
+              color("blue") cube([snapWidth+1, snapDiam, snapDiam]);
+            }
+          } // yappSymmetric
+        } // yappLeft
+        
+        if (isTrue(yappRight, snj))
+        {
+          translate([snapApos-(snapWidth/2)-0.5, shellWidth-(wallThickness/2)-0.15, snapZpos])
+          {
+            scale([1,.60, 1])
+                rotate([45,0,0])
+            color("blue") cube([snapWidth+1, snapDiam, snapDiam]);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([shellLength-(snapApos+(snapWidth/2)+0.5), shellWidth-(wallThickness/2)-0.15, snapZpos])
+            {
+              scale([1,.60, 1])
+                rotate([45,0,0])
+              color("blue") cube([snapWidth+1, snapDiam, snapDiam]);
+            } 
+          } // yappSymmetric
+        } // yappRight
+        
+        if (isTrue(yappBack, snj))
+        {
+          translate([(wallThickness/2)+0.15, snapApos-(snapWidth/2)-0.5, snapZpos])
+          {
+            scale([0.6, 1, 1])
+             rotate([45,0,90])
+              color("blue") 
+               cube([snapWidth+1, snapDiam, snapDiam]);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([(wallThickness/2)+0.15, shellWidth-(snapApos+(snapWidth/2))-0.5, snapZpos])
+            {
+              scale([0.6, 1, 1])
+              rotate([45,0,90])
+                 color("blue") 
+                   cube([snapWidth+1, snapDiam, snapDiam]);
+            }
+            
+          } // yappSymmetric
+        } // yappBack
+        
+        if (isTrue(yappFront, snj))
+        {
+          translate([shellLength-((wallThickness/2)+0.15), snapApos-(snapWidth/2)-0.5, snapZpos])
+          {
+              scale([0.6, 1, 1])
+                rotate([45,0,90])
+            color("blue") cube([snapWidth+1, snapDiam, snapDiam]);
+          }
+          if (isTrue(yappSymmetric, snj))
+          {
+            translate([shellLength-((wallThickness/2)+0.15),  shellWidth-(snapApos+(snapWidth/2))-0.5,  snapZpos])
+            {
+              scale([0.6, 1, 1])
+                rotate([45,0,90])
+              color("blue") cube([snapWidth+1, snapDiam, snapDiam]);
+            }     
+          } // yappSymmetric
+        } // yappFront      
+      }
+    } // for snj .. 
+  } //  Lid()
+} //-- printSnapJoins()
+
+//===========================================================

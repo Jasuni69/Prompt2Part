@@ -1,0 +1,11 @@
+function simplify2d_path(path, eps=1e-6) = simplify_path(path, eps=eps);
+
+
+// Function: simplify3d_path()
+// Description:
+//   Takes a 3D polyline and removes unnecessary collinear points.
+// Usage:
+//   simplify3d_path(path, [eps])
+// Arguments:
+//   path = A list of 3D path points.
+//   eps = Largest angle delta between segments to count as colinear.  Default: 1e-6

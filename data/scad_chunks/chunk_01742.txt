@@ -1,0 +1,50 @@
+module flex(cutout = false) { //! Draw flexistrip connector
+    l = 20.6;
+    w = 3;
+    h = 5.6;
+    top_l = 22.4;
+    top_t = 1.1;
+    tab_l = 13;
+    tab_w = 1;
+    slot_l = 16.4;
+    slot_w = 0.7;
+    slot_offset = 0.6;
+
+    if(cutout)
+        ;
+    else {
+        color(grey(30)) {
+            translate_z(0.5)
+                cube([l, w, 1], center = true);
+
+            linear_extrude(h)
+                difference() {
+                    square([l, w], center = true);
+
+                    translate([0, -w / 2 + slot_offset + slot_w / 2])
+                        square([slot_l, slot_w], center = true);
+                }
+
+            translate_z(h - top_t)
+                linear_extrude(top_t)
+                    difference() {
+                        union() {
+                            square([top_l, w], center = true);
+
+                            hull() {
+                                translate([0, -w / 2 + (w + tab_w) / 2])
+                                    square([tab_l - 1, w + tab_w], center = true);
+
+                                square([tab_l, w], center = true);
+                            }
+                        }
+
+                        translate([0, -w / 2 + slot_offset + slot_w / 2])
+                            square([slot_l, slot_w], center = true);
+                    }
+        }
+    }
+}
+
+small_ff = [[11.8, 0.9], [17, 1.4, 1.2], [12, 1.6, 1.2], [16, 1.1, 1.2]];
+large_ff = [[16,  1.25], [22, 1.5, 2.5], [16, 4.0, 2.5], [21, 0,   2.5]];

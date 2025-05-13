@@ -1,0 +1,50 @@
+            children(1);
+            clad(max(r),q) intersection(){
+                    children(0);
+                    children(1);
+                }
+            }
+            }
+        else {
+        union() {
+          if(includeOperands){ 
+                children(0);
+                children(1);
+               }
+            if (showMask && $children > 2) %
+                for (i = [2: max(2, $children - 1)]) children(i);
+
+            if ($children > 2)
+                for (i = [2: max(2, $children - 1)]) {
+                    intersection() {
+                        children(i);
+
+                        unionRound(r, detail,q, epsilon,includeOperands) {
+                            intersection() {
+                                children(0);
+                                children(i); // mask
+                            }
+                            intersection() {
+                                children(1);
+                                children(i); // mask
+                            }
+                        }
+                    }
+                }
+            }
+         }
+    }
+    
+    
+    module unionRound(r=1, detail = 5,q=70,  epsilon = 1e-6, includeOperands=true) {
+       if(includeOperands){ 
+        children(0);
+        children(1);
+       }
+        step = 90 / detail;
+       rx=is_list(r)?r[1]:r;
+       ry=is_list(r)?r[0]:r;
+      union()for (i = [0:  detail-1]) {
+            {
+                x = rx - sin(i * step ) * rx;
+                y = ry - cos(i * step ) * ry;

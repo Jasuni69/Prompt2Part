@@ -1,0 +1,1 @@
+function nut_thickness(type, nyloc = false) = nyloc ? type[4] : type[3]; //! Thickness of plain or nyloc version

@@ -1,0 +1,4 @@
+function shoulder_screw(s,d,length,head, thread_len, tolerance, head_size, drive, drive_size, thread,
+                      undersize, shaft_undersize, head_undersize, shoulder_undersize=0,
+                      blunt_start, blunt_start1, blunt_start2, 
+                      atype="screw", anchor=BOT, orient,spin) = no_function("shoulder_screw");

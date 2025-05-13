@@ -1,0 +1,12 @@
+function vector2d_angle(v1,v2) = vector_angle(v1,v2);
+
+
+// Function: vector3d_angle()
+// Status: DEPRECATED, use `vector_angle()` instead.
+// Usage:
+//   vector3d_angle(v1,v2);
+// Description:
+//   Returns angle in degrees between two 3D vectors.
+// Arguments:
+//   v1 = First 3D vector.
+//   v2 = Second 3D vector.

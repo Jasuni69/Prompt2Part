@@ -1,0 +1,4 @@
+module mod_screw_positions(type) //! Position children at the screw positions
+    for(p = mod_holes(type))
+        translate([p.x, p.y])
+            children();

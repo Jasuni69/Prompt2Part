@@ -1,0 +1,1 @@
+function threaded_insert_chamfer(type) = type[10];  //! Size of the chamfer for threaded inserts

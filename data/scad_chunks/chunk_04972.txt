@@ -1,0 +1,95 @@
+module dashed_stroke(path, dashpat=[3,3], width=1, closed=false, fit=true, roundcaps=false) {
+    no_children($children);
+    segs = dashed_stroke(path, dashpat=dashpat*width, closed=closed, fit=fit, mindash=0.5*width);
+    for (seg = segs)
+        stroke(seg, width=width, endcaps=roundcaps? "round" : false);
+}
+
+
+
+// Section: Computing paths
+
+// Function&Module: arc()
+// Synopsis: Draws a 2D pie-slice or returns 2D or 3D path forming an arc.
+// SynTags: Geom, Path 
+// Topics: Paths (2D), Paths (3D), Shapes (2D), Path Generators, Rounding
+// See Also: pie_slice(), stroke(), ring()
+//
+// Usage: 2D arc from 0º to `angle` degrees.
+//   path=arc(n, r|d=, angle);
+// Usage: 2D arc from START to END degrees.
+//   path=arc(n, r|d=, angle=[START,END]);
+// Usage: 2D arc from `start` to `start+angle` degrees.
+//   path=arc(n, r|d=, start=, angle=);
+// Usage: 2D circle segment by `width` and `thickness`, starting and ending on the X axis.
+//   path=arc(n, width=, thickness=);
+// Usage: Shortest 2D or 3D arc around centerpoint `cp`, starting at P0 and ending on the vector pointing from `cp` to `P1`.
+//   path=arc(n, cp=, points=[P0,P1], [long=], [cw=], [ccw=]);
+// Usage: 2D or 3D arc, starting at `P0`, passing through `P1` and ending at `P2`.
+//   path=arc(n, points=[P0,P1,P2]);
+// Usage: 2D or 3D arc, fron tangent point on segment `[P0,P1]` to the tangent point on segment `[P1,P2]`.
+//   path=arc(n, corner=[P0,P1,P2], r=);
+// Usage: Create a wedge using any other arc parameters
+//   path=arc(wedge=true,[rounding=],...)
+// Usage: as module
+//   arc(...) [ATTACHMENTS];
+// Description:
+//   If called as a function, returns a 2D or 3D path forming an arc.  If `wedge` is true, the centerpoint of the arc appears as the first point in the result.
+//   If called as a module, creates a 2D arc polygon or pie slice shape.  Numerous methods are available to specify the arc.
+//   .
+//   The `rounding` parameter is permitted only when `wedge=true` and applies specified radius roundings at each of the corners, with `rounding[0]` giving
+//   the rounding at the center point, and then the other two the two outer corners in the direction that the arc travels.  If you don't need to control
+//   the exact point count, you should use `$fs` and `$fa` to control the number of points on the roundings and arc.  If you give `n` then each arc
+//   section in your curve uses `n` points, so the total number of points is `n` times one plus the number of non-zero roundings you specified.
+// Arguments:
+//   n = Number of vertices to use in the arc.  If `wedge=true` you will get `n+1` points.  
+//   r = Radius of the arc.
+//   angle = If a scalar, specifies the end angle in degrees (relative to start parameter).  If a vector of two scalars, specifies start and end angles.
+//   ---
+//   d = Diameter of the arc.
+//   cp = Centerpoint of arc.
+//   points = Points on the arc.
+//   corner = A path of two segments to fit an arc tangent to.
+//   long = if given with cp and points takes the long arc instead of the default short arc.  Default: false
+//   cw = if given with cp and 2 points takes the arc in the clockwise direction.  Default: false
+//   ccw = if given with cp and 2 points takes the arc in the counter-clockwise direction.  Default: false
+//   width = If given with `thickness`, arc starts and ends on X axis, to make a circle segment.
+//   thickness = If given with `width`, arc starts and ends on X axis, to make a circle segment.
+//   start = Start angle of arc.  Default: 0
+//   wedge = If true, include centerpoint `cp` in output to form pie slice shape.  Default: false
+//   endpoint = If false exclude the last point (function only).  Default: true
+//   rounding = Can set to a scalar or list of three rounding values to round the corners of an arc when wedge=true.  Default: 0
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  (Module only) Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  (Module only) Default: `0`
+// Examples(2D):
+//   arc(n=4, r=30, angle=30, wedge=true);
+//   arc(r=30, angle=30, wedge=true);
+//   arc(d=60, angle=30, wedge=true);
+//   arc(d=60, angle=120);
+//   arc(d=60, angle=120, wedge=true);
+//   arc(r=30, angle=[75,135], wedge=true);
+//   arc(r=30, start=45, angle=75, wedge=true);
+//   arc(width=60, thickness=20);
+//   arc(cp=[-10,5], points=[[20,10],[0,35]], wedge=true);
+//   arc(points=[[30,-5],[20,10],[-10,20]], wedge=true);
+// Example(2D): Fit to three points.
+//   arc(points=[[5,30],[-10,-10],[30,5]], wedge=true);
+// Example(2D):
+//   path = arc(points=[[5,30],[-10,-10],[30,5]], wedge=true);
+//   stroke(closed=true, path);
+// Example(FlatSpin,VPD=175):
+//   path = arc(points=[[0,30,0],[0,0,30],[30,0,0]]);
+//   stroke(path, dots=true, dots_color="blue");
+// Example(2D): Fit to a corner.
+//   pts = [[0,40], [-40,-10], [30,0]];
+//   path = arc(corner=pts, r=20);
+//   stroke(pts, endcaps="arrow2");
+//   stroke(path, endcap2="arrow2", color="blue");
+// Example(2D, NoScales): Rounding the corners
+//   $fs=.5; $fa=1;
+//   arc(r=25, angle=[25,107], rounding=[6,5,7], wedge=true);
+//   stroke(arc(r=25, angle=[25,107], wedge=true), color="red",closed=true, width=.5);
+// Example(2D, NoScales): Negative roundings are permitted on the two outside corners, but not the center corner.  
+//   $fs=.5; $fa=1;
+//   arc(r=25, angle=[-30,45], rounding=[0,-12, -27], wedge=true);
+//   stroke(arc(r=25, angle=[-30,45], wedge=true), color="red",closed=true, width=.5);

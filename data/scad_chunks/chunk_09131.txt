@@ -1,0 +1,3 @@
+function _right(x, y) =
+    let(nx_2 = x * 2 + 2, ny = y * 2)
+    [for(i = [2, 1, 0]) [nx_2, ny + i]];

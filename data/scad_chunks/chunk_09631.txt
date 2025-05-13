@@ -1,0 +1,46 @@
+function get_metric_nut_thickness(size) = lookup(size, [
+		[ 1.6,  1.3],
+		[ 2.0,  1.6],
+		[ 2.5,  2.0],
+		[ 3.0,  2.4],
+		[ 4.0,  3.2],
+		[ 5.0,  4.0],
+		[ 6.0,  5.0],
+		[ 7.0,  5.5],
+		[ 8.0,  6.5],
+		[10.0,  8.0],
+		[12.0, 10.0],
+		[14.0, 11.0],
+		[16.0, 13.0],
+		[18.0, 15.0],
+		[20.0, 16.0],
+		[24.0, 21.5],
+		[30.0, 25.6],
+		[36.0, 31.0],
+		[42.0, 34.0],
+		[48.0, 38.0],
+		[56.0, 45.0],
+		[64.0, 51.0]
+	]);
+
+
+
+// Section: Modules
+
+
+// Module: screw()
+// Description:
+//   Makes a very simple screw model, useful for making screwholes.
+// Usage:
+//   screw(screwsize, screwlen, headsize, headlen, [countersunk], [orient], [align])
+// Arguments:
+//   screwsize = diameter of threaded part of screw.
+//   screwlen = length of threaded part of screw.
+//   headsize = diameter of the screw head.
+//   headlen = length of the screw head.
+//   countersunk = If true, center from cap's top instead of it's bottom.
+//   orient = Orientation of the screw.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Z`.
+//   align = Alignment of the screw.  Use the `V_` constants from `constants.scad` or `"sunken"`, or `"base"`.  Default: `"base"`.
+// Examples:
+//   screw(screwsize=3,screwlen=10,headsize=6,headlen=3,countersunk=true);
+//   screw(screwsize=3,screwlen=10,headsize=6,headlen=3, align="base");

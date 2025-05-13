@@ -1,0 +1,7 @@
+function Q_Ident() = [0, 0, 0, 1];
+
+
+// Function: Q_Add_S()
+// Usage:
+//   Q_Add_S(q, s)
+// Description: Adds a scalar value `s` to the W part of a quaternion `q`.

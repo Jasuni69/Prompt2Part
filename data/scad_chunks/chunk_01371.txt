@@ -1,0 +1,1 @@
+function tc_body_inset(type)   = type[9];   //! How far metal is inset into the plastic body

@@ -1,0 +1,4 @@
+function adj_opp_to_hyp(adj,opp) =
+    assert(is_finite(opp) && opp>=0 && is_finite(adj) && adj>=0,
+           "Triangle side lengths should be a positive numbers." )
+    norm([opp,adj]);

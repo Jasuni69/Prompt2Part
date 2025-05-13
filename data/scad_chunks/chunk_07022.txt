@@ -1,0 +1,5 @@
+module test_det3() {
+    M = [ [6,4,-2], [1,-2,8], [1,5,7] ];
+    assert_equal(det3(M), -334);
+}
+test_det3();

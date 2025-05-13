@@ -1,0 +1,19 @@
+module clip (capDiameter, capSlack, pinDiameter, pcbThickness, count)
+{
+  for(i = [0:1:count-1]) {
+    translate([i*(capDiameter+2),-10,-pcbThickness*1.5])
+    difference()
+    {
+    color ("Yellow")
+      translate([0,0,0])
+        cylinder (d=capDiameter, h=pcbThickness*1.5);
+    color ("blue")
+      //translate([0,0,(pcbThickness/2)+0.02])
+      translate([0,0,-0.01])
+       cylinder (d=pinDiameter+capSlack, h=(pcbThickness*1.5)+0.02);
+    } //difference
+  } // for loop
+} //clip
+
+//===========================================================
+//-- Create the Cutout through the lid and add the display mount

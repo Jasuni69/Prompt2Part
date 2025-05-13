@@ -1,0 +1,1 @@
+function pcb_polygon(type)      = type[14]; //! Optional outline polygon for odd shaped boards

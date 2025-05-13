@@ -1,0 +1,7 @@
+module transformers()
+    layout([for(t = transformers) tx_depth(t)], 10)
+        rotate(90)
+            transformer(transformers[$i]);
+
+if($preview)
+    transformers();

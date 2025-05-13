@@ -1,0 +1,50 @@
+module Kontaktwinkel(winkel=50,d,baseD,r,center=false, use2D=0,inv=false,centerBase=0,name,help){
+grad=-winkel+90;
+d=is_num(baseD)?(baseD/2)/sin(winkel)*2:is_undef(r)?is_undef(d)?0:d:2*r;
+
+h=assert(d,"baseD or d or r not set!")sin(grad)*d/2;
+b=sqrt(pow(d/2,2)-pow(h,2));    
+viewportSize=is_undef(viewportSize)?1000:max(d*2,100,viewportSize);
+
+
+centerBase=b(centerBase,false);
+$d=d;
+$r=d/2;
+ if(!use2D){
+      if(!inv) Tz(centerBase==1?h:
+                             centerBase==-1?-h:
+                                            0)intersection(){
+            children();
+            T(z=center?0:-h)cylinder(center?h*2:viewportSize,d=viewportSize,center=b(center,true),$fn=6);
+            }
+      if(inv)Tz(centerBase==1?-h:centerBase==-1?h:0) intersection(){
+            children();
+            difference(){
+               cube(viewportSize,center=true);
+               T(z=center?0:h-viewportSize)cylinder(center?h*2:viewportSize,d=viewportSize,center=b(center,true),$fn=6);
+            }
+        } 
+    }
+  if(use2D){
+      if(!inv)T(y=centerBase==1?h:centerBase==-1?-h:0)intersection(){
+          children();
+          T(center?0:-viewportSize/2,center?0:-h)square([viewportSize,center?h*2:viewportSize],center=b(center,true));
+          }
+      if(inv)T(y=centerBase==1?-h:centerBase==-1?h:0) intersection(){
+          children();
+          difference(){
+              square(viewportSize,center=true);
+              T(center?0:-viewportSize/2,center?0:h-viewportSize)square([viewportSize,center?h*2:viewportSize],center=b(center,true));
+          }
+      }         
+          
+    }   
+    
+MO(!$children);
+InfoTxt("Kontaktwinkel",["∅",d,"radius",r,"winkel",str(winkel,"°"),"Höhe",h,"Kontakt Radius",b,"2×",b*2],name);
+HelpTxt("Kontaktwinkel",["winkel",winkel,"d",d,"baseD",baseD,"r",r,"center",center,"use2D", use2D,"inv",inv,"centerBase",centerBase,"name",name],help);
+}
+
+
+
+/// creates Octahedron with n spherical subdivision

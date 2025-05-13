@@ -1,0 +1,18 @@
+function parabel(x=1,a=1,fn=fn,exp=2,bp=false,lap,t=[0,0],rev=false)=
+let(
+lap=is_num(lap)?[lap,lap]:lap,
+t=is_num(t)?[t,0]:is_list(t)?len(t)>1?t.xy:[is_num(t.x)?t.x:0,0]:[0,0]
+)
+[
+if(is_list(lap)&&!bp)[0,-lap.y]+t,
+(bp&&exp==2?[0,1/(a*4)]:
+            is_list(lap)?[x+lap.x,-lap.y]:
+                         [0,a*x^exp])
++t,
+if(is_list(lap)&&!bp)[x+lap.x,a*x^exp]+t,
+  for(i=rev?[0:fn]:[fn:-1:0])let(step=x/fn)[i*step,a*(i*step)^exp]+t
+];
+
+
+
+// smooth Transition over i segements from 1 ↦ 0

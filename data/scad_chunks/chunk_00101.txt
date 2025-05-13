@@ -1,0 +1,10 @@
+module widget_top_assembly()
+assembly("widget_top") {
+    translate([-5, 5])
+        widget(sheet_thickness(sheet));
+
+    render_2D_sheet(sheet)      // Must be last because it is transparent
+        widget_dxf();
+}
+
+//! * Screw the two assemblies together

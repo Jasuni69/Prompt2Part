@@ -1,0 +1,50 @@
+//    (6) = standoffHoleSlack   Default = standoffHoleSlack;
+//    (7) = filletRadius (0 = auto size)
+//    (n) = { <yappBoth> | yappLidOnly | yappBaseOnly }
+//    (n) = { yappHole, <yappPin> } // Baseplate support treatment
+//    (n) = { yappAllCorners | yappFrontLeft | yappFrontRight | <yappBackLeft> | yappBackRight }
+//    (n) = { yappCoordBox, <yappCoordPCB> }  
+//    (n) = { yappNoFillet }
+//-------------------------------------------------------------------
+
+/*
+pcb2X = 90;
+pcb2Y = 6;
+pcb2Length = 26;
+pcb2Width = 50;
+pcb2MountInset = 2.5;
+pcb2HoleDiameter = 3;
+pcb2Thickness = 1.7; 
+pcb2Height = 4;
+*/
+
+pcbStands = [
+  // Electro cookie 30 row
+  [5.1, 8.25, yappAllCorners]
+  // Relay module
+ ,[pcb2X + pcb2MountInset, pcb2Y             + pcb2MountInset,  pcb2Height, pcb2Thickness, 5, 2.8, yappCoordBox]
+ ,[pcb2X + pcb2MountInset, pcb2Y + pcb2Width - pcb2MountInset,  pcb2Height, pcb2Thickness, 5, 2.8, yappCoordBox]
+ ,[pcb2X + pcb2Length - pcb2MountInset, pcb2Y             + pcb2MountInset,  pcb2Height, pcb2Thickness, 5, 2.8, yappCoordBox]
+ ,[pcb2X + pcb2Length - pcb2MountInset, pcb2Y + pcb2Width - pcb2MountInset,  pcb2Height, pcb2Thickness, 5, 2.8, yappCoordBox]
+];
+
+
+//===================================================================
+//  *** Connectors ***
+//  Standoffs with hole through base and socket in lid for screw type connections.
+//-------------------------------------------------------------------
+//  Default origin = yappCoordBox: box[0,0,0]
+//  
+//  Parameters:
+//   Required:
+//    (0) = posx
+//    (1) = posy
+//    (2) = pcbStandHeight
+//    (3) = screwDiameter
+//    (4) = screwHeadDiameter (don't forget to add extra for the fillet)
+//    (5) = insertDiameter
+//    (6) = outsideDiameter
+//   Optional:
+//    (7) = PCB Gap : Default = -1 : Default for yappCoordPCB=pcbThickness, yappCoordBox=0
+//    (8) = filletRadius : Default = 0/Auto(0 = auto size)
+//    (n) = { <yappAllCorners> | yappFrontLeft | yappFrontRight | yappBackLeft | yappBackRight }

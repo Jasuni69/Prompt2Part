@@ -1,0 +1,38 @@
+function bez_tang(pt,a,r1,r2,p) =
+    assert(is_finite(r1) || is_vector(a))
+    assert(len(pt)==3 || is_undef(p))
+    let(
+        r1 = is_num(r1)? r1 : norm(a),
+        r2 = default(r2,r1),
+        p = default(p, 90)
+    )
+    is_vector(a)? [pt-r1*unit(a), pt, pt+r2*unit(a)] :
+    is_finite(a)? [
+        pt-spherical_to_xyz(r1,a,p),
+        pt,
+        pt+spherical_to_xyz(r2,a,p)
+    ] :
+    assert(false, "\nBad arguments.");
+
+
+// Function: bez_joint()
+// Synopsis: Calculates control points for a disjointed corner bezier path joint.
+// Topics: Bezier Paths
+// See Also: bez_begin(), bez_tang(), bez_end()
+// Usage:
+//   pts = bez_joint(pt, a1, a2, r1, r2, [p1=], [p2=]);
+//   pts = bez_joint(pt, VEC1, VEC2, [r1=], [r2=], [p1=], [p2=]);
+// Description:
+//   This creates a disjoint corner joint in a cubic bezier path.  It creates three points, being
+//   the aproaching control point, the fixed bezier control point, and the departing control point.
+//   The two control points can be directed in different arbitrary directions from the fixed bezier
+//   point. See {{bez_begin()}} for examples.
+// Arguments:
+//   pt = The fixed point for the bezier path.
+//   a1 = If given a scalar, specifies the theta (XY plane) angle in degrees from X+.  If given a vector, specifies the direction and possibly distance of the approaching control point.
+//   a2 = If given a scalar, specifies the theta (XY plane) angle in degrees from X+.  If given a vector, specifies the direction and possibly distance of the departing control point.
+//   r1 = Specifies the distance of the approching control point from the fixed point.  Overrides the distance component of the vector if `a1` contains a vector.
+//   r2 = Specifies the distance of the departing control point from the fixed point.  Overrides the distance component of the vector if `a2` contains a vector.
+//   ---
+//   p1 = If given, specifies the number of degrees away from the Z+ axis of the approaching control point.
+//   p2 = If given, specifies the number of degrees away from the Z+ axis of the departing control point.

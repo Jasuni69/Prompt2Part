@@ -1,0 +1,34 @@
+function pco1810_cap(h, r, d, wall, texture="none", anchor=BOTTOM, spin=0, orient=UP) =
+    no_function("pco1810_cap");
+
+
+
+// Section: PCO-1881 Bottle Threading
+
+
+// Module: pco1881_neck()
+// Synopsis: Creates a neck for a PCO1881 standard bottle.
+// SynTags: Geom
+// Topics: Bottles, Threading
+// See Also: pco1881_cap()
+// Usage:
+//   pco1881_neck([wall]) [ATTACHMENTS];
+// Description:
+//   Creates an approximation of a standard PCO-1881 threaded beverage bottle neck.
+// Arguments:
+//   wall = Wall thickness in mm.
+//   ---
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+// Named Anchors:
+//   "tamper-ring" = Centered at the top of the anti-tamper ring channel.
+//   "support-ring" = Centered at the bottom of the support ring.
+// Example:
+//   pco1881_neck();
+// Example:
+//   pco1881_neck() show_anchors(custom=false);
+// Example:
+//   expose_anchors(0.3)
+//       pco1881_neck()
+//           show_anchors(std=false);

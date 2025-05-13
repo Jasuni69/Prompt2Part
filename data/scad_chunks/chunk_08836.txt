@@ -1,0 +1,11 @@
+function _tri_arc_ct_clk(shape_pts) = 
+    let(
+	    c = tri_circumcenter(shape_pts),
+		v0 = shape_pts[0] - c,
+		v2 = shape_pts[2] - c,
+		r = norm(v0),
+		v0_a = atan2(v0[1], v0[0]),
+		a = angle_between(v0, v2, ccw = true),
+		a_step = a / __frags(r)
+	)
+	[for(a = [0:a_step:a]) c + ptf_rotate([r * cos(a), r * sin(a)], v0_a)];

@@ -1,0 +1,10 @@
+module test_rand_int() {
+    nums = rand_int(-100,100,1000,seed=2134);
+    assert_equal(len(nums), 1000);
+    for (num = nums) {
+        assert(num>=-100);
+        assert(num<=100);
+        assert_equal(num, floor(num));
+    }
+}
+test_rand_int();

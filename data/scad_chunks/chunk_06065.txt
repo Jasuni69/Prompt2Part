@@ -1,0 +1,46 @@
+module debug_region(region, vertices=true, edges=true, convexity=2, size=1)
+{
+  
+  if (is_path(region) || (is_region(region) && len(region)==1))
+    debug_polygon(force_path(region), vertices=vertices, edges=edges, convexity=convexity, size=size);
+  else {
+    for(i=idx(region))
+      echo(str("points_",chr(97+i)," = ",region[i]))
+    linear_extrude(height=0.01, convexity=convexity, center=true) 
+      region(region);
+    if(vertices)
+        _debug_poly_verts(region,size);
+    for(j=idx(region)){
+      if(edges)
+        _debug_poly_edges(j,region[j],vertices=vertices,size=size);
+    }      
+  }      
+}
+
+
+
+// Section: Geometrical calculations with regions
+
+// Function: point_in_region()
+// Synopsis: Tests if a point is inside, outside, or on the border of a {{region}}. 
+// Topics: Regions, Points, Comparison
+// See Also: region_area(), are_regions_equal()
+// Usage:
+//   check = point_in_region(point, region, [eps]);
+// Description:
+//   Tests if a point is inside, outside, or on the border of a {{region}}.  
+//   Returns -1 if the point is outside the region.
+//   Returns 0 if the point is on the boundary.
+//   Returns 1 if the point lies inside the region.
+// Arguments:
+//   point = The point to test.
+//   region = The region to test against, as a list of polygon paths.
+//   eps = Acceptable variance.  Default: `EPSILON` (1e-9)
+// Example(2D,Med):  Red points are in the region.
+//   region = [for(i=[2:4:10]) hexagon(r=i)];
+//   color("#ff7") region(region);
+//   for(x=[-10:10], y=[-10:10])
+//     if (point_in_region([x,y], region)>=0)
+//       move([x,y]) color("red") circle(0.15, $fn=12);
+//     else
+//       move([x,y]) color("#ddf") circle(0.1, $fn=12);

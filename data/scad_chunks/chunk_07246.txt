@@ -1,0 +1,10 @@
+function scene(scenes=10,t=$t)=[for(i=[0:scenes-1])min(max(t*scenes-i,0),1)];
+
+
+/** \name map
+\brief maps value from range to range
+\param val input value
+\param from maps from range [from,to]
+\param to   maps to range [from,to] 
+\param constrain limit range
+*/

@@ -1,0 +1,15 @@
+module pcb_grid_positions(type) {
+    grid =  pcb_grid(type);
+    for(i = [0 : 7 : len(grid) - 1]) {
+        x0 = grid[i];
+        y0 = grid[i + 1];
+
+        cols = is_undef(grid[i + 2]) ? round((pcb_length(type) - 2 * x0) / inch(0.1)) : grid[i + 2] - 1;
+        rows = is_undef(grid[i + 3]) ? round((pcb_width(type) - 2 * y0) / inch(0.1))  : grid[i + 3] - 1;
+        for(x = [0 : cols], y = [0 : rows])
+            pcb_grid(type, x, y, i = i)
+                children();
+    }
+}
+
+plating = 0.1;

@@ -1,0 +1,1 @@
+function rd_coil_size(type)   = type[1]; //! OD, ID, height, coil height

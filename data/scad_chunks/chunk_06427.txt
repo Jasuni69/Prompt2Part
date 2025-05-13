@@ -1,0 +1,40 @@
+function hull3d_faces(points) =
+    assert(is_path(points,3),"\nInvalid input to hull3d_faces.")
+    len(points) < 3 ? count(len(points))
+  : let ( // start with a single non-collinear triangle
+          tri = _noncollinear_triple(points, error=false)
+        )
+    tri==[] ? _hull_collinear(points)
+  : let(
+        a = tri[0],
+        b = tri[1],
+        c = tri[2],
+        plane = plane3pt_indexed(points, a, b, c),
+        d = _find_first_noncoplanar(plane, points)
+    )
+    d == len(points)
+  ? /* all coplanar*/
+    let (
+        pts2d =  project_plane([points[a], points[b], points[c]],points),
+        hull2d = hull2d_path(pts2d)
+    ) hull2d
+  : let(
+        remaining = [for (i = [0:1:len(points)-1]) if (i!=a && i!=b && i!=c && i!=d) i],
+        // Build an initial tetrahedron.
+        // Swap b, c if d is in front of triangle t.
+        ifop = _is_point_above_plane(plane, points[d]),
+        bc = ifop? [c,b] : [b,c],
+        b = bc[0],
+        c = bc[1],
+        triangles = [
+            [a,b,c],
+            [d,b,a],
+            [c,d,a],
+            [b,d,c]
+        ],
+        // calculate the plane equations
+        planes = [ for (t = triangles) plane3pt_indexed(points, t[0], t[1], t[2]) ]
+    ) _hull3d_iterative(points, triangles, planes, remaining);
+
+
+// Adds the remaining points one by one to the convex hull

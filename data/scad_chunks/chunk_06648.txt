@@ -1,0 +1,16 @@
+module test_format_float() {
+    assert(format_float(-PI*100,8) == "-314.15927");
+    assert(format_float(-PI,8) == "-3.1415927");
+    assert(format_float(-3,8) == "-3");
+    assert(format_float(3,8) == "3");
+    assert(format_float(PI*100,8) == "314.15927");
+    assert(format_float(PI,8) == "3.1415927");
+    assert(format_float(0,8) == "0");
+    assert(format_float(-PI*100,3) == "-314");
+    assert(format_float(-PI,3) == "-3.14");
+    assert(format_float(-3,3) == "-3");
+    assert(format_float(3,3) == "3");
+    assert(format_float(PI*100,3) == "314");
+    assert(format_float(PI,3) == "3.14");
+}
+test_format_float();

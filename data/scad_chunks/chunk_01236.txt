@@ -1,0 +1,4 @@
+module vero_mounting_hole_positions(type) //! Positions children at the mounting holes
+    for(p = vero_mounting_holes(type))
+        vero_grid_pos(type, p.x, p.y)
+            children();

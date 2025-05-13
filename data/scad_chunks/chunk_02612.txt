@@ -1,0 +1,52 @@
+module dimension(startpoint, endpoint, text = "", thickness = 0, text_size = 0 , rot_around_dim = 0) { //! Creates a 3D dimension between two points.
+    // Compute vector between points
+    direction = endpoint - startpoint;
+    length = norm(direction);
+    midpoint = (startpoint + endpoint) / 2;
+    thickness = (thickness == 0? length/200:thickness);
+
+    // Ensure nonzero values for calculations
+    dir_xy = norm([direction.x, direction.y]);
+
+    // Compute rotation angles
+    azimuth = atan2(direction.y, direction.x);
+    elevation = -atan2(direction.z, dir_xy);
+
+    //end triangle size
+    etr_width = thickness *10;
+    etr_height = thickness *4;
+
+    // Draw measurement line as a thin cylinder
+    translate(midpoint)
+    rotate([0, elevation, azimuth])
+    rotate([0, 90, 0])
+    resize([thickness, thickness, length - etr_width+0.01 ])
+    cube(center = true);
+
+    //do some vector calculations
+    dir = (length > 0) ? (direction / length) * thickness * 4 : [1, 0, 0];
+
+    // Draw endpoint markers
+    translate(startpoint)
+    rotate([0, elevation, azimuth])
+    rotate([rot_around_dim,0,0])
+    translate([0,0,-thickness/2])
+    linear_extrude(thickness)
+    polygon([[etr_width, etr_height/2],[0,0],[etr_width, -etr_height/2]],[[0,1,2]]);
+
+    translate(endpoint)
+    rotate([0, elevation, azimuth])
+    rotate([rot_around_dim,0,0])
+    translate([0,0,-thickness/2])
+    linear_extrude(thickness)
+    polygon([[-etr_width, etr_height/2],[0,0],[-etr_width, -etr_height/2]],[[0,1,2]]);
+
+
+    // Draw the text/distance
+    translate(midpoint)
+    rotate([0, elevation, azimuth])
+    rotate([rot_around_dim,0,0])
+    translate([0,thickness,-thickness/2])
+    linear_extrude(thickness)
+    text(text == "" ? str(length) : text, size = (text_size == 0? length/15:text_size), valign = "bottom", halign = "center");
+}

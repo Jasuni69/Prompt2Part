@@ -1,0 +1,16 @@
+function Subdivision(list,divisions=2,method="1") =
+  method=="1"            ? _Subdivision11(list,divisions) :
+  method=="1path"        ? _Subdivision11Path(list,divisions) :
+  method=="weighted"     ? _SubdivisionWeighted(list,divisions) : 
+  method=="weightedpath" ? _SubdivisionWeightedPath(list,divisions) : 
+  assert(false,"Unknown method in Subdivision",divisions);
+
+// This is the most basic subdivision with 1,1 weighting.
+// It will work in 2D and 3D.
+//
+// The average in OpenSCAD is: (current_point + next_point) / 2
+// The index of the list wraps around for the next point.
+//
+// The 'list2' is the average points between the original points.
+// The returned list is the new average between the average points
+// and the original points.

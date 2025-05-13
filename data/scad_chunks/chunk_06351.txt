@@ -1,0 +1,5 @@
+function _valid_line(line,dim,eps=EPSILON) =
+    is_matrix(line,2,dim)
+    && norm(line[1]-line[0])>eps*max(norm(line[1]),norm(line[0]));
+
+//Internal

@@ -1,0 +1,1 @@
+function bb_name(type)            = type[0]; //! Part code without shield type suffix

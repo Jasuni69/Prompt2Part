@@ -1,0 +1,35 @@
+function _corners_text(corners) =
+    is_string(corners) ? [str("\"",corners,"\"")] :
+    corners==CORNERS_NONE ? ["CORNERS_NONE"] :
+    corners==CORNERS_ALL ? ["CORNERS_ALL"] :
+    _is_corner_array(corners) ? [""] :
+    is_vector(corners,3) ? _edges_vec_txt(corners) :
+    is_list(corners) ? let(
+        lst = [for (x=corners) each _corners_text(x)],
+        out = [
+            for (i=idx(lst))
+            str(
+                (i==0? "[" : ""),
+                lst[i],
+                (i<len(lst)-1? "," : ""),
+                (i==len(lst)-1? "]" : "")
+            )
+        ]
+    ) out :
+    [""];
+
+
+/// Internal Module: _show_corners()
+/// Topics: Corners, Debugging
+/// Usage:
+///   _show_corners(corners, [size=], [text=], [txtsize=]);
+/// Description:
+///   Draws a semi-transparent cube with the given corners highlighted in red.
+/// Arguments:
+///   corners = The corners to highlight.
+///   size = The scalar size of the cube.
+///   text = If given, overrides the text to be shown on the front of the cube.
+///   txtsize = The size of the text.
+/// See Also: CORNERS_NONE, CORNERS_ALL, corners()
+/// Example:
+///   _show_corners(corners=FWD+RIGHT, size=30);

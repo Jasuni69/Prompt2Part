@@ -1,0 +1,1 @@
+function _sorted_cmp(lt, cmp, reverse) = _sorted(lt, reverse ? function(a, b) cmp(a, b) > 0 : function(a, b) cmp(a, b) < 0);

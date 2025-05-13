@@ -1,0 +1,16 @@
+function vnf_volume(vnf) =
+    let(verts = vnf[0])
+    sum([
+         for(face=vnf[1], j=[1:1:len(face)-2])
+             cross(verts[face[j+1]], verts[face[j]]) * verts[face[0]]
+    ])/6;
+
+
+// Function: vnf_area()
+// Synopsis: Returns the surface area of a VNF.
+// Topics: VNF Manipulation
+// See Also: vnf_volume(), vnf_halfspace(), vnf_bend() 
+// Usage:
+//   area = vnf_area(vnf);
+// Description:
+//   Returns the surface area in any VNF by adding up the area of all its faces.  The VNF need not be a manifold.

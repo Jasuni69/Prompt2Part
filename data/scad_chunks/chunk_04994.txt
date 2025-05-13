@@ -1,0 +1,4 @@
+function hyp_ang_to_adj(hyp,ang) =
+    assert(is_finite(hyp) && hyp>=0, "Triangle side length should be a positive number." )
+    assert(is_finite(ang) && ang>-90 && ang<90, "The angle should be an acute angle." )
+    hyp*cos(ang);

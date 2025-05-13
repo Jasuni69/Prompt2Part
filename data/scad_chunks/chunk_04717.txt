@@ -1,0 +1,2 @@
+function default(x,default) = x == undef ? default : x;
+// "polyhole" conversion, typically for internal holes

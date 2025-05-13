@@ -1,0 +1,42 @@
+module offset_sweep(path, height, 
+                    bottom, top, 
+                    h, l, length, ends, bot,
+                    offset="round", r=0, steps=16,
+                    quality=1, check_valid=true,
+                    extra=0, top_hole, bot_hole, bottom_hole, ends_hole,
+                    cut=undef, chamfer_width=undef, chamfer_height=undef,
+                    joint=undef, k=0.75, angle=45,
+                    convexity=10,anchor="base",cp="centroid",
+                    spin=0, orient=UP, atype="hull", _flipdir)
+{
+    assert(in_list(atype, ["intersect","hull","surf_hull","surf_intersect"]), "Anchor type must be \"hull\" or \"intersect\"");
+    if (is_region(path) && len(path)>1)
+       _offset_sweep_region(region=path, height=height, bottom=bottom, top=top, h=h, l=l, length=length, ends=ends, bot=bot,
+                            offset=offset, r=r, steps=steps, quality=quality, check_valid=check_valid, extra=extra,
+                            cut=cut, chamfer_width=chamfer_width, chamfer_height=chamfer_height, joint=joint, k=k, angle=angle,
+                            bot_hole=bot_hole,top_hole=top_hole,bottom_hole=bottom_hole,ends_hole=ends_hole,
+                            convexity=convexity, anchor=anchor, cp=cp, spin=spin, orient=orient, atype=atype) children();
+    else {
+        vnf_h = offset_sweep(path=path, height=height, h=h, l=l, length=length, bot=bot, top=top, bottom=bottom, ends=ends,
+                             offset=offset, r=r, steps=steps,
+                             quality=quality, check_valid=check_valid, extra=extra, cut=cut, chamfer_width=chamfer_width,
+                             chamfer_height=chamfer_height, joint=joint, k=k, angle=angle, _return_height=true, _flipdir=_flipdir);
+        vnf = vnf_h[0];
+        height = vnf_h[1];
+        anchors = [
+              named_anchor("zcenter", [0,0,0], UP),
+              named_anchor("base", [0,0,-height/2], UP),
+              named_anchor("top", [0,0,height/2], UP)          
+            ];
+        if (in_list(atype,["hull","intersect"]))
+            attachable(anchor,spin,orient,region=force_region(path),h=height,cp=cp,anchors=anchors,extent=atype=="hull"){
+                down(height/2)polyhedron(vnf[0],vnf[1],convexity=convexity);
+                children();
+            }
+        else
+            attachable(anchor,spin.orient,vnf=vnf, cp=cp,anchors=anchors, extent = atype=="surf_hull"){
+                vnf_polyhedron(vnf,convexity=convexity);
+                children();
+            }
+    }
+}

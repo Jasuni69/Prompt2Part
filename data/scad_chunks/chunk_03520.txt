@@ -1,0 +1,1 @@
+function pad(dim=0,padding=$padding) = dim -padding + removeExtra(padding);

@@ -1,0 +1,32 @@
+module genMarkerBar(color1, color2, axis )
+{
+    barLength= (axis == "X") ? shellLength
+              :(axis == "Y") ? shellWidth
+              :(axis == "Z") ? shellHeight + ((!showSideBySide) ? onLidGap : 0)
+              : undef;
+  
+  union()
+  {
+    color(color1)
+      translate([0,0,barLength/2]) 
+    cylinder(
+              d = 1,
+              h = barLength,
+              center = true);
+    color(color2)
+      translate([0,0,-5])  
+        cylinder(
+              d = 1,
+              h = 10,
+              center = true);
+    color(color2)
+      translate([0,0,barLength+5])  
+        cylinder(
+              d = 1,
+              h = 10,
+              center = true);
+  }
+}//-- genMarkerBar()
+
+
+//===========================================================

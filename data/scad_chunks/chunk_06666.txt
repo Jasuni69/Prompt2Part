@@ -1,0 +1,8 @@
+module test_str_pad() {
+   assert_equal(str_pad("abc",5,"x"), "abcxx");
+   assert_equal(str_pad("abc",5), "abc  ");
+   assert_equal(str_pad("abc",5,"x",left=true), "xxabc");
+   assert_equal(str_pad("", 5, "x"), "xxxxx");
+   assert_equal(str_pad("", 5, "x", left=true), "xxxxx");
+}   
+test_str_pad();

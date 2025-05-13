@@ -1,0 +1,1 @@
+function screw_knob_wave_amp(type) = type[7]; //! Wave amplitude

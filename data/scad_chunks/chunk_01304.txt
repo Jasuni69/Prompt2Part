@@ -1,0 +1,1 @@
+function gm_shaft_flat_w(type) = gm_shaft(type).y; //! Shaft width across the flat

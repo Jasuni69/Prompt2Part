@@ -1,0 +1,22 @@
+module test_line_normal() {
+    assert(line_normal([0,0],[10,0]) == [0,1]);
+    assert(line_normal([0,0],[0,10]) == [-1,0]);
+    assert(line_normal([0,0],[-10,0]) == [0,-1]);
+    assert(line_normal([0,0],[0,-10]) == [1,0]);
+    assert(approx(line_normal([0,0],[10,10]), [-sqrt(2)/2,sqrt(2)/2]));
+    assert(line_normal([[0,0],[10,0]]) == [0,1]);
+    assert(line_normal([[0,0],[0,10]]) == [-1,0]);
+    assert(line_normal([[0,0],[-10,0]]) == [0,-1]);
+    assert(line_normal([[0,0],[0,-10]]) == [1,0]);
+    assert(approx(line_normal([[0,0],[10,10]]), [-sqrt(2)/2,sqrt(2)/2]));
+    pts = [for (p=pair(rands(-100,100,1000,seed_value=4312))) p];
+    for (p = pair(pts,true)) {
+        p1 = p.x;
+        p2 = p.y;
+        n = unit(p2-p1);
+        n1 = [-n.y, n.x];
+        n2 = line_normal(p1,p2);
+        assert(approx(n2, n1));
+    }
+}
+*test_line_normal();

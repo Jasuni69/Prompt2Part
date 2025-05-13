@@ -1,0 +1,4 @@
+module leadnuthousing_nut_position(type) { //! The position of the nut may be off-center, use this to get the position
+    translate([leadnuthousing_hole_pos(type),0, leadnuthousing_height(type)/2])
+        children();
+}

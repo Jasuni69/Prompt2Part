@@ -1,0 +1,102 @@
+function subdivide_path(path, n, refine, maxlen, closed=true, exact, method) =
+    let(path = force_path(path))
+    assert(is_path(path))
+    assert(num_defined([n,refine,maxlen]),"Must give exactly one of n, refine, and maxlen")
+    refine==1 || n==len(path) ? path :
+    is_def(maxlen) ?
+        assert(is_undef(method), "Cannot give method with maxlen")
+        assert(is_undef(exact), "Cannot give exact with maxlen")
+        [
+         for (p=pair(path,closed))
+           let(steps = ceil(norm(p[1]-p[0])/maxlen))
+           each lerpn(p[0], p[1], steps, false),
+         if (!closed) last(path)
+        ]               
+    :
+    let(
+        exact = default(exact, true),
+        method = default(method, "length")
+    )
+    assert(method=="length" || method=="segment")
+    let(
+        n = !is_undef(n)? n :
+            !is_undef(refine)? len(path) * refine :
+            undef
+    )
+    assert((is_num(n) && n>0) || is_vector(n),"Parameter n to subdivide_path must be postive number or vector")
+    let(
+        count = len(path) - (closed?0:1), 
+        add_guess = method=="segment"?
+                       (
+                          is_list(n)
+                          ? assert(len(n)==count,"Vector parameter n to subdivide_path has the wrong length")
+                            add_scalar(n,-1)
+                          : repeat((n-len(path)) / count, count)
+                       )
+                  : // method=="length"
+                    assert(is_num(n),"Parameter n to subdivide path must be a number when method=\"length\"")
+                    let(
+                        path_lens = path_segment_lengths(path,closed),
+                        add_density = (n - len(path)) / sum(path_lens)
+                    )
+                    path_lens * add_density,
+        add = exact? _sum_preserving_round(add_guess)
+                   : [for (val=add_guess) round(val)]
+    )
+    [
+        for (i=[0:1:count-1]) 
+           each lerpn(path[i],select(path,i+1), 1+add[i],endpoint=false),
+        if (!closed) last(path)
+    ];
+
+
+
+
+// Function: resample_path()
+// Synopsis: Returns an equidistant set of points along a path.
+// SynTags: Path
+// Topics: Paths
+// See Also: subdivide_path()
+// Usage:
+//   newpath = resample_path(path, n|spacing=, [closed=]);
+// Description:
+//   Compute a uniform resampling of the input {{path}}.  If you specify `n` then the output path will have n
+//   {{points}} spaced uniformly (by linear interpolation along the input path segments).  The only points of the
+//   input path that are guaranteed to appear in the output path are the starting and ending points, and any
+//   points that have an angular deflection of at least the number of degrees given in `keep_corners`.
+//   If you specify `spacing` then the length you give will be rounded to the nearest spacing that gives
+//   a uniform sampling of the path and the resulting uniformly sampled path is returned.
+//   Note that because this function operates on a discrete input path the quality of the output depends on
+//   the sampling of the input.  If you want very accurate output, use a lot of points for the input.
+// Arguments:
+//   path = path in any dimension or a 1-region
+//   n = Number of points in output
+//   ---
+//   spacing = Approximate spacing desired
+//   keep_corners = If given a scalar, path vertices with deflection angle greater than this are preserved in the output.
+//   closed = set to true if path is closed.  Default: true
+// Example(2D):  Subsampling lots of points from a smooth curve
+//   path = xscale(2,circle($fn=250, r=10));
+//   sampled = resample_path(path, 16);
+//   stroke(path);
+//   color("red")move_copies(sampled) circle($fn=16);
+// Example(2D): Specified spacing is rounded to make a uniform sampling
+//   path = xscale(2,circle($fn=250, r=10));
+//   sampled = resample_path(path, spacing=17);
+//   stroke(path);
+//   color("red")move_copies(sampled) circle($fn=16);
+// Example(2D): Notice that the corners are excluded.
+//   path = square(20);
+//   sampled = resample_path(path, spacing=6);
+//   stroke(path,closed=true);
+//   color("red")move_copies(sampled) circle($fn=16);
+// Example(2D): Forcing preservation of corners.
+//   path = square(20);
+//   sampled = resample_path(path, spacing=6, keep_corners=90);
+//   stroke(path,closed=true);
+//   color("red")move_copies(sampled) circle($fn=16);
+// Example(2D): Closed set to false
+//   path = square(20);
+//   sampled = resample_path(path, spacing=6,closed=false);
+//   stroke(path);
+//   color("red")move_copies(sampled) circle($fn=16);

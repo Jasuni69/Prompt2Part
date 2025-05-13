@@ -1,0 +1,8 @@
+function _multmatrix(M, poly) =
+  let(
+    points = get_points(poly),
+    newPoints = is_3d_poly(poly) ?
+      [for (p = points) to3d(M*[p.x,p.y,p.z,1])] :
+      [for (p = points) to2d(M*[p.x,p.y,0,1])]
+  )
+  set_points(poly, newPoints);

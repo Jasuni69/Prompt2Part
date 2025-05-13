@@ -1,0 +1,25 @@
+module aluProCorner(cornerType, $fn=8) {
+	// xy corner
+	w1 = cornerType[0];
+	w2 = cornerType[1];
+	t = cornerType[2];
+	cham = cornerType[3];
+	w3 = cornerType[4];	
+
+	union() {	
+		// radial arm
+		rotate([0,0,45]) translate([0,-t/2,0]) square([w1/2+t,t]);
+
+		// outer radius
+		translate([w1/2-t,w1/2-t,0]) circle(r=t);
+
+		// corner block
+		translate([w1/2-w3,w1/2-w3]) square([w3-t+eta,w3-t+eta]);
+
+		// returns
+		for (i=[0,1]) mirror([i,i,0]) {
+			translate([w1/2-w2,w1/2-t,0]) square([w2-t,t-cham]);
+			translate([w1/2-w2+cham,w1/2-cham-eta,0]) square([w2-t-cham,cham+eta]);
+		}
+	}
+}

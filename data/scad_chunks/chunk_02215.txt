@@ -1,0 +1,21 @@
+module hinge_assembly(type, angle = 0)
+assembly(str("hinge_", type[0]), ngb = true) { //! Assembled hinge
+    kr = hinge_knuckle_dia(type) / 2;
+    hr = hinge_pin_dia(type) / 2;
+    w = hinge_width(type);
+
+    vitamin(str(": Hinge pin ", w, " x ", 2 * hr, "mm"));
+
+    stl_colour(pp1_colour) hinge_male(type);
+
+    translate([0, -kr, kr]) {
+        rotate([0, 90, 0])
+            explode(w + 10)
+                stl_colour("silver") cylinder(r = hr , h = w, center = true);
+
+        rotate([-angle, 0, 0])
+            translate([0, -kr, -kr])
+                rotate(180)
+                     stl_colour(pp2_colour) hinge_female(type);
+    }
+}

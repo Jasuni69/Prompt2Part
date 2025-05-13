@@ -1,0 +1,5 @@
+function __br_corner(frags, b_ang, L01, h, round_r) = 
+    let(b_leng = L01[0] - round_r / tan(b_ang / 2), b_sector_a = 180 - b_ang) 
+    b_leng >= 0 ? 
+    __br_corner_b_leng_gt_or_eq_zero(frags, b_sector_a, b_leng, h, round_r) :
+    __tr__corner_b_leng_lt_zero(frags, b_sector_a, L01[1], h, round_r);

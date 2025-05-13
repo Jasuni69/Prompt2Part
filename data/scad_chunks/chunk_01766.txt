@@ -1,0 +1,21 @@
+module pcb_base(type, height, thickness, wall = 2) { //! Generate STL for a base with PCB spacers
+    screw = pcb_screw(type);
+    ir = screw_clearance_radius(screw);
+    or = corrected_radius(ir) + wall;
+
+    union() {
+        linear_extrude(thickness)
+            difference() {
+                hull()
+                    pcb_screw_positions(type)
+                        poly_ring(or, ir);
+
+                pcb_screw_positions(type)
+                    poly_circle(ir);
+            }
+
+        linear_extrude(height)
+            pcb_screw_positions(type)
+                poly_ring(or, ir);
+    }
+}

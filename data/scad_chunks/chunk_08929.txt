@@ -1,0 +1,17 @@
+function differentiate(nodes, leng) = 
+    let(ZERO_VT = ZERO_VTS[len(position_of(nodes[0]))])
+    [
+        for(i = 0,
+            allSeperationFromj = allSeperationFrom(nodes, leng, nodes[i], i + 1),
+            allSep = [ZERO_VT, each -allSeperationFromj]; 
+            i < leng; 
+            i = i + 1,
+            allSep = updateAllSeperation(allSep, allSeperationFromj),
+            allSeperationFromj = allSeperationFrom(nodes, leng, nodes[i], i + 1)
+        )
+        applyForceTo(
+            nodes[i], 
+            allSeperationFromj == [] ? allSep[0] : allSep[0] + sum(allSeperationFromj), 
+            cohesion(nodes, leng, i)
+        )
+    ];

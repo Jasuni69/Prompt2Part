@@ -1,0 +1,26 @@
+module test_archimedean_spiral_extrude_slide() {
+    echo("==== test_archimedean_spiral_extrude_slide ====");    
+    
+    shape_pts = [
+        [5, 0],
+        [5, 4],
+        [4, 4], 
+        [4, 2], 
+        [-4, 2],
+        [-4, 4],
+        [-5, 4],
+        [-5, 0]
+    ];
+
+    archimedean_spiral_extrude(
+        shape_pts,
+        arm_distance = 15,  
+        init_angle = 180, 
+        point_distance = 5,
+        num_of_points = 100,
+        scale = [1, 5]
+    );
+
+}
+
+test_archimedean_spiral_extrude_slide();

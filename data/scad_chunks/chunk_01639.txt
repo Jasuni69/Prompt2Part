@@ -1,0 +1,1 @@
+function faston_insul_crimp_p(type) = type[13]; //! Position of the tip of the insulation crimp

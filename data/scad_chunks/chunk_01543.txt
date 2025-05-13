@@ -1,0 +1,1 @@
+function rd_transistor_colours(type)    = type[2]; //! Body colour and text colour

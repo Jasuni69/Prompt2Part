@@ -1,0 +1,1 @@
+function pulley_ir(type)     = pulley_od(type) / 2 - (pulley_teeth(type) ? belt_tooth_height(pulley_belt(type)) : 0);   //! Inside radius of the teeth

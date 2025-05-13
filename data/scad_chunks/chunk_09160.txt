@@ -1,0 +1,5 @@
+function next_y(y, dir, rows, wrapping) = 
+    let(ny = y + _next_y_table[dir])
+    wrapping ? (ny + rows) % rows : ny;
+    
+// go right and carve the right wall

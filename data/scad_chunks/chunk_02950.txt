@@ -1,0 +1,1 @@
+function getPCBInfo(yappPCBName, vector) = (getVector(yappPCBName, vector) == false) ? pcbByName("Main") : pcbByName(getVector(yappPCBName, vector));

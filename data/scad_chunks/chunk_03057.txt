@@ -1,0 +1,50 @@
+    undef,undef,1
+  ]
+ ,[pcbLength-(8.820),(pcbWidth/2)+3.810, // Pos
+    6, 6,                 // W,L
+    1.0,                      // wall thickness
+    2,                      // Gap above PCB
+    yappCircle,          // tubeType (Shape)
+    undef,undef,1
+  ]
+ ,[pcbLength-(8.820+(2.54*3)),(pcbWidth/2)+3.810, // Pos
+    6, 6,                 // W,L
+    1.0,                      // wall thickness
+    2,                      // Gap above PCB
+    yappCircle,          // tubeType (Shape)
+    undef,undef,1
+  ]
+];
+
+//===================================================================
+//  *** Push Buttons ***
+//-------------------------------------------------------------------
+//  Default origin = yappCoordPCB: PCB[0,0,0]
+//
+//  Parameters:
+//   Required:
+//    (0) = posx
+//    (1) = posy
+//    (2) = capLength for yappRectangle, capDiameter for yappCircle
+//    (3) = capWidth for yappRectangle, not used for yappCircle
+//    (4) = capAboveLid
+//    (5) = switchHeight
+//    (6) = switchTravel
+//    (7) = poleDiameter
+//   Optional:
+//    (8) = Height to top of PCB : Default = standoffHeight + pcbThickness
+//    (9) = buttonType  {yappCircle|<yappRectangle>} : Default = yappRectangle
+//    (10) = filletRadius : Default = 0/Auto 
+//-------------------------------------------------------------------
+
+pushButtons = 
+[
+    [pcbLength-(8.820+(2.54*8.5)),(pcbWidth/2)+3.810+(2.54*2), 
+    8, // cap Diameter
+    0, // Unused
+    1, // Cap above Lid
+    3, // Switch Height
+    1, // Switch travel
+    3.5, // Pole Diameter
+    undef, // Height to top of PCB
+    yappCircle, // Shape

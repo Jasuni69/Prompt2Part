@@ -1,0 +1,1 @@
+function pbox_foot(type)       = type[4]; //! Printed foot, can be false to suppress feet

@@ -1,0 +1,61 @@
+module jack_4mm_shielded(colour, thickness, display_colour = false) { //! Draw a 4mm shielded jack
+    vitamin(str("jack_4mm_shielded(\"", colour, "\", 3", arg(display_colour, false), "): 4mm shielded jack socket ", colour));
+    flange_d = 14.5;
+    flange_t = 2.5;
+    flange_id = 4.6;
+    sleaved = 21;
+    sleaved_d = 10.7;
+    thread = 14;
+    thread_d = 12;
+    thread_p = 0.75;
+    nut_d = 14.4;
+    nut_t = 5;
+    length = 32;
+    spade = 8.5;
+    actual_colour = display_colour ? display_colour : colour;
+
+    explode(length, offset = -length + flange_t) {
+        color(actual_colour) {
+            rounded_cylinder(r = flange_d / 2, h = flange_t, r2 = 1, ir = 4.5);
+
+            rotate_extrude() difference() {
+                union() {
+                    translate([0, -sleaved])
+                        square([sleaved_d  / 2, sleaved + flange_t]);
+
+                    if(!show_threads)
+                        translate([0, -thread])
+                            square([thread_d / 2, thread]);
+                }
+                square([flange_id, 100], center = true);
+
+                difference() {
+                    square([9, 2 * sleaved - 1], center = true);
+                    square([6, 2 * sleaved], center = true);
+                }
+            }
+
+            if(show_threads)
+                translate_z(-thread)
+                    male_metric_thread(thread_d, thread_p, thread, false, solid = false);
+        }
+
+        color(silver)
+            translate_z(-length + flange_t + spade - 0.5)
+                cylinder(d = 4.8, h = 0.5);
+
+        translate_z(-length + flange_t + spade)
+            vflip()
+                spade(spade4p8ll, spade);
+    }
+
+    translate_z(-thickness)
+        explode(-length)
+            vflip() {
+                color(silver)
+                    tube(ir = thread_d / 2, or = nut_d / 2, h = nut_t, center = false);
+
+                if(show_threads)
+                    female_metric_thread(thread_d, thread_p, nut_t, false, colour = silver);
+            }
+}

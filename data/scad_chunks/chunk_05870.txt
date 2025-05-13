@@ -1,0 +1,26 @@
+function all_nonzero(x, eps=EPSILON) =
+    is_finite(x)? abs(x)>eps :
+    is_vector(x) && [for (xx=x) if(abs(xx)<eps) 1] == [];
+
+
+// Function: all_positive()
+// Synopsis: Returns true if the value(s) given are greater than zero.
+// Topics: Comparisons, List Handling
+// See Also: approx(), all_zero(), all_nonzero(), all_negative(), all_nonpositive(), all_nonnegative()
+// Usage:
+//   test = all_positive(x,[eps]);
+// Description:
+//   Returns true if the argument is finite and greater than zero, within epsilon tolerance if desired.
+//   If passed a list returns true if all the entries are finite positive numbers.
+//   Otherwise, returns false.
+// Arguments:
+//   x = The value to check.
+//   eps = Tolerance. Default: 0
+// Example:
+//   a = all_positive(-2);  // Returns: false.
+//   b = all_positive(0);  // Returns: false.
+//   c = all_positive(2);  // Returns: true.
+//   d = all_positive([0,0,0]);  // Returns: false.
+//   e = all_positive([0,1,2]);  // Returns: false.
+//   f = all_positive([3,1,2]);  // Returns: true.
+//   g = all_positive([3,-1,2]);  // Returns: false.

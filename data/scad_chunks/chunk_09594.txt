@@ -1,0 +1,25 @@
+module zcyl(l=undef, r=undef, d=undef, r1=undef, r2=undef, d1=undef, d2=undef, h=undef, align=V_CENTER, center=undef)
+{
+	cyl(l=l, h=h, r=r, r1=r1, r2=r2, d=d, d1=d1, d2=d2, orient=ORIENT_Z, align=align, center=center);
+}
+
+
+
+// Module: chamferred_cylinder()
+// Status: DEPRECATED, use `cyl(..., chamfer)` instead.
+//
+// Usage:
+//   chamferred_cylinder(h, r|d, chamfer|chamfedge, [top], [bottom], [center])
+//
+// Description:
+//   Creates a cylinder with chamferred (bevelled) edges.
+//
+// Arguments:
+//   h = height of cylinder. (Default: 1.0)
+//   r = radius of cylinder. (Default: 1.0)
+//   d = diameter of cylinder. (use instead of r)
+//   chamfer = radial inset of the edge chamfer. (Default: 0.25)
+//   chamfedge = length of the chamfer edge. (Use instead of chamfer)
+//   top = boolean.  If true, chamfer the top edges. (Default: True)
+//   bottom = boolean.  If true, chamfer the bottom edges. (Default: True)
+//   center = boolean.  If true, cylinder is centered. (Default: false)

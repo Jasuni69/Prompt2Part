@@ -1,0 +1,44 @@
+module chain_hull()
+{
+	union() {
+		if ($children == 1) {
+			children();
+		} else if ($children > 1) {
+			for (i =[1:$children-1]) {
+				hull() {
+					children(i-1);
+					children(i);
+				}
+			}
+		}
+	}
+}
+
+
+// Module: extrude_arc()
+//
+// Description:
+//   Extrudes 2D shapes around a partial circle arc, with optional rounded caps.
+//   This is mostly useful for backwards compatability with older OpenSCAD versions
+//   without the `angle` argument in rotate_extrude.
+//
+// Usage:
+//   extrude_arc(arc, r|d, [sa], [caps], [orient], [align], [masksize]) ...
+//
+// Arguments:
+//   arc = Number of degrees to traverse.
+//   sa = Start angle in degrees.
+//   r = Radius of arc.
+//   d = Diameter of arc.
+//   orient = The axis to align to.  Use `ORIENT_` constants from `constants.scad`
+//   align = The side of the origin the part should be aligned with.  Use `V_` constants from `constants.scad`
+//   masksize = size of mask used to clear unused part of circle arc.  should be larger than height or width of 2D shapes to extrude.
+//   caps = If true, spin the 2D shapes to make rounded caps the ends of the arc.
+//   convexity = Max number of times a ray passes through the 2D shape's walls.
+//
+// Example(Med):
+//   pts=[[-5/2, -5], [-5/2, 0], [-5/2-3, 5], [5/2+3, 5], [5/2, 0], [5/2, -5]];
+//   #polygon(points=pts);
+//   extrude_arc(arc=270, sa=45, r=40, caps=true, convexity=4, $fa=2, $fs=2) {
+//       polygon(points=pts);
+//   }

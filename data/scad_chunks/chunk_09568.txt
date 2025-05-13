@@ -1,0 +1,25 @@
+function is_only_noncolinear_vertex(points, facelist, vertex) =
+	let(
+		face=select(facelist, vertex+1, vertex-1),
+		count=len(face)
+	)
+	0==sum(
+		[
+			for(i=[0:count-1]) norm(
+				cross(
+					points[face[(i+1)%count]]-points[face[0]],
+					points[face[(i+2)%count]]-points[face[(i+1)%count]]
+				)
+			)
+		]
+	)
+;
+
+
+// Function: triangulate_face()
+// Description:
+//   Given a face in a polyhedron, subdivides the face into triangular faces.
+//   Returns an array of faces, where each face is a list of three vertex indices.
+// Arguments:
+//   points = Array of vertices for the polyhedron.
+//   face = The face, given as a list of indices into the vertex array `points`.

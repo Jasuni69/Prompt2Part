@@ -1,0 +1,71 @@
+module genMask(pattern, width, height, hOffset, vOffset, thickness, hRepeat, vRepeat, rotation, openingShape, openingWidth, openingLength, openingRadius, openingRotation, polygon)
+{
+  
+  if (printMessages) echo("genMask",pattern=pattern);
+  if (printMessages) echo("genMask",width=width);
+  if (printMessages) echo("genMask",height=height);
+  if (printMessages) echo("genMask",hOffset=hOffset);
+  if (printMessages) echo("genMask",vOffset=vOffset);
+  if (printMessages) echo("genMask",thickness=thickness);
+  if (printMessages) echo("genMask",hRepeat=hRepeat);
+  if (printMessages) echo("genMask",vRepeat=vRepeat);
+  if (printMessages) echo("genMask",rotation=rotation);
+  if (printMessages) echo("genMask",openingShape=openingShape);
+  if (printMessages) echo("genMask",openingWidth=openingWidth);
+  if (printMessages) echo("genMask",openingLength=openingLength);
+  if (printMessages) echo("genMask",openingRadius=openingRadius);
+  if (printMessages) echo("genMask",openingRotation=openingRotation);
+  if (printMessages) echo("genMask",polygon=polygon);
+  
+  rotatedHeight = ((sin((360+rotation)%90) * width) + (cos((360+rotation)%90) * height));
+  rotatedWidth = ((sin((360+rotation)%90) * height) + (cos((360+rotation)%90) * width));
+
+  rotate([0,0,rotation])
+  translate([-rotatedWidth/2, -rotatedHeight/2,-0.02])
+  {
+    if (pattern == yappPatternSquareGrid) 
+    {
+      for(hpos=[-hRepeat:hRepeat:rotatedWidth+hRepeat])
+      {
+        for(vpos=[-vRepeat:vRepeat:rotatedHeight+vRepeat])
+        {
+          translate([hpos + hOffset,vpos+vOffset]) 
+          {
+            generateShape (openingShape, true, 
+            (openingWidth==0) ? width :openingWidth, 
+            (openingLength==0) ? height : openingLength, 
+            thickness+0.04, openingRadius, openingRotation, polygon);
+          }
+        }
+      }
+    } else if (pattern == yappPatternHexGrid) 
+    {
+      hexRepeatH = hRepeat;
+      hexRepeatV = (sqrt(3) * hRepeat/2);
+
+      for(hpos=[-hexRepeatH:hexRepeatH:rotatedWidth+hexRepeatH])
+      {
+        for(vpos=[-hexRepeatV:hexRepeatV*2:rotatedHeight+hexRepeatV*2])
+        {
+          translate([hpos + hOffset,vpos+vOffset,0]) 
+          {
+            generateShape (openingShape, true, 
+            (openingWidth==0) ? width :openingWidth, 
+            (openingLength==0) ? height : openingLength, 
+            thickness, openingRadius,openingRotation, polygon);
+          }
+          translate([hpos-(hexRepeatH/2)+ hOffset,vpos+hexRepeatV+vOffset,0]) 
+          {
+            generateShape (openingShape, true,
+            (openingWidth==0) ? width :openingWidth, 
+            (openingLength==0) ? height : openingLength, 
+            thickness, openingRadius,openingRotation, polygon);
+          }
+        }
+      }
+    } 
+  }
+} //-- genMask()
+
+
+//===========================================================

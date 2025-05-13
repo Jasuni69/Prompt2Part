@@ -1,0 +1,11 @@
+module base_assembly()
+assembly("base") {
+    stl_colour(pp1_colour) render() /*clip(ymax = 0)*/ socket_box_stl();
+
+    mains_socket_hole_positions(socket)
+        translate_z(height)
+            insert(insert);
+}
+//
+//! * Attach the four feet using 10mm M3 dome screws, washers above and below and nyloc nuts
+//

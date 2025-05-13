@@ -1,0 +1,1 @@
+function gs_hole_d(type)       = type[9]; //! Screw hole diameter

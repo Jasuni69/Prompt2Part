@@ -1,0 +1,8 @@
+module handle()
+    translate([handle_length() / 2, 0])
+        if($preview)
+            handle_fastened_assembly(3);
+        else
+            handle_stl();
+
+handle();

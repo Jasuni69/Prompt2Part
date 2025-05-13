@@ -1,0 +1,1 @@
+function psu_shroud_cable_pitch(cable_d) = cable_d + 5;                        //! Pitch between cable entries

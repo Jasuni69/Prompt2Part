@@ -1,0 +1,1 @@
+function terminal_block_divider(type) = type[1];    //! Width of the dividers

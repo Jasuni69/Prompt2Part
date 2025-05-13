@@ -1,0 +1,1 @@
+function bulldog_tube(type)      = type[5] / 2; //! Outside diameter of the tubes

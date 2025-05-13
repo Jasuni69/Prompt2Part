@@ -1,0 +1,23 @@
+function array_dim(v, depth=undef) =
+	(depth == undef)? (
+		concat([len(v)], _array_dim_recurse(v))
+	) : (depth == 0)? (
+		len(v)
+	) : (
+		let(dimlist = _array_dim_recurse(v))
+		(depth > len(dimlist))? 0 : dimlist[depth-1]
+	);
+
+
+
+// Section: Vector Manipulation
+
+// Function: vmul()
+// Description:
+//   Element-wise vector multiplication.  Multiplies each element of vector `v1` by
+//   the corresponding element of vector `v2`.  Returns a vector of the products.
+// Arguments:
+//   v1 = The first vector.
+//   v2 = The second vector.
+// Example:
+//   vmul([3,4,5], [8,7,6]);  // Returns [24, 28, 30]

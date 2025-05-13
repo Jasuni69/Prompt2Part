@@ -1,0 +1,16 @@
+function point2d(p, fill=0) = assert(is_list(p)) [for (i=[0:1]) (p[i]==undef)? fill : p[i]];
+
+
+// Function: path2d()
+// Synopsis: Convert a path to 2D. 
+// SynTags: Path
+// Topics: Coordinates, Points, Paths
+// See Also: point2d(), point3d(), path3d()
+// Usage:
+//   pts = path2d(points);
+// Description:
+//   Returns a list of 2D vectors/points from a list of 2D, 3D or higher dimensional vectors/points.
+//   Removes the extra coordinates from higher dimensional points.  The input must be a path, where
+//   every vector has the same length.
+// Arguments:
+//   points = A list of 2D or 3D points/vectors.

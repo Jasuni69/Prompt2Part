@@ -1,0 +1,42 @@
+function _polygon_centroid(poly, eps=EPSILON) =
+    assert( is_path(poly,dim=[2,3]), "\nThe input must be a 2D or 3D polygon." )
+    let(
+        n = len(poly[0])==2 ? 1 :
+            let( plane = plane_from_points(poly, check_coplanar=true))
+            assert(!is_undef(plane), "\nThe polygon must be planar." )
+            plane_normal(plane),
+        v0 = poly[0] ,
+        val = sum([
+            for(i=[1:len(poly)-2])
+            let(
+                v1 = poly[i],
+                v2 = poly[i+1],
+                area = cross(v2-v0,v1-v0)*n
+            ) [ area, (v0+v1+v2)*area ]
+        ])
+    )
+    assert(!approx(val[0],0, eps), "\nThe polygon is self-intersecting or its points are collinear.")
+    val[1]/val[0]/3;
+
+
+
+// Function: polygon_normal()
+// Synopsis: Return normal to a polygon.  
+// Topics: Geometry, Polygons
+// See Also: polygon_area(), centroid(), polygon_normal(), point_in_polygon(), polygon_line_intersection()
+// Usage:
+//   vec = polygon_normal(poly);
+// Description:
+//   Given a 3D simple planar polygon, returns a unit normal vector for the polygon.  The vector
+//   is oriented so that if the normal points toward the viewer, the polygon winds in the clockwise
+//   direction.  If the polygon has zero area, returns `undef`.  If the polygon is self-intersecting
+//   the the result is undefined.  It doesn't check for coplanarity.
+// Arguments:
+//   poly = The list of 3D path points for the perimeter of the polygon.
+// Example(3D):
+//   path = rot([0,30,15], p=path3d(star(n=5, d=100, step=2)));
+//   stroke(path, closed=true);
+//   n = polygon_normal(path);
+//   rot(from=UP, to=n)
+//       color("red")
+//           stroke([[0,0,0], [0,0,20]], endcap2="arrow2");

@@ -1,0 +1,23 @@
+function upcase(str) =
+    assert(is_string(str))
+    str_join([for(char=str) let(code=ord(char)) code>=97 && code<=122 ? chr(code-32) : char]);
+
+
+// Section: Random strings
+
+// Function: rand_str()
+// Synopsis: Create a randomized string.
+// Topics: Strings
+// See Also: suffix(), str_find(), substr_match(), starts_with(), ends_with(), str_split(), str_join(), str_strip(), upcase(), downcase()
+// Usage:
+//    str = rand_str(n, [charset], [seed]);
+// Description:
+//    Produce a random string of length `n`.  If you give a string `charset` then the
+//    characters of the random string are drawn from that list, weighted by the number
+//    of times each character appears in the list.  If you do not give a character set
+//    then the string is generated with characters ranging from "0" to "z" (based on
+//    character code).
+// Arguments:
+//    n = number of characters to produce
+//    charset = string to draw the characters from.  Default: characters from "0" to "z".
+//    seed = random number seed

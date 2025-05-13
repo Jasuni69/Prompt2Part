@@ -1,0 +1,1 @@
+function sierpinski_triangle (levels=4,  step=1) = lsystem_turtle(levels=levels, step=step, angle=120, "A-B-B",     [["A","A-B+A+B-A"], ["B","BB"]]);

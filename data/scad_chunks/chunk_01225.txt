@@ -1,0 +1,1 @@
+function vero_joints(type)         = type[11];  //! List of solder joints

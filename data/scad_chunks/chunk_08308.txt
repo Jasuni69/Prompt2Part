@@ -1,0 +1,3 @@
+module test_convex_hull2(poly) {
+
+}

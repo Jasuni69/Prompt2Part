@@ -1,0 +1,23 @@
+module test_typeof() {
+    assert(typeof(undef) == "undef");
+    assert(typeof(true) == "boolean");
+    assert(typeof(false) == "boolean");
+    assert(typeof(-123) == "number");
+    assert(typeof(0) == "number");
+    assert(typeof(123) == "number");
+    assert(typeof("") == "string");
+    assert(typeof("foo") == "string");
+    assert(typeof([]) == "list");
+    assert(typeof(["foo","bar"]) == "list");
+    assert(typeof([123,849,32]) == "list");
+    assert(typeof([0:5]) == "range");
+    assert(typeof([-3:0]) == "range");
+    assert(typeof([0:1:5]) == "range");
+    assert(typeof([-3:2:5]) == "range");
+    assert(typeof([10:-2:-10]) == "range");
+    assert(typeof([0:NAN:INF]) == "invalid");
+    assert(typeof([0:"a":INF]) == "undef"); 
+    assert(typeof([0:[]:INF]) == "undef"); 
+    assert(typeof([true:1:INF]) == "undef"); 
+}
+test_typeof();

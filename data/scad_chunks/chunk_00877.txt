@@ -1,0 +1,1 @@
+function heater_length(type) = type[1];

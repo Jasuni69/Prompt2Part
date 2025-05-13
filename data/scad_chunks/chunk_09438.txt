@@ -1,0 +1,12 @@
+function matrix3_scale(v) = [
+	[v.x,   0, 0],
+	[  0, v.y, 0],
+	[  0,   0, 1]
+];
+
+
+// Function: matrix4_scale()
+// Description:
+//   Returns the 4x4 matrix to perform a 3D scaling transformation.
+// Arguments:
+//   v = 3D vector of scaling factors.  [X,Y,Z]

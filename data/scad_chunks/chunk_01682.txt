@@ -1,0 +1,1 @@
+function pot_shaft(type)    = type[12]; //! Diameter, flat diameter, length and flat/slot length and colour. If flat diameter is less than the radius then it is a slot width

@@ -1,0 +1,66 @@
+module Tri(grad=60,l=20,l2,h=0,r=0,messpunkt=0,center=+0,top=0,tang=1,c,fn=fn,name,help){
+    
+  Echo("WIP‼ c and tang=0",color="red",condition=is_num(c)&&!tang);
+  h=is_num(c)?c/tan(grad/2)/2:h;
+  l22=is_undef(l2)?l:l2;  //wip
+ 
+ w1=180-grad;  //Supplementwinkel 
+ w2=(360-w1)/2;
+ w3=(360-w1)/2; 
+ 
+ rot=w2/2;   
+ 
+ r1=is_list(r)?is_undef(r[0])?0:
+                        r[0]:
+            r;   
+ r2=is_list(r)?is_undef(r[1])?0:
+                        r[1]:
+            r;
+ r3=is_list(r)?is_undef(r[2])?0:
+                           r[2]:
+            r;    
+  
+ 
+ l2=h?1/cos(grad/2)*(!tang?h+TangentenP(w1,r1):h):l22;   
+ l3=h?1/cos(grad/2)*(!tang?h+TangentenP(w1,r1):h):l; 
+ 
+ hc=h?h:l*cos(grad/2);   
+    
+ t1=[TangentenP(w1,r1,r1),0];   
+ t2=RotLang(90-grad/2,l2)-RotLang(90-w2/2,TangentenP(w2,r2,r2));
+ t3=RotLang(90+grad/2,l3)-RotLang(90+w3/2,TangentenP(w3,r3,r3));
+    
+points=concat(
+        kreis(rand=0,r=r1,grad=w1,t=t1,fn=fn/3),
+        kreis(rand=0,r=r2,rot=-rot+180,grad=w2,t=t2,fn=fn/3),    
+        kreis(rand=0,r=r3,rot=rot+180,grad=w3,t=t3,fn=fn/3)    
+);
+    
+    
+    rotate(top?0:180)translate([center?
+                //-2*Kathete(l2,hc)/(2*sin(grad)):top? // center Umkreis
+                -(tang?hc+TangentenP(w1,r1):hc+2*TangentenP(w1,r1))/2:top? // center h
+                        tang?
+                        0:-TangentenP(w1,r1)
+                  :tang?-hc:h?-hc-TangentenP(w1,r1):-hc,0,0]){//Basis
+        polygon(points,convexity=5);
+        if(messpunkt){
+            union(){//TangentenP
+                Pivot(active=[1,1,0,1],size=messpunkt);
+                translate(RotLang(90-grad/2,l2))rotate(90+w2/2)Pivot(active=[1,0,1,1],size=messpunkt);
+                translate(RotLang(90+grad/2,l3))rotate(90-w3/2)Pivot(active=[1,0,1,1],size=messpunkt);
+            }
+            
+            Col(6)union(){ // mittelpunkte
+                Pivot(t1,active=[1,0,0,1],size=messpunkt);
+                Pivot(t2,active=[1,0,0,1],size=messpunkt);   
+                Pivot(t3,active=[1,0,0,1],size=messpunkt);
+            }
+
+        }
+    }
+   
+ InfoTxt("Tri",["reale Höhe=",tang?hc-TangentenP(w1,r1):hc,"h",tang?hc:hc+TangentenP(w1,r1),"Basis",2*Kathete(l2,tang?hc:hc+TangentenP(w1,r1)),"Umkreis r",2*Kathete(l2,hc)/(2*sin(grad)),"c",l==l22?sin(grad/2)*l*2:"WIP"],name);
+ HelpTxt("Tri",["grad",grad,"l",l,"l2",l2,"h",h,"r",r,",messpunkt",messpunkt,",center=",center,"top",top,"tang",tang,"c",c,"fn",fn,"name",name],help);    
+ 
+}

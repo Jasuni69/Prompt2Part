@@ -1,0 +1,24 @@
+module Demo() {
+  translate([0, -50, 0])
+    HollowCylinder(22, 20, 10);
+
+  SmoothHole(5, 10, 2)
+    SmoothCylinder(22, 10, 2);
+
+  translate([30, -30, 0]) SmoothCube([10, 14, 18], 2);
+
+  translate([50, 0, 0]) CutCube([15, 14, 18], 3);
+
+  translate([30, 0, 0]) SmoothXYCube([10, 14, 18], 2);
+
+  translate([57, -23, 0]) SmoothCylinder(5, 18, 2);
+
+  translate([35, -60, 0]) SmoothHollowCube([22, 20, 14], 3, 2);
+
+  translate([80, 0, 0])
+    ChamferHole(4, 10, 2, [10, 10, 0])
+      cube([20, 20, 10]);
+}
+
+
+Demo();

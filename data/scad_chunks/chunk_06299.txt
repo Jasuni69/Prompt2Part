@@ -1,0 +1,30 @@
+module robertson_mask(size, extra=1, ang=2.5,anchor=TOP,spin,orient) {
+    dummy=assert(is_int(size) && size>=0 && size<=4);
+    Mmin = [0.0696, 0.0900, 0.1110, 0.1315, 0.1895][size];
+    Mmax = [0.0710, 0.0910, 0.1126, 0.1330, 0.1910][size];
+    M = (Mmin + Mmax) / 2 * INCH;
+    Tmin = [0.063, 0.105, 0.119, 0.155, 0.191][size];
+    Tmax = [0.073, 0.113, 0.140, 0.165, 0.201][size];
+    T = (Tmin + Tmax) / 2 * INCH;
+    Fmin = [0.032, 0.057, 0.065, 0.085, 0.090][size];
+    Fmax = [0.038, 0.065, 0.075, 0.095, 0.100][size];
+    F = (Fmin + Fmax) / 2 * INCH;
+    h = T + extra;
+    Mslop=M+2*get_slop();
+    Mtop = Mslop + 2*adj_ang_to_opp(F+extra,ang);
+    Mbot = Mslop - 2*adj_ang_to_opp(T-F,ang);
+    anchors = [named_anchor("standard",[0,0,T-h/2], UP, 0)];
+    default_tag("remove")
+      attachable(anchor,spin,orient,size=[Mbot,Mbot,T],size2=[Mtop,Mtop],anchors=anchors){
+        down(T/2)
+            intersection(){
+                prismoid([Mbot,Mbot],[Mtop,Mtop],h=h,anchor=BOT);
+                cyl(d1=0, d2=Mslop/(T-F)*sqrt(2)*h, h=h, anchor=BOT);
+            }
+        children();
+      }
+}
+
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

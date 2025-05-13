@@ -1,0 +1,14 @@
+function right_of_line2d(line, pt) =
+	triangle_area2d(line[0], line[1], pt) < 0;
+
+
+// Function: collinear()
+// Usage:
+//   collinear(a, b, c, [eps]);
+// Description:
+//   Returns true if three points are co-linear.
+// Arguments:
+//   a = First point.
+//   b = Second point.
+//   c = Third point.
+//   eps = Acceptable max angle variance.  Default: EPSILON (1e-9) degrees.

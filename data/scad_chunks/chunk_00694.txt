@@ -1,0 +1,11 @@
+module panel_meter_cutout(type, h = 0) { //! Make panel cutout
+    size = pmeter_size(type);
+    tab = pmeter_tab(type);
+    extrude_if(h)
+        offset(0.2) {
+            dogbone_square([size.x, size.y]);
+
+            if(tab)
+                rounded_square([size.x + 2 * tab.x, tab.y + 2 * cnc_bit_r], r = cnc_bit_r, center = true);
+        }
+}

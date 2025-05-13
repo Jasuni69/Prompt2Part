@@ -1,0 +1,1 @@
+function pdip_pin_n(type) = type[5]; //! Pin neck

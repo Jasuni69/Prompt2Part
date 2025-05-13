@@ -1,0 +1,1 @@
+function gm_tags(type)         = type[11]; //! Tag size and pitch

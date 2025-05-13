@@ -1,0 +1,1 @@
+function belt_length(type, points, open = false) = _belt_length(_belt_points_info(type, points, open), open); //! Compute belt length given path

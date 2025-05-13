@@ -1,0 +1,37 @@
+module join_prism(polygon, base, base_r, base_d, base_T=IDENT,
+                    scale=1, prism_end_T=IDENT, short=false, 
+                    length, l, height, h,
+                    aux="none", aux_T=IDENT, aux_r, aux_d,
+                    overlap, base_overlap,aux_overlap,
+                    n=15, base_n, end_n, aux_n,
+                    fillet, base_fillet,aux_fillet,end_round,
+                    k=0.7, base_k,aux_k,end_k,start,end,
+                    uniform=true, base_uniform, aux_uniform,
+                    smooth_normals=true, base_smooth_normals, aux_smooth_normals, 
+                    debug=false, anchor="origin", extent=true, cp="centroid", atype="hull", orient=UP, spin=0,
+                    convexity=10,_name1="base",_name2="aux")
+{
+    assert(in_list(atype, _ANCHOR_TYPES), "Anchor type must be \"hull\" or \"intersect\"");
+    vnf_start_end = join_prism(polygon,base, base_r=base_r, base_d=base_d, base_T=base_T,
+                   scale=scale, prism_end_T=prism_end_T, short=short,
+                   length=length, l=l, height=height, h=h,
+                   aux=aux, aux_T=aux_T, aux_r=aux_r, aux_d=aux_d,
+                   overlap=overlap, base_overlap=base_overlap, aux_overlap=aux_overlap,
+                   n=n,base_n=base_n, end_n=end_n, aux_n=aux_n,
+                   fillet=fillet, base_fillet=base_fillet, aux_fillet=aux_fillet, end_round=end_round,
+                   k=k, base_k=base_k, aux_k=aux_k, end_k=end_k,
+                   uniform=uniform, base_uniform=base_uniform, aux_uniform=aux_uniform, 
+                   debug=debug, start=start, end=end,
+                   smooth_normals=smooth_normals, base_smooth_normals=base_smooth_normals, aux_smooth_normals=aux_smooth_normals,
+                   return_axis=true, _name1=_name1, _name2=_name2
+    );
+    axis = vnf_start_end[2] - vnf_start_end[1];
+    anchors = [
+               named_anchor("root",vnf_start_end[1], -axis),
+               named_anchor("end",vnf_start_end[2], axis)
+              ];
+    attachable(anchor,spin,orient,vnf=vnf_start_end[0], extent=atype=="hull", cp=cp, anchors=anchors) {
+      vnf_polyhedron(vnf_start_end[0],convexity=convexity);
+      children();
+    }
+}

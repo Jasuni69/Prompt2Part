@@ -1,0 +1,4 @@
+function _turtle_repeat(commands, state, full_state, repeat) =
+    repeat==1?
+        _turtle(commands,state,full_state) :
+        _turtle_repeat(commands, _turtle(commands, state, true), full_state, repeat-1);

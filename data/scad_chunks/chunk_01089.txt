@@ -1,0 +1,1 @@
+function toggle_hole_radius(type) = toggle_od(type) / 2 + 0.1; //! Radius of the panel hole

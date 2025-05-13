@@ -1,0 +1,5 @@
+module test_ival() {
+    assert_equal(str(ival(function (a) a)), "function(a, b) target_func(a)");
+    assert_equal(ival(function (a) a)(3,5), 3);
+}
+test_ival();

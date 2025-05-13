@@ -1,0 +1,56 @@
+module orient_and_align(
+	size=undef, orient=ORIENT_Z, align=V_CENTER,
+	center=undef, noncentered=ALIGN_POS,
+	orig_orient=ORIENT_Z, orig_align=V_CENTER,
+	alignments=[]
+) {
+	algn = is_def(center)? (center? V_CENTER : noncentered) : align;
+    if (orig_align != V_CENTER) {
+		orient_and_align(size=size, orient=orient, align=algn) {
+			translate(vmul(size/2, -orig_align)) children();
+		}
+    } else if (orig_orient != ORIENT_Z) {
+		rotsize = (
+			(orig_orient==ORIENT_X)? [size[1], size[2], size[0]] :
+			(orig_orient==ORIENT_Y)? [size[0], size[2], size[1]] :
+			vabs(rotate_points3d([size], orig_orient, reverse=true)[0])
+		);
+		orient_and_align(size=rotsize, orient=orient, align=algn) {
+			rot(orig_orient,reverse=true) children();
+		}
+	} else if (is_scalar(algn)) {
+		// If align is a number and not a vector, then translate PRE-rotation.
+		orient_and_align(size=size, orient=orient) {
+			translate(vmul(size/2, algn*V_UP)) children();
+		}
+	} else if (is_str(algn)) {
+		// If align is a string, look for an alignments label that matches.
+		found = search([algn], alignments, num_returns_per_match=1);
+		if (found != [[]]) {
+			orient_and_align(size=size, orient=orient) {
+				idx = found[0];
+				delta = alignments[idx][1];
+				translate(-delta) children();
+			}
+		} else {
+			assertion(1==0, str("Alignment label '", algn, "' is not known.", (alignments? str("  Try one of ", [for (v=alignments) v[0]], ".") : "")));
+		}
+	} else if (orient != ORIENT_Z) {
+		rotsize = (
+			(orient==ORIENT_X)? [size[2], size[0], size[1]] :
+			(orient==ORIENT_Y)? [size[0], size[2], size[1]] :
+			vabs(rotate_points3d([size], orient)[0])
+		);
+		orient_and_align(size=rotsize, align=algn) {
+			rotate(orient) children();
+		}
+	} else if (is_def(algn) && algn != [0,0,0]) {
+		translate(vmul(size/2, algn)) children();
+	} else {
+		children();
+	}
+}
+
+
+
+// vim: noexpandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

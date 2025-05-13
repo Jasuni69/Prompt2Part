@@ -1,0 +1,7 @@
+function back_substitute(R, b, transpose = false) =
+    assert(is_matrix(R, square=true))
+    let(n=len(R))
+    assert(is_vector(b,n) || is_matrix(b,n),str("R and b are not compatible in back_substitute ",n, len(b)))
+    transpose
+      ? reverse(_back_substitute(transpose(R, reverse=true), reverse(b)))  
+      : _back_substitute(R,b);

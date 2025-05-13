@@ -1,0 +1,102 @@
+module jst_xh_header(type, pin_count, right_angle = false, colour = false, pin_colour = false, smt = false) { //! Draw JST XH, PH or ZH connector
+    series = chr([ord(type[0][4]) - 32, ord(type[0][5]) - 32]);
+    vitamin(str("jst_xh_header(", type[0], ", ", pin_count, arg(right_angle, false, "right_angle"), arg(colour, false, "colour"), arg(smt, false, "smt"), "): JST ", series, " connector ",
+                pin_count, " way", right_angle ? " right_angle" :""));
+
+    pitch = hdr_pitch(type);
+    size = hdr_box_size(type) + [(pin_count - 1) * pitch, 0, 0];
+    pinOffsetX = hdr_box_size(type).x / 2;                          // Offset from last pin to box edge
+    wallThickness = hdr_box_wall(type);
+    y_offset = hdr_y_offset(type);
+    ra_box_offset = hdr_ra_box_offset(type);
+    ra_h = hdr_ra_height(type);
+    ra_z = ra_h - size.y / 2;
+    ra_extra = ra_h - size.y;                                   // thicker base for right angle version
+    pinWidth = hdr_pin_width(type);
+    pin_colour = pin_colour ? pin_colour : hdr_pin_colour(type);
+
+    module jst_xh_socket(type, pin_count, ra = false) {
+        module wall() {
+            difference() {
+                square([size.x, size.y], center = true);
+
+                offset(-wallThickness)
+                    square([size.x, size.y], center = true);
+            }
+            if(right_angle)
+                translate([0, size.y / 2 + ra_extra / 2])
+                    square([size.x, ra_extra], center = true);
+        }
+
+        module slots() {
+            cutoutWidth = 1.3;
+            cutoutOffset = pinOffsetX + cutoutWidth / 2 - hdr_pin_width(type) / 2;
+            for(side = [-1, 1])
+                translate([side * (size.x / 2 - cutoutOffset), -size.y / 2 + wallThickness / 2])
+                    square([cutoutWidth, 2 * wallThickness], center = true);
+        }
+
+        linear_extrude(wallThickness)
+            square([size.x, size.y], center = true);                    // the base
+
+        linear_extrude(size.z / 2)                                      // full walls up to the slots
+            wall();
+
+        linear_extrude(size.z)                                          // slotted walls to the top
+            difference() {
+                wall();
+
+                if(type[0] == "jst_xh_header") {
+                    if(pin_count > 2)
+                        slots();
+                    else
+                        hull()
+                            slots();
+
+                    translate([0, -size.y / 2 + 3 * wallThickness / 2])
+                        square([size.x + 1, wallThickness], center = true);
+                }
+
+                if(type[0] == "jst_ph_header") {
+                    translate([0, -size.y / 2 + wallThickness / 2])
+                        square([max((pin_count - 2) * pitch, 1), 2 * wallThickness], center = true);
+
+                    translate([0, -y_offset / 2 - pinWidth / 4])
+                        square([size.x + 1, y_offset + pinWidth / 2], center = true);
+                }
+            }
+    } // end module
+
+    color(colour ? colour : hdr_base_colour(type))
+        if(right_angle)
+            translate([0, -ra_box_offset, ra_z])
+                rotate([-90, 0, 180])
+                    jst_xh_socket(type, pin_count, true);
+        else
+            translate([0, y_offset])
+                jst_xh_socket(type, pin_count);
+
+        for(x = [0 : pin_count - 1]) {
+            below = !smt ? 0 : hdr_pin_below(type);
+            verticalPinLength = right_angle ? hdr_pin_below(type) + ra_z + y_offset : hdr_pin_length(type);
+            horizontalPinLength = hdr_pin_length(type) - hdr_pin_below(type) + ra_box_offset;
+            translate([pitch * (x - (pin_count - 1) / 2), 0]) {
+                translate_z(below)
+                    pin(type, verticalPinLength - below, colour = pin_colour);
+
+                if(right_angle) {
+                    color(pin_colour)
+                        translate([0, -pinWidth / 2, ra_z - pinWidth / 2 + y_offset])
+                            rotate([0, -90, 0])
+                                rotate_extrude(angle = 90, $fn = fn)
+                                    translate([0, -pinWidth / 2])
+                                        square(pinWidth);
+
+                    translate([0, -hdr_pin_below(type), ra_z + y_offset])
+                        rotate([90, 0, 0])
+                            let($solder = undef)
+                                pin(type, horizontalPinLength, colour = pin_colour);
+                }
+            }
+        }
+}

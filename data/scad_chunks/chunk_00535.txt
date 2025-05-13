@@ -1,0 +1,1 @@
+function ttrack_height(type)        = type[2];   //! Height of track section

@@ -1,0 +1,26 @@
+function _good_segments(path, d, shiftsegs, closed, quality) =
+    let(
+        maxind = len(path)-(closed ? 1 : 2),
+        pathseg = [for(i=[0:maxind]) select(path,i+1)-path[i]],
+        pathseg_len =  [for(seg=pathseg) norm(seg)],
+        pathseg_unit = [for(i=[0:maxind]) pathseg[i]/pathseg_len[i]],
+        // Order matters because as soon as a valid point is found, the test stops
+        // This order works better for circular paths because they succeed in the center
+        alpha = concat([for(i=[1:1:quality]) i/(quality+1)],[0,1])
+    ) [
+        for (i=[0:len(shiftsegs)-1])
+            (i>maxind)? true :
+            _segment_good(path,pathseg_unit,pathseg_len, d - 1e-7, shiftsegs[i], alpha)
+    ];
+
+
+// Determine if a segment is good (approximately)
+// Input is the path, the path segments normalized to unit length, the length of each path segment
+// the distance threshold, the segment to test, and the locations on the segment to test (normalized to [0,1])
+// The last parameter, index, gives the current alpha index.
+//
+// A segment is good if any part of it is farther than distance d from the path.  The test is expensive, so
+// we want to quit as soon as we find a point with distance > d, hence the recursive code structure.
+//
+// This test is approximate because it only samples the points listed in alpha.  Listing more points
+// makes the test more accurate, but slower.

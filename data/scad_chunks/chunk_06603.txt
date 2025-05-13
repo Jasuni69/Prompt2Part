@@ -1,0 +1,14 @@
+module test_line_closest_point() {
+    assert(approx(line_closest_point([[-10,-10], [10,10]], [1,-1]), [0,0]));
+    assert(approx(line_closest_point([[-10,-10], [10,10]], [-1,1]), [0,0]));
+    assert(approx(line_closest_point([[-10,-20], [10,20]], [1,2]+[-2,1]), [1,2]));
+    assert(approx(line_closest_point([[-10,-20], [10,20]], [1,2]+[2,-1]), [1,2]));
+    assert(approx(line_closest_point([[-10,-20], [10,20]], [13,31]), [15,30]));
+    assert(approx(line_closest_point([[-10,-10], [10,10]], [1,-1],SEGMENT), [0,0]));
+    assert(approx(line_closest_point([[-10,-10], [10,10]], [-1,1],SEGMENT), [0,0]));
+    assert(approx(line_closest_point([[-10,-20], [10,20]], [1,2]+[-2,1],SEGMENT), [1,2]));
+    assert(approx(line_closest_point([[-10,-20], [10,20]], [1,2]+[2,-1],SEGMENT), [1,2]));
+    assert(approx(line_closest_point([[-10,-20], [10,20]], [13,31],SEGMENT), [10,20]));
+    assert(approx(line_closest_point([[-10,-20], [10,20]], [15,25],SEGMENT), [10,20]));
+}
+*test_line_closest_point();

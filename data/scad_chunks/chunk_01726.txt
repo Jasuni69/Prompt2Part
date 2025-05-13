@@ -1,0 +1,27 @@
+module jack(cutout = false) { //! Draw 3.5mm jack
+    l = 12;
+    w = 7;
+    h = 6;
+    d = 6;
+    ch = 2.5;
+
+    translate_z(h / 2)
+        if(cutout)
+            rotate([0, 90, 0])
+                cylinder(d = d + 2 * panel_clearance, h = 100);
+        else
+            color(grey(20))
+                rotate([0, 90, 0]) {
+                    linear_extrude(l / 2)
+                        difference() {
+                            square([h, w], center = true);
+
+                            circle(d = 3.5);
+                        }
+
+                    tube(or  = d / 2, ir = 3.5 / 2, h = l / 2 + ch, center = false);
+
+                    translate_z(-l / 4)
+                        cube([h, w, l / 2], center = true);
+                }
+}

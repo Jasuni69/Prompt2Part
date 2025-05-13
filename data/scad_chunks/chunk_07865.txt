@@ -1,0 +1,38 @@
+module fourier_vase(radius, thickness, stop, sample_rate, number_of_waves, harmonic_fn, main_curve) {
+    function x(y, n = 0) =
+        n == number_of_waves ? 0 : harmonic_fn(y, n) + x(y, n + 1);
+
+    wave_pts = [
+        for(y = [0:stop / sample_rate:stop]) 
+        [x(y), y]
+    ];
+    
+    pts = [
+        [0, 0],
+        each is_undef(main_curve) ? [
+            for(i = [0:len(wave_pts) - 1]) 
+            [radius + wave_pts[i].x, wave_pts[i].y]
+        ] : [
+            for(i = [0:len(wave_pts) - 1]) 
+            [radius + wave_pts[i].x + main_curve[i].x, wave_pts[i].y]],
+        [0, stop]
+    ];
+
+    translate([0, 0, stop])
+    mirror([0, 0, 1])
+    difference() {
+        rotate_extrude()
+            polygon(pts);
+
+        rotate_extrude()
+            offset(-thickness)
+                polygon(pts);
+        
+        translate([0, 0, -1])
+        linear_extrude(thickness + 1.001)
+            circle(radius * 2);
+
+        linear_extrude(stop - thickness)
+            circle(thickness * 2);
+    }
+}

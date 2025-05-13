@@ -1,0 +1,18 @@
+}
+
+// A block with a fillet round hole.
+thickness_plate = 15;
+translate([-30,0,10])
+{
+  difference()
+  {
+    // The block.
+    cube([20,thickness_plate,20],center=true);
+
+    // Remove a fillet cylinder with outward fillet.
+    // The correction of 0.005 is to avoid jitter
+    // in the preview.
+    rotate([90,0,0])
+      cylinder_fillet(h=thickness_plate+0.005,d=10,fillet=3,center=true);
+  }
+}

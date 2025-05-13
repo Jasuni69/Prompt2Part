@@ -1,0 +1,1 @@
+function 7_segment_pin_pitch(type)  = type[4]; //! x and y pin pitches and pin diameter

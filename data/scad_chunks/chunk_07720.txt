@@ -1,0 +1,33 @@
+module Kextrude (r1=10,r2,grad=60,rad=1,breit=5,center=1,fn=fn,help)rotate(center?-grad/2:0){
+   $fn=fn;
+    r2=is_undef(r2)?r1+breit:r2;
+    breit=r2-r1;
+    
+    rad=is_list(rad)?rad:[rad,rad,rad,rad];
+        
+    if (rad[0]>breit/2)Echo(color="red","Kextrude Eckradius zu groß für Breite!");
+    MO(!$children);
+    
+   rotate_extrude(angle=grad)T(r1)mirror([1,0])children();
+
+    
+union(){  
+    $helpM=0;
+    $info=0;  
+   rotate_extrude(angle=grad)T(r2)children();
+    
+   T(r1+rad[2])rotate(180)rotate_extrude(angle=90)T(rad[2])children();
+   T(r2-rad[3])rotate_extrude(angle=-90)T(rad[3])children(); 
+   T(r2-rad[3],-rad[2])R(90,0,-90)linear_extrude (r2-r1-rad[2]-rad[3])children(); 
+    
+ rotate(grad){
+   T(r1+rad[0])rotate(90)rotate_extrude(angle=90)T(rad[0])children();
+   T(r2-rad[1])rotate(90)rotate_extrude(angle=-90)T(rad[1])children();
+   T(r1+rad[0],+rad[0])R(90,0,90)linear_extrude (r2-r1-rad[0]-rad[1])children();
+     
+ }
+} 
+
+HelpTxt("Kextrude",["r1",r1,"r2",r2,"grad",grad,"rad",rad,"breit",breit,"center",center,"fn",fn],help);
+
+}

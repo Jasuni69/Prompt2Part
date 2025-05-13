@@ -1,0 +1,17 @@
+function xy_to_polar(x,y=undef) = let(
+		xx = y==undef? x[0] : x,
+		yy = y==undef? x[1] : y
+	) [norm([xx,yy]), atan2(yy,xx)];
+
+
+// Function: xyz_to_planar()
+// Usage:
+//   xyz_to_planar(point, a, b, c);
+// Description:
+//   Given three points defining a plane, returns the projected planar
+//   [X,Y] coordinates of the closest point to a 3D `point`.  The origin
+//   of the planar coordinate system [0,0] will be at point `a`, and the
+//   Y+ axis direction will be towards point `b`.  This coordinate system
+//   can be useful in taking a set of nearly coplanar points, and converting
+//   them to a pure XY set of coordinates for manipulation, before convering
+//   them back to the original 3D plane.

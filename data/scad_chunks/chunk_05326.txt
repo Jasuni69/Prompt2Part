@@ -1,0 +1,41 @@
+function bezier_line_intersection(bezier, line) =
+    assert(is_path(bezier,2), "\nThe input 'bezier' must be a 2d bezier.")
+    assert(_valid_line(line,2), "\nThe input 'line' is not a valid 2d line.")
+    let( 
+        a = _bezier_matrix(len(bezier)-1)*bezier, // bezier algebraic coeffs. 
+        n = [-line[1].y+line[0].y, line[1].x-line[0].x], // line normal
+        q = [for(i=[len(a)-1:-1:1]) a[i]*n, (a[0]-line[0])*n] // bezier SDF to line
+    )
+    [for(u=real_roots(q)) if (u>=0 && u<=1) u];
+
+
+
+
+// Section: Bezier Path Functions
+//   To contruct more complicated curves you can connect a sequence of Bezier curves end to end.  
+//   A Bezier path is a flattened list of control points that, along with the degree, represents such a sequence of bezier curves where all of the curves have the same degree.
+//   A Bezier path looks like a regular path, since it is just a list of points, but it is not a regular path.  Use {{bezpath_curve()}} to convert a Bezier path to a regular path.
+//   We interpret a degree N Bezier path as groups of N+1 control points that
+//   share endpoints, so they overlap by one point.  So if you have an order 3 bezier path `[p0,p1,p2,p3,p4,p5,p6]` then the first
+//   Bezier curve control point set is `[p0,p1,p2,p3]` and the second one is `[p3,p4,p5,p6]`.  The endpoint, `p3`, is shared between the control point sets.
+//   The Bezier degree, which must be known to interpret the Bezier path, defaults to 3. 
+
+
+// Function: bezpath_points()
+// Synopsis: Computes one or more specified points along a bezier path.
+// SynTags: Path
+// Topics: Bezier Paths
+// See Also: bezier_points(), bezier_curve()
+// Usage:
+//   pt = bezpath_points(bezpath, curveind, u, [N]);
+//   ptlist = bezpath_points(bezpath, curveind, LIST, [N]);
+//   path = bezpath_points(bezpath, curveind, RANGE, [N]);
+// Description:
+//   Extracts from the Bezier path `bezpath` the control points for the Bezier curve whose index is `curveind` and
+//   computes the point or points on the corresponding Bezier curve specified by `u`.  If `curveind` is zero you
+//   get the first curve.  The number of curves is `(len(bezpath)-1)/N` so the maximum index is that number minus one.  
+// Arguments:
+//   bezpath = A Bezier path path to approximate.
+//   curveind = Curve number along the path.  
+//   u = Parameter values for evaluating the curve, given as a single value, a list or a range.
+//   N = The degree of the Bezier path curves.  Default: 3

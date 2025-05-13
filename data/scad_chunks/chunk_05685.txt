@@ -1,0 +1,20 @@
+function _trapezoid_dims(h,w1,w2,shift,ang) = 
+    let(  
+        h = is_def(h)? h
+          : num_defined([w1,w2,each ang])==4 ? (w1-w2) * sin(ang[0]) * sin(ang[1]) / sin(ang[0]+ang[1])
+          : undef
+    )
+    is_undef(h) ? [h]
+  :
+    let(
+        x1 = is_undef(ang[0]) || ang[0]==90 ? 0 : h/tan(ang[0]),
+        x2 = is_undef(ang[1]) || ang[1]==90 ? 0 : h/tan(ang[1]),
+        w1 = is_def(w1)? w1
+           : is_def(w2) && is_def(ang[0]) ? w2 + x1 + x2
+           : undef,
+        w2 = is_def(w2)? w2
+           : is_def(w1) && is_def(ang[0]) ? w1 - x1 - x2
+           : undef,
+        shift = first_defined([shift,(x1-x2)/2])
+    )
+    [h,w1,w2,shift];

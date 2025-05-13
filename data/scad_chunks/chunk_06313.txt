@@ -1,0 +1,7 @@
+module mask2d_ogee(pattern, excess=0.01, anchor=CENTER,spin=0) {
+    path = mask2d_ogee(pattern, excess=excess);
+    attachable(anchor,spin, two_d=true, path=path) {
+        polygon(path);
+        children();
+    }
+}

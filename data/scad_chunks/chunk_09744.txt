@@ -1,0 +1,47 @@
+module nema_mount_holes(size=17, depth=5, l=5, slop=PRINTER_SLOP, orient=ORIENT_Z, align=V_CENTER)
+{
+	motor_width = nema_motor_width(size);
+	plinth_diam = nema_motor_plinth_diam(size)+slop;
+	screw_spacing = nema_motor_screw_spacing(size);
+	screw_size = nema_motor_screw_size(size)+slop;
+
+	orient_and_align([motor_width, motor_width, l], orient, align) {
+		union() {
+			xspread(screw_spacing) {
+				yspread(screw_spacing) {
+					if (l>0) {
+						union() {
+							yspread(l) cyl(h=depth, d=screw_size, $fn=max(8,segs(screw_size/2)));
+							cube([screw_size, l, depth], center=true);
+						}
+					} else {
+						cyl(h=depth, d=screw_size, $fn=max(8,segs(screw_size/2)));
+					}
+				}
+			}
+		}
+		if (l>0) {
+			union () {
+				yspread(l) cyl(h=depth, d=plinth_diam);
+				cube([plinth_diam, l, depth], center=true);
+			}
+		} else {
+			cyl(h=depth, d=plinth_diam);
+		}
+	}
+}
+
+
+
+// Module: nema11_mount_holes()
+// Description: Creates a mask to use when making NEMA 11 stepper motor mounts.
+// Arguments:
+//   depth = The thickness of the mounting hole mask.  Default: 5
+//   l = The length of the slots, for making an adjustable motor mount.  Default: 5
+//   slop = The printer-specific slop value to make parts fit just right.  Default: `PRINTER_SLOP`
+//   orient = Orientation of the stepper.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Z`.
+//   align = Alignment of the stepper.  Use the `V_` constants from `constants.scad`.  Default: `V_CENTER`.
+// Example:
+//   nema11_mount_holes(depth=5, l=5);
+// Example:
+//   nema11_mount_holes(depth=5, l=0);

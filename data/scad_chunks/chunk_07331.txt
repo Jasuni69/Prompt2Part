@@ -1,0 +1,71 @@
+module GT(z=20,achse=3.5,spiel=.05,evolute=true,pulley=true,linear=true,fn=fn,name,help,spielO=0){
+        p=2; // zahnabstand 
+        PLD=0.254; //  ?Mittellinie? Pitch Line distance 
+        b=0.4;// abstand mitte Mittelpunkt r2
+        r1=.15;//kehle basis zahn
+        r2=1; // zahn flanken radius im abstand [b,i]
+        i=.63;  // band dicke
+        breiteZahn=(r2-b)*2;
+        umfang=z*p; 
+        zahnWinkel=360/z;
+
+   
+if(pulley){
+    if(evolute){
+        offset(-spielO)
+        Rund(r1,0,fn=fn/4)
+        union(){
+            r=umfang/2/PI;
+            difference(){
+                circle(r,$fn=z*2);
+                for(i=[0:z-1])rotate(i*360/z)
+                for(i=[-ceil(zahnWinkel/2):ceil(zahnWinkel/2)])rotate(-i)T(-umfang/360*i,r-PLD)GT2(spiel);
+                if(achse)circle(d=achse-spielO*2,$fn=fn);
+            }
+            InfoTxt("GT2 Pulley evolute profile",["Dia",r*2-spiel*2-PLD*2,"z",z],name);
+                //if(name)echo(str(is_bool(name)?"":"<b>",name," GT2 Pulley evolute profil Dia=",r*2-spiel*2-PLD*2," z=",z));
+        }       
+     }
+    else{
+        offset(-spielO)
+        Rund(r1,0,fn=fn/4)
+        union(){
+            r=umfang/2/PI-PLD;
+            difference(){
+                circle(r,$fn=z*2);
+            for(i=[0:z-1])rotate(i*360/z)T(0,r)GT2(spiel);
+            if(achse)  circle(d=achse-spielO*2,$fn=fn);
+            }
+            InfoTxt("GT2 Pulley",["Dia",r*2-spielO*2,"z",z],name);
+            //echo(str(is_bool(name)?"":"<b>",name," GT2 Pulley Dia=",r*2-spiel*2,"z=",z));
+        }
+    }
+
+ }
+ else offset(-spielO){
+     $info=false;
+     if (linear)Linear(e=z,es=2)GT2(-spiel);
+     else {
+         r=umfang/2/PI;
+         intersection(){
+             Polar(e=z,y=r-PLD)GT2(-spiel);
+             circle(r+i-PLD,$fn=z*2);
+         }
+     }
+     InfoTxt("GT2 Belt",concat(["Länge",z*p],linear?[]:["(aussen",str((umfang/2/PI+i-PLD)*2*PI,")")]),name);
+    // echo(str(is_bool(name)?"":"<b>",name," GT2 Belt Länge=",z*p,linear?"":str("(aussen ",(umfang/2/PI+i-PLD)*2*PI,")")));
+     
+     } 
+    
+HelpTxt("GT",["z",z,
+"achse",achse,
+"spiel",spiel,
+"evolute",evolute,
+"pulley",pulley,
+"linear",linear,
+"fn",fn,
+"spielO",spielO,
+"name",name     
+],help);
+
+}

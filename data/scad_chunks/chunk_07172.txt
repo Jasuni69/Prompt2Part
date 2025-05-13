@@ -1,0 +1,1 @@
+function Umkreis(eck,rI,name)=let(r=rI/cos(180/eck))is_undef(name)?r:echo(str(name," Umkreis=",r))r;

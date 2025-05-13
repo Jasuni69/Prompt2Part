@@ -1,0 +1,25 @@
+function _back_substitute(R, b, x=[]) =
+    let(n=len(R))
+    len(x) == n ? x
+    : let(ind = n - len(x) - 1)
+      R[ind][ind] == 0 ? []
+    : let(
+          newvalue = len(x)==0
+            ? b[ind]/R[ind][ind]
+            : (b[ind]-list_tail(R[ind],ind+1) * x)/R[ind][ind]
+      )
+      _back_substitute(R, b, concat([newvalue],x));
+
+
+
+// Function: cholesky()
+// Synopsis: Compute the Cholesky factorization of a matrix. 
+// Topics: Matrices, Linear Algebra
+// See Also: linear_solve(), linear_solve3(), matrix_inverse(), rot_inverse(), back_substitute(), cholesky()
+// Usage:
+//   L = cholesky(A);
+// Description:
+//   Compute the cholesky factor, L, of the symmetric positive definite matrix A.
+//   The matrix L is lower triangular and `L * transpose(L) = A`.  If the A is
+//   not symmetric then an error is displayed.  If the matrix is symmetric but
+//   not positive definite then undef is returned.

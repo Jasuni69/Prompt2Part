@@ -1,0 +1,2 @@
+function sum(v, i=0, s=0) = len(v) > i ? sum(v, i+1, s+v[i]) : s;
+// sum a vector of vectors.  vsum([]) == undef

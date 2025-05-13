@@ -1,0 +1,7 @@
+module test_f_cross() {
+    _test_fn2arg(
+        function (a,b) f_cross(a,b),
+        [[UP,LEFT,FWD], [BACK+RIGHT,FWD,DOWN]]
+    );
+}
+test_f_cross();

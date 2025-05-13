@@ -1,0 +1,18 @@
+function point3d(p, fill=0) =
+    assert(is_list(p)) 
+    [for (i=[0:2]) (p[i]==undef)? fill : p[i]];
+
+
+// Function: path3d()
+// Synopsis: Convert a path to 3D. 
+// SynTags: Path
+// Topics: Coordinates, Points, Paths
+// See Also: point2d(), path2d(), point3d(), point4d(), path4d(), hstack()
+// Usage:
+//   pts = path3d(points, [fill]);
+// Description:
+//   Returns a list of 3D vectors/points from a list of 2D or higher dimensional vectors/points
+//   by removing extra coordinates or adding the z coordinate.  
+// Arguments:
+//   points = A list of 2D, 3D or higher dimensional points/vectors.
+//   fill = Scalar value to fill missing values in vectors with (in the 2D case).  Default: 0

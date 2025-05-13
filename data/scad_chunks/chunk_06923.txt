@@ -1,0 +1,8 @@
+module test_acosh() {
+    assert_approx(acosh(cosh(-2)), 2);
+    assert_approx(acosh(cosh(-1)), 1);
+    assert_approx(acosh(cosh(0)), 0);
+    assert_approx(acosh(cosh(1)), 1);
+    assert_approx(acosh(cosh(2)), 2);
+}
+test_acosh();

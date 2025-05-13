@@ -1,0 +1,1 @@
+function box_outset(type) = box_sheet_slot(type) + box_wall(type) - sheet_slot_clearance / 2;  //! How much the bezel expands the specified internal size

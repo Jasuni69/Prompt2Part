@@ -1,0 +1,61 @@
+function _tile_edge_path_list(vnf, axis, maxopen=1) =
+    let(
+        verts = vnf[0],
+        faces = vnf[1],
+        segs = [for(face=faces, edge=pair(select(verts,face),wrap=true)) if (approx(edge[0][axis],0) && approx(edge[1][axis],0)) [edge[1],edge[0]]],
+        paths = _assemble_partial_paths(segs),
+        closedlist = [
+            for(path=paths)
+              if (len(path)>3 && approx(path[0],last(path))) list_unwrap(path)
+        ],
+        openlist = [
+            for(path=paths)
+              if (path[0]!=last(path)) path
+        ]
+    )
+    assert(len(openlist)<=1, str("VNF has ",len(openlist)," open paths on an edge and at most ",maxopen," is supported."))
+    [openlist,closedlist];
+
+
+
+/// Function&Module: _textured_revolution()
+/// Usage: As Function
+///   vnf = _textured_revolution(shape, texture, tex_size, [tex_scale=], ...);
+///   vnf = _textured_revolution(shape, texture, counts=, [tex_scale=], ...);
+/// Usage: As Module
+///   _textured_revolution(shape, texture, tex_size, [tex_scale=], ...) [ATTACHMENTS];
+///   _textured_revolution(shape, texture, counts=, [tex_scale=], ...) [ATTACHMENTS];
+/// Topics: Sweep, Extrusion, Textures, Knurling
+/// Description:
+///   Given a 2D region or path, fully in the X+ half-plane, revolves that shape around the Z axis (after rotating its Y+ to Z+).
+///   This creates a solid from that surface of revolution, possibly capped top and bottom, with the sides covered in a given tiled texture.
+///   The texture can be given in one of three ways:
+///   - As a texture name string. (See {{texture()}} for supported named textures.)
+///   - As a 2D array of evenly spread height values. (AKA a heightfield.)
+///   - As a VNF texture tile.  A VNF tile exactly defines a surface from `[0,0]` to `[1,1]`, with the Z coordinates
+///     being the height of the texture point from the surface.  VNF tiles MUST be able to tile in both X and Y
+///     directions with no gaps, with the front and back edges aligned exactly, and the left and right edges as well.
+///   .
+///   One script to convert a grayscale image to a texture heightfield array in a .scad file can be found at:
+///   https://raw.githubusercontent.com/BelfrySCAD/BOSL2/master/scripts/img2scad.py
+/// Arguments:
+///   shape = The path or region to sweep/extrude.
+///   texture = A texture name string, or a rectangular array of scalar height values (0.0 to 1.0), or a VNF tile that defines the texture to apply to the revolution surface.  See {{texture()}} for what named textures are supported.
+///   tex_size = An optional 2D target size for the textures.  Actual texture sizes are scaled somewhat to evenly fit the available surface. 
+///   tex_scale = Scaling multiplier for the texture depth.
+///   ---
+///   inset = If numeric, lowers the texture into the surface by that amount, before the tex_scale multiplier is applied.  If `true`, insets by exactly `1`.  Default: `false`
+///   rot = If true, rotates the texture 90º.
+///   shift = [X,Y] amount to translate the top, relative to the bottom.  Default: [0,0]
+///   closed = if true and the shape is a path then treat it as a closed path and make a torus.  If false then connect the path to the axis of rotation with horizontal caps that will not received any specified texture.  If the shape is a region this option has no effect.  Default: `true`
+///   taper = If given, and `closed=false`, tapers the texture height to zero over the first and last given percentage of the path.  If given as a lookup table with indices between 0 and 100, uses the percentage lookup table to ramp the texture heights.  Default: `undef` (no taper)
+///   angle = The number of degrees counter-clockwise from X+ to revolve around the Z axis.  Default: `360`
+///   style = The triangulation style used.  See {{vnf_vertex_array()}} for valid styles.  Used only with heightfield type textures. Default: `"min_edge"`
+///   counts = If given instead of tex_size, gives the tile repetition counts for textures over the surface length and height.
+///   samples = Minimum number of "bend points" to have in VNF texture tiles.  Default: 8
+///   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+///   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+///   orient = Vector to rotate top toward, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+/// Anchor Types:
+///   "hull" = Anchors to the virtual convex hull of the shape.
+///   "intersect" = Anchors to the surface of the shape.

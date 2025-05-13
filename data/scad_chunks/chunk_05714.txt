@@ -1,0 +1,8 @@
+module supershape(step=0.5,n,m1=4,m2=undef,n1,n2=undef,n3=undef,a=1,b=undef, r=undef, d=undef, anchor=CENTER, spin=0, atype="hull") {
+    check = assert(in_list(atype, _ANCHOR_TYPES), "Anchor type must be \"hull\" or \"intersect\"");
+    path = supershape(step=step,n=n,m1=m1,m2=m2,n1=n1,n2=n2,n3=n3,a=a,b=b,r=r,d=d);
+    attachable(anchor,spin,extent=atype=="hull", two_d=true, path=path) {
+        polygon(path);
+        children();
+    }
+}

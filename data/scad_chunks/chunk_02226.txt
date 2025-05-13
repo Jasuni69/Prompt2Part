@@ -1,0 +1,7 @@
+function cable_y(type) = -mains_socket_depth(type) / 2;
+cable_x = 0;
+
+earth = M3_ringterm;
+earth_screw = ringterm_screw(earth);
+
+height = base_thickness + box_height;

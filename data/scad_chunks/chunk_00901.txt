@@ -1,0 +1,1 @@
+function insert_outer_d(type)        = type[2];     //! Outer diameter at the top

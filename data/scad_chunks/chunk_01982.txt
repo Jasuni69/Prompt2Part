@@ -1,0 +1,31 @@
+module MT3608_carrier_stl() { //! Generate the STL for an MT3608 carrier, two required
+    pcb_width = 17;
+    w_pitch_top = 6.81;
+    w_pitch_bot = inch(0.3);
+    l_pitch_top = 30.855;
+    l_pitch_bot = inch(1.2);
+    hole = 1;
+    height = carrier_height();
+    wall = 2 * extrusion_width;
+    width = hole + 2 * wall;
+    offset = (l_pitch_top - l_pitch_bot) / 2;
+
+    stl("MT3608_carrier")
+        difference() {
+            hull() {
+                translate([offset, 0, height - eps / 2])
+                    rounded_rectangle([width, pcb_width - 2, eps], 1, true);
+
+                translate_z(eps / 2)
+                    rounded_rectangle([width, pcb_width - 2, eps], 1, true);
+            }
+            for(side = [-1, 1])
+                hull() {
+                    translate([offset, side * w_pitch_top / 2, height])
+                        cube([hole, hole, eps], center = true);
+
+                    translate([0, side * w_pitch_bot / 2])
+                        cube([hole, hole, eps], center = true);
+                }
+        }
+}

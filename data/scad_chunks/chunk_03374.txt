@@ -1,0 +1,3 @@
+function flatten(list) = [ for (i = list, v = i) v ];
+
+//function flatten(vec,max=inf) = [let(i=min(len(vec)-1,max)) concat(flatten(vec,i-1),vec[i])];

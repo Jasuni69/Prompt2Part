@@ -1,0 +1,20 @@
+function _corner_ctrl_pts(round_d, p1, p2, p3) =
+    let(
+        _ya_za_1 = __angy_angz(p1, p2),
+        _ya_za_2 = __angy_angz(p3, p2),
+        
+        dz1 = sin(_ya_za_1[0]) * round_d,
+        dxy1 = cos(_ya_za_1[0]) * round_d,
+        dy1 = sin(_ya_za_1[1]) * dxy1,
+        dx1 = cos(_ya_za_1[1]) * dxy1,
+        
+        dz2 = sin(_ya_za_2[0]) * round_d,
+        dxy2 = cos(_ya_za_2[0]) * round_d,
+        dy2 = sin(_ya_za_2[1]) * dxy2,
+        dx2 = cos(_ya_za_2[1]) * dxy2       
+    )
+    [
+        p2 - [dx1, dy1, dz1],
+        p2,
+        p2 - [dx2, dy2, dz2]
+    ];

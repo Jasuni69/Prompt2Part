@@ -1,0 +1,2 @@
+function anyPairMatches(setA,setB)=
+      len([for(a=setA,b=setB)if(str(a)==str(b))1])!=0;

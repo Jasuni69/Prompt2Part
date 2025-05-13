@@ -1,0 +1,15 @@
+module test_plane_intersection(){
+    line = [ rands(-1,1,3), rands(-1,1,3)+[2,0,0] ]; // a valid line
+    pt0  = line[0]-[2,0,0];  // 2 points not on the line
+    pt1  = line[1]-[0,2,0]; 
+    plane01 = plane3pt(line[0],line[1],pt0);
+    plane02 = plane3pt(line[0],line[1],pt1);
+    plane03 = plane3pt(line[0],pt0,pt1);
+    info = info_str([["plane1 = ",plane01],["plane2 = ",plane02],["plane3 = ",plane03]]);
+    assert_approx(plane_intersection(plane01,plane02,plane03),line[0],info);
+    assert_approx(plane_intersection(plane01,2*plane01),undef,info);
+    lineInters = plane_intersection(plane01,plane02);
+    assert_approx(line_closest_point(lineInters,line[0]), line[0], info);
+    assert_approx(line_closest_point(lineInters,line[1]), line[1], info);
+}
+*test_plane_intersection();

@@ -1,0 +1,28 @@
+module _test_fn3arg(dafunc,tests) {
+    assert_equal(str(dafunc()),    "function(x, y, z) target_func(x, y, z)");
+    assert_equal(str(dafunc(3)),   "function(x, y) target_func(a, x, y)");
+    assert_equal(str(dafunc(a=3)), "function(x, y) target_func(a, x, y)");
+    assert_equal(str(dafunc(b=3)), "function(x, y) target_func(x, b, y)");
+    assert_equal(str(dafunc(c=3)), "function(x, y) target_func(x, y, c)");
+    assert_equal(str(dafunc(3,4)), "function(x) target_func(a, b, x)");
+    assert_equal(str(dafunc(a=3,b=4)), "function(x) target_func(a, b, x)");
+    assert_equal(str(dafunc(a=3,c=4)), "function(x) target_func(a, x, c)");
+    assert_equal(str(dafunc(b=3,c=4)), "function(x) target_func(x, b, c)");
+    assert_equal(str(dafunc(3,4,5)), "function() target_func(a, b, c)");
+    for (test = tests) {
+        a = test[0];
+        b = test[1];
+        c = test[2];
+        r = test[3];
+        assert_equal(dafunc(a=a,b=b,c=c)(), r);
+        assert_equal(dafunc(a,b,c)(), r);
+        assert_equal(dafunc(a)(b,c), r);
+        assert_equal(dafunc(b=b,c=c)(a), r);
+        assert_equal(dafunc(a=a,c=c)(b), r);
+        assert_equal(dafunc(a=a,b=b)(c), r);
+        assert_equal(dafunc(a=a)(b,c), r);
+        assert_equal(dafunc(b=b)(a,c), r);
+        assert_equal(dafunc(c=c)(a,b), r);
+        assert_equal(dafunc()(a,b,c), r);
+    }
+}

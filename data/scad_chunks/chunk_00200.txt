@@ -1,0 +1,11 @@
+module polyhole_stl() {
+    stl("polyhole");
+
+    linear_extrude(3, center = true)
+        difference() {
+            square([100, 27]);
+
+            positions()
+                poly_circle(r = $r);
+        }
+}

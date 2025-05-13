@@ -1,0 +1,1 @@
+function  d_mate_distance(type)    = 8.5;       //! Spacing when mated

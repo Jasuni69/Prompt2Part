@@ -1,0 +1,19 @@
+module A(rx, ry, angle, long, sweep, x, y){
+    args = is_num(rx)? [rx, ry, angle, long, sweep, x, y] : rx;
+    data = _pb_arc(pb_last($pb_pts), args, false, 0, 0, undef, []);
+    $pb_pts = concat($pb_pts, data[0]);
+    $pb_angle = data[2];
+    $pb_ctrl_pts = data[3];
+    if (pb_do_render($children, parent_module(0))) pb_draw();
+    children();   
+}
+
+//  function _pb_polar(pts, args) 
+//
+//  Adds a point at distance d relative from the last point in the given direction
+//  relative of absolute angle is handled by the caller. Here we assume absolute angle
+//  pts  the point list being constructed
+//  args     (list) Function specific parameters
+//  args[0]  (number)  Distance along from the last point.
+//  args[1]  (number)  Angle along which the new point is calculated.
+//  return (list)  Data structure being [new_points_list, new_post_processing_instructions_list, new_angle].

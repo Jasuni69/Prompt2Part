@@ -1,0 +1,10 @@
+function is_letter(s) =
+    assert(is_string(s))
+    s==""? false :
+    all([for (v=s) is_lower(v) || is_upper(v)]);
+
+
+
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

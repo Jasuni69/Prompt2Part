@@ -1,0 +1,15 @@
+module isosurface(f, isovalue, bounding_box, voxel_size, voxel_count=undef, reverse=false, closed=true, exact_bounds=false, convexity=6, cp="centroid", anchor="origin", spin=0, orient=UP, atype="hull", show_stats=false, show_box=false, _mball=false) {
+    vnf = isosurface(f, isovalue, bounding_box, voxel_size, voxel_count, reverse, closed, exact_bounds, show_stats, _mball);
+    vnf_polyhedron(vnf, convexity=convexity, cp=cp, anchor=anchor, spin=spin, orient=orient, atype=atype)
+        children();
+    if(show_box)
+        let(
+            bbox0 = is_num(bounding_box)
+            ? let(hb=0.5*bounding_box) [[-hb,-hb,-hb],[hb,hb,hb]]
+            : bounding_box,
+            autovoxsize = is_def(voxel_size) ? voxel_size : _getautovoxsize(bbox0, default(voxel_count,22^3)),
+            exactbounds = is_def(exact_bounds) ? exact_bounds : is_list(f),
+            voxsize = _mball ? voxel_size : _getvoxsize(autovoxsize, bbox0, exactbounds),
+            bbox = _mball ? bounding_box : _getbbox(voxsize, bbox0, exactbounds, f)
+        ) %translate(bbox[0]) cube(bbox[1]-bbox[0]);
+}

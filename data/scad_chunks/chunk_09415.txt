@@ -1,0 +1,8 @@
+function path2d(points) = [for (point = points) point2d(point)];
+
+
+// Function: point3d()
+// Description:
+//   Returns a 3D vector/point from a 2D or 3D vector.
+// Arguments:
+//   p = The coordinates to force into a 3D vector/point.

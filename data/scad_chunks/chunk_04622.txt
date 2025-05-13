@@ -1,0 +1,19 @@
+module minkowskiOutsideRound(r=1,enable=1,boundingEnvelope=[500,500,500]){
+  if(enable==0){//do nothing if not enabled
+    children();
+  } else {
+    minkowski(){//expand the now positive shape
+      difference(){//make the negative positive
+        cube(boundingEnvelope-[0.1,0.1,0.1],center=true);
+        minkowski(){//expand the negative inwards
+          difference(){//create a negative of the children
+            cube(boundingEnvelope,center=true);
+            children();
+          }
+          sphere(r);
+        }
+      }
+      sphere(r);
+    }
+  }
+}

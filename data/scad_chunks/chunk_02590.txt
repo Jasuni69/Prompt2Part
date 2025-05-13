@@ -1,0 +1,3 @@
+function angle_between(v1, v2) = acos(v1 * v2 / (norm(v1) * norm(v2))); //! Return the angle between two vectors
+
+// http://eecs.qmul.ac.uk/~gslabaugh/publications/euler.pdf

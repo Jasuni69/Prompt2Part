@@ -1,0 +1,50 @@
+                xi = rx - sin((i * step + step)  ) * rx;
+                yi = ry - cos((i * step + step)  ) * ry;
+//                color(rands(0, 1, 3, i))
+                hull() {
+                    intersection() {
+                        // shell(epsilon) 
+                        clad(x,q) children(0);
+                        // shell(epsilon) 
+                        clad(y,q) children(1);
+                    }
+                    intersection() {
+                        // shell(epsilon) 
+                        clad(xi,q) children(0);
+                        // shell(epsilon) 
+                        clad(yi,q) children(1);
+                    }
+                }
+            }
+        }
+    }
+    
+    // prototype module slow maybe on concave feature
+    module intersectionRound(r, q=70,  epsilon = 1e-6,showOperands = true) {
+        %if (showOperands){children(0);
+        children(1);}
+ 
+                    clad(r,q) inset(r,q)
+                     hull()intersection() {
+                           children(0);
+                           children(1);
+                    }
+ 
+    }
+    
+    // unionRound helper expand by r
+    module clad(r,q=70) {
+        minkowski() {
+            children();
+            //        icosphere(r,2);
+             isosphere(r,q); 
+        }
+    }
+    // unionRound helper
+    module shell(r,q=70) {
+        difference() {
+            clad(r,q) children();
+            children();
+        }
+    }
+    

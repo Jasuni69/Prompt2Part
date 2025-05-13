@@ -1,0 +1,7 @@
+function _is_pt_on_bbox(p, bbox) = let(
+    a = v_abs(p-bbox[0]),
+    b = v_abs(p-bbox[1])
+) a[0]<EPSILON || a[1]<EPSILON || b[0]<EPSILON || b[1]<EPSILON;
+
+
+/// internal function: return number of path points that fall on the bounding box edge

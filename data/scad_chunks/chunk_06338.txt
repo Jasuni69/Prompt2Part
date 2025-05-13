@@ -1,0 +1,86 @@
+module knuckle_hinge(length, segs, offset, inner=false, arm_height=0, arm_angle=45, gap=0.2,
+             seg_ratio=1, knuckle_diam=4, pin_diam=1.75, fill=true, clear_top=false,
+             round_bot=0, round_top=0, pin_fn, clearance=0, teardrop,
+             tap_depth, screw_head, screw_tolerance="close", knuckle_clearance, 
+             anchor=BOT,orient,spin)
+{
+  dummy =
+    assert(is_str(pin_diam) || all_positive([pin_diam]), "pin_diam must be a screw spec string or a positive number")
+    assert(all_positive(length), "length must be a postive number")
+    assert(is_int(segs) && segs>=2, "segs must be an integer 2 or greater")
+    assert(is_finite(offset) && offset>=knuckle_diam/2, "offset must be a valid number that is not smaller than radius of the hinge knuckle")
+    assert(is_finite(arm_angle) && arm_angle>0 && arm_angle<=90, "arm_angle must be greater than zero and less than or equal to 90");
+  segs1 = ceil(segs/2);
+  segs2 = floor(segs/2);
+  seglen1 = gap + (length-(segs-1)*gap) / (segs1 + segs2*seg_ratio);
+  seglen2 = gap + (length-(segs-1)*gap) / (segs1 + segs2*seg_ratio) * seg_ratio;
+  z_adjust = segs%2==1 ? 0
+           : inner? seglen1/2
+           : seglen2/2;
+  tearspin = is_undef(teardrop) || teardrop==false ? undef
+           : teardrop==UP || teardrop==true ? 0
+           : teardrop==DOWN ? 180
+           : teardrop==BACK ? 270
+           : teardrop==FWD ? 90
+           : assert(false, "Illegal value for teardrop");
+  knuckle_segs = segs(knuckle_diam);
+  transform = down(offset)*yrot(-90)*zmove(z_adjust);
+
+  if(knuckle_clearance){
+    knuckle_clearance_diam = knuckle_diam / cos(180/knuckle_segs) + 2*knuckle_clearance;
+    tag("remove")
+      attachable(anchor,spin,orient,
+                 size=[length,
+                       arm_height+offset/tan(arm_angle)+knuckle_diam/2+knuckle_diam/2/sin(arm_angle),
+                       offset+knuckle_diam/2],
+                 offset=[0,
+                         -arm_height/2-offset/tan(arm_angle)/2-knuckle_diam/sin(arm_angle)/4+knuckle_diam/4,
+                         -offset/2+knuckle_diam/4]
+      )
+      {
+        multmatrix(transform) down(segs%2==1? 0 : (seglen1+seglen2)/2){
+          move([offset,clearance])
+            intersection(){
+              n = inner && segs%2==1 ? segs1
+                
+                : inner ? segs1
+                : segs2;
+              zcopies(n=n, spacing=seglen1+seglen2)
+                 cyl(h=(inner?seglen1:seglen2)+gap-.01, d=knuckle_clearance_diam, circum=true, $fn=knuckle_segs, realign=true);
+              //cyl(h=length+2*gap, d=knuckle_clearance_diam, circum=true, $fn=knuckle_segs, realign=true);
+            }
+        }
+        union(){}
+    }
+  }
+  attachable(anchor,spin,orient,
+             size=[length,
+                   arm_height+offset/tan(arm_angle)+knuckle_diam/2+knuckle_diam/2/sin(arm_angle),
+                   offset+knuckle_diam/2],
+             offset=[0,
+                     -arm_height/2-offset/tan(arm_angle)/2-knuckle_diam/sin(arm_angle)/4+knuckle_diam/4,
+                     -offset/2+knuckle_diam/4]
+  )
+  {
+    multmatrix(transform)
+      force_tag() difference() {
+        zcopies(n=inner?segs2:segs1, spacing=seglen1+seglen2)
+          linear_extrude((inner?seglen2:seglen1)-gap,center=true)
+            _knuckle_hinge_profile(offset=offset, arm_height=arm_height, arm_angle=arm_angle, knuckle_diam=knuckle_diam, pin_diam=pin_diam,
+                                   fill=fill, clear_top=clear_top, round_bot=round_bot, round_top=round_top, pin_fn=pin_fn,clearance=clearance,tearspin=tearspin);
+        if (is_str(pin_diam)) back(clearance)right(offset) up(length/2-(inner?1:1)*z_adjust) zrot(default(tearspin,0)){
+          $fn = default(pin_fn,$fn);
+          tap_depth = min(segs%2==1?seglen1-gap/2:seglen2-gap/2, default(tap_depth, length));
+          screw_hole(pin_diam, length=length+.01, tolerance="self tap", bevel=false, anchor=TOP, teardrop=is_def(tearspin));
+          multmatrix(inner ? zflip(z=-length/2) : IDENT)
+            if (is_undef(screw_head) || screw_head=="none" || starts_with(screw_head,"flat"))
+              screw_hole(pin_diam, length=length-tap_depth, tolerance=screw_tolerance, bevel=false, anchor=TOP, head=screw_head, teardrop=is_def(tearspin));
+            else {
+              screw_hole(pin_diam, length=length-tap_depth, tolerance=screw_tolerance, bevel=false, anchor=TOP, teardrop=is_def(tearspin));
+              screw_hole(pin_diam, length=.01, tolerance=screw_tolerance, bevel=false, anchor=TOP, head=screw_head, teardrop=is_def(tearspin));
+            }
+        }
+      }
+    children();
+  }    
+}

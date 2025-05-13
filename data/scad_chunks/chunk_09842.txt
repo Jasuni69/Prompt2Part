@@ -1,0 +1,9 @@
+module test_all() {
+	assert(all([0,false,undef]) == false);
+	assert(all([1,false,undef]) == false);
+	assert(all([1,5,true]) == true);
+	assert(all([[0,0], [0,0]]) == false);
+	assert(all([[0,0], [1,0]]) == false);
+	assert(all([[1,1], [1,1]]) == true);
+}
+test_all();

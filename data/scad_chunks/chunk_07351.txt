@@ -1,0 +1,28 @@
+module Sichel(h=1,start=55,max=270,dia=33,radius=30,delta=-1,step=5, use2D=false,fn=36,help){
+  if(!use2D&&h) for (i=[start:step:max]){
+       j=i+step;
+       Color(i/max)hull(){
+           rotate(i) T(radius+delta*i/max*dia/2)cylinder(h,d=i/max*dia,$fn=fn);
+           rotate(j) T(radius+delta*j/max*dia/2)cylinder(h,d=j/max*dia,$fn=fn);
+       }
+    }
+  if(use2D||!h) for (i=[start:step:max]){
+       j=i+step;
+       Color(i/max)hull(){
+           rotate(i) T(radius+delta*i/max*dia/2)circle(d=i/max*dia,$fn=fn);
+           rotate(j) T(radius+delta*j/max*dia/2)circle(d=j/max*dia,$fn=fn);
+       }
+    }   
+  
+ HelpTxt("Sichel",[
+"h",h,
+"start",start,
+"max",max,
+"dia",dia,
+"radius",radius,
+"delta",delta,
+"step",step,
+"use2D", use2D,
+"fn",fn], help); 
+
+}

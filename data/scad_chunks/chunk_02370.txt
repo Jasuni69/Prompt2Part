@@ -1,0 +1,25 @@
+module mouse_grommet(r, thickness) { //! Make the STL for a mouse grommet
+
+    width = 2 * (wall + clearance) + thickness;
+
+    stl(str("mouse_grommet_", r * 20, "_", thickness))
+        rotate([90, 0, 0])
+            union() {
+                for(side = [-1, 1])
+                    translate_z(side * (width - wall) / 2)
+                        linear_extrude(wall, center = true)
+                            difference() {
+                                mouse_grommet_hole(r, z = r + wall, h = 0, expand = wall + overlap);
+
+                            translate([0, wall])
+                                mouse_grommet_hole(r, h = 0, expand = 0);
+                        }
+                linear_extrude(width - 1, center = true)
+                    difference() {
+                        mouse_grommet_hole(r, h = 0, z = r + wall, expand = wall);
+
+                        translate([0, wall])
+                            mouse_grommet_hole(r, h = 0, expand = 0);
+                    }
+            }
+}

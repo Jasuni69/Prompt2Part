@@ -1,0 +1,14 @@
+module pin(type, length = undef, colour = undef) { //! Draw a header pin
+    w = hdr_pin_width(type);
+    l = length == undef ? hdr_pin_length(type) : length;
+    chamfer = w / 2;
+    color(is_undef(colour) ? hdr_pin_colour(type) : colour)
+        translate_z(l / 2 - hdr_pin_below(type))
+            hull() {
+                cube([w, w, l - 2 * chamfer], center = true);
+
+                cube([w - chamfer, w - chamfer, l], center = true);
+            }
+     color(silver)
+        solder();
+}

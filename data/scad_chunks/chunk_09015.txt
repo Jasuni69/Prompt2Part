@@ -1,0 +1,6 @@
+function _tri_delaunay(d, points, leng, _indices_hash, i = 0) =
+    i == leng ? d :
+	_tri_delaunay(
+		delaunay_addpoint(d, points[i], _indices_hash), 
+	    points, leng, _indices_hash, i + 1
+	);

@@ -1,0 +1,9 @@
+function rotate_from_to(a, b) =
+    let(axis = unit(cross(a, b)))
+        axis * axis >= 0.99 ? transpose3([b, axis, cross(axis, b)]) * [a, axis, cross(axis, a)]
+                            : a * b > 0 ? [[ 1, 0, 0], [0, 1, 0], [0, 0,  1]]
+                                        : [[-1, 0, 0], [0, 1, 0], [0, 0, -1]];
+//
+// Given two rotations A and B, calculates the angle between B*[1,0,0]
+// and A*[1,0,0] that is, the total torsion angle difference between A and B.
+//

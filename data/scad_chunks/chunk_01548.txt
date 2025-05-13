@@ -1,0 +1,1 @@
+function rd_electrolytic_radius(type)  = type[2]; //! Corner radius

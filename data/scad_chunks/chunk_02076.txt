@@ -1,0 +1,1 @@
+function foot_diameter(type = foot) = type[0]; //! Outside maximum diameter

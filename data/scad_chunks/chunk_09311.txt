@@ -1,0 +1,3 @@
+function sampling_minDistSample(s, pos, samples) =
+    len(samples) == 1 ? samples[0] :
+    _sampling_minDistSample(s, pos, samples, samples[0], norm(pos - samples[0]));

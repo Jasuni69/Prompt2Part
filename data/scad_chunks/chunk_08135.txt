@@ -1,0 +1,4 @@
+module ring_regular_polygon(radius, thickness, sides) {
+    hollow_out(thickness) 
+        circle(radius + thickness / 2, $fn = sides);
+}

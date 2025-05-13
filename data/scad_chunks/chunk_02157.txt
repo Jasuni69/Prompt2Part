@@ -1,0 +1,2 @@
+function led_bezel_r(type)   =     //! Radius of the tube
+    corrected_radius(led_rim_dia(led_bezel_led(type)) / 2) + led_bezel_wall(type);

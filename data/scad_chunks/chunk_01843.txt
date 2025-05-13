@@ -1,0 +1,1 @@
+function fan_boss_d(type)         = type[9];    //! Diameter of the screw bosses

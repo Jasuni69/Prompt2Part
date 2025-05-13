@@ -1,0 +1,12 @@
+function gaussian_rand(mean, stddev) = let(s=rands(0,1,2)) mean + stddev*sqrt(-2*ln(s.x))*cos(360*s.y);
+
+
+// Function: log_rand()
+// Usage:
+//   log_rand(minval, maxval, factor);
+// Description:
+//   Returns a single random number, with a logarithmic distribution.
+// Arguments:
+//   minval = Minimum value to return.
+//   maxval = Maximum value to return.  `minval` <= X < `maxval`.
+//   factor = Log factor to use.  Values of X are returned `factor` times more often than X+1.

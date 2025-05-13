@@ -1,0 +1,12 @@
+module showPCBs()
+{
+  if ($preview) {
+    // Loop through the PCBs
+    for ( thePCB = pcb ) {
+      printPCB(thePCB);
+    }  
+  }
+} //--showPCBs()
+
+
+//===========================================================

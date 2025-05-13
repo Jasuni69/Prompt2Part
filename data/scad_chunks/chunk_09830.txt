@@ -1,0 +1,8 @@
+module test_cosh() {
+	assert(abs(cosh(-2)-3.7621956911) < eps);
+	assert(abs(cosh(-1)-1.5430806348) < eps);
+	assert(abs(cosh(0)-1) < eps);
+	assert(abs(cosh(1)-1.5430806348) < eps);
+	assert(abs(cosh(2)-3.7621956911) < eps);
+}
+test_cosh();

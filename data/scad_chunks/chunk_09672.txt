@@ -1,0 +1,40 @@
+module fillet_angled_corner_mask(fillet=1.0, ang=90)
+{
+	dx = fillet / tan(ang/2);
+	fn = quantup(segs(fillet), 4);
+	difference() {
+		down(fillet) cylinder(r=dx/cos(ang/2)+1, h=fillet+1, center=false);
+		yflip_copy() {
+			translate([dx, fillet, -fillet]) {
+				hull() {
+					sphere(r=fillet, $fn=fn);
+					down(fillet*3) sphere(r=fillet, $fn=fn);
+					zrot_copies([0,ang]) {
+						right(fillet*3) sphere(r=fillet, $fn=fn);
+					}
+				}
+			}
+		}
+	}
+}
+
+
+// Module: fillet_corner_mask()
+// Usage:
+//   fillet_corner_mask(r);
+// Description:
+//   Creates a shape that you can use to round 90 degree corners on a fillet.
+//   Difference it from the object to be filletted.  The center of the mask
+//   object should align exactly with the corner to be filletted.
+// Arguments:
+//   r = radius of corner fillet.
+// Example:
+//   fillet_corner_mask(r=20.0);
+// Example:
+//   difference() {
+//     cube(size=[30, 50, 80], center=true);
+//     translate([0, 25, 40]) fillet_mask_x(l=31, r=15);
+//     translate([15, 0, 40]) fillet_mask_y(l=51, r=15);
+//     translate([15, 25, 0]) fillet_mask_z(l=81, r=15);
+//     translate([15, 25, 40]) #fillet_corner_mask(r=15);
+//   }

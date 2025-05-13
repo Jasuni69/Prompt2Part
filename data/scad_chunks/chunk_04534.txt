@@ -1,0 +1,9 @@
+module AugerThread(outer_diam, inner_diam, height, pitch, tooth_angle=30, tolerance=0.4, tip_height=0, tip_min_fract=0) {
+  tooth_height = tan(tooth_angle)*(outer_diam-inner_diam);
+  ScrewThread(outer_diam, height, pitch, tooth_angle, tolerance, tip_height,
+    tooth_height, tip_min_fract);
+}
+
+
+// This creates a threaded hole in its children using metric standards by
+// default.

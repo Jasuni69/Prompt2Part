@@ -1,0 +1,1 @@
+function pbox_mid_offset(type) = pbox_ridges(type).y + pbox_wall(type) / 2; // Offset to wall midpoint

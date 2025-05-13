@@ -1,0 +1,2 @@
+function polySum(list, idx = 0, result = 0) = 
+	idx >= len(list) ? result : polySum(list, idx + 1, result + list[idx]);

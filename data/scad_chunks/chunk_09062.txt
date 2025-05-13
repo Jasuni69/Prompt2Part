@@ -1,0 +1,6 @@
+function next_y(y, dir, rows, wrapping) = 
+    let(ny = y + _next_y_table[dir])
+    wrapping ? (ny + rows) % rows : ny;
+
+// get z value by dir
+_next_z_table = [0, 0, 0, 0, 1, -1];

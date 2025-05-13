@@ -1,0 +1,42 @@
+module battery_contact(type, pos = true) { //! Draw a positive or negative battery contact for specified battery
+    vitamin(str("battery_contact(", type[0], ", ", pos, "): Battery ", pos ? "positive" : "negative", " contact"));
+
+    neg = 9;
+
+    tw = contact_tab_width(type);
+    h = contact_height(type);
+    hole_y = -contact_tab_length(type) + tw / 2;
+    t = contact_thickness(type);
+
+    color("silver") {
+        rounded_rectangle([contact_width(type), h, t], r = 1);
+
+        translate([0, -h / 2, t])
+            rotate([90, 0, 0])
+                linear_extrude(t)
+                    difference() {
+                        hull() {
+                            translate([-tw / 2, -1])
+                                square([tw, 1]);
+
+                            translate([0, hole_y])
+                                circle(d = tw);
+                        }
+                        translate([0, hole_y])
+                            circle(tw / 4);
+                    }
+
+        if(pos) {
+            p = contact_pos(type);
+
+            cylinder(d1 = p.z + 2 * t, d2 = p.y + 2 * t, h = p.x);
+        }
+        else {
+            p = contact_neg(type);
+
+            not_on_bom()
+                translate_z(t)
+                    comp_spring(p.y, p.x - t);
+        }
+    }
+}

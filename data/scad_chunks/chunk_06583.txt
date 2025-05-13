@@ -1,0 +1,5 @@
+function info_str(list,i=0,string=chr(10)) =
+    assert(i>=len(list) || (is_list(list[i])&&len(list[i])>=2), "Invalid list for info_str." )
+    i>=len(list)
+    ? str(string)
+    : info_str(list,i+1,str(string,str(list[i][0],_valstr(list[i][1]),chr(10))));

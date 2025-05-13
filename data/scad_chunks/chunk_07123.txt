@@ -1,0 +1,3 @@
+module Txt(text,line=0,size=$textSize){
+Col(8)T($textPos+[0,line*1.3*1.5])text(str(text),size= size,valign="top");    
+}

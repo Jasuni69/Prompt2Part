@@ -1,0 +1,1 @@
+function sclip_radius(type)        = type[5]; //! Bend radius

@@ -1,0 +1,6 @@
+function _initialEigenstates(width, height, weights) =
+	let(
+	    keys = [for(weight = weights) weight[0]], 
+        row = [for(x = [0:width - 1]) keys]
+	)	
+	[for(y = [0:height - 1]) row];

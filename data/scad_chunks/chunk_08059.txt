@@ -1,0 +1,48 @@
+module hilbert_dragon() {
+    module one_segment(body_r, body_fn, one_scale_data) {
+        rotate([-90, 0, 0])
+            dragon_body_scales(body_r, body_fn, one_scale_data);
+
+        points = [[0, 0, 0], [0, .1, 1], [0, 1, 1.5]] * 4.5;
+        path = bezier_curve(0.1, points);
+
+        // dorsal fin
+        translate([0, 3.2, -3]) 
+        rotate([-65, 0, 0]) 
+        path_extrude([[0, -.25], [0.5, 0], [0, .75], [-0.5, 0]] * 4.5, path, scale = .05);  
+        
+        translate([0, -2.5, 1]) 
+        rotate([-10, 0, 0]) 
+        scale([1.1, 0.8, 1.25])  
+            sphere(body_r * 1.075, $fn = 8); 
+    }
+
+    body_r = 5;
+    body_fn = 12;
+    scale_fn = 5;
+    scale_tilt_a = -3;
+
+    lines = hilbert_curve();
+    hilbert_path = dedup([each [for(line = lines) line[0]], lines[len(lines) - 1][1]]);
+    smoothed_hilbert_path = bezier_smooth(hilbert_path, 0.45, t_step = 0.15);
+
+    dragon_body_path = reverse([for(i = [1:len(smoothed_hilbert_path) - 2]) smoothed_hilbert_path[i]]);
+     
+    one_body_scale_data = one_body_scale(body_r, body_fn, scale_fn, scale_tilt_a);
+     
+    along_with(dragon_body_path, scale = [0.425, 0.6, 0.425])    
+    scale(0.035)  
+        one_segment(body_r, body_fn, one_body_scale_data);
+    
+    // tail
+    translate([0, -.012, -.54])
+    scale([0.017, 0.017, 0.025])
+    rotate([0, 0, -12])
+    mirror([0, 0, .2]) 
+        tail();
+
+    translate([.06, 0, -2.4])        
+    scale(0.033)      
+    rotate([0, -15, 0])   
+        dragon_head();     
+}

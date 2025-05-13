@@ -1,0 +1,6 @@
+function propagate(nbr_dirs, compatibilities, wf, coord) = 
+	_propagate(
+		nbr_dirs,
+		compatibilities,
+		[wf, create_stack(coord)]
+	);

@@ -1,0 +1,11 @@
+module hookBaseOutside()
+{
+  echo("hookBaseOutside() ..");
+  sphere(20);
+} // hookBaseOutside()
+
+//===========================================================
+//===========================================================
+
+//---- This is where the magic happens ----
+YAPPgenerate();

@@ -1,0 +1,11 @@
+module test_xscale() {
+    vals = [1,-1,-2,-3,10,147];
+    for (val=vals) {
+        assert_equal(xscale(val), [[val,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]);
+        assert_equal(xscale(val, p=[1,2,3]), [val*1,2,3]);
+        xscale(val) union(){};
+    }
+    // Verify that module at least doesn't crash.
+    xscale(-5) xscale(5) union(){};
+}
+test_xscale();

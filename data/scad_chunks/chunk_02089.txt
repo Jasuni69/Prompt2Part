@@ -1,0 +1,1 @@
+function screw_knob_stem_h(type)   = type[2]; //! The stem height below the flange

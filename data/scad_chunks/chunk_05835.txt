@@ -1,0 +1,13 @@
+function v_floor(v) =
+    assert(is_vector(v), "\nInvalid vector." ) 
+    [for (x=v) floor(x)];
+
+
+// Function: v_round()
+// Synopsis: Returns the values of the given vector, rounded to the nearest whole number.
+// Topics: Vectors, Math
+// See Also: v_abs(), v_floor(), v_ceil()
+// Usage:
+//   v2 = v_round(v);
+// Description:
+//   Returns the given vector after performing a `round()` on all items.

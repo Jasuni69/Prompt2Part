@@ -1,0 +1,1 @@
+function pcb_holes(type)        = type[10]; //! List of hole positions

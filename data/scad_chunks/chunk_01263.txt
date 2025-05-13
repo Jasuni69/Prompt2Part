@@ -1,0 +1,1 @@
+function scs_hole_offset(type)          = type[2]; //! Offset of bearing hole from base of block

@@ -1,0 +1,2 @@
+function _turtle3d_repeat(commands, state, repeat) =
+   repeat<=0 ? state : _turtle3d_repeat(commands, _turtle3d(commands, state), repeat-1);

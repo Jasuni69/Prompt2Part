@@ -1,0 +1,16 @@
+module ht_pipes()
+    color("grey")
+    layout([for(p = ht_pipes) 40 + pipe_od(p)]) let(p = ht_pipes[$i], len = pipe_length(p)) {
+        if(len <= 34)
+             translate_z(len)
+                ht_cap(p);
+
+        if(len >= 101)
+            ht_pipe(p);
+
+        if(len == 100)
+            ht_tpipe(p);
+    }
+
+if($preview)
+    ht_pipes();

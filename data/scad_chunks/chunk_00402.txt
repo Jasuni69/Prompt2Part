@@ -1,0 +1,1 @@
+function variac_dial_hole_r(type)    = type[14] ? type[14] : screw_clearance_radius(variac_screw(type));    //! Dial screw hole radius

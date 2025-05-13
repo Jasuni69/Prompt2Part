@@ -1,0 +1,76 @@
+module snap_pin(size,r,radius,d,diameter, l,length, nub_depth, snap, thickness, clearance=0.2, preload, pointed=true, anchor=FRONT, spin=0, orient=FRONT, center) {
+  preload_default = 0.2;
+  sizedat = _pin_size(size);
+  radius = get_radius(r1=r,r2=radius,d1=d,d2=diameter,dflt=struct_val(sizedat,"diameter")/2);
+  length = first_defined([l,length,struct_val(sizedat,"length")]);
+  snap = first_defined([snap, struct_val(sizedat,"snap")]);
+  thickness = first_defined([thickness, struct_val(sizedat,"thickness")]);
+  nub_depth = first_defined([nub_depth, struct_val(sizedat,"nub_depth")]);
+  preload = first_defined([first_defined([preload, struct_val(sizedat, "preload")]),preload_default]);
+
+  nubscale = 0.9;      // Mysterious arbitrary parameter
+
+  // The basic pin assumes a rounded cap of length sqrt(2)*r, which defines lStraight.
+  // If the point is enabled the cap length is instead 2*r
+  // preload shrinks the length, bringing the nubs closer together
+
+  rInner = radius - clearance;
+  stretch = sqrt(2)*radius/rInner;  // extra stretch factor to make cap have proper length even though r is reduced.
+  lStraight = length - sqrt(2) * radius - clearance;
+  lPin = lStraight + (pointed ? 2*radius : sqrt(2)*radius);
+  attachable(anchor=anchor,spin=spin, orient=orient,
+             size=[nubscale*(2*rInner+2*snap + clearance),radius*sqrt(2)-2*clearance,2*lPin]){
+  zflip_copy()
+      difference() {
+        intersection() {
+            cube([3 * (radius + snap), radius * sqrt(2) - 2 * clearance, 2 * length + 3 * radius], center = true);
+            _pin_shaft(rInner, lStraight, snap+clearance/2, nubscale, stretch, nub_depth-preload, pointed);
+        }
+        _pin_slot(l = lStraight, r = rInner - thickness, t = thickness, d = nub_depth - preload, nub = snap, depth = 2 * radius + 0.02, stretch = stretch);
+      }
+  children();
+  }
+}
+
+// Module: snap_pin_socket()
+// Synopsis: Creates a snap-pin socket for a {{snap_pin()}} to slot into.
+// SynTags: Geom
+// Topics: Joiners, Parts
+// See Also: snap_pin(), joiner(), dovetail(), snap_pin(), rabbit_clip()
+// Usage:
+//   snap_pin_socket(size, [fixed=], [fins=], [pointed=], [anchor=], [spin=], [orient=]) [ATTACHMENTS];
+//   snap_pin_socket(r=|radius=|d=|diameter=, l=|length=, nub_depth=, snap=, [fixed=], [pointed=], [fins=]) [ATTACHMENTS];
+// Description:
+//   Constructs a socket suitable for a snap_pin with the same parameters.   If `fixed` is true then the socket has flat walls and the
+//   pin will not rotate in the socket.  If `fixed` is false then the socket is round and the pin will rotate, particularly well
+//   if you add a lubricant.  If `pointed` is true the socket is pointed to receive a pointed pin, otherwise it has a rounded and and
+//   will be shorter.  If `fins` is set to true then two fins are included inside the socket to act as supports (which may help when printing tip up,
+//   especially when `pointed=false`).  The default orientation is DOWN with anchor BOTTOM so that you can difference() the socket away from an object.
+//   The socket extends 0.02 extra below its bottom anchor point so that differences will work correctly.  (You must have $overlap smaller than 0.02 in
+//   attach or the socket will be beneath the surface of the parent object.)
+//   .
+//   The "large" or "standard" size pin has a length of 10.8 and diameter of 7.  The "medium" pin has a length of 8 and diameter of 4.6.  The "small" pin
+//   has a length of 6 and diameter of 3.2.  The "tiny" pin has a length of 4 and a diameter of 2.5.
+// Arguments:
+//   size = text string to select from a list of predefined sizes, one of "standard", "medium", "small", or "tiny".
+//   ---
+//   pointed = set to true to get a pointed pin, false to get one with a rounded end.  Default: true
+//   r/radius = radius of the pin
+//   d/diameter = diameter of the pin
+//   l/length = length of the pin
+//   nub_depth = the distance of the nub from the base of the pin
+//   snap = how much snap the pin provides (the nub projection)
+//   fixed = if true the pin cannot rotate, if false it can.  Default: true
+//   pointed = if true the socket has a pointed tip.  Default: true
+//   fins = if true supporting fins are included.  Default: false
+// Example:  The socket shape itself in native orientation.
+//   snap_pin_socket("standard", anchor=CENTER, orient=UP, fins=true, $fn=40);
+// Example:  A spinning socket with fins:
+//   snap_pin_socket("standard", anchor=CENTER, orient=UP, fins=true, fixed=false, $fn=40);
+// Example:  A cube with a socket in the middle and one half-way off the front edge so you can see inside:
+//   $fn=40;
+//   diff("socket") cuboid([20,20,20])
+//     tag("socket"){
+//       attach(TOP) snap_pin_socket("standard");
+//       position(TOP+FRONT)snap_pin_socket("standard");
+//     }

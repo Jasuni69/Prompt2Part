@@ -1,0 +1,22 @@
+function _path_cuts_dir(path, cuts, closed=false, eps=1e-2) =
+    [for(ind=[0:len(cuts)-1])
+        let(
+            zeros = path[0]*0,
+            nextind = cuts[ind][1],
+            nextpath = unit(select(path, nextind+1)-select(path, nextind),zeros),
+            thispath = unit(select(path, nextind) - select(path,nextind-1),zeros),
+            lastpath = unit(select(path,nextind-1) - select(path, nextind-2),zeros),
+            nextdir =
+                nextind==len(path) && !closed? lastpath :
+                (nextind<=len(path)-2 || closed) && approx(cuts[ind][0], path[nextind],eps)
+                   ? unit(nextpath+thispath)
+              : (nextind>1 || closed) && approx(cuts[ind][0],select(path,nextind-1),eps)
+                   ? unit(thispath+lastpath)
+              :  thispath
+        ) nextdir
+    ];
+
+
+// internal function
+// converts pathcut output form to a [segment, u]
+// form list that works withi path_select

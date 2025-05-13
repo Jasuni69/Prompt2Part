@@ -1,0 +1,59 @@
+module al_clad_resistor(type, value, leads = true) { //! Draw an aluminium clad resistor
+    vitamin(str("al_clad_resistor(", type[0], ", ", value, arg(leads, true, "leads"),
+               "): Resistor aluminium clad ", type[0], " ", value));
+    length = al_clad_length(type);
+    width = al_clad_width(type);
+    height = al_clad_height(type);
+    tab = al_clad_tab(type);
+    thickness = al_clad_thickness(type);
+    terminal_h = 4;
+    terminal_t = 1;
+    terminal_l = 5;
+
+    body = al_clad_vpitch(type) - 2 * al_clad_clearance(type);
+
+    $fa = fa; $fs = fs;
+
+    color("silver") {
+        rotate([90, 0, 90])
+            linear_extrude(length, center = true)
+                hull() {
+                    translate([0, al_clad_height(type) / 2])
+                        intersection() {
+                            square([body, al_clad_height(type)], center = true);
+
+                            circle(body / 2 - eps);
+                        }
+                    translate([0, thickness / 2])
+                        square([body, thickness], center = true);
+                }
+        linear_extrude(thickness)
+            difference() {
+                union()
+                    for(end = [-1, 1])
+                        translate([end * (length - tab) / 2, end * (width - width / 2) / 2])
+                            square([tab, width / 2], center = true);
+
+                al_clad_resistor_hole_positions(type)
+                    circle(d = al_clad_hole(type));
+            }
+        if(leads) {
+            translate_z(height / 2)
+                rotate([0, 90, 0])
+                    cylinder(r = 1, h = al_clad_wire_length(type) - 2 * terminal_l + eps, center = true);
+
+            for(end = [-1, 1])
+                translate([end * (al_clad_wire_length(type) - terminal_l) / 2, 0, height / 2])
+                    rotate([90, 0, 0])
+                        linear_extrude(terminal_t, center = true) difference() {
+                            square([terminal_l, terminal_h], center = true);
+
+                            circle(r = 1);
+                        }
+        }
+    }
+    color("black")
+        translate_z(height / 2)
+            rotate([0, 90, 0])
+                cylinder(r = leads ? 3 : height / 2 - 2, h = length + eps, center = true);
+}

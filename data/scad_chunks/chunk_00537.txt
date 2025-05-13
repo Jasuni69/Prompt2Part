@@ -1,0 +1,1 @@
+function ttrack_slot_width(type)    = type[4];   //! Width of the slot

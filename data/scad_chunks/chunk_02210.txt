@@ -1,0 +1,1 @@
+function hinge_radius(type)      = washer_radius(screw_washer(hinge_screw(type))) + 1;

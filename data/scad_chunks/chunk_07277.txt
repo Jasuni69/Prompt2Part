@@ -1,0 +1,33 @@
+module PrevPos(on=true,t=[0,0,0],z=0,rot=[180,0,0],tP=[0,0,0],help){
+rot=is_num(rot)?[0,0,rot]:rot;
+if($preview&&on||on==2)translate(v3(t)+[0,0,z])rotate(v3(rot))children();
+else translate(v3(tP))children();
+
+Echo("Render with PrevPos!",color="warning",condition=on==2);
+
+MO(!$children);
+
+HelpTxt("PrevPos",["on",on,"t",t,"z",z,"rot",rot,"tP",tP],help);
+};
+
+
+/** \page Helper
+Points() show point position with numbers in preview only
+\name Points
+\param points points list to show
+\param color optional color else rainbow is used
+\param size  optional else distance is used to scale
+\param hull  optional creates a convex hull around points - number will be used for transparency/alpha
+\param loop  size of a loop of points 
+\param start start point of that loop
+\param mark  list for points to mark
+\param markS markCol marking size and color
+\param face  highlight marked points as face with normal and order number
+\param center orientation of number label radial (true) or viewpoint
+\param help help
+*/
+
+//Points(octa(5),loop=4,size=0.4);
+//Points(kreis(),mark=[0,1,2,3,4,5,6,7,8],loop=13,start=10);
+//Points(octa(5),mark=[3,4,2,1],hull=.5*0);
+//Points(octa(5),mark=[3,0,2,1],hull=true);

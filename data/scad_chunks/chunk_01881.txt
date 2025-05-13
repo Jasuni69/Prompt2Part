@@ -1,0 +1,10 @@
+function cable_bundle_positions(cable) = let( //! Positions of wires in a bundle to go through a cable strip
+        wires = cable_wires(cable),
+        bottom = cable_is_ribbon(cable) ? wires : wires < 3 ? wires : wires <= 7 ? ceil(wires / 2) : min(wires, 3),
+        middle = min(wires - bottom, 3),
+        top = wires - bottom - middle
+    )
+    [for(i = [0 : 1 : bottom - 1])    [i - (bottom - 1) / 2,       0.5],
+     for(i = [middle - 1 : -1 : 0])   [i - (middle - 1) / 2,       middle == bottom ? 1.5 : 0.5 + sin(60)],
+     for(i = [0 : 1 : top - 1])       [i - [0.5, 0.5, 1][top - 1], top == middle ?    2.5 : 1.5 + sin(60)]
+    ] * cable_wire_size(cable);

@@ -1,0 +1,1 @@
+function tbolt_head_width(type)     = type[3];   //! Head width for t-track bolt

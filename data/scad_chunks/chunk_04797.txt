@@ -1,0 +1,8 @@
+function pb_translate_pts(pts, translate=[0,0,0])= [for(p=pts)[p[0]+translate[0],p[1]? p[1]+translate[1] : translate[1], p[2]? p[2]+translate[2] : translate[2]]];
+
+
+//  function  pb_segmentsPerCircle(r)
+//
+//  Calculates the number of segments used per circle (per 360 deg) based on circle radius and openSCAD $fn, $fa and $fs settings.
+//  r       (number)  The circle radius for which the number of segments needs to be calculated.
+//  return  (number)  The number of segments that would be used by openSCAD if it would draw the circle.

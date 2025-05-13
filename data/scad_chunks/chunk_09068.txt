@@ -1,0 +1,11 @@
+function carve_bottom(x, y, z, cells, rows) = 
+    let(
+        y_minus_one = y - 1,
+        ny = y_minus_one < 0 ? y_minus_one + rows : y_minus_one
+    )
+    update(
+        cells, 
+        [x, ny, z, Z_X_WALL, UNVISITED]
+    );
+
+// go down and carve the up wall of the down cell

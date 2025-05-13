@@ -1,0 +1,34 @@
+module leadnut(type) { //! Draw specified leadnut
+    vitamin(str("leadnut(", type[0], "): ", type[1]));
+    bore_d = leadnut_bore(type);
+    bore_r = bore_d / 2;
+    h = leadnut_height(type);
+    pitch = leadnut_pitch(type);
+    lead = leadnut_lead(type);
+    flat = leadnut_flat(type);
+    flange_d = leadnut_flange_dia(type);
+
+    color(leadnut_colour(type)) vflip()
+        translate_z(-leadnut_flange_offset(type) - leadnut_flange_t(type)) {
+            tube(or = leadnut_od(type) / 2, ir = bore_r, h = h, center = false);
+
+            if(show_threads)
+                thread(bore_d, lead, h, thread_profile(pitch / 2, pitch * 0.366, 30), false, starts = lead / pitch, female = true, solid = false);
+
+            translate_z(leadnut_flange_offset(type))
+                linear_extrude(leadnut_flange_t(type))
+                    difference() {
+                        circle(d = flange_d);
+
+                        circle(bore_r);
+
+                        leadnut_screw_positions(type)
+                            circle(d = leadnut_hole_dia(type));
+
+                        if(flat)
+                            for(side = [-1, 1])
+                                translate([side * flange_d / 2, 0])
+                                    square([flange_d - flat, flange_d], center = true);
+                    }
+        }
+}

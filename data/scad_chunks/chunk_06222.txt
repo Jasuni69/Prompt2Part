@@ -1,0 +1,49 @@
+module textured_tile(
+    texture,
+    size,
+    ysize, height, w1, w2, ang, h, shift,
+    tex_size,
+    tex_reps,       
+    tex_inset=false,
+    tex_rot=0,      
+    tex_depth=1,
+    diff=false,
+    tex_extra,
+    tex_skip=0,
+    style="min_edge",
+    atype="tex",
+    anchor, spin=0, orient=UP
+)
+{
+    anchor = default(anchor, atype=="tex" ? BOTTOM : CENTER);
+    vnf_data = textured_tile(size=size,
+                        ysize=ysize, height=height, w1=w1, w2=w2, ang=ang, h=h, shift=shift, 
+                        texture=texture, tex_size=tex_size, tex_reps=tex_reps,tex_extra=tex_extra, 
+                        tex_inset=tex_inset, tex_rot=tex_rot, tex_depth=tex_depth,tex_skip=tex_skip,
+                        style=style, atype="std",_return_anchor=true);
+    h_w1_w2_shift = vnf_data[2];
+    is_trap = is_def(h_w1_w2_shift);
+    ysize=h_w1_w2_shift[0];
+    w1=h_w1_w2_shift[1];
+    w2=h_w1_w2_shift[2];
+    shift=h_w1_w2_shift[3];
+    size = vnf_data[1];
+    inset = is_num(tex_inset)? tex_inset : tex_inset? 1 : 0;
+    extra_ht = max(0,abs(tex_depth)*(1-inset));
+    anch_ht = atype=="tex" ? extra_ht : size.z;
+    geom = is_def(h_w1_w2_shift) ? atype=="std" ? attach_geom(axis=BACK, size=[w1,anch_ht,ysize],size2=[w2,anch_ht],shift=[-shift,0])
+                                                : attach_geom(axis=BACK, size=[w1,anch_ht,ysize],size2=[w2,anch_ht],shift=[-shift,0])
+                                 : attach_geom(size=[size.x,size.y,anch_ht]);
+    attachable(anchor=anchor,orient=orient, spin=spin, geom=geom, expose_tags=true){
+      down(atype=="tex" ? size.z/2+extra_ht/2 : 0)
+        if (diff) {
+          tag("keep") vnf_polyhedron(vnf_data[0]);
+          tag("remove")up(.05)
+              if (!is_trap) cuboid([size.x,size.y,size.z+0.1]);
+              else linear_sweep(trapezoid(w1=w1,w2=w2,h=ysize,shift=shift), h=size.z+0.1,center=true);
+        }
+        else vnf_polyhedron(vnf_data[0]);
+
+      children();
+    }
+}

@@ -1,0 +1,1 @@
+function teardrop_edge_mask(l, r, angle=45, excess=0.1, d, anchor, spin, orient,h,height,length) = no_function("teardrop_edge_mask");

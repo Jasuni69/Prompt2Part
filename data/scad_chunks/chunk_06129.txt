@@ -1,0 +1,14 @@
+function _get_vnf_tile_edges(texture) =
+    let(
+        verts = texture[0],
+        faces = texture[1],
+        everts = [for (v = verts) (v.x==0 || v.y==0 || v.x==1 || v.y==1)],
+        uc = unique_count([
+            for (face = faces, i = idx(face))
+            let(edge = select(face,i,i+1), i1 = min(edge), i2 = max(edge))
+            if (everts[i1] && everts[i2])
+            [i1, i2]
+        ]),
+        edges = uc[0], counts = uc[1],
+        uedges = [for (i = idx(edges)) if (counts[i] == 1) edges[i] ]
+    ) uedges;

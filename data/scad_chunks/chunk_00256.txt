@@ -1,0 +1,5 @@
+module fixing_blocks()
+    layout([for(s = screws) fixing_block_width(s)], 5)
+        fixing_block_test(screws[$i]);
+
+fixing_blocks();

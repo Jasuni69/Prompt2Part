@@ -1,0 +1,81 @@
+module half_joiner(h=20, w=10, l=10, a=30, screwsize=undef, guides=true, slop=PRINTER_SLOP, orient=ORIENT_Y, align=V_CENTER)
+{
+	dmnd_height = h*1.0;
+	dmnd_width = dmnd_height*tan(a);
+	guide_size = w/3;
+	guide_width = 2*(dmnd_height/2-guide_size)*tan(a);
+
+	if ($children > 0) {
+		difference() {
+			children();
+			half_joiner_clear(h=h, w=w, a=a, clearance=0.1, overlap=0.01, orient=orient, align=align);
+		}
+	}
+	orient_and_align([w, 2*l, h], orient, align, orig_orient=ORIENT_Y) {
+		difference() {
+			union() {
+				// Make base.
+				difference() {
+					// Solid backing base.
+					fwd(l/2) cube(size=[w, l, h], center=true);
+
+					// Clear diamond for tab
+					grid3d(xa=[-(w*2/3), (w*2/3)]) {
+						half_joiner_clear(h=h+0.01, w=w, clearance=slop*2, a=a);
+					}
+				}
+
+				difference() {
+					// Make tab
+					scale([w/3-slop*2, dmnd_width/2, dmnd_height/2]) xrot(45)
+						cube(size=[1,sqrt(2),sqrt(2)], center=true);
+
+					// Blunt point of tab.
+					back(guide_width/2+2)
+						cube(size=[w*0.99,4,guide_size*2], center=true);
+				}
+
+
+				// Guide ridges.
+				if (guides == true) {
+					xspread(w/3-slop*2) {
+						// Guide ridge.
+						fwd(0.05/2) {
+							scale([0.75, 1, 2]) yrot(45)
+								cube(size=[guide_size/sqrt(2), guide_width+0.05, guide_size/sqrt(2)], center=true);
+						}
+
+						// Snap ridge.
+						scale([0.25, 0.5, 1]) zrot(45)
+							cube(size=[guide_size/sqrt(2), guide_size/sqrt(2), dmnd_width], center=true);
+					}
+				}
+			}
+
+			// Make screwholes, if needed.
+			if (screwsize != undef) {
+				yrot(90) cylinder(r=screwsize*1.1/2, h=w+1, center=true, $fn=12);
+			}
+		}
+	}
+}
+//half_joiner(screwsize=3, orient=ORIENT_Z, align=V_UP);
+
+
+
+// Module: half_joiner2()
+// Usage:
+//   half_joiner2(h, w, l, [a], [screwsize], [guides], [orient], [align])
+// Description:
+//   Creates a half_joiner2 object that can be attached to half_joiner object.
+// Arguments:
+//   h = Height of the half_joiner.
+//   w = Width of the half_joiner.
+//   l = Length of the backing to the half_joiner.
+//   a = Overhang angle of the half_joiner.
+//   screwsize = Diameter of screwhole.
+//   guides = If true, create sliding alignment guides.
+//   orient = Orientation of the shape.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Y`.
+//   align = Alignment of the shape by the axis-negative (size1) end.  Use the `V_` constants from `constants.scad`.  Default: `V_CENTER`.
+// Example:
+//   half_joiner2(screwsize=3, orient=ORIENT_X);

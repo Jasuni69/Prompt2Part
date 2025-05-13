@@ -1,0 +1,10 @@
+module v(y){
+    data = _pb_vert(pb_last($pb_pts), [y], true, $pb_angle);
+    $pb_pts = concat($pb_pts, data[0]);
+    $pb_angle = data[2];
+    $pb_ctrl_pts = data[3];
+    if (pb_do_render($children, parent_module(0))) pb_draw();
+    children();  
+}
+
+//  Adds a point vertically from the last point to absolute coordinate y

@@ -1,0 +1,17 @@
+function _pt_in_tri(point, tri, eps=EPSILON) = 
+    min(  _tri_class([tri[0],tri[1],point],eps), 
+          _tri_class([tri[1],tri[2],point],eps), 
+          _tri_class([tri[2],tri[0],point],eps) );
+        
+
+/// Internal Function: _point_left_of_line2d()
+/// Usage:
+///   pt = point_left_of_line2d(point, line);
+/// Topics: Geometry, Points, Lines
+/// Description:
+///   Return >0 if point is left of the line defined by `line`.
+///   Return =0 if point is on the line.
+///   Return <0 if point is right of the line.
+/// Arguments:
+///   point = The point to check position of.
+///   line  = Array of two points forming the line segment to test against.

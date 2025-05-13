@@ -1,0 +1,23 @@
+function matrix4_mult(matrices, m=ident(4), i=0) =
+	(i>=len(matrices))? m :
+	let (newmat = is_def(m)? matrices[i] * m : matrices[i])
+		matrix4_mult(matrices, m=newmat, i=i+1);
+
+
+// Function: matrix3_apply()
+// Usage:
+//   matrix3_apply(pts, matrices)
+// Description:
+//   Given a list of transformation matrices, applies them in order to the points in the point list.
+// Arguments:
+//   pts = A list of 2D points to transform.
+//   matrices = A list of 3x3 matrices to apply, in order.
+// Example:
+//   npts = matrix3_apply(
+//       pts = [for (x=[0:3]) [5*x,0]],
+//       matrices =[
+//           matrix3_scale([3,1]),
+//           matrix3_rot(90),
+//           matrix3_translate([5,5])
+//       ]
+//   );  // Returns [[5,5], [5,20], [5,35], [5,50]]

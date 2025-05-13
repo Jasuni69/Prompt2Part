@@ -1,0 +1,14 @@
+module trefoil_klein_bottle(radius1, radius2, bottom_height, thickness, t_step, fn) {
+    rotate(90)
+        dis_connected_klein_bottle(radius1, radius2, bottom_height, thickness, t_step, fn);
+    
+    translate([0, -26.9, 151.35]) // try-and-error
+    rotate([-120, 0, 0])
+    rotate(90)
+        dis_connected_klein_bottle(radius1, radius2, bottom_height, thickness, t_step, fn);
+    
+    translate([0, 117.59, 98.975])  // try-and-error
+    rotate([120, 0, 0])
+    rotate(90)
+        dis_connected_klein_bottle(radius1, radius2, bottom_height, thickness, t_step, fn);  
+}

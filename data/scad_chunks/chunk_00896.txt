@@ -1,0 +1,1 @@
+function rod_end_thread_length(type)         = type[10];   //! length of the threads

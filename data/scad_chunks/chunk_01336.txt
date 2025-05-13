@@ -1,0 +1,3 @@
+function resistor_sleeved(type)       = type[9]; //! Are the leads sleeved
+
+splay_angle = 2; // radial lead splay angle

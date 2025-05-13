@@ -1,0 +1,10 @@
+module 2screw_block_assembly(screw = def_screw, name = false, short_insert = false) //! The printed block with inserts
+assembly(name ? name : str("2screw_block_M", 20 * screw_radius(screw), short_insert ? "_s" :""), ngb = true) {
+    insert = screw_insert(screw, short_insert);
+
+    stl_colour(name ? pp2_colour : pp1_colour)
+        render() 2screw_block(screw, name, short_insert) children();
+
+    2screw_block_holes(screw, short_insert)
+        insert(insert);
+}

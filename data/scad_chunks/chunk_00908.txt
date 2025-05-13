@@ -1,0 +1,1 @@
+function threaded_insert_pitch(type) = type[9];     //! Pitch of the outer thread for threaded inserts

@@ -1,0 +1,1 @@
+function blower_base(type)        = type[13]; //! Thickness of the base

@@ -1,0 +1,50 @@
+//--     C O N T R O L     --
+//---------------------------
+// -- Render --
+renderQuality             = 8;          //-> from 1 to 32, Default = 8
+
+// --Preview --
+previewQuality            = 5;          //-> from 1 to 32, Default = 5
+showSideBySide            = true;       //-> Default = true
+onLidGap                  = 0;  // tip don't override to animate the lid opening
+//onLidGap                  = ((ridgeHeight) - (ridgeHeight * abs(($t-0.5)*2)))*2;  // tip don't override to animate the lid opening/closing
+colorLid                  = "YellowGreen";   
+alphaLid                  = 1;
+colorBase                 = "BurlyWood";
+alphaBase                 = 1;
+hideLidWalls              = false;      //-> Remove the walls from the lid : only if preview and showSideBySide=true 
+hideBaseWalls             = false;      //-> Remove the walls from the base : only if preview and showSideBySide=true  
+showOrientation           = true;       //-> Show the Front/Back/Left/Right labels : only in preview
+showPCB                   = true;      //-> Show the PCB in red : only in preview 
+showSwitches              = true;      //-> Show the switches (for pushbuttons) : only in preview 
+showButtonsDepressed      = false;      //-> Should the buttons in the Lid On view be in the pressed position
+showOriginCoordBox        = false;      //-> Shows red bars representing the origin for yappCoordBox : only in preview 
+showOriginCoordBoxInside  = false;      //-> Shows blue bars representing the origin for yappCoordBoxInside : only in preview 
+showOriginCoordPCB        = true;      //-> Shows blue bars representing the origin for yappCoordBoxInside : only in preview 
+showMarkersPCB            = false;      //-> Shows black bars corners of the PCB : only in preview 
+showMarkersCenter         = false;      //-> Shows magenta bars along the centers of all faces  
+inspectX                  = 0;          //-> 0=none (>0 from Back)
+inspectY                  = 0;          //-> 0=none (>0 from Right)
+inspectZ                  = 0;          //-> 0=none (>0 from Bottom)
+inspectXfromBack          = true;       //-> View from the inspection cut foreward
+inspectYfromLeft          = true;       //-> View from the inspection cut to the right
+inspectZfromBottom        = true;       //-> View from the inspection cut up
+//---------------------------
+//--     C O N T R O L     --
+//---------------------------
+
+//===================================================================
+// *** PCB Supports ***
+// Pin and Socket standoffs 
+//-------------------------------------------------------------------
+//  Default origin =  yappCoordPCB : pcb[0,0,0]
+//
+//  Parameters:
+//   Required:
+//    (0) = posx
+//    (1) = posy
+//   Optional:
+//    (2) = Height to bottom of PCB : Default = standoffHeight
+//    (3) = PCB Gap : Default = -1 : Default for yappCoordPCB=pcbThickness, yappCoordBox=0
+//    (4) = standoffDiameter    Default = standoffDiameter;
+//    (5) = standoffPinDiameter Default = standoffPinDiameter;

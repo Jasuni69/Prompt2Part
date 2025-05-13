@@ -1,0 +1,7 @@
+module O5(e=5){
+  
+  LinEx(15,5)Rand(1,center=true)Rund(1,5){
+  Polar(e,15)circle(5,$fn=e);
+  circle(10);
+  }
+}

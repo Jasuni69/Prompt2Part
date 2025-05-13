@@ -1,0 +1,1 @@
+function camera_pcb(type)           = type[2]; //! The PCB part of the camera

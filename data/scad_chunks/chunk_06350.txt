@@ -1,0 +1,4 @@
+function _dist2line(d,n) = norm(d-(d * n) * n);
+
+
+///Internal

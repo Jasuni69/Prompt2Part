@@ -1,0 +1,5 @@
+module stl_colour(colour = pp1_colour, alpha = 1) { //! Colour an stl where it is placed in an assembly. `alpha` can be used to make it appear transparent.
+    $stl_colour = colour;
+    color(colour, alpha)
+        children();
+}

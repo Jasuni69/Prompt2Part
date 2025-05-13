@@ -1,0 +1,27 @@
+module Disphenoid(h=15,l=25,b=20,r=1,ty=0,tz=0,delta=[0,0],fn=36,help){
+    delta=is_list(delta)?delta:[delta,delta];
+    
+   points=[
+    [-l/2+r+delta[0],b/2-r+ty,0],
+    [-l/2+r-delta[0],-b/2+r+ty,0],
+    [l/2-r+delta[1],0,h/2-r+tz],
+    [l/2-r-delta[1],0,-h/2+r+tz],
+    ];
+    
+    
+    faces=[
+    [1,0,2],
+    [0,1,3],
+    [2,3,1],
+    [3,2,0],
+    ];
+
+
+
+    minkowski(){
+        polyhedron(points,faces,convexity=5);
+        sphere(r,$fn=fn);
+    }
+    
+  HelpTxt("Disphenoid",["h",h,"l",l,"b",b,"r",r,"ty",ty,"tz",tz,"delta",delta,"fn",fn],help);
+}

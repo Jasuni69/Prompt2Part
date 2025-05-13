@@ -1,0 +1,27 @@
+function _convex_hull_iterative(points, triangles, planes, remaining, _i=0) =
+	_i >= len(remaining) ? triangles : 
+	let (
+		// pick a point
+		i = remaining[_i],
+		// find the triangles that are in conflict with the point (point not inside)
+		conflicts = _find_conflicts(points[i], planes),
+		// for all triangles that are in conflict, collect their halfedges
+		halfedges = [ 
+			for(c = conflicts, i = [0:2]) let(
+				j = (i+1)%3
+			) [triangles[c][i], triangles[c][j]]
+		],
+		// find the outer perimeter of the set of conflicting triangles
+		horizon = _remove_internal_edges(halfedges),
+		// generate a new triangle for each horizon halfedge together with the picked point i
+		new_triangles = [ for (h = horizon) concat(h,i) ],
+		// calculate the corresponding plane equations
+		new_planes = [ for (t = new_triangles) plane3pt_indexed(points, t[0], t[1], t[2]) ]
+	) _convex_hull_iterative(
+		points,
+		//  remove the conflicting triangles and add the new ones
+		concat(list_remove(triangles, conflicts), new_triangles),
+		concat(list_remove(planes, conflicts), new_planes),
+		remaining,
+		_i+1
+	);

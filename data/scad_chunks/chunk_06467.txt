@@ -1,0 +1,17 @@
+function move(v=[0,0,0], p=_NO_ARG) =
+    is_string(v) ? (
+        assert(is_vnf(p) || is_path(p),"String movements only work with point lists and VNFs")
+        let(
+             center = v=="centroid" ? centroid(p)
+                    : v=="mean" ? mean(p)
+                    : v=="box" ? mean(pointlist_bounds(p))
+                    : assert(false,str("Unknown string movement ",v))
+        )
+        move(-center,p=p)
+      )
+    :
+    assert(is_vector(v) && (len(v)==3 || len(v)==2), "Invalid value for `v`")
+    let(
+        m = affine3d_translate(point3d(v))
+    )
+    p==_NO_ARG ? m : apply(m, p);

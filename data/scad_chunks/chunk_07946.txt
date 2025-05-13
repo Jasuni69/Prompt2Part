@@ -1,0 +1,18 @@
+module petal(radius, thickness) {
+	translate([-radius * 1.5, 0, radius * 2]) 
+    rotate([90, 120, 90]) 
+    intersection() {
+        crystal_ball(
+            radius = radius * 2, 
+            theta = 360,
+            phi = 90,
+            thickness = thickness
+        );
+
+		linear_extrude(radius * 5) hull() {
+			translate([radius * 1.25, 0, 0]) circle(radius / 3);
+			translate([-1.1 * radius, 0, 0]) circle(radius / 3);
+			circle(radius * 0.85);
+		}   
+	}
+}

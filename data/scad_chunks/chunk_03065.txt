@@ -1,0 +1,50 @@
+//    (0) = pos
+//    (1) = width
+//    (2) = height : Distance below the ridge : Negative to move into lid
+//   Optional:
+//    (n) = { <yappOrigin>, yappCenter } 
+//    (n) = { yappLeftOrigin, <yappGlobalOrigin> } // Only affects Top(lid), Back and Right Faces
+
+// Note: use ridgeExtTop to reference the top of the extension for cutouts.
+// Note: Snaps should not be placed on ridge extensions as they remove the ridge to place them.
+//-------------------------------------------------------------------
+ridgeExtFront =
+[
+ [85, 6, ridgeHeight]
+  
+  // Make a ridge extension 6mm wide in the middle of the ridge 
+ ,[95, 6, 5]
+   
+  // Make a ridge extension 6mm wide 10mm below the top of the ridge
+ ,[25, 6, 10]
+  
+  // Make a ridge extension 20mm wide 15mm below the top of the ridge
+ ,[45, 20, 15]
+ 
+ // Make a ridge extension 6mm wide 15mm below the top of the ridge
+ ,[35, 6, 15]
+];
+
+ridgeExtBack =
+[
+  // Make a ridge extension 6mm wide 8mm from the bottom of the box
+  [25, 6, 8, yappCoordBox]
+  
+  // Make a ridge extension 6mm wide 8mm from the bottom of the box from the left edge
+ ,[25, 6, 8, yappLeftOrigin, yappCoordBox, yappCenter]
+  
+  // Make a ridge extension 20mm wide 13mm from the bottom of the box
+ ,[45, 20, 13, yappCoordBox]
+ 
+ // Make a ridge extension 6mm wide 35mm from the bottom of the box
+ ,[35, 6, 35, yappCoordBox]
+];
+
+ridgeExtLeft =
+[
+  // Make a ridge extension 6mm wide 10mm below the top of the ridge
+  [5, 6, 10]
+  // Make a ridge extension 6mm wide 15mm below the top of the ridge
+ ,[15, 6, 15]
+  // Make a ridge extension 20mm wide 15mm below the top of the ridge
+ ,[25, 10, 15]

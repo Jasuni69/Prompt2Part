@@ -1,0 +1,12 @@
+function _closest_s1(s,eps=EPSILON) =
+    norm(s[1]-s[0])<=eps*(norm(s[0])+norm(s[1]))/2 ? [ s[0], [s[0]] ] :
+    let(
+        c = s[1]-s[0],
+        t = -s[0]*c/(c*c)
+    )
+    t<0 ? [ s[0], [s[0]] ] :
+    t>1 ? [ s[1], [s[1]] ] :
+    [ s[0]+t*c, s ];
+
+
+// find the point of a 2-simplex closest to the origin

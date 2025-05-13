@@ -1,0 +1,1 @@
+function BLDC_bell_spokes(type)                 = type[20]; //! Bell spoke count

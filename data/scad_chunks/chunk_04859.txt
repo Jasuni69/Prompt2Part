@@ -1,0 +1,20 @@
+module Polar(d, a){
+    data = _pb_polar($pb_pts,[d,a]);
+    $pb_pts = concat($pb_pts, data[0]);
+    $pb_angle = data[2];
+    $pb_ctrl_pts = data[3];
+    if (pb_do_render($children, parent_module(0))) pb_draw();
+    children();  
+}
+
+//  function _pb_forward(last, args, rel, angle)
+//
+//  Adds a point some distance along in the same direction as the last line segment or last angle.
+//  The distance depends on the arguments provided. Extends last line to intersect with one or multiple reference lines described by the provided parameters.
+//  The function will not add points if the last line is parallel with the reference line(s) or when it doesn't satisfy the bounds_mode rules.
+//  last    (list)  The point list being constructed.
+//  rel     (bool)  Set to false when working with relative boundary values. Set to true when working with absolute boundary values.
+//  args    (list)  Function specific parameters.
+//      args[0]  If a single value is provided the last line segment is extended with that value.
+//  angle   (number)  Last known angle.
+//  If two values are provided the last line is extended to wich ever line is intersected with first either the line with the value x or reference lines are assumed to lie parallel with both x and y axis. Two values provide a reference line points are given the intersection with that line.

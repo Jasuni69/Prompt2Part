@@ -1,0 +1,17 @@
+function closest_point(pt, points) =
+    assert(is_vector(pt), "\nInvalid point." )
+    assert(is_path(points,dim=len(pt)), "\nInvalid pointlist or incompatible dimensions." )
+    min_index([for (p=points) norm(p-pt)]);
+
+
+// Function: furthest_point()
+// Synopsis: Finds the furthest point in a list of points.
+// Topics: Geometry, Points, Distance
+// See Also: pointlist_bounds(), closest_point()
+// Usage:
+//   index = furthest_point(pt, points);
+// Description:
+//   Given a list of `points`, finds the index of the furthest point from `pt`.
+// Arguments:
+//   pt = The point to find the farthest point from.
+//   points = The list of points to search.

@@ -1,0 +1,43 @@
+module usb_A(h, v_flange_l, bar, cutout, l=17, h_flange_l = 11, flange_t = 0.4, w = 13.25) {
+    h_flange_h = 0.8;
+    v_flange_h = 1;
+    socket_h = (h - 2 * flange_t - bar) / 2;
+
+    translate_z(h / 2)
+        if(cutout)
+            rotate([90, 0, 90])
+                rounded_rectangle([w + 2 * v_flange_h + 2 * panel_clearance,
+                                   h + 2 * h_flange_h + 2 * panel_clearance, 100], r = cnc_bit_r);
+        else {
+            color("silver") rotate([0, 90, 0]) {
+                linear_extrude(l, center = true)
+                    difference() {
+                        square([h, w], center = true);
+
+                        for(s = [-1, 1])
+                            translate([s * (bar / 2 + socket_h / 2), 0])
+                                square([socket_h, w - 2 * flange_t], center = true);
+                    }
+
+                translate_z(-l / 2 + 0.5)
+                    cube([h, w, 1], center = true);
+
+                translate_z(l / 2 - flange_t)
+                    linear_extrude(flange_t) difference() {
+                        union() {
+                            if(h_flange_l)
+                                square([h + 2 * h_flange_h, h_flange_l], center = true);
+
+                            if(v_flange_l)
+                                square([v_flange_l, w + 2 * v_flange_h], center = true);
+                        }
+                        square([h - eps, w - eps], center = true);
+                    }
+                }
+
+                for(z = bar ?  [-1, 1] : [0])
+                    translate_z(z * (bar / 2 + socket_h / 2))
+                        translate([l - 17, 0])
+                            usb_A_tongue();
+            }
+}

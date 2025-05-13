@@ -1,0 +1,1 @@
+module test_hyp_ang_to_opp() nil();  // Covered in test_tri_functions()

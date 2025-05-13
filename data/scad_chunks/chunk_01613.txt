@@ -1,0 +1,1 @@
+function sheet_colour(type)    = type[3]; //! Colour

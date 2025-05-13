@@ -1,0 +1,1 @@
+function rocker_flange_w(type) = type[4];   //! Flange width

@@ -1,0 +1,35 @@
+module SQ(size=[10,10],fn=[10,2],diff=[0.0001,0.0001,0.0001,0.0001],center=true,help){
+    
+    x=is_list(size)?size[0]:size;
+    y=is_list(size)?size[1]:size;
+    fnx=is_list(fn)?fn[0]:fn;
+    fny=is_list(fn)?fn[1]:fn;
+    diff=is_list(diff)?diff:[diff,diff,diff,diff];
+    
+    points=[
+    for(i=[0:fnx])[-x/2+x/fnx*i,-y/2+i%2*-diff[0]],
+    for(i=[0:fny])[x/2+i%2*diff[1],-y/2+y/fny*i],    
+    for(i=[0:fnx])[x/2-x/fnx*i,y/2+i%2*diff[2]],
+    for(i=[0:fny])[-x/2-i%2*diff[3],y/2-y/fny*i],
+
+    ] ;
+    
+   // echo(points);
+    path=[[for(i=[0:len(points)-1])i]];
+    //echo (path);
+   translate(center?[0,0]:[x/2,y/2]) polygon(points,path);
+    
+   
+ if($info) echo(" in twisted extrusions use linear_extrude(segments=20)");
+HelpTxt("SQ",["size",[x,y],"fn",[fnx,fny],"diff",diff,"center",center] ,help);   
+}
+
+/*
+union(){ // Gear TEST
+    z=6;
+rot=+0.5;
+
+Cycloid(linear=+2,option=+0);
+T(rot*PI*z-PI/4,z/2)rotate(-rot*360-90)Cycloid(option=+0,z=z,l=+0.00,d=1);
+}
+// */

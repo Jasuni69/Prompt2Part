@@ -1,0 +1,17 @@
+module box(xmin, ymin, zmin, xmax, ymax, zmax) //! Construct a box given its bounds
+    polyhedron(
+        [[xmin, ymin, zmin],  // 0
+         [xmin, ymin, zmax],  // 1
+         [xmin, ymax, zmin],  // 2
+         [xmin, ymax, zmax],  // 3
+         [xmax, ymin, zmin],  // 4
+         [xmax, ymin, zmax],  // 5
+         [xmax, ymax, zmin],  // 6
+         [xmax, ymax, zmax]], // 7
+        [[7,5,1,3],  // top
+         [2,0,4,6],  // bottom
+         [5,4,0,1],  // front
+         [3,2,6,7],  // back
+         [5,7,6,4],  // right
+         [0,2,3,1]]  // left
+    );

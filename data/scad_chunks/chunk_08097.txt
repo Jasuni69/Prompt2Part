@@ -1,0 +1,20 @@
+module shadow(levels, px_width) {
+    dots = vx_gray(levels, center = true, normalize = true);
+    difference() {
+        square(len(levels), center = true);
+        render() union() {
+            for(dot = dots) {
+                translate(dot[0]) 
+                    square(dot[1] * px_width);                
+            }
+        }
+    }
+}
+
+stereographic_extrude(shadow_side_leng = len(levels), $fn = 48, convexity = 2) 
+    shadow(levels, px_width);
+    
+if($preview) {
+    color("gray") 
+        shadow(levels, px_width);
+}

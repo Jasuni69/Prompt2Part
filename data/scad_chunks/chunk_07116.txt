@@ -1,0 +1,1 @@
+function paul_bourke1        (levels=3,  step=1) = lsystem_turtle(levels=levels, step=step, angle=90,  "F+F+F+F+",  [["F","F+F-F-FF+F+F-F"]]);

@@ -1,0 +1,44 @@
+function star(n, r, ir, d, or, od, id, step, realign=false, align_tip, align_pit, anchor=CENTER, spin=0, atype="hull", _mat, _anchs) =
+    assert(in_list(atype, _ANCHOR_TYPES), "Anchor type must be \"hull\" or \"intersect\"")  
+    assert(is_undef(align_tip) || is_vector(align_tip))
+    assert(is_undef(align_pit) || is_vector(align_pit))
+    assert(is_undef(align_tip) || is_undef(align_pit), "Can only specify one of align_tip and align_pit")
+    assert(is_def(n), "Must specify number of points, n")
+    let(
+        r = get_radius(r1=or, d1=od, r=r, d=d),
+        count = num_defined([ir,id,step]),
+        stepOK = is_undef(step) || (step>1 && step<n/2)
+    )
+    assert(count==1, "Must specify exactly one of ir, id, step")
+    assert(stepOK,  n==4 ? "Parameter 'step' not allowed for 4 point stars"
+                  : n==5 || n==6 ? str("Parameter 'step' must be 2 for ",n," point stars")
+                  : str("Parameter 'step' must be between 2 and ",floor(n/2-1/2)," for ",n," point stars"))
+    let(
+        mat = !is_undef(_mat) ? _mat :
+            ( realign? zrot(-180/n) : ident(4) ) * (
+                !is_undef(align_tip)? rot(from=RIGHT, to=point2d(align_tip)) :
+                !is_undef(align_pit)? rot(from=RIGHT, to=point2d(align_pit)) * zrot(180/n) :
+                1
+            ),
+        stepr = is_undef(step)? r : r*cos(180*step/n)/cos(180*(step-1)/n),
+        ir = get_radius(r=ir, d=id, dflt=stepr),
+        offset = realign? 180/n : 0,
+        path1 = [for(i=[2*n:-1:1]) let(theta=180*i/n, radius=(i%2)?ir:r) radius*[cos(theta), sin(theta)]],
+        path = apply(mat, path1),
+        anchors = !is_undef(_anchs) ? _anchs :
+            !is_string(anchor)? [] : [
+            for (i = [0:1:n-1]) let(
+                a1 = 360 - i*360/n,
+                a2 = a1 - 180/n,
+                a3 = a1 - 360/n,
+                p1 = apply(mat, polar_to_xy(r,a1)),
+                p2 = apply(mat, polar_to_xy(ir,a2)),
+                p3 = apply(mat, polar_to_xy(r,a3)),
+                pos = (p1+p3)/2
+            ) each [
+                named_anchor(str("tip",i), p1, unit(p1,BACK), 0),
+                named_anchor(str("pit",i), p2, unit(p2,BACK), 0),
+                named_anchor(str("midpt",i), pos, unit(pos,BACK), 0),
+            ]
+        ]
+    ) reorient(anchor,spin, two_d=true, path=path, p=path, extent=atype=="hull", anchors=anchors);

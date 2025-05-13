@@ -1,0 +1,2 @@
+module plot3d(f,x,y,zclip, zspan, base=1, anchor="origin", orient=UP, spin=0, atype="hull", cp="box", convexity=4, style="default")
+   vnf_polyhedron(plot3d(f,x,y,zclip, zspan,base, style=style), atype=atype, orient=orient, anchor=anchor, cp=cp, convexity=convexity) children();

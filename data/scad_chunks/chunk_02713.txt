@@ -1,0 +1,8 @@
+function calculate_rotation_axis(a,b) =
+	//if the two vectors are not colinear find a rotation axis using the cross product
+	(norm(cross_product(b,a)) != 0) ? [unit_vector(cross_product(b,a)),_rotation_angle(a,b)] :
+	//if they are colinear and do not lie in the yz plane, choose the rotation axis from the yz plane
+	(a*[1,0,0] < 0) ? [unit_vector([0,-a[1],+a[0]]),acos(clamp(a*b/norm(a)/norm(b),-1,1))] :
+	(a*[1,0,0] > 0) ? [unit_vector([0,+a[1],-a[0]]),acos(clamp(a*b/norm(a)/norm(b),-1,1))] :
+	//otherwise use the x axis
+	[[1,0,0],acos(clamp(a*b/norm(a)/norm(b),-1,1))];

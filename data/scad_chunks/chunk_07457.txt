@@ -1,0 +1,29 @@
+module SRing(e=4,id=3.5,od=10,h=.8,rand=1.5,reduction=.5,schlitz=-17,help){
+$info=false;
+intersection(){
+    LinEx(h,.2,scale=1.05)Rund(0.3)difference(){
+       Kreis(od/2);
+       Rund(0.5) Stern(e,od/2-rand,id/2-reduction-1,mod=100,delta=schlitz);
+       rotate(180+180/e)intersection_for(i=[0:e-1])rotate(i*360/e)T(reduction)Kreis(id/2,fn=e*15);
+    }
+    Tz(-.005)Pille(h+.01,d=od,rad=min(.3,h/3),center=false);
+}
+HelpTxt("SRing",[
+"e",e,
+"id",id,
+"od",od,
+"h",h,
+"rand",rand,
+"reduction",reduction,
+"schlitz",schlitz,]
+,help);
+}
+
+/*
+Bevel(5){
+cube(5);
+R(180)VarioFill(dia=0,spiel=[.5,0],l=.5,fn=7);
+}// */
+
+//PCBcase(kanal=2,kabel=[3,2],kpos=[0,5],deckel=-1);
+//PCBcase(kanal=2,kabel=[3,2],kpos=[0,5],deckel=3);

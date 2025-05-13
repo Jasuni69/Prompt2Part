@@ -1,0 +1,5 @@
+function knuckle_hinge(length, segs, offset, inner=false, arm_height=0, arm_angle=45, gap=0.2,
+             seg_ratio=1, knuckle_diam=4, pin_diam=1.75, fill=true, clear_top=false,
+             round_bot=0, round_top=0, pin_fn, clearance,
+             tap_depth, screw_head, screw_tolerance="close", 
+             anchor=BOT,orient,spin) = no_function("hinge");

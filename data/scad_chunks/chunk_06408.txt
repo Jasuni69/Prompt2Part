@@ -1,0 +1,24 @@
+function _triangulate(poly, ind,  error, eps=EPSILON, tris=[]) =
+    len(ind)==3 
+    ?   _degenerate_tri(select(poly,ind),eps) 
+        ?   tris // if last 3 pts perform a degenerate triangle, ignore it
+        :   concat(tris,[ind]) // otherwise, include it
+    :   let( ear = _get_ear(poly,ind,eps) )
+        assert( ! error || (ear != undef), 
+            "\nThe polygon has twists or all its vertices are collinear or non coplanar.") 
+        ear == undef ? undef :
+        is_list(ear) // is it a degenerate ear ?
+        ?   len(ind) <= 4 ? tris :
+            _triangulate(poly, select(ind,ear[0]+3, ear[0]), error, eps, tris) // discard it
+        :   let(
+                ear_tri = select(ind,ear,ear+2),
+                indr    = select(ind,ear+2, ear) //  indices of the remaining path
+            )
+            _triangulate(poly, indr, error, eps, concat(tris,[ear_tri]));
+
+
+/// a returned ear will be:
+/// 1. a CW non-reflex triangle, made of subsequent poly vertices, without any other 
+///    poly points inside except possibly at its own vertices
+/// 2. or a degenerate triangle where two vertices are coincident
+/// the returned ear is specified by the index of `ind` of its first vertex

@@ -1,0 +1,15 @@
+function tube(h=heightInfo(),d=$d,dInner=$dInner,dOuter=$dOuter,wall=$wall
+	,d1=undef, d2=$d2, solid=solidInfo()) =
+ 	setType($type_geomInfoTube, [
+	/*wall*/solid?0
+				:zeroIfUndef(((dInner!=undef && dOuter!=undef)
+					?((dOuter-dInner)/2)
+					:wall))
+	,/*d*/ _priv_tube_d(d,dInner,dOuter,wall,d1)
+	,/*lx=d*/ _priv_tube_d(d,dInner,dOuter,wall,d1)
+	,/*ly=d*/ _priv_tube_d(d,dInner,dOuter,wall,d1)
+	,/*h*/h
+	,/*d1*/d1
+	,/*d2*/d2
+	,/*solid*/solid
+	,true]);

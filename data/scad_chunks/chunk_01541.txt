@@ -1,0 +1,53 @@
+module rd_disc(type, value, pitch = undef, z = 0, tail = 3) { //! Draw a radial disc component
+    vitamin(str("rd_disc(", type[0], ", \"", value, "\"): ", rd_disc_kind(type), ", ", type[0], " ", value));
+
+    size = rd_disc_size(type);
+    colours = rd_disc_colours(type);
+    opitch = rd_disc_pitch(type);
+    pitch = is_undef(pitch) ? opitch : pitch;
+    lead_d = rd_disc_lead_d(type);
+
+    $fs = fs; $fa = fa;
+    lead_positions = [for(side = [-1,1]) [-side * opitch.x / 2, side * opitch.y / 2]];
+
+    r = size / 2;
+    v = [[0, r.y], [r.x, r.y], [r.x, r.y * pow((r.y / r.x), 4)], [r.x, 0]];
+    bez = bezier_path(v, 20);
+
+    path = concat(bez, [for(p = reverse(bez)) [p.x, - p.y]]);
+
+    rotate(is_list(opitch) ? atan2(opitch.y, opitch.x): 0) {
+        color(colours[0]) {
+            translate_z(size.z - size.x / 2 + z)
+                rotate([90, 0, 0])
+                    color(colours[0])
+                        rotate_extrude()
+                            polygon(path);
+
+            r = lead_d[1] / 2;
+            rl = lead_d[0] / 2;
+            h = size.z - size.x / 2;
+            for(p = lead_positions)
+                translate([p.x, p.y, z + r]) {
+                    dy = (size.y / 2 - r - 0.1) * sign(-p.x);
+
+                    path = [[0,        0,        0],
+                            [0,        0,        h / 2],
+                            [-p.x / 2, dy - p.y, h / 2],
+                            [-p.x,     dy - p.y, h]];
+                    sweep(concat([[0, 0, - r / 2]],bezier_path(path, 20)), circle_points(r));
+
+                    vflip()
+                        rounded_cylinder(r = r, h = r, r2 = r - rl, ir = rl);
+                }
+        }
+
+        diagonal_pitch = norm(opitch);
+
+        pitch = is_undef(pitch)? diagonal_pitch : pitch;
+
+        rotate(is_list(opitch) ? -atan2(opitch.y, opitch.x): 0)
+            radial_leads(diagonal_pitch, pitch, z, lead_d[0], tail);
+
+    }
+}

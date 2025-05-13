@@ -1,0 +1,13 @@
+function _poly_trim(p,eps=0) =
+    let( nz = [for(i=[0:1:len(p)-1]) if ( !approx(p[i],0,eps)) i])
+    len(nz)==0 ? [0] : list_tail(p,nz[0]);
+
+
+// Function: poly_add()
+// Synopsis: Returns the polynomial sum of adding two polynomials.
+// Topics: Math
+// See Also: quadratic_roots(), polynomial(), poly_mult(), poly_div(), poly_add(), poly_roots()
+// Usage:
+//    sum = poly_add(p,q)
+// Description:
+//    Computes the sum of two polynomials.

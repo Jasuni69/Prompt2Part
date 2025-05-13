@@ -1,0 +1,50 @@
+module shell2d(thickness, or=0, ir=0, fill=0, round=0)
+{
+	thickness = is_scalar(thickness)? (
+		thickness<0? [thickness,0] : [0,thickness]
+	) : (thickness[0]>thickness[1])? (
+		[thickness[1],thickness[0]]
+	) : thickness;
+	difference() {
+		round2d(or=or,ir=ir)
+			offset(delta=thickness[1])
+				children();
+		round2d(or=fill,ir=round)
+			offset(delta=thickness[0])
+				children();
+	}
+}
+
+
+
+//////////////////////////////////////////////////////////////////////
+// Section: Miscellaneous
+//////////////////////////////////////////////////////////////////////
+
+
+// Module: orient_and_align()
+//
+// Description:
+//   Takes a vertically oriented shape, and re-orients and aligns it.
+//   This is useful for making a custom shape available in various
+//   orientations and alignments without extra translate()s and rotate()s.
+//   Children should be vertically (Z-axis) oriented, and centered.
+//   Non-extremity alignment points should be named via the `alignments` arg.
+//   Named alignments, as well as `ALIGN_NEG`/`ALIGN_POS` are aligned pre-rotation.
+//
+// Usage:
+//   orient_and_align(size, [orient], [align], [center], [noncentered], [orig_orient], [orig_align], [alignments]) ...
+//
+// Arguments:
+//   size = The size of the part.
+//   orient = The axis to align to.  Use ORIENT_ constants from constants.scad
+//   align = The side of the origin the part should be aligned with.
+//   center = If given, overrides `align`.  If true, centers vertically.  If false, `align` will be set to the value in `noncentered`.
+//   noncentered = The value to set `align` to if `center` == `false`.  Default: `V_UP`.
+//   orig_orient = The original orientation of the part.  Default: `ORIENT_Z`.
+//   orig_align = The original alignment of the part.  Default: `V_CENTER`.
+//   alignments = A list of `["name", [X,Y,Z]]` alignment-label/offset pairs.
+//
+// Example:
+//   #cylinder(d=5, h=10);
+//   orient_and_align([5,5,10], orient=ORIENT_Y, align=V_BACK, orig_align=V_UP) cylinder(d=5, h=10);

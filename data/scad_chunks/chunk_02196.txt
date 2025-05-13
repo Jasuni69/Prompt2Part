@@ -1,0 +1,4 @@
+module bbox_left(type)  //! Default left side, can be overridden to customise
+    render_2D_sheet(bbox_sheets(type))
+        dxf(str(bbox_name(type), "_left"))
+            bbox_left_blank(type);

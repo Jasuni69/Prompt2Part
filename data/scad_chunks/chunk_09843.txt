@@ -1,0 +1,15 @@
+module test_count_true() {
+	assert(count_true([0,false,undef]) == 0);
+	assert(count_true([1,false,undef]) == 1);
+	assert(count_true([1,5,false]) == 2);
+	assert(count_true([1,5,true]) == 3);
+	assert(count_true([[0,0], [0,0]]) == 0);
+	assert(count_true([[0,0], [1,0]]) == 1);
+	assert(count_true([[1,1], [1,1]]) == 4);
+	assert(count_true([[1,1], [1,1]], nmax=3) == 3);
+}
+test_count_true();
+
+
+
+// List/Array Ops

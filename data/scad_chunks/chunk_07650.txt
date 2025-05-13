@@ -1,0 +1,66 @@
+module Roof(height,h,base=0,deg=45,opt=1,floor=false,center=false,twist=0,scale=1,fn=0,convexity=5,lap=0,on=true,name,help){
+
+s=is_list(deg)?[tan(deg[0]),tan(deg[1])]:[tan(deg),tan(deg)];
+floor=is_list(h)?true:floor;
+h=is_list(h)?h:[floor?h:0,h];
+iSize=max(viewportSize*5,max(printBed)*2);
+base=height&&is_num(h[1])&&is_num(h[0])?height-h[0]-h[1]:base;
+on=version()[0]>2021?on:0;
+$idxON=false;
+
+InfoTxt("Roof",["h",h,"deg",str(deg,"° (",s,")")],name);
+
+Echo("Roof is experimental - use Dev Snapshot version and activate",color="warning",condition=version()[0]<2022);
+  Tz(on?(center?0:h[0]?h[0]:0):0){
+  $tab=is_undef($tab)?1:b($tab,false)+1;
+  linear_extrude(base+(on?lap:h[0]+h[1]),center=center,twist=twist,scale=scale,convexity=convexity,$fn=fn)children();
+  }
+ if(on)union(){ 
+ $idx=1;
+ $info=false;
+ //top
+  if(scale&&(h[1]||is_undef(h[1])))Tz(center?base/2:base+(h[0]?h[0]:0))intersection(){
+  scale([1,1,s[1]])roof(method=opt?"voronoi":"straight",$fn=fn,convexity=convexity)scale(scale)rotate(-twist)children(); // experimental feature comment out if not activated in preferences
+  if(h[1])cube([iSize,iSize,h[1]*2],true);
+  }
+  
+ //bottom
+  if(floor&&(h[0]||is_undef(h[0])))Tz(center?-base/2:h[0]?h[0]:0)intersection(){
+  scale([1,1,-s[0]])roof(method=opt?"voronoi":"straight",$fn=fn,convexity=convexity)children(); // experimental feature comment out if not activated in preferences
+  if(h[0])cube([iSize,iSize,h[0]*2],true);//for difference translate([-iSize/2,-iSize/2,-h[0]-iSize])cube(iSize);//
+  }
+  }
+  
+
+HelpTxt("Roof",["height",height,"h",h,"base",base,"deg",deg,"opt",opt,"floor",floor,"center",center,"twist",twist,"scale",scale,"fn",fn,"convexity",convexity,"lap",lap,"on",on,"name",name],help);
+}
+
+
+
+/** \page Generator
+ \name LinEx
+ LinEx()  linear extrudes child  polygon
+ \param h height
+ \param h2 height bottom
+ \param h22 heigt top
+ \param scale scale bottom
+ \param scale2 scale top
+ \param twist twist center
+ \param twistcap twist top/bottom
+ \param slices slices
+ \param $d $r polygon size for angle calculation
+ \param grad  calculate scale from $d/$r for angle
+ \param grad2 angle (optional) for top
+ \param center center result
+ \param end   rotate extrude ends
+ \param fn   number of fragments
+ \param lap overlap with center
+ \param scaleCenter scale center
+ \param gradC angle center ↦ scaleCenter
+ \param convexity convexity
+ \param name  name to identify
+ \param help activate help
+*/
+
+ //LinEx(25,2,end=true,gradC=88,$d=5)circle($r);
+ //LinEx(25,2,end=true,scaleCenter=[0.8,0.7],scale=[.8,1],$d=[7,9])square($r);

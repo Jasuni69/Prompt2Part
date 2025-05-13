@@ -1,0 +1,36 @@
+function list_shape(v, depth=undef) =
+    assert( is_undef(depth) || ( is_finite(depth) && depth>=0 ), "Invalid depth.")
+    ! is_list(v) ? 0 :
+    (depth == undef)
+    ?   concat([len(v)], _list_shape_recurse(v))
+    :   (depth == 0)
+        ?  len(v)
+        :  let( dimlist = _list_shape_recurse(v))
+           (depth > len(dimlist))? 0 : dimlist[depth-1] ;
+
+
+
+// Function: in_list()
+// Synopsis: Returns true if a value is in a list.
+// Topics: List Handling
+// See Also: select(), slice()
+// Usage:
+//   bool = in_list(val, list, [idx]);
+// Description:
+//   Returns true if value `val` is in list `list`. When `val==NAN` the answer will be false for any list.
+// Arguments:
+//   val = The simple value to search for.
+//   list = The list to search.
+//   idx = If given, searches the given columns for matches for `val`.
+// Example:
+//   a = in_list("bar", ["foo", "bar", "baz"]);  // Returns true.
+//   b = in_list("bee", ["foo", "bar", "baz"]);  // Returns false.
+//   c = in_list("bar", [[2,"foo"], [4,"bar"], [3,"baz"]], idx=1);  // Returns true.
+
+// Note that a huge complication occurs because OpenSCAD's search() finds
+// index i as a hits if the val equals list[i] but also if val equals list[i][0].
+// This means every hit needs to be checked to see if it's actually a hit,
+// and if the first hit is a mismatch we have to keep searching.
+// We assume that the normal case doesn't have mixed data, and try first
+// with just one hit, but if this finds a mismatch then we try again
+// with all hits, which could be slow for long lists.

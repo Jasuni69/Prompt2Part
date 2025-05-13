@@ -1,0 +1,11 @@
+module cutout_front( d ) {
+    xc = slot_point;
+    bw = 17;  // bottom 
+    uw = 23;  // upper 
+    bp = 3+ (bw/2); // base point
+    tp = d.y ; // top point
+    hull(){
+        translate([xc,bp, 0-CS ]) cylinder(d=bw, h=d.z+CS2);
+        translate([xc,tp, 0-CS]) cylinder(d=uw, h=d.z+CS2);
+     }
+}

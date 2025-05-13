@@ -1,0 +1,3 @@
+function gridfinity_bin_size_mm(type) = //! Overall size of the bin
+    let(s = gridfinity_bin_size(type))
+        [(s.x - 1) * pitch + width, (s.y - 1) * pitch + width, s.z * z_step];

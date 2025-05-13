@@ -1,0 +1,10 @@
+function pb_do_render(children, parent_module_name) = let(
+    do_render = (children == 0)// || parent_module_name == "M" || parent_module_name == "m")
+) do_render;
+
+// module m(x,y,a)
+//
+//  Start and initialise the pathbuilder. The function initialises the global point list $pb_pts, global post processing instructions $pb_post and global angle $pb_angle.
+//  x     (number)  x value of the 2D start point initialisation. Default to zero if not provided.
+//  y     (number)  y value of the 2D start point initialisation. Default to zero if not provided.
+//  a     (number)  angle of the path initialisation. Default to zero if not provided.

@@ -1,0 +1,60 @@
+module metric_nut(
+	size=3,
+	hole=true,
+	pitch=undef,
+	details=false,
+	flange=0,
+	center=undef,
+	orient=ORIENT_Z,
+	align=V_UP
+) {
+	H = get_metric_nut_thickness(size);
+	D = get_metric_nut_size(size);
+	boltfn = max(12, segs(size/2));
+	nutfn = max(12, segs(D/2));
+	dcirc = D/cos(30);
+	bevtop = (dcirc - D)/2;
+
+	color("silver")
+	orient_and_align([dcirc+flange, dcirc+flange, H], orient, align, center) {
+		difference() {
+			union() {
+				difference() {
+					cylinder(d=dcirc, h=H, center=true, $fn=6);
+					if (details) {
+						up(H/2-bevtop) {
+							difference() {
+								upcube([dcirc+1, dcirc+1, bevtop+0.5]);
+								down(0.01) cylinder(d1=dcirc, d2=dcirc-bevtop*2, h=bevtop+0.02, center=false, $fn=nutfn);
+							}
+						}
+						if (flange == 0) {
+							down(H/2) {
+								difference() {
+									down(0.5) upcube([dcirc+1, dcirc+1, bevtop+0.5]);
+									down(0.01) cylinder(d1=dcirc-bevtop*2, d2=dcirc, h=bevtop+0.02, center=false, $fn=nutfn);
+								}
+							}
+						}
+					}
+				}
+				if (flange>0) {
+					down(H/2) {
+						cylinder(d=D+flange, h=H/8, center=false);
+						up(H/8) cylinder(d1=D+flange, d2=D, h=H/8, center=false);
+					}
+				}
+			}
+			if (hole == true) {
+				if (pitch == undef) {
+					cylinder(r=size/2, h=H+0.5, center=true, $fn=boltfn);
+				} else {
+					threaded_rod(d=size, l=H+0.5, pitch=pitch, $fn=boltfn);
+				}
+			}
+		}
+	}
+}
+
+
+// vim: noexpandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

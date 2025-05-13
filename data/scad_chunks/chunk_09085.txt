@@ -1,0 +1,2 @@
+function cell(ri, ci, wallType, notVisited = UNVISITED, inward = undef, outwards = undef, cw = undef, ccw = undef) = 
+    [ri, ci, wallType, notVisited, inward, outwards, cw, ccw];

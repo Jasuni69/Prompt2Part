@@ -1,0 +1,3 @@
+function _in_shape_sub(shapt_pts, leng, pt, cond, i = 0) =
+    let(j = i + 1)
+    j == leng ? cond : _in_shape_sub(shapt_pts, leng, pt, _does_pt_cross(shapt_pts[i], shapt_pts[j], pt) ? !cond : cond, j);

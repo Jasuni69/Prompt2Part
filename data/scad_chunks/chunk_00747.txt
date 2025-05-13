@@ -1,0 +1,1 @@
+function psu_face_cutout(type)       = type[8];     //! Panel cutout to accommodate this face, e.g. for ATX

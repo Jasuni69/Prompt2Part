@@ -1,0 +1,9 @@
+module test_point_line_distance() {
+    assert_approx(point_line_distance([1,1,1], [[-10,-10,-10], [10,10,10]]), 0);
+    assert_approx(point_line_distance([-1,-1,-1], [[-10,-10,-10], [10,10,10]]), 0);
+    assert_approx(point_line_distance([1,-1,0], [[-10,-10,-10], [10,10,10]]), sqrt(2));
+    assert_approx(point_line_distance([8,-8,0], [[-10,-10,-10], [10,10,10]]), 8*sqrt(2));
+    assert_approx(point_line_distance([3,8], [[-10,0], [10,0]],SEGMENT), 8);
+    assert_approx(point_line_distance([14,3], [[-10,0], [10,0]],SEGMENT), 5);
+}
+*test_point_line_distance();

@@ -1,0 +1,46 @@
+    yappCircleWithFlats,//    p(5) = shape : { yappRectangle | yappCircle | yappPolygon | yappRoundedRect 
+    yappCenter,
+  ],
+];
+
+
+cutoutsLeft = 
+[
+];
+
+cutoutsRight = 
+[
+  [pcbLength("Joystick")/2,  //    p(0) = from Back
+    4,//    p(1) = from Left (height)
+    13.5,//    p(2) = width
+    2.5,//    p(3) = length
+    undef, //    p(4) = radius
+    yappRectangle,//    p(5) = shape : { yappRectangle | yappCircle | yappPolygon | yappRoundedRect 
+    yappCenter,
+    [yappPCBName, "Joystick"], 
+  ],
+];
+
+//===================================================================
+//  *** Snap Joins ***
+//-------------------------------------------------------------------
+//  Default origin = yappCoordBox: box[0,0,0]
+//
+//  Parameters:
+//   Required:
+//    (0) = posx | posy
+//    (1) = width
+//    (n) = yappLeft / yappRight / yappFront / yappBack (one or more)
+//   Optional:
+//    (n) = { <yappOrigin> | yappCenter }
+//    (n) = { yappSymmetric }
+//    (n) = { yappRectangle } == Make a diamond shape snap
+//-------------------------------------------------------------------
+
+snapJoins =   
+[
+ // [(shellWidth/2),     10, yappFront, yappCenter],
+// [(shellWidth/2),     6, yappFront, yappBack, yappCenter],
+];
+//---- This is where the magic happens ----
+YAPPgenerate();

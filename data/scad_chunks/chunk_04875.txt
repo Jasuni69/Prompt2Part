@@ -1,0 +1,4 @@
+function points() = let(
+        data1 = [$pb_pts, concat($pb_post, [[4,len($pb_pts)-1]])],
+        points1 = pb_postProcessPathLists([data1])
+    ) points1[0];

@@ -1,0 +1,1 @@
+function NEMA_shaft_length(type) = type[8]; //! Shaft length above the face, if a list then a leadscrew: length, lead, starts

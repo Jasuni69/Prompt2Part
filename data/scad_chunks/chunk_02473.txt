@@ -1,0 +1,20 @@
+module horihole(r, z, h = 0, center = true) { //! For making horizontal holes that don't need support material and are correct dimensions
+    bot_layer = floor((z - r) / layer_height);
+    top_layer = ceil((z + r) / layer_height);
+    render(convexity = 5)
+        extrude_if(h, center)
+            for(i = [bot_layer : top_layer]) {
+                Z = i * layer_height;
+                y = Z - z + layer_height / 2;
+                x = teardrop_plus_x(r, y, layer_height);
+                if(x > 0)
+                    translate([0, y])
+                        difference() {
+                            square([2 * x + layer_height, layer_height], center = true);
+
+                            for(end = [-1, 1])
+                                translate([end * (x + layer_height / 2), 0])
+                                    circle(d = layer_height, $fn = 32);
+                        }
+             }
+}

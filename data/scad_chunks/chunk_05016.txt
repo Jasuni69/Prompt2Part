@@ -1,0 +1,147 @@
+function _cubeindex(f, isoval) =
+    (f[0] >= isoval ? 1 : 0) +
+    (f[1] >= isoval ? 2 : 0) +
+    (f[2] >= isoval ? 4 : 0) +
+    (f[3] >= isoval ? 8 : 0) +
+    (f[4] >= isoval ? 16 : 0) +
+    (f[5] >= isoval ? 32 : 0) +
+    (f[6] >= isoval ? 64 : 0) +
+    (f[7] >= isoval ? 128 : 0);
+
+/*
+-----------------------------------------------------------
+Bounding box clipping support:
+
+Vertex and face layout for triangulating one voxel face that corrsesponds to a side of the box bounding all voxels.
+
+                    4(back)
+               3 +----------+ 7
+                /:  5(top) /|
+               / :        / |
+            1 +==========+5 |    <-- 3(side)
+0(side) -->   # 2+ - - - # -+ 6
+              # /        # /
+              #/  2(bot) #/
+            0 +----------+ 4
+                1(front)
+
+The clip face uses different indexing. After vertex coordinates and function values are assigned to each corner from the original voxel based on _MCFaceVertexIndices below, this is the clip face diagram:
+
+(1)           (2)
+   +----1----+
+   |         |
+   0         2
+   |         |
+   +----3----+
+(0)           (3)
+*/
+
+/// four indices for each face of the cube, counterclockwise looking from inside out
+_MCFaceVertexIndices = [
+  [],
+  [0,2,3,1], // left, x=0 plane
+  [0,1,5,4], // front, y=0 plane
+  [0,4,6,2], // bottom, z=0 plane
+  [4,5,7,6], // right, x=voxsize plane
+  [2,6,7,3], // back, y=voxsize plane
+  [1,3,7,5], // top, z=voxsize plane
+];
+
+/// Pair of vertex indices for each edge on the clip face (using clip face indexing)
+_MCClipEdgeVertexIndices = [
+  [0,1], [1,2], [2,3], [3,0]
+];
+
+/// In keeping with the convention for triangulating an isosurface through a voxel, analogous to the case in which two surfaces separate two diagonally opposite high-value corners of one face, in 2D contour terms it is assumed there is a valley separating two high corners, not a ridge connecting them. The 8 ambiguous triangulation cases for opposing corners are set up accordingly. These are the rotational groups of indices {10,30}, {11,19,33,57}, {20,60} in the array below.
+/// For each of the 81 possible configurations of a clip face intersected by a minimum and/or maximum isovalue, define a list of triangles, specified as pairs of corner ID and edge ID arrays, with a total of 3 points in each pair. Each pair has the form [corner],[edge1,edge2] or [corner1,corner2],[edge], or [corner1,corner2,corner3],[] or [],[edge1,edge2,edge3].
+_MCClipTriangleTable = [
+// Explanation of inline comments:
+// "base-3 index = decimal index", followed by
+//   "(xRotations)" for number of rotation versions, or
+//   "(Rotation n from decimal index)" indicating which decimal index this was rotated from, where n=the number of 90° clockwise rotations from the original.
+ [], // 0000 = 0 (×1)
+ [[0],[0,3]], // 0001 = 1 (×4)
+ [[],[7,4,3,3,4,0]], // 0002 = 2 (×4)
+ [[1],[1,0]], // 0010 = 3 (r1 from 1)
+ [[0,1],[1],[0],[1,3]], // 0011 = 4 (×4)
+ [[1],[1,4],[],[4,3,7],[],[4,1,3]], // 0012 = 5 (×4)
+ [[],[4,5,0,0,5,1]], // 0020 = 6 (r1 from 2)
+ [[0],[4,3],[],[4,5,1],[],[4,1,3]], // 0021 = 7 (×4)
+ [[],[7,5,1,1,3,7]], // 0022 = 8 (×4)
+ [[2],[2,1]], // 0100 = 9 (r2 from 1)
+ [[0],[0,3],[2],[2,1]], // 0101 = 10 (×2)
+ [[],[7,4,3,3,4,0],[2],[2,1]], // 0102 = 11 (×4)
+ [[1,2],[2],[1],[2,0]], // 0110 = 12 (r1 from 4)
+ [[0,1],[3],[1],[2,3],[1,2],[2]], // 0111 = 13 (×4)
+ [[1,2],[4],[2],[2,4],[],[2,3,7],[],[2,7,4]], // 0112 = 14 (×4)
+ [[2],[2,5],[],[5,0,4],[],[5,2,0]], // 0120 = 15 (r1 from 5)
+ [[0],[4,3],[2],[2,5],[],[4,5,2],[],[2,3,4]], // 0121 = 16 (×4)
+ [[2],[2,5],[],[2,3,7],[],[5,2,7]], // 0122 = 17 (×4)
+ [[],[5,6,1,1,6,2]], // 0200 = 18 (r2 from 2)
+ [[],[5,6,1,1,6,2],[0],[0,3]], // 0201 = 19 (r2 from 11)
+ [[],[7,4,0],[],[0,3,7],[],[1,5,6],[],[6,2,1]], // 0202 = 20 (×2)
+ [[1],[5,0],[],[5,6,2],[],[5,2,0]], // 0210 = 21 (r1 from 7)
+ [[0,1],[3],[1],[5,3],[],[3,5,2],[],[5,6,2]], // 0211 = 22 (×4)
+ [[1],[5,4],[],[5,6,7],[],[6,2,3],[],[6,3,7],[],[7,4,5]], // 0212 = 23 (×4)
+ [[],[4,6,2,2,0,4]], // 0220 = 24 (r1 from 8)
+ [[0],[4,3],[],[3,4,6],[],[6,2,3]], // 0221 = 25 (×4)
+ [[],[2,3,7,2,7,6]], // 0222 = 26 (×4)
+ [[3],[3,2]], // 1000 = 27 (r3 from 1)
+ [[3,0],[0],[3],[0,2]], // 1001 = 28 (r3 from 4)
+ [[3],[7,2],[],[7,4,0],[],[7,0,2]], // 1002 = 29 (r3 from 7)
+ [[1],[1,0],[3],[3,2]], // 1010 = 30 (r1 from 10)
+ [[3,0],[2],[0],[1,2],[0,1],[1]], // 1011 = 31 (r3 from 13)
+ [[3],[7,2],[1],[1,4],[],[7,4,1],[],[1,2,7]], // 1012 = 32 (r3 from 16)
+ [[],[4,5,0,0,5,1],[3],[3,2]], // 1020 = 33 (r1 from 11)
+ [[3,0],[2],[0],[4,2],[],[2,4,1],[],[4,5,1]], // 1021 = 34 (r3 from 22)
+ [[3],[7,2],[],[2,7,5],[],[5,1,2]], // 1022 = 35 (r3 from 25)
+ [[2,3],[3],[2],[3,1]], // 1100 = 36 (r2 from 4)
+ [[2,3],[1],[3],[0,1],[3,0],[0]], // 1101 = 37 (r2 from 13)
+ [[2,3],[1],[3],[7,1],[],[1,7,0],[],[7,4,0]], // 1102 = 38 (r2 from 22)
+ [[1,2],[0],[2],[3,0],[2,3],[3]], // 1110 = 39 (r1 from 13)
+ [[0,1,2],[],[0,2,3],[]], // 1111 = 40 (×1)
+ [[1,2],[4],[2],[7,4],[2,3],[7]], // 1112 = 41 (×4)
+ [[2,3],[5],[3],[3,5],[],[3,0,4],[],[3,4,5]], // 1120 = 42 (r1 from 14)
+ [[2,3],[5],[3],[4,5],[3,0],[4]], // 1121 = 43 (r1 from 41)
+ [[2],[7,5],[2,3],[7]], // 1122 = 44 (×4)
+ [[3],[3,6],[],[6,1,5],[],[6,3,1]], // 1200 = 45 (r2 from 5)
+ [[3,0],[6],[0],[0,6],[],[0,1,5],[],[0,5,6]], // 1201 = 46 (r2 from 14)
+ [[3],[7,6],[],[7,4,5],[],[4,0,1],[],[4,1,5],[],[5,6,7]], // 1202 = 47 (r2 from 23)
+ [[1],[5,0],[3],[3,6],[],[5,6,3],[],[3,0,5]], // 1210 = 48 (r1 from 16)
+ [[3,0],[6],[0],[5,6],[0,1],[5]], // 1211 = 49 (r2 from 41)
+ [[1],[5,4],[3],[7,6],[],[4,5,6],[],[4,6,7]], // 1212 = 50 (×2)
+ [[3],[3,6],[],[3,0,4],[],[6,3,4]], // 1220 = 51 (r1 from 17)
+ [[3],[4,6],[3,0],[4]], // 1221 = 52 (r1 from 44)
+ [[3],[7,6]], // 1222 = 53 (×4)
+ [[],[6,7,2,2,7,3]], // 2000 = 54 (r3 from 2)
+ [[0],[0,7],[],[7,2,6],[],[7,0,2]], // 2001 = 55 (r3 from 5)
+ [[],[6,4,0,0,2,6]], // 2002 = 56 (r3 from 8)
+ [[],[6,7,2,2,7,3],[1],[1,0]], // 2010 = 57 (r3 from 11)
+ [[0,1],[7],[1],[1,7],[],[1,2,6],[],[1,6,7]], // 2011 = 58 (r3 from 14)
+ [[1],[1,4],[],[1,2,6],[],[4,1,6]], // 2012 = 59 (r3 from 17)
+ [[],[4,5,1],[],[1,0,4],[],[2,6,7],[],[7,3,2]], // 2020 = 60 (r1 from 20)
+ [[0],[4,7],[],[4,5,6],[],[5,1,2],[],[5,2,6],[],[6,7,4]], // 2021 = 61 (r3 from 23)
+ [[],[1,2,6,1,6,5]], // 2022 = 62 (r3 from 26)
+ [[2],[6,1],[],[6,7,3],[],[6,3,1]], // 2100 = 63 (r2 from 7)
+ [[2],[6,1],[0],[0,7],[],[6,7,0],[],[0,1,6]], // 2101 = 64 (r2 from 16)
+ [[2],[6,1],[],[1,6,4],[],[4,0,1]], // 2102 = 65 (r2 from 25)
+ [[1,2],[0],[2],[6,0],[],[0,6,3],[],[6,7,3]], // 2110 = 66 (r1 from 22)
+ [[0,1],[7],[1],[6,7],[1,2],[6]], // 2111 = 67 (r3 from 41)
+ [[1],[6,4],[1,2],[6]], // 2112 = 68 (r3 from 44)
+ [[2],[6,5],[],[6,7,4],[],[7,3,0],[],[7,0,4],[],[4,5,6]], // 2120 = 69 (r1 from 23)
+ [[2],[6,5],[0],[4,7],[],[5,6,7],[],[5,7,4]], // 2121 = 70 (r1 from 50)
+ [[2],[6,5]], // 2122 = 71 (r3 from 53)
+ [[],[5,7,3,3,1,5]], // 2200 = 72 (r2 from 8)
+ [[0],[0,7],[],[0,1,5],[],[7,0,5]], // 2201 = 73 (r2 from 17)
+ [[],[0,1,5,0,5,4]], // 2202 = 74 (r2 from 26)
+ [[1],[5,0],[],[0,5,7],[],[7,3,0]], // 2210 = 75 (r1 from 25)
+ [[0],[5,7],[0,1],[5]], // 2211 = 76 (r2 from 44)
+ [[1],[5,4]], // 2212 = 77 (r2 from 53)
+ [[],[3,0,4,3,4,7]], // 2220 = 78 (r1 from 26)
+ [[0],[4,7]], // 2221 = 79 (r1 from 53)
+ [] // 2222 = 80 (×1)
+];
+
+/// _clipfacindex() - private function, called by _clipfacevertices()
+/// Return the index ID of a voxel face depending on the field strength at each corner in relation to isovalmin and isovalmax.
+// Returns a decimal version of a 4-digit base-3 index.

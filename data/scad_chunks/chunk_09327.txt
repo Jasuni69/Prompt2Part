@@ -1,0 +1,3 @@
+function RotXZ(t) = let(a = -45*(4 - hillf(t))/4) RotY(a);
+
+// Establishes the radius of the circle.

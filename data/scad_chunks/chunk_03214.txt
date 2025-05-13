@@ -1,0 +1,14 @@
+module HollowCylinder(outer_rad, inner_rad, height) {
+  $fa = ($fa >= 12) ? 1 : $fa;
+  $fs = ($fs >= 2) ? 0.4 : $fs;
+
+  rad_diff = outer_rad-inner_rad;
+  rotate_extrude(convexity=10)
+    translate([(outer_rad+inner_rad)/2, 0, 0])
+    hull() {
+      translate([0, rad_diff/2, 0])
+        circle(r=rad_diff/2);
+      translate([0, height-rad_diff/2, 0])
+        circle(r=rad_diff/2);
+    }
+}

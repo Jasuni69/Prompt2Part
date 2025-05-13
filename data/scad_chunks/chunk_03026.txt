@@ -1,0 +1,19 @@
+//   Optional:
+//    p(4) = filletRadius : Default = 0/Auto(0 = auto size)
+//    n(a) = { yappLeft | yappRight | yappFront | yappBack } : one or more
+//    n(b) = { yappNoFillet }
+//    n(c) = { <yappBase>, yappLid }
+//    n(d) = { yappCenter } : shifts Position to be in the center of the opening instead of 
+//                            the left of the opening
+//    n(e) = { <yappGlobalOrigin>, yappLeftOrigin } : Only affects Back and Right Faces
+//-------------------------------------------------------------------
+boxMounts =
+[
+//  [20, 6, 6, 3, yappLeft]
+];
+
+
+
+
+//---- This is where the magic happens ----
+YAPPgenerate();

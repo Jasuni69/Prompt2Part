@@ -1,0 +1,1 @@
+function smd_inductor_colour(type) = type[5]; //! Body colour

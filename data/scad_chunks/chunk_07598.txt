@@ -1,0 +1,4 @@
+module SCT(a=90){
+    echo(str("<H3>Winkel=",a," sin=",sin(a)," cos=",cos(a)," tan=",tan(a)));
+    echo(str("<H3>Winkel=",a," asin=",asin(a)," acos=",acos(a)," atan=",atan(a)));    
+}

@@ -1,0 +1,7 @@
+function Q_Add_S(q, s) = q+[0,0,0,s];
+
+
+// Function: Q_Sub_S()
+// Usage:
+//   Q_Sub_S(q, s)
+// Description: Subtracts a scalar value `s` from the W part of a quaternion `q`.

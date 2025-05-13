@@ -1,0 +1,2 @@
+function offset_pts(pts, dist) = 
+  _offset_poly(_iterative_remove_edges(pts, dist), dist);

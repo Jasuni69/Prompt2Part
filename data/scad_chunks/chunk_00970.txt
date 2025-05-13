@@ -1,0 +1,3 @@
+function spigot_angle(type, open) =
+    let(arm_w = sclip_arm_width(type), w = sclip_width(type) - 2 * arm_w)
+        (arm_angle(type, 0) - arm_angle(type, open)) * 2 * arm_w / w;

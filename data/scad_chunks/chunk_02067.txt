@@ -1,0 +1,6 @@
+function pcb_mount_width(pcb)  = pillar_y_pitch(pcb) + 2 * pillar_r; //! Outside width of the mount
+
+frame_w = 3;
+frame_t = 2;
+
+washer_thickness = 1.25;

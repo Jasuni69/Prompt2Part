@@ -1,0 +1,183 @@
+function _showstats_isosurface(voxsize, bbox, isoval, cubes, triangles, faces) =
+    let(
+        voxbounds = len(cubes)>0 ? let(
+            v = column(cubes, 0), // extract cube vertices
+            x = column(v,0),    // extract x values
+            y = column(v,1),    // extract y values
+            z = column(v,2),    // extract z values
+            xmin = min(x),
+            xmax = max(x)+voxsize.x,
+            ymin = min(y),
+            ymax = max(y)+voxsize.y,
+            zmin = min(z),
+            zmax = max(z)+voxsize.z
+        ) [[xmin,ymin,zmin], [xmax,ymax,zmax]] : "N/A",
+        nvox = len(cubes),
+        ntri = len(triangles),
+        tribounds = ntri>0 ? pointlist_bounds(triangles) : "N/A"
+    ) echo(str("\nIsosurface statistics:\n   Isovalue = ", isoval, "\n   Voxel size = ", voxsize,
+        "\n   Voxels intersected by the surface = ", nvox,
+        "\n   Triangles = ", ntri,
+        "\n   VNF bounds = ", tribounds,
+        "\n   Bounds for all data = ", bbox,
+        "\n   Voxel bounding box for isosurface = ", voxbounds,
+        "\n"));
+
+        
+
+/// ---------- contour stuff starts here ----------
+
+// Function&Module: contour()
+// Synopsis: Creates a 2D contour from a function or array of values.
+// SynTags: Geom,Path,Region
+// Topics: Isosurfaces, Path Generators (2D), Regions
+// Usage: As a module
+//   contour(f, isovalue, bounding_box, pixel_size, [pixel_count=], [use_centers=], [smoothing=], [exact_bounds=], [show_stats=], [show_box=], ...) [ATTACHMENTS];
+// Usage: As a function
+//   region = contour(f, isovalue, bounding_box, pixel_size, [pixel_count=], [pc_centers=], [smoothing=], [closed=], [show_stats=]);
+// Description:
+//   Computes a [region](regions.scad) that contains one or more 2D contour [paths](paths.scad)
+//   within a bounding box at a single isovalue.
+//   .
+//   See [Isosurface contour parameters](#isosurface-contour-parameters) for details about
+//   how the primary parameters work for contours.
+//   .
+//   To provide a function, you supply a [function literal](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/User-Defined_Functions_and_Modules#Function_literals)
+//   taking two parameters as input to define the grid coordinate location (e.g. `x,y`) and
+//   returning a single numerical value.
+//   You can also define an contour using a 2D array of values (i.e. a height map) instead of a
+//   function, in which case the contour is the set of points equal to the isovalue as interpolated
+//   from the array. The array indices are in the order `[x][y]` with `y` changing fastest.
+//   .
+//   The contour is evaluated over a bounding box defined by its minimum and maximum corners,
+//   `[[xmin,ymin],[xmax,ymax]]`. This bounding box is divided into pixels of the specified
+//   `pixel_size`. Smaller pixels produce a finer, smoother result at the expense of execution time.
+//   If the pixel size doesn't exactly divide your specified bounding box, then the bounding box is
+//   enlarged to contain whole pixels, and centered on your requested box. If the bounding box clips
+//   the contour and `closed=true` (the default), additional edges are added along the edges of the
+//   bounds. Setting `closed=false` causes a clipped path to end at the bounding box.
+//   .
+//   ***Closed and unclosed paths***
+//   .
+//   The module form of `contour()` always closes the polygons at the bounding box edges to produce
+//   valid polygons.  The functional form of `contour()` supports a `closed` parameter. When `closed=true` (the default)
+//   and a polygon is clipped by the bounding box, the bounding box edges are included in the polygon. The
+//   resulting path list is a valid region with no duplicated vertices in any path. 
+//   .
+//   When `closed=false`, paths that intersect the edge of the bounding box end at the bounding box. This
+//   means that the list of paths may include a mixture of closed and open paths. Regardless of whether
+//   any of the output paths are open, all closed paths have identical first and last points so that  closed and
+//   open paths can be distinguished. You can use {{are_ends_equal()}} to determine if a path is closed. A path
+//   list that includes open paths is not a region, because regions are lists of closed polygons. Duplicating the
+//   ends of closed paths can cause problems for functions such as {{offset()}}, which will complain about
+//   repeated points or produce incorrect results.  You can use {{list_unwrap()}} to remove the extra endpoint.
+// Arguments:
+//   f = The contour function or array.
+//   isovalue = A scalar giving the isovalue for the contour, or a 2-vector giving an isovalue range (resulting in a polygon bounded by two contours). For an unbounded range, use `[-INF,max_isovalue]` or `[min_isovalue,INF]`.
+//   bounding_box = The area in which to perform computations, expressed as a scalar size of a square centered on the origin, or a pair of 2D points `[[xmin,ymin], [xmax,ymax]]` specifying the minimum and maximum box corner coordinates. Unless you set `exact_bounds=true`, the bounding box size may be enlarged to fit whole pixels. When `f` is an array of values, `bounding_box` cannot be supplied if `pixel_size` is supplied because the bounding box is already implied by the array size combined with `pixel_size`, in which case this implied bounding box is centered around the origin.
+//   pixel_size = Size of the pixels used to sample the bounding box volume, can be a scalar or 2-vector, or omitted if `pixel_count` is set. You may get rectangular pixels of a slightly different size than requested if `exact_bounds=true`.
+//   ---
+//   pixel_count = Approximate number of pixels in the bounding box. If `exact_bounds=true` then the pixels may not be square. Use with `show_stats=true` to see the corresponding pixel size. Default: 1024 (if `pixel_size` not set)
+//   use_centers = When true, uses the center value of each pixel as an additional data point to refine the contour path through the pixel. The center value is the function value if `f` is a function, or the average of the four pixel corners if `f` is an array. If `use_centers` is set to another array of center values, then those values are used. If false, the contour path doesn't account for the pixel center. Default: true
+//   smoothing = Number of times to apply a 2-point moving average to the contours. This can remove small zig-zag artifacts resulting from a contour that follows the profile of a triangulated 3D surface when `use_centers` is set. Default: 2 if `use_centers=true`, 0 otherwise.
+//   closed = (Function only) When true, close the contour path if it intersects the bounding box by adding closing edges. When false, do not add closing edges. Default: true, and always true when called as a module.
+//   exact_bounds = When true, shrinks pixels as needed to fit whole pixels inside the requested bounding box. When false, enlarges `bounding_box` as needed to fit whole pixels of `pixel_size`, and centers the new bounding box over the requested box. Default: false
+//   show_stats = If true, display statistics in the console window about the contour: number of pixels that the surface passes through, number of points in all contours, bounding box of the pixels, and pixel-rounded bounding box of the contours, which may help you reduce your bounding box to improve speed. Default: false
+//   show_box = (Module only) display the requested bounding box as a transparent rectangle. This box may appear slightly different than specified if the actual bounding box had to be expanded to accommodate whole pixels. Default: false
+//   cp = (Module only) Center point for determining intersection anchors or centering the shape. Determines the base of the anchor vector. Can be "centroid", "mean", "box" or a 3D point.  Default: "centroid"
+//   anchor = (Module only) Translate so anchor point is at origin (0,0,0). See [anchor](attachments.scad#subsection-anchor).  Default: `"origin"`
+//   spin = (Module only) Rotate this many degrees around the Z axis after anchor. See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   atype = (Module only) Select "hull" or "intersect" anchor type.  Default: "hull"
+// Anchor Types:
+//   "hull" = Anchors to the virtual convex hull of the shape.
+//   "intersect" = Anchors to the surface of the shape.
+// Example(2D,NoAxes): A small height map consisting of 8×8 data values to create a 7×7 pixel area, showing a contour at one isovalue. When passing an array as the first argument, rotating the output 90° clockwise using `zrot(-90)` causes the features of the contour to correspond visually to features in the array. Setting `use_centers=false` results in only the corner values of each pixel to be considered when drawing contour lines, resulting in coarse outlines.
+//   field =[
+//       [0,2,2,1,0,0,0,0],
+//       [2,4,1,0,0,0,0,0],
+//       [2,2,2,1,0,0,0,0],
+//       [0,0,1,2,2,2,1,1],
+//       [0,0,2,1,0,3,1,0],
+//       [0,2,0,2,0,3,4,0],
+//       [0,0,0,1,2,3,2,0],
+//       [0,0,0,0,0,1,0,0]
+//   ];
+//   isoval=[0.7,INF];
+//   pixsize = 5;
+//   color("lightgreen") zrot(-90)
+//       contour(field, isoval, pixel_size=pixsize,
+//           use_centers=false);
+//   color("blue") down(1)
+//       square((len(field)-1)*pixsize, true);
+// Example(2D,NoAxes): The same height map with the same isovalue, this time setting `use_centers=true` to cause the pixel center values (average of the four corners) to be considered when drawing contours, giving somewhat finer resolution. When `use_centers=true`, some smoothing is applied to avoid some additional crookedness in the contours that occurs due to the contours following a slice of a triangulated mesh with triangles in varying orientations.
+//   field =[
+//       [0,2,2,1,0,0,0,0],
+//       [2,4,1,0,0,0,0,0],
+//       [2,2,2,1,0,0,0,0],
+//       [0,0,1,2,2,2,1,1],
+//       [0,0,2,1,0,3,1,0],
+//       [0,2,0,2,0,3,4,0],
+//       [0,0,0,1,2,3,2,0],
+//       [0,0,0,0,0,1,0,0]
+//   ];
+//   isoval=[0.7,INF];
+//   pixsize = 5;
+//   color("lightgreen") zrot(-90)
+//       contour(field, isoval, pixel_size=pixsize,
+//           use_centers=true);
+//   color("blue") down(1)
+//       square((len(field)-1)*pixsize, true);
+// Example(3D,NoAxes): You can pass a function literal taking x,y arguments, in which case the center value of each pixel is computed in addition to the corners for somewhat greater resolution than the specified pixel size. By default, two smoothing passes are performed on the output paths when making contours from a function.
+//   wavelen=42;
+//   wave2d = function(x,y)
+//       40*cos(180/wavelen*norm([x,y]));
+//   isoval=-30;
+//   pixsize = 10;
+//   translate([0,0,isoval]) color("green") zrot(-90)
+//       contour(wave2d, 
+//           bounding_box=[[-50,-50],[50,50]],
+//           isovalue=[isoval,INF], pixel_size=pixsize);
+//   %plot3d(wave2d, [-50:pixsize:50],[-50:pixsize:50],
+//          style="quincunx",base=5);
+// Example(2D,NoAxes): Here's a simple function that produces a contour in the shape of a flower with some petals. Note that the function has smaller values inside the shape so we choose a `-INF` bound for the isovalue.  
+//   f = function (x, y, petals=5)
+//       sin(petals*atan2(y,x)) + norm([x,y]);
+//   contour(f, isovalue=[-INF,3], bounding_box=8.1);
+// Example(2D,NoAxes): If we instead use a `+INF` bound then we get the bounding box with the flower shape removed.  
+//   f = function (x, y, petals=5)
+//       sin(petals*atan2(y,x)) + norm([x,y]);
+//   contour(f, isovalue=[3,INF], bounding_box=8.1);
+// Example(3D,NoAxes): We can take the previous function a step further and make the isovalue range bounded on both ends, resulting in a hollow shell shape. The nature of the function causes the thickness to vary, which is different from the constant thickness you would get if you subtracted an `offset()` polygon from the inside. Here we extrude this polygon with a twist.
+//   f = function (x, y, petals=5)
+//      sin(petals*atan2(y,x)) + norm([x,y]);
+//   linear_extrude(6, twist=30, scale=0.75, slices=10)
+//      contour(f, isovalue=[2,3], bounding_box=8.1);
+// Example(2D,NoAxes): Another function that needs an isovalue range to create a solid polygon. Increasing the minimum value results in holes in the object.
+//   f = function(x,y) (x^2+y-11)^2 + (x+y^2-7)^2;
+//   contour(f, bounding_box=12, isovalue=[0,125]);
+// Example(2D,NoAxes): The shape of these contours are somewhat sensitive to pixel size.
+//   f = function(x,y)  x^2+y^2 + 10*(1-cos(360*x)-cos(360*y));
+//   contour(f, bounding_box=13, isovalue=[-INF,35],
+//       pixel_size=0.25);
+// Example(2D,NoAxes,VPD=1920): An infinite periodic pattern showing contours at one elevation in red, overlaid with a transparent render of the 3D heightmap generated by the function.
+//   f = function(x,y) 100*(sin(x)*sin(y) * sin(x+y));
+//   pixel_size = 20;
+//   isovalue = 1;
+//   bbox = 720;
+//   up(isovalue) color("red") linear_extrude(1)
+//       contour(f, [isovalue,INF], bbox, pixel_size);
+//   %plot3d(f, [-360:pixel_size/2:360],
+//           [-360:pixel_size/2:360], style="quincunx");
+// Example(2D,NoAxes): A [Cassini oval](https://en.wikipedia.org/wiki/Cassini_oval) is a curve drawn such that for any point on the perimeter, the product of the distances from two fixed points is constant. The curve resembles two circular [metaballs](#functionmodule-metaballs2d) interacting. When the ratio `b/a=1`, there is a cusp where two contours meet at the origin, although the contour algorithm doesn't allow the two contours to touch.
+//   a=4;  b=4.1;
+//   f = function(x,y) (x^2+y^2)^2 - 2*a^2*(x^2-y^2) + a^4;
+//   contour(f,bounding_box=[[-6,-3],[6,3]], isovalue=[-INF,b^4]);
+// Example(2D,NoAxes,VPD=65,VPT=[-7,0,0]): A contour of a function that looks like the contour should intersect itself at the origin, but if you zoom in, you see that it doesn't actually cross or intersect. It is theoretically possible to obtain a crossing path with `contour()` although the algorithm attempts to avoid it, primarily by disallowing the function values at the sample points to be equal to the specified isovalue.
+//   g = function(x,y)
+//       let(
+//           theta=atan2(y,x),
+//           r = norm([x,y])
+//       )
+//       r*sin(3*theta-theta^2/20+40*r);
+//   contour(g, bounding_box=[[-23,-13],[9,13]],
+//       isovalue=[0,INF], pixel_size=0.2);

@@ -1,0 +1,3 @@
+module vero_grid_pos(type, x, y) //! Convert grid position to offset from the centre
+    translate(vero_grid_pos(type, x, y))
+        children();

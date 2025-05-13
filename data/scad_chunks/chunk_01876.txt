@@ -1,0 +1,1 @@
+function cable(wires, size, colours, ribbon = false, tlen = 25) = [wires, size, ribbon, colours, tlen]; //! Cable constructor

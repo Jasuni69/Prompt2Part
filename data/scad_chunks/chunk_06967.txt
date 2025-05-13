@@ -1,0 +1,13 @@
+module test_intersection() {
+  R1 = [square(10,center=true), square(9,center=true)];
+  R6 = [square(9.5,center=true), square(9,center=true)];
+  assert(are_regions_equal(intersection(R6,R1), R6));
+  assert(are_regions_equal(intersection(R1,R6), R6));
+  R8 = [right(8,square(10,center=true)), left(8,square(10,center=true))];
+  R9 = [back(8,square(10,center=true)), fwd(8,square(10,center=true))];
+  assert(are_regions_equal(intersection(R9,R8),[[[-3, -5], [-5, -5], [-5, -3], [-3, -3]], [[-5, 5], [-3, 5], [-3, 3], [-5, 3]], [[5, -5], [3, -5], [3, -3], [5, -3]], [[3, 3], [3, 5], [5, 5], [5, 3]]]));
+  assert(are_regions_equal(intersection(R8,R9),[[[-3, -5], [-5, -5], [-5, -3], [-3, -3]], [[-5, 5], [-3, 5], [-3, 3], [-5, 3]], [[5, -5], [3, -5], [3, -3], [5, -3]], [[3, 3], [3, 5], [5, 5], [5, 3]]]));
+
+
+}
+test_intersection();

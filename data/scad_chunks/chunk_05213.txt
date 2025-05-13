@@ -1,0 +1,11 @@
+function root_find(f,x0,x1,tol=1e-15) =
+   let(
+        y0 = f(x0),
+        y1 = f(x1),
+        yrange = y0<y1 ? [y0,y1] : [y1,y0]
+   )
+   // Check endpoints
+   y0==0 || _rfcheck(x0, y0,yrange,tol) ? x0 :
+   y1==0 || _rfcheck(x1, y1,yrange,tol) ? x1 :
+   assert(y0*y1<0, "Sign of function must be different at the interval endpoints")
+   _rootfind(f,[x0,x1],[y0,y1],yrange,tol);

@@ -1,0 +1,4 @@
+module d_connector_holes(type) //! Place children at the screw hole positions
+    for(end = [-1, 1])
+        translate([end * d_hole_pitch(type) / 2, 0])
+            children();

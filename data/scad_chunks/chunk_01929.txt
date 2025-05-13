@@ -1,0 +1,36 @@
+module box_corner_profile_section(type, section, sections) { //! Generates interlocking sections of the corner profile to allow it to be taller than the printer
+    overlap = 4;
+    length = box_height(type) - 2 * box_margin(type);
+    section_length = round_to_layer((length - overlap) / sections);
+    last_section = section >= sections - 1;
+    h = last_section ? length - (sections - 1) * section_length : section_length;
+    overlap_wall = 2;
+
+    difference() {
+        union() {
+            linear_extrude(h, convexity = 5)
+                box_corner_profile_2D(type);
+
+            if(!last_section)                              // male end always at the top
+                translate_z(section_length - 1)
+                    for(i = [0 : 1], offset = i * layer_height)
+                        linear_extrude(overlap + 1 - offset)
+                            offset(1 + offset - layer_height)
+                                offset(-overlap_wall - 1)
+                                    box_corner_profile_2D(type);
+        }
+        if(section > 0)
+            translate_z(last_section ? h : 0) {       // female at bottom unless last section
+                linear_extrude(2 * (overlap + layer_height), center = true, convexity = 5)
+                    offset(-overlap_wall)
+                        box_corner_profile_2D(type);
+
+                linear_extrude(2 * layer_height, center = true, convexity = 5)
+                    offset(-overlap_wall + layer_height)
+                        box_corner_profile_2D(type);
+            }
+        if(!section || last_section)                        // insert holes always at the bottom
+            translate([box_hole_inset(type), box_hole_inset(type)])
+                insert_hole(box_insert(type), 5);
+    }
+}

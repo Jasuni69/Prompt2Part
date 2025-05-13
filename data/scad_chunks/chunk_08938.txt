@@ -1,0 +1,8 @@
+function swap_xy(m)=
+	[	for(i=m)										// fall every menmber in matrix m
+			[i.y, i.x, i.z]								// swap x with y
+	];
+
+// Operator to create a complete gyroid cell (cube from [0,0,0] to [180,180,180] from single polyhedron 
+// by means of mirroring anf translation.
+// No parameters required

@@ -1,0 +1,12 @@
+module test_f_nor() {
+    _test_fn2arg(
+        function (a,b) f_nor(a,b),
+        [
+            [false, false, true ],
+            [true , false, false],
+            [false, true , false],
+            [true , true , false]
+        ]
+    );
+}
+test_f_nor();

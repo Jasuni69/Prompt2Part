@@ -1,0 +1,1 @@
+function tc_width(type)        = type[2];   //! Width of lugs

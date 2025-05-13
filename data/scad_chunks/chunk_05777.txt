@@ -1,0 +1,17 @@
+function struct_set(struct, key, value, grow=true) =
+  is_def(value) ? struct_set(struct,[key,value],grow=grow)
+  :
+  assert(is_list(key) && len(key)%2==0, "[key,value] pair list is not a list or has an odd length")
+  let(
+      new_entries = [for(i=[0:1:len(key)/2-1]) [key[2*i], key[2*i+1]]],
+      newkeys = column(new_entries,0),
+      indlist = search(newkeys, struct,0,0),
+      badkeys = grow ? (search([undef],new_entries,1,0)[0] != [] ? [undef] : [])
+                     : [for(i=idx(indlist)) if (is_undef(newkeys[i]) || len(indlist[i])==0) newkeys[i]],
+      ind = flatten(indlist),
+      dupfind = search(newkeys, new_entries,0,0),
+      dupkeys = [for(i=idx(dupfind)) if (len(dupfind[i])>1) newkeys[i]]
+  )
+  assert(badkeys==[], str("Unknown or bad key ",_format_key(badkeys[0])," in struct_set"))
+  assert(dupkeys==[], str("Duplicate key ",_format_key(dupkeys[0])," for struct"))
+  concat(list_remove(struct,ind), new_entries);

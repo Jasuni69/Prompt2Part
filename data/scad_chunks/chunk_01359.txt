@@ -1,0 +1,100 @@
+module multiwatt11(part_no, tail = 3) { //! Draw a MULTIWATT11 package
+    A = 5;                  // Body thickness, name from datasheet
+    B = 2.65;               // Lead offset from heatsink face
+    C = 1.6;                // Metal tab thickness
+    D = 1;                  // Straight section of leads before bend
+    E = (0.49 + 0.55) / 2;  // Lead thickness
+    F = (0.88 + 0.95) / 2;  // Lead width
+    G = 1.7;                // Lead pitch
+    H = 20;                 // Body width
+    L2 = (17.4 +18.1) / 2;  // Height of hole above the PCB
+    L3 = 17.5;              // Height from base to tab
+    L4 = 10.7;              // height of plastic part
+    L7 = (2.65 + 2.9) / 2;  // Distance of hole from the top
+    M = 4.3;                // Back leads from heatsink
+    M1 = 5.08;              // Back leass to front leads
+    S = (1.9 + 2.6) / 2;    // Chamfer
+    Dia = (3.65 + 3.85) / 2;// Hole diameter
+    inset = 1;              // Metal inset from plastic
+    draft = 7;              // 7 degree body draft angle
+    leads = 11;             // Number of leads
+    h = L2 + L7;            // Total height above PCB
+    z = h - L3;             // Height of base above PCB
+    dimple_d = 2.7;         // Half round dimples in the sides
+    tab_h = L3 - L4;
+    tan = tan(draft);
+    lead_r = E;
+
+    vitamin(str("multiwatt11(\"", part_no, "\"): MULTIWATT11 ", part_no));
+
+    rotate([90, 0, 0]) {
+        color(silver) {
+            linear_extrude(C)
+                union() {
+                    translate([-H / 2 + inset, z + inset + 0.2])
+                        square([H - 2 * inset, L4]);
+
+                    difference() {
+                        hull() {
+                            translate([-H / 2, z + L4])
+                                square([H, tab_h - S]);
+
+                            translate([-H / 2 + S, z + L4])
+                                square([H - 2 * S, tab_h]);
+                        }
+                        translate([0, h - L7])
+                            circle(d = Dia);
+                    }
+                }
+                $fs = fs;
+                $fa = fa;
+                M2 = M + M1;
+                front_path = [for(p = rounded_polygon([
+                                    [-B,            z,           0],
+                                    [-B - lead_r,   z - D,        lead_r],
+                                    [-M2 + lead_r,  h - L7 - L2, -lead_r],
+                                    [-M2,           h - L7 - L2 - tail, 0],
+                                ])) [0, p.y, -p.x]];
+
+                back_path = [for(p = rounded_polygon([
+                                    [-B,            z,           0],
+                                    [-B - lead_r,   z - D,        lead_r],
+                                    [-M + lead_r,   h - L7 - L2, -lead_r],
+                                    [-M,            h - L7 - L2 - tail,  0],
+                                ])) [0, p.y, -p.x]];
+                profile = rectangle_points(F, E);
+                for(i = [0 : leads - 1])
+                    translate([(i - (leads - 1) / 2) * G, 0, -E / 2])
+                        sweep((i % 2) ? back_path : front_path, profile);
+            }
+
+        color("dimgrey")
+            difference() {
+                s = B * tan;
+                s2 = (A - B) * tan;
+                hull() {
+                    translate([-H / 2 - C * tan, z + s, eps])
+                        cube([H + 2 * C * tan, L4 - s, eps]);
+
+                    translate([-H / 2, z, B])
+                        cube([H, eps, eps]);
+
+                    translate([-H / 2 + s2, z + s2, A - eps])
+                        cube([H - 2 * s2, L4 - (A - C) * tan, eps]);
+                }
+                for(side = [-1,1])
+                    translate([side * (H / 2 + s2), z + 4.5, C - eps])
+                        cylinder(d = dimple_d, h = A - C + 2 * eps);
+            }
+
+        color("white")
+            translate([0, z + L4 / 2, A])
+                linear_extrude(eps)
+                    resize([H * 0.7, 0], auto = true)
+                        text(part_no, halign = "center", valign = "center");
+
+
+    }
+}
+
+panel_USBA_pitch = 30;

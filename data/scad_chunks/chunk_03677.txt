@@ -1,0 +1,1 @@
+function _prototype_type() =  "type.typeMark";

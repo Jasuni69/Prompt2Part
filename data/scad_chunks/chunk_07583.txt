@@ -1,0 +1,30 @@
+module Rund(or=+0,ir,chamfer=false,fn,fs=$preview?.3:fs,help) {
+    
+    ir=is_undef(ir)?is_list(or)?or[1]:or:ir;
+    or=is_list(or)?or[0]:or;
+    chamfer=chamfer?true:false;
+   if(!chamfer)offset(r = or,$fn=fn,$fs=fs)offset(r = -or,$fn=fn,$fs=fs)
+               offset(r = -ir,$fn=fn,$fs=fs)offset(r = ir,$fn=fn,$fs=fs) 
+       children();
+     
+   
+   if(chamfer)offset(delta = or,chamfer=chamfer)offset(delta = -or,chamfer=chamfer)
+              offset(delta = -ir,chamfer=chamfer)offset(delta = ir,chamfer=chamfer) 
+       children();
+MO(!$children);
+HelpTxt("Rund",["or",or,"ir",ir,"chamfer",chamfer,"fn",fn,"fs",fs],help);
+}
+
+
+// /ΔΔ Modificatoren ΔΔ/ //
+ // \∇∇ Helper ∇∇/ // (not for creating geometry or objects)
+
+
+/** \page Helper
+PolyDeg(points)  shows the angle with colors in a polygon
+\name PolyDeg
+\param points points
+\param rad radius of marker
+\param poly  draw polygon from points
+\param txt  anotation angle
+*/

@@ -1,0 +1,6 @@
+module rounding_angled_edge_mask(h, r, r1, r2, d, d1, d2, ang=90, anchor=CENTER, spin=0, orient=UP,l,height,length)
+{
+    deprecate("angled_edge_mask");
+    rounding_edge_mask(h=h,r=r,r1=r1,r2=r2,d=d,d1=d1,d2=d1,ang=ang,anchor=anchor,spin=spin,orient=orient,l=l,height=height,length=length)
+      children();
+}

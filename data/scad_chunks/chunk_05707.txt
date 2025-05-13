@@ -1,0 +1,11 @@
+function _squircle_se_exponent(squareness) =
+    let(
+        // limit squareness; error if >0.99889, limit is smaller for r>1
+        s=min(0.998,squareness),
+        rho = 1 + s*(sqrt(2)-1),
+        x = rho / sqrt(2)
+    )
+    log(0.5) / log(x);
+
+
+/* Bezier squircle function */

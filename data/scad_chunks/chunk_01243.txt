@@ -1,0 +1,21 @@
+module veroboard_base(type, height, thickness, wall = 2, tapped = false) { //! Generate STL for a base with PCB spacers
+    screw = vero_screw(type);
+    ir = tapped ? screw_pilot_hole(screw) : screw_clearance_radius(screw);
+    or = corrected_radius(ir) + wall;
+
+    union() {
+        linear_extrude(thickness)
+            difference() {
+                hull()
+                    vero_mounting_hole_positions(type)
+                        poly_ring(or, ir);
+
+                vero_mounting_hole_positions(type)
+                    poly_circle(ir);
+            }
+
+        linear_extrude(height)
+            vero_mounting_hole_positions(type)
+                poly_ring(or, ir);
+    }
+}

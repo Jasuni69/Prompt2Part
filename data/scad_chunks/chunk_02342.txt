@@ -1,0 +1,1 @@
+function fixing_block_height(screw = def_screw) = fixing_block_depth(screw); //! Height given screw size, same as depth

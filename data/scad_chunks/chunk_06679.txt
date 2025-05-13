@@ -1,0 +1,5 @@
+module test_vnf_triangulate() {
+    vnf = [[[-1,-1,0],[1,-1,0],[1,1,0],[-1,1,0]],[[0,1,2,3]]];
+    assert(vnf_triangulate(vnf) == [[[-1,-1,0],[1,-1,0],[1,1,0],[-1,1,0]], [[0,1,2],[2,3,0]]]);
+}
+test_vnf_triangulate();

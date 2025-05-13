@@ -1,0 +1,1 @@
+function faston_wall_h(type)        = type[10]; //! Height of transition web wall

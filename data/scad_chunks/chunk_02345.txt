@@ -1,0 +1,1 @@
+function fixing_block_holes(screw) = concat([fixing_block_h_hole(screw)], fixing_block_v_holes(screw)); //! Returns a list of transforms to position all the screws

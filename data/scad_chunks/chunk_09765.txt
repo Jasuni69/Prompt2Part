@@ -1,0 +1,46 @@
+module rot(a=0, v=undef, cp=undef, from=undef, to=undef, reverse=false)
+{
+	if (is_def(cp)) {
+		translate(cp) rot(a=a, v=v, from=from, to=to, reverse=reverse) translate(-cp) children();
+	} else if (is_def(from)) {
+		assertion(is_def(to), "`from` and `to` should be used together.");
+		axis = vector_axis(from, to);
+		ang = vector_angle(from, to);
+		if (ang < 0.0001 && a == 0) {
+			children();  // May be slightly faster?
+		} else if (reverse) {
+			rotate(a=-ang, v=axis) rotate(a=-a, v=from) children();
+		} else {
+			rotate(a=ang, v=axis) rotate(a=a, v=from) children();
+		}
+	} else if (a == 0) {
+		children();  // May be slightly faster?
+	} else if (reverse) {
+		if (is_def(v)) {
+			rotate(a=-a, v=v) children();
+		} else if (is_scalar(a)) {
+			rotate(-a) children();
+		} else {
+			rotate([-a[0],0,0]) rotate([0,-a[1],0]) rotate([0,0,-a[2]]) children();
+		}
+	} else {
+		rotate(a=a, v=v) children();
+	}
+}
+
+
+// Module: xrot()
+//
+// Description:
+//   Rotates children around the X axis by the given number of degrees.
+//
+// Usage:
+//   xrot(a, [cp]) ...
+//
+// Arguments:
+//   a = angle to rotate by in degrees.
+//   cp = centerpoint to rotate around. Default: [0,0,0]
+//
+// Example:
+//   #cylinder(h=50, r=10, center=true);
+//   xrot(90) cylinder(h=50, r=10, center=true);

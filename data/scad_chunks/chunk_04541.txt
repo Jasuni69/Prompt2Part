@@ -1,0 +1,18 @@
+module MetricBolt(diameter, length, tolerance=0.4) {
+  drive_tolerance = pow(3*tolerance/HexDriveAcrossCorners(diameter),2)
+    + 0.75*tolerance;
+
+  difference() {
+    cylinder(h=diameter, r=(HexAcrossCorners(diameter)/2-0.5*tolerance), $fn=6);
+    cylinder(h=diameter,
+      r=(HexDriveAcrossCorners(diameter)+drive_tolerance)/2, $fn=6,
+      center=true);
+  }
+  translate([0,0,diameter-0.01])
+    ScrewThread(diameter, length+0.01, tolerance=tolerance,
+      tip_height=ThreadPitch(diameter), tip_min_fract=0.75);
+}
+
+
+// Create a standard sized metric countersunk (flat) bolt with hex key drive.
+// In compliance with convention, the length for this includes the head.

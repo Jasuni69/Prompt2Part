@@ -1,0 +1,62 @@
+module tag_this(tag)
+{
+    req_children($children);
+    check=
+      assert(is_string(tag),"tag must be a string")
+      assert(undef==str_find(tag," "),str("Tag string \"",tag,"\" contains a space, which is not allowed"));
+    $save_tag=default($tag,"");
+    $tag = str($tag_prefix,tag);
+    children();
+}
+
+
+// Module: force_tag()
+// Synopsis: Assigns a tag to a non-attachable object.
+// Topics: Attachments
+// See Also: tag(), recolor(), hide(), show_only(), diff(), intersect()
+// Usage:
+//   PARENT() force_tag([tag]) CHILDREN;
+// Description:
+//   You use this module when you want to make a non-attachable or non-BOSL2 module respect tags.
+//   It applies to its children the tag specified (or the tag currently in force if you don't specify a tag),
+//   making a final determination about whether to show or hide the children.
+//   This means that tagging in children's children will be ignored.
+//   This module is specifically provided for operating on children that are not tag aware such as modules
+//   that don't use {{attachable()}} or built in modules such as
+//   - `polygon()`
+//   - `projection()`
+//   - `polyhedron()`  (or use {{vnf_polyhedron()}})
+//   - `linear_extrude()`  (or use {{linear_sweep()}})
+//   - `rotate_extrude()`
+//   - `surface()`
+//   - `import()`
+//   - `difference()`
+//   - `intersection()`
+//   - `hull()`
+//   .
+//   When you use tag-based modules like {{diff()}} with a non-attachable module, the result may be puzzling.
+//   Any time a test occurs for display of child() that test will succeed.  This means that when diff() checks
+//   to see if it should show a module it will show it, and when diff() checks to see if it should subtract the module
+//   it will subtract it.  The result will be a hole, possibly with zero-thickness edges or faces.  In order to
+//   get the correct behavior, every non-attachable module needs an invocation of force_tag, even ones
+//   that are not tagged.
+//   .
+//   For a step-by-step explanation of attachments, see the [Attachments Tutorial](Tutorial-Attachments).
+// Arguments:
+//   tag = tag string, which must not contain any spaces
+// Side Effects:
+//   Sets `$tag` to the tag you specify, possibly with a scope prefix.
+// Example(2D): This example produces the full square without subtracting the "remove" item.  When you use non-attachable modules with tags, results are unpredictable.
+//   diff()
+//   {
+//     polygon(square(10));
+//     move(-[.01,.01])polygon(square(5),$tag="remove");
+//   }
+// Example(2D): Adding force_tag() fixes the model.  Note you need to add it to *every* non-attachable module, even the untagged ones, as shown here.
+//   diff()
+//   {
+//     force_tag()
+//       polygon(square(10));
+//     force_tag("remove")
+//       move(-[.01,.01])polygon(square(5));
+//   }

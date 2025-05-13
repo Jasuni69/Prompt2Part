@@ -1,0 +1,35 @@
+function line_from_points(points, check_collinear=false, eps=EPSILON, fast) =
+    assert( is_path(points), "\nInvalid point list." )
+    assert( is_finite(eps) && (eps>=0), "\nThe tolerance should be a non-negative value." )
+    len(points) == 2
+      ? points 
+      : let(
+            dep = is_def(fast) ? echo("In line_from_points() the 'fast' parameter is deprecated; use 'check_collinear' instead.") true : false,
+            check = dep ? fast : check_collinear,
+            twod = is_path(points,2),
+            covmix = _covariance_evec_eval(path3d(points), 0), // pass 0 to use largest eigenvalue
+            pm     = covmix[0], // point mean
+            evec   = unit(covmix[1]), // normalized eigenvector corresponding to largest eigenvalue
+            maxext = let(b=pointlist_bounds(points)) norm(b[1]-b[0])/2,
+            line3d = [pm-evec*maxext, pm+evec*maxext],
+            line = twod ? path2d(line3d) : line3d
+        )
+        check && _line_greatest_distance(points,line)>eps ? undef
+        : line;
+
+
+
+// Section: Planes
+
+
+// Function: is_coplanar()
+// Synopsis: Check if 3d points are coplanar and not collinear.  
+// Topics: Geometry, Coplanarity
+// See Also: plane3pt(), plane3pt_indexed(), plane_from_normal(), plane_from_points(), plane_from_polygon()
+// Usage:
+//   bool = is_coplanar(points,[eps]);
+// Description:
+//   Returns true if the given 3D points are non-collinear and are on a plane.
+// Arguments:
+//   points = The points to test.
+//   eps = Tolerance in geometric comparisons.  Default: `EPSILON` (1e-9)

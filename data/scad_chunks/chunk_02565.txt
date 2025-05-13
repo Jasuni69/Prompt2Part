@@ -1,0 +1,1 @@
+function sqr(x) = x * x;                        //! Square x

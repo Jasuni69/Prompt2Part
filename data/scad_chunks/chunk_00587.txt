@@ -1,0 +1,1 @@
+function light_strip_cut_length(type, segs) = ceil(light_strip_length(type) * segs * light_strip_grouped(type) / light_strip_leds(type)); //! Calculate cut length given segments

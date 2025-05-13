@@ -1,0 +1,7 @@
+module NEMA_outline(type) //! 2D outline
+    intersection() {
+        side = NEMA_width(type);
+        square([side, side], center = true);
+
+        circle(NEMA_radius(type));
+    }

@@ -1,0 +1,13 @@
+module HexGrid(e=[11,4],es=5,center=true,name){
+  
+  es=is_list(es)?es:[es*sin(60),es];
+  $d=es.y;
+    Grid(e=e,es=es,center=center,name=name)
+    translate([0,
+    $idx[0]%2?is_list(es)?es[1]/2:es/2:
+            0
+    ])children();
+    MO(!$children);
+  
+  InfoTxt("HexGrid",["es",es],name);
+}

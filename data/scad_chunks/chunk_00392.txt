@@ -1,0 +1,1 @@
+function variac_bulge_dia(type)      = type[4];     //! Bulge to opposite edge

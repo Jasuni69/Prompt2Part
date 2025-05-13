@@ -1,0 +1,8 @@
+module text_lid(t, font_size, font_name, r_round_edge, lid_height, thickness, spacing) {
+    translate([0, 0, lid_height])
+    mirror([0, 0, 1])
+    box_extrude(height = lid_height, shell_thickness = thickness) 
+    mirror([0, 0, 1])
+    offset(r = spacing + thickness) 
+        minkowski_text(t, font_size, font_name, r_round_edge); 
+}

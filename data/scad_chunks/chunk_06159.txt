@@ -1,0 +1,22 @@
+function affine2d_identity() = ident(3);
+
+
+// Function: affine2d_translate()
+// Synopsis: Returns a 2D (3x3) translation transformation matrix.
+// SynTags: Mat
+// Topics: Affine, Matrices, Transforms, Translation
+// See Also: affine3d_translate(), move(), translate(), left(), right(), fwd(), back(), down(), up()
+// Usage:
+//   mat = affine2d_translate(v);
+// Description:
+//   Returns the 3x3 affine2d matrix to perform a 2D translation.
+// Arguments:
+//   v = 2D Offset to translate by.  [X,Y]
+// Example:
+//   mat = affine2d_translate([30,40]);
+//   // Returns:
+//   //   [
+//   //     [1, 0, 30],
+//   //     [0, 1, 40],
+//   //     [0, 0,  1]
+//   //   ]

@@ -1,0 +1,20 @@
+function f_neg(a) = f_1arg(function(a) -a)(a);
+
+
+
+//////////////////////////////////////////////////////////////////////
+// Section: Min/Max Operators
+
+
+// Function: f_min()
+// Synopsis: Returns a function to calculate the minimum value of a list.
+// Topics: Function Literals, Math Operators
+// See Also: f_min(), f_max(), f_min2(), f_max2(), f_min3(), f_max3()
+// Usage:
+//   fn = f_min();
+//   fn = f_min(a);
+// Description:
+//   A factory that generates function literals based on `min(a)`, where the `a`
+//   argument can optionally be replaced with a constant.
+// Arguments:
+//   a = If given, replaces the argument.

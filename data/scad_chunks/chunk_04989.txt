@@ -1,0 +1,26 @@
+module _debug_poly_edges(j,points, path,vertices,size)
+{  
+       path = default(path, count(len(points)));
+       if (vertices){
+            translate(points[path[0]]) {
+                color("cyan") up(0.1) cylinder(d=size*1.5, h=0.01, center=false, $fn=12);
+            }
+            translate(points[path[len(path)-1]]) {
+                color("pink") up(0.11) cylinder(d=size*1.5, h=0.01, center=false, $fn=4);
+            }
+        }
+        for (i = [0:1:len(path)-1]) {
+            midpt = (points[path[i]] + points[path[(i+1)%len(path)]])/2;
+            color("blue") {
+                up(0.2) {
+                    translate(midpt) {
+                        linear_extrude(height=0.1, convexity=10, center=true) {
+                            text(text=str(chr(65+j),i), size=size/2, halign="center", valign="center");
+                        }
+                    }
+                }
+            }
+        }
+ }
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

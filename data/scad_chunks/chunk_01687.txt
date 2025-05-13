@@ -1,0 +1,1 @@
+function pot_z(type, washer = true) = pot_thread_h(type) - pot_nut(type)[1] - pot_proud - (washer ? pot_washer(type)[1] : 0); //! Ideal distance behind panel surface to get the nut and washer on comfortably

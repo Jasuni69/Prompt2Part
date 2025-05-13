@@ -1,0 +1,27 @@
+function binsearch(key, list, idx, cmp=f_cmp()) =
+    let(
+        a = function(s,e)
+            let(
+                p = floor((s+e)/2),
+                ikey = is_undef(idx)? list[p] : list[p][idx],
+                c = cmp(ikey,key)
+            )
+            c == 0? p :
+            c > 0? (p == s? undef : a(s, p-1)) :
+            (p == e? undef : a(p+1, e))
+    ) a(0,len(list)-1);
+
+
+// Function: simple_hash()
+// Synopsis: Returns an integer hash of a given value.
+// Topics: Function Literals, Hashing, Data Structures
+// See Also: hashmap()
+// Usage:
+//   hx = simple_hash(x);
+// Description:
+//   Given an arbitrary value, returns the integer hash value for it.
+// Arguments:
+//   x = The value to get the simple hash value  of.
+// Example:
+//   x = simple_hash("Foobar");
+//   x = simple_hash([[10,20],[-5,3]]);

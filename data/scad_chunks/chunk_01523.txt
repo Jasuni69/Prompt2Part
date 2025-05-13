@@ -1,0 +1,1 @@
+function rd_xtal_pitch(type)  = type[3]; //! Crystal lead pitch

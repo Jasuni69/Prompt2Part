@@ -1,0 +1,1 @@
+function delaunay_circles(d) = d[2];

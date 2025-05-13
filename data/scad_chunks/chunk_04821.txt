@@ -1,0 +1,27 @@
+function pb_postProcessPathLists(data_list =[]) = [for (data=data_list)
+    let(
+        pts = pb_removeAdjacentDuplicates(data[0]),
+        steps = data[1],
+        l = len(steps),
+        first_pt = steps[1][1]==0? [] : [pts[0]],
+        last_pt = steps[l-2][1]==len(pts)-1? [] : [pts[len(pts)-1]],
+        result = [for (i = [0: len(steps)-2]) let(
+            step = data[1][i],
+            next_step = data[1][i+1],
+            start = step[1],
+            end = next_step[1],
+            fill = (step[0]==2)? pb_fillet(pts, step[1], step[2], step[3]) : [],
+            chamf = (step[0]==3)? pb_chamfer(pts, step[1], step[2]) : [],
+            post = start+1<=end-1?pb_subList(pts, start+1, end-1) : []
+        ) for (p=concat(fill, chamf, post)) p],
+        r = concat(first_pt, result, last_pt),
+        rr = concat(r, len(steps)>0 && pb_last(steps)[0]==4? [r[0]] : [])
+    ) rr];
+
+    
+//  Calculates tangent fillet for any given point in a closed points list. Flip the curve by setting the radius negative.    
+//  pts     (list)     List of 2D points.
+//  index   (number)   Index to the point for which a fillet is required.
+//  radius  (number)   Radius for the requested fillet
+//  segments(number)   Optional fixed number of segments to draw the fillet.        
+//  return  (segments) List of points representing the fillet curve that can replace the given point by index.

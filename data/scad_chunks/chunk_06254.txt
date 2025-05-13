@@ -1,0 +1,29 @@
+module torus(
+    r_maj, r_min, center,
+    d_maj, d_min,
+    or, od, ir, id,
+    anchor, spin=0, orient=UP
+) {
+    _or = get_radius(r=or, d=od, dflt=undef);
+    _ir = get_radius(r=ir, d=id, dflt=undef);
+    _r_maj = get_radius(r=r_maj, d=d_maj, dflt=undef);
+    _r_min = get_radius(r=r_min, d=d_min, dflt=undef);
+    maj_rad = is_finite(_r_maj)? _r_maj :
+        is_finite(_ir) && is_finite(_or)? (_or + _ir)/2 :
+        is_finite(_ir) && is_finite(_r_min)? (_ir + _r_min) :
+        is_finite(_or) && is_finite(_r_min)? (_or - _r_min) :
+        assert(false, "Bad Parameters");
+    min_rad = is_finite(_r_min)? _r_min :
+        is_finite(_ir)? (maj_rad - _ir) :
+        is_finite(_or)? (_or - maj_rad) :
+        assert(false, "Bad Parameters");
+    anchor = get_anchor(anchor, center, BOT, CENTER);
+    attachable(anchor,spin,orient, r=(maj_rad+min_rad), l=min_rad*2) {
+        rotate_extrude(convexity=4) {
+            right_half(s=min_rad*2, planar=true)
+                right(maj_rad)
+                    circle(r=min_rad);
+        }
+        children();
+    }
+}

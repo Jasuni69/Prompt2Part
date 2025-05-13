@@ -1,0 +1,67 @@
+function zflip(p=_NO_ARG, z=0) =
+    assert(is_finite(z))
+    assert(p==_NO_ARG || is_list(p),"Invalid point list")
+    z==0? mirror([0,0,1],p=p) :
+    let(m = up(z) * mirror(UP) * down(z))
+    p==_NO_ARG? m : apply(m, p);
+
+
+//////////////////////////////////////////////////////////////////////
+// Section: Other Transformations
+//////////////////////////////////////////////////////////////////////
+
+// Function&Module: frame_map()
+//
+// Synopsis: Rotates and possibly skews children from one frame of reference to another.
+// SynTags: Trans, Path, VNF, Mat
+// Topics: Affine, Matrices, Transforms, Rotation
+// See Also: rot(), xrot(), yrot(), zrot()
+//
+// Usage: As module
+//   frame_map(v1, v2, v3, [reverse=]) CHILDREN;
+// Usage: As function to remap points
+//   transformed = frame_map(v1, v2, v3, p=points, [reverse=]);
+// Usage: As function to return a transformation matrix:
+//   map = frame_map(v1, v2, v3, [reverse=]);
+//   map = frame_map(x=VECTOR1, y=VECTOR2, [reverse=]);
+//   map = frame_map(x=VECTOR1, z=VECTOR2, [reverse=]);
+//   map = frame_map(y=VECTOR1, z=VECTOR2, [reverse=]);
+//
+// Description:
+//   Maps one coordinate frame to another.  You must specify two or
+//   three of `x`, `y`, and `z`.  The specified axes are mapped to the vectors you supplied, so if you
+//   specify x=[1,1] then the x axis will be mapped to the line y=x.  If you
+//   give two inputs, the third vector is mapped to the appropriate normal to maintain a right hand
+//   coordinate system.  If the vectors you give are orthogonal the result will be a rotation and the
+//   `reverse` parameter will supply the inverse map, which enables you to map two arbitrary
+//   coordinate systems to each other by using the canonical coordinate system as an intermediary.
+//   You cannot use the `reverse` option with non-orthogonal inputs.  Note that only the direction
+//   of the specified vectors matters: the transformation will not apply scaling, though it can
+//   skew if your provide non-orthogonal axes.
+//
+// Arguments:
+//   x = Destination 3D vector for x axis.
+//   y = Destination 3D vector for y axis.
+//   z = Destination 3D vector for z axis.
+//   p = If given, the point, path, patch, or VNF to operate on.  Function use only.
+//   reverse = reverse direction of the map for orthogonal inputs.  Default: false
+//
+// Example:  Remap axes after linear extrusion
+//   frame_map(x=[0,1,0], y=[0,0,1]) linear_extrude(height=10) square(3);
+//
+// Example: This map is just a rotation around the z axis
+//   mat = frame_map(x=[1,1,0], y=[-1,1,0]);
+//   multmatrix(mat) frame_ref();
+//
+// Example:  This map is not a rotation because x and y aren't orthogonal
+//   frame_map(x=[1,0,0], y=[1,1,0]) cube(10);
+//
+// Example:  This sends [1,1,0] to [0,1,1] and [-1,1,0] to [0,-1,1].  (Original directions shown in light shade, final directions shown dark.)
+//   mat = frame_map(x=[0,1,1], y=[0,-1,1]) * frame_map(x=[1,1,0], y=[-1,1,0],reverse=true);
+//   color("purple",alpha=.2) stroke([[0,0,0],10*[1,1,0]]);
+//   color("green",alpha=.2)  stroke([[0,0,0],10*[-1,1,0]]);
+//   multmatrix(mat) {
+//      color("purple") stroke([[0,0,0],10*[1,1,0]]);
+//      color("green") stroke([[0,0,0],10*[-1,1,0]]);
+//   }
+//

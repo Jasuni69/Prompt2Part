@@ -1,0 +1,1 @@
+function display_threads(type)      = type[9];  //! Length that studs protrude from the PCB holes

@@ -1,0 +1,1 @@
+function smd_cap_size(type)    = type[1]; //! Body length, width

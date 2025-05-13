@@ -1,0 +1,34 @@
+function quadratic_roots(a,b,c,real=false) =
+  real ? [for(root = quadratic_roots(a,b,c,real=false)) if (root.y==0) root.x]
+  :
+  is_undef(b) && is_undef(c) && is_vector(a,3) ? quadratic_roots(a[0],a[1],a[2]) :
+  assert(is_num(a) && is_num(b) && is_num(c))
+  assert(a!=0 || b!=0 || c!=0, "Quadratic must have a nonzero coefficient")
+  a==0 && b==0 ? [] :     // No solutions
+  a==0 ? [[-c/b,0]] : 
+  let(
+      descrim = b*b-4*a*c,
+      sqrt_des = sqrt(abs(descrim))
+  )
+  descrim < 0 ?             // Complex case
+     [[-b, sqrt_des],
+      [-b, -sqrt_des]]/2/a :
+  b<0 ?                     // b positive
+     [[2*c/(-b+sqrt_des),0],
+      [(-b+sqrt_des)/a/2,0]]
+      :                     // b negative
+     [[(-b-sqrt_des)/2/a, 0],
+      [2*c/(-b-sqrt_des),0]];
+
+
+// Function: polynomial() 
+// Synopsis: Evaluate a polynomial at a real or complex value.
+// Topics: Math, Complex Numbers
+// See Also: quadratic_roots(), polynomial(), poly_mult(), poly_div(), poly_add(), poly_roots()
+// Usage:
+//   x = polynomial(p, z)
+// Description:
+//   Evaluates specified real polynomial, p, at the complex or real input value, z.
+//   The polynomial is specified as p=[a_n, a_{n-1},...,a_1,a_0]
+//   where a_n is the z^n coefficient.  Polynomial coefficients are real.
+//   The result is a number if `z` is a number and a complex number otherwise.

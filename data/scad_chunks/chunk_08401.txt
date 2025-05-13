@@ -1,0 +1,6 @@
+function _nz_worley_from(nbrs, dists) = 
+    let(
+        m = min(dists),
+        i = search(m, dists)[0]
+    )
+    [each nbrs[i], m];

@@ -1,0 +1,4 @@
+function Rotate(rotvec) =
+  AffMerge([RotZ(rotvec[0]), RotY(rotvec[1]), RotX(rotvec[2])]);
+
+// Prepare a matrix to translate by vector v.

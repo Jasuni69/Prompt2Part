@@ -1,0 +1,15 @@
+function u_add(a,b) = is_undef(a) || is_undef(b)? undef : a + b;
+
+
+// Function: u_sub()
+// Synopsis: Returns the difference of 2 numbers if both are defined, otherwise returns undef.
+// Topics: Undef Handling
+// See Also: u_add(), u_mul(), u_div()
+// Usage:
+//   x = u_sub(a, b);
+// Description:
+//   Subtracts `b` from `a`, returning the result, or undef if either value is `undef`.
+//   This emulates the way undefs used to be handled in versions of OpenSCAD before 2020.
+// Arguments:
+//   a = First value.
+//   b = Second value.

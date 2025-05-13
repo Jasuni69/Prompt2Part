@@ -1,0 +1,1 @@
+function kreisXY(r=5,grad=0)=[r*sin(grad),r*cos(grad)];//depreciated use RotLang

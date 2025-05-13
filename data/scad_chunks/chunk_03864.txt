@@ -1,0 +1,1 @@
+function XCENTER(align2=NOCHANGE,align3=NOCHANGE) = align(XCENTER,align2,align3);

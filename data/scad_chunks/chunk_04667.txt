@@ -1,0 +1,10 @@
+module internalSq(size,r,center=0){
+    tran=center==1?[0,0]:size/2;
+    translate(tran){
+      square(size,true);
+      offs=sin(45)*r;
+      for(i=[-1,1],j=[-1,1]){
+        translate([(size.x/2-offs)*i,(size.y/2-offs)*j])circle(r);
+      }
+    }
+}

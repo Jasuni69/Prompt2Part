@@ -1,0 +1,9 @@
+module capsule( cd, ch, cfn=$fn ) {
+    cdh = cd / 2;
+    chh = ch /2;
+    hull(){ 
+        translate([cdh,cdh,cdh]) sphere( d=cd, $fn=cfn );
+        translate([cdh,cdh,(ch-cdh)]) sphere( d=cd, $fn=cfn );
+    }
+}
+// quarter it

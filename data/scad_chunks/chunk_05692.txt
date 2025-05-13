@@ -1,0 +1,11 @@
+module teardrop2d(r, ang=45, cap_h, d, circum=false, realign=false, bot_corner=0, anchor=CENTER, spin=0)
+{
+    path = teardrop2d(r=r, d=d, ang=ang, circum=circum, realign=realign, cap_h=cap_h, bot_corner=bot_corner);
+    attachable(anchor,spin, two_d=true, path=path, extent=false) {
+        polygon(path);
+        children();
+    }
+}
+
+// _extrapt = true causes the point to be duplicated so a teardrop with no cap
+// has the same point count as one with a cap.

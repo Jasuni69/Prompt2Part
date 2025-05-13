@@ -1,0 +1,3 @@
+function layout_offset(widths, i, gap = 2) = //! Calculate the offset for the `i`th item
+    i == 0 ? widths[0] / 2
+           : layout_offset(widths, i - 1, gap) + widths[i - 1] / 2 + gap + widths[i] / 2;

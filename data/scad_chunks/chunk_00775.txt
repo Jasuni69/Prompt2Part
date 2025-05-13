@@ -1,0 +1,1 @@
+function smd_res_end_cap(type) = type[2]; //! End cap width

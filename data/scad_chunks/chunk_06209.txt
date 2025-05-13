@@ -1,0 +1,70 @@
+function thread_specification(screw_spec, tolerance=undef, internal=false) =
+  let( 
+       diam = _nominal_diam(screw_spec),
+       pitch = struct_val(screw_spec, "pitch"),
+       tspec = tolerance == 0 || tolerance=="none" ? _exact_thread_tolerance(diam, pitch)
+             :  struct_val(screw_spec,"system") == "ISO" ? _ISO_thread_tolerance(diam, pitch, internal, tolerance)
+             :  struct_val(screw_spec,"system") == "UTS" ? _UTS_thread_tolerance(diam, pitch, internal, tolerance)
+             :  assert(false,"Unknown screw system ",struct_val(screw_spec,"system"))
+  )
+  assert(min(struct_val(tspec,"d_minor"))>0, "Thread specification is too coarse for the diameter")
+  tspec;
+
+
+
+
+
+// recess sizing:
+// http://www.fasnetdirect.com/refguide/Machinepancombo.pdf
+//
+/*   ASME B 18.6.3
+http://www.smithfast.com/newproducts/screws/msflathead/
+
+
+/* phillips recess diagram
+
+http://files.engineering.com/getfile.aspx?folder=76fb0d5e-1fff-4c49-87a5-05979477ca88&file=Noname.jpg&__hstc=212727627.6c577ef84c12d9cc69c819eea7be49d2.1563972499721.1563972499721.1563972499721.1&__hssc=212727627.1.1563972499721&__hsfp=165344926
+
+*/
+
+
+//
+// https://www.bayoucitybolt.com/socket-head-cap-screws-metric.html
+//
+// Torx drive depth for UTS and ISO (at least missing for "flat small", which means you can't select torx for this head type)
+// Handle generic phillips (e.g. ph2) or remove it?
+
+// https://www.fasteners.eu/tech-info/ISO/7721-2/
+//
+//    JIS 
+//https://www.garagejournal.com/forum/media/jis-b-4633-vs-iso-8764-1-din-5260-ph.84492/
+
+//square:
+//https://www.aspenfasteners.com/content/pdf/square_drive_specification.pdf
+//http://www.globalfastener.com/standards/index.php?narr58=149
+//https://patents.google.com/patent/US1003657
+
+// thread standards:
+// https://www.gewinde-normen.de/en/index.html
+
+/////////////////////////////////////////////////////////////////////////////////////////*
+/////////////////////////////////////////////////////////////////////////////////////////*
+/////////////////////////////////////////////////////////////////////////////////////////*
+///  
+///  TODO list:
+///  
+///  need to make holes at actual size instead of nominal?
+///     or relative to actual size?
+///     That means I need to preserve thread= to specify this
+///  torx depth for UTS pan head
+///  $fn control
+///  phillips driver spec with ph# is confusing since it still looks up depth in tables
+///     and can give an error if it's not found
+///  torx depths missing for pan head
+///  support for square drive?  (It's in the ASME standard)
+///  
+/////////////////////////////////////////////////////////////////////////////////////////*
+/////////////////////////////////////////////////////////////////////////////////////////*
+/////////////////////////////////////////////////////////////////////////////////////////*
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

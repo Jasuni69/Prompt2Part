@@ -1,0 +1,32 @@
+module heart_with_ears(heart_width, thickness, spacing) {
+    module ear(radius, thickness, spacing) {
+        width = radius / 1.5;
+        
+        linear_extrude(thickness) 
+            arc(radius, [0, 240], width, "LINE_OUTWARD");
+            
+        translate([0, 0, thickness + spacing]) 
+        linear_extrude(thickness) 	
+            arc(radius, [240, 360], width, "LINE_OUTWARD");
+            
+        linear_extrude(thickness * 2 + spacing) 
+            arc(radius, [0, 20], width, "LINE_OUTWARD");
+    }
+    
+	heart_radius = 0.5 * heart_width / (1 + cos(45));
+	ring_radius = heart_radius / 3;
+	ring_x = (heart_width / 2 + spacing) * 1.075;
+    ring_y = heart_radius * sin(60);
+	ring_thickness = 0.5 * (thickness - spacing);
+	
+	linear_extrude(thickness) 
+	    heart(heart_radius, center = true);
+
+	translate([ring_x, ring_y, 0]) 
+    rotate(-40) 
+        ear(ring_radius, ring_thickness, spacing); 
+
+	translate([-ring_x, ring_y, 0]) 
+    rotate(125) 
+        ear(ring_radius, ring_thickness, spacing);
+}

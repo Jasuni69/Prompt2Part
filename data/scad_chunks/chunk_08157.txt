@@ -1,0 +1,5 @@
+module test_convex_hull2(poly) {
+    assert(poly == [[-2, 1], [-1, -1], [1, 0], [1, 1]]);
+}
+
+test_polygon_hull();

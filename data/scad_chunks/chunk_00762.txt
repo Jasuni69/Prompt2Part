@@ -1,0 +1,10 @@
+function psu_face_transform(type, face) =           //! Returns a transformation matrix to get to the specified face
+    let(l = psu_length(type),
+        w = psu_width(type),
+        h = psu_height(type),
+        f = psu_faces(type)[face],
+        left = psu_left_bay(type),
+        right = psu_right_bay(type),
+        rotations = [[180, 0, 0], [0, 0, 0], [90, 0, -90], [90, 0, 90], [90, 0, 0], [-90, 0, 0]],
+        translations = [h / 2, h / 2, l / 2 - left, l / 2 - right, w / 2, w / 2]
+    ) translate([0, 0, h / 2]) * rotate(rotations[face]) * translate([0, 0, translations[face]]);

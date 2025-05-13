@@ -1,0 +1,3 @@
+module thermal_cutouts()
+    layout([for(t = thermal_cutouts) tc_length(t)], 5, true)
+        thermal_cutout(thermal_cutouts[$i]);

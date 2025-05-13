@@ -1,0 +1,9 @@
+module test_modang() {
+    assert_equal(modang(-700), 20);
+    assert_equal(modang(-270), 90);
+    assert_equal(modang(-120), -120);
+    assert_equal(modang(120), 120);
+    assert_equal(modang(270), -90);
+    assert_equal(modang(700), -20);
+}
+test_modang();

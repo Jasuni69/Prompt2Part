@@ -1,0 +1,18 @@
+module squircle(size, squareness=0.5, style="fg", anchor=CENTER, spin=0, atype="box" ) {
+    check = assert(squareness >= 0 && squareness <= 1);
+    anchorchk = assert(in_list(atype, ["box", "perim"]));
+    size = is_num(size) ? [size,size] : point2d(size);
+    assert(all_positive(size), "All components of size must be positive.");
+    path = squircle(size, squareness, style, atype="box");
+    if (atype == "box") {
+        attachable(anchor, spin, two_d=true, size=size, extent=false) {
+            polygon(path);
+            children();
+        }
+    } else { // atype=="perim"
+        attachable(anchor, spin, two_d=true, extent=true, path=path) {
+            polygon(path);
+            children();
+        }
+    }
+}

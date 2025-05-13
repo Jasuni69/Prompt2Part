@@ -1,0 +1,13 @@
+module test_is_letter() {
+    for (i=[32:126]) {
+        if (
+            (i>=ord("A") && i <=ord("Z")) ||
+            (i>=ord("a") && i <=ord("z"))
+        ) {
+            assert(is_letter(chr(i)));
+        } else {
+            assert(!is_letter(chr(i)));
+        }
+    }
+}
+test_is_letter();

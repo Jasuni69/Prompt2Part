@@ -1,0 +1,8 @@
+module strap_end_assembly(type = strap)
+assembly("strap_end", ngb = true) {
+    stl_colour(pp1_colour)
+        strap_end(type);
+
+    translate_z(strap_height(type) + strap_key(type))
+        insert(strap_insert(type));
+}

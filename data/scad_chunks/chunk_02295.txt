@@ -1,0 +1,3 @@
+module 2screw_block_h_hole(screw = def_screw, short_insert = false) //! Place children at the front screw hole
+    multmatrix(2screw_block_h_hole(screw, short_insert))
+        children();

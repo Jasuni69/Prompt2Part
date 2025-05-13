@@ -1,0 +1,10 @@
+function carve_right(x, y, z, cells) = 
+    let(cell = cells[z][y][x])
+    update(
+        cells, 
+        z_y_x_wall(cell) ? [x, y, z, Z_Y_WALL, VISITED] :
+        z_x_wall(cell)   ? [x, y, z, Z_WALL, VISITED] : 
+        y_x_wall(cell)   ? [x, y, z, Y_WALL, VISITED] : [x, y, z, NO_WALL, VISITED]
+    );
+
+// go top and carve the top wall

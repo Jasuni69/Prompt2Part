@@ -1,0 +1,1 @@
+function mains_socket_counterbore(type) = type[10];  //! Screw counterbore

@@ -1,0 +1,7 @@
+module Flower(e=8,n=15,r=10,r2=0,min=5,fn=720,name,help){
+points=[for(f=[+0:fn])let(i=f*360/fn)RotLang(i,r2+max(min-r2,(r-r2)*pow(abs(sin(e*.5*i)),2/n)))];
+
+polygon(points,convexity=5);
+
+HelpTxt("Flower",["e",e,"n",n,"r",r,"r2",r2,"min",min,"fn",fn,"name",name],help);
+}

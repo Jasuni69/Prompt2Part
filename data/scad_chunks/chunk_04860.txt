@@ -1,0 +1,4 @@
+function _pb_forward(last=[0,0], args=[], rel=false, angle) = let(
+        l = len(args), p1 = last, d = l==1? args[0] : 0.001, p2 = p1+[sin(angle)*d, cos(angle)*d],
+        bds = [for(b=l==1? [] : l==2? [[args[0]-1,args[1]],[args[0],args[1]],[args[0],args[1]+1]] : pb_groupsOf(2, args)[1]) rel? last+b : b],
+        pt = l==1? [[p2]] : l>1? pb_intersectLineWithPolyline([p1,p2],bds,true,true, false, l==2?undef:true) : [[[]]]) [len(pt)>0?[pt[0][0]]:[],[],angle,[[],[]]];

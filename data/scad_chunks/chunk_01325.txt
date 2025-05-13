@@ -1,0 +1,53 @@
+function NIUGUY_CB_PSU(id, name, s /*size*/, c=10/*corner*/) =
+    [id, name, // ID and Name
+    s.x, s.y, s.z, // Size
+    false, 2.5, // Screw type and hole radius
+    false, // true if ATX
+    0, 0, // left and right bays
+    false, // terminals
+    NIUGUY_CB_PCB([s.x, s.y, 1.6], 0.5, 0.5, 2, 2), // pcb
+    [ // parameters are: holes, thickness, cutouts, grill, fans, iec, switch, vents, panel cutout
+        // bottom
+        [ [[s.x/2 - 4, s.y/2 - 7.5, [5, 0]], [-s.x/2 + 4, -s.y/2 + 7.5, [-5, 0] ], ], 1.5, [] ], // two slots cutout for screws
+        // top
+        [ [], 0.5,  [
+                        [ [-s.x/2 + 20, -s.y/2], [-s.x/2 + 20, s.y/2], [-s.x/2, s.y/2], [-s.x/2, -s.y/2] ],
+                        [ [ s.x/2 - 20, -s.y/2], [ s.x/2 - 20, s.y/2], [ s.x/2, s.y/2], [ s.x/2, -s.y/2] ]
+                    ], [5.5, 1, 6, [50, 30, 6, 6], []] ], // grill
+        // left
+        [ [], 0.5,  [
+                        [ [s.y/2, s.z/2], [s.y/2, -s.z/2 + 3], [-s.y/2, -s.z/2 + 3], [-s.y/2, s.z/2] ], // +3 is for placement of pcb
+                        [ [s.y/2, s.z/2], [s.y/2, -s.z/2], [-s.y/2, -s.z/2], [-s.y/2, s.z/2] ],
+                    ] ],
+        // right
+        [ [], 0.5,  [
+                        [ [-s.y/2, -s.z/2], [s.y/2, -s.z/2], [s.y/2, s.z/2], [-s.y/2, s.z/2] ],
+                    ] ],
+        // front
+        [ [], 2.0,  [
+                        [ [-s.x/2, s.z/2 - c], [-s.x/2, s.z/2], [-s.x/2 + c, s.z/2] ],
+                        [ [ s.x/2, s.z/2 - c], [ s.x/2, s.z/2], [ s.x/2 - c, s.z/2] ]
+                    ], [4.5, 1.5, 6, [15, 15, 4, 8], []] ], // grill
+        // back
+        [ [], 2.0,  [
+                        [ [-s.x/2, -s.z/2 + c], [-s.x/2, -s.z/2], [-s.x/2 + c, -s.z/2] ],
+                        [ [ s.x/2, -s.z/2 + c], [ s.x/2, -s.z/2], [ s.x/2 - c, -s.z/2] ]
+                    ] ],
+    ],
+    [] // accessories for BOM
+];
+
+NG_CB_200W_24V = NIUGUY_CB_PSU("NG_CB_200W_24V", "NIUGUY CB-200W-24V", [178, 50, 22]);
+NG_CB_500W_24V = NIUGUY_CB_PSU("NG_CB_500W_24V", "NIUGUY CB-500W-24V", [238, 50, 22]);
+
+External =
+    ["External", "X Box", 0, 0, 0, false, false, false, 0, 0, [], false,
+        [],
+        [": IEC mains lead"]
+    ];
+
+psus = [NG_CB_200W_24V, NG_CB_500W_24V, PD_150_12, S_250_48, S_300_12, ATX300, ATX500];
+
+psus_not_shown = [KY240W];
+
+use <psu.scad>

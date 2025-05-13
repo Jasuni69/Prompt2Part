@@ -1,0 +1,8 @@
+function is_vnf_list(x) = is_list(x) && all([for (v=x) is_vnf(v)]);
+
+
+// Function: vnf_vertices()
+// Synopsis: Returns the list of vertex points from a VNF.
+// Topics: VNF Manipulation
+// See Also: is_vnf(), is_vnf_list(), vnf_faces()
+// Description: Given a VNF structure, returns the list of vertex points.

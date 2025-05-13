@@ -1,0 +1,15 @@
+function _prototype_geomInfo_currentPartStack() = _prototype_PackedGeomerty() [6];
+
+//function _prototype_geomInfo_noHull() = _prototype_PackedGeomerty() [1];
+
+
+$type_geomInfoSolid =  typeOf(_prototype_geomInfo_solid());
+$type_geomInfoTube = typeOf(_prototype_geomInfo_Tube());
+$type_geomInfoChamfer = typeOf(_prototype_geomInfo_Chamfer());
+$type_geomInfoAlign = typeOf(_prototype_geomInfo_Align());
+$type_geomInfoStacking = typeOf(_prototype_geomInfo_Stacking());
+$type_geomInfoHeight = typeOf(_prototype_geomInfo_Height());
+$type_currentPartStack= typeOf(_prototype_geomInfo_currentPartStack());
+//$type_geomInfoNoHull =  typeOf(_prototype_geomInfo_solid());
+
+$type_geomInfoPacked = typeOf(_prototype_PackedGeomerty());

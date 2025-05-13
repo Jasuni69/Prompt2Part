@@ -1,0 +1,6 @@
+module test_affine2d_zrot() {
+    for(a = [-360:2/3:360]) {
+        assert(affine2d_zrot(a) == [[cos(a),-sin(a),0],[sin(a),cos(a),0],[0,0,1]]);
+    }
+}
+test_affine2d_zrot();

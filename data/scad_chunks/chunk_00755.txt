@@ -1,0 +1,1 @@
+function atx_psu(type)               = type[7];     //! True if an ATX style PSU

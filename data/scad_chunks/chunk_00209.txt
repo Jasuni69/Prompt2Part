@@ -1,0 +1,49 @@
+        [ 28,  102, -90, "rd_xtal", C_002RX, "60KHz", 3, inch(0.1) ],
+
+        [ 30,  130,-90, "rd_xtal", ACT1100, "40MHz", 0.5 ],
+        [ 30,  150,-90, "rd_xtal", ACT1700, "80MHz", 0.5 ],
+
+        [ 93,  230,-90, "rd_box_cap", BOXC18x10x16, "X2 rated film capacitor", "0.47uF 250V" ],
+        [ 93,  210,-90, "rd_box_cap", BOXC18x5x11,  "X2 rated film capacitor", "0.1uF 250V" ],
+
+        [ 77,  15, -90, "flex"],
+        [ 95,  15, -90, "flat_flex"],
+        [ 87,  15, -90, "flat_flex", true],
+
+        [ 47,  55,   0, "molex_hdr", 2],
+        [ 51,  48,   0, "molex_hdr", 2, 1],
+        [ 51,  41,   0, "molex_hdr", 2, -1],
+        [ 45,  65,   0, "jst_xh", 2],
+        [ 54,  65,   0, "jst_ph", 2],
+        [ 61,  65,   0, "jst_zh", 2],
+
+        [ 50,  75, 180, "term254", 3],
+        [ 63,  75, 180, "term254", 3, undef, grey(20)],
+        [ 75,  75, 180, "gterm508",2, undef, "blue"],
+
+        [ 50,  90, 180, "gterm35", 4, [1,2]],
+        [ 63,  90, 180, "gterm35", 4, [1,2], "red"],
+        [ 75,  90, 180, "gterm", gt_5x11, 3],
+        [ 90,  90, 180, "gterm", gt_5x17, 3, [1], "red"],
+
+        [ 55, 110, 180, "gterm635", 2],
+        [ 75, 110, 180, "gterm635", 2, undef, "blue"],
+        [ 90, 110, 180, "gterm", gt_5x17, 2, undef, grey(20)],
+
+        [ 50, 130, 180, "term35", 4],
+        [ 70, 130, 180, "term35", 3, "lime"],
+        [ 50, 150,   0, "transition", 5],
+        [ 50, 160,   0, "block", 10, 5, 8, "orange"],
+        [ 45, 170,   0, "button_6mm"],
+        [ 55, 170,   0, "button_4p5mm"],
+        [ 50, 185,   0, "microswitch", small_microswitch],
+        [ 52, 200,   0, "pcb", 11, TMC2130 ],
+        [ 76, 210,   0, "pdip", 24, "27C32", true, inch(0.6) ],
+        [ 80, 180,   0, "pdip", 8, "NE555" ],
+        [ 71, 180,   0, "smd_inductor", IND2525, "4R7"],
+
+        [ 87, 166, -90, "smd_soic", SOIC18, "PIC18F88"],
+        [ 78, 166, -90, "smd_soic", SOIC14, "74HC00"],
+        [ 71, 166, -90, "smd_soic", SOIC16, "ICL323"],
+        [ 64, 166, -90, "smd_soic", SOIC8, "M34063"],
+        [ 70, 150,   0, "chip", 10, 5, 1, grey(20)],

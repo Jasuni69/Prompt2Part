@@ -1,0 +1,1 @@
+function peano_curve         (levels=4,  step=1) = lsystem_turtle(levels=levels, step=step, angle=90,  "X",         [["X","XFYFX+F+YFXFY-F-XFYFX"], ["Y","YFXFY-F-XFYFX+F+YFXFY"]]);

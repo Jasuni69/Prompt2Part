@@ -1,0 +1,69 @@
+function mask2d_ogee(pattern, excess=0.01, anchor=CENTER, spin=0) =
+    assert(is_list(pattern))
+    assert(len(pattern)>0)
+    assert(len(pattern)%2==0,"pattern must be a list of TYPE, VAL pairs.")
+    assert(all([for (i = idx(pattern,step=2)) in_list(pattern[i],["step","xstep","ystep","round","fillet"])]))
+    let(
+        x = concat([0], cumsum([
+            for (i=idx(pattern,step=2)) let(
+                type = pattern[i],
+                val = pattern[i+1]
+            ) (
+                type=="step"?   val.x :
+                type=="xstep"?  val :
+                type=="round"?  val :
+                type=="fillet"? val :
+                0
+            )
+        ])),
+        y = concat([0], cumsum([
+            for (i=idx(pattern,step=2)) let(
+                type = pattern[i],
+                val = pattern[i+1]
+            ) (
+                type=="step"?   val.y :
+                type=="ystep"?  val :
+                type=="round"?  val :
+                type=="fillet"? val :
+                0
+            )
+        ])),
+        tot_x = last(x),
+        tot_y = last(y),
+        data = [
+            for (i=idx(pattern,step=2)) let(
+                type = pattern[i],
+                val = pattern[i+1],
+                pt = [x[i/2], tot_y-y[i/2]] + (
+                    type=="step"?   [val.x,-val.y] :
+                    type=="xstep"?  [val,0] :
+                    type=="ystep"?  [0,-val] :
+                    type=="round"?  [val,0] :
+                    type=="fillet"? [0,-val] :
+                    [0,0]
+                )
+            ) [type, val, pt]
+        ],
+        path = [
+            [tot_x,-excess],
+            [-excess,-excess],
+            [-excess,tot_y],
+            for (pat = data) each
+                pat[0]=="step"?  [pat[2]] :
+                pat[0]=="xstep"? [pat[2]] :
+                pat[0]=="ystep"? [pat[2]] :
+                let(
+                    r = pat[1],
+                    steps = segs(abs(r)),
+                    step = 90/steps
+                ) [
+                    for (i=[0:1:steps]) let(
+                        a = pat[0]=="round"? (180+i*step) : (90-i*step)
+                    ) pat[2] + abs(r)*[cos(a),sin(a)]
+                ]
+        ],
+        path2 = deduplicate(path)
+    ) reorient(anchor,spin, two_d=true, path=path2, p=path2);
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

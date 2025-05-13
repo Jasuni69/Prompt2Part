@@ -1,0 +1,43 @@
+module rcube(size=[1,1,1], r=0.25, center=false) {
+	deprecate("rcube()", "cuboid()");
+	cuboid(size=size, fillet=r, align=center? V_CENTER : V_UP);
+}
+
+
+
+// Section: Prismoids
+
+
+// Module: prismoid()
+//
+// Description:
+//   Creates a rectangular prismoid shape.
+//
+// Usage:
+//   prismoid(size1, size2, h, [shift], [orient], [align|center]);
+//
+// Arguments:
+//   size1 = [width, length] of the axis-negative end of the prism.
+//   size2 = [width, length] of the axis-positive end of the prism.
+//   h = Height of the prism.
+//   shift = [x, y] amount to shift the center of the top with respect to the center of the bottom.
+//   orient = Orientation of the prismoid.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Z`.
+//   align = Alignment of the prismoid by the axis-negative (size1) end.  Use the `V_` constants from `constants.scad`.  Default: `ALIGN_POS`.
+//   center = If given, overrides `align`.  A true value sets `align=V_CENTER`, false sets `align=ALIGN_POS`.
+//
+// Example: Rectangular Pyramid
+//   prismoid(size1=[40,40], size2=[0,0], h=20);
+// Example: Prism
+//   prismoid(size1=[40,40], size2=[0,40], h=20);
+// Example: Truncated Pyramid
+//   prismoid(size1=[35,50], size2=[20,30], h=20);
+// Example: Wedge
+//   prismoid(size1=[60,35], size2=[30,0], h=30);
+// Example: Truncated Tetrahedron
+//   prismoid(size1=[10,40], size2=[40,10], h=40);
+// Example: Inverted Truncated Pyramid
+//   prismoid(size1=[15,5], size2=[30,20], h=20);
+// Example: Right Prism
+//   prismoid(size1=[30,60], size2=[0,60], shift=[-15,0], h=30);
+// Example(FlatSpin): Shifting/Skewing
+//   prismoid(size1=[50,30], size2=[20,20], h=20, shift=[15,5]);

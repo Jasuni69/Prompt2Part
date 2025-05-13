@@ -1,0 +1,11 @@
+function pb_is_2d(p=[]) = is_list(p) && len(p)==2 && is_num(p[0]) && is_num(p[1]);
+
+//  function is_between(v1, v, v2)
+//
+//  Tests if value v is between or equal to v1 and v2. It does not matter if v1 is greater than v2 or vice versa.
+//  v1  (number or list) Defines one of the two value boundaries. Value can be a number or a list representing a 2D point.
+//  v   (number or list) Defines one value to be tested against v1 and v2. It does not matter
+//  v2  (number or list) Defines one of the two value boundaries. Value can be a number or a list representing a 2D point.
+//  return  (bool)
+//      false if the value v is outside the boundaries v1 and v2.
+//      true  if the value is inside the boundaries v1 and v2.

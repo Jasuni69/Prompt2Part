@@ -1,0 +1,89 @@
+module path_extrude2d(path, caps=false, closed=false, s, convexity=10) {
+    req_children($children);
+    extra_ang = 0.1; // Extra angle for overlap of joints
+    check =
+       assert(caps==false || closed==false, "Cannot have caps on a closed extrusion")
+       assert(is_path(path,2));
+    path = deduplicate(path);
+    s = s!=undef? s :
+        let(b = pointlist_bounds(path))
+        norm(b[1]-b[0]);
+    check2 = assert(is_finite(s));
+    L = len(path);
+    attachable(){
+      union(){
+        for (i = [0:1:L-(closed?1:2)]) {
+            seg = select(path, i, i+1);
+            segv = seg[1] - seg[0];
+            seglen = norm(segv);
+            translate((seg[0]+seg[1])/2) {
+                rot(from=BACK, to=segv) {
+                    difference() {
+                        xrot(90) {
+                            linear_extrude(height=seglen, center=true, convexity=convexity) {
+                                children();
+                            }
+                        }
+                        if (closed || i>0) {
+                            pt = select(path, i-1);
+                            pang = v_theta(rot(from=-segv, to=RIGHT, p=pt - seg[0]));
+                            fwd(seglen/2+0.01) zrot(pang/2) cube(s, anchor=BACK);
+                        }
+                        if (closed || i<L-2) {
+                            pt = select(path, i+2);
+                            pang = v_theta(rot(from=segv, to=RIGHT, p=pt - seg[1]));
+                            back(seglen/2+0.01) zrot(pang/2) cube(s, anchor=FWD);
+                        }
+                    }
+                }
+            }
+        }
+        for (t=triplet(path,wrap=closed)) {
+            ang = -(180-vector_angle(t)) * sign(_point_left_of_line2d(t[2],[t[0],t[1]]));
+            delt = point3d(t[2] - t[1]);
+            if (ang!=0)
+                translate(t[1]) {
+                    frame_map(y=delt, z=UP)
+                        rotate(-sign(ang)*extra_ang/2)
+                            rotate_extrude(angle=ang+sign(ang)*extra_ang)
+                                if (ang<0)
+                                    right_half(planar=true) children();
+                                else
+                                    left_half(planar=true) children();                          
+                }
+                    
+        }
+        if (caps) {
+            bseg = select(path,0,1);
+            move(bseg[0])
+                rot(from=BACK, to=bseg[0]-bseg[1])
+                    rotate_extrude(angle=180)
+                        right_half(planar=true) children();
+            eseg = select(path,-2,-1);
+            move(eseg[1])
+                rot(from=BACK, to=eseg[1]-eseg[0])
+                    rotate_extrude(angle=180)
+                        right_half(planar=true) children();
+        }
+      }
+      union();
+    }
+}
+
+
+// Module: path_extrude()
+// Synopsis: Extrudes 2D children along a 3D path.
+// SynTags: Geom
+// Topics: Paths, Extrusion, Miscellaneous
+// See Also: path_sweep(), path_extrude2d()
+// Usage:
+//   path_extrude(path, [convexity], [clipsize]) 2D-CHILDREN;
+// Description:
+//   Extrudes 2D children along a 3D path.  This may be slow and can have problems with twisting.  
+// Arguments:
+//   path = Array of points for the bezier path to extrude along.
+//   convexity = Maximum number of walls a ray can pass through.
+//   clipsize = Increase if artifacts are left.  Default: 100
+// Example(FlatSpin,VPD=600,VPT=[75,16,20]):
+//   path = [ [0, 0, 0], [33, 33, 33], [66, 33, 40], [100, 0, 0], [150,0,0] ];
+//   path_extrude(path) circle(r=10, $fn=6);

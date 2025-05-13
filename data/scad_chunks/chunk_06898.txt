@@ -1,0 +1,15 @@
+module sphere_OK(style)
+{
+    R=10;
+    vnf_in = spheroid(r=R, style=style, circum=false, $fn=32);
+    vnf_out = spheroid(r=R, style=style, circum=true, $fn=32);
+    true_vol = 4/3*PI*R^3;
+    vol_error_in = vnf_volume(vnf_in)/true_vol-1;
+    vol_error_out = vnf_volume(vnf_out)/true_vol-1;
+    for (v=vnf_in[0]) assert(approx(norm(v),R),str("Point not on sphere for style ",style));
+    for (face=vnf_out[1])
+       assert(approx(R,norm(plane_closest_point(plane_from_points(select(vnf_out[0],face)), [0,0,0]))),
+              str("face not tangent for style ",style));
+    assert(abs(vol_error_in)<.023 && vol_error_in<0, str("Volume rel error of sphere style ",style," for circum=false is ",vol_error_in));
+    assert(abs(vol_error_out)<.013 && vol_error_out>0, str("Volume rel error of sphere style ",style," for circum=true is ",vol_error_out));
+}

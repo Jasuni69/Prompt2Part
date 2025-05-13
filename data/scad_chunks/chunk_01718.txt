@@ -1,0 +1,16 @@
+module usb_A_tongue() {
+    l = 9;
+    w = 12;
+    h = 2;
+
+    color("white")
+        translate([-1, 0 , h / 2])
+            rotate([90, 0, 90])
+                hull() {
+                    linear_extrude(l - 2)
+                        square([w, h], center = true);
+
+                    linear_extrude(l)
+                        square([w - 1, h - 1], center = true);
+                }
+}

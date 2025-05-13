@@ -1,0 +1,25 @@
+function _validate_texture(texture) =
+    is_vnf(texture)
+      ? let( // Validate VNF tile texture
+            bounds = pointlist_bounds(texture[0]),
+            min_xy = point2d(bounds[0]),
+            max_xy = point2d(bounds[1])
+        )
+        assert(all_nonnegative(concat(min_xy,[1,1]-max_xy)), "VNF tile X and Y components must be between 0 and 1.")
+        let(
+            verts = texture[0],
+            uedges = _get_vnf_tile_edges(texture),
+            edge_verts = [for (i = unique(flatten(uedges))) verts[i] ],
+            hverts = [for(v = edge_verts) if(v.x==0 || v.x==1) v],
+            vverts = [for(v = edge_verts) if(v.y==0 || v.y==1) v],
+            allgoodx = all(hverts, function(v) any(hverts, function(w) approx(w,[1-v.x, v.y, v.z]))),
+            allgoody = all(vverts, function(v) any(vverts, function(w) approx(w,[v.x, 1-v.y, v.z])))
+        )
+        assert(allgoodx && allgoody, "All VNF tile edge vertices must line up with a vertex on the opposite side of the tile.")
+        true
+      : // Validate heightfield texture.
+        assert(is_matrix(texture), "Malformed texture.")
+        let( tex_dim = list_shape(texture) )
+        assert(len(tex_dim) == 2, "Heightfield texture must be a 2D square array of scalar heights.")
+        assert(all_defined(tex_dim), "Heightfield texture must be a 2D square array of scalar heights.")
+        true;

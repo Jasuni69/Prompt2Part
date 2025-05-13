@@ -1,0 +1,9 @@
+module q(cx, cy, x, y, n=$pb_spline){
+    args = is_num(cx)? [cx, cy, x, y] : cx;
+    data = _pb_quadratic(pb_last($pb_pts), args, true, $pb_angle);
+    $pb_pts = concat($pb_pts, data[0]);
+    $pb_angle = data[2];
+    $pb_ctrl_pts = data[3];
+    if (pb_do_render($children, parent_module(0))) pb_draw();
+    children();     
+}

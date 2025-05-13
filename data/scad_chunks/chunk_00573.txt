@@ -1,0 +1,29 @@
+module comp_spring(type, l = 0, center = false) { //! Draw specified spring, l can be set to specify the compressed length.
+    length = spring_length(type);
+    closed = spring_closed(type);
+    od = spring_od(type);
+    od2 = spring_od2(type);
+    gauge = spring_gauge(type);
+    ground = spring_ground(type);
+    vitamin(str("comp_spring(", type[0], arg(l, 0),
+                "): Spring ", od, od != od2 ? str(" - ", od2, "mm spiral") : "mm", " OD, ", gauge, "mm gauge x ",
+                length, "mm long, ",
+                closed ? "closed" : "open",
+                ground ? " ground" : "", " end" ));
+
+    mesh = len(type) > 9 ? spring_mesh(type) : spring_mesh(comp_spring(type, l));
+    assert(l == mesh[2], "can't change the length of a pre-generated spring");
+    len = l ? l : length;
+    translate_z(center ? - len / 2 : 0) {
+        color(spring_colour(type))
+            if(ground)
+                clip(zmin = 0, zmax = h)
+                    polyhedron(mesh[0], mesh[1]);
+            else
+                polyhedron(mesh[0], mesh[1]);
+
+        if($children)
+            translate_z(len)
+                children();
+    }
+}

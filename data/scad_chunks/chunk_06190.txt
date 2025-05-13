@@ -1,0 +1,13 @@
+function _exact_thread_tolerance(d,P) =
+   let(
+       H = P*sqrt(3)/2,
+       basic_minordiam = d - 5/4*H,
+       basic_pitchdiam = d - 3/4*H
+      )
+    [["pitch", P], ["d_major", [d,d]], ["d_pitch", [basic_pitchdiam,basic_pitchdiam]], ["d_minor", [basic_minordiam,basic_minordiam]],
+     ["basic", [basic_minordiam, basic_pitchdiam, d]]];
+
+
+// Takes a screw name as input and returns a list of the form
+// [system, diameter, thread, length]
+// where system is either "english" or "metric".

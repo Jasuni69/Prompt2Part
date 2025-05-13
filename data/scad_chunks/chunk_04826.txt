@@ -1,0 +1,30 @@
+function pb_curveBetweenPoints(p1=[], p2=[], radius=0, segments=0) = radius==0? [p1,p2] : let(
+    d = norm(p2-p1),
+    r = abs(radius),
+    e = assert(r*2>=d, str("Radius:",r," is too small for distance:",d)),
+    x3 = (p1[0] + p2[0])/2,
+    y3 = (p1[1] + p2[1])/2,
+    base = sqrt(pow(r,2) - pow((d / 2),2)),
+    basex = base * (p1[1] - p2[1]) / d,
+    basey = base * (p2[0] - p1[0]) / d,
+    pc = radius > 0? [x3 - basex, y3 - basey] : [x3 + basex, y3 + basey],
+    a1 = atan2(p1[0]-pc[0], p1[1]-pc[1]),
+    a2 = atan2(p2[0]-pc[0], p2[1]-pc[1]),
+    da = a2 - a1 % 360,
+    cda = da<-180? 360 + da : da>180? -360 + da : da,
+    //steps = floor(abs(cda*($fn==0? 1/$fa : $fn/360))),
+    steps = segments==0? floor(abs(cda * pb_segmentsPerCircle(radius) / 360)) : segments,
+    sa = cda/steps,
+    pts = steps<=2? [p1,p2] : [p1,for(i=[1:steps-1]) [sin(a1 + (sa * i)) * r + pc[0], cos(a1 + (sa * i)) * r + pc[1]],p2]
+) [pts,sign(sa)*90+a1+cda, pc];
+
+
+
+//  function pb_bezier_quadratic_curve(p0, c, p1, n)
+//
+//  Generates a Bezier quadratic curve from p0 to p1 using a single control point c. The curve is approximated by a 2D point list containing n points.
+//  p0      (list)   List of two numbers representing the 2D start point of the curve.
+//  c       (list)   List of two numbers representing a 2D control point shaping the curve and defines both entry and exit tangents.
+//  p1      (list)   List of two numbers representing the 2D end point of the curve.
+//  n       (number) The number of points that should be returned.
+//  return  (list)   List of 2D points resembling the quadratic curve.

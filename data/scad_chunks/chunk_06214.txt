@@ -1,0 +1,9 @@
+module cube(size=1, center, anchor, spin=0, orient=UP)
+{
+    anchor = get_anchor(anchor, center, -[1,1,1], -[1,1,1]);
+    size = force_list(size,3);      // Native cube prints a warning and gives a unit cube when parameters are bogus
+    attachable(anchor,spin,orient, size=is_vector(size,3)?size:[1,1,1]) {
+        _cube(size, center=true);
+        children();
+    }
+}

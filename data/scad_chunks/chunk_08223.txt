@@ -1,0 +1,6 @@
+module test_rounded_square_size_corner() {
+    echo("==== test_rounded_square_size_corner ====");
+    rounded_square(size = 50, corner_r = 5);
+}
+
+test_rounded_square_size_corner();

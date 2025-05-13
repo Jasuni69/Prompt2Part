@@ -1,0 +1,4 @@
+function minimum(a,componentIndex, i = 0) = (i < len(a) - 1)
+        ? min(a[i][componentIndex], minimum(a,componentIndex, i +1)) : a[i][componentIndex];
+
+//adds an element to a vector

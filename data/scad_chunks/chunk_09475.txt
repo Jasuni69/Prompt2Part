@@ -1,0 +1,12 @@
+function get_radius(r1=undef, r=undef, d1=undef, d=undef, dflt=undef) = (
+	is_def(r1)? r1 :
+	is_def(d1)? d1/2 :
+	is_def(r)? r :
+	is_def(d)? d/2 :
+	dflt
+);
+
+
+// Function: Len()
+// Description:
+//   Given an array, returns number of items in array.  Otherwise returns `undef`.

@@ -1,0 +1,1 @@
+function clamp(v,lower_bound,upper_bound) = min(max(v,lower_bound),upper_bound);

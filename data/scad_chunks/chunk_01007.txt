@@ -1,0 +1,1 @@
+function gt_height(type)       = type[3];   //! Height of the flat top

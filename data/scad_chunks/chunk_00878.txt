@@ -1,0 +1,1 @@
+function heater_height(type) = type[2];

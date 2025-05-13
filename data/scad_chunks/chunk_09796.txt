@@ -1,0 +1,53 @@
+module xrot_copies(rots=[], cp=[0,0,0], n=undef, count=undef, sa=0, offset=0, r=0, subrot=true)
+{
+	cnt = first_defined([count, n]);
+	sang = sa + offset;
+	rot_copies(rots=rots, v=V_RIGHT, cp=cp, n=cnt, sa=sang, delta=[0, r, 0], subrot=subrot) children();
+}
+
+
+// Module: yrot_copies()
+//
+// Description:
+//   Given an array of angles, rotates copies of the children
+//   to each of those angles around the Y axis.
+//
+// Usage:
+//   yrot_copies(rots, [r], [cp], [sa], [subrot]) ...
+//   yrot_copies(n, [r], [cp], [sa], [subrot]) ...
+//
+// Arguments:
+//   rots = Optional array of rotation angles, in degrees, to make copies at.
+//   cp = Centerpoint to rotate around.
+//   n = Optional number of evenly distributed copies to be rotated around the ring.  If given, overrides `rots` argument.
+//   sa = Starting angle, in degrees.  For use with `n`.  Angle is in degrees counter-clockwise from X-, when facing the origin from Y+.
+//   r = Radius to move children left, away from cp, before rotating.  Makes rings of copies.
+//   subrot = If false, don't sub-rotate children as they are copied around the ring.
+//
+// Side Effects:
+//   `$ang` is set to the rotation angle of each child copy, and can be used to modify each child individually.
+//
+// Example:
+//   yrot_copies([180, 270, 315])
+//       cylinder(h=20, r1=5, r2=0);
+//   color("red",0.333) cylinder(h=20, r1=5, r2=0);
+//
+// Example:
+//   yrot_copies(n=6)
+//       cylinder(h=20, r1=5, r2=0);
+//   color("red",0.333) cylinder(h=20, r1=5, r2=0);
+//
+// Example:
+//   yrot_copies(n=6, r=10)
+//       yrot(-90) cylinder(h=20, r1=5, r2=0);
+//   color("red",0.333) yrot(-90) cylinder(h=20, r1=5, r2=0);
+//
+// Example:
+//   yrot_copies(n=6, r=10, sa=45)
+//       yrot(-90) cylinder(h=20, r1=5, r2=0);
+//   color("red",0.333) yrot(-90) cylinder(h=20, r1=5, r2=0);
+//
+// Example:
+//   yrot_copies(n=6, r=20, subrot=false)
+//       yrot(-90) cylinder(h=20, r1=5, r2=0, center=true);
+//   color("red",0.333) yrot(-90) cylinder(h=20, r1=5, r2=0, center=true);

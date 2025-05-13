@@ -1,0 +1,2 @@
+function coreXY_drive_toothed_idler_offset(type) = //! Offset of toothed drive idler pulley
+    [ 0, coreXY_drive_pulley_x_alignment(type), 0 ];

@@ -1,0 +1,1 @@
+function cc_center(cc) = cc[0];

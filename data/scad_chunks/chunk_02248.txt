@@ -1,0 +1,16 @@
+module camera_fastened_assembly(cam, thickness, angle = 0) {
+    camera_assembly(cam, angle);
+
+    camera_bracket_position(cam)
+        camera_bracket_screw_positions(cam) {
+            nut = screw_nut(bracket_screw);
+            t = bracket_thickness(cam);
+            screw_length = screw_length(bracket_screw, thickness + t, 2, nyloc = true);
+            vflip()
+                translate_z(thickness)
+                    screw_and_washer(bracket_screw, screw_length);
+
+            translate_z(t)
+                nut_and_washer(nut, true);
+        }
+}

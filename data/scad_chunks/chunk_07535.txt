@@ -1,0 +1,40 @@
+function mPointsORG(points=[0,0], r=[0,0,0], t=[0,0,0], s=[1,1,1])=
+let(
+pointsI=is_list(points[0])?points:[points],
+dimension=len(pointsI[0]),
+out=
+[for(i=[0:len(pointsI)-1])m(r=r,t=t,s=s)*
+  concat(pointsI[i],
+    dimension==3?[1]:concat([for(dim=[1:3-dimension])0],[1]) // add to vector
+  )
+    +[for(dim=[0:dimension-1])0]] // mask vector
+)is_list(points[0])?out:out[0];
+
+
+
+
+
+//echo(mPoints([[0,1]],r=50) );
+
+
+  /*
+    rot=[+27,+28,+75];
+    sc=[1.3,0.4,1.3];
+    tr=[14,15,13];
+p=[
+   [-10,  0,  0], 
+   [ 10,  0,  0], 
+   [  0, 10,  0], 
+   [  0,-10,  0], 
+   [  0,  0, 10], 
+   [  0,  0,-10]
+  ];
+
+a=[[for (i=[0:len(p)-1])i]];
+
+T(0)Color(alpha=.5)scale(1.0001)hull()polyhedron(p2,a);
+rotate(rot)translate(tr)scale(sc)hull()polyhedron(p,a);
+
+p2=mPoints(mPoints(p,t=tr,r=rot,s=sc),t=[0,0]);
+
+// */

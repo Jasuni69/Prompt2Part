@@ -1,0 +1,10 @@
+function vertex(i, j, n, theta) = 
+    i > j ? [0, 0, 0] : 
+	        sum([
+			    for(k = [i:j]) 
+				let(
+					cosa = cos(theta),
+					a_i_n = 360 * k / n
+				)
+				[cosa * cos(a_i_n), cosa * sin(a_i_n), sin(theta)]
+			]);

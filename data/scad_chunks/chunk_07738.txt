@@ -1,0 +1,161 @@
+module PCBcase(
+pcb=[20,40,1],/*[breite×länge×höhe]*/
+h=20,/*höhe*/
+wand,/*Wandstärke */
+r2=3,/*Innenradius*/
+rC=2,/*Eckradius*/
+rS=2,/*Kantenradius*/
+spiel=0.2,
+kabel,/*Kabelloch[b,h]*/
+kanal,
+kpos=[0,0],
+tasche=5,
+deckel=false,
+dummy=1,
+name,
+clip=true,
+help
+){
+  deckel=is_bool(deckel)?b(deckel):deckel;
+  $info=false; 
+  rS=abs(rS);
+  rC=max(rS,abs(rC));  
+  wand=max(rC-rC/sqrt(2)+rS/sqrt(2),rS,is_undef(wand)?0:wand-spiel); 
+  kabel=is_num(kabel)?[kabel,kabel/1.618]:kabel;
+  spiel=abs(spiel);
+  $helpM=0; 
+  size=[pcb[0]+(wand+spiel)*2,pcb[1]+(wand+spiel)*2,h];
+  kabelrundung=1; // rundungsradius Kabellochecken  
+  //  %translate([0,0,h/2])cube(size,true);
+  //if(name&&!$children)echo(str("<H2>Case size=",size));
+  if(!deckel)InfoTxt("Case",[$children?"Inside":"size",$children?pcb+[0,0,h-tasche-wand]:size,"pcb headroom",str(h-tasche-wand,"mm")],name);
+  else InfoTxt("Case",["Deckeldicke",str(tasche-pcb[2]-spiel,"mm")],name);    
+  assert(is_list(pcb),"No pcb size");
+
+
+
+
+if(deckel&&!(deckel<0)){ // for render
+
+        
+    difference(){
+    linear_extrude(tasche-pcb[2]-spiel,convexity=5)offset(.5,$fn=24)square([pcb[0]-1,pcb[1]-1],true);
+    translate([0,0,+1.5])linear_extrude(50,convexity=5)square([pcb[0]-2,pcb[1]-2],true);
+}
+
+if(clip)Tz((tasche-pcb[2])/2){//clip positiv
+    MKlon(pcb[0]/2)R(90)LinEx(pcb.y*.75-spiel*2,center=true,end=true)Vollwelle(r=.5-spiel,extrude=0,xCenter=-1,fn=4,x0=-.1);
+    MKlon(tx=0,ty=pcb[1]/2)R(90,0,90)LinEx(pcb.x*.75-spiel*2,center=true,end=true)Vollwelle(r=.5-spiel,extrude=0,xCenter=-1,fn=4,x0=-.1);
+    }
+   
+
+
+if(kanal)intersection(){
+    if($children)children();
+        else minkowski(){
+          translate([0,0,h/2])cube([pcb[0]-rS*2-(rC-rS)*2+wand*2+spiel*2,pcb[1]-rS*2-(rC-rS)*2+wand*2+spiel*2,h-rS*2],true);
+          sphere(rS,$fn=36);
+          cylinder(minVal,r=rC-rS,$fn=72);
+        }
+    union(){
+        translate([pcb[0]/2,kpos[0]-kanal/2+spiel,0])
+        cube([wand+150,kanal-spiel*2,tasche-spiel-(deckel<2?kpos[1]<0?-kpos[1]:0:pcb[2])],center=false);
+    }
+    
+}
+
+
+
+}
+
+//PCB dummy
+if(dummy&&$preview)color([0.6,0.6,0.2,0.5])translate([0,0,tasche-pcb[2]])linear_extrude(pcb[2],convexity=5)square([pcb[0],pcb[1]],true);
+    
+if(!deckel||($preview&&deckel!=3)||deckel==2||deckel<0)color(alpha=deckel==1?0.5:1){
+    difference(){
+     if(!$children)   minkowski(){
+          translate([0,0,h/2])cube([pcb[0]-rS*2-(rC-rS)*2+wand*2+spiel*2,pcb[1]-rS*2-(rC-rS)*2+wand*2+spiel*2,h-rS*2],true);
+          sphere(rS,$fn=36);
+          cylinder(minVal,r=rC-rS,$fn=72);
+        }
+     else children();   
+       translate([0,0,h/2-wand-2.5])minkowski(){
+           cube([pcb[0]-r2*2-1,pcb[1]-r2*2-1,h-r2*2+5],true);
+           sphere(r2,$fn=36);
+           
+       }
+    if(kabel)color([0.7,0.7,0.8])translate([pcb[0]/2-.5-r2,kpos[0],kpos[1]+tasche+kabel[1]/2])rotate([90,0,90])linear_extrude(500,convexity=5)offset(kabelrundung,$fn=24)square(kabel-[kabelrundung*2,kabelrundung*2],true); //Kabelloch
+    if(kanal)translate([50,kpos[0],0])cube([100,kanal,tasche*2],true);    
+
+    
+    linear_extrude(tasche*2,center=true,convexity=5)offset(.5+spiel,$fn=24)square([pcb[0]-1,pcb[1]-1],true);
+    
+    if($children)color([.5,0.4,0.5])rotate([180])cylinder(100,d=500,$fn=6);
+        
+    if(clip)Tz((tasche-pcb[2])/2){ //clip negativ
+        MKlon(pcb.x/2+spiel)R(90)LinEx(pcb.y*.75,center=true,end=true)Vollwelle(r=.5,extrude=0,xCenter=-1,fn=4,x0=-1);
+        MKlon(tx=0,ty=pcb.y/2+spiel)R(90,0,90)LinEx(pcb.x*.75,center=true,end=true)Vollwelle(r=.5,extrude=0,xCenter=-1,fn=4,x0=-1);
+    }
+
+   }
+
+}
+if(!deckel&&$preview)color(alpha=0.5){ // only view deckel in preview if deckel=0
+    difference(){
+    linear_extrude(tasche-pcb[2]-spiel,convexity=5)offset(.5,$fn=24)square([pcb[0]-1,pcb[1]-1],true);
+    translate([0,0,+1.5])linear_extrude(50,convexity=5)square([pcb[0]-2,pcb[1]-2],true);
+    }
+
+    if(clip) Tz((tasche-pcb[2])/2){//clip positiv
+        MKlon(pcb[0]/2)R(90)LinEx(pcb.y*.75-spiel*2,center=true,end=true)Vollwelle(r=.5-spiel,extrude=0,xCenter=-1,fn=4,x0=-.1);
+        //Pille(pcb[1]*.75-spiel*2,d=1-spiel*2,fn=12,fn2=12,name=0);
+        MKlon(tx=0,ty=pcb[1]/2)R(90,0,90)LinEx(pcb.x*.75-spiel*2,center=true,end=true)Vollwelle(r=.5-spiel,extrude=0,xCenter=-1,fn=4,x0=-.1);
+        //Pille(pcb[0]*.75-spiel*2,d=1-spiel*2,fn=12,fn2=12,name=0);
+    }
+
+    if(kanal)intersection(){
+        if($children)children();
+            else minkowski(){
+              translate([0,0,h/2])cube([pcb[0]-rS*2-(rC-rS)*2+wand*2+spiel*2,pcb[1]-rS*2-(rC-rS)*2+wand*2+spiel*2,h-rS*2],true);
+              sphere(rS,$fn=36);
+              cylinder(minVal,r=rC-rS,$fn=72);
+            }
+            
+        union(){
+            translate([pcb[0]/2,kpos[0]-kanal/2+spiel,0])
+            cube([wand+150,kanal-spiel*2,tasche-spiel-(deckel<2?kpos[1]<0?-kpos[1]:0:pcb[2])],center=false);
+        }    
+        
+    }
+}
+HelpTxt("PCBcase",[
+  
+"pcb",str(pcb,"/*Platine[Breite×Länge×Höhe]*/")," 
+h",str(h,"/*Höhe*/"),"
+wand",str(wand,"/*Wandstärke */")," 
+r2",str(r2,"/*Innenradius*/")," 
+rC",str(rC,"/*Eckradius*/")," 
+rS",str(rS,"/*Kantenradius*/")," 
+spiel",str(spiel,"/*Deckelspiel*/")," 
+kabel",str(kabel,"/*Kabelloch[b,h]*/"),"
+kanal",str(kanal,"/*Kabelkanal breite*/"),"
+kpos",str(kpos,"/*Kabelposition[y,z]*/"),"
+tasche",str(tasche,"/*Taschen h für Platine*/"),"
+deckel",str(deckel,"/*render Deckel option 0-2*/"),"
+dummy",str(dummy,"/*show PCB */"),"
+name",name,"
+clip",clip
+],help);
+
+}
+
+
+
+
+
+
+
+/*
+Cring(txt="|-test-|",id=20,center=0);
+T(0,14)R(90,0,180)Text("test",h=1,size=5);
+// */

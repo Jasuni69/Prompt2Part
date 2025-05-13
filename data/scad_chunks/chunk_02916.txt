@@ -1,0 +1,153 @@
+module connectorNew(shellPart, theCoordSystem, x, y, conn, outD) 
+{
+  face = (shellPart==yappPartBase) ? yappBase : yappLid ;
+  connHeightRaw = translate2Box_Z (conn[2], face, theCoordSystem);
+  
+  pcb_Thickness = pcbThickness(theCoordSystem[2]);
+  
+  connHeight =  connHeightRaw;
+
+  d1 = conn[3]; //-- screw Diameter
+  d2 = conn[4]; //-- screwHead Diameter
+  d3 = conn[5]; //-- insert Diameter
+  d4 = outD;
+  
+  screwHoleHeight = connHeight;
+  screwHeadHeight = connHeight - ((d4-d2)/2);  
+  
+  insertHeight = getParamWithDefault(conn[7],undef);
+  
+  pcbGapTmp = getParamWithDefault(conn[8],undef);
+  
+  fR = getParamWithDefault(conn[9],0); //-- filletRadius
+ 
+  pcbGap = (pcbGapTmp == undef ) ? ((theCoordSystem[0]==yappCoordPCB) ? pcb_Thickness : 0) : pcbGapTmp;
+  
+  if (printMessages) echo("connectorNew", pcbGap=pcbGap);
+   
+  if (shellPart==yappPartBase)
+  {
+    color("Yellow")
+    translate([x, y, 0])
+    {
+      hb = connHeight; 
+      if (connHeight >= basePlaneThickness) 
+      {  
+        union()
+        {
+          difference()
+          {
+            union()
+            {
+              //-- outerCylinder --
+              color("orange")
+              translate([0,0,0.02])
+              linear_extrude(hb-0.02)
+                circle(d = d4); //-- outside Diam
+              if (!isTrue(yappNoFillet, conn))
+              {
+                filletRadius = (fR == 0) ? basePlaneThickness : fR; 
+                filletRad = min(filletRadius,connHeight - basePlaneThickness);
+                if (hb>basePlaneThickness)
+                {
+                  translate([0,0,(basePlaneThickness)])
+                  {
+                    color("violet")
+                    pinFillet(d4/2, filletRad);
+                  }
+                }
+              }// ifFillet
+            }
+            
+            //-- screw head Hole --
+            color("red") 
+              if (!isTrue(yappCountersink, conn))
+                translate([0,0,0]) 
+                  cylinder(h=screwHeadHeight, d=d2);
+              else
+                translate([0,0,0]) 
+                  screwHeadHole(conn);
+
+            //-- screwHole --
+            translate([0,0,-0.01])  
+              color("blue") 
+                cylinder(h=screwHoleHeight+0.02, d=d1);
+            
+          } //  difference
+          
+          //-- Internal fillet
+          if (!isTrue(yappNoFillet, conn) && !isTrue(yappCountersink, conn))
+          {
+            filletRadius = (d2-d1)/4; // 1/2 the width if the screw flange
+            
+            filletRad = min (filletRadius, (d4-d1)/2);
+            translate([0,0, screwHeadHeight])
+            {
+              color("teal")
+              pinFillet(-d2/2-0.01, -filletRad);
+            }
+          }// ifFillet
+        } // union
+      } // Height > plane thickness
+    } //  translate
+  } //  if base
+  
+  if (shellPart==yappPartLid)
+  {
+    //-- calculate the Z-position for the lid connector.
+    //-- for a PCB connector, start the connector on top of the PCB to push it down.
+    
+    heightTemp = shellHeight-connHeight-pcbGap;
+    zOffset = -heightTemp;
+
+    color("Yellow")
+    translate([x, y, zOffset])
+    {
+      ht=(heightTemp);
+      union()
+      {
+        difference()
+        {
+          union()
+          {
+            //-- outside Diameter --
+            color("orange")
+            linear_extrude(ht-0.01)
+                circle(d = d4);
+            //-- flange --
+            if (!isTrue(yappNoFillet, conn))
+            {
+              filletRadius = (fR == 0) ? lidPlaneThickness : fR;
+              translate([0,0,ht-lidPlaneThickness]) 
+              {
+                pinFillet(-d4/2, filletRadius);
+              }
+            } // ifFillet
+          }  
+          //-- insert --
+          color("blue")
+          translate([0, 0, -0.01])
+          if (!isTrue(yappSelfThreading, conn))
+          {
+            linear_extrude(ht + 0.02)
+              circle(d = d3);
+          } else {
+            self_forming_screw(h=ht + 0.02, d=d3, center=false);
+          }
+        } //  difference
+        
+        // Add stop if needed
+        if (!is_undef(insertHeight) && (insertHeight < (ht-lidPlaneThickness))) 
+        {
+          color("teal")
+          translate([0,0,insertHeight]) 
+          linear_extrude(ht-insertHeight-0.01)
+            circle(d = d4-0.01);
+        }
+      } // union
+    } // translate
+  } //  if lid
+} //-- connectorNew()
+
+        
+//===========================================================

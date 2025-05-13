@@ -1,0 +1,12 @@
+function vmul(v1, v2) = [for (i = [0:len(v1)-1]) v1[i]*v2[i]];
+
+
+// Function: vdiv()
+// Description:
+//   Element-wise vector division.  Divides each element of vector `v1` by
+//   the corresponding element of vector `v2`.  Returns a vector of the quotients.
+// Arguments:
+//   v1 = The first vector.
+//   v2 = The second vector.
+// Example:
+//   vdiv([24,28,30], [8,7,6]);  // Returns [3, 4, 5]

@@ -1,0 +1,133 @@
+module ball_screw_rod(
+    d, l, pitch, 
+    ball_diam=5, ball_arc=100,
+    starts=1,
+    left_handed=false,
+    internal=false,
+    length, h, height,
+    bevel, bevel1, bevel2,
+    blunt_start, blunt_start1, blunt_start2,
+    lead_in, lead_in1, lead_in2,
+    lead_in_ang, lead_in_ang1, lead_in_ang2,
+    end_len, end_len1, end_len2,
+    lead_in_shape="default",
+    anchor, spin, orient
+) {
+    n = max(3,ceil(segs(ball_diam/2)*ball_arc/2/360));
+    depth = ball_diam * (1-cos(ball_arc/2))/2;
+    cpy = ball_diam/2/pitch*cos(ball_arc/2);
+    profile = [
+        each arc(n=n, d=ball_diam/pitch, cp=[-0.5,cpy], start=270, angle=ball_arc/2),
+        each arc(n=n, d=ball_diam/pitch, cp=[+0.5,cpy], start=270-ball_arc/2, angle=ball_arc/2)
+    ];
+    generic_threaded_rod(
+        d=d, l=l, pitch=pitch,
+        profile=profile,
+        left_handed=left_handed,
+        starts=starts,
+        bevel=bevel,bevel1=bevel1,bevel2=bevel2,
+        internal=internal, length=length, height=height, h=h,
+        blunt_start=blunt_start, blunt_start1=blunt_start1, blunt_start2=blunt_start2,
+        lead_in=lead_in, lead_in1=lead_in1, lead_in2=lead_in2, lead_in_shape=lead_in_shape,
+        lead_in_ang=lead_in_ang, lead_in_ang1=lead_in_ang1, lead_in_ang2=lead_in_ang2,
+        end_len=end_len, end_len1=end_len1, end_len2=end_len2,
+        anchor=anchor,
+        spin=spin,
+        orient=orient
+    ) children();
+}
+
+
+// Section: Generic Threading
+
+// Module: generic_threaded_rod()
+// Synopsis: Creates a generic threaded rod.
+// SynTags: Geom
+// Topics: Threading, Screws
+// See Also: generic_threaded_nut()
+// Usage:
+//   generic_threaded_rod(d, l|length, pitch, profile, [internal=], ...) [ATTACHMENTS];
+// Description:
+//   Constructs a generic threaded rod using an arbitrary thread profile that you supply.  The rod can be tapered
+//   (e.g. for pipe threads).  For specific thread types use other modules that supply the appropriate profile.
+//   .
+//   You give the profile as a 2D path that will be scaled by the pitch to produce the final thread shape.  The profile
+//   X values must be between -1/2 and 1/2.  The Y=0 point will align with the specified rod diameter, so generally you
+//   want a Y value of zero at the peak (which makes your specified diameter the outer diameter of the threads).  The
+//   value in the valleys of the thread should then be `-depth/pitch` due to the scaling by the thread pitch.  The first
+//   and last points should generally have the same Y value, but it is not necessary to give values at X=1/2 or X=-1/2
+//   if unless the Y values differ from the interior points in the profile.  Generally you should center the profile
+//   horizontally in the interval [-1/2, 1/2].
+//   .
+//   If internal is true then produce a thread mask to difference from an object.  When internal is true the rod
+//   diameter is enlarged to correct for the polygonal nature of circles to ensure that the internal diameter is the
+//   specified size.  The diameter is also increased by `4 * $slop` to create clearance for threading by allowing a `2 *
+//   $slop` gap on each side.  If bevel is set to true and internal is false then the ends of the rod will be beveled.
+//   When bevel is true and internal is true the ends of the rod will be filled in so that the rod mask will create a
+//   bevel when subtracted from an object.  The bevel is at 45 deg and is the depth of the threads.
+//   .
+//   Blunt start threading, which is the default, specifies that the thread ends abruptly at its full width instead of
+//   running off the end of the shaft and leaving a sharp edged partial thread at the end of the screw.  This makes
+//   screws easier to start and prevents cross threading.  Blunt start threads should always be superior, and they are
+//   faster to model, but if you really need standard threads that run off the end you can set `blunt_start=false`.
+//   .
+//   The teardrop option cuts off the threads with a teardrop for 3d printability of horizontal holes.  By default,
+//   if the screw outer radius is r then the flat top will be at distance 1.05r from the center, adding a 5% space.  
+//   You can set teardrop to a numerical value to adjust that percentage, e.g. a value of 0.1 would give a 10% space.
+//   You can set teardrop to "max" to create a pointy-top teardrop with no flat section.  
+// Arguments:
+//   d = Outer diameter of threaded rod.
+//   l / length / h / height = Length of threaded rod.
+//   pitch = Thread spacing.
+//   profile = A 2D path giving the shape of a thread
+//   ---
+//   left_handed = If true, create left-handed threads.  Default: false
+//   starts = The number of lead starts.  Default: 1
+//   internal = If true, make this a mask for making internal threads.  Default: false
+//   d1 = Bottom outside diameter of threads.
+//   d2 = Top outside diameter of threads.
+//   bevel = set to true to bevel both ends, a number to specify a bevel size, false for no bevel, and "reverse" for an inverted bevel
+//   bevel1 = set bevel for bottom end. 
+//   bevel2 = set bevel for top end.
+//   blunt_start = If true apply truncated blunt start threads at both ends.  Default: true
+//   blunt_start1 = If true apply truncated blunt start threads bottom end.
+//   blunt_start2 = If true apply truncated blunt start threads top end.
+//   end_len = Specify the unthreaded length at the end after blunt start threads.  Default: 0
+//   end_len1 = Specify unthreaded length at the bottom
+//   end_len2 = Specify unthreaded length at the top
+//   lead_in = Specify linear length of the lead in section of the threading with blunt start threads
+//   lead_in1 = Specify linear length of the lead in section of the threading at the bottom with blunt start threads
+//   lead_in2 = Specify linear length of the lead in section of the threading at the top with blunt start threads
+//   lead_in_ang = Specify angular length in degrees of the lead in section of the threading with blunt start threads
+//   lead_in_ang1 = Specify angular length in degrees of the lead in section of the threading at the bottom with blunt start threads
+//   lead_in_ang2 = Specify angular length in degrees of the lead in section of the threading at the top with blunt start threads
+//   lead_in_shape = Specify the shape of the thread lead in by giving a text string or function.  Default: "default"
+//   teardrop = If true, adds a teardrop profile to the back (Y+) side of the threaded rod, for 3d printability of horizontal holes. If numeric, specifies the proportional extra distance of the teardrop flat top from the screw center, or set to "max" for a pointed teardrop (see above). Default: false
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//   $slop = The printer-specific slop value, which adds clearance (`4*$slop`) to internal threads.
+// Example(2DMed): Example Tooth Profile
+//   pitch = 2;
+//   depth = pitch * cos(30) * 5/8;
+//   profile = [
+//       [-7/16, -depth/pitch*1.07],
+//       [-6/16, -depth/pitch],
+//       [-1/16,  0],
+//       [ 1/16,  0],
+//       [ 6/16, -depth/pitch],
+//       [ 7/16, -depth/pitch*1.07]
+//   ];
+//   stroke(profile, width=0.02);
+// Example:
+//   pitch = 2;
+//   depth = pitch * cos(30) * 5/8;
+//   profile = [
+//       [-7/16, -depth/pitch*1.07],
+//       [-6/16, -depth/pitch],
+//       [-1/16,  0],
+//       [ 1/16,  0],
+//       [ 6/16, -depth/pitch],
+//       [ 7/16, -depth/pitch*1.07]
+//   ];
+//   generic_threaded_rod(d=10, l=40, pitch=2, profile=profile);

@@ -1,0 +1,50 @@
+//-------------------------------------------------------------------
+pcbStands = 
+[
+//  [2.75, 3.5, yappFrontLeft, yappFrontRight, yappTopPin],
+//  [5.3, 3.5, yappBackLeft, yappBackRight, yappTopPin],
+// Normal with pin and hole
+  //[3.5, 2.75, yappFrontLeft, yappBackLeft, yappTopPin, [yappPCBName, "Joystick"]],
+  //[3.5, 5.3, yappFrontRight, yappBackRight, yappTopPin, [yappPCBName, "Joystick"]],
+  
+// Self taping with only lid 
+//  [3.5, 2.75, 7, 3.0, yappFrontLeft, yappBackLeft, yappHole, [yappPCBName, "Joystick"], yappLidOnly, yappSelfThreading],
+  [3.5, 2.75, yappDefault, yappDefault, 7.0, 3.0, yappFrontLeft, yappBackLeft, yappHole, [yappPCBName, "Joystick"], yappLidOnly, yappSelfThreading],
+  [3.5, 5.3,, yappDefault, yappDefault, 7.0, 3.0, yappFrontRight, yappBackRight, yappHole, [yappPCBName, "Joystick"], yappLidOnly, yappSelfThreading],
+
+];
+
+
+
+//===================================================================
+//  *** Connectors ***
+//  Standoffs with hole through base and socket in lid for screw type connections.
+//-------------------------------------------------------------------
+//  Default origin = yappCoordPCB : pcb[0,0,0]
+//  
+//  Parameters:
+//   Required:
+//    p(0) = posx
+//    p(1) = posy
+//    p(2) = StandHeight : From specified origin 
+//    p(3) = screwDiameter
+//    p(4) = screwHeadDiameter (don't forget to add extra for the fillet)
+//    p(5) = insertDiameter
+//    p(6) = outsideDiameter
+//   Optional:
+//    p(7) = insert Depth : default to entire connector
+//    p(8) = PCB Gap : Default if yappCoordPCB then pcbThickness else 0
+//    p(9) = filletRadius : Default = 0/Auto(0 = auto size)
+//    n(a) = { yappAllCorners, yappFrontLeft | <yappBackLeft> | yappFrontRight | yappBackRight }
+//    n(b) = { <yappCoordPCB> | yappCoordBox | yappCoordBoxInside }
+//    n(c) = { yappNoFillet }
+//    n(d) = { yappCountersink }
+//    n(e) = [yappPCBName, "XXX"] : Specify a PCB. Defaults to [yappPCBName, "Main"]
+//    n(f) = { yappThroughLid = changes the screwhole to the lid and the socket to the base}
+//    n(g) = {yappSelfThreading} : Make the insert self threading specify the Screw Diameter in the insertDiameter
+//-------------------------------------------------------------------
+connectors   =
+[
+  [14,14,
+    3, //StandHeight
+    3.1, //screwDiameter

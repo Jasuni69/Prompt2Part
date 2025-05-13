@@ -1,0 +1,1 @@
+function bool2int(b) = b ? 1 : 0;

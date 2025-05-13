@@ -1,0 +1,3 @@
+module pcb_mount_washer_stl() //! A plastic washer to clamp a PCB
+    linear_extrude(washer_thickness)
+        pcb_mount_ring();

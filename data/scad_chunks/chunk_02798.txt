@@ -1,0 +1,27 @@
+function TouchPoint(Center1,Radius1,Center2,Radius2) =
+  let( d = Center2-Center1,
+       l_total = norm(d),
+       l_avg = (Radius1 + l_total-Radius2)/2,
+       a = atan2(d.y,d.x))
+  [Center1.x + l_avg*cos(a),
+   Center1.y + l_avg*sin(a)];
+
+
+// DrawLine
+// --------
+// This module draws a line with squared ends.
+// Some use a hull() over two points,
+// but this calculation matches the style
+// of the rest of the script.
+//
+// Smart code with hull() by Reddit user oldesole1:
+//   // Since each line terminates inside a double-width 
+//   // circle, this just hulls over two points.
+//   module DrawLine(Point1,Point2)
+//   {
+//     hull()
+//       for (pos = [Point1,Point2])
+//         translate(pos)
+//           circle(d = line_width);
+//   }
+// I think that the hull() is faster and more straightforward.

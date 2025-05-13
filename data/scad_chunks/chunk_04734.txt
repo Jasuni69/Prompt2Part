@@ -1,0 +1,9 @@
+function circle(r=1, c=[0,0], internal=false, offsetAngle=0, d) =
+  let(
+    r1 = d==undef ? r : d/2,
+    points = arc(r=r1,c=c,angle=-360,offsetAngle=offsetAngle,internal=internal)
+  )
+  [points,[irange(0,len(points)-1)]];
+
+
+// **3D Primitives**

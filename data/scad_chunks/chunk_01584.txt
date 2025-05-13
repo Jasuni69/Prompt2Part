@@ -1,0 +1,51 @@
+module ax_diode(type, value, pitch = 0) { //! Through hole axial diode. If `pitch` is zero the minimum is used. If below the minimum the resistor is placed vertical.
+    vitamin(str("ax_diode(", type[0], ", \"", value, "\"): Diode ", value));
+
+    wire_d =  ax_diode_wire(type);
+    size = ax_diode_size(type);
+    colours = ax_diode_colour(type);
+    body_r = size.y / 2;
+    length = size.x;
+    r = size.z;
+    $fs = fs; $fa = fa;
+
+
+    orientate_axial(length, body_r, pitch, wire_d) {
+        color("darkred") {
+            gap = length / 20;
+            l = (length - gap) / 2 - r - 2 * eps;
+            for(end = [-1, 1])
+                translate_z(end * (l + gap) / 2)
+                    cylinder(r = body_r * 0.8, h = l, center = true);
+
+            cylinder(r = wire_d / 2 + eps, h = gap + eps, center = true);
+        }
+
+        color(colours[0])
+            rotate_extrude()
+                hull() {
+                    translate([0, -length / 2])
+                        square([body_r - r, length]);
+
+                    if(r) {
+                        translate([body_r - r, -length / 2 + r])
+                            circle(r);
+
+                        translate([body_r - r, length / 2 - r])
+                            circle(r);
+                    }
+                }
+
+        color(colours[1]) {
+            translate_z(-length / 2 + r + eps)
+                cylinder(r = body_r + eps, h = length / 5);
+
+            tlength = 2 * PI * body_r * 0.8;
+
+            cylindrical_wrap(body_r)
+                resize([tlength, 0], auto = true)
+                    text(value, halign = "center", valign = "center");
+
+        }
+    }
+}

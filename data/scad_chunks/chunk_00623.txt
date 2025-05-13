@@ -1,0 +1,24 @@
+module display_aperture(type, clearance, clear_pcb = false) { //! Make aperture cutout
+    aperture = display_aperture(type);
+    ts = display_touch_screen(type);
+    pcb = display_pcb(type);
+    rb = display_ribbon(type);
+
+    translate([aperture[0].x, aperture[0].y, -10])
+        cube([aperture[1].x - aperture[0].x, aperture[1].y - aperture[0].y, 20]);
+
+    if(ts)
+        translate([ts[0].x - clearance, ts[0].y - clearance, -clearance])
+            cube([ts[1].x - ts[0].x + 2 * clearance, ts[1].y - ts[0].y + 2 * clearance, ts[1].z + clearance + eps]);
+
+    if(rb)
+        translate([rb[0].x, rb[0].y,0])
+            cube([rb[1].x - rb[0].x, rb[1].y - rb[0].y, ts[1].z + display_depth(type) + 2]);
+
+    if(clear_pcb)
+        translate([display_pcb_offset(type).x, display_pcb_offset(type).y, display_depth(type) / 2 + 0.5 + display_ts_thickness(type)])
+            cube([pcb_length(pcb) + 2 * clearance, pcb_width(pcb) + 2 * clearance, display_depth(type) + 1], center = true);
+    else
+        translate_z(display_depth(type) / 2 + 0.5)
+            cube([display_width(type) + 2 * clearance, display_height(type) + 2 * clearance, display_depth(type) + 1], center = true);
+}

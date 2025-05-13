@@ -1,0 +1,2 @@
+function nz_worley3(x, y, z, seed, grid_w = 10, dist = "euclidean") =
+    _nz_worley3([x, y, z], seed, grid_w, dist);

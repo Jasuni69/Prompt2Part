@@ -1,0 +1,1 @@
+function pot_boss_d(type)   = type[8];  //! Boss diameter

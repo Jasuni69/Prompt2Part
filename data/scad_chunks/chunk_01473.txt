@@ -1,0 +1,1 @@
+function mod_width(type)  = type[3];        //! Body width

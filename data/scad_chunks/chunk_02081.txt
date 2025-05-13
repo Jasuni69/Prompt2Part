@@ -1,0 +1,1 @@
+function foot_slant(type = foot)    = type[5]; //! Taper angle

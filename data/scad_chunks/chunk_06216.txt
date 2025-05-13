@@ -1,0 +1,379 @@
+module cuboid(
+    size,
+    p1, p2,
+    chamfer,
+    rounding,
+    edges=EDGES_ALL,
+    except=[],
+    except_edges,
+    trimcorners=true,
+    teardrop=false,
+    clip_angle,
+    anchor=CENTER,
+    spin=0,
+    orient=UP
+) {
+    module trunc_cube(s,corner) {
+        multmatrix(
+            (corner.x<0? xflip() : ident(4)) *
+            (corner.y<0? yflip() : ident(4)) *
+            (corner.z<0? zflip() : ident(4)) *
+            scale(s+[1,1,1]*0.001) *
+            move(-[1,1,1]/2)
+        ) polyhedron(
+            [[1,1,1],[1,1,0],[1,0,0],[0,1,1],[0,1,0],[1,0,1],[0,0,1]],
+            [[0,1,2],[2,5,0],[0,5,6],[0,6,3],[0,3,4],[0,4,1],[1,4,2],[3,6,4],[5,2,6],[2,4,6]]
+        );
+    }
+    module xtcyl(l,r) {
+        if (teardrop) {
+            teardrop(r=r, l=l, cap_h=r, ang=teardrop, spin=90, orient=DOWN);
+        } else if (is_finite(clip_angle)) {
+            cap_h = r * sin(clip_angle);
+            down(r-cap_h) teardrop(r=r, l=l, cap_h=cap_h, ang=clip_angle, spin=90, orient=DOWN);
+        } else {
+            yrot(90) cyl(l=l, r=r);
+        }
+    }
+    module ytcyl(l,r) {
+        if (teardrop) {
+            teardrop(r=r, l=l, cap_h=r, ang=teardrop, spin=0, orient=DOWN);
+        } else if (is_finite(clip_angle)) {
+            cap_h = r * sin(clip_angle);
+            down(r-cap_h) teardrop(r=r, l=l, cap_h=cap_h, ang=clip_angle, spin=0, orient=DOWN);
+        } else {
+            zrot(90) yrot(90) cyl(l=l, r=r);
+        }
+    }
+    module tsphere(r) {
+        if (teardrop) {
+            onion(r=r, cap_h=r, ang=teardrop, orient=DOWN);
+        } else if (is_finite(clip_angle)) {
+            cap_h = r * sin(clip_angle);
+            down(r-cap_h) onion(r=r, cap_h=cap_h, ang=clip_angle, orient=DOWN);
+        } else {
+            spheroid(r=r, style="octa", orient=DOWN);
+        }
+    }
+    module corner_shape(corner) {
+        e = _corner_edges(edges, corner);
+        cnt = sum(e);
+        r = first_defined([chamfer, rounding]);
+        dummy = assert(is_finite(r) && !approx(r,0));
+        c = [r,r,r];
+        m = 0.01;
+        c2 = v_mul(corner,c/2);
+        c3 = v_mul(corner,c-[1,1,1]*m/2);
+        $fn = is_finite(chamfer)? 4 : quantup(segs(r),4);
+        translate(v_mul(corner, size/2-c)) {
+            if (cnt == 0 || approx(r,0)) {
+                translate(c3) cube(m, center=true);
+            } else if (cnt == 1) {
+                if (e.x) {
+                    right(c3.x) {
+                        intersection() {
+                            xtcyl(l=m, r=r);
+                            multmatrix(
+                                (corner.y<0? yflip() : ident(4)) *
+                                (corner.z<0? zflip() : ident(4))
+                            ) {
+                                yrot(-90) linear_extrude(height=m+0.1, center=true) {
+                                    polygon([[r,0],[0.999*r,0],[0,0.999*r],[0,r],[r,r]]);
+                                }
+                            }
+                        }
+                    }
+                } else if (e.y) {
+                    back(c3.y) {
+                        intersection() {
+                            ytcyl(l=m, r=r);
+                            multmatrix(
+                                (corner.x<0? xflip() : ident(4)) *
+                                (corner.z<0? zflip() : ident(4))
+                            ) {
+                                xrot(90) linear_extrude(height=m+0.1, center=true) {
+                                    polygon([[r,0],[0.999*r,0],[0,0.999*r],[0,r],[r,r]]);
+                                }
+                            }
+                        }
+                    }
+                } else if (e.z) {
+                    up(c3.z) {
+                        intersection() {
+                            zcyl(l=m, r=r);
+                            multmatrix(
+                                (corner.x<0? xflip() : ident(4)) *
+                                (corner.y<0? yflip() : ident(4))
+                            ) {
+                                linear_extrude(height=m+0.1, center=true) {
+                                    polygon([[r,0],[0.999*r,0],[0,0.999*r],[0,r],[r,r]]);
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (cnt == 2) {
+                intersection() {
+                    if (!e.x) {
+                        intersection() {
+                            ytcyl(l=c.y*2, r=r);
+                            zcyl(l=c.z*2, r=r);
+                        }
+                    } else if (!e.y) {
+                        intersection() {
+                            xtcyl(l=c.x*2, r=r);
+                            zcyl(l=c.z*2, r=r);
+                        }
+                    } else {
+                        intersection() {
+                            xtcyl(l=c.x*2, r=r);
+                            ytcyl(l=c.y*2, r=r);
+                        }
+                    }
+                    translate(c2) trunc_cube(c,corner); // Trim to just the octant.
+                }
+            } else {
+                intersection() {
+                    if (trimcorners) {
+                        tsphere(r=r);
+                    } else {
+                        intersection() {
+                            xtcyl(l=c.x*2, r=r);
+                            ytcyl(l=c.y*2, r=r);
+                            zcyl(l=c.z*2, r=r);
+                        }
+                    }
+                    translate(c2) trunc_cube(c,corner); // Trim to just the octant.
+                }
+            }
+        }
+    }
+    sizecheck = assert(num_defined([size,p1,p2])!=3, "\nCannot give size if p2 is given (did you forget brackets on the size argument?)")
+                assert(is_def(p1) || is_undef(p2), "If p2 is given you must also give p1");
+    size = force_list(default(size,1),3);
+    edges = _edges(edges, except=first_defined([except_edges,except]));
+    teardrop = is_bool(teardrop)&&teardrop? 45 : teardrop;
+    chamfer = approx(chamfer,0) ? undef : chamfer;
+    rounding = approx(rounding,0) ? undef : rounding;
+    checks =
+        assert(is_vector(size,3),"Size must be a scalar or 3-vector")
+        assert(all_nonnegative(size), "All components of size= must be >=0")
+        assert(is_undef(chamfer) || is_finite(chamfer),"chamfer must be a finite value")
+        assert(is_undef(rounding) || is_finite(rounding),"rounding must be a finite value")
+        assert(is_undef(rounding) || is_undef(chamfer), "Cannot specify nonzero value for both chamfer and rounding")
+        assert(teardrop==false || (is_finite(teardrop) && teardrop>0 && teardrop<=90), "teardrop must be either false or an angle number between 0 and 90")
+        assert(clip_angle==undef || (is_finite(clip_angle) && clip_angle>0 && clip_angle<=90), "clip_angle must be either false or an angle number between 0 and 90")
+        assert(!teardrop || clip_angle==undef, "teardrop= and clip_angle= are mutually exclusive features.")
+        assert(is_undef(p1) || is_vector(p1,3), "p1 must be a 3-vector")
+        assert(is_undef(p2) || is_vector(p2,3), "p2 must be a 3-vector")
+        assert(is_bool(trimcorners));
+    if (!is_undef(p1)) {
+        if (!is_undef(p2)) {
+            translate(pointlist_bounds([p1,p2])[0]) {
+                cuboid(size=v_abs(p2-p1), chamfer=chamfer, rounding=rounding, edges=edges, trimcorners=trimcorners, anchor=-[1,1,1]) children();
+            }
+        } else {
+            translate(p1) {
+                cuboid(size=size, chamfer=chamfer, rounding=rounding, edges=edges, trimcorners=trimcorners, anchor=-[1,1,1]) children();
+            }
+        }
+    } else {
+        rr = max(default(chamfer,0), default(rounding,0));
+        if (rr>0) {
+            minx = max(
+                edges.y[0] + edges.y[1], edges.y[2] + edges.y[3],
+                edges.z[0] + edges.z[1], edges.z[2] + edges.z[3],
+                edges.y[0] + edges.z[1], edges.y[0] + edges.z[3],
+                edges.y[1] + edges.z[0], edges.y[1] + edges.z[2],
+                edges.y[2] + edges.z[1], edges.y[2] + edges.z[3],
+                edges.y[3] + edges.z[0], edges.y[3] + edges.z[2]
+            ) * rr;
+            miny = max(
+                edges.x[0] + edges.x[1], edges.x[2] + edges.x[3],
+                edges.z[0] + edges.z[2], edges.z[1] + edges.z[3],
+                edges.x[0] + edges.z[2], edges.x[0] + edges.z[3],
+                edges.x[1] + edges.z[0], edges.x[1] + edges.z[1],
+                edges.x[2] + edges.z[2], edges.x[2] + edges.z[3],
+                edges.x[3] + edges.z[0], edges.x[3] + edges.z[1]
+            ) * rr;
+            minz = max(
+                edges.x[0] + edges.x[2], edges.x[1] + edges.x[3],
+                edges.y[0] + edges.y[2], edges.y[1] + edges.y[3],
+                edges.x[0] + edges.y[2], edges.x[0] + edges.y[3],
+                edges.x[1] + edges.y[2], edges.x[1] + edges.y[3],
+                edges.x[2] + edges.y[0], edges.x[2] + edges.y[1],
+                edges.x[3] + edges.y[0], edges.x[3] + edges.y[1]
+            ) * rr;
+            check =
+                assert(minx <= size.x, "Rounding or chamfering too large for cuboid size in the X axis.")
+                assert(miny <= size.y, "Rounding or chamfering too large for cuboid size in the Y axis.")
+                assert(minz <= size.z, "Rounding or chamfering too large for cuboid size in the Z axis.")
+            ;
+        }
+        majrots = [[0,90,0], [90,0,0], [0,0,0]];
+        attachable(anchor,spin,orient, size=size) {
+            if (is_finite(chamfer) && !approx(chamfer,0)) {
+                if (edges == EDGES_ALL && trimcorners) {
+                    if (chamfer<0) {
+                        cube(size, center=true) {
+                            attach(TOP,overlap=0) prismoid([size.x,size.y], [size.x-2*chamfer,size.y-2*chamfer], h=-chamfer, anchor=TOP);
+                            attach(BOT,overlap=0) prismoid([size.x,size.y], [size.x-2*chamfer,size.y-2*chamfer], h=-chamfer, anchor=TOP);
+                        }
+                    } else {
+                        isize = [for (v = size) max(0.001, v-2*chamfer)];
+                        hull() {
+                            cube([ size.x, isize.y, isize.z], center=true);
+                            cube([isize.x,  size.y, isize.z], center=true);
+                            cube([isize.x, isize.y,  size.z], center=true);
+                        }
+                    }
+                } else if (chamfer<0) {
+                    checks = assert(edges == EDGES_ALL || edges[2] == [0,0,0,0], "Cannot use negative chamfer with Z aligned edges.");
+                    ach = abs(chamfer);
+                    cube(size, center=true);
+
+                    // External-Chamfer mask edges
+                    difference() {
+                        union() {
+                            for (i = [0:3], axis=[0:1]) {
+                                if (edges[axis][i]>0) {
+                                    vec = EDGE_OFFSETS[axis][i];
+                                    translate(v_mul(vec/2, size+[ach,ach,-ach])) {
+                                        rotate(majrots[axis]) {
+                                            cube([ach, ach, size[axis]], center=true);
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Add multi-edge corners.
+                            if (trimcorners) {
+                                for (za=[-1,1], ya=[-1,1], xa=[-1,1]) {
+                                    ce = _corner_edges(edges, [xa,ya,za]);
+                                    if (ce.x + ce.y > 1) {
+                                        translate(v_mul([xa,ya,za]/2, size+[ach-0.01,ach-0.01,-ach])) {
+                                            cube([ach+0.01,ach+0.01,ach], center=true);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Remove bevels from overhangs.
+                        for (i = [0:3], axis=[0:1]) {
+                            if (edges[axis][i]>0) {
+                                vec = EDGE_OFFSETS[axis][i];
+                                translate(v_mul(vec/2, size+[2*ach,2*ach,-2*ach])) {
+                                    rotate(majrots[axis]) {
+                                        zrot(45) cube([ach*sqrt(2), ach*sqrt(2), size[axis]+2.1*ach], center=true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    hull() {
+                        corner_shape([-1,-1,-1]);
+                        corner_shape([ 1,-1,-1]);
+                        corner_shape([-1, 1,-1]);
+                        corner_shape([ 1, 1,-1]);
+                        corner_shape([-1,-1, 1]);
+                        corner_shape([ 1,-1, 1]);
+                        corner_shape([-1, 1, 1]);
+                        corner_shape([ 1, 1, 1]);
+                    }
+                }
+            } else if (is_finite(rounding) && !approx(rounding,0)) {
+                sides = quantup(segs(rounding),4);
+                if (edges == EDGES_ALL) {
+                    if(rounding<0) {
+                        cube(size, center=true);
+                        zflip_copy() {
+                            up(size.z/2) {
+                                difference() {
+                                    down(-rounding/2) cube([size.x-2*rounding, size.y-2*rounding, -rounding], center=true);
+                                    down(-rounding) {
+                                        ycopies(size.y-2*rounding) xcyl(l=size.x-3*rounding, r=-rounding);
+                                        xcopies(size.x-2*rounding) ycyl(l=size.y-3*rounding, r=-rounding);
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        isize = [for (v = size) max(0.001, v-2*rounding)];
+                        minkowski() {
+                            cube(isize, center=true);
+                            if (trimcorners) {
+                                tsphere(r=rounding, $fn=sides);
+                            } else {
+                                intersection() {
+                                    xtcyl(r=rounding, l=rounding*2, $fn=sides);
+                                    ytcyl(r=rounding, l=rounding*2, $fn=sides);
+                                    cyl(r=rounding, h=rounding*2, $fn=sides);
+                                }
+                            }
+                        }
+                    }
+                } else if (rounding<0) {
+                    checks = assert(edges == EDGES_ALL || edges[2] == [0,0,0,0], "Cannot use negative rounding with Z aligned edges.");
+                    ard = abs(rounding);
+                    cube(size, center=true);
+
+                    // External-Rounding mask edges
+                    difference() {
+                        union() {
+                            for (i = [0:3], axis=[0:1]) {
+                                if (edges[axis][i]>0) {
+                                    vec = EDGE_OFFSETS[axis][i];
+                                    translate(v_mul(vec/2, size+[ard,ard,-ard]-[0.01,0.01,0])) {
+                                        rotate(majrots[axis]) {
+                                            cube([ard, ard, size[axis]], center=true);
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Add multi-edge corners.
+                            if (trimcorners) {
+                                for (za=[-1,1], ya=[-1,1], xa=[-1,1]) {
+                                    ce = _corner_edges(edges, [xa,ya,za]);
+                                    if (ce.x + ce.y > 1) {
+                                        translate(v_mul([xa,ya,za]/2, size+[ard-0.01,ard-0.01,-ard])) {
+                                            cube([ard+0.01,ard+0.01,ard], center=true);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Remove roundings from overhangs.
+                        for (i = [0:3], axis=[0:1]) {
+                            if (edges[axis][i]>0) {
+                                vec = EDGE_OFFSETS[axis][i];
+                                translate(v_mul(vec/2, size+[2*ard,2*ard,-2*ard])) {
+                                    rotate(majrots[axis]) {
+                                        cyl(l=size[axis]+2.1*ard, r=ard);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    hull() {
+                        corner_shape([-1,-1,-1]);
+                        corner_shape([ 1,-1,-1]);
+                        corner_shape([-1, 1,-1]);
+                        corner_shape([ 1, 1,-1]);
+                        corner_shape([-1,-1, 1]);
+                        corner_shape([ 1,-1, 1]);
+                        corner_shape([-1, 1, 1]);
+                        corner_shape([ 1, 1, 1]);
+                    }
+                }
+            } else {
+                cube(size=size, center=true);
+            }
+            children();
+        }
+    }
+}

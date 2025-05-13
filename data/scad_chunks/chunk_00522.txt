@@ -1,0 +1,1 @@
+function pillar_height(type)     = type[3];     //! Body height

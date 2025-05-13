@@ -1,0 +1,19 @@
+module Echo(title,color="#FF0000",size=2,condition=true,help=false){
+    
+ if(condition)
+     if(version()[0]<2021)echo(str("<H",size,"><font color=",color,">",title)); 
+     else if (color=="#FF0000"||color=="red")echo(str("\n🔴\t»»» ",title));
+     else if (color=="redring")echo(str("\n⭕\t»»» ",title));
+     else if (color=="#FFA500"||color=="orange")echo(str("\n🟠\t»»» ",title));    
+     else if (color=="#00FF00"||color=="green"||color=="info")echo(str("🟢\t ",title));
+     else if (color=="#0000FF"||color=="blue") echo(str("🔵\t ",title));
+     else if (color=="#FF00FF"||color=="purple") echo(str("🟣\t ",title));    
+     else if (color=="#000000"||color=="black") echo(str("⬤\t ",title));
+     else if (color=="#FFFFFF"||color=="white") echo(str("◯\t ",title));
+     else if (color=="#FFFF00"||color=="yellow"||color=="warning") echo(str("⚠\t ",title));    
+         else echo(str("• ",title)); 
+
+ HelpTxt("Echo",["title",title,"color",color,"size",size,"condition",condition],help);
+}
+
+/// display variable values

@@ -1,0 +1,3 @@
+module test_ring_extrude(sections, angle) {
+
+}

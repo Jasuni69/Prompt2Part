@@ -1,0 +1,8 @@
+function columnLengOfRow(ri, cellWidth, previousColumnLeng, dividedRatio) = 
+    let(
+	    r = ri * cellWidth,
+		circumference = 2 * PI * r,
+		estimatedOutWallWidth = circumference / previousColumnLeng,
+		ratio = estimatedOutWallWidth / cellWidth >= dividedRatio ? 2 : 1
+	)
+	previousColumnLeng * ratio;

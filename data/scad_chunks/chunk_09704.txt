@@ -1,0 +1,7 @@
+function Q_Div_S(q, s) = q/s;
+
+
+// Function: Q_Add()
+// Usage:
+//   Q_Add(a, b)
+// Description: Adds each part of two quaternions together.

@@ -1,0 +1,10 @@
+module caterpillars(radius) {
+	big_caterpillar(radius);
+	
+	translate([radius * 3.5, -radius * 4.5, radius * 9.75]) 
+	rotate([0, -15, 0]) 
+	scale([0.8, 0.8, 0.8]) 
+	    small_caterpillar(radius);
+}
+
+caterpillars(5);

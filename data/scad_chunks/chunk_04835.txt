@@ -1,0 +1,3 @@
+function _pb_vert(last=[], args=[], rel=false, angle) = let(y=rel? last[1] + args[0] : args[0]) y==last[1]? [[[]],[],angle,[[],[]]] : [[[last[0],y]], [], y > last[0]? 0 : 180,[[],[]]];
+
+//  Adds point y units away from the last

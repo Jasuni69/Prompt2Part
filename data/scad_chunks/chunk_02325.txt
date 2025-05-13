@@ -1,0 +1,1 @@
+function strap_end_width(type = strap) = strap_width(type) + 2 * (wall + clearance); //! Width of the ends

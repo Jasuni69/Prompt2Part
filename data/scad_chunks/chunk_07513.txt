@@ -1,0 +1,17 @@
+function TangentenP(//Tangenten schnittpunkt ab Kreis mit radius rad
+grad=150, // MittelpunktWinkel der Tangenten
+rad=20, // Kreis radius
+r=0// Kreislinien abstand von 0 (radius für Kreise)
+)=
+    let(
+    c=sin(abs(grad)/2)*rad*2,//  Sekante 
+    w1=abs(grad)/2,          //  Schenkelwinkel
+    w3=180-abs(grad),        //  Scheitelwinkel
+    a=(c/sin(w3/2))/2,    
+    hc=grad!=180?Kathete(a,c/2):0,  // Sekante tangenten center
+    hSek=Kathete(rad,c/2), //center Sekante
+    tsRadius=r-rad+hc+hSek
+    )
+tsRadius;
+
+// two digit dec max 255

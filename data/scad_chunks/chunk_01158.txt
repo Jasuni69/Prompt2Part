@@ -1,0 +1,1 @@
+function BLDC_side_colour(type)                 = type[14]; //! Side colour

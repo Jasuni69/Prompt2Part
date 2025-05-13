@@ -1,0 +1,17 @@
+module xmove(x=0) translate([x,0,0]) children();
+
+
+// Module: ymove()
+//
+// Description:
+//   Moves/translates children the given amount along the Y axis.
+//
+// Usage:
+//   ymove(y) ...
+//
+// Arguments:
+//   y = Amount to move back along the Y axis.  Negative values move forward.
+//
+// Example:
+//   #sphere(d=10);
+//   ymove(20) sphere(d=10);

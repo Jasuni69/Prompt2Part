@@ -1,0 +1,1 @@
+function sclip_height(type)        = type[2]; //! External height

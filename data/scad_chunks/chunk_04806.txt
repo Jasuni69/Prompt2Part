@@ -1,0 +1,6 @@
+function replace(s, oldText, newText) = join(split(s, oldText),newText);
+
+//  function pb_replacechar(s)
+//  string      (string)  Source string
+//  char        (char)    Character to be deleted from string
+//  Returns sub string of string.

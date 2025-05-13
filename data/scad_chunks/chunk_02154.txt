@@ -1,0 +1,1 @@
+function led_bezel_flange_t(type) = type[2]; //! Flange thickness

@@ -1,0 +1,4 @@
+function _turtle3d_impl(cmd, arg1, arg2) =
+    cmd == "create" ? 
+        _create_cmd(arg1, arg2) : 
+        _chain_move(cmd, arg1, arg2);

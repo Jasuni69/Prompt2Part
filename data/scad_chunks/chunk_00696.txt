@@ -1,0 +1,17 @@
+module studding(d , l, center = true) { //! Draw a threaded rod with specified diameter and length
+    vitamin(str("studding(", d, ", ", l,"): Threaded rod M", d, " x ", l, "mm"));
+
+    chamfer = d / 20;
+    pitch = metric_coarse_pitch(d);
+
+    translate_z(center ? 0 : l / 2)
+        if(show_threads && pitch)
+            male_metric_thread(d, pitch, l, colour = rod_colour);
+        else
+            color(studding_colour)
+                hull() {
+                    cylinder(d = d, h = l - 2 * chamfer, center = true);
+
+                    cylinder(d = d - 2 * chamfer, h = l, center = true);
+                }
+}

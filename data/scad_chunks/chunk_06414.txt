@@ -1,0 +1,38 @@
+function reverse_polygon(poly) =
+    let(poly=force_path(poly,"poly"))
+    assert(is_path(poly), "\nInput should be a polygon.")
+    [ poly[0], for(i=[len(poly)-1:-1:1]) poly[i] ];
+
+
+// Function: reindex_polygon()
+// Synopsis: Adjust point indexing of polygon to minimize pointwise distance to a reference polygon. 
+// Topics: Geometry, Polygons
+// See Also: reindex_polygon(), align_polygon(), are_polygons_equal()
+// Usage:
+//   newpoly = reindex_polygon(reference, poly);
+// Description:
+//   Rotates and possibly reverses the point order of a 2d or 3d polygon path to optimize its pairwise point
+//   association with a reference polygon.  The two polygons must have the same number of vertices and be the same dimension.
+//   The optimization is done by computing the distance, norm(reference[i]-poly[i]), between
+//   corresponding pairs of vertices of the two polygons and choosing the polygon point index rotation that
+//   makes the total sum over all pairs as small as possible.  Returns the reindexed polygon.  Note
+//   that the geometry of the polygon is not changed by this operation, just the labeling of its
+//   vertices.  If the input polygon is 2d and is oriented opposite the reference then its point order is
+//   reversed.
+// Arguments:
+//   reference = reference polygon path
+//   poly = input polygon to reindex
+// Example(2D):  The red dots show the 0th entry in the two input path lists.  Note that the red dots are not near each other.  The blue dot shows the 0th entry in the output polygon
+//   pent = subdivide_path([for(i=[0:4])[sin(72*i),cos(72*i)]],30);
+//   circ = circle($fn=30,r=2.2);
+//   reindexed = reindex_polygon(circ,pent);
+//   move_copies(concat(circ,pent)) circle(r=.1,$fn=32);
+//   color("red") move_copies([pent[0],circ[0]]) circle(r=.1,$fn=32);
+//   color("blue") translate(reindexed[0])circle(r=.1,$fn=32);
+// Example(2D): The indexing that minimizes the total distance does not necessarily associate the nearest point of `poly` with the reference, as in this example where again the blue dot indicates the 0th entry in the reindexed result.
+//   pent = move([3.5,-1],p=subdivide_path([for(i=[0:4])[sin(72*i),cos(72*i)]],30));
+//   circ = circle($fn=30,r=2.2);
+//   reindexed = reindex_polygon(circ,pent);
+//   move_copies(concat(circ,pent)) circle(r=.1,$fn=32);
+//   color("red") move_copies([pent[0],circ[0]]) circle(r=.1,$fn=32);
+//   color("blue") translate(reindexed[0])circle(r=.1,$fn=32);

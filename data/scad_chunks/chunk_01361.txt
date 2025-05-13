@@ -1,0 +1,12 @@
+module panel_USBA_holes(h = 100) { //! Make holes for USBA connector
+    corner_clearance = 2 * cnc_bit_r * (1 - 1 / sqrt(2));
+    width = 5.5 + corner_clearance;
+    length = 13 + corner_clearance;
+
+    extrude_if(h) union() {
+        rounded_square([length, width], r = cnc_bit_r);
+
+        panel_USBA_hole_positions()
+            drill(M3_clearance_radius, 0);
+    }
+}

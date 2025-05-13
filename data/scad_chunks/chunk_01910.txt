@@ -1,0 +1,1 @@
+function box_insert_l(type) = insert_length(box_insert(type));

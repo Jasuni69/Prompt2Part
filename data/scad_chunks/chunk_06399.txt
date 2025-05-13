@@ -1,0 +1,10 @@
+function centroid(object,eps=EPSILON) =
+    assert(is_finite(eps) && (eps>=0), "\nThe tolerance should a non-negative value." )
+    is_vnf(object) ? _vnf_centroid(object,eps)
+  : is_path(object,[2,3]) ? _polygon_centroid(object,eps)
+  : is_region(object) ? (len(object)==1 ? _polygon_centroid(object[0],eps) : _region_centroid(object,eps))
+  : assert(false, "\nInput must be a VNF, a region, or a 2D or 3D polygon");
+
+
+/// Internal Function: _region_centroid()
+/// Compute centroid of region

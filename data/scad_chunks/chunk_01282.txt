@@ -1,0 +1,11 @@
+module scs_bearing_block_hole_positions(type) { //! Place children at hole positions
+    screw_separation_x = scs_screw_separation_x(type);
+    screw_separation_z = scs_screw_separation_z(type);
+    G = scs_block_side_height(type);
+    h = scs_hole_offset(type);
+
+    for(x = [-screw_separation_x, screw_separation_x], z = [-screw_separation_z, screw_separation_z])
+        translate([x / 2, G - h, z / 2])
+            rotate([-90, 0, 0])
+                children();
+}

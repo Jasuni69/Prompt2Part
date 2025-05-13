@@ -1,0 +1,28 @@
+module chamferred_cylinder(h=1, r=undef, d=undef, chamfer=0.25, chamfedge=undef, angle=45, center=false, top=true, bottom=true)
+{
+	deprecate("chamf_cyl()` and `chamferred_cylinder()", "cyl()");
+	r = get_radius(r=r, d=d, dflt=1);
+	chamf = (chamfedge == undef)? chamfer : chamfedge * cos(angle);
+	cyl(l=h, r=r, chamfer1=bottom? chamf : 0, chamfer2=top? chamf : 0, chamfang=angle, center=center);
+}
+
+
+
+// Module: chamf_cyl()
+// Status: DEPRECATED, use `cyl(..., chamfer)` instead.
+//
+// Usage:
+//   chamf_cyl(h, r|d, chamfer|chamfedge, [top], [bottom], [center])
+//
+// Description:
+//   Creates a cylinder with chamferred (bevelled) edges.  Basically a shortcut of `chamferred_cylinder()`
+//
+// Arguments:
+//   h = height of cylinder. (Default: 1.0)
+//   r = radius of cylinder. (Default: 1.0)
+//   d = diameter of cylinder. (use instead of r)
+//   chamfer = radial inset of the edge chamfer. (Default: 0.25)
+//   chamfedge = length of the chamfer edge. (Use instead of chamfer)
+//   top = boolean.  If true, chamfer the top edges. (Default: True)
+//   bottom = boolean.  If true, chamfer the bottom edges. (Default: True)
+//   center = boolean.  If true, cylinder is centered. (Default: false)

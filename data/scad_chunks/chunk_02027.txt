@@ -1,0 +1,5 @@
+module psu_shroud_cable_positions(type, cable_d, cables = 1)                    //! Place children at the cable tie positions
+    for(i = [0 : 1 : cables - 1])
+        translate([-psu_length(type) / 2 - psu_shroud_extent(type) + cable_tie_inset,
+                   psu_shroud_centre_y(type) + (i - cables / 2 + 0.5) *  psu_shroud_cable_pitch(cable_d)])
+            children();

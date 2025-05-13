@@ -1,0 +1,13 @@
+function f_is_bool(a) = f_1arg(function (a) is_bool(a))(a);
+
+
+// Function: f_is_num()
+// Synopsis: Returns a function to determine if a value is a number.
+// Topics: Function Literals, Type Queries
+// See Also: f_is_undef(), f_is_bool(), f_is_string(), f_is_list()
+// Usage:
+//   fn = f_is_num();
+// Description:
+//   A factory that returns function literals equivalent to `is_num(a)`.
+// Arguments:
+//   a = If given, replaces the argument.

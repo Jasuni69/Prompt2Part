@@ -1,0 +1,10 @@
+module PipeBlock()union(){
+Prisma(10,20,40,c1=5,s=2.5);
+Rundrum(10,20,r=2.5)VarioFill(l=[19,30],exp=2.3,spiel=[0,3]);
+Tz(30){
+  Polar(4,15)R(0,-90,90)Bogen(l=25,d=3,center=+0,rad=5,messpunkt=false);
+  MKlon(tx=5)R(0,90)Kehle(dia=3); 
+  MKlon(ty=10)R(-90)Kehle(dia=3,rad=1);
+  
+} 
+}

@@ -1,0 +1,9 @@
+module test_affine3d_skew() {
+    assert(affine3d_skew(sxy=2) == [[1,2,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]);
+    assert(affine3d_skew(sxz=2) == [[1,0,2,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]);
+    assert(affine3d_skew(syx=2) == [[1,0,0,0],[2,1,0,0],[0,0,1,0],[0,0,0,1]]);
+    assert(affine3d_skew(syz=2) == [[1,0,0,0],[0,1,2,0],[0,0,1,0],[0,0,0,1]]);
+    assert(affine3d_skew(szx=2) == [[1,0,0,0],[0,1,0,0],[2,0,1,0],[0,0,0,1]]);
+    assert(affine3d_skew(szy=2) == [[1,0,0,0],[0,1,0,0],[0,2,1,0],[0,0,0,1]]);
+}
+test_affine3d_skew();

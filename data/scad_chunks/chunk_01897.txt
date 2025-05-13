@@ -1,0 +1,1 @@
+function box_name(type)        = type[7]; //! Name for projects with more than one box

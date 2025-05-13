@@ -1,0 +1,12 @@
+function _isobands_tri_label(pts, lower, upper) =
+    [
+        for(row = pts)
+        [
+            for(p = row) 
+            let(
+                label = p.z < lower ? 0 : 
+                        p.z > upper ? 2 : 1
+            )
+            [each p, label]
+        ]
+    ];

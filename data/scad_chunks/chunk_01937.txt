@@ -1,0 +1,3 @@
+function subst_sheet(type, sheet) =
+    let(s = box_sheets(type))
+        sheet ? assert(sheet_thickness(sheet) == sheet_thickness(s)) sheet : s;

@@ -1,0 +1,77 @@
+module buildLightTubes()
+{
+  for(tube=lightTubes)
+  {
+    //-- Get the desired coordinate system    
+    theCoordSystem = getCoordSystem(tube, yappCoordPCB);    
+   
+    standoff_Height = standoffHeight(theCoordSystem[2]);
+    pcb_Thickness = pcbThickness(theCoordSystem[2]);
+    
+    xPos = translate2Box_X (tube[0], yappLid, theCoordSystem);
+    yPos = translate2Box_Y (tube[1], yappLid, theCoordSystem);
+
+    tLength       = tube[2];
+    tWidth        = tube[3];
+    tWall         = tube[4];
+    tAbvPcb       = tube[5];
+    tubeType      = tube[6];
+    lensThickness = getParamWithDefault(tube[7],0);
+    filletRad     = getParamWithDefault(tube[9],0);
+    toTopOfPCB    = getParamWithDefault(tube[8], standoff_Height+pcb_Thickness);
+    
+    pcbTop2Lid = (shellHeight) - (basePlaneThickness + lidPlaneThickness + toTopOfPCB + tAbvPcb);
+     
+    if (printMessages) echo("buildLightTubes", tubeType=tubeType); 
+    if (printMessages) echo (baseWallHeight=baseWallHeight, lidWallHeight=lidWallHeight, lidPlaneThickness=lidPlaneThickness, toTopOfPCB=toTopOfPCB, tAbvPcb=tAbvPcb);
+    if (printMessages) echo (pcbTop2Lid=pcbTop2Lid);
+    
+    translate([xPos, yPos, ((pcbTop2Lid)/-2)-lidPlaneThickness])
+    {
+      if (tubeType == yappCircle)
+      {
+        difference()
+        {
+          color("red") 
+            cylinder(h=pcbTop2Lid, d=max(tWidth,tLength)+(tWall*2), center=true);
+          
+          translate([0,0,-lensThickness - 0.02])
+            color("blue") 
+              cylinder(h=pcbTop2Lid + lidPlaneThickness +0.02, d=tWidth, center=true);
+        }
+        if (!isTrue(yappNoFillet, tube))
+        {
+          filletRadius = (filletRad==0) ? lidPlaneThickness : filletRad; 
+          translate([0,0,(pcbTop2Lid/2)])
+          color("red") pinFillet(-(tWidth+(tWall*2))/2, filletRadius);
+        } // ifFillet
+      }
+      else
+      {
+        difference()
+        {
+          color("red") 
+            cube([tWidth+(tWall*2), tLength+(tWall*2), pcbTop2Lid], center=true);
+          
+          translate([0,0,tWall*-1])
+            color("green") 
+              cube([tWidth, tLength, pcbTop2Lid], center=true);
+          translate([0,0, +lensThickness])
+            color("blue") 
+              cube([tWidth, tLength, pcbTop2Lid+lensThickness], center=true);
+        }
+        if ((!isTrue(yappNoFillet, tube)))
+        {
+          filletRadius = (filletRad==0) ? lidPlaneThickness : filletRad; 
+          translate([0,0,(pcbTop2Lid/2)])
+          color("red") rectangleFillet(tWidth+(tWall*2), tLength+(tWall*2),filletRadius, 1);
+        } // ifFillet
+      }
+    }
+  } //--for(..)
+  
+} //-- buildLightTubes()
+
+
+//===========================================================
+//-- Create the cut through the lid

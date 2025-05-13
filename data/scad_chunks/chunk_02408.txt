@@ -1,0 +1,2 @@
+module pcb_shape(offset)
+    rounded_square([pcb_length(pcb) + 2 * offset, pcb_width(pcb) + 2 * offset], pcb_radius(pcb) + offset);

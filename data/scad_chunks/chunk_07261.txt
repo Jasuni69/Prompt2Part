@@ -1,0 +1,16 @@
+module R(x=0,y=0,z=0,help=false)
+{
+
+    rotate(is_list(x)?x+[0,y,z]:[x,y,z])children();
+    MO(!$children);
+    HelpTxt("R",["x",x,"y",y,"z",z],help);
+}
+
+/** \name M
+\page Modifier
+M() multmatrix objects
+\param skewXY skew the x axis along y
+\param scaleXY scales x and y
+*/
+
+// short for multmatrix and skewing objects

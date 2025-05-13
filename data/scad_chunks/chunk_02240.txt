@@ -1,0 +1,35 @@
+module rpi_camera_focus_ring_stl() { //! Focus ring the glue onto RPI lens
+
+    rad = 15 / 2;
+    hole_r1 = 2.5 / 2;
+    hole_r2 = 5 / 2;
+    thickness = 3;
+    flutes = 8;
+    angle = 180 / flutes;
+    x = rad / (sin(angle / 2) + cos(angle / 2));
+    r = x * sin(angle / 2);
+
+    stl("rpi_camera_focus_ring")
+        difference() {
+            linear_extrude(height = thickness, convexity = 5)
+                difference() {
+                    union() {
+                        circle(x);
+                        for(i = [0 : flutes - 1])
+                            rotate([0, 0, 2 * angle * i])
+                                translate([x, 0])
+                                    circle(r);
+                    }
+                    for(i = [0 : flutes - 1])
+                        rotate([0, 0, 2 * angle * i + angle])
+                            translate([x, 0])
+                                circle(r);
+                }
+            hull() {
+                poly_cylinder(r = hole_r1, h = 0.1, center = true);
+
+                translate([0, 0, thickness])
+                    poly_cylinder(r = hole_r2, h = 0.1, center = true);
+            }
+        }
+}

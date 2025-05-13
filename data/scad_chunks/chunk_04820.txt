@@ -1,0 +1,47 @@
+function pb_processCommands(cmds=[], _i=0, _r=[[],[],0,[[],[]]], _f=[]) = 
+        assert(is_list(cmds) && len(cmds) > 0 && (cmds[0][0] == "m" || cmds[0][0] == "M"), str("cmds must be a list and start with a M (move) command but started with ",cmds[0][0]))
+        _i==len(cmds)? concat(_f,[[_r[0],concat(_r[1],[[4,len(_r[0])-1]])]]) : let(
+        cmd = cmds[_i],
+        o = ord(cmd[0]),
+        c = cmd[0],
+        a = _r[2],
+        ctl = _r[3],
+        l = pb_last(_r[0]),
+        d = c=="m"? _pb_line(_r[0], true,cmd[1],a,true) :
+            c=="M"? _pb_line(_r[0], false, cmd[1],a,true) :
+            c=="l"? _pb_line(_r[0], true, cmd[1], a, false) :
+            c=="L"? _pb_line(_r[0], false, cmd[1], a, false) :
+            c=="h"? _pb_horz(l, cmd[1], true, a) :
+            c=="H"? _pb_horz(l, cmd[1], false, a) :
+            c=="v"? _pb_vert(l, cmd[1], true, a) :
+            c=="V"? _pb_vert(l, cmd[1], false, a) :
+            c=="c"? _pb_cubic(l, cmd[1], true, a) :
+            c=="C"? _pb_cubic(l, cmd[1], false, a) :
+            c=="s"? _pb_smooth_cubic(l, cmd[1], true, a, ctl) :
+            c=="S"? _pb_smooth_cubic(l, cmd[1], false, a, ctl) :
+            c=="q"? _pb_quadratic(l, cmd[1], true, a) :
+            c=="Q"? _pb_quadratic(l, cmd[1], false, a) :
+            c=="t"? _pb_smooth_quadratic(l, cmd[1], true, a, ctl) :
+            c=="T"? _pb_smooth_quadratic(l, cmd[1], false, a, ctl) :
+            c=="a"? _pb_arc(l, cmd[1], true, a) :
+            c=="A"? _pb_arc(l, cmd[1], false, a) :
+            c=="z" || c=="Z"? _pb_close(_r[0], a) :
+            c=="polar"? _pb_polar(_r[0], [cmd[1][0], cmd[1][1]+a]) :
+            c=="Polar"? _pb_polar(_r[0], cmd[1]) :
+            c=="forward"? _pb_forward(l, cmd[1], true, a) :
+            c=="Forward"? _pb_forward(l, cmd[1], false, a) :
+            c=="angle"? _pb_angle(cmd[1], false, a) :
+            c=="Angle"? _pb_angle(cmd[1], true, a) :
+            c=="segment"? _pb_segment(last=l, args=cmd[1], rel=true) :
+            c=="Segment"? _pb_segment(last=l, args=cmd[1], rel=false) :
+            c=="fillet"? _pb_fillet(_r[0], cmd[1], a) :
+            c=="chamfer"? _pb_chamfer(_r[0], cmd[1], a) : [],
+        _f = (c=="m" || c=="M") && _r[0]!=[]? concat(_f, [[_r[0],concat(_r[1],[[4,len(_r[0])-1]]),_r[2],_r[3]]]) : _f,
+        r = c=="m" || c=="M"? d : d==[]? _r : [concat(_r[0], d[0]),concat(_r[1], d[1]), is_num(d[2])? d[2] : _r[2],d[3]]
+    ) pb_processCommands(cmds, _i+1, c=="m" || c=="M"? d : d==[]? _r : [concat(_r[0], d[0]),concat(_r[1], d[1]), is_num(d[2])? d[2] : _r[2],is_list(d[3])? d[3]: [[],[]]], _f);
+
+
+//  Applies fillets and chamfer commands to the raw point list
+//  chamfer = 2
+//  fillet  = 3
+//  z       = 4

@@ -1,0 +1,6 @@
+module BasicHeart2D()
+{
+  heart2D(100,raise=0,stretch=0.2,shift=0.2,points=150);
+}
+
+// The basic shape of the full text.

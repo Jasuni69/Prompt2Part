@@ -1,0 +1,30 @@
+function setFromList(geomList,oldGeom=$geomInfo)
+  = isOfType(geomList[0],$type_geomInfoPacked)
+   ?geomList[0]
+   //"error: only unpacked geometry must be passed to geomSet"
+   //:geom1;
+   :[ for(member=_prototype_PackedGeomerty())
+      (member == typeOf(oldGeom))
+        ? member
+        : isOfTypeOrElse(typeOf(member),geomList[0],
+          isOfTypeOrElse(typeOf(member),geomList[1],
+          isOfTypeOrElse(typeOf(member),geomList[2],
+          isOfTypeOrElse(typeOf(member),geomList[3],
+          isOfTypeOrElse(typeOf(member),geomList[4],
+          isOfTypeOrElse(typeOf(member),geomList[5],
+          isOfTypeOrElse(typeOf(member),geomList[6],
+          isOfTypeOrElse(typeOf(member),geomList[7],
+          isOfTypeOrElse(typeOf(member),geomList[8],
+          isOfTypeOrElse(typeOf(member),geomList[9],
+          isOfTypeOrElse(typeOf(member),geomList[10],
+          isOfTypeOrElse(typeOf(member),geomList[11],
+          isOfTypeOrElse(typeOf(member),geomList[12],
+          isOfTypeOrElse(typeOf(member),geomList[13],
+          isOfTypeOrElse(typeOf(member),geomList[14],
+          isOfTypeOrElse(typeOf(member),geomList[15],
+          isOfTypeOrElse(typeOf(member),geomList[16],
+          isOfTypeOrElse(typeOf(member),geomList[17],
+          isOfTypeOrElse(typeOf(member),geomList[18],
+          isOfTypeOrElse(typeOf(member),geomList[19],
+          oldGeom[getTypeIndex(typeOf(member))]))))))))))))))))))))
+      ];

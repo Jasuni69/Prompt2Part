@@ -1,0 +1,34 @@
+function pb_chamfer(pts, index, size) = let(
+    a = index==0? pts[len(pts)-1] : pts[index-1],
+    b = pts[index],
+    c = index == len(pts)-1? pts[0]:pts[index+1],
+    d = size/2,
+    ba = a-b,
+    bc = c-b,
+    l1 = norm(ba),
+    l2 = norm(bc),
+    cos_angle = ba * bc / (l1 * l2),
+    tan_half_angle = sqrt((1 - cos_angle) / (1 + cos_angle)),
+    bf_length = sqrt(pow(d/tan_half_angle,2) + pow(d,2)),
+    ba_u = ba/l1,
+    bc_u = bc/l2,
+    bf = ba_u*bf_length,
+    bg = bc_u*bf_length,
+    f = b + bf,
+    g = b + bg
+) (size<=0 || a==b || b==c)? [b] : [f, g];
+
+//  function pb_ellipseCenter(p1, p2, rx, ry, angle, long, ccw)
+//
+//  Calculates center of a ellipse rx, ry rotated to angle that runs through both p1 and p2.
+//  p1          2D start point for the arc segment.
+//  p2          2D end point of the arc segment.
+//  rx          x radius for the ellipse when angle = 0
+//  ry          y radius for the ellipse when angle = 0
+//  angle       rotation angle of the ellipse around it's center point.
+//  long        Two ways around the ellipse. Set to true to take the long way.
+//  ccw         Set to true of you want the acr drawn following the ellipse counter clock wize.
+//
+//  return      List with two values.
+//      return[0]   2D point list forming a polyline representing the ellipseArc.
+//      return[1]   2D point which represents the position of the ellipse center point.

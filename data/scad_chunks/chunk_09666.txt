@@ -1,0 +1,32 @@
+module fillet_mask(l=undef, r=1.0, orient=ORIENT_Z, align=V_CENTER, h=undef, center=undef)
+{
+	l = first_defined([l, h, 1]);
+	sides = quantup(segs(r),4);
+	orient_and_align([2*r, 2*r, l], orient, align, center=center) {
+		linear_extrude(height=l+0.1, convexity=4, center=true) {
+			difference() {
+				square(2*r, center=true);
+				xspread(2*r) yspread(2*r) circle(r=r, $fn=sides);
+			}
+		}
+	}
+}
+
+
+// Module: fillet_mask_x()
+// Usage:
+//   fillet_mask_x(l, r, [align], [center])
+// Description:
+//   Creates a shape that can be used to fillet a 90 degree edge oriented
+//   along the X axis.  Difference it from the object to be filletted.
+//   The center of the mask object should align exactly with the edge to
+//   be filletted.
+// Arguments:
+//   l = Length of mask.
+//   r = Radius of the fillet.
+//   align = Alignment of the mask.  Use the `V_` constants from `constants.h`.  Default: centered.
+// Example:
+//   difference() {
+//       cube(size=100, center=false);
+//       #fillet_mask_x(l=100, r=25, align=V_RIGHT);
+//   }

@@ -1,0 +1,15 @@
+module no_module() {
+    assert(false, str("You called ",parent_module(1),"() as a module but it is available only as a function"));
+}    
+  
+
+// Module: deprecate()
+// Synopsis: Display a console note that a module is deprecated and suggest a replacement.
+// Topics: Error Checking
+// See Also: no_function(), no_module()
+// Usage:
+//   deprecate(new_name);
+// Description:
+//   Display info that the current module is deprecated and you should switch to a new name
+// Arguments:
+//   new_name = name of the new module that replaces the old one

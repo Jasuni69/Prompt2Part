@@ -1,0 +1,5 @@
+function slice(list, start = 0, end = undef) = let( //! Slice a list or string with Python type semantics
+        len = len(list),
+        start = limit(start < 0 ? len + start : start, 0, len),
+        end   = is_undef(end) ? len : limit(end   < 0 ? len + end : end, 0, len)
+    ) is_string(list) ? slice_str(list, start, end) : [for(i = [start : 1 : end - 1]) list[i]];

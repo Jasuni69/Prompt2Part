@@ -1,0 +1,37 @@
+module ISOKFlange(partLen = 108.0,
+	innerDiameter = 102,
+	outerDiameter = 108,
+	ringWidth = 2.4,
+	flangeDiameter = 130,
+	flangeSize = 12,
+	ridgeDepth = 2,
+	grooveRadius = 1.5,
+	grooveOffset = 5.0) {
+	
+	flangeInnerSize = flangeSize-ridgeDepth;
+	middleSegmentSize=partLen-flangeInnerSize;
+
+	group() {
+		group() {
+			difference() {
+				difference() {
+					cylinder(h = partLen, d = flangeDiameter, center = false);
+					cylinder(h = partLen, d = innerDiameter, center = false);
+					translate([0,0,partLen-grooveOffset]) {
+						rotate_extrude()
+						translate([flangeDiameter/2,0,0])
+						circle(r = grooveRadius);
+					}
+				}
+				difference() {
+					union() {
+						cylinder(h = middleSegmentSize, d = flangeDiameter-ringWidth, center = false);
+						cylinder(h = partLen-flangeSize, d = flangeDiameter);
+					}
+					cylinder(h = middleSegmentSize, d = outerDiameter);
+				}
+			}
+		}
+	}
+}
+ISOKFlange(10);  // this file is meant to be imported, not included

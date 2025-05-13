@@ -1,0 +1,44 @@
+module opengrab() { //! Draw OpenGrab module
+    vitamin("opengrab(): OpenGrab V3 electro permanent magnet");
+
+    color("grey")
+        translate_z(magnet / 2 + eps)
+            cube([width, width, magnet - eps], center = true);
+
+    color(grey(80)) {
+        gap = (width - poles * pole_w + 3 * eps) / (poles - 1);
+        pitch = pole_w + gap;
+        for(i = [0 : poles - 1])
+            translate([(i - floor(poles / 2)) * pitch - eps, 0, 0.5])
+                cube([pole_w, pole_l, 1], center = true);
+    }
+
+    not_on_bom()
+        translate_z(opengrab_pcb_z())
+            pcb(pcb);
+
+    translate_z(1)
+        opengrab_hole_positions() {
+            color(brass)
+                linear_extrude(depth - 1)
+                    difference() {
+                            circle(d = 4.7 / cos(30), $fn = 6);
+
+                            circle(r = 3/2);
+                    }
+
+            if(show_threads)
+                female_metric_thread(3, metric_coarse_pitch(3), depth - 1, center = false, colour = brass);
+        }
+
+    module molex()
+        translate_z(opengrab_pcb_z() + pcb_thickness(pcb))
+            color(grey(90))
+                import("stl/Molex_5023860470.stl");
+
+    translate([-8.4, -14.2])
+        molex();
+
+    translate([0.125, -14.2])
+        molex();
+}

@@ -1,0 +1,2 @@
+module use_stl(name)                //! Import an STL to make a build platter
+    assert(false);                  // Here for documentation only, real version in core.scad

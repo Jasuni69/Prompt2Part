@@ -1,0 +1,54 @@
+module DRing(d=4,id=20,r=.5,l=0,grad=180,fn=fn,center=true,name,help){
+    $info=false;
+    $d=d;
+    r=is_list(r)?r:[r,d/2];
+  
+  
+   translate(center?[0,0]:[0,d/2+r[0]+l])union(){
+    if($children){
+        DBogen(fn=fn/2,grad=grad,x=(id+d)+r[0]*2,rad2=max(r[1],.0001))children();
+      union(){
+        $info=false;
+        //RotEx(180,fn=fn/2)T((id+d)/2+r)children();
+        T(y=-l)MKlon(tx=id/2)rotate(-90)RotEx(90,fn=fn/4)T(d/2+r[0])children();
+        T(y=-d/2-r[0]-l)R(90,0,-90)linear_extrude(id,center=true)children();
+        if(l)MKlon((id+d)/2+r[0])R(90)linear_extrude(l,center=false)children(); 
+      }
+    }
+    else{
+    //RotEx(180,fn=fn/2)T((id+d)/2+r[0]) circle(d=d,$fn=fn);
+     DBogen(fn=fn/2,grad=grad,x=(id+d)+r[0]*2,rad2=max(r[1],.0001))circle(d=d,$fn=fn);   
+    T(y=-l)MKlon(tx=id/2)rotate(-90)RotEx(90,fn=fn/4)T(d/2+r[0])circle(d=d,$fn=fn);
+    if(l)MKlon((id+d)/2+r[0])R(90)linear_extrude(l,center=false) circle(d=d,$fn=fn);
+    T(y=-d/2-r[0]-l)R(90,0,-90) linear_extrude(id,center=true) circle(d=d,$fn=fn);
+        
+    }
+  if(name)%T(y=-d-r[0]-l-$vpd/100)Caliper(id,messpunkt=0);
+  }    
+InfoTxt("DRing",["dist",id+r[0]*2+d,"mm innen h=",str(l+2*r[0]+id/2,"mm")],name);
+HelpTxt("DRing",[
+  "d",d,
+  "id",id,
+  "r",r,
+  "l",l,
+  "grad",grad,
+  "fn",fn,
+  "centre",center,
+  "name",name]
+   ,help);    
+}
+
+/** \page Products
+\name SRing
+SRing() creates a self locking retaining ring
+\param e number of arms
+\param id target arbor diameter
+\param od outer diameter
+\param h thickness
+\param rand rim
+\param reduction  smaller id/2
+\param schlitz ratio  land/groove
+*/
+
+
+// SicherungsRing

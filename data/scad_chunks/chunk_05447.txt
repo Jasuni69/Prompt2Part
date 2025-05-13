@@ -1,0 +1,53 @@
+function transform_desc(T,desc) =
+    assert(is_description(desc), "Invalid description")
+    is_consistent(T, ident(4)) ? [for(t=T) [t*desc[0], desc[1]]]
+  : is_matrix(T,4,4) ? [T*desc[0], desc[1]]
+  : assert(false,"T must be a 4x4 matrix or list of 4x4 matrices");
+
+
+// Module: desc_copies()
+// Synopsis: Places copies according to a list of transformation matrices and supplies descriptions for the copies.
+// SynTags: MatList, Trans
+// Topics: Transformations, Distributors, Copiers, Descriptions
+// See Also: line_copies(), move_copies(), xcopies(), ycopies(), zcopies(), grid_copies(), xflip_copy(), yflip_copy(), zflip_copy(), mirror_copy()
+// Usage:
+//   desc_copies(transforms) CHILDREN;
+// Description:
+//   Makes a copy of the children and applies each matrix in the list of transformation matrices.
+//   This is equivalent to running `multmatrix()` over all the transformations for the children.
+//   This function provides a method for working with descriptions of the whole set of copies by
+//   making all of their descriptions available to the children.  This functionality will primarly
+//   be useful when the transformation consists only of translations and rotations and hence
+//   does not change the size or shape of the children.  If you change the shape of the objects, care
+//   is required to ensure that the descriptions match correctly. 
+//   .
+//   In a child object you obtain its description using {{parent()}} as usual.  Once you have
+//   that description you can also access descriptions of the other objects, assuming they have
+//   identical geometry.  (The geometry can vary if you make your object conditional on `$idx` for example.)
+//   To get the next object use `$next()` and to get the previous one use `$prev()`.  You can also
+//   get an arbitrary object description by index using `$desc(i)`.  You can use these descriptions
+//   with {{prism_connector()}} to create prisms between the corresponding objects.
+//   .
+//   Note that in OpenSCAD version 2021.01 you cannot directly call `$next` or the other `$` functions.
+//   You have to write `let(next=$next)` and then you can use the `next()` function.  Similar steps
+//   are necessary for the other functions.  In development versions you can directly invoke `$next()`
+//   and the other functions.  
+//   .
+//   The descriptions are made available through function literals provided in the `$` variables.  The
+//   available functions are
+//   * $next([di], [desc]): Returns the description of the next object, or if `di` is given, the object `di` steps forward.  The indexing wraps around.
+//   * $prev([di], [desc]): Returns the description of the previous object, or if `di` is given, the object `di` steps before.  The indexing wraps around.
+//   * $desc(i, [desc]): Returns a description of the object with index `i`.  Indexing does **not** wrap around.  
+//   All of these functions have an optional `desc` parameter, which is the description that will be transformed to produce the next, previous, or indexed
+//   description.  By default `desc` is set to {{parent()}}, but you may wish to use a different description if you have objects that vary.
+//   .
+//   See the last examples in {{prism_connector()}} for examples using this module.  
+// Arguments:
+//   transforms = list of transformation matrices to apply to the children
+// Side Effects:
+//   `$count` is set to the number of transformations
+//   `$idx` is set to the index number of the current transformation
+//   `$is_last` is set to true if this is the last copy and false otherwise
+//   `$next()` is set to a function literal that produces the next description (see above)
+//   `$prev()` is set to a function literal that produces the previous description (see above)
+//   `$desc()` is set to a function literal that produces the description at a specified index (see above)

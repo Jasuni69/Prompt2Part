@@ -1,0 +1,53 @@
+module regular_polygon_maze(radius, ccells, levels, thickness = 1, sides) {    
+	function no_wall(cell) = get_type(cell) == "NO_WALL";
+	function top_wall(cell) = get_type(cell) == "TOP_WALL";
+	function right_wall(cell) = get_type(cell) == "RIGHT_WALL";
+	function top_right_wall(cell) = get_type(cell) == "TOP_RIGHT_WALL";
+
+	function get_x(cell) = mz_square_get(cell, "x"); 
+	function get_y(cell) = mz_square_get(cell, "y");
+	function get_type(cell) = mz_square_get(cell, "t");
+
+    arc_angle = 360 / ccells;
+	r = radius / (levels + 1);
+	
+	cells = mz_square(ccells, levels, y_wrapping = true);
+
+	difference() {
+		union() {
+			for(i = [1 : levels + 1]) {
+			    ring_regular_polygon(r * i, thickness, sides);
+			}
+		  
+		  
+			for(row = cells, cell = row) { 
+				cr = get_x(cell) + 1; 
+				cc = get_y(cell);    
+				
+				angle = cc * arc_angle;
+				 
+				if(top_wall(cell) || top_right_wall(cell)) { 
+				    regular_polygon_to_polygon_wall(r * cr, r, cc * arc_angle , thickness, sides);
+				} 
+			}
+	    }
+		
+		union() {
+		    // maze entry
+			// ring_regular_polygon_sector(r, arc_angle / 1.975 , thickness, r / 3, sides);   
+
+	        // road to the next level
+			for(row = cells, cell = row) { 
+				cr = get_x(cell) + 1; 
+				cc = get_y(cell);   
+				
+				if(no_wall(cell) || top_wall(cell)) { 
+				    ring_regular_polygon_sector(r * (cr + 1), (cc + 0.5) * arc_angle , thickness, thickness * 0.75 , sides);
+				}  
+			}
+		}
+	}
+}
+
+linear_extrude(wall_height) 
+    regular_polygon_maze(radius_of_circle_wrapper, ccells, levels, wall_thickness, sides);

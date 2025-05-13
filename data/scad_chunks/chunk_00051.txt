@@ -1,0 +1,50 @@
+
+translate([x3 + 90, modules_y])
+    modules();
+
+translate([x3 + 150, modules_y])
+    photo_interrupters();
+
+translate([x3, ssrs_y]) {
+    ssrs();
+
+    ssr_shrouds();
+}
+
+translate([x3, blowers_y])
+    blowers();
+
+translate([x2, batteries_y])
+    batteries();
+
+translate([x3 + 10, hot_ends_y])
+    hot_ends();
+
+translate([x2, panel_meters_y])
+    panel_meters();
+
+translate([x2, extrusions_y])
+    extrusions();
+
+translate([x2, box_sections_y])
+    box_sections();
+
+translate([370, transformers_y])
+    transformers();
+
+translate([x4, transformers_y])
+    no_explode() socket_boxes();
+
+translate([950, transformers_y + 110])
+    rotate(-90)
+        bbox_test();
+
+belts_y = 0;
+rails_y = belts_y + 200;
+extrusion_brackets_y = rails_y + 250;
+sk_brackets_y = extrusion_brackets_y + 80;
+kp_pillow_blocks_y = sk_brackets_y + 60;
+bearing_blocks_y = kp_pillow_blocks_y + 60;
+BLDC_y = bearing_blocks_y + 180;
+pot_y = bearing_blocks_y;
+cable_strip_y = sheets_y + 30;

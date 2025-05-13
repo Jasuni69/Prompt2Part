@@ -1,0 +1,29 @@
+module catenaries() {
+    //
+    // catenary curve path from control points
+    //
+    curve = [for(p = catenary_points(l, x, y)) [p.x, p.y, 0]];
+    //
+    // Draw the curve
+    //
+    r = 0.5;
+    sweep(curve, circle_points(r, $fn = 64));
+    //
+    // Minimum Z
+    //
+    min_z = catenary_points(l, x, y, 0);
+
+    color("blue") {
+        translate([min_z.x, min_z.y + r])
+            rotate([-90, 0, 0])
+                arrow();
+
+        translate([min_z.x, min_z.y - r])
+            rotate([90, 0, 0])
+                arrow();
+    }
+}
+
+if($preview)
+    rotate(is_undef($bom) ? 0 : [70, 0, 315])
+        catenaries();

@@ -1,0 +1,42 @@
+module extrusion_corner_bracket(type) { //! Corner bracket for extrusion
+    vitamin(str("extrusion_corner_bracket(", type[0], "): Extrusion corner bracket ", type[1].z, "mm for ", extrusion_corner_bracket_extrusion(type)[0]));
+
+    eSize = extrusion_corner_bracket_size(type).z;
+    cbSize = extrusion_corner_bracket_size(type).x;
+    baseThickness = extrusion_corner_bracket_base_thickness(type);
+    hole_r = screw_clearance_radius(find_screw(hs_cap, nut_size(extrusion_corner_bracket_tnut(type))));
+
+    module base() {
+        linear_extrude(baseThickness)
+            difference() {
+                translate([0, -eSize / 2])
+                    square([cbSize, eSize]);
+
+                hull() {
+                    translate([extrusion_corner_bracket_hole_offset(type) + 1.5, 0])
+                        circle(hole_r);
+
+                    translate([extrusion_corner_bracket_hole_offset(type) - 1.5, 0])
+                        circle(hole_r);
+                }
+            }
+    }
+
+    color("silver") {
+        rotate([90, 0, 90])
+            base();
+
+        translate([0, baseThickness])
+            rotate([90, 0, 0])
+                base();
+
+        sideThickness = extrusion_corner_bracket_side_thickness(type);
+        for(z = [-eSize / 2, eSize / 2 - sideThickness]) {
+            translate_z(z) {
+                right_triangle(cbSize, cbSize, sideThickness, center = false);
+                cube([5, cbSize, sideThickness]);
+                cube([cbSize, 5, sideThickness]);
+            }
+        }
+    }
+}

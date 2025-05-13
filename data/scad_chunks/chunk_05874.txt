@@ -1,0 +1,16 @@
+function all_nonnegative(x,eps=0) =
+    is_num(x)? x>=-eps :
+    is_vector(x) && [for (xx=x) if(xx<-eps) 1] == [];
+
+
+// Function: all_equal()
+// Synopsis: Returns true if all items in a list are approximately equal to each other.
+// Topics: Comparisons, List Handling
+// See Also: approx(), all_zero(), all_nonzero(), all_positive(), all_negative(), all_nonpositive(), all_nonnegative()
+// Usage:
+//   b = all_equal(vec, [eps]);
+// Description:
+//   Returns true if all of the entries in vec are equal to each other, or approximately equal to each other if eps is set.
+// Arguments:
+//   vec = vector to check
+//   eps = Set to tolerance for approximate equality.  Default: 0

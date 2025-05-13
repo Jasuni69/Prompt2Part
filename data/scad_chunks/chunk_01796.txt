@@ -1,0 +1,17 @@
+module pdip(pins, part, socketed, w = inch(0.3), pitch = inch(0.1)) { //! Draw standard 0.1" PDIP IC package
+    vitamin(str("pdip(", pins, ", ", part, arg(w, inch(0.3), "w"), arg(pitch, inch(0.1), "pitch"),"): IC ", part, " PDIP", pins));
+    n = ceil(pins / 2);
+    k = in([4, 8], n) ? n - 1 : n;
+    length = k * pitch + pitch / 2;
+    width = w - pitch / 2;
+    height = 3;
+    $fa = fa; $fs = fs;
+
+    if(socketed)
+        dil_socket(n, w, pitch)
+            dip(n, part, [length, width, height], w, pitch, pdip_pin);
+        else
+            dip(n, part, [length, width, height], w, pitch, pdip_pin);
+    dil_pin_positions(n, w, pitch)
+        solder();
+}

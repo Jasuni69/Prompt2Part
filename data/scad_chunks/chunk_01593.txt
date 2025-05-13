@@ -1,0 +1,1 @@
+function spool_hub_diameter(type)  = type[7]; //! Diameter of the thicker hub

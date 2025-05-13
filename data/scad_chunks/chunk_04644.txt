@@ -1,0 +1,16 @@
+function offsetPolygonPoints(points, offset=0)=
+// Work sthe same as the offset does, except for the fact that instead of a 2d shape
+// It works directly on polygon points
+// It returns the same number of points just offset into or, away from the original shape.
+// points= a series of x,y points[[x1,y1],[x2,y2],...]
+// offset= amount to offset by, negative numbers go inwards into the shape, positive numbers go out
+// return= a series of x,y points[[x1,y1],[x2,y2],...]
+let(
+  isCWorCCW=sign(offset)*CWorCCW(points)*-1,
+  lp=len(points)
+)
+[for(i=[0:lp-1]) parallelFollow([
+  points[listWrap(i-1,lp)],
+  points[i],
+  points[listWrap(i+1,lp)],
+],thick=offset,mode=isCWorCCW)];

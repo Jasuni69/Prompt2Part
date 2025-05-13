@@ -1,0 +1,30 @@
+function block_matrix(M) =
+    let(
+        bigM = [for(bigrow = M) each hstack(bigrow)],
+        len0 = len(bigM[0]),
+        badrows = [for(row=bigM) if (len(row)!=len0) 1]
+    )
+    assert(badrows==[], "Inconsistent or invalid input")
+    bigM;
+
+
+// Section: Solving Linear Equations and Matrix Factorizations
+
+// Function: linear_solve()
+// Synopsis: Solve Ax=b or, for overdetermined case, solve the least square problem. 
+// Topics: Matrices, Linear Algebra
+// See Also: linear_solve3(), matrix_inverse(), rot_inverse(), back_substitute(), cholesky()
+// Usage:
+//   solv = linear_solve(A,b,[pivot])
+// Description:
+//   Solves the linear system Ax=b.  If `A` is square and non-singular the unique solution is returned.  If `A` is overdetermined
+//   the least squares solution is returned. If `A` is underdetermined, the minimal norm solution is returned.
+//   If `A` is rank deficient or singular then linear_solve returns `[]`.  If `b` is a matrix that is compatible with `A`
+//   then the problem is solved for the matrix valued right hand side and a matrix is returned.  Note that if you 
+//   want to solve Ax=b1 and Ax=b2 that you need to form the matrix `transpose([b1,b2])` for the right hand side and then
+//   transpose the returned value.  The solution is computed using QR factorization.  If `pivot` is set to true (the default) then
+//   pivoting is used in the QR factorization, which is slower but expected to be more accurate.
+// Arguments:
+//   A = Matrix describing the linear system, which need not be square
+//   b = right hand side for linear system, which can be a matrix to solve several cases simultaneously.  Must be consistent with A.
+//   pivot = if true use pivoting when computing the QR factorization.  Default: true

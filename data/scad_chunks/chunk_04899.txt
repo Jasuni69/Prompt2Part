@@ -1,0 +1,29 @@
+function orderPoints(pts, order=[0,1,2], defaults=[0,0,0]) = [for(pt = pts) [for(i=[0:len(order)-1]) order[i]>=len(pt)? defaults[i] : pt[order[i]]] ];
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+//  *********************************************************************************************************************************  
+//  Helper functions
+
+
+//  function  sp(r)
+//
+//  SP (Show points) to quickly visualise a list of points.
+//
+//  pts     (list)    List of 2D or 3D points.
+//  r       (number)  Radius of the point markers.
+//  color   (string)  Color of the point markers.

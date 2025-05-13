@@ -1,0 +1,47 @@
+module joiner_clear(l=40, w=10, ang=30, clearance=0, overlap=0.01, anchor=CENTER, spin=0, orient=UP)
+{
+    dmnd_height = l*0.5;
+    dmnd_width = dmnd_height*tan(ang);
+    guide_size = w/3;
+    guide_width = 2*(dmnd_height/2-guide_size)*tan(ang);
+
+    attachable(anchor,spin,orient, size=[w, guide_width, l]) {
+        union() {
+            back(l/4) half_joiner_clear(l=l/2+0.01, w=w, ang=ang, overlap=overlap, clearance=clearance);
+            fwd(l/4) half_joiner_clear(l=l/2+0.01, w=w, ang=ang, overlap=overlap, clearance=-0.01);
+        }
+        children();
+    }
+}
+
+
+
+// Module: joiner()
+// Synopsis: Creates a joiner shape that can mate with another rotated joiner shape.
+// SynTags: Geom
+// Topics: Joiners, Parts
+// See Also: half_joiner_clear(), half_joiner(), half_joiner2(), joiner_clear(), joiner(), snap_pin(), rabbit_clip(), dovetail()
+// Usage:
+//   joiner(l, w, base, [ang=], [screwsize=], [$slop=]) [ATTACHMENTS];
+// Description:
+//   Creates a joiner object that can be attached to another joiner object.
+// Arguments:
+//   l = Length of the joiner.
+//   w = Width of the joiner.
+//   base = Length of the backing to the joiner.
+//   ang = Overhang angle of the joiner.
+//   ---
+//   screwsize = If given, diameter of screwhole.
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//   $slop = Printer specific slop value to make parts fit more closely.
+// Examples(FlatSpin,VPD=125):
+//   joiner(screwsize=3);
+//   joiner(l=40, w=10, base=10);
+// Example(3D):
+//   diff()
+//   cuboid(50)
+//     attach([FWD,TOP,RIGHT])
+//       zrot_copies(n=2,r=15)
+//         joiner();

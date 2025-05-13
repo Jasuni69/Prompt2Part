@@ -1,0 +1,37 @@
+function _covariance_evec_eval(points, eigenvalue_id) =
+    let(  pm    = sum(points)/len(points), // mean point
+          Y     = [ for(i=[0:len(points)-1]) points[i] - pm ],
+          M     = transpose(Y)*Y ,     // covariance matrix
+          evals = _eigenvals_symm_3(M), // eigenvalues in decreasing order
+          evec  = _eigenvec_symm_3(M,evals,i=eigenvalue_id) )
+    [pm, evec, evals[0] ];
+    
+
+// Function: plane_from_points()
+// Synopsis: Return plane defined by a set of 3D points, with arbitrary normal direction.
+// Topics: Geometry, Planes, Points
+// See Also: plane3pt(), plane3pt_indexed(), plane_from_normal(), plane_from_points(), plane_from_polygon()
+// Usage:
+//   plane = plane_from_points(points, [check_coplanar], [eps]);
+// Description:
+//   Given a list of 3 or more 3D points, returns the coefficients of the normalized cartesian equation of a plane,
+//   that is [A,B,C,D] where Ax+By+Cz=D is the equation of the plane and norm([A,B,C])=1.
+//   .
+//   If `check_coplanar=true`, the plane is returned if the points are all coplanar; otherwise `undef` is returned if the points are collinear or not coplanar.
+//   If `check_coplanar=false`, then the coplanarity check is skipped and a best-fit plane is returned (where "best fit"
+//   means minimal perpendiclular point-plane distances, not minimal vertical distances as one would get with least-squares fitting).
+//   The direction of the plane's normal is arbitrary and is not determined by the point order, unlike {{plane_from_polygon()}}.
+// Arguments:
+//   points = The list of points to find the best-fit plane.
+//   check_coplanar = If true, verify the point coplanarity within `eps` tolerance.  Default: false
+//   eps = Tolerance in geometric comparisons.  Default: `EPSILON` (1e-9)
+// Example(FlatSpin,VPD=320,VPT=[-2,5,-2]): 100 non-coplanar random points (yellow spheres) distributed in a volume, showing the best-fit plane (transparent square) with its normal vector.
+//   points = rot(45, v=[-0.3,1,0],
+//       p=random_points(100,3,scale=[50,50,15],seed=47));
+//   plane = plane_from_points(points);
+//   move_copies(points) sphere(d=3, $fn=12);
+//   cp = mean(points);
+//   move(cp) rot(from=UP,to=plane_normal(plane)) {
+//       color("#06f") anchor_arrow(50, flag=false);
+//       %linear_extrude(0.1) square(100, center=true);
+//   }

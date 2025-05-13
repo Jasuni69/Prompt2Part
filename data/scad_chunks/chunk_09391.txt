@@ -1,0 +1,8 @@
+function array_shortest(vecs) = min([for (v = vecs) len(v)]);
+
+
+// Function: array_longest()
+// Description:
+//   Returns the length of the longest sublist in a list of lists.
+// Arguments:
+//   vecs = A list of lists.

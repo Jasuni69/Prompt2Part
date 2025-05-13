@@ -1,0 +1,1 @@
+function _downcase_if_str(s) = is_string(s) ? downcase(s) : s;

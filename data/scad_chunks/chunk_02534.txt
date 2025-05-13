@@ -1,0 +1,1 @@
+function rectangle_points(w, h) = [[-w/2, -h/2, 0], [-w/2, h/2, 0], [w/2, h/2, 0], [w/2, -h/2, 0]]; //! Generate the points of a rectangle

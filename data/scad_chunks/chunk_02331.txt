@@ -1,0 +1,22 @@
+module strap(length, type = strap) { //! Generate the STL for the rubber strap
+    len = length - 2 * (wall + clearance);
+    w = strap_width(type);
+
+    stl("strap")
+        linear_extrude(strap_thickness(type), convexity = 3)
+            difference() {
+                rounded_square([len, w], w / 2 - eps);
+
+                for(end = [-1, 1])
+                    translate([end * (len / 2 - strap_min_width(type) - strap_boss_r(type) - clearance), 0])
+                        rotate(end * 90 + 90)
+                            hull() {
+                                offset(clearance)
+                                    strap_boss_shape(type);
+
+                                translate([strap_extension(type) / 2, 0])
+                                    offset(clearance)
+                                        strap_boss_shape(type);
+                            }
+            }
+}

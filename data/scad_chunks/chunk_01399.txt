@@ -1,0 +1,1 @@
+function meter_offset(type)      = type[2];     //! Display position, 0 = center, +1 = top

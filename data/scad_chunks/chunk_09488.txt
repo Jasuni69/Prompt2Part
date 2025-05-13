@@ -1,0 +1,3 @@
+module echo_warning(msg, pfx="WARNING") {
+	echo(str("<p style=\"background-color: #ffffb0\"><b>", pfx, ":</b> ", msg, "</p>"));
+}

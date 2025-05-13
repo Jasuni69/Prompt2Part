@@ -1,0 +1,1 @@
+function display_aperture(type)     = type[7];  //! Size of the aperture including its depth

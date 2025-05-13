@@ -1,0 +1,102 @@
+function _attach_geom_edge_path(geom, edge) =
+    assert(is_vector(edge),str("Invalid edge: edge=",edge))
+    let(
+        type = geom[0],
+        cp = _get_cp(geom),
+        offset_raw = select(geom,-2),
+        offset = [for (i=[0:2]) edge[i]==0? 0 : offset_raw[i]],  // prevents bad centering.
+        edge = point3d(edge)
+    )
+    type == "prismoid"? ( //size, size2, shift, axis
+        let(all_comps_good = [for (c=edge) if (c!=sign(c)) 1]==[])
+        assert(all_comps_good, "All components of an edge for a cuboid/prismoid must be -1, 0, or 1")
+        let(edge_good = len([for (c=edge) if(c) 1])==2)
+        assert(edge_good, "Invalid edge.")
+        let(
+            size = geom[1],
+            size2 = geom[2],
+            shift = point2d(geom[3]),
+            axis = point3d(geom[4]),
+            edge = rot(from=axis, to=UP, p=edge),
+            offset = rot(from=axis, to=UP, p=offset),
+            h = size.z,
+            cpos = function(vec) let(
+                        u = (vec.z + 1) / 2,
+                        siz = lerp(point2d(size), size2, u) / 2,
+                        z = vec.z * h / 2,
+                        pos = point3d(v_mul(siz, point2d(vec)) + shift * u, z)
+                    ) pos,
+            ep1 = cpos([for (c=edge) c? c : -1]),
+            ep2 = cpos([for (c=edge) c? c :  1]),
+            cp = (ep1 + ep2) / 2,
+            axy = point2d(edge),
+            bot = point3d(v_mul(point2d(size )/2, axy), -h/2),
+            top = point3d(v_mul(point2d(size2)/2, axy) + shift, h/2),
+            xang = atan2(h,(top-bot).x),
+            yang = atan2(h,(top-bot).y),
+            vecs = [
+                if (edge.x) yrot(90-xang, p=sign(axy.x)*RIGHT),
+                if (edge.y) xrot(yang-90, p=sign(axy.y)*BACK),
+                if (edge.z) [0,0,sign(edge.z)]
+            ], 
+            segvec = cross(unit(vecs[1]), unit(vecs[0])),
+            seglen = norm(ep2 - ep1),
+            path = [
+                cp - segvec * seglen/2,
+                cp + segvec * seglen/2
+            ],
+            m = rot(from=UP,to=axis) * move(offset)
+        ) [path, [vecs], m]
+    ) : type == "conoid"? ( //r1, r2, l, shift, axis
+        assert(edge.z && edge.z == sign(edge.z), "The Z component of an edge for a cylinder/cone must be -1 or 1")
+        let(
+            rr1 = geom[1],
+            rr2 = geom[2],
+            l = geom[3],
+            shift = point2d(geom[4]),
+            axis = point3d(geom[5]),
+            r1 = is_num(rr1)? [rr1,rr1] : point2d(rr1),
+            r2 = is_num(rr2)? [rr2,rr2] : point2d(rr2),
+            edge = rot(from=axis, to=UP, p=edge),
+            offset = rot(from=axis, to=UP, p=offset),
+            maxr = max([each r1, each r2]),
+            sides = segs(maxr),
+            top = path3d(move(shift, p=ellipse(r=r2, $fn=sides)), l/2),
+            bot = path3d(ellipse(r=r1, $fn=sides), -l/2),
+            path = edge.z < 0 ? bot : top,
+            path2 = edge.z < 0 ? top : bot,
+            zed = edge.z<0? [0,0,-l/2] : point3d(shift,l/2),
+            vecs = [
+                for (i = idx(top)) let(
+                    pt1 = (path[i] + select(path,i+1)) /2,
+                    pt2 = (path2[i] + select(path2,i+1)) /2,
+                    v1 = unit(zed - pt1),
+                    v2 = unit(pt2 - pt1),
+                    v3 = unit(cross(v1,v2)),
+                    v4 = cross(v3,v2),
+                    v5 = cross(v1,v3)
+                ) [v4, v5]
+            ],
+            m = rot(from=UP,to=axis) * move(offset)
+        ) edge.z>0
+          ? [reverse(list_wrap(path)), reverse(vecs), m]
+          : [list_wrap(path), vecs, m]
+    ) : undef;
+
+
+/// Internal Function: _attach_transform()
+/// Usage: To Get a Transformation Matrix
+///   mat = _attach_transform(anchor, spin, orient, geom);
+/// Usage: To Transform Points, Paths, Patches, or VNFs
+///   new_p = _attach_transform(anchor, spin, orient, geom, p);
+/// Topics: Attachments
+/// See Also: reorient(), attachable()
+/// Description:
+///   Returns the affine3d transformation matrix needed to `anchor`, `spin`, and `orient`
+///   the given geometry `geom` shape into position.
+/// Arguments:
+///   anchor = Anchor point to translate to the origin `[0,0,0]`.  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+///   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+///   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+///   geom = The geometry description of the shape.
+///   p = If given as a VNF, path, or point, applies the affine3d transformation matrix to it and returns the result.

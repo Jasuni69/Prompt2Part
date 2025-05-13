@@ -1,0 +1,1 @@
+function screw_knob_waves(type)    = type[6]; //! Number of waves around the flange edge

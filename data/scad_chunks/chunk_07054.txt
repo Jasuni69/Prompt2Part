@@ -1,0 +1,31 @@
+module test_is_type() {
+    assert(is_type(undef,"undef"));
+    assert(is_type(true,"boolean"));
+    assert(is_type(false,"boolean"));
+    assert(is_type(-123,"number"));
+    assert(is_type(0,"number"));
+    assert(is_type(123,"number"));
+    assert(is_type("","string"));
+    assert(is_type("foo","string"));
+    assert(is_type([],"list"));
+    assert(is_type([1,2,3],"list"));
+    assert(is_type(["foo","bar"],"list"));
+    assert(is_type([0:5],"range"));
+
+    assert(is_type(undef,["undef"]));
+    assert(is_type(true,["boolean"]));
+    assert(is_type(false,["boolean"]));
+    assert(is_type(-123,["number"]));
+    assert(is_type(0,["number"]));
+    assert(is_type(123,["number"]));
+    assert(is_type("",["string"]));
+    assert(is_type("foo",["string"]));
+    assert(is_type([],["list"]));
+    assert(is_type([1,2,3],["list"]));
+    assert(is_type(["foo","bar"],["list"]));
+    assert(is_type([0:5],["range"]));
+
+    assert(is_type(123,["number","string"]));
+    assert(is_type("foo",["number","string"]));
+}
+test_is_type();

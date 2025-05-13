@@ -1,0 +1,54 @@
+module Servokopf(rot,spiel=0.1,schraube=true,T=21,d=4.9,h=3.25,name,help)
+{
+    // 21 Zacken!
+
+    tdepth=.25;
+    r1=d/2+spiel;
+    r2=d/2-tdepth+spiel;
+    
+    preset=[
+    ["name","T","d"],
+    ["A15T",15,3.9],// A1
+    ["B25T",25,4.9],// B1
+    ["C24T",24,5.6],// C1
+    ["H25T",25,5.9],// 3F
+    ["D15T",15,7.6],// D1
+    [" 21T",21,4.9] // this
+    ];
+    
+    if(help)for(i=[0:len(preset)-1])echo(preset[i]);
+    %if(is_num(rot))Tz(+0){//direction
+      Col(5,0.5) rotate(rot+90)   scale([1,0.5])circle(3.5,$fn=3); 
+      Col(6,0.7) rotate(90) scale([1,0.5])circle(4,$fn=3);
+    }
+    
+    difference(){
+    
+      if($children)children();
+      translate([0,0,-0.01])union(){
+        linear_extrude(h,convexity=5,scale=scaleGrad(grad=88,h=h,r=r1))Rund(+0,0.1,fn=12)Star(T,r1,r2,grad=3,grad2=gradS(wall(0.199,.8,even=0),r2),fn=0);
+        Kegel(d1=d+spiel*2+.2,h=.5,name=false);
+      }
+
+      if(schraube&&$children){
+         cylinder(h+10,d=2,$fn=36); //SchraubenlochNarbe 
+         translate([0,0,h-.011])cylinder(.2,d1=r2*2,d2=2,$fn=36); //Decke 
+         translate([0,0,h])Polar(teiler(T,5),rot=-90,name=false)R(0,-90)cylinder(d/2-tdepth*.8,d=.5,$fn=3); //Decke Support Struktur 
+         
+         translate([0,0,h + 1.15])cylinder(100,d=4.5,$fn=36); //SchraubenKopflochNarbe 
+      }
+      translate([0,0,-30.01])cylinder(30,d=50,$fn=36); //Servo
+    }
+
+ InfoTxt("Servokopf",["T",T,"d",d+spiel*2,"dTop",(d+spiel*2)*scaleGrad(grad=88,h=h,r=d/2+spiel)],name);
+ HelpTxt("Servokopf",[
+    "rot",rot, 
+    "spiel",spiel,
+    "schraube",schraube,
+    "T",T,
+    "d",d,
+    "h",h,
+    "name",name
+    ],help);
+
+}

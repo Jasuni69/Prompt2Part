@@ -1,0 +1,8 @@
+function log_rand(minval, maxval, factor) = -ln(1-rands(1-1/pow(factor,minval), 1-1/pow(factor,maxval), 1)[0])/ln(factor);
+
+
+// Function: segs()
+// Description:
+//   Calculate the standard number of sides OpenSCAD would give a circle based on `$fn`, `$fa`, and `$fs`.
+// Arguments:
+//   r = Radius of circle to get the number of segments for.

@@ -1,0 +1,6 @@
+function definePrototype(typeString,index, protoData)=
+    [for (i =[0:1: len(protoData)])
+      (i <len(protoData))
+        ? protoData[i]
+        : [len(protoData),typeString, _prototype_type(), index]
+    ];

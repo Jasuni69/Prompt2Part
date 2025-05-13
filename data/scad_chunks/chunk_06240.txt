@@ -1,0 +1,8 @@
+function ycyl(
+    h, r, d, r1, r2, d1, d2, l,
+    chamfer, chamfer1, chamfer2,
+    chamfang, chamfang1, chamfang2,
+    rounding, rounding1, rounding2,
+    circum=false, realign=false, from_end=false,height,length,
+    anchor=CENTER, spin=0, orient=UP
+) = no_function("ycyl");

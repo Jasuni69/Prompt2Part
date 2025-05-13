@@ -1,0 +1,1 @@
+function sclip_max_gap(type)       = type[11]; //! Maximum opening

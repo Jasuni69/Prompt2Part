@@ -1,0 +1,22 @@
+module test_is_integer() {
+    assert(is_integer(-999));
+    assert(is_integer(-1));
+    assert(is_integer(0));
+    assert(is_integer(1));
+    assert(is_integer(999));
+    assert(!is_integer(-1.1));
+    assert(!is_integer(1.1));
+    assert(!is_integer(-0.1));
+    assert(!is_integer(0.1));
+    assert(!is_integer(-99.1));
+    assert(!is_integer(99.1));
+    assert(!is_integer(undef));
+    assert(!is_integer(INF));
+    assert(!is_integer(NAN));
+    assert(!is_integer(false));
+    assert(!is_integer(true));
+    assert(!is_integer("foo"));
+    assert(!is_integer([0,1,2]));
+    assert(!is_integer([0:1:2]));
+}
+test_is_integer();

@@ -1,0 +1,1 @@
+function pulley_belt(type)             = type[4];  //! Belt type

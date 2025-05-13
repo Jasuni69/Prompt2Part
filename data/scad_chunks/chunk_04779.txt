@@ -1,0 +1,5 @@
+function sphere2(r=1, d) = let(R = d == undef ? r : d/2)
+  rotate_extrude(poly=arc(r=R, angle=180,offsetAngle=-90));
+
+
+// Platonic solids, centered with unit radius, and triangle-only faces.

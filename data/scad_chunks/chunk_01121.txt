@@ -1,0 +1,3 @@
+module rocker_hole(type, h = 0, rounded = true) //! Make a hole to accept a rocker switch, by default 2D, set h for 3D
+    extrude_if(h)
+        rounded_square([rocker_slot_w(type), rocker_slot_h(type)], rounded ? 1 : 0, center = true);

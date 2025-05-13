@@ -1,0 +1,16 @@
+module test_is_upper() {
+    for (i=[32:126]) {
+        if (
+            (i>=ord("A") && i <=ord("Z"))
+        ) {
+            assert(is_upper(chr(i)));
+        } else {
+            assert(!is_upper(chr(i)));
+        }
+    }
+    assert(is_upper("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+    assert(!is_upper("abcdefghijklmnopqrstuvwxyz"));
+    assert(!is_upper("ABCDEFGHIJkLMNOPQRSTUVWXYZ"));
+    assert(!is_upper("ABCDEFGHIJKLMNOPQRSTUVWXYz"));
+}
+test_is_upper();

@@ -1,0 +1,37 @@
+module offset_3D(r, chamfer_base = false) { //! Offset 3D shape by specified radius `r`, positive or negative.
+    module ball(r)
+        if(chamfer_base)
+            rotate_extrude()
+                intersection() {
+                    rotate(180)
+                        teardrop(0, r);
+
+                    translate([0, -r])
+                        square([r, 2 * r]);
+                }
+        else
+            sphere(r);
+
+    if(r > 0)
+        minkowski() {
+            children();
+
+            ball(r);
+        }
+    else
+        if(r < 0)
+            render() difference() {
+                cube(big / 2, center = true);
+
+                minkowski() {
+                    difference() {
+                        cube(big, center = true);
+
+                        children();
+                    }
+                    ball(-r);
+                }
+            }
+        else
+            children();
+}

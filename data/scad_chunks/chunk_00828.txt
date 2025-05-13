@@ -1,0 +1,1 @@
+function smd_qfp_body_size(type) = type[1]; //! Size of the body

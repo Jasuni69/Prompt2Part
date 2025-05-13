@@ -1,0 +1,42 @@
+module smd_inductor(type, value) { //! Draw an SMD inductor
+    vitamin(str("smd_inductor(", type[0], " ,\"", value, "\"): ", type[0], " package ", value));
+
+    size = smd_inductor_size(type);
+    z0 = smd_inductor_z(type);
+    z1 = smd_inductor_lead_z(type);
+    z2 = z0 + size.z;
+    leads = smd_inductor_leads(type);
+    gap = leads[3];
+    gap2 = gap - leads.z * 2;
+
+    $fs = fs; $fa = fa;
+
+    color(smd_inductor_colour(type))
+        render() difference() {
+            translate_z(z0)
+                rounded_rectangle(size, 0.5);
+
+            for(side = [-1, 1])
+                translate([side * (size.x / 2 - (size.x - gap2) / 4), 0, eps])
+                    cube([(size.x - gap2) / 2, leads.y + 2 * leads.z, 3 * leads.z], center = true);
+        }
+
+    color("white")
+        translate_z(z2)
+            linear_extrude(eps)
+                resize([0.9 * size.x, size.y / 2])
+                    text(value, halign = "center", valign = "center");
+
+    color(silver)
+        translate_z(z1 / 2)
+            rotate([90, 0, 0])
+                linear_extrude(leads.y, center = true, convexity = 5) let($fn = fn)
+                    difference() {
+                        rounded_square([leads.x, z1], 2 * leads.z);
+
+                        rounded_square([leads.x - 2 * leads.z, z1 - 2 * leads.z], leads.z);
+
+                        translate([0, - z1 / 2])
+                            square([gap, leads.z * 2 + eps], center = true);
+                    }
+}

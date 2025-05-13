@@ -1,0 +1,1 @@
+function nxtp(dotM, p) = p + _dir_table[_corner_value(dotM, p)];

@@ -1,0 +1,36 @@
+module back_half(s=100, y=undef, cp=[0,0,0], planar=false)
+{
+	dir = V_BACK;
+	cp = is_scalar(y)? [0,y,0] : is_scalar(cp)? cp*dir : cp;
+	translate(cp) difference() {
+		translate(-cp) children();
+		translate(-dir*s/2) {
+			if (planar) {
+				square(s, center=true);
+			} else {
+				cube(s, center=true);
+			}
+		}
+	}
+}
+
+
+
+// Module: chain_hull()
+//
+// Usage:
+//   chain_hull() ...
+//
+// Description:
+//   Performs hull operations between consecutive pairs of children,
+//   then unions all of the hull results.  This can be a very slow
+//   operation, but it can provide results that are hard to get
+//   otherwise.
+//
+// Example:
+//   chain_hull() {
+//       cube(5, center=true);
+//       translate([30, 0, 0]) sphere(d=15);
+//       translate([60, 30, 0]) cylinder(d=10, h=20);
+//       translate([60, 60, 0]) cube([10,1,20], center=false);
+//   }

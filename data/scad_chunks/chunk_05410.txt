@@ -1,0 +1,25 @@
+function _is_shown() =
+    assert(is_list($tags_shown) || $tags_shown=="ALL")
+    assert(is_list($tags_hidden))
+    let(
+        dummy=is_undef($tags) ? 0 : echo("Use tag() instead of $tags for specifying an object's tag."),
+        $tag = default($tag,$tags)
+    )
+    assert(is_string($tag), str("Tag value (",$tag,") is not a string"))
+    assert(undef==str_find($tag," "),str("Tag string \"",$tag,"\" contains a space, which is not allowed"))
+    let(
+        shown  = $tags_shown=="ALL" || in_list($tag,$tags_shown),
+        hidden = in_list($tag, $tags_hidden)
+    )
+    shown && !hidden;
+
+
+// Section: Visualizing Anchors
+
+/// Internal Function: _standard_anchors()
+/// Usage:
+///   anchs = _standard_anchors([two_d]);
+/// Description:
+///   Return the vectors for all standard anchors.
+/// Arguments:
+///   two_d = If true, returns only the anchors where the Z component is 0.  Default: false

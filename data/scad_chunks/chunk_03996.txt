@@ -1,0 +1,5 @@
+module align(a1=NOCHANGE,a2=NOCHANGE,a3=NOCHANGE)
+    g(align(a1,a2,a3))children();
+
+
+//shorthands for align

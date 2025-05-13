@@ -1,0 +1,7 @@
+module test_mask2d_rabbet() {
+    assert_approx(mask2d_rabbet(10), [[10,-0.01],[-0.01,-0.01],[-0.01,10],[0,10],[10,10],[10,0]]);
+    assert_approx(mask2d_rabbet(size=10), [[10,-0.01],[-0.01,-0.01],[-0.01,10],[0,10],[10,10],[10,0]]);
+    assert_approx(mask2d_rabbet(size=[10,15]), [[10,-0.01],[-0.01,-0.01],[-0.01,15],[0,15],[10,15],[10,0]]);
+    assert_approx(mask2d_rabbet(size=[10,15],excess=1), [[10,-1],[-1,-1],[-1,15],[0,15],[10,15],[10,0]]);
+}
+test_mask2d_rabbet();

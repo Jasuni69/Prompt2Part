@@ -1,0 +1,1 @@
+function BLDC_prop_shaft_diameter(type)         = type[24]; //! Diameter of unthreaded portion of prop shaft

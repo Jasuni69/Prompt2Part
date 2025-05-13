@@ -1,0 +1,2 @@
+function partIs(bodySet, ifTrue=true, ifFalse=false) = currentPartIn(bodySet)
+						? ifTrue : ifFalse;

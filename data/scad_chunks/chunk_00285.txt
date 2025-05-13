@@ -1,0 +1,1 @@
+function  d_hole_pitch(type)       = type[3];   //! Mounting hole pitch

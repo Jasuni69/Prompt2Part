@@ -1,0 +1,17 @@
+//    p(1) = width
+//    p(2) = { yappLeft | yappRight | yappFront | yappBack } : one or more
+//   Optional:
+//    n(a) = { <yappOrigin>, yappCenter }
+//    n(b) = { yappSymmetric }
+//    n(c) = { yappRectangle } == Make a diamond shape snap
+//-------------------------------------------------------------------
+snapJoins   =   
+[
+    [shellLength-17, 5, yappLeft]
+   ,[shellLength-10, 5, yappRight]
+   ,[(shellWidth/2)-2.5, 5, yappBack]
+];
+
+
+//--- this is where the magic happens ---
+YAPPgenerate();

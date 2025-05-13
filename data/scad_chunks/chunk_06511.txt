@@ -1,0 +1,33 @@
+function frame_map(x,y,z, p=_NO_ARG, reverse=false) =
+    p != _NO_ARG
+    ? apply(frame_map(x,y,z,reverse=reverse), p)
+    :
+    assert(num_defined([x,y,z])>=2, "Must define at least two inputs")
+    let(
+        xvalid = is_undef(x) || (is_vector(x) && len(x)==3),
+        yvalid = is_undef(y) || (is_vector(y) && len(y)==3),
+        zvalid = is_undef(z) || (is_vector(z) && len(z)==3)
+    )
+    assert(xvalid,"Input x must be a length 3 vector")
+    assert(yvalid,"Input y must be a length 3 vector")
+    assert(zvalid,"Input z must be a length 3 vector")
+    let(
+        x = is_undef(x)? undef : unit(x,RIGHT),
+        y = is_undef(y)? undef : unit(y,BACK),
+        z = is_undef(z)? undef : unit(z,UP),
+        map = is_undef(x)? [cross(y,z), y, z] :
+            is_undef(y)? [x, cross(z,x), z] :
+            is_undef(z)? [x, y, cross(x,y)] :
+            [x, y, z]
+    )
+    reverse? (
+        let(
+            ocheck = (
+                approx(map[0]*map[1],0) &&
+                approx(map[0]*map[2],0) &&
+                approx(map[1]*map[2],0)
+            )
+        )
+        assert(ocheck, "Inputs must be orthogonal when reverse==true")
+        [for (r=map) [for (c=r) c, 0], [0,0,0,1]]
+    ) : [for (r=transpose(map)) [for (c=r) c, 0], [0,0,0,1]];

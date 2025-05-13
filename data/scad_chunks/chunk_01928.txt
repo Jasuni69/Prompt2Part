@@ -1,0 +1,13 @@
+module box_corner_profile(type) { //! Generates the corner profile STL for 3D printing.
+    length = box_height(type) - 2 * box_margin(type);
+
+    stl(str(box_name(type), "_corner_profile"))
+        difference() {
+            linear_extrude(length, center = true, convexity = 5)
+                box_corner_profile_2D(type);
+
+            for(z = [-1, 1])
+                translate([box_hole_inset(type), box_hole_inset(type), z * length / 2])
+                    insert_hole(box_insert(type), 5);
+        }
+}

@@ -1,0 +1,1 @@
+function gm_hub(type)          = type[9]; //! Motor hub diameter, height, corner rad

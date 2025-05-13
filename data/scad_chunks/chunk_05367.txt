@@ -1,0 +1,56 @@
+module position(at,from)
+{
+    if (is_def(from)){
+      echo("'from' argument of position() has changed to 'at' and will be removed in a future version");
+    }
+    dummy0=assert(num_defined([at,from])==1, "Cannot give both `at` argument and the deprectated `from` argument to position()");
+    at = first_defined([at,from]);
+    req_children($children);
+    dummy1=assert($parent_geom != undef, "No object to position relative to.");
+    anchors = (is_vector(at)||is_string(at))? [at] : at;
+    two_d = _attach_geom_2d($parent_geom);
+    for (anchr = anchors) {
+        anch = _find_anchor(anchr, $parent_geom);
+        $edge_angle = len(anch)==5 ? struct_val(anch[4],"edge_angle") : undef;
+        $edge_length = len(anch)==5 ? struct_val(anch[4],"edge_length") : undef;
+        $attach_to = undef;
+        $attach_anchor = anch;
+        translate(anch[1]) children();
+    }
+}
+
+
+
+// Module: orient()
+// Synopsis: Orients children's tops in the directon of the specified anchor.
+// SynTags: Trans
+// Topics: Attachments
+// See Also: attachable(), attach(), position()
+// Usage:
+//   PARENT() orient(anchor, [spin]) CHILDREN;
+// Description:
+//   Orients children such that their top is tilted in the direction of the specified parent anchor point. 
+//   For a step-by-step explanation of attachments, see the [Attachments Tutorial](Tutorial-Attachments).
+// Arguments:
+//   anchor = The anchor on the parent which you want to match the orientation of.
+//   spin = The spin to add to the children.  (Overrides anchor spin.)
+// Side Effects:
+//   `$attach_to` is set to `undef`.
+// Example: When orienting to an anchor, the spin of the anchor may cause confusion:
+//   prismoid([50,50],[30,30],h=40) {
+//       position(TOP+RIGHT)
+//           orient(RIGHT)
+//               prismoid([30,30],[0,5],h=20,anchor=BOT+LEFT);
+//   }
+// Example: You can override anchor spin with `spin=`.
+//   prismoid([50,50],[30,30],h=40) {
+//       position(TOP+RIGHT)
+//           orient(RIGHT,spin=0)
+//               prismoid([30,30],[0,5],h=20,anchor=BOT+LEFT);
+//   }
+// Example: Or you can anchor the child from the back
+//   prismoid([50,50],[30,30],h=40) {
+//       position(TOP+RIGHT)
+//           orient(RIGHT)
+//               prismoid([30,30],[0,5],h=20,anchor=BOT+BACK);
+//   }

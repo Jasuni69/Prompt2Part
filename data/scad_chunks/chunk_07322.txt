@@ -1,0 +1,9 @@
+module NACA(l=10,naca=0012,fn=fn,center=false,name,help){
+
+points=naca(l=l,naca=naca,fn=fn);
+InfoTxt("NACA",["Surface length",pathLength(points),"center",center?center==2?str("30%-max Thickness=",l*0.3):str("¼-25% neutral (N)=",l*0.25):0],name);
+translate([center?center==2?-l*0.3:-l*.25:0,0])polygon(points);
+HelpTxt("NACA",["l",l,"naca",str(naca<1000?"00":"",naca%100),"fn",fn,"center",center,name],help);
+}
+
+//Star(od=10,id=5);

@@ -1,0 +1,1 @@
+function knob_skirt(type)    = type[10]; //! Skirt diameter and thickness

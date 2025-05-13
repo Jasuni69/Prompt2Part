@@ -1,0 +1,49 @@
+module ServokopfT15(rot=0,spiel=0,schraube=true,help) // .6 nozzle
+{
+    // 15 Zacken!
+    d2=6+spiel;
+    d1=6.1+spiel;
+    fn=3;
+    
+    %Tz(+0){//direction
+      Col(5,0.5) rotate(rot)   scale([1,0.5])circle(3.5,$fn=3); 
+      Col(6,0.7)  scale([1,0.5])circle(4,$fn=3);
+    
+    }
+    
+    difference()
+    {
+        if($children)union()
+        {
+            children();
+            
+        }
+       rotate(rot) for (i=[0:360/5:359])
+        {
+         rotate([0,0,i]) translate([0,0,-.1])cylinder(3.25,d1=d1,d2=d2,$fn=fn,center=false);   
+            
+        }
+        
+        
+    if($children)  translate([0,0,-0.01])cylinder(.5,d1=d1-0.1,d2=d1-2,$fn=36,center=false);//basekone
+       // *cylinder(6,d1=d1,d2=d2,$fn=fn,center=true);
+      //  *rotate([0,0,360/2*fn])cylinder(6,d1=d1,d2=d2,$fn=fn,center=true);
+     if(schraube){
+         cylinder(10,d=2,$fn=36); //SchraubenlochNarbe 
+         translate([0,0,3.4+1])cylinder(100,d=4.5,$fn=36); //SchraubenKopflochNarbe 
+     }
+          translate([0,0,-30.01])cylinder(30,d=50,$fn=36); //Servo
+      
+    }
+    
+    if(!$children)     translate([0,0,-0.01])cylinder(.5,d1=d1-0.1,d2=d1-2,$fn=36,center=false);//basekone
+    
+    
+ HelpTxt("ServokopfT15",[
+    "rot",rot, 
+    "spiel",spiel,
+    "schraube",schraube],
+    help);
+    
+    
+}

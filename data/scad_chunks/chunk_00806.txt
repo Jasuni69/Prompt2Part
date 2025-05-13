@@ -1,0 +1,1 @@
+function smd_tant_colours(type)= type[5]; //! Colours of body and stripe

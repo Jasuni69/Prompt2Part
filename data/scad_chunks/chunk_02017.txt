@@ -1,0 +1,1 @@
+function psu_shroud_extent(type) = 15 + wall;                                   //! How far it extends beyond the PSU to clear the connections

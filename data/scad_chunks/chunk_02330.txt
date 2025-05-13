@@ -1,0 +1,6 @@
+module strap_holes(length, type = strap, h = 100) //! The panel cut outs
+    extrude_if(h)
+        strap_screw_positions(length, type)
+            offset(cnc_bit_r + 0.05)
+                offset(-step - cnc_bit_r)
+                    strap_boss_shape(type);

@@ -1,0 +1,21 @@
+module shell2d(offset1,offset2=0,minOR=0,minIR=0){
+	difference(){
+		round2d(minOR,minIR){
+      offset(max(offset1,offset2)){
+        children(0);//original 1st child forms the outside of the shell
+      }
+    }
+		round2d(minIR,minOR){
+      difference(){//round the inside cutout
+        offset(min(offset1,offset2)){
+          children(0);//shrink the 1st child to form the inside of the shell 
+        }
+        if($children>1){
+          for(i=[1:$children-1]){
+            children(i);//second child and onwards is used to add material to inside of the shell
+          }
+        }
+      }
+		}
+	}
+}

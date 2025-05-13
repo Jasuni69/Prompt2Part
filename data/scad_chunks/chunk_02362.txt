@@ -1,0 +1,34 @@
+module ribbon_grommet(ways, thickness) { //! Generate the STL for a printed ribbon grommet
+
+    width = 2 * (wall + clearance) + thickness;
+    slot_length = ribbon_clamp_slot(ways);
+    length = slot_length + 2 * wall + 2 * overlap;
+
+    stl(str("ribbon_grommet_", ways, "_", thickness))
+        rotate([90, 0, 0])
+            union() {
+                for(side = [-1, 1])
+                    translate_z(side * (width - wall) / 2)
+                        linear_extrude(wall, center = true, convexity = 5)
+                            difference() {
+                                hull() {
+                                    translate([-length / 2, 0])
+                                        square([length, base]);
+
+                                    for(end = [-1, 1])
+                                        translate([end * (length / 2 - rad), height - rad])
+                                            semi_circle(rad);
+                                }
+                                translate([-slot_length / 2, base])
+                                    square([slot_length, slot_height]);
+                            }
+
+                linear_extrude(width -1, center = true)
+                    difference() {
+                        ribbon_grommet_hole(ways, expand = false, h = 0);
+
+                        translate([-slot_length / 2, base])
+                            square([slot_length, slot_height]);
+                    }
+            }
+}

@@ -1,0 +1,9 @@
+module sp(pts=[], r=1, color="yellow"){
+    for(pt=pts) translate(pt) color(color) sphere(r=r);
+}   
+
+//  function  _pu_segmentsPerCircle(r)
+//
+//  Calculates the number of segments used per circle (per 360 deg) based on circle radius and openSCAD $fn, $fa and $fs settings.
+//  r       (number)  The circle radius for which the number of segments needs to be calculated.
+//  return  (number)  The number of segments that would be used by openSCAD if it would draw the circle.

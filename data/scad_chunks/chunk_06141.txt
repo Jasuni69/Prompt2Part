@@ -1,0 +1,15 @@
+module left_half(s=100, x=0, planar=false)
+{
+    req_children($children);
+    dir = LEFT;
+    difference() {
+        children();
+        translate([x,0,0]-dir*s/2) {
+            if (planar) {
+                square(s, center=true);
+            } else {
+                cube(s, center=true);
+            }
+        }
+    }
+}

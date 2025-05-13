@@ -1,0 +1,1 @@
+function rd_boxc_size(type)    = type[1]; //! Overall size and corner radius

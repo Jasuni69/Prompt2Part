@@ -1,0 +1,6 @@
+module test_bosl_required() {
+    bosl_required(2.000001);
+    bosl_required("2.0.1");
+    bosl_required([2,0,1]);
+}
+test_bosl_required();

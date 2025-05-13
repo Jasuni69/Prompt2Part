@@ -1,0 +1,9 @@
+function lemniscate_curve(t_step, a = 2, b = 1, c = 1) = 
+    [
+	    for(t = [0:t_step:360 - t_step])
+		let(
+		    sint = sin(t),
+			cost = cos(t)
+		)
+		[a * sint, b * sint * cost , c * cost]
+	];

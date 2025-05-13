@@ -1,0 +1,40 @@
+function _isosurface_triangles(cubelist, voxsize, isovalmin, isovalmax, tritablemin, tritablemax) = [
+    for(cl=cubelist)
+        let(
+            v = cl[0],          // voxel coord
+            cbidxmin = cl[1],   // cube ID for isomvalmin
+            cbidxmax = cl[2],   // cube ID for isovalmax
+            f = cl[3],          // function values for each cube corner
+            bbfaces = cl[4],    // faces (if any) on the bounding box
+            vcube = [           // list of cube corner vertex coordinates
+                v, v+[0,0,voxsize.z], v+[0,voxsize.y,0], v+[0,voxsize.y,voxsize.z],
+                v+[voxsize.x,0,0], v+[voxsize.x,0,voxsize.z],
+                v+[voxsize.x,voxsize.y,0], v+voxsize
+            ]
+        )
+        each [
+            if(len(tritablemin[cbidxmin])>0) for(ei=tritablemin[cbidxmin]) // min surface
+                let(
+                    edge = _MCEdgeVertexIndices[ei],
+                    vi0 = edge[0],
+                    vi1 = edge[1],
+                    denom = f[vi1] - f[vi0],
+                    u = abs(denom)<0.00001 ? 0.5 : (isovalmin-f[vi0]) / denom
+                )
+                vcube[vi0] + u*(vcube[vi1]-vcube[vi0]),
+            if(len(tritablemax[cbidxmax])>0) for(ei=tritablemax[cbidxmax]) // max surface
+                let(
+                    edge = _MCEdgeVertexIndices[ei],
+                    vi0 = edge[0],
+                    vi1 = edge[1],
+                    denom = f[vi1] - f[vi0],
+                    u = abs(denom)<0.00001 ? 0.5 : (isovalmax-f[vi0]) / denom
+                )
+                vcube[vi0] + u*(vcube[vi1]-vcube[vi0]),
+            if(len(bbfaces)>0) for(bf = bbfaces)
+                  each _clipfacevertices(vcube, f, bf, isovalmin, isovalmax)
+        ]
+];
+
+
+/// Generate triangles for the special case of voxel faces clipped by the bounding box

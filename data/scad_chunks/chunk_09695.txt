@@ -1,0 +1,9 @@
+function Quat(ax=[0,0,1], ang=0) = _Quat(ax/norm(ax), sin(ang/2), cos(ang/2));
+
+
+// Function: QuatX()
+// Usage:
+//   QuatX(a);
+// Description: Create a new Quaternion for rotating around the X axis [1,0,0].
+// Arguments:
+//   a = Number of degrees to rotate around the axis counter-clockwise, when facing the origin.

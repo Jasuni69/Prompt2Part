@@ -1,0 +1,15 @@
+function ball_screw_rod(
+    d, l, pitch, 
+    ball_diam=5, ball_arc=100,
+    starts=1,
+    left_handed=false,
+    internal=false,
+    length, h, height,
+    bevel, bevel1, bevel2,
+    blunt_start, blunt_start1, blunt_start2,
+    lead_in, lead_in1, lead_in2,
+    lead_in_ang, lead_in_ang1, lead_in_ang2,
+    end_len, end_len1, end_len2,
+    lead_in_shape="default",
+    anchor, spin, orient
+) = no_function("ball_screw_rod");

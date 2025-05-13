@@ -1,0 +1,15 @@
+function pt(pt=1)=25.4/72*pt;
+
+
+/** /name parabel
+/page Functions
+parabel() gives points of a parabel
+\param x  width
+\param a  height ratio
+\param fn fragments
+\param exp exponent
+\param bp  focal point
+\param lap overlap outside points
+\param t  translate points
+\param rev reverse points
+*/

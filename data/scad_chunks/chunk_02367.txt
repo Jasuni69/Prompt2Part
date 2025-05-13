@@ -1,0 +1,13 @@
+module mouse_grommet_hole(r, h = 50, z = undef, expand = wall + clearance) //! Make a hole for a mouse grommet
+    extrude_if(h)
+        hull(){
+            R = r + expand;
+            translate([0, z == undef ? R : z])
+                if(expand)
+                    semi_circle(R);
+                else
+                    semi_teardrop(r = R, h = 0);
+
+            translate([-R, 0])
+                square([2 * R, eps]);
+        }

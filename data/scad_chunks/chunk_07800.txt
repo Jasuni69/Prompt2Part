@@ -1,0 +1,21 @@
+module arm(radius) {
+    translate([0, 0, -radius]) {
+		translate([0, 0, radius / 2]) 
+		linear_extrude(radius) {
+			translate([0, -radius * 0.75, 0]) 
+			    square([radius * 9, radius * 1.5]);
+
+			rotate(80) 
+			translate([0, -radius * 0.5, 0]) 
+			    square([radius * 9, radius]);
+		}
+
+		translate([0, 0, radius * 0.25]) 
+		linear_extrude(radius * 1.5) 
+			circle(radius);
+			
+		linear_extrude(radius * 2)  
+		translate([radius * 9, 0, 0]) 
+			circle(radius);
+	}
+}

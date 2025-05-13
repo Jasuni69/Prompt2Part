@@ -1,0 +1,9 @@
+function set_intersection(a, b) =
+    assert( is_list(a) && is_list(b), "Invalid sets." )
+    let( found = search(a, b, num_returns_per_match=1) )
+    [ for (i=idx(a)) if(found[i]!=[]) a[i] ];
+
+
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

@@ -1,0 +1,4 @@
+function hole_distance(main_diameter) = (main_diameter / 2.31) + (hole_diameter(main_diameter) / 2);
+
+// Funkcia na výpočet výšky valca bez zaoblenia
+// Function to calculate the height of a cylinder without rounding

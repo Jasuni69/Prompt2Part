@@ -1,0 +1,50 @@
+    17.0, //windowHeight
+    0, //windowOffsetH
+    -0.9, //windowOffsetV
+    true, //bevel
+    0, // rotation
+    5.0,//snapDiameter
+    yappDefault,
+    yappCenter,  
+  ],
+    [ // This is for a 2004A 4x20 LCD Display
+    55.5, //xPos
+    36.5, // yPos
+    98.0, // displayWidth
+    60.0, //displayHeight
+    2.2, //pinInsetH
+    2.5, //pinInsetV
+    3.3, //pinDiameter
+    3.3, //postOverhang 
+    9.3, //walltoPCBGap
+    1.6, //pcbThickness
+    79.0, //windowWidth
+    28.0, //windowHeight
+    0, //windowOffsetH
+    0.0, //windowOffsetV
+    true, //bevel
+    0, // rotation
+    5.0,//snapDiameter
+    yappDefault,
+    yappCenter,  
+  ],
+
+  */
+  [ // This is for a 2004A 4x20 LCD Display - Mounted under the lid with screws
+    55.5, //xPos
+    36.5, // yPos
+    98.0, // displayWidth
+    60.0, //displayHeight
+    2.2, //pinInsetH
+    2.5, //pinInsetV
+    3.3, //pinDiameter
+    0, //postOverhang 
+    9.3, //walltoPCBGap
+    1.6, //pcbThickness
+    79.0, //windowWidth
+    28.0, //windowHeight
+    0, //windowOffsetH
+    0.0, //windowOffsetV
+    true, //bevel
+    0, // rotation
+    5.0,//snapDiameter

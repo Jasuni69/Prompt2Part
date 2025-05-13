@@ -1,0 +1,16 @@
+module inbusScrewM3(h=10.1,nut=true
+              ,capMargin=3.8)
+clear(grey)
+{
+    g(align(TOUP,XCENTER,YCENTER),solid())
+    {
+      tubeFast(dOuter = margin(3),h = h-2.1+.02);
+      Z(h-2.1)
+        tubeFast(d = margin(5.5),h = 2.1+.02);
+      Z(h-.02)
+        tubeFast(d=margin(5.5)
+                ,wall=2
+                ,h = .01+removeExtra(capMargin));
+    }
+  children();
+}

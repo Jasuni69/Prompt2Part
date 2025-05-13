@@ -1,0 +1,1 @@
+function flatten(l) = [ for (a = l) for (b = a) b ];

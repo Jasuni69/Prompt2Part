@@ -1,0 +1,15 @@
+module test_f_even() {
+    _test_fn1arg(
+        function (a) f_even(a),
+        [
+            [-3, false],
+            [-2, true ],
+            [-1, false],
+            [ 0, true ],
+            [ 1, false],
+            [ 2, true ],
+            [ 3, false],
+        ]
+    );
+}
+test_f_even();

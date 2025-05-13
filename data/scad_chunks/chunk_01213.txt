@@ -1,0 +1,5 @@
+module leadnuthousing_nut_screw_positions(type) { //! get screw positions to mount the nut to the nut housing
+    translate([leadnuthousing_hole_pos(type),0, 0])
+        leadnut_screw_positions(leadnuthousing_nut(type))
+            children();
+}

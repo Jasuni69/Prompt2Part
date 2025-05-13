@@ -1,0 +1,8 @@
+function _makefaces(direction, startind, good, pointcount, closed) =
+    let(
+        lenlist = list_bset(good, pointcount),
+        numfirst = len(lenlist),
+        numsecond = sum(lenlist),
+        prelim_faces = _makefaces_recurse(startind, startind+len(lenlist), numfirst, numsecond, lenlist, closed)
+    )
+    direction? [for(entry=prelim_faces) reverse(entry)] : prelim_faces;

@@ -1,0 +1,10 @@
+module test_polygon_hull() {
+    echo("==== test_polygon_hull ====");
+    polygon_hull([
+        [1, 1],
+        [1, 0],
+        [0, 1],
+        [-2, 1],
+        [-1, -1]
+    ]);
+}

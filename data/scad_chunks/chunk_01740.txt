@@ -1,0 +1,68 @@
+module barrel_jack(cutout = false) { //! Draw barrel power jack
+    l = 13.2;
+    w = 8.89;
+    h = 11;
+    bore_d = 6.3;
+    bore_h = 6.5;
+    bore_l = 11.8;
+    pin_d = 2;
+    front = 3.3;
+    r = 0.5;
+    contact_d = 2;
+    contact_w = 4;
+    inset = 1;
+    if(cutout) {
+        rotate([0, 90, 0])
+            translate([-bore_h, 0])
+                cylinder(d = bore_d + panel_clearance, h = 100);
+    } else {
+        color(grey(20)) rotate([0, 90, 0]) {
+            linear_extrude(l, center = true) {
+                difference() {
+                    translate([-h / 2, 0])
+                        rounded_square([h, w], r);
+
+                    translate([-bore_h, 0])
+                        circle(d = bore_d);
+
+                    translate([-h / 2 - bore_h, 0])
+                        square([h, w], center = true);
+
+                }
+            }
+            translate_z(l / 2 - front)
+                linear_extrude(front) {
+                    difference() {
+                        translate([-h / 2, 0])
+                            rounded_square([h, w], r);
+
+                        translate([-bore_h, 0])
+                            circle(d = bore_d);
+                    }
+                }
+
+            translate([-bore_h, 0])
+                tube(or = w / 2 - 0.5, ir = bore_d / 2, h = l);
+
+            translate([-bore_h, 0, -l / 2])
+                cylinder(d = w -1, h = l - bore_l);
+        }
+        color("silver") {
+            translate([l / 2 - inset - pin_d / 2, 0, bore_h])
+                hull() {
+                    sphere(pin_d / 2);
+
+                    rotate([0, -90, 0])
+                        cylinder(d = pin_d, h = bore_l - inset);
+                }
+            hull() {
+                translate([l / 2 - inset - contact_d / 2, 0, bore_h - bore_d / 2])
+                    rotate([90, 0, 0])
+                        cylinder(d = contact_d, h = contact_w, center = true);
+
+                translate([l / 2 - bore_l, 0,  bore_h - bore_d / 2 + contact_d / 4])
+                    cube([eps, contact_w, eps], center = true);
+            }
+        }
+    }
+}

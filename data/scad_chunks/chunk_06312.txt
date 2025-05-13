@@ -1,0 +1,99 @@
+function mask2d_dovetail(edge, angle, slope, shelf=0, inset=0, mask_angle=90, excess=0.01, flat_top=true, w,width,h,height, anchor=CENTER, spin=0,x,y) =
+    assert(num_defined([slope,angle])<=1, "Cannot give both slope and angle")
+    assert(is_finite(excess))
+    assert(is_undef(w) || all_positive([w]))
+    assert(is_undef(h) || all_positive([h]))
+    assert(is_undef(height) || all_positive([height]))
+    assert(is_undef(width) || all_positive([width]))
+    assert(is_finite(inset)||is_vector(inset,2))
+    let(
+        y = one_defined([h,height,y],"h,height,y",dflt=undef),
+        x = one_defined([w,width,x],"w,width,x",dflt=undef),
+        angle = is_def(slope) ? atan(slope) : angle,
+        dummy2=//assert(num_defined([x,y])==2 || (all_positive([angle]) && angle<90), "Invalid angle or slope")
+               assert(num_defined([x,y])<2 || is_undef(angle), "Cannot give both width and height if you give slope or angle"),
+        inset = force_list(inset,2),
+        width = is_def(x)? x
+              : is_def(y)? adj_ang_to_opp(adj=y,ang=angle)
+              : assert(all_positive([edge]))
+                hyp_ang_to_opp(hyp=edge,ang=angle),
+        height = is_def(y) ? y
+               : num_defined([width,angle])==2 ? opp_ang_to_adj(opp=width,ang=angle)+shelf
+               : all_defined([edge,angle]) ? hyp_ang_to_adj(hyp=edge,ang=angle)
+               : assert(is_def(edge) && edge>width) sqrt(edge^2-width^2),
+        top = polar_to_xy(height/sin(mask_angle),mask_angle),
+        outside_corner = _inset_corner([top,[0,0],[0,0]], mask_angle, inset, excess, flat_top),
+        dummy=assert(outside_corner[1][1].x+width > top.x, "Dovetail doesn't fit on that angled edge.  Try increasing x inset.")
+              assert(outside_corner[1][1].x>=0, "Dovetails doesn't fit on the edge.  Try decreasing y inset."),
+        path = deduplicate([
+                            each outside_corner[0],
+                            outside_corner[1][0],
+                            if (shelf>0) outside_corner[1][1]+[width,height],
+                            outside_corner[1][1]+[width,height-shelf],
+                            outside_corner[1][1]
+                           ], closed=true)
+    ) reorient(anchor,spin, two_d=true, path=path, p=path);
+
+
+
+// Function&Module: mask2d_ogee()
+// Synopsis: Creates a 2D ogee mask shape.
+// SynTags: Geom, Path
+// Topics: Shapes (2D), Paths (2D), Path Generators, Attachable, Masks (2D)
+// See Also: corner_profile(), edge_profile(), face_profile()
+// Usage: As Module
+//   mask2d_ogee(pattern, [excess], ...) [ATTACHMENTS];
+// Usage: As Function
+//   path = mask2d_ogee(pattern, [excess], ...);
+// Description:
+//   Creates a 2D Ogee mask shape that is useful for extruding into a 3D mask for a 90° edge.
+//   Conversely, you can use that same extruded shape to make an interior ogee decoration between two walls at a 90º angle.
+//   As a 2D mask, this is designed to be differenced away from the edge of a shape that with its corner at the origin and one edge on the X+ axis and the other mask_angle degrees counterclockwise from the X+ axis.  
+//   Since there are a number of shapes that fall under the name ogee, the shape of this mask is given as a pattern.
+//   Patterns are given as TYPE, VALUE pairs.  ie: `["fillet",10, "xstep",2, "step",[5,5], ...]`.  See Patterns below.
+//   If called as a function, returns a 2D path of the outline of the mask shape.
+//   .
+//   ### Patterns
+//   .
+//   Type     | Argument  | Description
+//   -------- | --------- | ----------------
+//   "step"   | [x,y]     | Makes a line to a point `x` right and `y` down.
+//   "xstep"  | dist      | Makes a `dist` length line towards X+.
+//   "ystep"  | dist      | Makes a `dist` length line towards Y-.
+//   "round"  | radius    | Makes an arc that will mask a roundover.
+//   "fillet" | radius    | Makes an arc that will mask a fillet.
+//
+// Arguments:
+//   pattern = A list of pattern pieces to describe the Ogee.
+//   excess = Extra amount of mask shape to creates on the X- and Y- sides of the shape. Default: 0.01
+//   ---
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//
+// Example(2D): 2D Ogee Mask
+//   mask2d_ogee([
+//       "xstep",1,  "ystep",1,  // Starting shoulder.
+//       "fillet",5, "round",5,  // S-curve.
+//       "ystep",1,  "xstep",1   // Ending shoulder.
+//   ]);
+// Example: Masking by Edge Attachment
+//   diff()
+//   cube([50,60,70],center=true)
+//       edge_profile(TOP)
+//           mask2d_ogee([
+//               "xstep",1,  "ystep",1,  // Starting shoulder.
+//               "fillet",5, "round",5,  // S-curve.
+//               "ystep",1,  "xstep",1   // Ending shoulder.
+//           ]);
+// Example: Making an interior ogee
+//   %render() difference() {
+//       move(-[5,0,5]) cube(30, anchor=BOT+LEFT);
+//       cube(310, anchor=BOT+LEFT);
+//   }
+//   xrot(90)
+//       linear_extrude(height=30, center=true)
+//           mask2d_ogee([
+//               "xstep", 1, "round",5,
+//               "ystep",1, "fillet",5,
+//               "xstep", 1, "ystep", 1,
+//           ]);

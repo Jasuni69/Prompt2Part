@@ -1,0 +1,6 @@
+function _dp_distance_array(small, big, abort_thresh=1/0, small_ind=0, tdist=[], map=[]) =
+   small_ind == len(small)+1 ? [tdist[len(tdist)-1][len(big)-1], map] :
+   let( newrow = _dp_distance_row(small, big, small_ind, tdist) )
+   min(newrow[0]) > abort_thresh ? [tdist[len(tdist)-1][len(big)-1],map] :
+   _dp_distance_array(small, big, abort_thresh, small_ind+1, concat(tdist, [newrow[0]]), concat(map, [newrow[1]]));
+*/

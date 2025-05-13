@@ -1,0 +1,4 @@
+module mouse_grommet_assembly(r, thickness)
+    stl_colour(pp1_colour)
+        rotate([-90, 0, 0])
+            mouse_grommet(r, thickness);

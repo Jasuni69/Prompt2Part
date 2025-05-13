@@ -1,0 +1,6 @@
+module invertFor(body)
+{
+	$removing=bodyIs(body)?($removing?false:true):$removing;
+	$beforeRemoving=bodyIs(body)?($beforeRemoving?false:true):$beforeRemoving;
+	children();
+}

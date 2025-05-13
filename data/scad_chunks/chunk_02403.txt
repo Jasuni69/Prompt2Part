@@ -1,0 +1,3 @@
+module fan_controller_assembly() rotate(90) vflip() veroboard_fastened_assembly(fan_vb, -vero_thickness(fan_vb) - 1.4, 0);
+
+fan_controller_assembly();

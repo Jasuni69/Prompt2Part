@@ -1,0 +1,7 @@
+function Q_Add(a, b) = a+b;
+
+
+// Function: Q_Sub()
+// Usage:
+//   Q_Sub(a, b)
+// Description: Subtracts each part of quaternion `b` from quaternion `a`.

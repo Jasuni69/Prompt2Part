@@ -1,0 +1,20 @@
+function posmod(x,m) = 
+    assert( is_finite(x) && is_finite(m) && !approx(m,0) , "\nInput must be finite numbers. The divisor cannot be zero.")
+    (x%m+m)%m;
+
+
+// Function: modang()
+// Synopsis: Returns an angle normalized to between -180º and 180º.
+// Topics: Math
+// See Also: constrain(), posmod(), modang()
+// Usage:
+//   ang = modang(x);
+// Description:
+//   Takes an angle in degrees and normalizes it to an equivalent angle value between -180 and 180.
+// Example:
+//   a1 = modang(-700);  // Returns: 20
+//   a2 = modang(-270);  // Returns: 90
+//   a3 = modang(-120);  // Returns: -120
+//   a4 = modang(120);   // Returns: 120
+//   a5 = modang(270);   // Returns: -90
+//   a6 = modang(700);   // Returns: -20

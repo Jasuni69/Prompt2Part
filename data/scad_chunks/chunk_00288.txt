@@ -1,0 +1,1 @@
+function  d_height(type)           = type[6];   //! From the front to the back of the metal part

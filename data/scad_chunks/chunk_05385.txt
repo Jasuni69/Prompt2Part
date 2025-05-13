@@ -1,0 +1,26 @@
+module hide_this()
+{
+  tag_scope()
+    hide("child")
+    tag_this("child")
+    children();
+}
+
+// Module: show_only()
+// Synopsis: Show only the children with the listed tags.
+// See Also: tag(), recolor(), show_all(), show_int(), diff(), intersect()
+// Topics: Attachments
+// Usage:
+//   show_only(tags) CHILDREN;
+// Description:
+//   Show only the children with the listed tags, which you supply as a space separated string.  Only unhidden objects will be shown, so if an object is hidden either before or after the `show_only()` call then it will remain hidden.  This overrides any previous `show_only()` calls.  Unlike `hide()`, calls to `show_only()` are not cumulative.
+//   For a step-by-step explanation of attachments, see the [Attachments Tutorial](Tutorial-Attachments).
+// Side Effects:
+//   Sets `$tags_shown` to the tag you specify.
+// Example:  Display the attachments but not the parent
+//   show_only("visible")
+//     cube(50, anchor=CENTER)
+//       tag("visible"){
+//         attach(LEFT, BOTTOM) cylinder(d=30, h=30);
+//         attach(RIGHT, BOTTOM) cylinder(d=30, h=30);
+//       }

@@ -1,0 +1,9 @@
+module d_plug_D(length, width, rad) { //! D plug D shape
+    d = width / 2 - rad;
+    offset = d * sin(10);
+
+    hull()
+        for(x = [-1, 1], y = [-1, 1])
+            translate([x * (length / 2 - rad) + y * x * offset, y * (width / 2 - rad)])
+                circle(rad);
+}

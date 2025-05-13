@@ -1,0 +1,44 @@
+function bezpath_length(bezpath, N=3, max_deflect=0.001) =
+    assert(is_int(N))
+    assert(is_num(max_deflect))
+    assert(len(bezpath)%N == 1, str("\nA degree ",N," bezier path should have a multiple of ",N," points in it, plus 1."))
+    sum([
+        for (seg=[0:1:(len(bezpath)-1)/N-1]) (
+            bezier_length(
+                select(bezpath, seg*N, (seg+1)*N),
+                max_deflect=max_deflect
+            )
+        )
+    ]);
+
+
+
+// Function: path_to_bezpath()
+// Synopsis: Generates a bezier path that passes through all points in a given linear path.
+// SynTags: Path
+// Topics: Bezier Paths, Rounding
+// See Also: path_tangents()
+// Usage:
+//   bezpath = path_to_bezpath(path, [closed], [tangents], [uniform], [size=]|[relsize=]);
+// Description:
+//   Given a 2d or 3d input path and optional list of tangent vectors, computes a cubic (degree 3) bezier
+//   path that passes through every point on the input path and matches the tangent vectors. If you do not
+//   supply the tangents then they are computed using `path_tangents()` with `uniform=false` by default.
+//   Only the direction of the tangent vectors matter, not their magnitudes.
+//   If the path is closed, specify this by setting `closed=true`.
+//   The `size` or `relsize` parameter determines how far the curve can deviate from
+//   the input path.  In the case where the curve has a single hump, the size specifies the exact distance
+//   between the specified path and the bezier.  If you give relsize then it is relative to the segment
+//   length (e.g. 0.05 means 5% of the segment length).  In 2d when the bezier curve makes an S-curve
+//   the size parameter specifies the sum of the deviations of the two peaks of the curve.  In 3-space
+//   the bezier curve may have three extrema: two maxima and one minimum.  In this case the size specifies
+//   the sum of the maxima minus the minimum. Tangents computed on non-uniform data tend
+//   to display overshoots.  See `smooth_path()` for examples.
+// Arguments:
+//   path = 2D or 3D point list or 1-region that the curve must pass through
+//   closed = true if the curve is closed .  Default: false
+//   tangents = tangents constraining curve direction at each point
+//   uniform = set to true to compute tangents with uniform=true.  Default: false
+//   ---
+//   size = absolute size specification for the curve, a number or vector
+//   relsize = relative size specification for the curve, a number or vector.  Default: 0.1.

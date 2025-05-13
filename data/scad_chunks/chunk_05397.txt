@@ -1,0 +1,7 @@
+module _show_highlight()
+{
+  if ($highlight || $highlight_this)
+    #children();
+  else
+    children();
+}

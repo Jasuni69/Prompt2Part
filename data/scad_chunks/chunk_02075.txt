@@ -1,0 +1,1 @@
+function insert_foot() = insert_foot; //! Default foot with insert

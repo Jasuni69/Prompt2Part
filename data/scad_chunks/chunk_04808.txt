@@ -1,0 +1,16 @@
+function pb_substring(string, start, length) = start < length ?
+str(string[start], pb_substring(string, start + 1, length)) : "";
+
+//  function pb_groupsOf(n, list, skip, drop, only_groups)
+//
+//  After skipping skip values this function will group subsequent values in groups of n until the end of the list but minus drop values.
+//  This is useful  to group values into point lists and handle left over values in a different way. Perfect to deal with SVG number sequences.
+//  n           (number)  Define how many values go in a group. for example, n=3 to turn [x,y,z,x,y,z,x,y,z...] into [[x,y,z],[x,y,z],[x,y,z]...]
+//  list        (list)    List containing the input data. This can be kind of data.
+//  skip        (number)  Defines how many list values to skip before grouping starts.
+//  drop        (number)  Defines how many list values at the end of the list should not be grouped.
+//  only_groups (bool)    (default = true) Set to false if you want left-over values that can not be grouped and are not skipped or dropped to be included in the return data.
+//  return      (list)    Returns list with three value sets.
+//      return[0]         Skipped values.
+//      return[1]         Grouped values.
+//      return[2]         leftover values if only_groups==false. Followed by the dropped values.

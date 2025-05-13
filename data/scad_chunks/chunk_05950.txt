@@ -1,0 +1,21 @@
+function _assemble_partial_paths_recur(edges, eps, paths=[], i=0) =
+    i==len(edges) ? paths :
+    norm(edges[i][0]-last(edges[i]))<eps ? _assemble_partial_paths_recur(edges, eps, paths,i+1) :
+    let(    // Find paths that connects on left side and right side of the edges (if one exists)
+        
+        left = [for(j=idx(paths)) if (approx(last(paths[j]),edges[i][0],eps)) j],
+        right = [for(j=idx(paths)) if (approx(last(edges[i]),paths[j][0],eps)) j]
+    )
+    let(
+        keep_path = list_remove(paths,[if (len(left)>0) left[0],if (len(right)>0) right[0]]),
+        update_path =  left==[] && right==[] ? edges[i]
+                    : left==[] ? concat(list_head(edges[i]),paths[right[0]])
+                    : right==[] ?  concat(paths[left[0]],slice(edges[i],1,-1))
+                    : left[0] != right[0] ? concat(paths[left[0]],slice(edges[i],1,-2), paths[right[0]])
+                    : concat(paths[left[0]], slice(edges[i],1,-1)) // last arg -2 removes duplicate endpoints but this is handled in passthrough function
+    )
+    _assemble_partial_paths_recur(edges, eps, concat(keep_path, [update_path]), i+1);
+
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

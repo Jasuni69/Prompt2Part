@@ -1,0 +1,50 @@
+PSU12V1A = ["PSU12V1A", "PSU 12V 1A", 67, 31, 1.7, 0, 3.9, 0, "green", true, [[3.5, 3.5], [-3.5, 3.5], [-3.5, -3.5], [3.5, -3.5]], [], []];
+
+RAMPSEndstop = ["RAMPSEndstop", "RAMPS Endstop Switch",
+    40.0, 16.0, 1.6, 0.5, 2.54, 0, "red",  false,
+    [
+        [2, 2, false], [2, 13.5, false], [17, 13.5], [36, 13.5]
+    ],
+    [
+        [ 11.6,  8,   -90, "jst_xh", 3, true, "white", "silver"],
+        [ 26.5, 12.75,  0, "microswitch", small_microswitch],
+        [ 27.5, 17.5,  15, "chip", 15, 0.5, 4.5, "silver"],
+    ],
+    []];
+
+ESP_01 = [
+    "ESP_01", "ESP-01",
+    24.8, 14.6, 1, // size
+    0, // corner radius
+    0, // mounting hole diameter
+    0, // pad around mounting hole
+    grey(25), // color
+    false, // true if parts should be separate BOM items
+    [], // hole positions
+    [ // components
+        [   2.8,   -7.25, 0, "-2p54header", 2, 4 ],
+        [ -14.55, -11.3,  0, "chip", 5.25, 5.25, 2.25, grey(15) ],
+        [ -14,     -5.2,  0, "chip", 4.5,  4.75, 1.1,  grey(15) ],
+        // antenna
+        for (y = [ 2.8  : 2.3 : 7.4  ]) [ -0.7, -y,  0, "block", 0.7, 1.75, 0.1,  gold ],
+        for (y = [ 4    : 2.3 : 10.6 ]) [ -4.3, -y,  0, "block", 0.7, 1.75, 0.1,  gold ],
+        for (y = [ 3.4  : 2.3 : 10.1 ]) [ -2.5, -y,  0, "block", 4.3, 0.7,  0.1,  gold ],
+        for (y = [ 4.55 : 2.3 : 11.2 ]) [ -2.5, -y,  0, "block", 4.3, 0.7,  0.1,  gold ],
+
+        [ -0.7, -10.85,  0, "block", 0.7,3.75,  0.1,  gold ],
+        [ -6.6,  -5.8,   0, "block", 0.7, 7.5,  0.1,  gold ],
+        [ -4.8,  -2.3,   0, "block", 8.8, 0.7,  0.1,  gold ],
+    ],
+    [], // accessories
+    [2.8 - 1.27, 3.54, 2, 4, silver, 2.54, 2.54] // grid
+];
+
+//================================================
+// ESP_01M WIFI Module
+// by Karl McMurdo (XrXca)
+//================================================
+ESP_01M = [
+    "ESP_01M", "ESP-01M WiFi module (ESP8285)",
+    18, 18, 0.8, // size
+    0, // corner radius
+    0, // mounting hole diameter

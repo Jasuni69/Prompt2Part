@@ -1,0 +1,31 @@
+module svgShape(path="", _i=-2, _p=undef, _first_CW=undef, $pb_spline=10){
+    _p = _p==undef? svgPoints(path) : _p;
+    l = len(_p);
+    _first_CW = _i<-1? pb_is_CW(_p[0]) : _first_CW;
+    _i = _i==-2? l-1 : _i;
+    if (l>0){
+        if (l==1) polygon(_p[0]);
+        if (_i>=0){
+            CW2 = pb_is_CW(_p[_i]);
+            if (CW2 == _first_CW) union(){
+                polygon(_p[_i]);
+                svgShape(path, _i-1, _p, _first_CW);
+            } else difference(){
+                svgShape(path, _i-1, _p, _first_CW);
+                polygon(_p[_i]);
+            }
+        }
+    }
+}
+
+
+
+//  function svgTweenPath(s)
+//
+//  Processes two similar paths where the command sequence is identical but the parameters are different.
+//  The return value is a path string that is either Path1, Path2 or somewhere in between depending on the factor value
+//  which must be somewhere between 0 and 1. This function is great to create in between splines.
+//  path1   (list)   String compliant with SVG path syntax plus the extra commands introduced in pathBuilder.
+//  path2   (list)   String compliant with SVG path syntax plus the extra commands introduced in pathBuilder.
+//  factor  (number) Number between 0 and 1 determining the path values of the return path.
+//  return  (list) String compliant with SVG path syntax plus the extra commands introduced in pathBuilder.

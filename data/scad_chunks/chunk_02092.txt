@@ -1,0 +1,1 @@
+function screw_knob_solid(type)    = type[5]; //! Is the flange solid or just a wall

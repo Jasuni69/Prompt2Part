@@ -1,0 +1,46 @@
+module string_tetrahedrons(level, leng, diameter, segs_per_side, center) {
+
+    function height(leng) = 
+        leng * sqrt(1 - 4 / 9 * pow(sin(60), 2));
+        
+    if(level == 0) {
+        string_tetrahedron(leng * 2, diameter, segs_per_side, 6);
+    }
+    else {
+    
+        half_leng = leng / 2;
+        center_y = half_leng * tan(30);
+
+        translate([0, center_y * 2])
+            string_tetrahedrons(level - 1, half_leng, diameter, segs_per_side, center);
+
+        translate([half_leng, -center_y])
+            string_tetrahedrons(level - 1, half_leng, diameter, segs_per_side, center);
+
+        translate([-half_leng, -center_y])
+            string_tetrahedrons(level - 1, half_leng, diameter, segs_per_side, center);
+
+        translate([0, 0, height(leng)])
+            string_tetrahedrons(level - 1, half_leng, diameter, segs_per_side, center);
+
+
+        if(center) {
+            rotate(60)
+                  string_tetrahedrons(level - 1, half_leng, diameter, segs_per_side, center);
+
+            a = atan(height(leng * 2) / (2 * center_y));
+
+            for(i = [0:120:240]) {
+                rotate(i)
+                translate([0, -center_y * 2])
+                rotate([a, 0, 0])
+                translate([0, center_y * 2])
+                rotate([180, 0, 0])
+                scale(0.9427)
+                    string_tetrahedrons(level - 1, half_leng, diameter, segs_per_side, center);
+            }  
+        }        
+    }
+}
+
+string_tetrahedrons(level, leng, diameter, segs_per_side, center);

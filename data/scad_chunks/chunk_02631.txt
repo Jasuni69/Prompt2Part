@@ -1,0 +1,1 @@
+function yard(x) = x * 25.4 * 12 * 3;                                               //! Yard to mm conversion

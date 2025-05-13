@@ -1,0 +1,8 @@
+module box_external_additions() {
+    amp = pbox_ridges(box).y + eps;
+    d = foot_diameter(foot) + 1;
+    feet_positions()
+        cylinder(d1 = d, d2 = d + 2 * amp, h = amp);
+
+    slots(wall + pbox_ridges(box).y + eps, 1);
+}

@@ -1,0 +1,2 @@
+function _coordinate(range, t, points, n) = 
+    [for(i = range) _component(t, points, n, i)];

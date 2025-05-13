@@ -1,0 +1,42 @@
+module Drehpunkt(x=0,rz=0,rx=0,ry=0,y=0,z=0,messpunkt=messpunkt,help)
+{
+    y=is_list(x)?x[1]:y;
+    z=is_undef(x[2])?z:x[2];
+    x=is_list(x)?x[0]:x;
+    lMP=is_bool(messpunkt)?$vpd/4:messpunkt;
+    
+    translate([x,y,z])rotate([rx,ry,rz])translate([-x,-y,-z])children();
+    if(messpunkt)
+    {
+        if(rz)%color("blue")translate([x,y,z])cylinder(lMP,d=.5,center=true,$fn=12);
+        if(ry)%color("green")translate([x,y,z])rotate([0,0,rz])rotate([90,0,0])cylinder(lMP,d=.5,center=true,$fn=12);
+        if(rx)%color("red")translate([x,y,z])rotate([rx,ry,rz])rotate([0,90,0])cylinder(lMP,d=.5,center=true,$fn=12);   
+        %color("yellow")translate([x,y,z])sphere(d=1,$fn=12);
+    }
+    MO(!$children);
+    
+    HelpTxt("Drehpunkt",[
+    "x",x,
+    "rz",rz,
+    "rx",rx,
+    "ry",ry,
+    "y",y,
+    "z",z,
+    "messpunkt",messpunkt],
+    help);
+
+}
+
+/** \page Modifier
+Rand() creates an outline on a polygon
+\param rand thickness of outline + or -
+\param center if outline centered
+\param fn,fs fragments for outline
+\param delta, chamfer  use delta (no radial extension)
+\param help  help 
+*/
+
+/* 
+Rand(1,center=1.0,delta=0)Star(8);
+Tz(-1)Color(alpha=0.3)Star(8);
+//*/

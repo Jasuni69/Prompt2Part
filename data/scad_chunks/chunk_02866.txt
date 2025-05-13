@@ -1,0 +1,49 @@
+// DemonstrationTurtleRim.scad
+//
+// Demonstration for the StoneAgeLib
+//
+// Version 1
+// February 22, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+
+// Either include everything with
+// the file StoneAgeLib.scad, or
+// include only what is needed.
+
+//include <StoneAgeLib/StoneAgeLib.scad>
+include <StoneAgeLib/turtle.scad>
+
+$fn=200;
+
+// A demonstration of a Turtle for a complex shape.
+// The shape is the rim of a car wheel.
+
+turtle =
+[
+  [FORWARD,10],
+  [CIRCLE,1,80],
+  [FORWARD,5],
+  [CIRCLE,2,10],
+  [FORWARD,2],
+  [CIRCLE,-1,80],
+  [CIRCLE,1,20],
+  [CIRCLE,-0.5,200],
+  [FORWARD,0.3],
+  [CIRCLE,0.5,100],
+  [CIRCLE,-1,35],
+  [CIRCLE,2,13],
+  [FORWARD,4.7],
+  [CIRCLE,1,32],
+  [CIRCLE,-1,50],
+  [CIRCLE,0.5,100],
+  [FORWARD,0.3],
+  [CIRCLE,-0.5,200],
+  [CIRCLE,1,20],
+  [CIRCLE,-1,58],
+  [CIRCLE,0.3,84],
+  [CIRCLE,-45,12],
+  [SETX,0],
+];
+
+path = TurtleToPath(turtle);

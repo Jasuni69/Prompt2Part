@@ -1,0 +1,1 @@
+function hashmap_dels(m, keys, _indices_hash) = _hashmap_dels(m, keys, len(keys), _indices_hash);

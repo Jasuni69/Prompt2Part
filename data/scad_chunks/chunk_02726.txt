@@ -1,0 +1,6 @@
+module makeRing(r1,r2,h){
+	difference(){
+		cylinder(r=r2,h=h,center=true);
+		cylinder(r=r1,h=2*h,center=true);
+	}
+}

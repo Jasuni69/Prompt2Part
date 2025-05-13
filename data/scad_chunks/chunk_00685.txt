@@ -1,0 +1,1 @@
+function pmeter_pcb_h(type)       = type[14]; //! Component height from the front

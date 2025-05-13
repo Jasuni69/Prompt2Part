@@ -1,0 +1,51 @@
+function hashmap(hashsize=127,items,table) =
+    let(
+        table = !is_undef(table)? table : [for (i=[0:1:hashsize-1]) []]
+    )
+    items != undef? hashmap(hashsize=hashsize, table=table)(additems=items) :
+    function(k,v,del,additems)
+        additems!=undef? let(
+            hashes = [for (item = additems) simple_hash(item[0]) % hashsize],
+            grouped = list_pad(group_data(hashes, additems), hashsize, []),
+            table = [for (i=idx(table)) concat(table[i],grouped[i])]
+        ) hashmap(hashsize=hashsize, table=table) :
+        del!=undef? let(
+            bnum = simple_hash(del) % hashsize,
+            bucket = [for (item=table[bnum]) if (item[0]!=del) item],
+            table = [for (i=idx(table)) i==bnum? bucket : table[i]]
+        ) hashmap(hashsize=hashsize, table=table) :
+        k==undef && v==undef? [for (bucket=table, item=bucket) item] :
+        let(
+            bnum = simple_hash(k) % hashsize,
+            bucket = table[bnum],
+            fnd = search([k], bucket)
+        )
+        k!=undef && v==undef? (fnd==[]? undef : bucket[fnd[0]][1]) :
+        let(
+            newtable = [
+                for (i=idx(table))
+                i!=bnum? table[i] :
+                !fnd? [[k,v], each bucket] :
+                [[k,v], for (j=idx(bucket)) if (j!=fnd[0]) bucket[i]]
+            ]
+        ) hashmap(hashsize=hashsize, table=newtable);
+
+
+
+//////////////////////////////////////////////////////////////////////
+// Section: Function Meta-Generators
+
+
+// Function: f_1arg()
+// Synopsis: Creates a factory for a 2-arg function literal, where you can optionally pre-fill the arg.
+// Topics: Function Literals
+// See Also: f_2arg(), f_3arg()
+// Usage:
+//   fn = f_1arg(func);
+// Description:
+//   Takes a function literal that accepts one argument, and returns a function
+//   literal factory that can be used to pre-fill out that argument with a constant.
+// Example:
+//   f_str = f_1arg(function(a) str(a));
+//   fn_str = f_str();   // = function(a) str(a);
+//   fn_str3 = f_str(3); // = function() str(3);

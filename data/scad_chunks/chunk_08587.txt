@@ -1,0 +1,7 @@
+function _first_stroke(stroke_pts, path_pts) =
+    let(
+        p1 = path_pts[0],
+        p2 = path_pts[1],
+        m = _rz_matrix(p1, p2)
+    )
+    [for(p = stroke_pts) m * p + p1];

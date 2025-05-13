@@ -1,0 +1,7 @@
+function Q_Dot(a, b) = a[0]*b[0] + a[1]*b[1] + a[2]*b[2] + a[3]*b[3];
+
+
+// Function: Q_Neg()
+// Usage:
+//   Q_Neg(q)
+// Description: Returns the negative of quaternion `q`.

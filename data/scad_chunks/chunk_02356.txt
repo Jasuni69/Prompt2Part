@@ -1,0 +1,8 @@
+module fixing_block_M40_stl() fixing_block(M4_cap_screw);
+
+//
+//! 1. Lay the blocks out with the two larger holes facing upwards.
+//! 1. Place two M2 inserts into the two vertical holes of each block and push them home with a soldering iron with a conical bit heated to 200&deg;C.
+//! When removing the iron it helps to twist it a little anti-clockwise to release it from the thread.
+//! 1. Lay the blocks on their backs and insert a third insert the same way.
+//

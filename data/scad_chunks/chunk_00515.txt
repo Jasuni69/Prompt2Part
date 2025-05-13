@@ -1,0 +1,26 @@
+module star_washer(type) { //! Draw star version of washer
+    $fs = fs; $fa = fa;
+
+    hole = washer_size(type);
+    thickness = washer_thickness(type);
+    diameter  = star_washer_diameter(type);
+    rad = diameter / 2;
+    inner = (hole / 2 + rad) / 2;
+    spoke  = rad - hole / 2;
+    vitamin(str("star_washer(", type[0], "_washer): Washer star M", hole, " x ", thickness, "mm"));
+    color(star_washer_colour)
+        linear_extrude(thickness)
+            difference() {
+                circle(rad);
+
+                circle(d = washer_id(type));
+
+                for(a = [0:30:360])
+                    rotate(a)
+                        translate([inner + spoke / 2, 0, 0.5])
+                            square([spoke, 2 * PI * inner / 36], center = true);
+            }
+    if($children)
+        translate_z(thickness)
+            children();
+}

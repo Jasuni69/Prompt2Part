@@ -1,0 +1,11 @@
+module led_bezel_fastened_assembly(type, t, colour = "red") //! Led bezel fitted to panel with  and retaining ring
+{
+    explode(20)
+        led_bezel_assembly(type, colour);
+
+    translate_z(-t)
+        vflip()
+            stl_colour(pp2_colour)
+                explode(60)
+                    led_bezel_retainer(type);
+}

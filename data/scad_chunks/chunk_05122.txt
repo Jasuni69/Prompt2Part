@@ -1,0 +1,29 @@
+function list_pad(list, minlen, fill) =
+    assert(is_list(list), "Invalid input." )
+    concat(list,repeat(fill,minlen-len(list)));
+
+
+// Function: list_set()
+// Synopsis: Sets the value of specific list items.
+// Topics: List Handling
+// See Also: list_insert(), list_remove(), list_remove_values()
+// Usage:
+//   list = list_set(list, indices, values, [dflt], [minlen]);
+// Description:
+//   Takes the input list and returns a new list such that `list[indices[i]] = values[i]` for all of
+//   the (index,value) pairs supplied and unchanged for other indices.  If you supply `indices` that are 
+//   larger that the length of the list then the list is extended and filled in with the `dflt` value.
+//   If you specify indices smaller than zero then they index from the end, with -1 being the last element.
+//   Negative indexing does not wrap around: an error occurs if you give a value smaller than `-len(list)`.
+//   If you set `minlen` then the list is lengthed, if necessary, by padding with `dflt` to that length.  
+//   Repetitions in `indices` are not allowed. The lists `indices` and `values` must have the same length.  
+//   If `indices` is given as a scalar, then that index of the given `list` will be set to the scalar value of `values`.
+// Arguments:
+//   list = List to set items in.  Default: []
+//   indices = List of indices into `list` to set.
+//   values = List of values to set.
+//   dflt = Default value to store in sparse skipped indices.
+//   minlen = Minimum length to expand list to.
+// Example:
+//   a = list_set([2,3,4,5], 2, 21);  // Returns: [2,3,21,5]
+//   b = list_set([2,3,4,5], [1,3], [81,47]);  // Returns: [2,81,4,47]

@@ -1,0 +1,49 @@
+alphaLid            = 0.9; // 1;
+colorBase           = "BurlyWood";
+alphaBase           = 0.9; // 1;
+hideLidWalls        = false;    //-> false
+hideBaseWalls       = false;    //-> false
+showOrientation     = true;
+showPCB             = false;
+showSwitches        = false;
+showPCBmarkers      = false;
+showShellZero       = false;
+showCenterMarkers   = false;
+inspectX            = 0;        //-> 0=none (>0 from Back)
+inspectY            = 0;        //-> 0=none (>0 from Right)
+inspectZ            = 0;        //-> 0=none (>0 from Bottom)
+inspectXfromBack    = true;     // View from the inspection cut foreward
+inspectYfromLeft    = true;     //-> View from the inspection cut to the right
+inspectZfromTop     = false;    //-> View from the inspection cut down
+//-- C O N T R O L ---------------------------------------
+
+
+//===================================================================
+//  *** Snap Joins ***
+//-------------------------------------------------------------------
+//  Default origin = yappCoordBox: box[0,0,0]
+//
+//  Parameters:
+//   Required:
+//    (0) = posx | posy
+//    (1) = width
+//    (n) = yappLeft / yappRight / yappFront / yappBack (one or more)
+//   Optional:
+//    (n) = { <yappOrigin> | yappCenter }
+//    (n) = { yappSymmetric }
+//    (n) = { yappRectangle } == Make a diamond shape snap
+//-------------------------------------------------------------------
+snapJoins   =   
+[
+// Test all combinations of yappCenter & yappRectangle 
+    [(shellWidth/2)-10,     5, yappFront, yappBack, yappCenter, yappSymmetric]
+   ,[(shellLength/2)-10,     5, yappLeft, yappRight, yappCenter, yappSymmetric]
+
+   ,[(shellWidth/2)-20,     5, yappFront, yappBack, yappSymmetric]
+   ,[(shellLength/2)-20,     5, yappLeft, yappRight, yappSymmetric]
+
+   ,[(shellWidth/2)-30,     5, yappFront, yappBack, yappCenter, yappSymmetric, yappRectangle]
+   ,[(shellLength/2)-30,     5, yappLeft, yappRight, yappCenter, yappSymmetric, yappRectangle]
+
+   ,[(shellWidth/2)-40,     5, yappFront, yappBack, yappSymmetric, yappRectangle]
+   ,[(shellLength/2)-40,     5, yappLeft, yappRight, yappSymmetric, yappRectangle]

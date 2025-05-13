@@ -1,0 +1,1 @@
+function pillar_ifn(type)        = type[7];     //! Inner number of sides, 6 for hex, 0 for smooth cylinder

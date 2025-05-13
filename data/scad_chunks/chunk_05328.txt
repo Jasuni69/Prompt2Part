@@ -1,0 +1,41 @@
+function bezpath_curve(bezpath, splinesteps=16, N=3, endpoint=true) =
+    assert(is_path(bezpath))
+    assert(is_int(N))
+    assert(is_int(splinesteps) && splinesteps>0)
+    assert(len(bezpath)%N == 1, str("\nA degree ",N," bezier path should have a multiple of ",N," points in it, plus 1."))
+    let(
+        segs = (len(bezpath)-1) / N,
+        step = 1 / splinesteps,
+        path = [
+            for (seg = [0:1:segs-1])
+                each bezier_points(select(bezpath, seg*N, (seg+1)*N), [0:step:1-step/2]),
+            if (endpoint) last(bezpath)
+        ],
+        is_closed = approx(path[0], last(path)),
+        out = path_merge_collinear(path, closed=is_closed)
+    ) out;
+
+
+// Function: bezpath_closest_point()
+// Synopsis: Finds the closest point on a bezier path to a given point.
+// Topics: Bezier Paths
+// See Also: bezpath_points(), bezpath_curve(), bezier_points(), bezier_curve(), bezier_closest_point()
+// Usage:
+//   res = bezpath_closest_point(bezpath, pt, [N], [max_err]);
+// Description:
+//   Finds an approximation to the closest part of the given bezier path to point `pt`.
+//   Returns [segnum, u] for the closest position on the bezier path to the given point `pt`.
+// Arguments:
+//   bezpath = A bezier path to approximate.
+//   pt = The point to find the closest curve point to.
+//   N = The degree of the bezier curves.  Cubic beziers have N=3.  Default: 3
+//   max_err = The maximum allowed error when approximating the closest approach.
+// Example(2D):
+//   pt = [100,0];
+//   bez = [[0,0], [20,40], [60,-25], [80,0],
+//          [100,25], [140,25], [160,0]];
+//   pos = bezpath_closest_point(bez, pt);
+//   xy = bezpath_points(bez,pos[0],pos[1]);
+//   debug_bezier(bez, N=3);
+//   color("red") translate(pt) sphere(r=1);
+//   color("blue") translate(xy) sphere(r=1);

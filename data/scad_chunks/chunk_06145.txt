@@ -1,0 +1,15 @@
+module front_half(s=100, y=0, planar=false)
+{
+    req_children($children);
+    dir = FWD;
+    difference() {
+        children();
+        translate([0,y,0]-dir*s/2) {
+            if (planar) {
+                square(s, center=true);
+            } else {
+                cube(s, center=true);
+            }
+        }
+    }
+}

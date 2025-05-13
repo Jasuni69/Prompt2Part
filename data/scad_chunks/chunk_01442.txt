@@ -1,0 +1,1 @@
+function rail_end(type)        = type[3];   //! Minimum distance screw can be from the end

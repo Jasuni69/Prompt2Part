@@ -1,0 +1,29 @@
+module spade(type, height = 14) { //! Draw a spade of the specified type and total length. The shank length is adjusted to make the length.
+    w = spade_w(type);
+    l = spade_l(type);
+    chamfer = w / 4;
+    shank_w = spade_shank(type);
+    shank_l = height - spade_l(type);
+
+    color("silver")
+    rotate([90, 0, 0])
+        linear_extrude(spade_t(type), center = true)
+            difference() {
+                union() {
+                    if(shank_l > 0)
+                        translate([-shank_w / 2, 0])
+                            square([shank_w, shank_l]);
+
+                    translate([0, shank_l])
+                        hull() {
+                            translate([- w/ 2, 0])
+                                square([w, l - chamfer]);
+
+                            translate([- (w - chamfer) / 2, 0])
+                                square([w - chamfer, l]);
+                        }
+                }
+                translate([0, shank_l + l / 2])
+                    circle(d = spade_hole(type));
+            }
+}

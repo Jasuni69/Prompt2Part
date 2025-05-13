@@ -1,0 +1,28 @@
+function bezier_path_closest_point(path, pt, N=3, max_err=0.01, seg=0, min_seg=undef, min_u=undef, min_dist=undef) =
+	let(curve = select(path,seg*N,(seg+1)*N))
+	(seg*N+1 >= len(path))? (
+		let(curve = select(path, min_seg*N, (min_seg+1)*N))
+		[min_seg, bezier_segment_closest_point(curve, pt, max_err=max_err)]
+	) : (
+		let(
+			curve = select(path,seg*N,(seg+1)*N),
+			u = bezier_segment_closest_point(curve, pt, max_err=0.05),
+			dist = norm(bez_point(curve, u)-pt),
+			mseg = (min_dist==undef || dist<min_dist)? seg : min_seg,
+			mdist = (min_dist==undef || dist<min_dist)? dist : min_dist,
+			mu = (min_dist==undef || dist<min_dist)? u : min_u
+		)
+		bezier_path_closest_point(path, pt, N, max_err, seg+1, mseg, mu, mdist)
+	);
+
+
+
+// Function: bezier_path_length()
+// Usage:
+//   bezier_path_length(path, [N], [max_deflect]);
+// Description:
+//   Approximates the length of the bezier path.
+// Arguments:
+//   path = A bezier path to approximate.
+//   N = The degree of the bezier curves.  Cubic beziers have N=3.  Default: 3
+//   max_deflect = The largest amount of deflection from the true curve to allow for approximation.

@@ -1,0 +1,4 @@
+function solve_row(m, i) = let(diag = m[i][i]) [ // Make diagonal one by dividing the row by it and subtract from other rows to make column zero
+    for(j = [0 : len(m) - 1])
+        i == j ? m[j] / diag : m[j] - m[i] * m[j][i] / diag
+];

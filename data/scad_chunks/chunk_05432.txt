@@ -1,0 +1,2 @@
+function _corner_edge_count(edges, v) =
+    let(u = (v+[1,1,1])/2) edges[0][u.y+u.z*2] + edges[1][u.x+u.z*2] + edges[2][u.x+u.y*2];

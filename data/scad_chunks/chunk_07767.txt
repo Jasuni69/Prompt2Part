@@ -1,0 +1,38 @@
+module PilleOLD(l=10,d=5,fn=fn,fn2=36,center=true,name,s=0,rad,rad2,loch=false,help)
+{
+ //rotate_extrude()Halb(2D=true)Strebe(h=10,rad=+2,d=-4,2D=true);
+    
+   // if(rad>d/2-.001||rad2>d/2-.001)echo("<font color=red> Radius limited to d/2");
+ rad=is_undef(rad)?d/2:d>0?min(rad,d/2):max(rad,d/2); 
+ rad2=is_undef(rad2)?rad:min(rad2,d/2);    
+  d=s?s:d>0?max(d,rad*2):min(rad*2,d); //abwärts compabilät
+    
+ if(!loch)Tz(center?-l/2:0)rotate_extrude(convexity=5,$fn=fn)polygon(concat(
+     
+    kreis(rand=0,grad=90,r=rad2,center=false,rot=0,t=[d/2-rad2,l-rad2],fn=fn2/4),
+    kreis(rand=0,grad=90,r=rad,rot=+90,center=false,t=[d/2-rad,rad],fn=fn2/4),     
+    [[0,0]],
+    [[0,l]]
+    
+    ),
+    //paths=[[for(i=[0:floor(fn/4)])i,for(i=[floor(fn/2)+1:-1:floor(fn/4)+1])i,floor(fn/2)+2,floor(fn/2)+3]],
+    convexity=5
+    );
+ 
+ //if(fn%4)echo("<font size=7 color=red>FN nicht teilbar durch 4");
+ 
+ if(loch)Tz(center?-l/2:0)rotate_extrude(convexity=5,$fn=fn)polygon(concat(
+    kreis(rand=0,grad=90,r=rad,rot=+90,center=false,t=[d/2-rad,rad],fn=fn2/4),//unten 
+    kreis(rand=0,grad=90,r=rad2,center=false,rot=0,t=[d/2-rad2,l-rad2],fn=fn2/4)//oben
+    
+    ),
+    //paths=[[for(i=[0:floor(fn/4)])i,for(i=[floor(fn/2)+1:-1:floor(fn/4)+1])i]],
+    convexity=5 
+    );    
+
+    if(name)echo(str("»»» »»» ",name," Pille Länge= ",l," sphere r= ",rad,"/",rad2," Durchmesser=",d));
+    if(2*rad>l)echo(str("<H1><font color=red>∅>l ",n," Pille Länge= ",l," sphere∅= ",d)); 
+     
+  if(help)echo(str("<H3><font color=",helpMColor,">Help Pille(l=",l,", d=",d,", fn=",fn,", fn2=",fn2,", center=",center,",n=",n,", s=",s,", rad=",rad,",rad2=",rad2,", loch=",loch,", help);"));
+    
+}

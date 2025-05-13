@@ -1,0 +1,98 @@
+function teardrop(h, r, ang=45, cap_h, r1, r2, d, d1, d2, cap_h1, cap_h2,  chamfer, chamfer1, chamfer2, circum=false, realign=false, bot_corner1, bot_corner2, bot_corner=0,
+                  l, length, height, anchor=CENTER, spin=0, orient=UP) =
+    let(
+        r1 = get_radius(r=r, r1=r1, d=d, d1=d1, dflt=1),
+        r2 = get_radius(r=r, r1=r2, d=d, d1=d2, dflt=1),
+        length = one_defined([l, h, length, height],"l,h,length,height"),
+        dummy0=assert(is_finite(length) && length>0, "length must be positive"),
+        cap_h1 = first_defined([cap_h1, cap_h]),
+        cap_h2 = first_defined([cap_h2, cap_h]),
+        bot_corner1 = first_defined([bot_corner1, bot_corner]),
+        bot_corner2 = first_defined([bot_corner2, bot_corner]),         
+        chamfer1 = first_defined([chamfer1,chamfer,0]),
+        chamfer2 = first_defined([chamfer2,chamfer,0]),    
+        sides = segs(max(r1,r2)),
+        profile1 = teardrop2d(r=r1, ang=ang, cap_h=cap_h1, $fn=sides, circum=circum, realign=realign,_extrapt=true, bot_corner=bot_corner1),
+        profile2 = teardrop2d(r=r2, ang=ang, cap_h=cap_h2, $fn=sides, circum=circum, realign=realign,_extrapt=true, bot_corner=bot_corner2),
+        tip_y1 = r1/cos(90-ang),
+        tip_y2 = r2/cos(90-ang),
+        _cap_h1 = min(default(cap_h1, tip_y1), tip_y1),
+        _cap_h2 = min(default(cap_h2, tip_y2), tip_y2),
+        capvec = unit([0, _cap_h1-_cap_h2, length]),
+        dummy=
+          assert(abs(chamfer1)+abs(chamfer2) <= length,"chamfers are too big to fit in the length")
+          assert(chamfer1<=r1 && chamfer2<=r2, "Chamfers cannot be larger than raduis")
+          assert(bot_corner1==0 || bot_corner1>=chamfer1, "\nchamfer1 doesn't work with bottom corner: must have chamfer1 <= bot_corner1")
+          assert(bot_corner2==0 || bot_corner2>=chamfer2, "\nchamfer2 doesn't work with bottom corner: must have chamfer2 <= bot_corner2")
+          assert(bot_corner1==0 || bot_corner1>chamfer1 || sides%2==(realign?1:0), 
+                 str("\nWith chamfer1==bot_corner1 and realign=",realign," must have ",realign?"odd":"even"," number of sides, but sides=",sides))
+          assert(is_undef(cap_h1) || cap_h1-chamfer1 > r1*sin(ang), "chamfer1 is too big to work with the specified cap_h1")
+          assert(is_undef(cap_h2) || cap_h2-chamfer2 > r2*sin(ang), "chamfer2 is too big to work with the specified cap_h2"),
+        cprof1 = r1==chamfer1 ? repeat([0,0],len(profile1))
+                              : teardrop2d(r=r1-chamfer1, ang=ang, cap_h=u_add(cap_h1,-chamfer1), bot_corner=bot_corner1==0?0:bot_corner1-chamfer1,
+                                           $fn=sides, circum=circum, realign=realign,_extrapt=true),
+        cprof2 = r2==chamfer2 ? repeat([0,0],len(profile2))
+                              : teardrop2d(r=r2-chamfer2, ang=ang, cap_h=u_add(cap_h2,-chamfer2), bot_corner=bot_corner2==0?0:bot_corner2-chamfer2,
+                                           $fn=sides, circum=circum, realign=realign,_extrapt=true),
+        anchors = [
+            named_anchor("cap",      [0,0,(_cap_h1+_cap_h2)/2], capvec),
+            named_anchor("cap_fwd",  [0,-length/2,_cap_h1],         unit((capvec+FWD)/2)),
+            named_anchor("cap_back", [0,+length/2,_cap_h2],         unit((capvec+BACK)/2), 180),
+        ],
+        vnf = vnf_vertex_array(
+            points = [
+                if (chamfer1!=0) fwd(length/2, xrot(90, path3d(cprof1))),
+                fwd(length/2-abs(chamfer1), xrot(90, path3d(profile1))),
+                back(length/2-abs(chamfer2), xrot(90, path3d(profile2))),
+                if (chamfer2!=0) back(length/2, xrot(90, path3d(cprof2))),
+            ],
+            caps=true, col_wrap=true, reverse=true
+        )
+    ) reorient(anchor,spin,orient, r1=r1, r2=r2, l=l, axis=BACK, anchors=anchors, p=vnf);
+
+
+// Function&Module: onion()
+// Synopsis: Creates an attachable onion-like shape.
+// SynTags: Geom, VNF
+// Topics: Shapes (3D), Attachable, VNF Generators, FDM Optimized
+// See Also: teardrop(), teardrop2d()
+// Description:
+//   Creates a sphere with a conical hat, to make a 3D teardrop.
+//
+// Usage: As Module
+//   onion(r|d=, [ang=], [cap_h=], [circum=], [realign=], ...) [ATTACHMENTS];
+// Usage: As Function
+//   vnf = onion(r|d=, [ang=], [cap_h=], [circum=], [realign=], ...);
+//
+// Arguments:
+//   r = radius of spherical portion of the bottom. Default: 1
+//   ang = Angle of cone on top from vertical. Default: 45 degrees
+//   cap_h = If given, height above sphere center to truncate teardrop shape.  Default: `undef` (no truncation)
+//   ---
+//   circum = set to true to circumscribe the specified radius/diameter.  Default: False
+//   realign = adjust point alignment to determine if bottom is flat or pointy.  Default: False
+//   d = diameter of spherical portion of bottom.
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//
+// Named Anchors:
+//   "cap" = The center of the top of the cap, oriented with the cap face normal.
+//   "tip" = The position where an un-capped onion would come to a point, oriented in the direction the point is from the center.
+//
+// Example: Typical Shape
+//   onion(r=30, ang=30);
+// Example: Crop Cap
+//   onion(r=30, ang=30, cap_h=40);
+// Example: Close Crop
+//   onion(r=30, ang=30, cap_h=20);
+// Example: Onions are useful for making the tops of large cylindrical voids.
+//   difference() {
+//       cuboid([100,50,100], anchor=FWD+BOT);
+//       down(0.1)
+//           cylinder(h=50,d=50,anchor=BOT)
+//               attach(TOP)
+//                   onion(d=50, cap_h=30);
+//   }
+// Example: Standard Connectors
+//   onion(d=30, ang=30, cap_h=20) show_anchors();

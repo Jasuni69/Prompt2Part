@@ -1,0 +1,32 @@
+function affine2d_skew(xa=0, ya=0) =
+    assert(is_finite(xa))
+    assert(is_finite(ya))
+    [
+        [1,       tan(xa), 0],
+        [tan(ya), 1,       0],
+        [0,       0,       1]
+    ];
+
+
+
+// Section: Affine3d 4x4 Transformation Matrices
+
+
+// Function: affine3d_identity()
+// Synopsis: Returns a 3D (4x4) identity transformation matrix.
+// SynTags: Mat
+// Topics: Affine, Matrices, Transforms
+// See Also: affine2d_identity(), ident(), IDENT
+// Usage:
+//   mat = affine3d_identity();
+// Description:
+//   Create a 4x4 affine3d identity matrix.
+// Example:
+//   mat = affine2d_identity();
+//   // Returns:
+//   //   [
+//   //     [1, 0, 0, 0],
+//   //     [0, 1, 0, 0],
+//   //     [0, 0, 1, 0],
+//   //     [0, 0, 0, 1]
+//   //   ]

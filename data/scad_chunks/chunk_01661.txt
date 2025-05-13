@@ -1,0 +1,1 @@
+function blower_wall_right(type)  = type[17]; //! Right wall thickness (for square fans)

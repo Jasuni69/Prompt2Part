@@ -1,0 +1,6 @@
+function _tri_circumcircle(shape_pts) =
+   let(
+	  center = tri_circumcenter(shape_pts),
+	  v = shape_pts[0] - center
+   )
+   [center, v * v];

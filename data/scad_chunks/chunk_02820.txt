@@ -1,0 +1,86 @@
+module Crease2D(pieces=8,variation=50,thickness=1.5)
+{
+  // Create a list with individual vectors.
+  vectors = 
+  [ 
+    [0,0],
+    let(start_angle = rands(0,360,1)[0])
+    for(i=[0:pieces]) 
+      let(angle  = rands(start_angle-variation,start_angle+variation,1)[0])
+      let(length = rands(100/pieces,400/pieces,1)[0])
+      let(x = length*cos(angle))
+      let(y = length*sin(angle))
+      [x,y]
+  ];
+
+  // Make a list with coordinates.
+  points = vector_add_2D(vectors); 
+
+  // Draw lines between the coordinates.
+  // The offset is used to center the shape.
+  for(i=[0:pieces-1])
+  {
+    offset = points[len(points)-1] / 2;
+    hull()
+    {
+      translate(points[i]-offset)
+        circle(thickness,$fn=5);
+      translate(points[i+1]-offset)
+        circle(thickness,$fn=5);
+    }
+  }
+}
+
+// ==============================================================
+//
+// **********************************************
+// **                                          **
+// **            FlexHex Stones                **
+// **                                          **
+// **********************************************
+//
+// Original:
+// "Irregular Grid Flexible Sheet"
+// https://www.printables.com/model/222827-irregular-grid-flexible-sheet
+// https://www.thingiverse.com/thing:5406876
+// By "degroof" (Steve DeGroof) www.stevedegroof.com
+// Uploaded June 09, 2022
+// License CC0 Public Domain
+//
+// Version 2
+// January 22, 2023
+// License: CC0 (Public Domain)
+// Changes by: Stone Age Sculptor:
+//   I call them "FlexHex Stones".
+//   I removed the flat base, only the FlexHex stones are created.
+//   That makes it also possible to put a fabric halfway.
+//   The height is now the height of the stones.
+//   The bottom starts at z position 0.
+//   The seed for the random is added as a parameter.
+//   All irregular stones are first created in 2D.
+//   The extrusion is done at the end.
+//   Add your own bottom to connect all the stones.
+//   I found this more useful when using it in a scene.
+//
+// Version 3
+// January 19, 2025
+// License CC0 (Public Domain)
+// Changes by: Stone Age Sculptor:
+//   The default seed is now a random.
+//   The size is now default 100x100
+//   Added a FlexHex2D() with the same parameters.
+//
+//
+// FlexHex
+// -------
+// Creates a flexible rectangular sheet of irregular hexagons, 
+// maintaining a consistent gap between each flexhex stone.
+//
+// Parameters:
+//   l = length
+//   w = width
+//   h = height of the flexhex stones
+//   grid = spacing between the hexagons
+//   gap = spacing between hexagons
+//   irregularity = amount of irregularity in hexagons (0-100) 
+//   s = seed for random pattern, the same seed will give the same pattern.

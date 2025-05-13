@@ -1,0 +1,13 @@
+function os_teardrop(r,cut,extra,check_valid, quality,steps, offset) =
+        assert(num_defined([r,cut])==1, "Must define exactly one of `r` and `cut`")
+        _remove_undefined_vals([
+                "for", "offset_sweep",
+                "type", "teardrop",
+                "r",r,
+                "cut",cut,
+                "extra",extra,
+                "check_valid",check_valid,
+                "quality", quality,
+                "steps", steps,
+                "offset", offset
+        ]);

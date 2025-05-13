@@ -1,0 +1,1 @@
+function square_button_ra_z(type)         = type[7];  //! Height of button centre above the PCB for right_angle version

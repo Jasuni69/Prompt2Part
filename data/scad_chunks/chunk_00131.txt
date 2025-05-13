@@ -1,0 +1,50 @@
+module press_fits()
+{
+    thickness = 2;
+    width = 20;
+    vthickness = 4;
+
+    translate([0, width + 2])
+        difference() {
+            cube([width, width, thickness]);
+
+            for(x = [0.25, 0.75])
+                for(y = [0.25, 0.75])
+                    translate([x * width, y * width])
+                        press_fit_socket();
+        }
+
+    union() {
+        cube([width, width, thickness]);
+
+        for(x = [0.25, 0.75])
+            for(y = [0.25, 0.75])
+                translate([x * width, y * width, thickness])
+                    press_fit_peg(h = thickness);
+    }
+
+    translate([width + 2, width + 2])
+        difference() {
+            cube([width, vthickness, width]);
+
+            for(x = [0.25, 0.75])
+                for(y = [0.25, 0.75])
+                    translate([x, 0, y] * width)
+                        rotate([90, 0, 0])
+                            press_fit_socket();
+        }
+
+    translate([width + 2, 0])
+        union() {
+            cube([width, width, thickness]);
+
+            for(x = [0.25, 0.75])
+                for(y = [0.25, 0.75])
+                    translate([x * width, y * width, thickness])
+                        press_fit_peg(h = vthickness, horizontal = true);
+        }
+
+}
+
+
+press_fits();

@@ -1,0 +1,8 @@
+module holes()
+    for(i = [0 : len(diameters1) - 1]) {
+        translate(pos(i))
+            children();
+
+        translate(pos2(i))
+            children();
+    }

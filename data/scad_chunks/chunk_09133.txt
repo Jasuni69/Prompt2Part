@@ -1,0 +1,24 @@
+function _corner_value(dotM, p) =
+    let(
+        x = p.x, 
+        y = p.y,
+        dotMy = dotM[y],
+        dotMy1 = dotM[y + 1],
+        x_1 = x + 1
+    )
+    (dotMy[x] ?    1 : 0) + 
+    (dotMy1[x] ?   2 : 0) + 
+    (dotMy1[x_1] ? 4 : 0) + 
+    (dotMy[x_1] ?  8 : 0);
+
+UP = [0,  1];
+DOWN = [0, -1];
+LEFT = [-1, 0]; 
+RIGHT = [1,  0]; 
+
+_dir_table = [
+    undef, DOWN,  LEFT,  DOWN,
+    UP,    undef, LEFT,  DOWN,
+    RIGHT, RIGHT, undef, RIGHT,
+    UP,    UP,    LEFT,  undef
+];

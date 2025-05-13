@@ -1,0 +1,47 @@
+module pin_socket(type, cols = 1, rows = 1, right_angle = false, height = 0, smt = false, cutout = false, colour) { //! Draw pin socket
+    pitch = hdr_pitch(type);
+    length = pitch * cols + 0.5;
+    width = pitch * rows - 0.08;
+    depth = height ? height : hdr_socket_depth(type);
+    base_colour = colour ? colour : hdr_base_colour(type);
+    ra_offset = 1.5;
+    if(cutout)
+        ;
+    else {
+        vitamin(str("pin_socket(", type[0], ", ", cols, ", ", rows, arg(right_angle, false, "right_angle"), arg(height, 0, "height"), arg(smt, false, "smt"),
+                               "): Pin socket ", cols, " x ", rows, right_angle ? " right_angle" : ""));
+        color(base_colour)
+            translate([0, right_angle ? -ra_offset - (rows - 1) * pitch / 2 : 0, right_angle ? width / 2 : 0])
+                rotate([right_angle ? 90 : 0, 0, 0])
+                    translate_z(depth / 2)
+                        linear_extrude(depth, center = true)
+                            difference() {
+                                square([length, width], center = true);
+
+                            for(x = [0 : cols - 1], y = [0 : rows -1])
+                                translate([pitch * (x - (cols - 1) / 2), pitch * (y - (rows - 1) / 2)])
+                                    square(hdr_pin_width(type), center = true);
+                    }
+
+             for(x = [0 : cols - 1], y = [0 : rows -1]) {
+                if(!smt)
+                    translate([pitch * (x - (cols - 1) / 2), pitch * (y - (rows - 1) / 2), 0])
+                        pin(type, hdr_pin_below(type) + (y + 0.5) * pitch);
+
+                if(right_angle) {
+                    rotate([-90, 0, 180])
+                        translate([pitch * (x - (cols - 1) / 2), -pitch * (y - (rows - 1) / 2) - width / 2, hdr_pin_below(type) - (y - (rows - 1) / 2) * pitch])
+                            let($solder = undef)
+                                pin(type, hdr_pin_below(type) + (y - 0.5) * pitch);
+
+                    w = hdr_pin_width(type);
+                    color(hdr_pin_colour(type))
+                        translate([pitch * (x - (cols - 1) / 2), pitch * (y - (rows - 1) / 2) - w / 2, pitch * (y - (rows - 1) / 2) + width / 2 - w / 2])
+                            rotate([0, -90, 0])
+                                rotate_extrude(angle = 90, $fn = fn)
+                                    translate([0, -w / 2])
+                                        square(w);
+                }
+            }
+    }
+}

@@ -1,0 +1,64 @@
+module Pivot(p0=[0,0,0],size,active=[1,1,1,1,1,1],messpunkt,txt,rot=0,vpr=$vpr,help=false){
+  messpunkt=is_undef(messpunkt)?is_undef($messpunkt)?true:$messpunkt:messpunkt;
+    p0=is_num(p0)?[p0,0]:p0;
+    size=is_undef(size)?is_bool(messpunkt)?pivotSize:messpunkt:size;
+  
+    size2=size/+5;
+  if(messpunkt&&$preview)%translate(p0)union(){
+        
+      if(active[3])rotate(rot)  color("blue")cylinder(size,d1=.5*size2,d2=0,center=false,$fn=4);
+      if(active[2])rotate(rot)  color("green")rotate([-90,0,0])cylinder(size,d1=.5*size2,d2=0,center=false,$fn=4);
+      if(active[1])rotate(rot)  color("red")rotate([0,90,0])cylinder(size,d1=.5*size2,d2=0,center=false,$fn=4);   
+       if(active[0]) color("yellow")sphere(d=size2*.6,$fn=12);
+       //Text
+       if(active[4]) %color("grey")rotate(vpr)
+          //linear_extrude(.1,$fn=1)
+       text(text=str(norm(p0)?p0:""," ",rot?str(rot,"°"):"","   "),size=size2,halign="right",valign="top",font="Bahnschrift:style=light",$fn=1);    
+       
+       if(txt&&active[5])%color("lightgrey")rotate(vpr)translate([0,size/15])//linear_extrude(.1,$fn=1)
+         Tz(0.1) text(text=str(txt,"   "),size=size2,font="Bahnschrift:style=light",halign="right",valign="bottom",$fn=1);
+  }     
+  HelpTxt("Pivot",[
+     "p0",p0,
+    "size",size,
+    "active",active,
+    "messpunkt",messpunkt,
+    "txt",txt,
+    "rot",rot,
+    "vpr",vpr]
+    ,help); 
+
+}
+
+
+
+
+
+
+}//fold // \ΔΔ Helper   ΔΔ\ \\
+{//fold // \∇∇ Polygons ∇∇/ //
+
+
+/** \page Polygons
+Connector creates a connector pin
+\param l length
+\param l2 center length
+\param d  diameter
+\param d2  center diameter
+\param dicke  wall thickness
+\param flat length flat sections
+\param latch latch height
+\param collar collar height
+\param deg,degC,degEnd angle of chamfers
+\param end end diameter change from d
+\param cut cut end length
+\param half for half x side 
+\param center center
+\param 2D polygon or 3D connector
+\param printCut overhang angle horizontal print
+\param print rotate and move 3D pin up
+
+*/
+
+//Roof(2,[.25,.25])Connector(d=3,d2=3.5,dicke=1.2,latch=.25,end=-.5,flat=0.7);
+//Connector(l=[20,15],d=5,end=-.5,d2=6, use2D=false,collar=0,l2=+0,print=true,center=false);

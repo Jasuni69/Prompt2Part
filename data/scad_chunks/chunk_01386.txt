@@ -1,0 +1,1 @@
+function led_lead_t(type)   = type[6]; //! Lead thickness

@@ -1,0 +1,1 @@
+function box_section_colour2(type)   = type[6]; //! Colour2, for woven box section

@@ -1,0 +1,4 @@
+module hidden()                             //! Make item invisible, except on the BOM
+    scale(1 / sqr(1024))
+        let($hidden = true)
+            children();

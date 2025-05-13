@@ -1,0 +1,1 @@
+function gradC(grad=0,min=0,sec=0,h=0,prozent=0,gon=0,rad=0)=grad+h/24*360+min/60+sec/3600+atan(prozent/100)+gon/400*360+rad/(2*PI)*360;

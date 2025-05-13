@@ -1,0 +1,22 @@
+function set_difference(a, b) =
+    assert( is_list(a) && is_list(b), "Invalid sets." )
+    let( found = search(a, b, num_returns_per_match=1) )
+    [ for (i=idx(a)) if(found[i]==[]) a[i] ];
+
+
+// Function: set_intersection()
+// Synopsis: Returns a list of unique items that are in both given lists.
+// Topics: Set Handling, List Handling
+// See Also: set_union(), set_difference()
+// Usage:
+//   s = set_intersection(a, b);
+// Description:
+//   Given two sets (lists with unique items), returns the set of items that are in both sets.
+// Arguments:
+//   a = The starting set.
+//   b = The set of items to intersect with set `a`.
+// Example:
+//   set_a = [2,3,5,7,11];
+//   set_b = [1,2,3,5,8];
+//   set_i = set_intersection(set_a, set_b);
+//   // set_i now equals [2,3,5]

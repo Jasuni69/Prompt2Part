@@ -1,0 +1,15 @@
+function f_sign(a)  = f_1arg(function(a) sign(a))(a);
+
+
+// Function: f_ln()
+// Synopsis: Returns a function to calculate the natural logarithm of a given number.
+// Topics: Function Literals, Math Operators
+// See Also: f_abs(), f_sign(), f_ln(), f_log(), f_exp(), f_sqr(), f_sqrt()
+// Usage:
+//   fn = f_ln();
+//   fn = f_ln(a);
+// Description:
+//   A factory that generates function literals based on `ln(a)`, where the `a`
+//   argument can optionally be replaced with a constant.
+// Arguments:
+//   a = If given, replaces the argument.

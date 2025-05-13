@@ -1,0 +1,21 @@
+module radial_leads(ap, p, z, d, tail)
+    color(silver) {
+        $fn = fn;
+        lead_positions(p, 0)
+            solder(d / 2);
+
+        if(p != ap) {
+            assert(!is_list(p), "Bending four leads not supported yet");
+            dz = d;
+            dx = p / 2 - ap / 2;
+            path = [[0, z, 0], [0, z - dz, 0], [dx, dz, 0], [dx, 0, 0]];
+            rpath = concat(bezier_path(path, 20), [[dx, -tail, 0]]);
+            lead_positions(ap, 0)
+                rotate([90, 0, 90 * -$x + 90])
+                    sweep(rpath, circle_points(d / 2));
+        }
+        else
+            lead_positions(p, -tail)
+                 rotate(90)
+                    cylinder(d = d, h = tail + z);
+    }

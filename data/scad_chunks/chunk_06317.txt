@@ -1,0 +1,1 @@
+function chamfer_corner_mask(chamfer=1, anchor=CENTER, spin=0, orient=UP) = no_function("chamfer_corner_mask");

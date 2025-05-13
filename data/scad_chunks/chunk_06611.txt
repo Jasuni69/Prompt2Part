@@ -1,0 +1,9 @@
+module test_plane_normal() {
+    assert_approx(plane_normal(plane3pt([0,0,20], [0,10,10], [0,0,0])), [1,0,0]);
+    assert_approx(plane_normal(plane3pt([2,0,20], [2,10,10], [2,0,0])), [1,0,0]);
+    assert_approx(plane_normal(plane3pt([0,0,0], [10,0,10], [0,0,20])), [0,1,0]);
+    assert_approx(plane_normal(plane3pt([0,2,0], [10,2,10], [0,2,20])), [0,1,0]);
+    assert_approx(plane_normal(plane3pt([0,0,0], [10,10,0], [20,0,0])), [0,0,1]);
+    assert_approx(plane_normal(plane3pt([0,0,2], [10,10,2], [20,0,2])), [0,0,1]);
+}
+*test_plane_normal();

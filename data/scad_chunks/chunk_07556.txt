@@ -1,0 +1,24 @@
+function sq (size=[10,10],fn=[10,10],diff=0,t=[0,0,0],z,center=true)=
+  let (
+    x=is_list(size)?size[0]:size,
+    y=is_list(size)?size[1]:size,
+    fnx=max(1,is_list(fn)?fn[0]:fn),
+    fny=max(1,is_list(fn)?fn[1]:fn),
+    diff=is_list(diff)?diff:[diff,diff,diff,diff],
+    t=center?t:size/2+t,
+    points=is_undef(z)?[
+    for(i=[0:fnx-1])[-x/2+x/fnx*i,-y/2+i%2*-diff[0]]+t,
+    for(i=[0:fny-1])[x/2+i%2*diff[1],-y/2+y/fny*i]+t,
+    for(i=[0:fnx-1])[x/2-x/fnx*i,y/2+i%2*diff[2]]+t,
+    for(i=[0:fny-1])[-x/2-i%2*diff[3],y/2-y/fny*i]+t
+    ]:
+    [
+    for(i=[0:fnx-1])[-x/2+x/fnx*i,    -y/2+i%2*-diff[0],z]+v3(t),
+    for(i=[0:fny-1])[x/2+i%2*diff[1], -y/2+y/fny*i,     z]+v3(t),
+    for(i=[0:fnx-1])[x/2-x/fnx*i,      y/2+i%2*diff[2], z]+v3(t),
+    for(i=[0:fny-1])[-x/2-i%2*diff[3], y/2-y/fny*i,     z]+v3(t)
+    ]
+  )
+  points;
+  
+  //polygon(sq(center=0));

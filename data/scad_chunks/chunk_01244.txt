@@ -1,0 +1,7 @@
+module veroboard_fastened_assembly(type, height, thickness, flip = false, ngb = false) { //! Draw the assembly with components and fasteners in place
+
+    translate_z(height)
+        veroboard_assembly(type, ngb = ngb);
+
+    veroboard_fasteners(type, height, thickness, flip);
+}

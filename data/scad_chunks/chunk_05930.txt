@@ -1,0 +1,35 @@
+function path_normals(path, tangents, closed) =
+    is_1region(path) ? path_normals(path[0], tangents, default(closed,true)) :
+    let(closed=default(closed,false))
+    assert(is_path(path,[2,3]))
+    assert(is_bool(closed))
+    let(
+         tangents = default(tangents, path_tangents(path,closed)),
+         dim=len(path[0])
+    )
+    assert(is_path(tangents) && len(tangents[0])==dim,"Dimensions of path and tangents must match")
+    [
+     for(i=idx(path))
+         let(
+             pts = i==0 ? (closed? select(path,-1,1) : select(path,0,2))
+                 : i==len(path)-1 ? (closed? select(path,i-1,i+1) : select(path,i-2,i))
+                 : select(path,i-1,i+1)
+        )
+        dim == 2 ? [tangents[i].y,-tangents[i].x]
+                 : let( v=cross(cross(pts[1]-pts[0], pts[2]-pts[0]),tangents[i]))
+                   assert(norm(v)>EPSILON, "3D path contains collinear points")
+                   unit(v)
+    ];
+
+
+// Function: path_curvature()
+// Synopsis: Returns the estimated numerical curvature of the {{path}}.
+// Topics: Paths
+// See Also: path_tangents(), path_normals(), path_torsion()
+// Usage:
+//   curvs = path_curvature(path, [closed]);
+// Description:
+//   Numerically estimate the curvature of the {{path}} (in any dimension).
+// Arguments:
+//   path = path in any dimension or a 1-region
+//   closed = if true then treat the path as a polygon.  Default: false

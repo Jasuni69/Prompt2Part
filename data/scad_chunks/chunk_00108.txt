@@ -1,0 +1,14 @@
+module drag_chains()
+    drag_chain_assembly(drag_chain, pos);
+
+if($preview)
+    drag_chains();
+else {
+    drag_chain_link(drag_chain);
+
+    translate([-x * 2, 0])
+        drag_chain_link(drag_chain, start = true);
+
+    translate([x * 2, 0])
+        drag_chain_link(drag_chain, end = true);
+}

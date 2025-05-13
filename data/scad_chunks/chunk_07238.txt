@@ -1,0 +1,11 @@
+function string2num(string,start=0,length)=is_string(string)?let(start=min(len(string),max(0,start)),length=min(is_undef(length)?len(string):length,len(string)-start))length?(ord(string[start])-48)*pow(10,length-1)+string2num(string,start+1,length-1):0:is_num(string)?string:0;
+
+
+
+/** \name stringChunk
+\page Functions
+stringChunk() separates charcter from a string
+\param txt input string
+\param start start of extraction
+\param length number of characters to extract
+*/

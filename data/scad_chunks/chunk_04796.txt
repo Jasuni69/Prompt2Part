@@ -1,0 +1,8 @@
+function pb_reflectPntOn(p1=[], pc=[0,0]) = pc + (p1-pc)*-1;
+
+//  pb_translate_pts(pts, translate)
+//
+//  translates points in point list.
+//  pts        (list)  List of 2D or 3D points.
+//  translate  (list)  List of three or two numbers representing the 3D vector to translate the points with
+//  return  (list)  List of translated 3D points.

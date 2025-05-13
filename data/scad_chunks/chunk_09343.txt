@@ -1,0 +1,10 @@
+function AffMerge(Mlist, i=0) = i >= len(Mlist) ?
+  [[1,0,0,0],[0,1,0,0],[0,0,1,0]] :
+  let (
+    rest = AffMerge(Mlist, i+1),
+    prod = Mlist[i] * [rest[0], rest[1], rest[2], [0,0,0,1]]
+  )
+  [prod[0], prod[1], prod[2]];
+
+
+// Prepare a matrix to rotate around the x-axis.

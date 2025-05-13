@@ -1,0 +1,12 @@
+module pcb_grid_components(type, components, cutouts = false, angle = undef) //! Draw list of components on the PCB grid for perf board
+    let($solder = pcb_solder(type))
+        for(comp = components) {
+            p = pcb_grid_pos(type, comp.x, comp.y);
+            if(comp[3][0] == "-")
+                translate([p.x, p.y])
+                    vflip()
+                        pcb_component(comp, cutouts, angle);
+            else
+                translate([p.x, p.y, pcb_thickness(type)])
+                    pcb_component(comp, cutouts, angle);
+        }

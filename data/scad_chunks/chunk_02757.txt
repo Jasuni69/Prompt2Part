@@ -1,0 +1,7 @@
+module tslot_20x20_3s_base(l,detailed){
+	aluProExtrusion(BR_20x20_3S, l=l, detailed=detailed);
+}
+
+//	aluProExtrusion(BR_20x40, l=70, center=false);
+//	aluProExtrusion(BR_20x60, center=true);
+// aluProExtrusion(BR_20x80, center=false);

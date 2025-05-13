@@ -1,0 +1,5 @@
+module lamp_layer(radius, width, height) {
+    linear_extrude(height, center = true)
+    hollow_out(width)
+        circle(radius + width, $fn = 6);
+}

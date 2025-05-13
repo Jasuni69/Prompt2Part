@@ -1,0 +1,110 @@
+module joiner(l=40, w=10, base=10, ang=30, screwsize, anchor=CENTER, spin=0, orient=UP)
+{
+    if (is_list($tags_shown) && in_list("remove",$tags_shown)) {
+        attachable(anchor,spin,orient, size=[w,l,base*2], $tag="remove") {
+            joiner_clear(w=w, l=l, ang=ang, clearance=1);
+            union();
+        }
+    } else {
+        attachable(anchor,spin,orient, size=[w,l,base*2], $tag="keep") {
+            union() {
+                back(l/4) half_joiner(l=l/2, w=w, base=base, ang=ang, screwsize=screwsize);
+                fwd(l/4) half_joiner2(l=l/2, w=w, base=base, ang=ang, screwsize=screwsize);
+            }
+            children();
+        }
+    }
+}
+
+
+
+// Section: Dovetails
+
+// Module: dovetail()
+// Synopsis: Creates a possibly tapered dovetail shape.
+// SynTags: Geom
+// Topics: Joiners, Parts
+// See Also: joiner(), snap_pin(), rabbit_clip(), partition(), partition_mask(), partition_cut_mask()
+//
+// Usage:
+//   dovetail(gender, w=|width, h=|height, slide|thickness=, [slope=|angle=], [taper=|back_width=], [chamfer=], [r=|radius=], [round=], [extra=], [$slop=])
+//
+// Description:
+//   Produces a possibly tapered dovetail joint shape to attach to or subtract from two parts you wish to join together.
+//   The tapered dovetail is particularly advantageous for long joints because the joint assembles without binding until
+//   it is fully closed, and then wedges tightly.  You can chamfer or round the corners of the dovetail shape for better
+//   printing and assembly, or choose a fully rounded joint that looks more like a puzzle piece.  The dovetail appears
+//   parallel to the Y axis and projecting upwards, so in its default orientation it will slide together with a translation
+//   in the positive Y direction.  The gender determines whether the shape is meant to be added to your model or
+//   differenced, and it also changes the anchor and orientation.  The default anchor for dovetails is BOTTOM;
+//   the default orientation depends on the gender, with male dovetails oriented UP and female ones DOWN.  The dovetails by default
+//   have extra extension of 0.01 for unions and differences.  You should ensure that attachment is done with overlap=0 to ensure that
+//   the sizing and positioning is correct.  To adjust the fit, use the $slop variable, which increases the depth and width of
+//   the female part of the joint to allow a clearance gap of $slop on each of the three sides.
+//
+// Arguments:
+//   gender = A string, "male" or "female", to specify the gender of the dovetail.
+//   w / width = Width (at the wider, top end) of the dovetail before tapering
+//   h / height = Height of the dovetail (the amount it projects from its base)
+//   slide / thickness = Distance the dovetail slides when you assemble it (length of sliding dovetails, thickness of regular dovetails)
+//   ---
+//   slope = slope of the dovetail.  Standard woodworking slopes are 4, 6, or 8.  Default: 6.
+//   angle = angle (in degrees) of the dovetail.  Specify only one of slope and angle.
+//   taper = taper angle (in degrees). Dovetail gets narrower by this angle.  Default: no taper
+//   back_width = width of right hand end of the dovetail.  This alternate method of specifying the taper may be easier to manage.  Specify only one of `taper` and `back_width`.  Note that `back_width` should be smaller than `width` to taper in the customary direction, with the smaller end at the back.
+//   chamfer = amount to chamfer the corners of the joint (Default: no chamfer)
+//   r / radius = amount to round over the corners of the joint (Default: no rounding)
+//   round = true to round both corners of the dovetail and give it a puzzle piece look.  Default: false.
+//   $slop = Increase the width of socket by double this amount and depth by this amount to allow adjustment of the fit.
+//   extra = amount of extra length and base extension added to dovetails for unions and differences.  Default: 0.01
+// Example: Ordinary straight dovetail, male version (sticking up) and female version (below the xy plane)
+//   dovetail("male", width=15, height=8, slide=30);
+//   right(20) dovetail("female", width=15, height=8, slide=30);
+// Example: Adding a 6 degree taper (Such a big taper is usually not necessary, but easier to see for the example.)
+//   dovetail("male", w=15, h=8, slide=30, taper=6);
+//   right(20) dovetail("female", 15, 8, 30, taper=6);  // Same as above
+// Example: A block that can link to itself
+//   diff()
+//     cuboid([50,30,10]){
+//       attach(BACK) dovetail("male", slide=10, width=15, height=8);
+//       tag("remove")attach(FRONT) dovetail("female", slide=10, width=15, height=8);
+//     }
+// Example: Setting the dovetail angle.  This is too extreme to be useful.
+//   diff()
+//     cuboid([50,30,10]){
+//       attach(BACK) dovetail("male", slide=10, width=15, height=8, angle=30);
+//       tag("remove")attach(FRONT) dovetail("female", slide=10, width=15, height=8, angle=30);
+//     }
+// Example: Adding a chamfer helps printed parts fit together without problems at the corners
+//   diff("remove")
+//     cuboid([50,30,10]){
+//       attach(BACK) dovetail("male", slide=10, width=15, height=8, chamfer=1);
+//       tag("remove")attach(FRONT) dovetail("female", slide=10, width=15, height=8,chamfer=1);
+//     }
+// Example: Rounding the outside corners is another option
+//   diff("remove")
+//   cuboid([50,30,10]) {
+//       attach(BACK)  dovetail("male", slide=10, width=15, height=8, radius=1, $fn=32);
+//       tag("remove") attach(FRONT) dovetail("female", slide=10, width=15, height=8, radius=1, $fn=32);
+//   }
+// Example: Or you can make a fully rounded joint
+//   $fn=32;
+//   diff("remove")
+//   cuboid([50,30,10]){
+//       attach(BACK) dovetail("male", slide=10, width=15, height=8, radius=1.5, round=true);
+//       tag("remove")attach(FRONT) dovetail("female", slide=10, width=15, height=8, radius=1.5, round=true);
+//   }
+// Example: With a long joint like this, a taper makes the joint easy to assemble.  It will go together easily and wedge tightly if you get the tolerances right.  Specifying the taper with `back_width` may be easier than using a taper angle.
+//   cuboid([50,30,10])
+//     attach(TOP) dovetail("male", slide=50, width=18, height=4, back_width=15, spin=90);
+//   fwd(35)
+//     diff("remove")
+//       cuboid([50,30,10])
+//         tag("remove") attach(TOP) dovetail("female", slide=50, width=18, height=4, back_width=15, spin=90);
+// Example: A series of dovetails forming a tail board, with the inside of the joint up.  A standard wood joint would have a zero taper.
+//   cuboid([50,30,10])
+//     attach(BACK) xcopies(10,5) dovetail("male", slide=10, width=7, taper=4, height=4);
+// Example: Mating pin board for a half-blind right angle joint, where the joint only shows on the side but not the front.  Note that the anchor method and use of `spin` ensures that the joint works even with a taper.
+//   diff("remove")
+//     cuboid([50,30,10])
+//       tag("remove")position(TOP+BACK) xcopies(10,5) dovetail("female", slide=10, width=7, taper=4, height=4, anchor=BOTTOM+FRONT,spin=180);

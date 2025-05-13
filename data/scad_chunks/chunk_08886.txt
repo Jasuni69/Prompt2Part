@@ -1,0 +1,45 @@
+function reaction_diffusion(
+    feed, kill, generation, space_size = [50, 50], init_size = [10, 10], init_u = 0.5, init_v = 0.25, Du = 0.2, Dv = 0.1) =
+	let(
+		space_x = space_size.x,
+		space_y = space_size.y,
+		uv = init(space_x, space_y, init_size.x, init_size.y, init_u, init_v),
+		uy_ly = [
+			for(y = [0:space_y - 1])
+			[(y + 1 + space_y) % space_y, (y - 1 + space_y) % space_y]
+		],
+		rx_lx = [
+			for(x = [0:space_x - 1]) 
+			[(x + 1 + space_x) % space_x, (x - 1 + space_x) % space_x]
+		]
+	)
+	_reaction_diffusion(feed, kill, generation, uv, Du, Dv, uy_ly, rx_lx, space_x, space_y);
+
+
+/*
+use <surface/sf_thicken.scad>
+use <experimental/reaction_diffusion.scad>
+
+feed = 0.04; 
+kill = 0.06;
+generation = 1000;
+thickness = 0.5;
+altitude_scale = 10;
+space_size = [50, 50];
+init_size = [10, 10];
+
+uv = reaction_diffusion(feed, kill, generation, space_size, init_size);
+
+leng_y = len(uv);
+leng_x = len(uv[0]);
+
+points = [
+    for(y = [0:leng_y - 1])
+	[
+	     for(x = [0:leng_x - 1])
+		 [x, y, uv[y][x][0] * altitude_scale]
+	]
+];
+
+sf_thicken(points, thickness);
+*/

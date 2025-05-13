@@ -1,0 +1,55 @@
+function makeCurvedPartOfPolyHedron(radiiPoints,r,fn,minR=0.01)=
+// this is a private function that I'm not expecting library users to use directly
+// radiiPoints= serise of x, y, r points
+// r= radius of curve that will be put on the end of the extrusion
+// fn= amount of subdivisions
+// minR= if one of the points in radiiPoints is less than r, it's likely to converge and form a sharp edge,
+//     the min radius on these converged edges can be controled with minR, though because of legacy reasons it can't be 0, but can be a very small number.
+// return= array of [polyhedronPoints, Polyhedronfaces, theLength of a singe layer in the curve]
+let(
+  lp=len(radiiPoints),
+  radii=[for(i=[0:lp-1])radiiPoints[i].z],
+  isCWorCCWOverall=CWorCCW(radiiPoints),
+  dir=sign(r),
+  absR=abs(r),
+  fractionOffLp=1-1/fn,
+  allPoints=[for(fraction=[0:1/fn:1])
+    let(
+      iterationOffset=dir*sqrt(sq(absR)-sq(fraction*absR))-dir*absR,
+      theOffsetPoints=offsetPolygonPoints(radiiPoints,iterationOffset),
+      polyRoundOffsetPoints=[for(i=[0:lp-1])
+        let(
+          pointsAboutCurrent=[
+            theOffsetPoints[listWrap(i-1,lp)],
+            theOffsetPoints[i],
+            theOffsetPoints[listWrap(i+1,lp)]
+          ],
+          isCWorCCWLocal=CWorCCW(pointsAboutCurrent),
+          isInternalRadius=(isCWorCCWLocal*isCWorCCWOverall)==-1,
+          // the radius names are only true for positive r,
+          // when are r is negative increasingRadius is actually decreasing and vice-vs
+          // increasingRadiusWithPositiveR is just to verbose of a variable name for my liking
+          increasingRadius=max(radii[i]-iterationOffset, minR),
+          decreasingRadius=max(radii[i]+iterationOffset, minR)
+        )
+        [theOffsetPoints[i].x, theOffsetPoints[i].y, isInternalRadius? increasingRadius: decreasingRadius]
+      ],
+      pointsForThisLayer=polyRound(polyRoundOffsetPoints,fn)
+    )
+    addZcoord(pointsForThisLayer,fraction*absR)
+  ],
+  polyhedronPoints=flatternArray(allPoints),
+  allLp=len(allPoints),
+  layerLength=len(allPoints[0]),
+  loopToSecondLastLayer=allLp-2,
+  sideFaces=[for(layerIndex=[0:loopToSecondLastLayer])let(
+    currentLayeroffset=layerIndex*layerLength,
+    nextLayeroffset=(layerIndex+1)*layerLength,
+    layerFaces=[for(subLayerIndex=[0:layerLength-1])
+      [
+        currentLayeroffset+subLayerIndex, currentLayeroffset + listWrap(subLayerIndex+1,layerLength), nextLayeroffset+listWrap(subLayerIndex+1,layerLength), nextLayeroffset+subLayerIndex]
+    ]
+  )layerFaces],
+  polyhedronFaces=flatternArray(sideFaces)
+)
+[polyhedronPoints, polyhedronFaces, layerLength];

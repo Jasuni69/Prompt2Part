@@ -1,0 +1,17 @@
+module ymove(y=0) translate([0,y,0]) children();
+
+
+// Module: zmove()
+//
+// Description:
+//   Moves/translates children the given amount along the Z axis.
+//
+// Usage:
+//   zmove(z) ...
+//
+// Arguments:
+//   z = Amount to move up along the Z axis.  Negative values move down.
+//
+// Example:
+//   #sphere(d=10);
+//   zmove(20) sphere(d=10);

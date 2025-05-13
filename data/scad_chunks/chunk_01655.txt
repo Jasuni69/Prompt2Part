@@ -1,0 +1,1 @@
+function blower_hub_height(type)  = type[12]; //! Height of the rotor

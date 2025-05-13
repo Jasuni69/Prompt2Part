@@ -1,0 +1,44 @@
+module narrowing_strut(w=10, l=100, wall=5, ang=30, orient=ORIENT_Y, align=V_UP)
+{
+	h = wall + w/2/tan(ang);
+	orient_and_align([w, h, l], orient, align, orig_orient=ORIENT_Z) {
+		fwd(h/2) {
+			linear_extrude(height=l, center=true, slices=2) {
+				back(wall/2) square([w, wall], center=true);
+				back(wall-0.001) {
+					yscale(1/tan(ang)) {
+						difference() {
+							zrot(45) square(w/sqrt(2), center=true);
+							fwd(w/2) square(w, center=true);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+// Module: thinning_wall()
+//
+// Description:
+//   Makes a rectangular wall which thins to a smaller width in the center,
+//   with angled supports to prevent critical overhangs.
+//
+// Usage:
+//   thinning_wall(h, l, thick, [ang], [strut], [wall], [orient], [align]);
+//
+// Arguments:
+//   h = height of wall.
+//   l = length of wall.  If given as a vector of two numbers, specifies bottom and top lengths, respectively.
+//   thick = thickness of wall.
+//   ang = maximum overhang angle of diagonal brace.
+//   strut = the width of the diagonal brace.
+//   wall = the thickness of the thinned portion of the wall.
+//   orient = Orientation of the length axis of the wall.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_X`.
+//   align = Alignment of the shape.  Use the `V_` constants from `constants.scad`.  Default: `V_CENTER`.
+//
+// Example: Typical Shape
+//   thinning_wall(h=50, l=80, thick=4);
+// Example: Trapezoidal
+//   thinning_wall(h=50, l=[80,50], thick=4);

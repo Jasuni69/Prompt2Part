@@ -1,0 +1,1 @@
+function mapi(v, func) = [ for (i = [0:len(v)-1]) func(i,v[i]) ]; //! make a new vector where the func function argument is applied to each element of the vector v. The func will get the index number as first argument, and the element as second argument.

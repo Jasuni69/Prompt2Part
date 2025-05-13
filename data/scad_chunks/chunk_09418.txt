@@ -1,0 +1,12 @@
+function translate_points(pts, v=[0,0,0]) = [for (pt = pts) pt+v];
+
+
+// Function: scale_points()
+// Usage:
+//   scale_points(pts, v, [cp]);
+// Description:
+//   Scales each point in an array by a given amount, around a given centerpoint.
+// Arguments:
+//   pts = List of points to scale.
+//   v = A vector with a scaling factor for each axis.
+//   cp = Centerpoint to scale around.

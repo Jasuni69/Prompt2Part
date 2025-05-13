@@ -1,0 +1,6 @@
+module pcb_mount_ring()
+    difference() {
+        circle(pillar_r);
+
+        poly_circle(screw_clearance_r);
+    }

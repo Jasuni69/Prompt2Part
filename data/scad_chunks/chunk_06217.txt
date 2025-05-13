@@ -1,0 +1,118 @@
+function cuboid(
+    size=[1,1,1],
+    p1, p2,
+    chamfer,
+    rounding,
+    edges=EDGES_ALL,
+    except_edges=[],
+    trimcorners=true,
+    anchor=CENTER,
+    spin=0,
+    orient=UP
+) = no_function("cuboid");
+
+
+
+// Function&Module: prismoid()
+// Synopsis: Creates a rectangular prismoid shape with optional roundovers and chamfering.
+// SynTags: Geom, VNF
+// Topics: Shapes (3D), Attachable, VNF Generators
+// See Also: cuboid(), rounded_prism(), trapezoid(), edge_profile()
+// Usage: 
+//   prismoid(size1, size2, [h|l|height|length], [shift], [xang=], [yang=], ...) [ATTACHMENTS];
+// Usage: Chamfered and/or Rounded Prismoids
+//   prismoid(size1, size2, h|l|height|length, [chamfer=], [rounding=]...) [ATTACHMENTS];
+//   prismoid(size1, size2, h|l|height|length, [chamfer1=], [chamfer2=], [rounding1=], [rounding2=], ...) [ATTACHMENTS];
+// Usage: As Function
+//   vnf = prismoid(...);
+// Description:
+//   Creates a rectangular prismoid shape with optional roundovers and chamfering.
+//   You can only round or chamfer the vertical(ish) edges.  For those edges, you can
+//   specify rounding and/or chamferring per-edge, and for top and bottom separately.
+//   If you want to round the bottom or top edges see {{rounded_prism()}} or {{edge_profile()}}
+//   .
+//   Specification of the prismoid is similar to specification for {{trapezoid()}}.  You can specify the dimensions of the
+//   bottom and top and its height to get a symmetric prismoid.  You can use the shift argument to shift the top face around.
+//   You can also specify base angles either in the X direction, Y direction or both.  In order to avoid overspecification,
+//   you may need to specify a parameter such as size2 as a list of two values, one of which is undef.  For example,
+//   specifying `size2=[100,undef]` sets the size in the X direction but allows the size in the Y direction to be computed based on yang.
+//   .
+//   The anchors on the top and bottom faces have spin pointing back.  The anchors on the side faces have spin point UP.
+//   The anchors on the top and bottom edges also have anchors that point clockwise as viewed from outside the shapep.
+//   The anchors on the side edges and the corners have spin with positive Z component, pointing along the edge where the anchor is located.
+// Arguments:
+//   size1 = [width, length] of the bottom end of the prism.
+//   size2 = [width, length] of the top end of the prism.
+//   h/l/height/length = Height of the prism.
+//   shift = [X,Y] amount to shift the center of the top end with respect to the center of the bottom end.
+//   ---
+//   xang = base angle in the X direction.  Can be a scalar or list of two values, one of which may be undef
+//   yang = base angle in the Y direction.  Can be a scalar or list of two values, one of which may be undef
+//   rounding = The roundover radius for the vertical-ish edges of the prismoid.  If given as a list of four numbers, gives individual radii for each corner, in the order [X+Y+,X-Y+,X-Y-,X+Y-]. Default: 0 (no rounding)
+//   rounding1 = The roundover radius for the bottom of the vertical-ish edges of the prismoid.  If given as a list of four numbers, gives individual radii for each corner, in the order [X+Y+,X-Y+,X-Y-,X+Y-].
+//   rounding2 = The roundover radius for the top of the vertical-ish edges of the prismoid.  If given as a list of four numbers, gives individual radii for each corner, in the order [X+Y+,X-Y+,X-Y-,X+Y-].
+//   chamfer = The chamfer size for the vertical-ish edges of the prismoid.  If given as a list of four numbers, gives individual chamfers for each corner, in the order [X+Y+,X-Y+,X-Y-,X+Y-].  Default: 0 (no chamfer)
+//   chamfer1 = The chamfer size for the bottom of the vertical-ish edges of the prismoid.  If given as a list of four numbers, gives individual chamfers for each corner, in the order [X+Y+,X-Y+,X-Y-,X+Y-].
+//   chamfer2 = The chamfer size for the top of the vertical-ish edges of the prismoid.  If given as a list of four numbers, gives individual chamfers for each corner, in the order [X+Y+,X-Y+,X-Y-,X+Y-].
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `BOTTOM`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//
+// Example: Truncated Pyramid
+//   prismoid(size1=[35,50], size2=[20,30], h=20);
+// Example: Rectangular Pyramid
+//   prismoid([40,40], [0,0], h=20);
+// Example: Prism
+//   prismoid(size1=[40,40], size2=[0,40], h=20);
+// Example: Wedge
+//   prismoid(size1=[60,35], size2=[30,0], h=30);
+// Example: Truncated Tetrahedron
+//   prismoid(size1=[10,40], size2=[40,10], h=40);
+// Example: Inverted Truncated Pyramid
+//   prismoid(size1=[15,5], size2=[30,20], h=20);
+// Example: Right Prism
+//   prismoid(size1=[30,60], size2=[0,60], shift=[-15,0], h=30);
+// Example(FlatSpin,VPD=160,VPT=[0,0,10]): Shifting/Skewing
+//   prismoid(size1=[50,30], size2=[20,20], h=20, shift=[15,5]);
+// Example: Specifying bottom, height and angle
+//   prismoid(size1=[100,75], h=30, xang=50, yang=70);
+// Example: Specifying top, height and angle, with asymmetric angles
+//   prismoid(size2=[100,75], h=30, xang=[50,60], yang=[70,40]);
+// Example: Specifying top, bottom and angle for X and using that to define height.  Note that giving yang here would likely give a conflicting height calculation, which is not allowed.  
+//   prismoid(size1=[100,75], size2=[75,35], xang=50);
+// Example: The same as the previous example but we give a shift in Y.  Note that shift.x must be undef because you cannot give combine an angle with a shift, so a shift.x value would conflict with xang being defined.  
+//   prismoid(size1=[100,75], size2=[75,35], xang=50, shift=[undef,20]);
+// Example:  The X dimensions defined by the base length, angle and height; the Y dimensions defined by the top length, angle, and height. 
+//   prismoid(size1=[100,undef], size2=[undef,75], h=30, xang=[20,90], yang=30);
+// Example: Rounding
+//   prismoid(100, 80, rounding=10, h=30);
+// Example: Chamfers
+//   prismoid(100, 80, chamfer=5, h=30);
+// Example: Gradiant Rounding
+//   prismoid(100, 80, rounding1=10, rounding2=0, h=30);
+// Example: Per Corner Rounding
+//   prismoid(100, 80, rounding=[0,5,10,15], h=30);
+// Example: Per Corner Chamfer
+//   prismoid(100, 80, chamfer=[0,5,10,15], h=30);
+// Example: Mixing Chamfer and Rounding
+//   prismoid(
+//       100, 80, h=30,
+//       chamfer=[0,5,0,10],
+//       rounding=[5,0,10,0]
+//   );
+// Example: Really Mixing It Up
+//   prismoid(
+//       size1=[100,80], size2=[80,60], h=20,
+//       chamfer1=[0,5,0,10], chamfer2=[5,0,10,0],
+//       rounding1=[5,0,10,0], rounding2=[0,5,0,10]
+//   );
+// Example: How to Round a Top or Bottom Edge
+//   diff()
+//   prismoid([50,30], [30,20], shift=[3,6], h=15, rounding=[5,0,5,0]) {
+//       edge_profile([TOP+RIGHT, BOT+FRONT], excess=10, convexity=20) {
+//           mask2d_roundover(h=5,mask_angle=$edge_angle);
+//       }
+//   }
+// Example(Spin,VPD=160,VPT=[0,0,10]): Standard Connectors
+//   prismoid(size1=[50,30], size2=[20,20], h=20, shift=[15,5])
+//       show_anchors();

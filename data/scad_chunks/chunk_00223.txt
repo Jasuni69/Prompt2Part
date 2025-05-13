@@ -1,0 +1,21 @@
+module psus()
+    layout([for(p = psus) atx_psu(p) ? psu_length(p) : psu_width(p)], 10) let(p = psus[$i])
+    rotate(atx_psu(p) ? 0 : 90) {
+        psu(p);
+
+        if (psu_screw(p))
+            psu_screw_positions(p)
+                translate_z(3)
+                    screw_and_washer(psu_screw(p), 8);
+
+        if(show_cutout && atx_psu(p))
+            #atx_psu_cutout(p);
+    }
+
+if($preview) {
+    psus();
+
+    for(p = psus_not_shown)
+        hidden()
+            psu(p);
+}

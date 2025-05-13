@@ -1,0 +1,9 @@
+function involute(r=10,grad=45,fn=fn,rot=0,rev=0,delta=0,z)=
+let(
+  step=grad/(fn),
+  deltaStep=delta/(fn)
+)
+is_num(z)?
+  [for(i=rev?[fn:-1:0] : [0:fn]) [sin(i*step+rot), cos(i*step+rot),0]*r + [sin(i*step-90+rot), cos(i*step-90+rot), 0] * (2*PI*r/360*i*step+i*deltaStep)+[0,0,z]]:
+  [for(i=rev?[fn:-1:0] : [0:fn]) [sin(i*step+rot), cos(i*step+rot)]*r + [sin(i*step-90+rot), cos(i*step-90+rot)] * (2*PI*r/360*i*step+i*deltaStep)]
+;

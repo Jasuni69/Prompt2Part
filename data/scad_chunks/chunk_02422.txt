@@ -1,0 +1,30 @@
+module case_assembly() pose([ 29.60, 0.00, 158.00 ], exploded = true) pose([ 198.00, 0.00, 352.80 ], exploded = false)
+assembly("case") {
+    if(show_box)
+        stl_colour(pp1_colour) render() enviro_plus_case_stl();
+    else
+        render() difference() {
+            enviro_plus_case_stl();
+
+            translate_z(height / 2)
+                cube([100, 100, height - 20], center = true);
+        }
+
+    pbox_inserts(box);
+
+    translate([pcb_x, 0, top_thickness])
+        explode(20)
+            stl_colour(pp2_colour) render() bulkhead_stl();
+
+    feet_positions() {
+        foot_assembly(0, foot);
+
+        vflip()
+            explode(20, explode_children = true)
+                translate_z(foot_thickness(foot))
+                    screw_and_washer(foot_screw(foot), 6);
+    }
+
+}
+
+//! * Solder the fan_controller to the Enviro+ expansion connector at the 5V, GND and #4 pins.

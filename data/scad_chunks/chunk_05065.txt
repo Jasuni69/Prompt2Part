@@ -1,0 +1,781 @@
+function debug_tetra(r) = let(size=r/norm([1,1,1])) [
+    size*[[1,1,1], [-1,-1,1], [1,-1,-1], [-1,1,-1]],
+    [[0,1,3],[0,3,2],[1,2,3],[1,0,2]]
+];
+
+// Section: Metaballs
+//   ![Metaball animation](https://raw.githubusercontent.com/BelfrySCAD/BOSL2/master/images/metaball_demo.gif)
+//   .
+//   [Metaballs](https://en.wikipedia.org/wiki/Metaballs), also known as "blobby objects",
+//   can produce smoothly varying blobs and organic forms. You create metaballs by placing metaball
+//   objects at different locations. These objects have a basic size and shape when placed in
+//   isolation, but if another metaball object is nearby, the two objects interact, growing larger
+//   and melding together. The closer the objects are, the more they blend and meld.
+//   .
+//   The `metaballs()` module and function produce scenes of 3D metaballs. The `metaballs2d()` module and
+//   function produces scenes of 2D metaballs. The metaball specification method, tranformations, bounding box,
+//   and other parameters are used the say way in 3D and 2D, but in 2D, pixels replace voxels. This
+//   introductory section describes features common to both 3D and 2D cases.
+//   .
+//   <a name="metaball-parameters"></a>
+//   ***Parameters common to 3D and 2D metaballs***
+//   .
+//   **Parameter `spec`:** The simplest metaball specification is a 1D list of alternating transformation matrices and
+//   metaball functions: `[trans0, func0, trans1, func1, ... ]`, passed as the `spec` parameter.
+//   Each transformation matrix you supply can be constructed using the usual transformation commands
+//   such as {{up()}}, {{right()}}, {{back()}}, {{move()}}, {{scale()}}, {{rot()}} and so on. You can
+//   multiply the transformations together, similar to how the transformations can be applied
+//   to regular objects in OpenSCAD. For example, to transform an object in regular OpenSCAD you
+//   might write `up(5) zrot(45) scale(4)`. You would provide that transformation
+//   as the transformation matrix `up(5) * zrot(45) * scale(4)`. You can use
+//   scaling to produce an ellipsoid from a sphere, and you can even use {{skew()}} if desired. 
+//   When no transformation is needed, give `IDENT` as the transformation.
+//   .
+//   The `spec` parameter is flexible. It doesn't have to be just a list of alternating transformation
+//   matrices and metaball functions. It can also be a list of alternating transforms and *other specs*,
+//   as `[trans0, spec0, trans1, spec1, ...]`, in which `spec0`, `spec1`, etc. can be one of:
+//   * A built-in metaball function name as described below, such as `mb_sphere(r=10)`.
+//   * A function literal accepting a vector representing a point in space relative to the metaball's center.
+//   * An array containing a function literal and a debug VNF, as `[custom_func, [sign, vnf]]`, where `sign` is the sign of the metaball and `vnf` is the VNF to show in the debug view when `debug=true` is set.
+//   * Another spec array, for nesting metaball specs together.
+//   .
+//   Nested metaball specs allow for complicated assemblies in which you can arrange components in a logical
+//   way, or repeat a structure with different transformation matrices. That is,
+//   instead of specifying a transform and function, you specify a transform and then another metaball
+//   specification. For example, you could set `finger=[t0,f0,t1,f1,t2,f2]` and then set
+//   `hand=[u0,finger,u1,finger,...]` and then invoke `metaballs()` with `spec=[s0, hand]`. In effect, any
+//   metaball specification array can be treated as a single metaball in another specification array.
+//   This is a powerful technique that lets you make groups of metaballs that you can use as individual
+//   metaballs in other groups, and can make your code compact and simpler to understand. Keep in mind that
+//   nested components aren't independent; they still interact with all other components. See Example 24.
+//   .
+//   **Parameters `bounding_box` and grid units:** The metaballs are evaluated over a bounding box. The `bounding_box` parameter can be specified by
+//   its minimum and maximum corners: `[[xmin,ymin,zmin],[xmax,ymax,zmax]]` in 3D, or
+//   `[[xmin,ymin],[xmax,ymax]]` in 2D. The bounding box can also be specified as a scalar size of a cube (in 3D)
+//   or square (in 2D) centered on the origin. The contributions from **all**  metaballs, even those outside
+//   the box, are evaluated over the bounding box.
+//   .
+//   This bounding box is divided into grid units, specified as `voxel_size` in 3D or `pixel_size` in 2D,
+//   which can be a scalar or a vector size.
+//   Alternately, you can set the grid count (`voxel_count` or `pixel_count`) to fit approximately the
+//   specified number of grid units into the bounding box.
+//   .
+//   Objects in the scene having any dimension smaller than the grid spacing may not
+//   be displayed, so if objects seem to be missing, try making the grid units smaller or the grid count
+//   larger. By default, if the voxel size or pixel size doesn't exactly divide your specified bounding box,
+//   then the bounding box is enlarged to contain whole grid units, and centered on your requested box.
+//   Alternatively, you may set `exact_bounds=true`, which causes the grid units to adjust to fit instead,
+//   resulting in non-square grid units. Either way, if the bounding box clips a metaball and `closed=true`
+//   (the default), the object is closed at the intersection. Setting `closed=false` causes the object to end
+//   at the bounding box. In 3D, this results in a non-manifold shape with holes, exposing the inside of the
+//   object. In 2D, this results in an open-ended contour path with higher values on the right with respect to
+//   the path direction. 
+//   .
+//   For metaballs with flat surfaces or sides, avoid letting any side of the bounding box coincide with one
+//   of these flat surfaces or sides, otherwise unpredictable triangulation around the edge may result.
+//   .
+//   **Parameter `isovalue`:** The `isovalue` parameter applies globally to **all** your metaballs and changes
+//   the appearance of your entire metaball object, possibly dramatically. It defaults to 1 and you don't usually
+//   need to change it. If you increase the isovalue, then all the objects in your model shrink, causing some melded
+//   objects to separate. If you decrease it, each metaball grows and melds more with others. As with `isosurface()`,
+//   a range may be specified for isovalue, which can result in hollow metaballs, although this isn't particularly
+//   useful except possibly in 2D.
+//   .
+//   ***Metaballs debug view***
+//   .
+//   The module form of `metaballs()` and `metaballs2d()` can take a `debug` argument. When you set
+//   `debug=true`, the scene is rendered as a transparency (in 3D) or outline (in 2D) with the primitive
+//   metaball shapes shown inside, colored blue for positive, orange for negative, or gray for custom
+//   metaballs with no sign specified. These shapes are displayed at the sizes specified by the dimensional
+//   parameters in the corresponding metaball functions, regardless of isovalue. Setting `hide_debug=true` in
+//   individual metaball functions hides primitive shape from the debug view. Regardless the `debug` setting,
+//   child modules can access the metaball geometry via `$metaball_vnf` in 3D, or `$metaball_pathlist` in 2D.
+//   .
+//   User-defined metaball functions are displayed by default as gray tetrahedrons (3D) or triangles (2D)
+//   with a corner radius of 5, unless you also designate a shape for your custom function, as described
+//   below in the documentation for {{metaballs()}} and {{metaballs2d()}}.
+//   .
+//   ***Metaballs run time***
+//   .
+//   The size of the grid units (voxels or pixels) and size of the bounding box affects the run time, which can
+//   be long, especially in 3D.
+//   Smaller grid units produce a finer, smoother result at the expense of execution time. Larger grid units
+//   shorten execution time.
+//   The affect on run time is most evident for 3D metaballs, less so for 2D metaballs.
+//   .
+//   For example, in 3D, a voxel size of 1 with a bounding box volume of 200×200×200 may be slow because it
+//   requires the calculation and storage of eight million function values, and more processing and memory to
+//   generate the triangulated mesh.  On the other hand, a voxel size of 5 over a 100×100×100 bounding box
+//   requires only 8,000 function values and a modest computation time. A good rule is to keep the number
+//   of voxels below 10,000 for preview, and adjust the voxel size smaller for final rendering. If you don't
+//   specify `voxel_size` or `voxel_count`, then a default count of 10,000 voxels is used,
+//   which should be reasonable for initial preview.
+//   .
+//   In 2D, If you don't specify `pixel_size` or `pixel_count`, then a default count of 1024 pixels is used,
+//   which is reasonable for initial preview. You may find, however, that 2D metaballs are reasonably fast
+//   even at finer resolution.
+//   .
+//   Because a bounding box that is too large wastes time
+//   computing function values that are not needed, you can also set the parameter `show_stats=true` to get
+//   the actual bounds of the voxels intersected by the surface. With this information, you may be able to
+//   decrease run time, or keep the same run time but increase the resolution. 
+//   .
+//   ***Metaball functions and user defined functions***
+//   .
+//   You can construct complicated metaball models using only the built-in metaball functions described in
+//   the documentation below for {{metaballs()}} and {{metaballs2d()}}.
+//   However, you can create your own custom metaballs if desired.
+//   .
+//   When multiple metaballs are in a model, their functions are summed and compared to the isovalue to
+//   determine the final shape of the metaball object.
+//   Each metaball is defined as a function of a vector that gives the value of the metaball function
+//   for that point in space. As is common in metaball implementations, we define the built-in metaballs
+//   using an inverse relationship where the metaball functions fall off as $1/d$, where $d$ is distance
+//   measured from the center or core of the metaball. The 3D spherical metaball and 2D circular metaball
+//   therefore have a simple basic definition as $f(v) = 1/\text{norm}(v)$. If we choose an isovalue $c$,
+//   then the set of points $v$ such that $f(v) >= c$ defines a bounded set; for example, a sphere with radius
+//   depending on the isovalue $c$. The default isovalue is $c=1$. Increasing the isovalue shrinks the object,
+//   and decreasing the isovalue grows the object.
+//   .
+//   To adjust interaction strength, the influence parameter applies an exponent, so if `influence=a`
+//   then the decay becomes $1/d^{1/a}$. This means, for example, that if you set influence to
+//   0.5 you get a $1/d^2$ falloff. Changing this exponent changes how the balls interact.
+//   .
+//   You can pass a custom function as a [function literal](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/User-Defined_Functions_and_Modules#Function_literals)
+//   that takes a vector as its first argument and returns a single numerical value.
+//   Generally, the function should return a scalar value that drops below the isovalue somewhere within your
+//   bounding box. If you want your custom metaball function to behave similar to to the built-in functions,
+//   the return value should fall off with distance as $1/d$. See `metaballs()` Examples 20, 21, and 22 for
+//   demonstrations of creating custom metaball functions. Example 22 also shows how to make a complete custom
+//   metaball function that handles the `influence` and `cutoff` parameters.
+//   .
+//   By default, when `debug=true`, a custom 3D metaball function displays a gray tetrahedron with corner
+//   radius 5, and a custom 2D metaball function displays a gray triangle with corner radius 5.
+//   To specify a custom VNF for a custom function literal, enclose it in square brackets to make a  list with
+//   the function literal as the first element, and another list as the second element, for example:
+//   .
+//   `[ function (point) custom_func(point, arg1,...), [sign, vnf] ]`
+//   .
+//   where `sign` is the sign of the metaball and `vnf` is the VNF to show in the debug view when `debug=true`.
+//   For 2D metaballs, you would specify a polygon path instead of a VNF.
+//   The sign determines the color of the debug object: `1` is blue, `-1` is orange, and `0` is gray.
+//   See `metaballs()` Example 31 below for a demonstration of setting a VNF for a custom function.
+
+
+
+// Function&Module: metaballs()
+// Synopsis: Creates a group of 3D metaballs (smoothly connected blobs).
+// SynTags: Geom,VNF
+// Topics: Metaballs, Isosurfaces, VNF Generators
+// See Also: isosurface()
+// Usage: As a module
+//   metaballs(spec, bounding_box, voxel_size, [isovalue=], [closed=], [exact_bounds=], [convexity=], [show_stats=], [show_box=], [debug=] ...) [ATTACHMENTS];
+// Usage: As a function
+//   vnf = metaballs(spec, bounding_box, voxel_size, [isovalue=], [closed=], [exact_bounds=], [convexity=], [show_stats=]);
+// Description:
+//   Computes a [VNF structure](vnf.scad) of a 3D metaball scene within a specified bounding box.
+//   .
+//   See [metaball parameters](#metaball-parameters) for details on the primary parameters common to
+//   `metaballs()` and `metaballs2d()`. The `spec` parameter is described in more detail there. The `spec`
+//   parameter is a 1D list of alternating transforms and metaball functions; for example, the array
+//   `spec= [ left(9), mb_sphere(5), right(9), mb_sphere(5) ]` defines a scene with two spheres of radius
+//   5 shifted 9 units to the left and right of the origin. The `spec` parameter completely defines the
+//   metaballs in your scene, including their position, orientation, and scaling, as well as different shapes.
+//   .
+//   You can create metaballs in a variety of standard shapes using the predefined functions
+//   listed below. If you wish, you can also create custom metaball shapes using your own functions
+//   (see Examples 20 and 21). For all of the built-in metaballs, three parameters are available to control
+//   the interaction of the metaballs with each other: `cutoff`, `influence`, and `negative`. These parameters
+//   apply to the individual metaball functions specified in your `spec` array; they are **not** parameters
+//   of `metaballs()`.
+//   .
+//   The `cutoff` parameter specifies the distance beyond which the metaball has no interaction
+//   with other balls. When you apply `cutoff`, a smooth suppression factor begins
+//   decreasing the interaction strength at half the cutoff distance and reduces the interaction to
+//   zero at the cutoff. Note that the smooth decrease may cause the interaction to become negligible
+//   closer than the actual cutoff distance, depending on the voxel size and `influence` of the
+//   ball. Also, depending on the value of `influence`, a cutoff that ends in the middle of
+//   another ball can result in strange shapes, as shown in Example 17, with the metaball
+//   interacting on one side of the boundary and not interacting on the other side. If you scale
+//   a ball, the cutoff value is also scaled.
+//   . 
+//   The `influence` parameter adjusts the strength of the interaction that metaball objects have with
+//   each other. If you increase `influence` of one metaball from its default of 1, then that metaball
+//   interacts with others at a longer range, and surrounding balls grow bigger. The metaball with larger
+//   influence can also grow bigger because it couples more strongly with other nearby balls, but it
+//   can also remain nearly unchanged while influencing others when `isovalue` is greater than 1.
+//   Decreasing influence has the reverse effect. Small changes in influence can have a large
+//   effect; for example, setting `influence=2` dramatically increases the interactions at longer
+//   distances, and you may want to set the `cutoff` argument to limit the range influence.
+//   At the other exteme, small influence values can produce ridge-like artifacts or texture on the
+//   model. Example 14 demonstrates this effect. To avoid these artifacts, keep `influence` above about
+//   0.5 and consider using `cutoff` instead of using small influence.
+//   .
+//   The `negative` parameter, if set to `true`, creates a negative metaball, which can result in
+//   hollows, dents, or reductions in size of other metaballs. 
+//   Negative metaballs are never directly visible; only their effects are visible. The `influence`
+//   argument may also behave in ways you don't expect with a negative metaball. See Examples 16 and 17.
+//   .
+//   ***Built-in metaball functions***
+//   .
+//   Several metaballs are defined for you to use in your models. 
+//   All of the built-in metaballs take positional and named parameters that specify the size of the
+//   metaball (such as height or radius). The size arguments are the same as those for the regular objects
+//   of the same type (e.g. a sphere accepts both `r` for radius and the named parameter `d=` for
+//   diameter). The size parameters always specify the size of the metaball **in isolation** with
+//   `isovalue=1`. The metaballs can grow much bigger than their specified sizes when they interact
+//   with each other. Changing `isovalue` also changes the sizes of metaballs. They grow bigger than their
+//   specified sizes, even in isolation, if `isovalue < 1` and smaller than their specified sizes if
+//   `isovalue > 1`.
+//   .
+//   The built-in metaball functions are listed below. As usual, arguments without a trailing `=` can be used positionally; arguments with a trailing `=` must be used as named arguments.
+//   .
+//   * `mb_sphere(r|d=)` &mdash; spherical metaball, with radius `r` or diameter `d`.  You can create an ellipsoid using `scale()` as the last transformation entry of the metaball `spec` array. 
+//   * `mb_cuboid(size, [squareness=])` &mdash; cuboid metaball with rounded edges and corners. The corner sharpness is controlled by the `squareness` parameter ranging from 0 (spherical) to 1 (cubical), and defaults to 0.5. The `size` parameter specifies the dimensions of the cuboid that circumscribes the rounded shape, which is tangent to the center of each cube face. The `size` parameter may be a scalar or a vector, as in {{cuboid()}}. Except when `squareness=1`, the faces are always a little bit curved.
+//   * `mb_cyl(h|l|height|length, [r|d=], [r1=|d1=], [r2=|d2=], [rounding=])` &mdash; vertical cylinder or cone metaball with the same dimensional arguments as {{cyl()}}. At least one of the radius or diameter arguments is required. The `rounding` argument defaults to 0 (sharp edge) if not specified. Only one rounding value is allowed: the rounding is the same at both ends. For a fully rounded cylindrical shape, consider using `mb_disk()` or `mb_capsule()`, which are less flexible but have faster execution times.
+//   * `mb_disk(h|l|height|length, r|d=)` &mdash; flat disk with rounded edge, using the same dimensional arguments as {{cyl()}}. The diameter specifies the total diameter of the shape including the rounded sides, and must be greater than its height.
+//   * `mb_capsule(h|l|height|length, [r|d=]` &mdash; vertical cylinder with rounded caps, using the same dimensional arguments as {{cyl()}}. The object is a convex hull of two spheres. The height or length specifies the distance between the ends of the hemispherical caps.
+//   * `mb_connector(p1, p2, [r|d=])` &mdash; a connecting rod of radius `r` or diameter `d` with hemispherical caps (like `mb_capsule()`), but specified to connect point `p1` to point `p2` (which must be different 3D coordinates). As with `mb_capsule()`, the object is a convex hull of two spheres. The points `p1` and `p2` are at the centers of the two round caps. The connectors themselves are still influenced by other metaballs, but it may be undesirable to have them influence others, or each other. If two connectors are connected, the joint may appear swollen unless `influence` or `cutoff` is reduced. Reducing `cutoff` is preferable if feasible, because reducing `influence` can produce interpolation artifacts.
+//   * `mb_torus([r_maj|d_maj=], [r_min|d_min=], [or=|od=], [ir=|id=])` &mdash; torus metaball oriented perpendicular to the z axis. You can specify the torus dimensions using the same arguments as {{torus()}}; that is, major radius (or diameter) with `r_maj` or `d_maj`, and minor radius and diameter using `r_min` or `d_min`. Alternatively you can give the inner radius or diameter with `ir` or `id` and the outer radius or diameter with `or` or `od`. You must provide a combination of inputs that completely specifies the torus. If `cutoff` is applied, it is measured from the circle represented by `r_min=0`.
+//   * `mb_octahedron(size, [squareness=])` &mdash; octahedron metaball with rounded edges and corners. The corner sharpness is controlled by the `squareness` parameter ranging from 0 (spherical) to 1 (sharp), and defaults to 0.5. The `size` parameter specifies the tip-to-tip distance of the octahedron that circumscribes the rounded shape, which is tangent to the center of each octahedron face. The `size` parameter may be a scalar or a vector, as in {{octahedron()}}. At `squareness=0`, the shape reduces to a sphere curcumscribed by the octahedron. Except when `squareness=1`, the faces are always curved.
+//   .
+//   In addition to the dimensional arguments described above, all of the built-in functions accept the
+//   following named arguments:
+//   * `cutoff` &mdash; positive value giving the distance beyond which the metaball does not interact with other balls.  Cutoff is measured from the object's center. Default: INF
+//   * `influence` &mdash; a positive number specifying the strength of interaction this ball has with other balls.  Default: 1
+//   * `negative` &mdash; when true, creates a negative metaball. Default: false
+//   * `hide_debug` &mdash; when true, suppresses the display of the underlying metaball shape when `debug=true` is set in the `metaballs()` module. This is useful to hide shapes that may be overlapping others in the debug view. Default: false
+//   .
+//   ***Duplicated vertices***
+//   .
+//   The point list in the generated VNF structure contains many duplicated points. This is normally not a
+//   problem for rendering the shape, but machine roundoff differences may result in Manifold issuing
+//   warnings when doing the final render, causing rendering to abort if you have enabled the "stop on
+//   first warning" setting. You can prevent this by passing the VNF through {{vnf_quantize()}} using a
+//   quantization of 1e-7, or you can pass the VNF structure into {{vnf_merge_points()}}, which also
+//   removes the duplicates. Additionally, flat surfaces (often resulting from clipping by the bounding
+//   box) are triangulated at the voxel size resolution, and these can be unified into a single face by
+//   passing the vnf structure to {{vnf_unify_faces()}}. These steps can be computationally expensive
+//   and are not normally necessary.
+// Arguments:
+//   spec = Metaball specification in the form `[trans0, spec0, trans1, spec1, ...]`, with alternating transformation matrices and metaball specs, where `spec0`, `spec1`, etc. can be a metaball function or another metaball specification. See above for more details, and see Example 24 for a demonstration.
+//   bounding_box = The volume in which to perform computations, expressed as a scalar size of a cube centered on the origin, or a pair of 3D points `[[xmin,ymin,zmin], [xmax,ymax,zmax]]` specifying the minimum and maximum box corner coordinates. Unless you set `exact_bounds=true`, the bounding box size may be enlarged to fit whole voxels.
+//   voxel_size = Size of the voxels used to sample the bounding box volume, can be a scalar or 3-vector, or omitted if `voxel_count` is set. You may get a non-cubical voxels of a slightly different size than requested if `exact_bounds=true`.
+//   ---
+//   voxel_count = Approximate number of voxels in the bounding box. If `exact_bounds=true` then the voxels may not be cubes. Use with `show_stats=true` to see the corresponding voxel size. Default: 10000 (if `voxel_size` not set)
+//   isovalue = A scalar value specifying the isosurface value (threshold value) of the metaballs. At the default value of 1.0, the internal metaball functions are designd so the size arguments correspond to the size parameter (such as radius) of the metaball, when rendered in isolation with no other metaballs. You can also specify an isovalue range such as `[1,1.1]`, which creates hollow metaballs, where the hollow is evident when clipped by the bounding box. A scalar isovalue is equivalent to the range `[isovalue,INF]`. Default: 1.0
+//   closed = When true, close the surface if it intersects the bounding box by adding a closing face. When false, do not add a closing face, possibly producing non-manfold metaballs with holes where the bounding box intersects them.  Default: true
+//   exact_bounds = When true, shrinks voxels as needed to fit whole voxels inside the requested bounding box. When false, enlarges `bounding_box` as needed to fit whole voxels of `voxel_size`, and centers the new bounding box over the requested box. Default: false
+//   show_stats = If true, display statistics about the metaball isosurface in the console window. Besides the number of voxels that the surface passes through, and the number of triangles making up the surface, this is useful for getting information about a possibly smaller bounding box to improve speed for subsequent renders. Enabling this parameter has a small speed penalty. Default: false
+//   convexity = (Module only) Maximum number of times a line could intersect a wall of the shape. Affects preview only. Default: 6
+//   show_box = (Module only) Display the requested bounding box as transparent. This box may appear slightly different than specified if the actual bounding box had to be expanded to accommodate whole voxels. Default: false
+//   debug = (Module only) Display the underlying primitive metaball shapes using your specified dimensional arguments, overlaid by the transparent metaball scene. Positive metaballs appear blue, negative appears orange, and any custom function with no debug VNF defined appears as a gray tetrahedron of corner radius 5.
+//   cp = (Module only) Center point for determining intersection anchors or centering the shape.  Determines the base of the anchor vector. Can be "centroid", "mean", "box" or a 3D point.  Default: "centroid"
+//   anchor = (Module only) Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `"origin"`
+//   spin = (Module only) Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = (Module only) Vector to rotate top toward, after spin. See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//   atype = (Module only) Select "hull" or "intersect" anchor type.  Default: "hull"
+// Anchor Types:
+//   "hull" = Anchors to the virtual convex hull of the shape.
+//   "intersect" = Anchors to the surface of the shape.
+// Named Anchors:
+//   "origin" = Anchor at the origin, oriented UP.
+// Side Effects:
+//   `$metaball_vnf` is set to the VNF of the metaball scene.
+// Example(3D,NoAxes): Two spheres interacting.
+//   spec = [
+//       left(9), mb_sphere(5),
+//       right(9), mb_sphere(5)
+//   ];
+//   metaballs(spec, voxel_size=0.5,
+//       bounding_box=[[-16,-7,-7], [16,7,7]]);
+// Example(3D,NoAxes): Two rounded cuboids interacting.
+//   spec = [
+//       move([-8,-5,-5]), mb_cuboid(10),
+//       move([8,5,5]), mb_cuboid(10)
+//   ];
+//   metaballs(spec, voxel_size=0.5,
+//       bounding_box=[[-15,-12,-12], [15,12,12]]);
+// Example(3D,NoAxes): Two rounded `mb_cyl()` cones interacting.
+//      spec = [
+//          left(10), mb_cyl(15, r1=6, r2=4, rounding=2),
+//          right(10), mb_cyl(15, r1=6, r2=4, rounding=2)
+//      ];
+//      metaballs(spec, voxel_size=0.5,
+//          bounding_box=[[-17,-8,-10], [17,8,10]]);
+// Example(3D,NoAxes): Two disks interacting. Here the arguments are in order and not named.
+//   metaballs([
+//       move([-10,0,2]), mb_disk(5,9),
+//       move([10,0,-2]), mb_disk(5,9)
+//       ], [[-20,-10,-6], [20,10,6]], 0.5);
+// Example(3D,NoAxes): Two capsules interacting.
+//   metaballs([
+//       move([-8,0,4])*yrot(90), mb_capsule(16,3),
+//       move([8,0,-4])*yrot(90), mb_capsule(16,3)
+//       ], [[-17,-5,-8], [17,5,8]],  0.5);
+// Example(3D,NoAxes): A sphere with two connectors.
+//   path = [[-20,0,0], [0,0,1], [0,-10,0]];
+//   spec = [
+//       move(path[0]), mb_sphere(6),
+//       for(seg=pair(path)) each
+//          [IDENT, mb_connector(seg[0],seg[1],
+//           2, influence=0.5)]
+//   ];
+//   metaballs(spec, voxel_size=0.5,
+//       bounding_box=[[-27,-13,-7], [4,7,14]]);
+// Example(3D,NoAxes): Interaction between two tori in different orientations.
+//    spec = [
+//        move([-10,0,17]),        mb_torus(r_maj=6, r_min=2),
+//        move([7,6,21])*xrot(90), mb_torus(r_maj=7, r_min=3)
+//    ];
+//    voxel_size = 0.5;
+//    boundingbox = [[-19,-9,9], [18,10,32]];
+//    metaballs(spec, boundingbox, voxel_size);
+// Example(3D,NoAxes,VPR=[75,0,20]): Two octahedrons interacting. Here `voxel_size` is not given, so it defaults to a value that results in approximately 10,000 voxels in the bounding box. Adding the parameter `show_stats=true` displays the voxel size used, along with other information.
+//   metaballs([
+//       move([-11,0,4]), mb_octahedron(20),
+//       move([11,0,-4]), mb_octahedron(20)
+//       ], [[-21,-11,-14], [21,11,14]]);
+// Example(3D,VPD=110): These next five examples demonstrate the different types of metaball interactions. We start with two spheres 30 units apart. Each would have a radius of 10 in isolation, but because they are influencing their surroundings, each sphere mutually contributes to the size of the other. The sum of contributions between the spheres add up so that a surface plotted around the region exceeding the threshold defined by `isovalue=1` looks like a peanut shape surrounding the two spheres.
+//   spec = [
+//       left(15),  mb_sphere(10),
+//       right(15), mb_sphere(10)
+//   ];
+//   voxel_size = 1;
+//   boundingbox = [[-30,-19,-19], [30,19,19]];
+//   metaballs(spec, boundingbox, voxel_size);
+// Example(3D,VPD=110): Adding a cutoff of 25 to the left sphere causes its influence to disappear completely 25 units away (5 units from the center of the right sphere). The left sphere is bigger because it still receives the full influence of the right sphere, but the right sphere is smaller because the left sphere has no contribution past 25 units. The right sphere is not abruptly cut off because the cutoff function is smooth and influence is normal. Setting cutoff too small can remove the interactions of one metaball from all other metaballs, leaving that metaball alone by itself.
+//   spec = [
+//       left(15),  mb_sphere(10, cutoff=25),
+//       right(15), mb_sphere(10)
+//   ];
+//   voxel_size = 1;
+//   boundingbox = [[-30,-19,-19], [30,19,19]];
+//   metaballs(spec, boundingbox, voxel_size);
+// Example(3D,VPD=110): Here, the left sphere has less influence in addition to a cutoff. Setting `influence=0.5` results in a steeper falloff of contribution from the left sphere. Each sphere has a different size and shape due to unequal contributions based on distance.
+//   spec = [
+//       left(15),  mb_sphere(10, influence=0.5, cutoff=25),
+//       right(15), mb_sphere(10)
+//   ];
+//   voxel_size = 1;
+//   boundingbox = [[-30,-19,-19], [30,19,19]];
+//   metaballs(spec, boundingbox, voxel_size);
+// Example(3D,VPD=110): In this example, we have two size-10 spheres as before and one tiny sphere of 1.5 units radius offset a bit on the y axis. With an isovalue of 1, this figure would appear similar to Example 9 above, but here the isovalue has been set to 2, causing the surface to shrink around a smaller volume values greater than 2. Remember, higher isovalue thresholds cause metaballs to shrink.
+//   spec = [
+//      left(15),  mb_sphere(10),
+//      right(15), mb_sphere(10),
+//      fwd(15),   mb_sphere(1.5)
+//   ];
+//   voxel_size = 1;
+//   boundingbox = [[-30,-19,-19], [30,19,19]];
+//   metaballs(spec, boundingbox, voxel_size,
+//       isovalue=2);
+// Example(3D,VPD=110): Keeping `isovalue=2`, the influence of the tiny sphere has been set quite high, to 10. Notice that the tiny sphere shrinks a bit, but it has dramatically increased its contribution to its surroundings, causing the two other spheres to grow and meld into each other. The `influence` argument on a small metaball affects its surroundings more than itself.
+//   spec = [
+//      move([-15,0,0]), mb_sphere(10),
+//      move([15,0,0]),  mb_sphere(10),
+//      move([0,-15,0]), mb_sphere(1.5, influence=10)
+//   ];
+//   voxel_size = 1;
+//   boundingbox = [[-30,-19,-19], [30,19,19]];
+//   metaballs(spec, boundingbox, voxel_size,
+//       isovalue=2);
+// Example(3D,Med): Setting `influence` to less than 0.5 can cause interpolation artifacts in the surface. The only difference between these two spheres is `influence`. Both have `cutoff` set to prevent them from affecting each other. The sphere on the right has a low influence of 0.02, which translates to a falloff with distance $d$ proportional to $1/d^{50}$. That high exponent increases the *non-linear* nature of the function gradient at the isosurface, reducing the accuracy of the *linear* interpolation of where the the surface intersects each voxel, causing ridges to appear. You could use this to create a texture deliberately, but it is usually better to use `cutoff` to limit the range of influence rather than reducing `influence` significantly below 1.
+//   spec = [
+//       left(10), mb_sphere(8, cutoff=10, influence=1),
+//       right(10), mb_sphere(8, cutoff=10, influence=0.02)
+//   ];
+//   bbox = [[-18,-8,-8], [18,8,8]];
+//   metaballs(spec, bounding_box=bbox, voxel_size=0.4);
+// Example(3D,NoAxes): A group of five spherical metaballs with different sizes. The parameter `show_stats=true` (not shown here) was used to find a compact bounding box for this figure. Here instead of setting `voxel_size`, we set `voxel_count` for approximate number of voxels in the bounding box, and the voxel size is adjusted to fit. Setting `exact_bounds=true` forces the bounding box to be fixed, and a non-cubic voxel is then used to fit within that box.
+//      spec = [ // spheres of different sizes
+//          move([-20,-20,-20]), mb_sphere(5),
+//          move([0,-20,-20]),   mb_sphere(4),
+//          IDENT,               mb_sphere(3),
+//          move([0,0,20]),      mb_sphere(5),
+//          move([20,20,10]),    mb_sphere(7)
+//      ];
+//      voxel_size = 1.5;
+//      boundingbox = [[-30,-31,-31], [32,31,30]];
+//      metaballs(spec, boundingbox,
+//          exact_bounds=true, voxel_count=40000);
+// Example(3D,NoAxes): A metaball can be negative. In this case we have two metaballs in close proximity, with the small negative metaball creating a dent in the large positive one. The positive metaball is shown transparent, and small spheres show the center of each metaball. The negative metaball isn't visible because its field is negative; the isosurface encloses only field values greater than the isovalue of 1.
+//   centers = [[-1,0,0], [1.25,0,0]];
+//   spec = [
+//       move(centers[0]), mb_sphere(8),
+//       move(centers[1]), mb_sphere(3, negative=true)
+//   ];
+//   voxel_size = 0.25;
+//   boundingbox = [[-7,-6,-6], [3,6,6]];
+//   %metaballs(spec, boundingbox, voxel_size);
+//   color("green") move_copies(centers) sphere(d=1, $fn=16);
+// Example(3D,VPD=105,VPT=[3,5,4.7]): When a positive and negative metaball interact, the negative metaball reduces the influence of the positive one, causing it to shrink, but not disappear because its contribution approaches infinity at its center. In this example we have a large positive metaball near a small negative metaball at the origin. The negative ball has high influence, and a cutoff limiting its influence to 20 units. The negative metaball influences the positive one up to the cutoff, causing the positive metaball to appear smaller inside the cutoff range, and appear its normal size outside the cutoff range. The positive metaball has a small dimple at the origin (the center of the negative metaball) because it cannot overcome the infinite negative contribution of the negative metaball at the origin.
+//   spec = [
+//       back(10), mb_sphere(20),
+//       IDENT, mb_sphere(2, influence=30,
+//           cutoff=20, negative=true),
+//   ];
+//   voxel_size = 0.5;
+//   boundingbox = [[-20,-4,-20], [20,30,20]];
+//   metaballs(spec, boundingbox, voxel_size);
+// Example(3D,NoAxes,VPD=80,VPT=[3,0,19]): A sharp cube, a rounded cube, and a sharp octahedron interacting. Because the surface is generated through cubical voxels, voxel corners are always cut off, resulting in difficulty resolving some sharp edges.
+//   spec = [
+//       move([-7,-3,27])*zrot(55), mb_cuboid(6, squareness=1),
+//       move([5,5,21]),   mb_cuboid(5),
+//       move([10,0,10]),  mb_octahedron(10, squareness=1)
+//   ];
+//   voxel_size = 0.5; // a bit slow at this resolution
+//   boundingbox = [[-12,-9,3], [18,10,32]];
+//   metaballs(spec, boundingbox, voxel_size);
+// Example(3D,NoAxes,VPD=205,Med): A toy airplane, constructed only from metaball spheres with scaling. The bounding box is used to clip the wingtips, tail, and belly of the fuselage.
+//   bounding_box = [[-55,-50,-5],[35,50,17]];
+//   spec = [
+//       move([-20,0,0])*scale([25,4,4]),   mb_sphere(1), // fuselage
+//       move([30,0,5])*scale([4,0.5,8]),   mb_sphere(1), // vertical stabilizer
+//       move([30,0,0])*scale([4,15,0.5]),  mb_sphere(1), // horizontal stabilizer
+//       move([-15,0,0])*scale([6,45,0.5]), mb_sphere(1)  // wing
+//   ];
+//   voxel_size = 1;
+//   color("lightblue") metaballs(spec, bounding_box, voxel_size);
+// Example(3D,VPD=60,VPR=[57,0,50],VPT=[0.5,2,1.8]): Custom metaballs are an advanced technique in which you define your own metaball shape by passing a function literal that takes a single argument: a coordinate in space relative to the metaball center called `point` here, but can be given any name. This distance vector from the origin is calculated internally and always passed to the function. Inside the function, it is converted to a scalar distance `dist`. The function literal expression sets all of your parameters. Only `point` is not set, and it becomes the single parameter to the function literal. The `spec` argument invokes your custom function as a function literal that passes `point` into it.
+//   function threelobe(point) =
+//      let(
+//           ang=atan2(point.y, point.x),
+//           r=norm([point.x,point.y])*(1.3+cos(3*ang)),
+//           dist=norm([point.z, r])
+//      ) 3/dist;
+//   metaballs(
+//       spec = [
+//           IDENT, function (point) threelobe(point),
+//           up(7), mb_sphere(r=4)
+//       ],
+//       bounding_box = [[-14,-12,-5],[8,12,13]],
+//       voxel_size=0.5);
+// Example(3D,VPD=60,VPR=[57,0,50],VPT=[0.5,2,1.8]): Here is a function nearly identical to the previous example, introducing additional dimensional parameters into the function to control its size and number of lobes. The bounding box size here is as small as possible for calculation efficiency, but if you expiriment with this using different argument values, you should increase the bounding box along with voxel size.
+//   function multilobe(point, size, lobes) =
+//      let(
+//           ang=atan2(point.y, point.x),
+//           r=norm([point.x,point.y])*(1.3+cos(lobes*ang)),
+//           dist=norm([point.z, r])
+//      ) size/dist;
+//   metaballs(
+//       spec = [
+//           left(7),
+//              function (point) multilobe(point, 3, 4),
+//           right(7)*zrot(60),
+//              function (point) multilobe(point, 3, 3)
+//       ],
+//       bounding_box = [[-16,-13,-5],[18,13,6]],
+//       voxel_size=0.4);
+// Example(3D): Next we show how to create a function that works like the built-ins. **This is a full implementation** that allows you to specify the function directly by name in the `spec` argument without needing the function literal syntax, and without needing the `point` argument in `spec`, as in the prior examples. Here, `noisy_sphere_calcs() is the calculation function that accepts the `point` position argument and any other parameters needed (here `r` and `noise_level`), and returns a single value. Then there is a "master" function `noisy_sphere() that does some error checking and returns an array consisting of (a) a function literal expression that sets all of your parameters, and (b) another array containing the metaball sign and a simple "debug" VNF representation of the metaball for viewing when `debug=true` is passed to `metaballs()`. The call to `mb_cutoff()` at the end handles the cutoff function for the noisy ball consistent with the other internal metaball functions; it requires `dist` and `cutoff` as arguments. You are not required to use this implementation in your own custom functions; in fact it's easier simply to declare the function literal in your `spec` argument, but this example shows how to do it all.
+//   //
+//   // noisy sphere internal calculation function 
+//   
+//   function noisy_sphere_calcs(point, r, noise_level, cutoff, exponent, neg) =
+//       let(
+//           noise = rands(0, noise_level, 1)[0],
+//           dist = norm(point) + noise // distance to point from metaball center
+//       ) neg * mb_cutoff(dist,cutoff) * (r/dist)^exponent;
+//   
+//   // noisy sphere "master" entry function to use in spec argument
+//   
+//   function noisy_sphere(r, noise_level, cutoff=INF, influence=1, negative=false, hide_debug=false, d) =
+//      assert(is_num(cutoff) && cutoff>0, "\ncutoff must be a positive number.")
+//      assert(is_finite(influence) && influence>0, "\ninfluence must be a positive number.")
+//      let(
+//          r = get_radius(r=r,d=d),
+//          dummy=assert(is_finite(r) && r>0, "\ninvalid radius or diameter."),
+//          neg = negative ? -1 : 1,
+//          // create [sign, vnf] for debug view; show tiny shape if hide_debug=true
+//          debug_vnf = [neg, hide_debug ? debug_tetra(0.02) : sphere(r, $fn=16)]
+//      ) [
+//          // pass control as a function literal to the calc function
+//          function (point) noisy_sphere_calcs(point, r, noise_level, cutoff, 1/influence, neg),
+//          debug_vnf
+//      ];
+//   
+//   // define the scene and render it
+//   
+//   spec = [
+//       left(9),  mb_sphere(5),
+//       right(9), noisy_sphere(r=5, noise_level=0.2)
+//   ];
+//   voxel_size = 0.5;
+//   boundingbox = [[-16,-8,-8], [16,8,8]];
+//   metaballs(spec, boundingbox, voxel_size);
+// Example(3D,Med,NoAxes,VPR=[55,0,0],VPD=200,VPT=[7,2,2]): Demonstration of `debug=true` with a more complex example using ellipsoids, a capsule, spheres, and a torus to make a tetrahedral object with rounded feet and a ring on top. The bottoms of the feet are flattened by clipping with the bottom of the bounding box. The center of the object is thick due to the contributions of three ellipsoids and a capsule converging. Designing an object like this using metaballs requires trial and error with low-resolution renders.
+//   include <BOSL2/polyhedra.scad>
+//   tetpts = zrot(15, p = 22 * regular_polyhedron_info("vertices", "tetrahedron"));
+//   tettransform = [ for(pt = tetpts) move(pt)*rot(from=RIGHT, to=pt)*scale([7,1.5,1.5]) ];
+//   
+//   spec = [
+//       // vertical cylinder arm
+//       up(15), mb_capsule(17, 2, influence=0.8),
+//       // ellipsoid arms
+//       for(i=[0:2]) each [tettransform[i], mb_sphere(1, cutoff=30)],
+//       // ring on top
+//       up(35)*xrot(90), mb_torus(r_maj=8, r_min=2.5, cutoff=35),
+//       // feet
+//       for(i=[0:2]) each [move(2.2*tetpts[i]), mb_sphere(5, cutoff=30)],
+//   ];
+//   voxel_size = 1;
+//   boundingbox = [[-22,-32,-13], [36,32,46]];
+//   metaballs(spec, boundingbox, voxel_size, isovalue=1, debug=true);
+// Example(3D,Med,NoAxes,VPR=[70,0,30],VPD=520,VPT=[0,0,80]): This example demonstrates grouping metaballs together and nesting them in lists of other metaballs, to make a crude model of a hand. Here, just one finger is defined, and a thumb is defined from one less joint in the finger. Individual fingers are grouped together with different positions and scaling, along with the thumb. Finally, this group of all fingers is used to combine with a rounded cuboid, with a slight ellipsoid dent subtracted to hollow out the palm, to make the hand.
+//   joints = [[0,0,1], [0,0,85], [0,-5,125], [0,-16,157], [0,-30,178]];
+//   finger = [
+//       for(i=[0:3]) each
+//           [IDENT, mb_connector(joints[i], joints[i+1], 9+i/5, influence=0.22)]
+//   ];
+//   thumb = [
+//       for(i=[0:2]) each [
+//           scale([1,1,1.2]),
+//           mb_connector(joints[i], joints[i+1], 9+i/2, influence=0.28)
+//       ]
+//   ];
+//   allfingers = [
+//       left(15)*zrot(5)*yrot(-50)*scale([1,1,0.6])*zrot(30), thumb,
+//       left(15)*yrot(-9)*scale([1,1,0.9]), finger,
+//       IDENT, finger,
+//       right(15)*yrot(8)*scale([1,1,0.92]), finger,
+//       right(30)*yrot(17)*scale([0.9,0.9,0.75]), finger
+//   ];
+//   hand = [
+//       IDENT, allfingers,
+//       move([-5,0,5])*scale([1,0.36,1.55]), mb_cuboid(90, squareness=0.3, cutoff=80),
+//       move([-10,-95,50])*yrot(10)*scale([2,2,0.95]),
+//           mb_sphere(r=15, cutoff=50, influence=1.5, negative=true)
+//   ];
+//   voxel_size=2.5;
+//   bbox = [[-104,-40,-10], [79,18,188]];
+//   metaballs(hand, bbox, voxel_size, isovalue=1);
+// Example(3D,Med,NoAxes,VPR=[76,0,40],VPD=128,VPT=[4,-1,13]): A model of an elephant using cylinders, capsules, and disks.
+//   legD1 = 4.6;
+//   legD2 = 1;
+//   spec = [
+//       // legs
+//       up(1)*fwd(8)*left(13), mb_cyl(d1=legD1, d2=legD2, h=20),
+//       up(1)*fwd(8)*right(10), mb_cyl(d1=legD1, d2=legD2, h=20),
+//       up(1)*back(8)*left(13), mb_cyl(d1=legD1, d2=legD2, h=20),
+//       up(1)*back(8)*right(10), mb_cyl(d1=legD1, d2=legD2, h=20),
+//       up(20)*yrot(90), mb_capsule(d=21, h=36, influence=0.5), // body
+//       right(21)*up(25)*yrot(-20), mb_capsule(r=7, h=25, influence=0.5, cutoff=9), // head
+//       right(24)*up(10)*yrot(15), mb_cyl(d1=3, d2=6, h=15, cutoff=3), // trunk
+//       // ears
+//       right(18)*up(29)*fwd(11)*zrot(-20)*yrot(80)*scale([1.4,1,1]), mb_disk(r=5,h=2, cutoff=3),
+//       right(18)*up(29)*back(11)*zrot(20)*yrot(80)*scale([1.4,1,1]), mb_disk(r=5,h=2, cutoff=3),
+//       // tusks
+//       right(26)*up(13)*fwd(5)*yrot(135), mb_capsule(r=1, h=10, cutoff=1),
+//       right(26)*up(13)*back(5)*yrot(135), mb_capsule(r=1, h=10, cutoff=1)
+//   ];
+//   bbox = [[-21,-17,-9], [31,17,38]];
+//   metaballs(spec, bounding_box=bbox, voxel_size=1, isovalue=1);
+// Example(3D,NoAxes,Med,VPD=235,VPR=[83,0,320],VPT=[-5,-5,43]): A model of a giraffe using a variety of different metaball shapes. Features such as the tail and lower legs are thin, so a small voxel size is required to render them.
+//   legD = 1;
+//   tibia = 14; 
+//   femur = 12;
+//   head = [-35,0,78];  // head position
+//   stance = [12,6];    // leg position offsets
+//   
+//   spec = [
+//       // Lower legs
+//       move([-stance.x,-stance.y]), mb_connector([-4,0,0.25],[-6,0,tibia],legD, influence = 0.2),
+//       move([-stance.x,stance.y]),  mb_connector([0,0,0],[0,0,tibia],legD, influence = 0.2),
+//       move([stance.x,-stance.y]),  mb_connector([-2,0,0],[-3,0,tibia],legD, influence = 0.2),
+//       move([stance.x,stance.y]),   mb_connector([0,0,0],[0,0,tibia],legD, influence = 0.2),
+//       // Upper legs
+//       move([-stance.x,-stance.y,tibia]), mb_connector([-6,0,0],[-2,0,femur],legD),
+//       move([-stance.x,stance.y,tibia]),  mb_connector([0,0,0],[0,0,femur],legD),
+//       move([stance.x,-stance.y,tibia]),  mb_connector([-3,0,0],[-1,0,femur],legD),
+//       move([stance.x,stance.y,tibia]),   mb_connector([0,0,0],[0,0,femur],legD),
+//   
+//       // Hooves
+//       move([-stance.x-5.5,-stance.y,1.25])*yrot(-5), mb_capsule(d=2, h=3, cutoff=2),
+//       move([-stance.x-4.5,-stance.y,-1.4])*yrot(-5), mb_cuboid(size=4, squareness=1, cutoff=1, influence=20, negative=true), // truncate bottom of raised hoof
+//       move([-stance.x-1,stance.y,1]),     mb_capsule(d=2, h=3, cutoff=2),
+//       move([stance.x-3.5,-stance.y,1]),   mb_capsule(d=2, h=3, cutoff=2),
+//       move([stance.x-1,stance.y,1]),      mb_capsule(d=2, h=3, cutoff=2),
+//   
+//       // Body
+//       up(tibia+femur+10) * yrot(10),        mb_cuboid([16,7,7]),
+//       up(tibia+femur+15)*left(10),          mb_sphere(2),
+//       up(tibia+femur+8)*right(13)*xrot(90), mb_disk(1,4),
+//   
+//       // Tail
+//       up(tibia+femur+8), mb_connector([18,0,0],[22,0,-16], 0.4, cutoff = 1),
+//   
+//       // Neck
+//       up(tibia+femur+35)*left(22)*yrot(-30)* yscale(0.75), mb_cyl(d1 = 5, d2 = 3, l = 38),
+//   
+//       // Head
+//       move(head + [-4,0,-3])*yrot(45)*xscale(0.75), mb_cyl(d1 = 1.5, d2 = 4, l = 12, rounding=0),
+//       move(head), mb_cuboid(2),    
+//   
+//       // Horns
+//       move(head), mb_connector([0,-2,5],[0,-2.5,8],0.3, cutoff = 1),
+//       move(head + [0,-2.5,8]), mb_sphere(0.5, cutoff = 1),
+//       move(head), mb_connector([0,2,5],[0,2.5,8],0.3, cutoff = 1),
+//       move(head + [0,2.5,8]), mb_sphere(0.5, cutoff = 1),
+//   
+//       // Ears
+//       move(head + [2,-8,4])* xrot(60) * scale([0.5,1,3]) , mb_sphere(d = 2, cutoff = 2),
+//       move(head + [2,8,4])* xrot(-60) * scale([0.5,1,3]) , mb_sphere(d = 2, cutoff = 2),
+//   ];
+//   vsize = 0.85;
+//   bbox =  [[-45.5, -11.5, 0], [23, 11.5, 87.55]];
+//   metaballs(spec, bbox, voxel_size=vsize);
+// Example(3D,Med,NoAxes,VPD=228,VPT=[1,-5,35]): A model of a bunny, assembled from separate body components made with metaballs, with each component rendered at a different voxel size, and then combined together along with eyes and teeth. In this way, smaller bounding boxes can be defined for each component, which speeds up rendering. A bit more time is saved by saving the repeated components (ear, front leg, hind leg) in VNF structures, to render copies with {{vnf_polyhedron()}}.
+//   torso = [
+//       up(20) * scale([1,1.2,2]), mb_sphere(10), 
+//       up(10), mb_sphere(5) // fatten lower torso
+//   ];
+//   head = [
+//       up(50) * scale([1.2,0.8,1]), mb_sphere(10, cutoff = 15),
+//       // nose
+//       move([0,-11,50]), mb_cuboid(2),
+//       // eye sockets
+//       move([5,-10,54]), mb_sphere(0.5, negative = true),
+//       move([-5,-10,54]), mb_sphere(0.5, negative = true),
+//       // tail
+//       move([0,15,6]), mb_sphere(2, cutoff = 5)
+//   ];
+//   hind_leg = [ 
+//       move([-15,-5,3]) * scale([1.5,4,1.75]), mb_sphere(5),
+//       move([-15,10,3]), mb_sphere(3, negative = true)
+//   ];
+//   front_leg = [ 
+//       move([-9,-4,30]) * zrot(30) * scale([1.5,5,1.75]), mb_sphere(3),
+//       move([-9,10,30]), mb_sphere(2, negative = true)
+//   ];
+//   ear = [
+//       yrot(10) * move([0,0,65]) * scale([4,1,7]), mb_sphere(2),
+//       yrot(10)*move([0,-3,65])*scale([3,2,6]), mb_sphere(2, cutoff = 2, influence =2, negative = true)
+//   ];
+//   vnf_hindleg = metaballs(hind_leg, [[-22,-24,0],[-8,7,11]], voxel_size=0.8);
+//   vnf_frontleg = metaballs(front_leg, [[-16,-17,25], [-1,7,35]], voxel_size=0.6);
+//   vnf_ear = metaballs(ear, [[3,-2,50],[20,2,78]], voxel_size=0.6);
+//   color("BurlyWood") {
+//       metaballs([IDENT, torso, IDENT, head],
+//           [[-16,-17,0],[16,20,63]], voxel_size=0.7);
+//       xflip_copy() {
+//           vnf_polyhedron(vnf_hindleg);
+//           vnf_polyhedron(vnf_frontleg);
+//           vnf_polyhedron(vnf_ear);;
+//       }
+//   }
+//   // add eyes
+//   xflip_copy() move([5,-8,54]) color("skyblue") sphere(2, $fn = 32);
+//   // add teeth
+//   xflip_copy() move([1.1,-10,44]) color("white") cuboid([2,0.5,4], rounding = 0.15);
+// Example(3D,Med,NoAxes,VPD=120,VPT=[2,0,6],VPR=[60,0,320]): A model of a duck made from spheres, disks, a capsule, and a cone for the tail.
+//   b_box = [[-31,-18,-10], [29,18,31]];
+//   headZ = 21;
+//   headX = 11;
+//   spec = [
+//       // head
+//       left(headX)*up(headZ)*scale([1,0.9,1]), mb_sphere(10,cutoff=11), //skull
+//       left(headX)*up(14), mb_disk(3,5, influence=0.5), //neck shim
+//       left(headX+5)*up(headZ-1)*fwd(5),  mb_disk(1,2, cutoff=4), //cheek bulge
+//       left(headX+5)*up(headZ-1)*back(5), mb_disk(1,2, cutoff=4), //cheek bulge
+//       // eye indentations
+//       move([-headX,0,headZ+3])*zrot(70)*left(9)*yrot(25)*scale([1,3,1.3]), mb_sphere(1, negative=true, influence=1, cutoff=10),
+//       move([-headX,0,headZ+3])*zrot(-70)*left(9)*yrot(25)*scale([1,3,1.3]), mb_sphere(1, negative=true, influence=1, cutoff=10),
+//       // beak
+//       left(headX+13)*up(headZ)*zscale(0.4)*yrot(90), mb_capsule(12,3, cutoff=5),
+//       left(headX+8)*up(headZ), mb_disk(2,4),
+//       left(headX+16)*up(30), mb_sphere(5, negative=true, cutoff=8),
+//       left(headX+12)*up(headZ+1)*scale([1.2,1,0.75]), mb_sphere(2, cutoff = 3),
+//       // body
+//       scale([1.5,1,1]), mb_disk(17,15), //body
+//       // tail
+//       right(20)*up(8)*yscale(1.7)*yrot(35), mb_cyl(h=15, r1=4, r2=0.5) 
+//   ];
+//   metaballs(spec, b_box, voxel_size=0.75);
+//   // add eyeballs
+//   yflip_copy()
+//       move([-headX,0,headZ+2.5])zrot(53)left(4.9) color("#223300") sphere(3,$fn=64);
+// Example(3D,Med,NoAxes,VPD=120,VPT=[2,0,6],VPR=[60,0,320]): Specifying `debug=true`, we can see the elements used to construct the duck. Positive metaballs are blue and negative metaballs are orange. Unfortunately, although the head is a rather complex structure, the big blue skull element covers up other details. Note also that removing the voxel_size parameter from `metaballs()` speeds up the preview.
+//   b_box = [[-31,-18,-10], [29,18,31]];
+//   headZ = 21;
+//   headX = 11;
+//   spec = [
+//       // head
+//       left(headX)*up(headZ)*scale([1,0.9,1]), mb_sphere(10,cutoff=11), //skull
+//       left(headX)*up(14), mb_disk(3,5, influence=0.5), //neck shim
+//       left(headX+5)*up(headZ-1)*fwd(5),  mb_disk(1,2, cutoff=4), //cheek bulge
+//       left(headX+5)*up(headZ-1)*back(5), mb_disk(1,2, cutoff=4), //cheek bulge
+//       // eye indentations
+//       move([-headX,0,headZ+3])*zrot(70)*left(9)*yrot(25)*scale([1,3,1.3]), mb_sphere(1, negative=true, influence=1, cutoff=10),
+//       move([-headX,0,headZ+3])*zrot(-70)*left(9)*yrot(25)*scale([1,3,1.3]), mb_sphere(1, negative=true, influence=1, cutoff=10),
+//       // beak
+//       left(headX+13)*up(headZ)*zscale(0.4)*yrot(90), mb_capsule(12,3, cutoff=5),
+//       left(headX+8)*up(headZ), mb_disk(2,4),
+//       left(headX+16)*up(30), mb_sphere(5, negative=true, cutoff=8),
+//       left(headX+12)*up(headZ+1)*scale([1.2,1,0.75]), mb_sphere(2, cutoff = 3),
+//       // body
+//       scale([1.5,1,1]), mb_disk(17,15), //body
+//       // tail
+//       right(20)*up(8)*yscale(1.7)*yrot(35), mb_cyl(h=15, r1=4, r2=0.5) 
+//   ];
+//   metaballs(spec, b_box, debug=true); // removed voxel_size, set debug=true
+//   // add eyeballs
+//   yflip_copy()
+//       move([-headX,0,headZ+2.5])zrot(53)left(4.9) color("#223300") sphere(3,$fn=64);
+// Example(3D,Med,NoAxes,VPD=79,VPT=[-9,10,10],VPR=[50,0,340]): Adding `hide_debug=true` to the skull metaball function suppresses its display and reveals the neck and cheek components formerly covered by the skull metaball. Here we also disabled the addition of eyeballs, and reduced the size of the bounding box to enclose only the head. The bounding box is for computing the metaball surface; the debug components still display outside these bounds.
+//   b_box = [[-31,-18,11], [0,18,31]];
+//   headZ = 21;
+//   headX = 11;
+//   spec = [
+//       // head
+//       left(headX)*up(headZ)*scale([1,0.9,1]), mb_sphere(10,cutoff=11,hide_debug=true), //skull
+//       left(headX)*up(14), mb_disk(3,5, influence=0.5), //neck shim
+//       left(headX+5)*up(headZ-1)*fwd(5),  mb_disk(1,2, cutoff=4), //cheek bulge
+//       left(headX+5)*up(headZ-1)*back(5), mb_disk(1,2, cutoff=4), //cheek bulge
+//       // eye indentations
+//       move([-headX,0,headZ+3])*zrot(70)*left(9)*yrot(25)*scale([1,3,1.3]), mb_sphere(1, negative=true, influence=1, cutoff=10),
+//       move([-headX,0,headZ+3])*zrot(-70)*left(9)*yrot(25)*scale([1,3,1.3]), mb_sphere(1, negative=true, influence=1, cutoff=10),
+//       // beak
+//       left(headX+13)*up(headZ)*zscale(0.4)*yrot(90), mb_capsule(12,3, cutoff=5),
+//       left(headX+8)*up(headZ), mb_disk(2,4),
+//       left(headX+16)*up(30), mb_sphere(5, negative=true, cutoff=8),
+//       left(headX+12)*up(headZ+1)*scale([1.2,1,0.75]), mb_sphere(2, cutoff = 3),
+//       // body
+//       scale([1.5,1,1]), mb_disk(17,15), //body
+//       // tail
+//       right(20)*up(8)*yscale(1.7)*yrot(35), mb_cyl(h=15, r1=4, r2=0.5) 
+//   ];
+//   metaballs(spec, b_box, debug=true); // removed voxel_size, set debug=true
+//   // add eyeballs
+//   * yflip_copy()
+//       move([-headX,0,headZ+2.5])zrot(53)left(4.9) color("#223300") sphere(3,$fn=64);
+// Example(3D,VPD=83,NoAxes): Adapting the multi-lobe function from Example 21 above, here we show how to display a debug-view VNF approximating the shape of the metaball when `debug=true`, *without* resorting to the full custom function implementation demonstrated in Example 22. Rather than having just the function literal in the `spec` array, we use `[function_literal, [sign,vnf]]` instead, where `sign` is the sign of the metaball (-1 or 1) and `vnf` is the VNF of the debug-view shape.
+//   // custom metaball function - a lobed object
+//   function multilobe(point, size, lobes) =
+//      let(
+//           ang=atan2(point.y, point.x),
+//           r=norm([point.x,point.y])*(1.4+cos(lobes*ang)),
+//           dist=norm([point.z, r])
+//      ) size/dist;
+//   
+//   // custom metaball debug VNF - n-pointed star
+//   function lobes_debug_vnf(r, n) =
+//       let(nstar=zrot(180/n,p=path3d(star(n,r,r/6),0)))
+//          vnf_vertex_array(
+//            [down(0.3*r,nstar), up(0.3*r,nstar)],
+//            col_wrap=true, caps=true);
+//   
+//   // show the object with debug VNF defined
+//   lobes = 5;
+//   size = 8;
+//   spec = [
+//       IDENT,
+//       [ // use [func,[sign,vnf]] instead of func
+//           function(point) multilobe(point,size,lobes),
+//           [1, lobes_debug_vnf(size*2, lobes)]
+//       ]
+//   ];
+//   metaballs(spec,
+//       bounding_box = [[-20,-20,-8],[20,20,8]],
+//       voxel_size=0.5, debug=true);
+
+$metaball_vnf = undef; // set by module for possible use with children()

@@ -1,0 +1,12 @@
+function bosl_version_num() = version_to_num(BOSL_VERSION);
+
+
+// Function: bosl_version_str()
+// Synopsis: Returns the BOSL2 version as a string.
+// Topics: Versioning
+// See Also: bosl_version(), bosl_version_num(), bosl_required()
+// Usage:
+//   ver = bosl_version_str();
+// Description:
+//   Returns a string of the version, formatted like "MAJOR.MINOR.REV".
+//   For example, version 2.1.43 will be returned as `"2.1.43"`.

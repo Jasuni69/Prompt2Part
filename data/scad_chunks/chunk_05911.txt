@@ -1,0 +1,38 @@
+module linear_bearing(l, od=15, id=8, length, anchor=CTR, spin=0, orient=UP) {
+    l = first_defined([l, length, 24]);
+    attachable(anchor,spin,orient, d=od, l=l) {
+        color("silver") {
+            tube(id=id, od=od, l=l-1);
+            tube(id=od-1, od=od, l=l);
+            tube(id=id, od=id+1, l=l);
+            tube(id=id+2, od=od-2, l=l);
+        }
+        children();
+    }
+}
+
+
+// Section: lmXuu Linear Bearings
+
+// Module: lmXuu_housing()
+// Synopsis: Creates a standardized LM*UU linear bearing mount clamp.
+// SynTags: Geom
+// Topics: Parts, Bearings
+// See Also: linear_bearing(), linear_bearing_housing(), lmXuu_info(), lmXuu_bearing(), lmXuu_housing(), ball_bearing()
+// Usage:
+//   lmXuu_housing(size, tab, gap, wall, tabwall, screwsize) [ATTACHMENTS];
+// Description:
+//   Creates a model of a clamp to hold a standard sized lmXuu linear bearing cartridge.
+// Arguments:
+//   size = Standard lmXuu inner size.
+//   tab = Clamp tab height.  Default: 7
+//   tabwall = Clamp Tab thickness.  Default: 5
+//   wall = Wall thickness of clamp housing.  Default: 3
+//   gap = Gap in clamp.  Default: 5
+//   screwsize = Size of screw to use to tighten clamp.  Default: 3
+//   ---
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+// Example:
+//   lmXuu_housing(size=10, wall=2, tab=6, screwsize=2.5);

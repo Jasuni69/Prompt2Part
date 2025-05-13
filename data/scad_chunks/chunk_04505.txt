@@ -1,0 +1,2 @@
+function bolt_data (options = undef, kind = DEFAULT_BOLT_KIND) = 
+  is_undef(options) ? bolts : (is_string(options) ? bolts[options][kind] : options);

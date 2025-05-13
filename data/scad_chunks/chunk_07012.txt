@@ -1,0 +1,8 @@
+module test__corner_edge_count() {
+    edges = _edges([TOP,FRONT+RIGHT]);
+    assert(_corner_edge_count(edges,TOP+FRONT+RIGHT) == 3);
+    assert(_corner_edge_count(edges,TOP+FRONT+LEFT) == 2);
+    assert(_corner_edge_count(edges,BOTTOM+FRONT+RIGHT) == 1);
+    assert(_corner_edge_count(edges,BOTTOM+FRONT+LEFT) == 0);
+}
+test__corner_edge_count();

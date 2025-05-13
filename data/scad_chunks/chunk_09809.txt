@@ -1,0 +1,39 @@
+module top_half(s=100, z=undef, cp=[0,0,0], planar=false)
+{
+	dir = planar? V_BACK : V_UP;
+	cp = is_scalar(z)? [0,0,z] : is_scalar(cp)? cp*dir : cp;
+	translate(cp) difference() {
+		translate(-cp) children();
+		translate(-dir*s/2) {
+			if (planar) {
+				square(s, center=true);
+			} else {
+				cube(s, center=true);
+			}
+		}
+	}
+}
+
+
+
+// Module: bottom_half()
+//
+// Usage:
+//   bottom_half([z|cp], [s]) ...
+//
+// Description:
+//   Slices an object at a horizontal X-Y cut plane, and masks away everything that is above it.
+//
+// Arguments:
+//   cp = If given as a scalar, moves the cut plane down by the given amount.  If given as a point, specifies a point on the cut plane.  Default: [0,0,0]
+//   z = The Z coordinate of the cut-plane, if given.  Use instead of `cp`.
+//   s = Mask size to use.  Use a number larger than twice your object's largest axis.  If you make this too large, it messes with centering your view.  Default: 100
+//   planar = If true, this becomes equivalent to a planar `front_half()`.
+//
+// Examples:
+//   bottom_half() sphere(r=20);
+//   bottom_half(z=-10) sphere(r=20);
+//   bottom_half(cp=-10) sphere(r=20);
+//   bottom_half(cp=[0,0,10]) sphere(r=20);
+// Example(2D):
+//   bottom_half(planar=true) circle(r=20);

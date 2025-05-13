@@ -1,0 +1,26 @@
+module spiral_ripples() {
+    phi = (1 + sqrt(5)) / 2;
+    degrees = 720;
+    points = [
+        for(d = [0:angle_step:degrees])
+        let(
+            theta = radians(d),
+            r = pow(phi, theta * 2 / PI)
+        )
+        r * [cos(d), sin(d)]
+    ];
+
+    sf = [
+        for(y = [-45:voxel_step:30]) 
+        [
+            for(x = [-40:voxel_step:70]) 
+            let(
+                nz = nz_cell(points, [x, y], dist),
+                n = amplitude * nz_perlin2(nz / wave_smoothness, nz / wave_smoothness, seed)
+            )
+            [x, y, n]
+        ]
+    ];
+
+    sf_thicken(sf, thickness);
+}

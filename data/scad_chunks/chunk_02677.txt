@@ -1,0 +1,2 @@
+module no_pose()                                                    //! Force children not to be posed even if parent is
+    let($posed = true, $zoomed = undef) children();

@@ -1,0 +1,3 @@
+function power_jack_radius() = 9.8 / 2; //! Power jack socket flange radius
+
+power_jack_flat = 6.7;

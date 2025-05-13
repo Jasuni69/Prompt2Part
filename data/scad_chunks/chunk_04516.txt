@@ -1,0 +1,29 @@
+module _nut (
+  options,
+  kind = "hexagon",
+  height_clearance = 0,
+  width_clearance = 0
+) {
+  n = nut_data(options, kind);
+  thickness = kind == "hexagon_lock" ? n.nut_thickness : n.thickness;
+  h = thickness + height_clearance;
+
+  if (kind == "hexagon_lock") {
+    lock_h = n.thickness - n.nut_thickness;
+    cylinder(d = n.width + width_clearance, h = lock_h + height_clearance);
+    translate([0, 0, lock_h]) {
+      hexagon(d = hex_inscribed_circle_d(n.width + width_clearance), h = h);
+    }
+  }
+  else {
+    hexagon(d = hex_inscribed_circle_d(n.width + width_clearance), h = h);
+  }
+}
+
+//
+// nutcatch_parallel - generate a parallel (surface) nutcatch positive
+//
+// Usage:
+//
+//     nutcatch_parallel("M3");
+//

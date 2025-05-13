@@ -1,0 +1,35 @@
+function currentPartIn(bodySet,standardBody
+                      ,concatStadardPrefix="+",exactNamePrefix=":",excludeItPrefix="!"
+                      ,currentBody=$currentBody) = ( bodySet==ALL
+				|| ( ($currentBody != undef)
+	  				   && (bodySet != undef)
+	  				   && (let(expandedParentsCurrentBody = expandParentsStripArgs(currentBody)
+                    , bodySetReplacedPlusSign = is_undef(standardBody)
+                                                  ?bodySet
+                                                  :join(split(bodySet,concatStadardPrefix)
+                                                        ,str(standardBody,","))
+                    , bodysInSet= split(bodySetReplacedPlusSign,",")
+                    ,  positiveBodySet= [for(b=bodysInSet)
+                                        let(sp=split(b,excludeItPrefix))
+                                        if(len(sp)==1)b]
+                    ,  negativeBodySet= [for(b=bodysInSet)
+                                        let(sp=split(b,excludeItPrefix))
+                                        if(len(sp)>1)
+                                          let(syntaxError= assert(len(sp)<3
+                                          ,str("Only one exclusionPrefix ''"
+                                            ,excludeItPrefix
+                                            ,"' allowed per body name."
+                                            ," seprate prefixed excluded "
+                                            ,"bodynames by commas ','"
+                                              )))
+                                            sp[1]]
+                    //  ,debu= echo(negativeBodySet)
+                  )(!encloses(negativeBodySet,currentBody) &&
+                      len([for(body=positiveBodySet)
+                        let(exactlyThis = reverse(split(body,exactNamePrefix))
+                            ,curBody = (len(exactlyThis)>1
+                                        ?currentBody
+                                        :expandedParentsCurrentBody))
+                        if(encloses(curBody, exactlyThis[0]))true
+                      ])>0))));
+//					    ? (true) : (false);

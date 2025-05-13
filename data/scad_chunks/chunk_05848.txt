@@ -1,0 +1,10 @@
+function vector_search_tree(points, leafsize=25, treemin=400) =
+    points==[] ? [] :
+    assert( is_matrix(points), "\nThe input list entries should be points." )
+    assert( is_int(leafsize) && leafsize>=1,
+            "\nThe tree leaf size should be an integer greater than zero.")
+    len(points)<treemin ? points :
+    [ points, _bt_tree(points, count(len(points)), leafsize) ];
+
+
+//Ball tree construction

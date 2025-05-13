@@ -1,0 +1,1 @@
+function pcbThickness(pcbName="Main") = (getVectorBase(pcbName, pcb))[5];

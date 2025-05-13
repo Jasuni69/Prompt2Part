@@ -1,0 +1,23 @@
+function isTrue(constantValue, setArray) = (
+  (   setArray[0] == constantValue 
+   || setArray[1] == constantValue 
+   || setArray[2] == constantValue 
+   || setArray[3] == constantValue 
+   || setArray[4] == constantValue 
+   || setArray[5] == constantValue 
+   || setArray[6] == constantValue 
+   || setArray[7] == constantValue 
+   || setArray[8] == constantValue 
+   || setArray[9] == constantValue 
+   || setArray[10] == constantValue 
+   || setArray[11] == constantValue 
+   || setArray[12] == constantValue 
+   || setArray[13] == constantValue 
+   || setArray[14] == constantValue 
+   || setArray[15] == constantValue 
+   || setArray[16] == constantValue 
+   || setArray[17] == constantValue 
+   || setArray[18] == constantValue 
+   || setArray[19] == constantValue ) ? 1 : 0);  
+   
+//===========================================================

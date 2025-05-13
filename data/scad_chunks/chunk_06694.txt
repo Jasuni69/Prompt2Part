@@ -1,0 +1,20 @@
+module test_all_zero() {
+    assert(all_zero(0));
+    assert(all_zero([0,0,0]));
+    assert(!all_zero([[0,0,0],[0,0]]));
+    assert(all_zero([EPSILON/2,EPSILON/2,EPSILON/2]));
+    assert(!all_zero(1e-3));
+    assert(!all_zero([0,0,1e-3]));
+    assert(!all_zero([EPSILON*10,0,0]));
+    assert(!all_zero([0,EPSILON*10,0]));
+    assert(!all_zero([0,0,EPSILON*10]));
+    assert(!all_zero(true));
+    assert(!all_zero(false));
+    assert(!all_zero(INF));
+    assert(!all_zero(-INF));
+    assert(!all_zero(NAN));
+    assert(!all_zero("foo"));
+    assert(!all_zero([]));
+    assert(!all_zero([0:1:2]));
+}
+test_all_zero();

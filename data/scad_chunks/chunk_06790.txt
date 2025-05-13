@@ -1,0 +1,22 @@
+module test_f_is_list() {
+    testfn = f_is_list();
+    for (test = [
+        [undef,   false],
+        [false,   false],
+        [true,    false],
+        [-4,      false],
+        [0,       false],
+        [1.5,     false],
+        [3,       false],
+        [INF,     false],
+        [-INF,    false],
+        [NAN,     false],
+        ["",      false],
+        ["foo",   false],
+        [[4,5,6], true],
+        [[4:1:6], false]
+    ]) {
+        assert(testfn(test[0]) == test[1]);
+    }
+}
+test_f_is_list();

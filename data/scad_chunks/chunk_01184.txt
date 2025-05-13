@@ -1,0 +1,1 @@
+function leadnut_bore(type)          = type[2];     //! Thread size

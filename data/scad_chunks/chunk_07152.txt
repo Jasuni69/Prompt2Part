@@ -1,0 +1,63 @@
+module Bellow(size=[10,10,2.5],delta=2,flat=.25,fn=4,deg=90/6,help){
+
+delta=is_list(delta)?delta:[delta,delta];
+flat=is_list(flat)?flat:[flat,flat];
+fn=ceil(fn/2)*2;
+
+x=size.x/2+delta.x;
+y=size.y/2+delta.y;
+z=size.z;
+
+x2=size.x/2 - delta.x;
+y2=size.y/2 - delta.y;
+
+h1=flat.x;
+h2=size.z-flat.y;
+mod=1;
+deg=min(180/fn, deg);
+
+HelpTxt("Bellow",["size",size,"delta",delta,"flat",flat,"fn",fn,"deg",deg],help);
+
+points=fn==4?[
+[x,y,0],[-x,y,0],[-x,-y,0],[x,-y,0],
+[x,y,h1],[-x,y,h1],[-x,-y,h1],[x,-y,h1],
+[x2,y2,h2],[-x2,y2,h2],[-x2,-y2,h2],[x2,-y2,h2],
+[x2,y2,z],[-x2,y2,z],[-x2,-y2,z],[x2,-y2,z],
+]:
+let(step=360/fn)[
+for(i=[0:fn-1])let(r=x/2,delta=(i%2?-1:1)*deg)[cos(i*step+delta)*r,sin(i*step+delta)*r,0],
+for(i=[0:fn-1])let(r=x/2,delta=(i%2?-1:1)*deg)[cos(i*step+delta)*r,sin(i*step+delta)*r,h1],
+for(i=[0:fn-1])let(r=x2/2,delta=(i%2?1:-1)*deg)[cos(i*step+delta)*r,sin(i*step+delta)*r,h2],
+for(i=[0:fn-1])let(r=x2/2,delta=(i%2?1:-1)*deg)[cos(i*step+delta)*r,sin(i*step+delta)*r,z],
+];
+
+
+faces=[
+[0,1,2,3],//bottom
+[1,0,4,5],vAdd([1,0,4,5],1),vAdd([1,0,4,5],2),[0,3,7,4], //walls
+vAdd([1,0,4,5],4),vAdd([1,0,4,5],5),vAdd([1,0,4,5],6),vAdd([0,3,7,4],4), //walls
+vAdd([1,0,4,5],8),vAdd([1,0,4,5],9),vAdd([1,0,4,5],10),vAdd([0,3,7,4],8), //walls
+[15,14,13,12]//top
+];
+
+if(fn==4)polyhedron(points,faces);
+else PolyH(points,loop=fn,faceOpt=+0,flip=false);
+}
+
+
+
+
+/** \name BLetter
+BLetter() creates fast render braille letter
+\param chr  character
+\param dots dots
+\param boxSize  size
+\param dotSize  dot base size and height
+\param dotDist  dot center distance
+\param dotTopSize  dot top size 
+\param center center xy
+
+*/
+//BLetter("A",center=true);
+//BLetter(dots=[0,1,0, 1,0,1]);
+//BLetter("ei");//(Vollschrift)

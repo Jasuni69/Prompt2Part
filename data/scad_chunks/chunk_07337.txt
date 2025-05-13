@@ -1,0 +1,55 @@
+module CZahn(
+modul=[1,1],
+r=10,
+deg=[180,180],
+fn=20,help){
+
+r2=is_list(modul)?modul/4:[modul/4,modul/4];
+deg=is_list(deg)?deg:[deg,deg];
+epiStep=deg[0]/fn;
+epiStep2=epiStep/r*r2[0];
+
+hypStep=deg[1]/fn; // modul[1]
+hypStep2=hypStep/r*r2[1]; // r
+
+assert(r-r2[0]>0,str("r=",r));
+
+points=[
+[-0.01,0],
+for(i=[-fn:0])[cos(i*hypStep2),sin(i*hypStep2)]*(r-r2[1])+[cos(-i*(hypStep-hypStep2)),sin(-i*(hypStep-hypStep2))]*r2[1],
+for(i=[0:fn])[cos(i*epiStep2),sin(i*epiStep2)]*(r+r2[0])-[cos(i*(epiStep+epiStep2)),sin(i*(epiStep+epiStep2))]*r2[0]
+
+];
+
+lastP=points[len(points)-1];
+
+rotate(-atan(lastP.x/lastP.y))mirror([1,0])polygon(points);
+rotate(atan(lastP.x/lastP.y))polygon(points);
+HelpTxt("CZahn",["modul",modul,"r",r,"deg",deg,"fn",fn],help);
+}
+
+
+
+//union(){
+//r=1;
+// r2=1;   
+//    grad=70;
+//    h=undef;
+//    mitte=2;
+//    extrude=+9.34;
+//    xCenter=-1;
+//polygon([for(i=[0:27])vollwelle(fn=5,l=18,grad=grad,h=h,r=r,r2=r2,mitte=mitte,xCenter=xCenter,grad2=50,extrude=extrude)[i]]);
+//T(0,0,-0.1)color("green")Vollwelle(fn=5,l=18,grad=grad,h=h,r=r,mitte=mitte,r2=r2,xCenter=xCenter,grad2=+50,extrude=extrude);  
+//T(0,2.4)color("red")square([8.68,1],center=0);
+// *T(extrude-h,1)color("red")square([h,1],center=0);    
+// *T(5,4)square([r2-sin(90-grad)*r2,1]);
+// *T(5+6.5,1)square([r-sin(90-grad)*r,1]);
+//    
+//}
+
+/// creates points for vollwelle
+/*
+p=vollwelle(grad2=-100,minF=12);
+polygon(p);
+echo(len(p));
+//*/

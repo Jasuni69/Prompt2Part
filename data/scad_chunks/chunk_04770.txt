@@ -1,0 +1,10 @@
+module poly2d(poly) {
+  if (is_poly_vector(poly))
+    for (p = poly) polygon(points=p[0], paths=p[1]);
+  else {
+    if (depth(poly) == 2)
+      polygon(poly);
+    else
+      polygon(points=poly[0], paths=poly[1]);
+  }
+}

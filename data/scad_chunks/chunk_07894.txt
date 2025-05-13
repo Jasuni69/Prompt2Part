@@ -1,0 +1,6 @@
+module tile02(tile_width, line_width) {
+	half_width = tile_width * 0.5; 
+	line2d([half_width, 0], [half_width, tile_width], line_width, p1Style = "CAP_BUTT", p2Style = "CAP_BUTT");
+	line2d([0, half_width], [half_width - line_width, half_width], line_width, p1Style = "CAP_BUTT", p2Style = "CAP_BUTT");
+	line2d([half_width + line_width, half_width], [tile_width, half_width], line_width, p1Style = "CAP_BUTT", p2Style = "CAP_BUTT");
+}

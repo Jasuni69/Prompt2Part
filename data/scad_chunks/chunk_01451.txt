@@ -1,0 +1,1 @@
+function rail_screw_height(type, screw) = rail_height(type) - rail_bore_depth(type) + screw_head_depth(screw, rail_hole(type)); //! Position screw taking into account countersink into counterbored hole

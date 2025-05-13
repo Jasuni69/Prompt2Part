@@ -1,0 +1,16 @@
+module Knochen(l=+15,d=3,d2=5,b=0,fn=fn,help)
+
+{
+  HelpTxt("Knochen",["l",l,"d",d,"d2",d2,"b",b,"fn",fn],help);
+    f=50/fn*0.3;
+    function mf(x)=d+pow(1.5,x);
+    for(i=[-l:f:+5])
+    {
+        hull()
+        {
+        R(i*b)T(z=i)scale([d2/mf(i),1,1])R(i*b)cylinder(.01,d=mf(i),$fn=fn);
+        R((i+f)*b)T(z=i+f)scale([d2/mf(i+f),1,1])R((i+f)*b)cylinder(.01,d=mf(i+f),$fn=fn);
+        }
+    }
+
+}

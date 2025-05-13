@@ -1,0 +1,1 @@
+function ff_slot(type)  = type[0]; //! Flat flex slot size

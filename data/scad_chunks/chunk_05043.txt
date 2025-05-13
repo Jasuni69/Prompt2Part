@@ -1,0 +1,5 @@
+function _mb_disk_influence(point, hl, r, ex, neg) =
+    let(
+        rdist=norm([point.x,point.y]), 
+        dist = rdist<r ? abs(point.z) : norm([rdist-r,point.z])
+    ) neg*(hl/dist)^ex;

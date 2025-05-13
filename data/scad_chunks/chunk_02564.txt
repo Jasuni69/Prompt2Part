@@ -1,0 +1,8 @@
+module round_3D(r, ir = undef, or = undef, chamfer_base = false) { //! Round a 3D child single radius or separate inside and outside radii
+    IR = is_undef(ir) ? r : ir;
+    OR = is_undef(or) ? r : or;
+    offset_3D(OR, chamfer_base)
+        offset_3D(-OR -IR, chamfer_base)
+            offset_3D(IR, chamfer_base)
+                children();
+}

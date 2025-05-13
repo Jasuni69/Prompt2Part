@@ -1,0 +1,1 @@
+function valsFromList(list=[undef])=list[$valPtr];

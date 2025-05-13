@@ -1,0 +1,60 @@
+module dog_back(head_r, peg_radius) {
+    $fn = 36;    
+
+    module foot() {
+        translate([head_r, 0, 0]) {
+            color("PapayaWhip") 
+            ellipse_extrude(head_r / 3) 
+                polygon(shape_ellipse([head_r / 3, head_r / 2]));
+            
+            color("Maroon")  
+            linear_extrude(head_r) 
+                circle(head_r / 8);
+            
+            color("Goldenrod") 
+            translate([head_r / 45, 0, head_r / 2]) 
+            rotate([0, -15, 0]) 
+                rounded_cylinder(
+                    radius = [head_r / 5, head_r / 3.5], 
+                    h = head_r * 1.25, 
+                    round_r = 2
+                );            
+        }    
+    }
+
+
+    module feet() {
+        foot();
+        mirror([1, 0, 0]) foot();
+    }
+
+    module body_feet() {
+        translate([0, -head_r / 5, -head_r * 1.65]) 
+            feet();
+
+
+        color("Goldenrod") scale([1, 1.25, 1]) 
+        difference() {
+            sphere(head_r);
+            translate([-head_r, head_r / 6, -head_r]) 
+                cube(head_r * 2);
+        }
+    }
+
+    module back() {
+        mirror([0, 1, 0]) 
+            body_feet();
+
+        rotate([-36.5, 0, 0]) 
+        color("Goldenrod") 
+        linear_extrude(head_r * 2, scale = 0.5) 
+            circle(head_r / 6);
+    }
+
+    back();
+        
+    color("Goldenrod")  
+    translate([0, -head_r * 0.2, 0]) 
+    rotate([90, 0, 0]) 
+        connector_peg(peg_radius, spacing = spacing); 
+}

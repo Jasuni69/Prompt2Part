@@ -1,0 +1,1 @@
+function rod_end_sphere_seg_width(type)      = type[7];    //! the width of the pivoting part, effectively a (sphere - sphereCaps - center bore)

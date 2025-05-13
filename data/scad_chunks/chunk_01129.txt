@@ -1,0 +1,1 @@
+function gs_lug_w(type)        = type[7]; //! Screw lug width

@@ -1,0 +1,11 @@
+module test_unit() {
+    assert(unit([10,0,0]) == [1,0,0]);
+    assert(unit([0,10,0]) == [0,1,0]);
+    assert(unit([0,0,10]) == [0,0,1]);
+    assert(abs(norm(unit([10,10,10]))-1) < EPSILON);
+    assert(abs(norm(unit([-10,-10,-10]))-1) < EPSILON);
+    assert(abs(norm(unit([-10,0,0]))-1) < EPSILON);
+    assert(abs(norm(unit([0,-10,0]))-1) < EPSILON);
+    assert(abs(norm(unit([0,0,-10]))-1) < EPSILON);
+}
+test_unit();

@@ -1,0 +1,9 @@
+function _os_remove_edges(p, dist) = 
+  let (N = len(p), offlim = _os_offset_limit(p))
+  let (eqlist = [ for (i=[0:N-1])
+    if (!(dist/offlim[i] > 1))
+      _os_seg2eq(p[i], p[(i+1)%N], 0)
+    ])
+  let (N2 = len(eqlist))
+  [ for (i=[0:N2-1])
+    _os_solve2eq(eqlist[(i+N2-1)%N2], eqlist[i]) ];

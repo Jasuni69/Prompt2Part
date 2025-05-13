@@ -1,0 +1,5 @@
+function is_point_on_line(point, line, bounded=false, eps=EPSILON) =
+    assert(is_finite(eps) && (eps>=0), "\nThe tolerance should be a non-negative value." )
+    assert(is_vector(point), "\nPoint must be a vector.")
+    assert(_valid_line(line, len(point),eps),"\nGiven line is not valid.")
+    _is_point_on_line(point, line, bounded,eps);

@@ -1,0 +1,67 @@
+function octahedron(size=1, anchor=CENTER, spin=0, orient=UP) =
+    let(
+        s = force_list(size,3)/2,
+        dummy=assert(is_vector(s,3) && all_positive(s), "\nsize must be a positive scalar or 3-vector"),
+        vnf = [
+            [ [0,0,s.z], [s.x,0,0], [0,s.y,0], [-s.x,0,0], [0,-s.y,0], [0,0,-s.z] ],
+            [ [0,2,1], [0,3,2], [0,4,3], [0,1,4], [5,1,2], [5,2,3], [5,3,4], [5,4,1] ]
+        ]
+    ) reorient(anchor,spin,orient, vnf=vnf, extent=true, p=vnf);
+
+
+
+// Section: Cylinders
+
+
+// Function&Module: cylinder()
+// Synopsis: Creates an attachable cylinder.
+// SynTags: Geom, VNF, Ext
+// Topics: Shapes (3D), Attachable, VNF Generators
+// See Also: cyl()
+// Usage: As Module (as in native OpenSCAD)
+//   cylinder(h, r=/d=, [center=]);
+//   cylinder(h, r1/d1=, r2/d2=, [center=]);
+// Usage: With BOSL2 anchoring and attachment extensions
+//   cylinder(h, r=/d=, [center=], [anchor=], [spin=], [orient=]) [ATTACHMENTS];
+//   cylinder(h, r1/d1=, r2/d2=, [center=], [anchor=], [spin=], [orient=]) [ATTACHMENTS];
+// Usage: As Function (BOSL2 extension)
+//   vnf = cylinder(h, r=/d=, ...);
+//   vnf = cylinder(h, r1/d1=, r2/d2=, ...);
+// Description:
+//   Creates a 3D cylinder or conic object.
+//   This modules extends the built-in `cylinder()` module by adding support for attachment and by adding a function version.   
+//   When called as a function, returns a [VNF](vnf.scad) for a cylinder.  
+// Arguments:
+//   h = The height of the cylinder.
+//   r1 = The bottom radius of the cylinder.  (Before orientation.)
+//   r2 = The top radius of the cylinder.  (Before orientation.)
+//   center = If given, overrides `anchor`.  A true value sets `anchor=CENTER`, false sets `anchor=BOTTOM`.  Default: false
+//   ---
+//   d1 = The bottom diameter of the cylinder.  (Before orientation.)
+//   d2 = The top diameter of the cylinder.  (Before orientation.)
+//   r = The radius of the cylinder.
+//   d = The diameter of the cylinder.
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+// Example: By Radius
+//   xdistribute(30) {
+//       cylinder(h=40, r=10);
+//       cylinder(h=40, r1=10, r2=5);
+//   }
+// Example: By Diameter
+//   xdistribute(30) {
+//       cylinder(h=40, d=25);
+//       cylinder(h=40, d1=25, d2=10);
+//   }
+// Example(Med): Anchoring
+//   cylinder(h=40, r1=10, r2=5, anchor=BOTTOM+FRONT);
+// Example(Med): Spin
+//   cylinder(h=40, r1=10, r2=5, anchor=BOTTOM+FRONT, spin=45);
+// Example(Med): Orient
+//   cylinder(h=40, r1=10, r2=5, anchor=BOTTOM+FRONT, spin=45, orient=FWD);
+// Example(Big): Standard Connectors
+//   xdistribute(40) {
+//       cylinder(h=30, d=25) show_anchors();
+//       cylinder(h=30, d1=25, d2=10) show_anchors();
+//   }

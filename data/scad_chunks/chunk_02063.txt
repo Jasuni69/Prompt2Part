@@ -1,0 +1,19 @@
+module printed_pulley_assembly(type, colour = pp1_colour) //! Draw a printed pulley with its grub screws in place
+assembly(str("printed_pulley_", type[0]), ngb = true) {
+    translate_z(pulley_offset(type)) {
+        stl_colour(colour)
+            if(printed_pulley_inverted(type))
+                translate_z(pulley_height(type))
+                    hflip()
+                        printed_pulley(type);
+            else
+                printed_pulley(type);
+
+        if(pulley_screws(type))
+            translate_z(pulley_screw_z(type))
+                for(i = [0 : pulley_screws(type) - 1])
+                    rotate([-90, 0, i * -90])
+                        translate_z(pulley_bore(type) / 2 + pulley_screw_length(type))
+                            screw(pulley_screw(type), pulley_screw_length(type));
+    }
+}

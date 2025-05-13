@@ -1,0 +1,15 @@
+module aluProBasicSection(profileType) {
+	difference() {
+		union() {
+			aluProCore(profileType[1]);
+			
+			for (i=[0:3]) rotate([0,0,i*90]) {
+				aluProCorner(profileType[2]);
+
+				if (profileType[4][i] == 1)
+					aluProSide(profileType[3]);
+			}
+		}
+		aluProBore(profileType[0]);
+	}
+}

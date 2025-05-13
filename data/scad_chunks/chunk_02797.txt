@@ -1,0 +1,29 @@
+function IntersectionPoints(Center1,Radius1,Center2,Radius2) =
+  let(d  = Center2 - Center1,
+      l  = norm(d),
+      t1 = (Radius1*Radius1 - Radius2*Radius2 + l*l)/(2*l),
+      t2 = Radius1*Radius1,
+      t3 = t1*t1,
+      ta = t2 > t3 ? sqrt(t2-t3) : 0,
+      tb = t2 > t3 ? t1 : -Radius1,
+      k1 = tb*d/l + Center1,
+      k2 = ta*d/l)
+  [[k1.x - k2.y, k1.y + k2.x],
+   [k1.x + k2.y, k1.y - k2.x]];
+
+
+// TouchPoint
+// ----------
+// This function calculates the point
+// where two circles touch.
+// Because of the calculation and rounding 
+// differences, it is hard to tell if the
+// circles really touch. Therefor the average
+// location is returned.
+// Parameters: Two circles, defined by
+//   their center point and radius.
+// Return: A single point in 2D
+// Limits:
+//   If the circles are the same, then
+//   the center point of the circles 
+//   is returned.

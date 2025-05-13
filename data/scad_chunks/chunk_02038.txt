@@ -1,0 +1,7 @@
+module door_hinge_hole_positions(dir = 0) {                 //! Position children at the door hole positions
+    hole_pitch = width - 10;
+
+    for(side = [-1, 1])
+        translate([width / 2 + side * hole_pitch / 2, -dir * width / 2 -side * hole_pitch / 2])
+            children();
+}

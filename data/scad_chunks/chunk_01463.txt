@@ -1,0 +1,1 @@
+function carriage_size(type)         = [ carriage_length(type), carriage_width(type), carriage_height(type) ]; //! Size of carriage

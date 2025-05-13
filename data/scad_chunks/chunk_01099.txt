@@ -1,0 +1,1 @@
+function square_button_cap_flange_d(type) = type[8];  //! Diameter of the flange of the cap

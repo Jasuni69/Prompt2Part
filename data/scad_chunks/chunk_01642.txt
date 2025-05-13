@@ -1,0 +1,2 @@
+function faston_insul_stop(type) = //! Position where insulation stops
+   faston_wire_crimp_p(type).z + faston_wire_crimp_l(type);

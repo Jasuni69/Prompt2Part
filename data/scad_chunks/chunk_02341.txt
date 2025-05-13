@@ -1,0 +1,3 @@
+function fixing_block_depth(screw = def_screw) = //! Depth given screw size
+    let(insert = screw_insert(screw))
+        max(insert_length(insert) + wall, insert_outer_d(insert) + 2 * wall);

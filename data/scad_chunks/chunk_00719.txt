@@ -1,0 +1,7 @@
+function belt_pulley_pr(type, pulley, twisted=false) = //! Pitch radius. Default it expects the belt tooth to be against a toothed pulley an the backside to be against a smooth pulley (an idler). If `twisted` is true, the the belt is the other way around.
+    let(
+        thickness = belt_thickness(type),
+        ph = belt_pitch_height(type)
+    ) pulley_teeth(pulley)
+        ? pulley_pr(pulley) + (twisted ? thickness - ph : 0 )
+        : pulley_ir(pulley) + (twisted ? ph : thickness - ph );

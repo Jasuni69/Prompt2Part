@@ -1,0 +1,35 @@
+module assert_equal(got, expected, info) {
+    no_children($children);
+    if (got != expected || (is_nan(got) && is_nan(expected))) {
+        echo();
+        echo(str("EXPECT: ", _valstr(expected)));
+        echo(str("GOT   : ", _valstr(got)));
+        if (same_shape(got, expected)) {
+            echo(str("DELTA : ", _valstr(got - expected)));
+        }
+        if (is_def(info)) {
+            echo(str("INFO  : ", _valstr(info)));
+        }
+        assert(got == expected);
+    }
+}
+
+
+// Module: shape_compare()
+// Synopsis: Compares two child shapes.
+// SynTags: Geom
+// Topics: Error Checking, Debugging, Testing
+// See Also: assert_approx(), assert_equal()
+// Usage:
+//   shape_compare([eps]) {TEST_SHAPE; EXPECTED_SHAPE;}
+// Description:
+//   Compares two child shapes, returning empty geometry if they are very nearly the same shape and size.
+//   Returns the differential geometry if they are not quite the same shape and size.
+// Arguments:
+//   eps = The surface of the two shapes must be within this size of each other.  Default: 1/1024
+// Example:
+//   $fn=36;
+//   shape_compare() {
+//       sphere(d=100);
+//       rotate_extrude() right_half(planar=true) circle(d=100);
+//   }

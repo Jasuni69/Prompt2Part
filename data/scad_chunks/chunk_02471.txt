@@ -1,0 +1,9 @@
+module fillet(r, h, center = false) //! Fillet with specified radius and height
+    extrude_if(h, center = center)
+        difference() {
+            translate([-eps, -eps, 0])
+                square(r + eps);
+
+            translate([r, r])
+                circle(r + eps);
+        }

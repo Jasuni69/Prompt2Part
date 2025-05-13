@@ -1,0 +1,4 @@
+function HexDriveAcrossCorners(diameter) =
+  HexDriveAcrossFlats(diameter) / cos(30);
+
+// Provides metric countersunk hex (Allen) drive widths across the flats.

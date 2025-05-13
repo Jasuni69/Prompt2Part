@@ -1,0 +1,36 @@
+module motor_faceplate(type) { //! Draw specified motor faceplate
+    w = faceplate_width(type);
+    t = faceplate_thickness(type);
+    boss = faceplate_boss_size(type);
+    boss_r = boss[0] / 2;
+    boss_ir = boss[1] / 2;
+    boss_t = boss.z;
+    rad = 5; // corner radius
+
+    translate_z(-t) {
+        color(silver)
+            linear_extrude(t)
+                difference() {
+                    rounded_square([w - eps, w - eps], rad);
+
+                    faceplate_screw_positions(type)
+                        circle(d = faceplate_hole_dia(type));
+                }
+
+        color(grey(10))
+            translate_z(eps)
+                linear_extrude(t - 2 * eps)
+                    difference() {
+                        rounded_square([w, w], rad);
+
+                        faceplate_screw_positions(type)
+                            circle(d = faceplate_hole_dia(type) + eps);
+                    }
+    }
+
+    color(grey(10))
+        tube(h = boss_t, or = boss_r - eps, ir = boss_ir + eps, center = false);
+
+    color(silver)
+        tube(h = boss_t - eps, or = boss_r, ir = boss_ir, center = false);
+}

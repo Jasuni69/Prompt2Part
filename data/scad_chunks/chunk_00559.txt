@@ -1,0 +1,8 @@
+module ttrack_place_insert(type, pos, insert = undef) { //! Place a T-Insert relative to the centre of the track
+    insert = is_undef(insert) ? ttrack_fixture(type) : insert;
+    TT = t_insert_top_thickness(insert);
+    T = ttrack_top_thickness(type);
+    translate([0,pos,-T+TT])
+        rotate([0,0,90])
+            children();
+}

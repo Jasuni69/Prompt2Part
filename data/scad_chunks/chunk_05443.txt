@@ -1,0 +1,42 @@
+function desc_point(desc, p, anchor) =
+    is_undef(desc) ?
+       assert(is_undef(anchor), "Cannot give anchor withot desc")
+       let(
+            T = matrix_inverse($transform)
+       )
+       apply(T, default(p,UP))
+  : assert(is_description(desc), "Invalid description")
+    assert(num_defined([anchor,p])<2, "Cannot give both anchor and p")
+    let (
+         T = linear_solve($transform, desc[0]),
+         p = is_def(p) ? p
+           :  let(anch = _find_anchor(anchor, desc[1]))
+              anch[1]
+    )
+    apply(T, p);
+
+
+// Function: desc_dir()
+// Synopsis: Computes the direction in the current context of a direction or anchor in a description's context
+// Topics: Descriptions, Attachment
+// See Also: parent(), desc_point()
+// Usage:
+//   dir = desc_anchor(desc,[dir], [anchor]);
+// Description:
+//   Computes the direction in the current context of a direction in the context of the description.  You can specify
+//   the direction by giving a direction vector, or you can give an anchor that will be interpreted from the description.
+//   If you don't give a description then the direction is computed relative to global world coordinates; in this case you
+//   cannot give an anchor as the direction.  
+// Arguments:
+//   desc = Description to use.  Default: use the global world coordinate system
+//   dir = Direction or list of directions to use.  Default: UP (if anchor is not given)
+//   ---
+//   anchor = Anchor (only one) to get the direction from.
+// Example(3D): Here we don't give a description so the reference is to the global world coordinate system, and we don't give a direction, so the default of UP applies.  This lets the cylinder be placed so it is horizontal in world coordinates.  
+//   prismoid(20,10,h=15)
+//     attach(RIGHT,BOT) cuboid([4,4,15])
+//     position(TOP) cyl(d=12,h=5,orient=desc_dir(),anchor=BACK);
+// Example(3D,VPR=[78.1,0,76.1]): Here we use the description of the prismoid, which lets us place the rod so that it is oriented in the direction of the prismoid's face. 
+//   prismoid(20,10,h=15) let(pris=parent())
+//      attach(RIGHT,BOT) cuboid([4,4,15])
+//      position(TOP) cyl(d=2,h=15,orient=desc_dir(pris,anchor=FWD),anchor=LEFT);

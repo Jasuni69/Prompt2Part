@@ -1,0 +1,1 @@
+function box_grill_hole_r() = grill_hole / 2;

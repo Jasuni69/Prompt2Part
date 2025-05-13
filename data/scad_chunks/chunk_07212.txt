@@ -1,0 +1,8 @@
+function v3(v)= [
+is_num(v.x)?v.x:is_num(v)?v:0,
+is_num(v.y)?v.y:0,
+is_num(v.z)?v.z:0,
+ ];
+
+
+/* org

@@ -1,0 +1,3 @@
+function choose(choices, seed) =
+    let(c = is_undef(seed) ? rands(0, len(choices) - 1, 1) : rands(0, len(choices) - 1, 1, seed)) 
+    choices[round(c[0])];

@@ -1,0 +1,6 @@
+module main_cylinder(height=10, diameter=3,center=false) {
+    cylinder(h=height, d=diameter, $fn=facetCount, center=center);
+}
+
+// Funkcia na výpočet priemeru výrezového valca
+// Function to calculate the diameter of the cutout cylinder

@@ -1,0 +1,9 @@
+module grill(width, height, r = 1000, poly = false, h = 0) { //! A staggered array of 5mm holes to make grills in sheets. Can be constrained to be circular. Set `poly` `true` for printing, `false` for milling.
+    extrude_if(h)
+        if(poly)
+            grill_hole_positions(width, height, r)
+                poly_circle(r = grill_hole / 2);
+        else
+            grill_hole_positions(width, height, r)
+                circle(d = grill_hole);
+}

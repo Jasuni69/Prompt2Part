@@ -1,0 +1,28 @@
+function diametral_pitch(circ_pitch, mod, pitch, diam_pitch) =
+    let( circ_pitch = circular_pitch(pitch, mod, circ_pitch, diam_pitch) )
+    PI / circ_pitch / INCH;
+
+
+// Function: module_value()
+// Synopsis: Returns tooth density expressed as "module"
+// Topics: Gears, Parts
+// See Also: spur_gear(), diametral_pitch(), circular_pitch(), module_value()
+// Usage:
+//   mod = module_value(circ_pitch);
+//   mod = module_value(mod=);
+//   mod = module_value(diam_pitch=);
+// Description:
+//   Get tooth size expressed as "module".  The module is the pitch
+//   diameter of the gear divided by the number of teeth on the gear.  For example, a gear with a pitch
+//   diameter of 40 mm, with 20 teeth on it will have a modulus of 2 mm.  For circ_pitch and mod this
+//   calculation does not depend on untis.  If you give diametral pitch, which is based on inputs, then
+//   the module is returned in millimeters.  
+// Arguments:
+//   circ_pitch = The circular pitch, the distance between teeth centers around the pitch circle.
+//   ---
+//   mod = The module of the gear (pitch diameter / teeth)
+//   diam_pitch = The diametral pitch, or number of teeth per inch of pitch diameter.  The diametral pitch is a completely different thing than the pitch diameter.
+// Example:
+//   mod1 = module_value(circ_pitch=8);
+//   mod2 = module_value(mod=2);
+//   mod3 = module_value(diam_pitch=16);

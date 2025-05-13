@@ -1,0 +1,9 @@
+module fastened_insert_foot_assembly(t = 3, type = insert_foot) { //! Assembly with fasteners in place for specified sheet thickness
+    screw = foot_screw(type);
+    screw_length = screw_length(screw, t, 2, insert = true);
+
+    explode(-10) insert_foot_assembly(type);
+
+    translate_z(t)
+        screw_and_washer(screw, screw_length, true);
+}

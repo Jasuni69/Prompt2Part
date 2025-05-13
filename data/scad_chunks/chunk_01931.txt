@@ -1,0 +1,9 @@
+module box_corner_quadrants(type, width, depth)
+    for(corner = [0:3]) {
+        x = [-1,1,1,-1][corner];
+        y = [-1,-1,1,1][corner];
+
+        translate([x * width / 2, y * depth / 2, 0])
+            rotate(corner * 90)
+                quadrant(box_intrusion(type), box_boss_r(type));
+    }

@@ -1,0 +1,40 @@
+function sampling_trySampleFromOneActive(s, seed) =
+    let(
+        active = sampling_active(s),
+        i = floor(rands(0, len(active) - 1, 1, seed)[0]),
+        pos = active[i],
+        samples = sampling_kSamples(s, pos, seed)
+    )
+    len(samples) == 0 ? 
+        [
+            sampling_r(s), 
+            sampling_k(s), 
+            sampling_w(s), 
+            [for(j = [0:len(active) - 1]) if(j != i) active[j]], 
+            sampling_grid(s), 
+            sampling_layers(s), 
+            sampling_rows(s), 
+            sampling_columns(s),
+            sampling_history(s)
+        ]
+        :
+        let(
+            sample = sampling_minDistSample(s, pos, samples),
+            nx_active = [each active, sample],
+            w = sampling_w(s),
+            x = floor(sample.x / w),
+            y = floor(sample.y / w),
+            z = floor(sample.z / w),
+            nx_grid = grid_replace(sampling_grid(s), x, y, z, sample)
+        )
+        [
+            sampling_r(s), 
+            sampling_k(s), 
+            w, 
+            nx_active, 
+            nx_grid, 
+            sampling_layers(s), 
+            sampling_rows(s), 
+            sampling_columns(s),
+            [each sampling_history(s), [pos, sample]]
+        ];

@@ -1,0 +1,1 @@
+function _set_point(turtle, point) = [point, _get_angle(turtle)];

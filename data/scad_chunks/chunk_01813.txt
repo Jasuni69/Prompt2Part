@@ -1,0 +1,1 @@
+function battery_led_positions(type) = type[8]; //! LED positions for Lumintop

@@ -1,0 +1,1 @@
+function mains_socket_depth(type)       = type[2];   //! Depth at the base

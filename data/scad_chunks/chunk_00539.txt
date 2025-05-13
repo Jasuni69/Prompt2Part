@@ -1,0 +1,1 @@
+function ttrack_top_thickness(type) = type[6];   //! Thickness of the top layer

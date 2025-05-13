@@ -1,0 +1,22 @@
+function binomial(n) =
+    assert( is_int(n) && n>0, "\nInput must be an integer greater than 0.")
+    [for( c = 1, i = 0; 
+        i<=n; 
+         c = c*(n-i)/(i+1), i = i+1
+        ) c ] ;
+
+
+// Function: binomial_coefficient()
+// Synopsis: Returns the `k`-th binomial coefficient of the integer `n`.
+// Topics: Math
+// See Also: hypot(), sqr(), log2(), factorial()
+// Usage:
+//   x = binomial_coefficient(n, k);
+// Description:
+//   Returns the `k`-th binomial coefficient of the integer `n`.
+// Arguments:
+//   n = The integer to get the binomial coefficient of
+//   k = The binomial coefficient index
+// Example:
+//   x = binomial_coefficient(3,2);  // Returns: 3
+//   y = binomial_coefficient(10,6); // Returns: 210

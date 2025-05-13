@@ -1,0 +1,7 @@
+function _chamfcorner(points, parm) =
+        let(
+                d = parm[0],
+                prev = unit(points[0]-points[1]),
+                next = unit(points[2]-points[1])
+          )
+       [points[1]+prev*d, points[1]+next*d];

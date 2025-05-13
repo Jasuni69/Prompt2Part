@@ -1,0 +1,1 @@
+function _case13_isolines(cell_pts, threshold) = _case2_isolines(cell_pts, threshold);

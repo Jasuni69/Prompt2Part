@@ -1,0 +1,35 @@
+module gridfinity_bin(type) { //! Create a gridfinity bin, bits to cut out are passed as a child
+    size = gridfinity_bin_size(type);
+    w1 = width - 2 * (lower_chamfer + upper_chamfer);
+    w2 = width - 2 * upper_chamfer;
+
+    stl(gridfinity_bin_name(type)) {
+        translate([-(size.x - 1) / 2 * pitch, -(size.y - 1) / 2 * pitch])
+            for(x = [0 : size.x - 1], y = [0 : size.y - 1])
+                translate([x * pitch, y * pitch]) {
+                    hull() {
+                        rounded_rectangle([w1, w1, eps], chamfer_r);
+
+                        translate_z(lower_chamfer)
+                            rounded_rectangle([w2, w2, foot_h + eps], foot_r);
+                    }
+
+                    hull() {
+                        translate_z(lower_chamfer + foot_h)
+                            rounded_rectangle([w2, w2, foot_h + eps], foot_r);
+
+                        translate_z(lower_chamfer + foot_h + upper_chamfer)
+                            rounded_rectangle([width, width, eps], corner_r);
+                    }
+                }
+
+        difference() {
+            base_z = gridfinity_base_z();
+            translate_z(base_z)
+                rounded_rectangle([(size.x - 1) * pitch + width, (size.y - 1) * pitch + width, size.z * z_step - base_z], corner_r);
+
+            if($children)
+                children(0);
+        }
+    }
+}

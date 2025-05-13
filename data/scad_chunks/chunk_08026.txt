@@ -1,0 +1,8 @@
+function penrose_snowflake(n = 3, angle = 18, leng = 1, heading = 0, start = [0, 0]) = 
+    let(
+        axiom = "F----F----F----F----F",
+        rules = [
+            ["F", "F----F----F----------F++F----F"]
+        ]
+    )
+    lsystem2(axiom, rules, n, angle, leng, heading, start);

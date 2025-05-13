@@ -1,0 +1,17 @@
+module aluProCore(coreType) {
+	w = aluProCore_w(coreType);
+	keyW = aluProCore_keyW(coreType);
+	keyD = aluProCore_keyD(coreType);
+
+	difference() {
+		square([w,w],center=true);
+
+		// remove keys
+		for (i=[0:3]) 
+			rotate([0,0,i*90])
+			translate([w/2,0,0])
+			polygon([[eta,keyW/2], 
+                      [-keyD,0], 
+                      [eta,-keyW/2]]); 
+	}
+}

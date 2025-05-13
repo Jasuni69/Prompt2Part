@@ -1,0 +1,13 @@
+function _sphere_line_isect_best(R, line, ref) =
+   let(
+        pts = sphere_line_intersection(abs(R), [0,0,0], line=line)
+   )
+   len(pts)<2 ? [] :
+   let(  
+        dist = [for(pt=pts) ref*pt]
+   )
+   dist[0]>dist[1] ? pts[0] : pts[1];
+
+// First input is all the pairs of the polygon, e.g. pair(poly,wrap=true)
+// Unlike the others this returns [point, ind, u], where point is the actual intersection
+// point, ind ind and u are the segment index and u value.  Prism is z-aligned.

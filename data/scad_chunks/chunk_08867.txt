@@ -1,0 +1,2 @@
+function _penrose3(triangles, n, i = 0) = 
+	i == n ? triangles : _penrose3(_subdivide(triangles), n, i+ 1);

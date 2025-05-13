@@ -1,0 +1,1 @@
+function vero_width(type) = vero_strips(type) * vero_pitch(type); //! Width of the board

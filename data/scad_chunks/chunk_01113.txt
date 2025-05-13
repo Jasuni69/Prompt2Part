@@ -1,0 +1,1 @@
+function rocker_depth(type)    = type[9];   //! Body depth

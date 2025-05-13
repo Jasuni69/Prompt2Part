@@ -1,0 +1,3 @@
+function revList(list)=//reverse list
+  let(Llist=len(list)-1)
+  [for(i=[0:Llist]) list[Llist-i]];

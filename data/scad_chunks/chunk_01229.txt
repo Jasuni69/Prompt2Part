@@ -1,0 +1,1 @@
+function vero_track_width(type)    = vero_pitch(type) * 0.8; //! The width of the tracks

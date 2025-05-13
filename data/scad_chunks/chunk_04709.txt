@@ -1,0 +1,3 @@
+function is_vec(a) = version_num()<20190500 ?
+  (len(a) ? true : false) :
+  is_list(a);

@@ -1,0 +1,16 @@
+function matrix4_skew_yz(ya, za) = [
+	[      1, 0, 0, 0],
+	[tan(ya), 1, 0, 0],
+	[tan(za), 0, 1, 0],
+	[      0, 0, 0, 1]
+];
+
+
+// Function: matrix3_mult()
+// Usage:
+//   matrix3_mult(matrices)
+// Description:
+//   Returns a 3x3 transformation matrix which results from applying each matrix in `matrices` in order.
+// Arguments:
+//   matrices = A list of 3x3 matrices.
+//   m = Optional starting matrix to apply everything to.

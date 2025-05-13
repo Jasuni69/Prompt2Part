@@ -1,0 +1,3 @@
+function _rotate2d(a, points) =
+  let(cosa = cos(a), sina = sin(a))
+  [for (p = points) [p.x * cosa - p.y * sina,p.x * sina + p.y * cosa]];

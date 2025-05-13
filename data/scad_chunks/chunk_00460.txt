@@ -1,0 +1,1 @@
+function extrusion_center_square_wd(type)       = type[5];  //! Size of center square if +ve or tube diameter if -ve

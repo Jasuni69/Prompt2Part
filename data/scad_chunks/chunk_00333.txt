@@ -1,0 +1,1 @@
+function mains_socket_top_w(type)       = type[3];   //! Width at the top, might be tapered

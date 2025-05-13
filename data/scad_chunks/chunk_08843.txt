@@ -1,0 +1,23 @@
+function reduce_tris(indices_tris, dist) = 
+    let(
+        m = edge_tri(indices_tris, hashmap(number_of_buckets = len(indices_tris) / 4)),  
+        entries = hashmap_entries(m), 
+        edges = [
+            for(entry = entries)  
+            if(len(entry[1]) == 1 && dist_gt(points[entry[0][0]], points[entry[0][1]], dist))
+            entry[0]
+        ],
+        reduce_tris = [
+            for(t_indices = indices_tris) 
+            let(
+                edge1 = edge(t_indices[0], t_indices[1]),
+                edge2 = edge(t_indices[1], t_indices[2]),
+                edge3 = edge(t_indices[2], t_indices[0])
+            )
+            if(
+                !has(edges, edge1) && !has(edges, edge2) && !has(edges, edge3)
+            )
+            t_indices
+        ]
+    )
+    len(indices_tris) > len(reduce_tris) ? reduce_tris(reduce_tris, dist) : reduce_tris;

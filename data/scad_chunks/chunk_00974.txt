@@ -1,0 +1,1 @@
+function hygrometer_or() = flange_d / 2; //! The outside radius of a hygrometer

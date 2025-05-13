@@ -1,0 +1,1 @@
+function addZcoord(points,displacement)=[for(i=[0:len(points)-1])[points[i].x,points[i].y, displacement]];

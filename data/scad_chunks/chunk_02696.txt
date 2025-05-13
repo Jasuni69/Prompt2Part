@@ -1,0 +1,3 @@
+module BOLTS_error(msg){
+	echo(str("BOLTS Error: ",msg));
+}

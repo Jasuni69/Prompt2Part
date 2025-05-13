@@ -1,0 +1,17 @@
+module Perspective(strength=0.0,y=0)
+{
+  a1 = strength*45;
+  a2 = max(a1,0);
+  a3 = min(a2,45);
+  angle = -a3;
+
+  if(strength==0 || y==0)
+    children();
+  else
+    projection(true)
+      rotate([angle,0,0])
+        linear_extrude(2*y,v=[0,1,1],scale=0,center=true)
+          children();
+}
+
+// ======================================================

@@ -1,0 +1,3 @@
+function PolarFunc2(r, a) = let(z = 23-sqrt(23*23-r*r)) (z < 2 ? 2 : z);
+
+// 3 -- A rose

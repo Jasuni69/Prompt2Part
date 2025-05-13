@@ -1,0 +1,3 @@
+function _chain_one_arg(cmd, arg) = 
+    cmd == "pt" ? _pt(arg) : 
+    cmd == "unit_vts" ? _unit_vts(arg) : undef;

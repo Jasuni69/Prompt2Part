@@ -1,0 +1,24 @@
+function _valstr(x) =
+    is_string(x)? str("\"",str_replace_char(x, "\"", "\\\""),"\"") :
+    is_list(x)? str("[",str_join([for (xx=x) _valstr(xx)],","),"]") :
+    is_num(x) && x==floor(x)? format_int(x) :
+    is_finite(x)? format_float(x,12) : x;
+
+
+// Module: assert_approx()
+// Synopsis: Assert that a value is approximately what was expected.
+// Topics: Error Checking, Debugging
+// See Also: no_children(), no_function(), no_module(), assert_equal()
+// Usage:
+//   assert_approx(got, expected, [info]);
+// Description:
+//   Tests if the value gotten is what was expected, plus or minus 1e-9.  If not, then
+//   the expected and received values are printed to the console and
+//   an assertion is thrown to stop execution.
+//   Returns false if both 'got' and 'expected' are 'nan'.
+// Arguments:
+//   got = The value actually received.
+//   expected = The value that was expected.
+//   info = Extra info to print out to make the error clearer.
+// Example:
+//   assert_approx(1/3, 0.333333333333333, str("number=",1,", denom=",3));

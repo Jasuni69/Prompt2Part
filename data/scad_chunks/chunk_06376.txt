@@ -1,0 +1,17 @@
+function plane_normal(plane) =
+    assert( _valid_plane(plane), "\nInvalid input plane." )
+    unit([plane.x, plane.y, plane.z]);
+
+
+// Function: plane_offset()
+// Synopsis: Returns the signed offset of the plane from the origin.  
+// Topics: Geometry, Planes
+// See Also: plane3pt(), plane3pt_indexed(), plane_from_normal(), plane_from_points(), plane_from_polygon(), plane_normal(), plane_offset()
+// Usage:
+//   d = plane_offset(plane);
+// Description:
+//   Returns coeficient D of the normalized plane equation `Ax+By+Cz=D`, or the scalar offset of the plane from the origin.
+//   This value may be negative.
+//   The absolute value of this coefficient is the distance of the plane from the origin.
+// Arguments:
+//   plane = The `[A,B,C,D]` plane definition where `Ax+By+Cz=D` is the formula of the plane.

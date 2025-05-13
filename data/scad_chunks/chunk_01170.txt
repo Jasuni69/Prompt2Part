@@ -1,0 +1,5 @@
+function BLDC_prop_shaft_thread_diameter(type)  = type[26]; //! Diameter of threaded section of prop shaft
+
+bldc_cap_colour  = grey(50);
+bldc_shaft_colour = grey(90);
+bldc_bearing_colour = grey(80);

@@ -1,0 +1,8 @@
+function __m_rotation_xRotation(a) = 
+    let(c = cos(a), s = sin(a))
+    [
+        [1, 0, 0, 0],
+        [0, c, -s, 0],
+        [0, s, c, 0],
+        FINAL_ROW
+    ];

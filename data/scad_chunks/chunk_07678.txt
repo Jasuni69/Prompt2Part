@@ -1,0 +1,12 @@
+module GewindeV2(dn=10,s,w=0,g=1,winkel=+60,rot2=0,r1=0,kern,fn=1,detail=fn,spiel=spiel,name,tz=0,preset=0,h=10,translate=[0,0,0],rotate=[0,0,0],d=0,gd=0,r=0,center=true,help,p=1.5,endMod=true){
+
+s=is_undef(s)?p:s;//Steigung
+p=s;    
+
+ r1=r1?r1:p/sin(winkel/2)/2-0.01;   //overlap preventing
+  rh=Kathete(r1,p/2);  //Gangtiefe
+       
+  
+spiel=rot2==0?spiel:0;                  // spiel only for symetrische 
+dn=$children?dn+spiel*2:dn;
+kern=!is_undef(kern)?kern:dn-2*rh+spiel;

@@ -1,0 +1,1 @@
+function psu_face_switch(type)       = type[6];     //! Rocker switch x,y, rotation and type

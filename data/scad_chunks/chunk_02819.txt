@@ -1,0 +1,55 @@
+module Dimples(xsize=100,ysize=100,density=100)
+{
+  // Guess the amount of dimples
+  number = xsize * ysize * density / 200;
+
+  // Makes lists with coordinates
+  // and lists with size and scaling.
+  coord_x = rands(-xsize/2,xsize/2,number);
+  coord_y = rands(-ysize/2,ysize/2,number);
+  scaling = rands(1,6,number);
+  size    = rands(0.1,0.8,number);
+
+  // Make the dimples.
+  // The "render" speeds up the usage.
+  render()
+  {
+    for(i=[0:number-1])
+      translate([coord_x[i],coord_y[i],0])
+        scale([scaling[i],scaling[i],1])
+          intersection()
+          {
+            sphere(size[i],$fn=7);
+            translate([-10,-10,0])
+              cube(20);
+          }
+  }
+}
+
+
+// ==============================================================
+//
+// Crease2D
+// --------
+// This module creates a 2D crease shape.
+// It it meant to be used with roof() to
+// make creases in a flat surface.
+//
+// The shape is centered around the middle (0,0).
+// When the angle variation is set to 50,
+// then the total size is about from -100 to +100.
+//
+// Parameters:
+//   pieces    
+//      The number of line pieces.
+//      Default 8, between 2 and 100 are good values.
+//   variation
+//      The angle for the maximum change in direction.
+//      Default 50, from 10 to 100 are good values.
+//   thickness
+//      The thickness of the line.
+//      Default 2, from 0.5 to 10 are useful values.
+//
+// Note: A previous version of Crease2D is in
+//       my "Brick With Text" 3D model, but that
+//       had a bug.

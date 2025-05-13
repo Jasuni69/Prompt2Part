@@ -1,0 +1,46 @@
+function worm_gear_thickness(
+    circ_pitch,
+    teeth,
+    worm_diam,
+    worm_arc=45,
+    pressure_angle=20,
+    crowning=0.1,
+    clearance,
+    diam_pitch,
+    mod,
+    pitch
+) = let(
+        circ_pitch = circular_pitch(pitch, mod, circ_pitch, diam_pitch),
+        thickness = worm_gear(
+            circ_pitch=circ_pitch,
+            teeth=teeth,
+            worm_diam=worm_diam,
+            worm_arc=worm_arc,
+            crowning=crowning,
+            pressure_angle=pressure_angle,
+            clearance=clearance,
+            get_thickness=true
+        )
+    ) thickness;
+
+
+// Function: worm_dist()
+// Synopsis: Returns the distance between a worm and a worm gear
+// Topics: Gears, Parts
+// See Also: worm(), worm_gear(), pitch_radius(), outer_radius()
+// Usage:
+//   dist = worm_dist(mod=|diam_pitch=|circ_pitch=, d, starts, teeth, [profile_shift], [pressure_angle=]);
+// Description:
+//   Calculate the distance between the centers of a worm and its mating worm gear, taking account
+//   possible profile shifting of the worm gear.
+// Arguments:
+//   d = diameter of worm
+//   starts = number of starts of worm
+//   teeth = number of teeth on worm gear
+//   profile_shift = profile shift of worm gear
+//   ---
+//   mod = The module of the gear (pitch diameter / teeth)
+//   diam_pitch = The diametral pitch, or number of teeth per inch of pitch diameter.  The diametral pitch is a completely different thing than the pitch diameter.
+//   circ_pitch = The circular pitch, the distance between teeth centers around the pitch circle.
+//   pressure_angle = The pressure angle of the gear.
+//   backlash = Add extra space to produce a total of 2*backlash between the two gears.

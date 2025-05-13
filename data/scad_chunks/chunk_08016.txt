@@ -1,0 +1,9 @@
+function sierpinski_arrowhead(n = 6, angle = 60, leng = 1, heading = 0, start = [0, 0]) = 
+    let(
+        axiom = "XF",
+        rules = [
+            ["X", "YF+XF+Y"],
+            ["Y", "XF-YF-X"]
+        ]
+    )
+    lsystem2(axiom, rules, n, angle, leng, heading, start);

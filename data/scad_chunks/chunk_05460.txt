@@ -1,0 +1,16 @@
+function EDGE(a,b) =
+    is_undef(b) ? str("edge",a)
+  : assert(in_list(a,[TOP,BOT,CTR,1,0,-1]),str("Invalid direction: ",a))
+    let(
+        choices=["bot_","","top_"],
+        ind=is_vector(a) ? a.z : a
+    )
+    str(choices[ind+1],"edge",b);
+
+// Function: FACE()
+// Synopsis: Named face anchor constants
+// Topics: Constants, Attachment
+// Usage:
+//   FACE(i)
+// Description:
+//   A shorthand for the named anchors "face0", "face1", etc.

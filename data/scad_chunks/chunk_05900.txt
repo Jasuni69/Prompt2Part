@@ -1,0 +1,16 @@
+function _sort_vectors(arr, idxlist, _i=0) =
+    len(arr)<=1 || ( is_list(idxlist) && _i>=len(idxlist) ) || _i>=len(arr[0])  ? arr :
+    let(
+        k = is_list(idxlist) ? idxlist[_i] : _i,
+        pivot   = arr[floor(len(arr)/2)][k],
+        lesser  = [ for (entry=arr) if (entry[k]  < pivot ) entry ],
+        equal   = [ for (entry=arr) if (entry[k] == pivot ) entry ],
+        greater = [ for (entry=arr) if (entry[k]  > pivot ) entry ]
+      )
+    concat(
+        _sort_vectors(lesser,  idxlist, _i  ), 
+        _sort_vectors(equal,   idxlist, _i+1), 
+        _sort_vectors(greater, idxlist, _i  ) );
+        
+ 
+// sorting using compare_vals(); returns indexed list when `indexed==true`

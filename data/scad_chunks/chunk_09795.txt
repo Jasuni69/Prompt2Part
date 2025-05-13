@@ -1,0 +1,66 @@
+module rot_copies(rots=[], v=undef, cp=[0,0,0], count=undef, n=undef, sa=0, offset=0, delta=[0,0,0], subrot=true)
+{
+	cnt = first_defined([count, n]);
+	sang = sa + offset;
+	angs = is_def(cnt)? (cnt<=0? [] : [for (i=[0:cnt-1]) i/cnt*360+sang]) : rots;
+	if (cp != [0,0,0]) {
+		translate(cp) rot_copies(rots=rots, v=v, n=cnt, sa=sang, delta=delta, subrot=subrot) children();
+	} else if (subrot) {
+		for ($idx = [0:len(angs)-1]) {
+			$ang = angs[$idx];
+			rotate(a=$ang,v=v) translate(delta) rot(a=sang,v=v,reverse=true) children();
+		}
+	} else {
+		for ($idx = [0:len(angs)-1]) {
+			$ang = angs[$idx];
+			rotate(a=$ang,v=v) translate(delta) rot(a=$ang,v=v,reverse=true) children();
+		}
+	}
+}
+
+
+// Module: xrot_copies()
+//
+// Description:
+//   Given an array of angles, rotates copies of the children
+//   to each of those angles around the X axis.
+//
+// Usage:
+//   xrot_copies(rots, [r], [cp], [sa], [subrot]) ...
+//   xrot_copies(n, [r], [cp], [sa], [subrot]) ...
+//
+// Arguments:
+//   rots = Optional array of rotation angles, in degrees, to make copies at.
+//   cp = Centerpoint to rotate around.
+//   n = Optional number of evenly distributed copies to be rotated around the ring.  If given, overrides `rots` argument.
+//   sa = Starting angle, in degrees.  For use with `n`.  Angle is in degrees counter-clockwise from Y+, when facing the origin from X+.  First unrotated copy is placed at that angle.
+//   r = Radius to move children back, away from cp, before rotating.  Makes rings of copies.
+//   subrot = If false, don't sub-rotate children as they are copied around the ring.
+//
+// Side Effects:
+//   `$ang` is set to the rotation angle of each child copy, and can be used to modify each child individually.
+//
+// Example:
+//   xrot_copies([180, 270, 315])
+//       cylinder(h=20, r1=5, r2=0);
+//   color("red",0.333) cylinder(h=20, r1=5, r2=0);
+//
+// Example:
+//   xrot_copies(n=6)
+//       cylinder(h=20, r1=5, r2=0);
+//   color("red",0.333) cylinder(h=20, r1=5, r2=0);
+//
+// Example:
+//   xrot_copies(n=6, r=10)
+//       xrot(-90) cylinder(h=20, r1=5, r2=0);
+//   color("red",0.333) xrot(-90) cylinder(h=20, r1=5, r2=0);
+//
+// Example:
+//   xrot_copies(n=6, r=10, sa=45)
+//       xrot(-90) cylinder(h=20, r1=5, r2=0);
+//   color("red",0.333) xrot(-90) cylinder(h=20, r1=5, r2=0);
+//
+// Example:
+//   xrot_copies(n=6, r=20, subrot=false)
+//       xrot(-90) cylinder(h=20, r1=5, r2=0, center=true);
+//   color("red",0.333) xrot(-90) cylinder(h=20, r1=5, r2=0, center=true);

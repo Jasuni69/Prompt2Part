@@ -1,0 +1,15 @@
+function pickColorWithOpacity(shells=	$shellPartsForAutoColor
+ 										,details=$detailPartsForAutoColor
+ 							,part=$currentBody) =
+		let(foundShell=findInList(split(is_undef(shells)?"":shells,","),part)
+			 ,foundDetail=findInList(split(is_undef(details)?"":details,","),part)
+			 ,ind=	(len(foundShell)>0)
+							?[foundShell[0]*2,.4]
+							:(len(foundDetail)>0
+									?([foundDetail[0]*2+1,1])
+											:[0,.4])
+			)[$colorNames[ind[0]],ind[1]];
+			
+
+
+//picks onec olor for shells (even index)

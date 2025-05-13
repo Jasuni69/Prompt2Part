@@ -1,0 +1,1 @@
+function NEMA_thread_d(type)     = type[11]; //! Screw hole diameter

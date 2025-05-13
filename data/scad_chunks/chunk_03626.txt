@@ -1,0 +1,10 @@
+module pressNutM4(marginUp=margin(0),marginDown=margin(0))
+{
+  opaq(grey)
+  g(align(XCENTER,YCENTER)
+    ,Z(margin(0,-marginUp-marginDown)))
+  stack()
+    tubeFast(dOuter=margin(15-4.4*0),h =margin(.7,marginUp+marginDown))
+    tubeFast(dOuter=margin(5.1),h = margin(6,marginUp)-.7
+                    + marginUp);
+}

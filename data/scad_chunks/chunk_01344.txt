@@ -1,0 +1,1 @@
+function al_clad_thickness(type)   = type[6];   //! Tab thickness

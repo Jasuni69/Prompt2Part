@@ -1,0 +1,7 @@
+module test_f_1arg() {
+    assert_equal(str(f_1arg(function (x) x)), "function(a) ((a == undef) ? function(x) target_func(x) : function() target_func(a))");
+    assert_equal(str(f_1arg(function (x) x)(3)), "function() target_func(a)");
+    assert_equal(f_1arg(function (x) x)()(4), 4);
+    assert_equal(f_1arg(function (x) x)(3)(), 3);
+}
+test_f_1arg();

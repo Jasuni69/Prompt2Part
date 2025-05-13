@@ -1,0 +1,30 @@
+function path_tangents(path, closed, uniform=true) =
+    is_1region(path) ? path_tangents(path[0], default(closed,true), uniform) :
+    let(closed=default(closed,false))
+    assert(is_bool(closed))
+    assert(is_path(path))
+    !uniform ? [for(t=deriv(path,closed=closed, h=path_segment_lengths(path,closed))) unit(t)]
+             : [for(t=deriv(path,closed=closed)) unit(t)];
+
+
+// Function: path_normals()
+// Synopsis: Returns normal vectors for each point along a path.
+// Topics: Paths
+// See Also: path_tangents()
+// Usage:
+//   norms = path_normals(path, [tangents], [closed]);
+// Description:
+//   Compute the normal vector to the input {{path}}.  This vector is perpendicular to the
+//   path tangent and lies in the plane of the curve.  For 3d paths we define the plane of the curve
+//   at path {{point}} i to be the plane defined by point i and its two neighbors.  At the endpoints of open paths
+//   we use the three end points.  For 3d paths the computed normal is the one lying in this plane that points
+//   towards the center of curvature at that path point.  For 2D paths, which lie in the xy plane, the normal
+//   is the path pointing to the right of the direction the path is traveling.  If points are collinear then
+//   a 3d path has no center of curvature, and hence the 
+//   normal is not uniquely defined.  In this case the function issues an error.
+//   For 2D paths the plane is always defined so the normal fails to exist only
+//   when the derivative is zero (in the case of repeated points).
+// Arguments:
+//   path = 2D or 3D path or a 1-region
+//   tangents = path tangents optionally supplied
+//   closed = if true path is treated as a polygon.  Default: false

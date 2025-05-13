@@ -1,0 +1,20 @@
+module test__is_corner_array() {
+    edges = _edges([TOP,FRONT+RIGHT]);
+    corners = _corners([TOP,FRONT+RIGHT]);
+    assert(!_is_corner_array(undef));
+    assert(!_is_corner_array(true));
+    assert(!_is_corner_array(false));
+    assert(!_is_corner_array(INF));
+    assert(!_is_corner_array(-INF));
+    assert(!_is_corner_array(NAN));
+    assert(!_is_corner_array(-4));
+    assert(!_is_corner_array(0));
+    assert(!_is_corner_array(4));
+    assert(!_is_corner_array("foo"));
+    assert(!_is_corner_array([]));
+    assert(!_is_corner_array([4,5,6]));
+    assert(!_is_corner_array([2:3:9]));
+    assert(!_is_corner_array(edges));
+    assert(_is_corner_array(corners));
+}
+test__is_corner_array();

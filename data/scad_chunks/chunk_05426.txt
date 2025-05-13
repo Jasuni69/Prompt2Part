@@ -1,0 +1,66 @@
+module _show_edges(edges="ALL", size=20, text, txtsize=3,toplabel) {
+    edge_set = _edges(edges);
+    text = !is_undef(text) ? text : _edges_text(edges);
+    color("red") {
+        for (axis=[0:2], i=[0:3]) {
+            if (edge_set[axis][i] > 0) {
+                translate(EDGE_OFFSETS[axis][i]*size/2) {
+                    if (axis==0) xcyl(h=size, d=2);
+                    if (axis==1) ycyl(h=size, d=2);
+                    if (axis==2) zcyl(h=size, d=2);
+                }
+            }
+        }
+    }
+    fwd(size/2) _edges_text3d(text, size=txtsize);
+    color("yellow",0.7) cuboid(size=size);
+    vpr = [55,0,25];
+    color("black")
+    if (is_def(toplabel))
+      for(h=idx(toplabel)) up(21+6*h)rot(vpr) text3d(select(toplabel,-h-1),size=3.3,h=0.1,orient=UP,anchor=FRONT);
+}
+
+
+
+
+/// Internal Constant: CORNERS_NONE
+/// Topics: Corners
+/// Description:
+///   The set of no corners.
+/// Figure(3D):
+///   _show_corners(corners="NONE");
+/// See Also: CORNERS_ALL, corners()
+CORNERS_NONE = [0,0,0,0,0,0,0,0];  // No corners.
+
+
+/// Internal Constant: CORNERS_ALL
+/// Topics: Corners
+/// Description:
+///   The set of all corners.
+/// Figure(3D):
+///   _show_corners(corners="ALL");
+/// See Also: CORNERS_NONE, _corners()
+CORNERS_ALL = [1,1,1,1,1,1,1,1];
+
+
+/// Internal Constant: CORNER_OFFSETS
+/// Topics: Corners
+/// Description:
+///   The vectors pointing to each corner of a unit sized cube.
+///   Each item in a corner array will have a corresponding vector in this array.
+/// See Also: CORNERS_NONE, CORNERS_ALL, _corners()
+CORNER_OFFSETS = [
+    [-1,-1,-1], [ 1,-1,-1], [-1, 1,-1], [ 1, 1,-1],
+    [-1,-1, 1], [ 1,-1, 1], [-1, 1, 1], [ 1, 1, 1]
+];
+
+
+
+
+/// Internal Function: _is_corner_array()
+/// Topics: Corners, Type Checking
+/// Usage:
+///   bool = _is_corner_array(x)
+/// Description:
+///   Returns true if the given value has the form of a corner array.
+/// See Also: CORNERS_NONE, CORNERS_ALL, _corners()

@@ -1,0 +1,11 @@
+function gradS(s,r)=r&&abs(s)>abs(2*r)&&(is_undef($idx)||!$idx)?echo("\t⭕ ‼ gradS s > diameter (2×r) max ❗")180*sign(s)*sign(r)
+    :abs(s)>abs(2*r)?180*sign(s)*sign(r)
+                    :asin(s/(2*r))*2;// winkel zur Sehne s des Kreisradiuses r
+
+/// radius of the circle that has chord s 
+/**
+\param s length of the chord
+\param n for a n-polygon
+\param a if you have the angle 
+*/
+// Radius  zur Sehne

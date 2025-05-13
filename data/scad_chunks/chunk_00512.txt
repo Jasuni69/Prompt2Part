@@ -1,0 +1,1 @@
+function washer_colour(type) = washer_soft(type) ? soft_washer_colour : hard_washer_colour; //! Washer colour

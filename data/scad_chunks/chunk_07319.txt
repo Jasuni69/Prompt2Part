@@ -1,0 +1,122 @@
+module Welle(e=3,grad=200,r=5,r2,center=3,rand=2,h=0,ext=0,end=false,fn,fs=fs,lap=0,name,help,overlap){
+    gradSUM=assert(grad)vSum(grad);
+    end=is_list(end)?end:[end,end];
+    e=round(e);
+    lap=is_undef(overlap)?lap:overlap; // compatibility
+    r2=is_undef(r2)?is_list(r)?r[1]:r
+                   :r2;
+    r=is_list(r)?r[0]:r;
+
+    $x=rand;    
+    grad1=(is_list(grad)?grad[0]:grad/2); //between S segments
+    grad2=(is_list(grad)?grad[1]:grad/2); //in S segment
+    
+    w=(gradSUM-180)/2;
+    y=sin(grad2)*r ; // shift r
+    y2=sin(grad2)*r2;// shift r2
+    yg1=sin(grad1)*r ; // shift r
+    y2g1=sin(grad1)*r2;// shift r2
+    
+    hORG=h;
+    Echo("h increased to min height",color="warning",condition=is_num(hORG)&&hORG>0&&(hORG/2<(1-cos(grad2))*r||hORG/2<(1-cos(grad2))*r2 ) );
+    
+    hList=is_list(h)?h:[max(h/2,(1-cos(grad2))*r),max(h/2,(1-cos(grad2))*r2)];
+    h=[hList[0]-(1-cos(grad2))*r , hList[1]-(1-cos(grad2))*r2 ];
+    Echo("h for 3D not implemeted",color="redring",condition=max(h)&&$children);
+    hi=[-cos(grad2)*r , -cos(grad2)*r2]+h;
+    
+    
+    Echo(str("h diff sum",h,"Σ=",vSum(h)," < 0"),color="redring",condition=vSum(h)<0);
+
+
+
+    //delta=(h[0]*tan(90-grad1)+h[1]*tan(90-grad2))*2;
+
+    delta2= vSum(h) *tan(90-grad2) ; // in S Segment
+    delta=y+y2+yg1+y2g1 + (vSum(h))*tan(90-grad1) + delta2 ;// between S segments
+    
+    fn=is_undef(fn)||fn==0?[fs2fn(r=r,grad=gradSUM,fs=fs),fs2fn(r=r2,grad=gradSUM,fs=fs)]:is_list(fn)?fn:[fn,fn];
+    points=[
+     each for(i=[0:round(e-1)])each[
+       arc(r2+rand/2,deg=grad1+grad2+(i==0&&end[0]?90-grad1:0),t=[-hi[1],-y2+delta*i],rot=180-grad2,fn=fn[1],rev=1),
+       arc(r-rand/2,deg=grad1+grad2+(i==(e-1)&&end[1]?90-grad1:0),t=[hi[0],y+delta2+delta*i],rot=-grad2,fn=fn[0],rev=0)
+       ] ,
+       
+    if (rand) each[
+      if(end[1]&&hi[0]>0)[0,y+r+delta2+ delta*(e -1)-rand/2],
+      if(end[1]&&hi[0]>0)[0,y+r+delta2+ delta*(e -1)+rand/2],
+
+      each for(i=[round(e-1):-1:0])each[
+       arc(r+rand/2,deg=grad1+grad2+(i==(e-1)&&end[1]?90-grad1:0),t=[hi[0],y+delta2+delta*i],rot=-grad2,fn=fn[0],rev=1),
+       arc(r2-rand/2,deg=grad2+grad1+(i==0&&end[0]?90-grad1:0),t=[-hi[1],-y2+delta*i],rot=180-grad2,fn=fn[1],rev=0)
+      ] ,
+       
+      //[0,-y2+rand/2],[0,-y2-rand/2] ,
+      if(end[0]&&hi[1]>0 )[0,-y2-r2+rand/2],
+      if(end[0]&&hi[1]>0 )[0,-y2-r2-rand/2],
+    ],
+       // extension
+    if (rand==0) each[ [ext,y*2+delta2+ delta *(e -1)],[ext,-y2*2] ],
+    ];
+    
+    //echo(points);
+    
+    if(!$children)T(0,center?center>1?center>2?y2- delta *(e-1)/2// c3
+                                              :-delta2-y- delta*(e-1)/2// c2
+                                     :0-delta2/2- delta*(e -1)/2 // c1 WIP!!
+                            :end[0]?r2+y2:y2*2)
+      polygon(points);
+    
+    
+    T(0,center?center>1?center>2?y2:-y:0:y2*2)Linear(es=(y+y2)*2,e=e,x=0,y=1,center=center)
+    union(){
+
+     if(false){
+         T(hi[0],y/2)  Kreis(grad=grad+lap,r=r,fn=fn[0],rand=rand,rcenter=true,sek=true);
+         T(-hi[1],-y2/2)  Kreis(grad=grad+lap,fn=fn[1],r=-r2,rand=rand,rcenter=true,sek=true);   
+     }
+
+//3D
+     if($children) {
+         T(sin(w)*r,y)  RotEx(grad=grad+lap,fn=fn[0],center=true)T(r)children();
+         union(){
+             $info=0;
+             $helpM=0;
+         T(-sin(w)*r2,-y2)RotEx(grad=grad+lap,fn=fn[1],center=true)T(-r2)children(); 
+         }  
+         
+     }
+    }
+    
+ InfoTxt("Welle",["Wellenenhöhe h+r/r2=",str(h[0]+r+sin(w)*r,"/",-h[1]-r2-sin(w)*r2),"Abstand r/r2=",str(y,"/",y2),"Länge=",e*(y+y2)],name);  
+ HelpTxt("Welle",[
+    "e",e,
+    "grad",grad, 
+    "r",r, 
+    "r2",r2, 
+    "center",center, 
+    "rand",rand,
+    "h",h,
+    "ext",ext,
+    "end",end,
+    "fn",fn,
+    "fs",fs,
+    "lap",lap, 
+    "name",name] 
+    ,help);    
+}
+
+
+/** \name Riemen \page Polygons
+Riemen() creates a belt form  can use polygons as children for 3D
+\param r1 radius pulley 1
+\param r2 raduis pulley 2
+\param tx pulley distance 
+\param fn fs fragments
+\param center center
+\param lap overlap (for 3D)
+\param name help name help
+*/
+
+//Rand(1)Riemen(tx=25,r1=5,r2=10,center=-1,$messpunkt=true);
+//Cut()Riemen(center=+0,fn=25)rotate(90)Rund(0.2,fn=12)Nut(a=undef,b=undef,es=2,e=5,grad=70,center=false);

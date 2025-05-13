@@ -1,0 +1,17 @@
+module dividers( d, xdiv, ydiv, h, t=wall_thick ) {
+    th=t/2;
+    for (i=xdiv) { 
+        ip=((i<1)?(d.x*i):i) ;
+        translate([(ip-th),0,0]) cube( [t, d.y, h] );
+    }
+    for (i=ydiv) { 
+        ip=((i<1)?(d.y*i):i) ;
+        translate([0,(ip-th),0]) cube( [d.x, t, h] );
+    }
+}
+
+/* =========================
+    diecut(d, x) - trims child objects to the base_box shape described by <d>
+
+    d - [x,y,z] box definition
+   ========================= */

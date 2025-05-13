@@ -1,0 +1,19 @@
+module _show_cube_faces(faces, size=20, toplabel,botlabel) {
+   color("red")
+     for(f=faces){
+          move(f*size/2) rot(from=UP,to=f)
+             cuboid([size,size,.1]);
+     }
+   vpr = [55,0,25];
+   color("black"){
+   if (is_def(toplabel))
+     for(h=idx(toplabel)) up(21+6*h)rot(vpr) text3d(select(toplabel,-h-1),size=3.3,h=.1,orient=UP,anchor=FRONT);
+   if (is_def(botlabel))
+     for(h=idx(botlabel)) down(26+6*h)rot(vpr) text3d(botlabel[h],size=3.3,h=.1,orient=UP,anchor=FRONT);
+   }
+   color("yellow",0.7) cuboid(size=size);
+}
+
+
+
+/// Internal utility function

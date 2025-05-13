@@ -1,0 +1,84 @@
+function path_to_bezpath(path, closed, tangents, uniform=false, size, relsize) =
+    is_1region(path) ? path_to_bezpath(path[0], default(closed,true), tangents, uniform, size, relsize) :
+    let(closed=default(closed,false))
+    assert(is_bool(closed))
+    assert(is_bool(uniform))
+    assert(num_defined([size,relsize])<=1, "\nCan't define both size and relsize.")
+    assert(is_path(path,[2,3]),"\nInput path is not a valid 2d or 3d path.")
+    assert(is_undef(tangents) || is_path(tangents,[2,3]),"\nTangents must be a 2d or 3d path.")
+    assert(is_undef(tangents) || len(path)==len(tangents), "\nInput tangents must be the same length as the input path.")
+    let(
+        curvesize = first_defined([size,relsize,0.1]),
+        relative = is_undef(size),
+        lastpt = len(path) - (closed?0:1)
+    )
+    assert(is_num(curvesize) || len(curvesize)==lastpt, str("\nSize or relsize must have length ",lastpt,"."))
+    let(
+        sizevect = is_num(curvesize) ? repeat(curvesize, lastpt) : curvesize,
+        tangents = is_def(tangents) ? [for(t=tangents) let(n=norm(t)) assert(!approx(n,0),"\nZero tangent vector.") t/n] :
+                                      path_tangents(path, uniform=uniform, closed=closed)
+    )
+    assert(min(sizevect)>0, "\nSize and relsize must be greater than zero.")
+    [
+        for(i=[0:1:lastpt-1])
+            let(
+                first = path[i],
+                second = select(path,i+1),
+                seglength = norm(second-first),
+                dummy = assert(seglength>0, str("\nPath segment has zero length from index ",i," to ",i+1,".")),
+                segdir = (second-first)/seglength,
+                tangent1 = tangents[i],
+                tangent2 = -select(tangents,i+1),                        // Need this to point backward, in direction of the curve
+                parallel = abs(tangent1*segdir) + abs(tangent2*segdir), // Total component of tangents parallel to the segment
+                Lmax = seglength/parallel,    // May be infinity
+                size = relative ? sizevect[i]*seglength : sizevect[i],
+                normal1 = tangent1-(tangent1*segdir)*segdir,   // Components of the tangents orthogonal to the segment
+                normal2 = tangent2-(tangent2*segdir)*segdir,
+                p = [ [-3 ,6,-3 ],                   // polynomial in power form
+                      [ 7,-9, 2 ],
+                      [-5, 3, 0 ],
+                      [ 1, 0, 0 ] ]*[normal1*normal1, normal1*normal2, normal2*normal2],
+                uextreme = approx(norm(p),0) ? []
+                                             : [for(root = real_roots(p)) if (root>0 && root<1) root],
+                distlist = [for(d=bezier_points([normal1*0, normal1, normal2, normal2*0], uextreme)) norm(d)],
+                scale = len(distlist)==0 ? 0 :
+                        len(distlist)==1 ? distlist[0]
+                                         : sum(distlist) - 2*min(distlist),
+                Ldesired = size/scale,   // This is infinity when the polynomial is zero
+                L = min(Lmax, Ldesired)
+            )
+            each [
+                  first, 
+                  first + L*tangent1,
+                  second + L*tangent2 
+                 ],
+        select(path,lastpt)
+    ];
+
+
+
+/// Function: path_to_bezcornerpath()
+/// Synopsis: Generates a bezier path tangent to all midpoints of the path segments, deviating from the corners by a specified amount or proportion.
+/// SynTags: Path
+/// Topics: Bezier Paths, Rounding
+/// See Also: path_to_bezpath()
+/// Usage:
+///   bezpath = path_to_bezcornerpath(path, [closed], [size=]|[relsize=]);
+/// Description:
+///   Given a 2d or 3d input path, computes a cubic (degree 3) bezier path passing through, and tangent to,
+///   every segment midpoint on the input path and deviating from the corners by a specified amount.
+///   If the path is closed, specify this by setting `closed=true`.
+///   The `size` or `relsize` parameter determines how far the curve can deviate from
+///   the corners of the input path. The `size` parameter specifies the exact distance
+///   between the specified path and the corner.  If you give a `relsize` between 0 and 1, then it is
+///   relative to the maximum distance from the corner that would produce a circular rounding, with 0 being
+///   the actual corner and 1 being the circular rounding from the midpoint of the shortest leg of the corner.
+///   For example, `relsize=0.25` means the "corner" of the rounded path is 25% of the distance from the path
+///   corner to the theoretical circular rounding.
+///   See `smooth_path()` for examples.
+/// Arguments:
+///   path = 2D or 3D point list or 1-region that the curve must pass through
+///   closed = true if the curve is closed .  Default: false
+///   ---
+///   size = absolute curve deviation from the corners, a number or vector
+///   relsize = relative curve deviation (between 0 and 1) from the corners, a number or vector. Default: 0.5.

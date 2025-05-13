@@ -1,0 +1,19 @@
+function square(size=1, center=false,r=0) =
+  let(
+    x = is_vec(size) ? size.x : size,
+    y = is_vec(size) ? size.y : size,
+    o = center ? [-x/2,-y/2] : [0,0],
+    d = r*2
+  )
+  //assert(d <= x && d <= y)
+  translate(o,
+    (r > 0 ?
+      concat(
+        arc(r=r, angle=-90, offsetAngle=0,   c=[x-r,  r]),
+        arc(r=r, angle=-90, offsetAngle=270, c=[  r,  r]),
+        arc(r=r, angle=-90, offsetAngle=180, c=[  r,y-r]),
+        arc(r=r, angle=-90, offsetAngle=90,  c=[x-r,y-r])
+      ) :
+      [[[0,0],[0,y],[x,y],[x,0]],[[0,1,2,3]]]
+    )
+  );

@@ -1,0 +1,4 @@
+module transformer_hole_positions(type) //! Position children at the mounting hole positions
+    for(x = [-1, 1], y = tx_y_pitch(type) ? [-1, 1] : 0)
+        translate([x * tx_x_pitch(type) / 2, y * tx_y_pitch(type) / 2])
+            children();

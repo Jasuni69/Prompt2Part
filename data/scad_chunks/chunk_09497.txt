@@ -1,0 +1,8 @@
+function adendum(mm_per_tooth=5) = module_value(mm_per_tooth);
+
+
+// Function: dedendum()
+// Description: The depth of the gear tooth valley, below the pitch radius.
+// Arguments:
+//   mm_per_tooth = Distance between teeth around the pitch circle, in mm.
+//   clearance = If given, sets the clearance between meshing teeth.

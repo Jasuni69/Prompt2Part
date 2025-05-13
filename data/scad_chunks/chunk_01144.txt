@@ -1,0 +1,112 @@
+module geared_stepper(type, angle = 0) { //! Draw the specified geared stepper with optional shaft angle.
+    vitamin(str("geared_stepper(", type[0], "): Geared stepper - ", type[1]));
+
+    radius = gs_diameter(type) / 2;
+    motor = gs_motor(type);
+    height = gs_height(type) - motor.y;
+    offset = gs_offset(type);
+    lug_t = gs_lug_t(type);
+    bulge = gs_bulge(type);
+    bulge_z = bulge[3];
+    bulge2 = gs_bulge2(type);
+    wires = gs_wires(type);
+
+    $fa = fa; $fs = fs;
+
+    // Gearbox
+    color(motor.y ? gearbox_colour : motor_colour) {
+        difference() {
+            rad = gs_radius(type);
+            translate([0, -offset])
+                if(rad >= 0)
+                    rounded_cylinder(r = radius, h = height, r2 = rad);
+                else
+                    translate_z(height)
+                        vflip()
+                            rounded_cylinder(r = radius, h = height, r2 = -rad);
+
+            if(!lug_t)
+                geared_stepper_screw_positions(type)
+                    cylinder(d = gs_hole_d(type), h = 10, center = true);
+        }
+
+        cylinder(d = gs_boss_d(type), h = 2 * gs_boss_h(type), center = true);
+
+        if(lug_t)
+            linear_extrude(lug_t)
+                difference() {
+                    hull()
+                        geared_stepper_screw_positions(type)
+                            circle(d = gs_lug_w(type));
+
+                    geared_stepper_screw_positions(type)
+                        circle(d = gs_hole_d(type));
+                }
+
+        if(!bulge_z)
+            translate([0, -offset - radius, eps])
+                cube([bulge.x - 2, 2 * (bulge.y - radius) - 2, 2 * eps], center = true);
+    }
+
+    // Motor
+    if(motor.y)
+        color("#9BA2AC")
+            translate([0, -offset, height])
+                rotate_extrude()
+                    union() {
+                        r = motor.x / 2;
+                        rad = motor[2];
+                        square([r - rad, rad]);
+
+                        translate([0, motor.y - rad])
+                            square([r - rad, rad]);
+
+                        hull()
+                            for(y = [2 * rad, motor.y - 2 * rad])
+                                translate([r - rad, y])
+                                    circle(rad);
+                    }
+
+    // Shaft
+    f = gs_shaft_flat(type);
+    two_flats = f < 0;
+    vflip()
+        rotate(angle)
+            color(two_flats ? brass : gearbox_colour) {
+                d = gs_shaft_d(type);
+                h = gs_shaft_length(type);
+                linear_extrude(h)
+                    intersection() {
+                        circle(d = d);
+
+                        translate([0, two_flats ? 0 : (f - d) / 2])
+                            square([d + 1, abs(f)], center = true);
+                    }
+
+                cylinder(d = d, h = h - gs_flat_length(type));
+            }
+
+    // Wire block
+    color(bulge_z ? "white" : "skyblue") {
+        translate([0, - offset - radius, eps + bulge[3]])
+            rounded_rectangle([bulge.x, 2 * (bulge.y - radius), bulge.z], 0.5, center = false);
+
+        if(bulge2.z)
+            translate([0, - offset, bulge.z + 1 - bulge2.z])
+                linear_extrude(bulge2.z)
+                    round(0.5)
+                        intersection() {
+                            circle(bulge2.y);
+
+                            translate([0, -50])
+                                square([bulge2.x, 100], center = true);
+                        }
+    }
+
+    wire_d = gs_wire_d(type);
+    for(j = [0 : len(wires) - 1], i = [0 : len(wires[j]) - 1])
+        translate([(i - len(wires[j]) / 2 + 0.5) * wire_d, 0, bulge_z + (j ? bulge.z - 2.5 : 2.5)])
+            rotate([90, 0, 0])
+                color(wires[j][i])
+                    cylinder(d = wire_d, h = radius + offset + 10);
+}

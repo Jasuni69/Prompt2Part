@@ -1,0 +1,7 @@
+module test_f_tan() {
+    _test_fn1arg(
+        function (a) f_tan(a),
+        [[-135,1],[-45,-1],[0,0],[45,1],[135,-1]]
+    );
+}
+test_f_tan();

@@ -1,0 +1,14 @@
+module veroboard_assembly(type, ngb = false) //! Draw the assembly with components
+pose_vflip(exploded = true)
+assembly(vero_assembly(type), ngb = ngb, big = true) {
+    veroboard(type);
+
+    let($solder = [vero_track_width(type) / 2, 0, vero_thickness(type) + vero_track_thickness(type)])
+        vero_components(type);
+
+    let($solder = [vero_track_width(type) / 2, 0, vero_track_thickness(type)])
+        for(r = vero_joints(type))
+            for(x = r.x, y = r.y)
+                vero_grid_pos(type, x, y)
+                    solder();
+}

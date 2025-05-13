@@ -1,0 +1,69 @@
+module thread_helix(
+    d, pitch, thread_depth, flank_angle, turns,
+    profile, starts=1, left_handed=false, internal=false,
+    d1, d2, thread_angle, 
+    lead_in_shape,
+    lead_in, lead_in1, lead_in2,
+    lead_in_ang, lead_in_ang1, lead_in_ang2,
+    lead_in_sample=10,
+    anchor, spin, orient
+) {
+    dummy1=assert(num_defined([thread_angle,flank_angle])<=1, "Cannot define both flank angle and thread angle")
+           assert(is_undef(profile) || !any_defined([thread_depth, flank_angle]),
+                  "Cannot give thread_depth or flank_angle with a profile")
+           assert(all_positive([turns]), "The turns parameter must be a positive number")
+           assert(all_positive(pitch), "pitch must be a positive number")
+           assert(num_defined([flank_angle,thread_angle])<=1, "Cannot give both thread_angle and flank_angle")
+           assert(is_def(profile) || is_def(thread_depth), "If profile is not given, must give thread depth");
+    flank_angle = first_defined([flank_angle,u_mul(0.5,thread_angle),15]);
+    h = pitch*starts*abs(turns);
+    r1 = get_radius(d1=d1, d=d, dflt=10);
+    r2 = get_radius(d1=d2, d=d, dflt=10);
+    profile = is_def(profile) ? profile :
+        let(
+            tdp = thread_depth / pitch,
+            dz = tdp * tan(flank_angle),
+            cap = (1 - 2*dz)/2
+        )
+        assert(cap/2+dz<=0.5, "Invalid geometry: incompatible thread depth and thread_angle/flank_angle")
+        internal?
+          [
+            [-cap/2-dz, tdp],
+            [-cap/2,    0  ],
+            [+cap/2,    0  ],
+            [+cap/2+dz, tdp],
+          ]
+        :
+          [
+            [+cap/2+dz, 0  ],
+            [+cap/2,    tdp],
+            [-cap/2,    tdp],
+            [-cap/2-dz, 0  ],
+          ];
+
+    pline = mirror([-1,1],  p = profile * pitch);
+    dir = left_handed? -1 : 1;
+    attachable(anchor,spin,orient, r1=r1, r2=r2, l=h) {
+        union(){
+        zrot_copies(n=starts)
+            spiral_sweep(pline, h=h, r1=r1, r2=r2, turns=turns*dir, internal=internal,
+                         lead_in_shape=lead_in_shape,
+                         lead_in=lead_in, lead_in1=lead_in1, lead_in2=lead_in2,
+                         lead_in_ang=lead_in_ang, lead_in_ang1=lead_in_ang1, lead_in_ang2=lead_in_ang2,
+                         lead_in_sample=lead_in_sample,anchor=CENTER);
+        }
+        children();
+    }
+}
+
+
+
+// Questions
+//   Should nut modules take d1/d2 for tapered nuts?
+//
+// Need explanation of what exactly the diff is between threaded_rod and helix_threads.
+//
+// What about blunt_start for ball screws?
+// Should default bevel be capped at 1mm or 2mm or something like that?  Including/especially inner bevel on nuts
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

@@ -1,0 +1,1 @@
+function nut_flat_radius(type) = nut_radius(type) * cos(30); //! Radius across the flats

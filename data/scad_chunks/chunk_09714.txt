@@ -1,0 +1,15 @@
+function Q_Slerp(q1, q2, u) = let(
+		dot = Q_Dot(q1, q2),
+		qq2 = dot<0? Q_Neg(q2) : q2,
+		dott = dot<0? -dot : dot,
+		theta = u * acos(constrain(dott,-1,1))
+	) (dott>0.9995)?
+		Q_Normalize(q1 + ((qq2-q1) * u)) :
+		(q1*cos(theta) + (Q_Normalize(qq2 - (q1 * dott)) * sin(theta)));
+
+
+// Function: Q_Matrix3()
+// Usage:
+//   Q_Matrix3(q);
+// Description:
+//   Returns the 3x3 rotation matrix for the given normalized quaternion q.

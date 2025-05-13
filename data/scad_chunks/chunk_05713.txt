@@ -1,0 +1,15 @@
+function supershape(step=0.5, n, m1=4, m2, n1=1, n2, n3, a=1, b, r, d,anchor=CENTER, spin=0, atype="hull") =
+    assert(in_list(atype, _ANCHOR_TYPES), "Anchor type must be \"hull\" or \"intersect\"")
+    let(
+        n = first_defined([n, ceil(360/step)]),
+        angs = lerpn(360,0,n,endpoint=false),  
+        r = get_radius(r=r, d=d, dflt=undef),
+        m2 = is_def(m2) ? m2 : m1,
+        n2 = is_def(n2) ? n2 : n1,
+        n3 = is_def(n3) ? n3 : n2,
+        b = is_def(b) ? b : a,
+        // superformula returns r(theta), the point in polar coordinates
+        rvals = [for (theta = angs) _superformula(theta=theta,m1=m1,m2=m2,n1=n1,n2=n2,n3=n3,a=a,b=b)],
+        scale = is_def(r) ? r/max(rvals) : 1,
+        path = [for (i=idx(angs)) scale*rvals[i]*[cos(angs[i]), sin(angs[i])]]
+    ) reorient(anchor,spin, two_d=true, path=path, p=path, extent=atype=="hull");

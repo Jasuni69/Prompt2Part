@@ -1,0 +1,63 @@
+module extrude_arc(arc=90, sa=0, r=undef, d=undef, orient=ORIENT_Z, align=V_CENTER, masksize=100, caps=false, convexity=4)
+{
+	eps = 0.001;
+	r = get_radius(r=r, d=d, dflt=100);
+	orient_and_align([2*r, 2*r, 0], orient, align) {
+		zrot(sa) {
+			if (caps) {
+				place_copies([[r,0,0], cylindrical_to_xyz(r, arc, 0)]) {
+					rotate_extrude(convexity=convexity) {
+						difference() {
+							children();
+							left(masksize/2) square(masksize, center=true);
+						}
+					}
+				}
+			}
+			difference() {
+				rotate_extrude(angle=arc, convexity=convexity*2) {
+					right(r) {
+						children();
+					}
+				}
+				if(version_num() < 20190000) {
+					maxd = r + masksize;
+					if (arc<180) rotate(arc) back(maxd/2) cube([2*maxd, maxd, masksize+0.1], center=true);
+					difference() {
+						fwd(maxd/2) cube([2*maxd, maxd, masksize+0.2], center=true);
+						if (arc>180) rotate(arc-180) back(maxd/2) cube([2*maxd, maxd, masksize+0.1], center=true);
+					}
+				}
+			}
+		}
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// Section: 2D Mutators
+//////////////////////////////////////////////////////////////////////
+
+
+// Module: round2d()
+// Usage:
+//   round2d(r) ...
+//   round2d(or) ...
+//   round2d(ir) ...
+//   round2d(or, ir) ...
+// Description:
+//   Rounds an arbitrary 2d objects.  Giving `r` rounds all concave and
+//   convex corners.  Giving just `ir` rounds just concave corners.
+//   Giving just `or` rounds convex corners.  Giving both `ir` and `or`
+//   can let you round to different radii for concave and convex corners.
+//   The 2d object must not have any parts narrower than twice the `or`
+//   radius.  Such parts will disappear.
+// Arguments:
+//   r = Radius to round all concave and convex corners to.
+//   or = Radius to round only outside (convex) corners to.  Use instead of `r`.
+//   ir = Radius to round/fillet only inside (concave) corners to.  Use instead of `r`.
+// Examples(2D):
+//   round2d(r=10) {square([40,100], center=true); square([100,40], center=true);}
+//   round2d(or=10) {square([40,100], center=true); square([100,40], center=true);}
+//   round2d(ir=10) {square([40,100], center=true); square([100,40], center=true);}
+//   round2d(or=16,ir=8) {square([40,100], center=true); square([100,40], center=true);}

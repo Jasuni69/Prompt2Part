@@ -1,0 +1,89 @@
+module hex_panel(
+    shape,
+    strut,
+    spacing,
+    frame,
+    bevel_frame,
+    h, height, l, length, 
+    bevel = [],
+    anchor, 
+    orient = UP, cp="centroid", atype="hull",
+    spin = 0) 
+{
+    frame = first_defined([frame,strut]);
+    bevel_frame = first_defined([bevel_frame, frame]);
+    shape = force_path(shape,"shape");
+    bevel = is_vector(bevel) ? [bevel] : bevel;
+    bevOK = len([for(bev=bevel) if (norm([bev.x,bev.y])==1 && (bev.x==0 || bev.y==0) && (bev.z==0 || bev.z==-1)) 1]) == len(bevel);
+    dummy=
+      assert(is_finite(strut) && strut > 0, "strut must be positive")
+      assert(is_finite(frame) && frame >= 0, "frame must be nonnegative")
+      assert(is_finite(bevel_frame) && bevel_frame >= 0, "bevel_frame must be nonnegative")
+      assert(is_finite(spacing) && spacing>0, "spacing must be positive")
+      assert(is_path(shape,2) || is_vector(shape, 3), "shape must be a path or a 3D vector")
+      assert(len(bevel) == 0 || is_vector(shape, 3), "bevel must be used only on rectangular panels")
+      assert(is_path(shape) || all_positive(shape), "when shape is a size vector all components must be positive")
+      assert(bevOK, "bevel list contains an invalid entry")
+      assert(!(in_list(FRONT, bevel) && in_list(FRONT+BOTTOM, bevel)), "conflicting FRONT bevels")
+      assert(!(in_list(BACK,  bevel) && in_list(BACK+BOTTOM,  bevel)), "conflicting BACK bevels")
+      assert(!(in_list(RIGHT, bevel) && in_list(RIGHT+BOTTOM, bevel)), "conflicting RIGHT bevels")
+      assert(!(in_list(LEFT,  bevel) && in_list(LEFT+BOTTOM,  bevel)), "conflicting LEFT bevels")
+      assert(is_undef(h) || is_path(shape), "cannot give h with a size vector");
+    shp = is_path(shape) ? shape : square([shape.x, shape.y], center = true);
+    ht = is_path(shape) ? one_defined([h,l,height,length],"height,length,l,h")
+       : shape.z;
+    
+    bounds = pointlist_bounds(shp);
+    sizes = bounds[1] - bounds[0]; // [xsize, ysize]
+    assert(frame*2 + spacing < sizes[0], "There must be room for at least 1 cell in the honeycomb");
+    assert(frame*2 + spacing < sizes[1], "There must be room for at least 1 cell in the honeycomb");
+
+    bevpaths = len(bevel)==0 ? []
+             : _bevelSolid(shape,bevel);
+    if (len(bevel) > 0) {
+         size1 = [bevpaths[0][0].x-bevpaths[0][1].x, bevpaths[0][2].y-bevpaths[0][1].y,ht];
+         size2 = [bevpaths[1][0].x-bevpaths[1][1].x, bevpaths[1][2].y-bevpaths[1][1].y];
+         shift = point2d(centroid(bevpaths[1])-centroid(bevpaths[0]));
+         offset = (centroid(bevpaths[0]));
+         attachable(anchor,spin,orient,size=size1,size2=size2,shift=shift,offset=offset){
+             down(ht/2)
+                 intersection() {
+                     union() {
+                         linear_extrude(height = ht, convexity=8) {
+                             _honeycomb(shp, spacing = spacing, hex_wall = strut);
+                             offset_stroke(shp, width=[-frame, 0], closed=true);
+                         }
+                         for (b = bevel) _bevelWall(shape, b, bevel_frame);
+                     }
+                     vnf_polyhedron(vnf_vertex_array(bevpaths, col_wrap=true, caps=true));
+                 }
+             children();
+         }
+     }
+     else if (is_vector(shape)){
+         attachable(anchor = anchor, spin = spin, orient = orient, size = shape) {        
+             down(ht/2) 
+                 linear_extrude(height = ht, convexity=8) {
+                     _honeycomb(shp, spacing = spacing, hex_wall = strut);
+                     offset_stroke(shp, width=[-frame, 0], closed=true);
+                 }
+             children();
+         }
+    }
+    else {
+         anchors = [
+           named_anchor("zcenter", [0,0,0], UP),
+           named_anchor("base", [0,0,-ht/2], UP),
+           named_anchor("top", [0,0,ht/2], UP)          
+         ];
+         attachable(anchor = default(anchor,"zcenter"), spin = spin, orient = orient, path=shp, h=ht, cp=cp, extent=atype=="hull",anchors=anchors) {        
+              down(ht/2) 
+                 linear_extrude(height = ht, convexity=8) {
+                     _honeycomb(shp, spacing = spacing, hex_wall = strut);
+                     offset_stroke(shp, width=[-frame, 0], closed=true);
+                 }
+             children();
+         }
+
+    } 
+}

@@ -1,0 +1,1 @@
+function al_clad_height(type)      = type[9];   //! Body height

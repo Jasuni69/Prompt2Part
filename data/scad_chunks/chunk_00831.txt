@@ -1,0 +1,1 @@
+function smd_qfp_pitch(type)     = type[4]; //! Pin pitch

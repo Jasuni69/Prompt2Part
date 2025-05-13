@@ -1,0 +1,2 @@
+function _any_intersection(lines, line, lines_leng, i, epsilon) =
+    i == lines_leng ? [] : _any_intersection_sub(lines, line, lines_leng, i, epsilon);

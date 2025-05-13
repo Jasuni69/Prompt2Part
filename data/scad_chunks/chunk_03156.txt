@@ -1,0 +1,50 @@
+//                              and offsets applied. This can be used to fine tune the mask
+//                              placement within the opening.
+//    n(d) = { <yappCoordPCB> | yappCoordBox | yappCoordBoxInside }
+//    n(e) = { <yappOrigin>, yappCenter }
+//    n(f) = { <yappGlobalOrigin>, yappLeftOrigin } // Only affects Top(lid), Back and Right Faces
+//    n(g) = [yappPCBName, "XXX"] : Specify a PCB. Defaults to [yappPCBName, "Main"]
+//    n(h) = { yappFromInside } Make the cut from the inside towards the outside
+//-------------------------------------------------------------------
+
+cutoutsBase = 
+[
+];
+
+cutoutsLid  = 
+[
+
+//yappCenter demo
+/*
+    [10, 10, 10, 20, undef, yappRectangle]                              //(A)
+   ,[10, 50, 10, 20, undef, yappRectangle, yappCenter]                  //(B)
+
+   ,[30, 10, undef, undef, 5, yappCircle, ]                             //(C)
+   ,[30, 50, undef, undef, 5, yappCircle, yappCenter]                   //(D)
+ 
+   ,[50, 10, 10, 20, 2, yappRoundedRect, ]                              //(E)
+   ,[50, 50, 10, 20, 2, yappRoundedRect, yappCenter]                    //(F)
+ 
+   ,[70, 10, 15, undef, 10, yappCircleWithFlats, ]                      //(G)
+   ,[70, 50, 15, undef, 10, yappCircleWithFlats, yappCenter]            //(H)
+ 
+   ,[90, 10, 5, 2, 8, yappCircleWithKey, ]                              //(I)
+   ,[90, 50, 5, 2, 8, yappCircleWithKey, yappCenter]                    //(J)
+ 
+   ,[110, 10, 20, 20, undef, yappPolygon, shape6ptStar]                 //(K)
+   ,[110, 50, 20, 20, undef, yappPolygon, shape6ptStar, yappCenter]     //(L)
+   
+*/
+
+
+ // [0, 40, 20, 20, undef, yappRectangle, 0.2, yappCenter]                              //(A)
+ [25, 40, 20, 20, undef, yappRectangle, 0.2, yappCenter]                              //(A)
+ ,[50, 40, 20, 20, undef, yappRectangle, 0.2, yappCenter]                              //(A)
+ ,[75, 40, 20, 20, undef, yappRectangle, 0.2, yappCenter]                              //(A)
+ ,[100, 40, 20, 20, undef, yappRectangle, 0.2, yappCenter]                              //(A)
+ ,[125, 40, 20, 20, undef, yappRectangle, 0.2, yappCenter]                              //(A)
+ ,[150, 40, 20, 20, undef, yappRectangle, 0.2, yappCenter]                              //(A)
+ ,[175, 40, 20, 20, undef, yappRectangle, 0.2, yappCenter]                              //(A)
+ ,[200, 40, 20, 20, undef, yappRectangle, 0.2, yappCenter]                              //(A)
+
+ ,[25, 40, 20, 20, undef, yappPolygon, 1.5, $t*360, shapeIsoTriangle, yappCenter, yappFromInside]

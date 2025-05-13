@@ -1,0 +1,3 @@
+module test_stereographic_extrude_rs(outer_sphere_r, inner_sphere_r) {
+
+}

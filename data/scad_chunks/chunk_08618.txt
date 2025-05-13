@@ -1,0 +1,6 @@
+function __inner_points_shape_starburst(r1, r2, n) = 
+    let (
+        a = 360 / n,
+        half_a = a / 2
+    )
+    [for(i = 0; i < n; i = i + 1) [r2 * cos(a * i + half_a), r2 * sin(a * i + half_a)]];

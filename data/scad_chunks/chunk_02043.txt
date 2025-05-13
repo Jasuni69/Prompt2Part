@@ -1,0 +1,23 @@
+module door_hinge_assembly(top, door_thickness = 6) { //! The moving assembly that goes on the door
+    dir = top ? -1 : 1;
+    pin_x = door_hinge_pin_x();
+    pin_y = door_hinge_pin_y();
+    screw_length = screw_length(screw, thickness + door_thickness, 1);
+
+    translate([0, pin_y - (thickness + door_thickness / 2), dir * width / 2]) {
+        rotate([90, 0, 180])
+            stl_colour(pp2_colour) door_hinge(door_thickness);
+
+        rotate([90, 0, 0])
+            door_hinge_hole_positions()
+                screw_and_washer(screw, screw_length);
+    }
+
+    washer = screw_washer(pin_screw);
+    wt = washer_thickness(washer);
+    translate([pin_x, pin_y, top ? 0 : -wt])
+        washer(washer);
+
+    translate([pin_x, pin_y, top ? wt + stat_width : width])
+        screw_and_washer(pin_screw, screw_length(pin_screw, width + stat_width, 2, longer = true));
+}

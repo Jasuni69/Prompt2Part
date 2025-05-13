@@ -1,0 +1,20 @@
+function hsv(h,s=1,v=1,a) =
+    assert(s>=0 && s<=1)
+    assert(v>=0 && v<=1)
+    assert(is_undef(a) || a>=0 && a<=1)
+    let(
+        h = posmod(h,360),
+        c = v * s,
+        hprime = h/60,
+        x = c * (1- abs(hprime % 2 - 1)),
+        rgbprime = hprime <=1 ? [c,x,0]
+                 : hprime <=2 ? [x,c,0]
+                 : hprime <=3 ? [0,c,x]
+                 : hprime <=4 ? [0,x,c]
+                 : hprime <=5 ? [x,0,c]
+                 : hprime <=6 ? [c,0,x]
+                 : [0,0,0],
+        m=v-c
+    )
+    is_def(a) ? point4d(add_scalar(rgbprime,m),a)
+              : add_scalar(rgbprime,m);

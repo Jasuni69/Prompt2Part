@@ -1,0 +1,1 @@
+function gt_top(type)          = type[4];   //! Depth at the top

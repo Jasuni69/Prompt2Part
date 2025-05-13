@@ -1,0 +1,1 @@
+function pillar_id(type)         = type[5];     //! Inner diameter of metal part

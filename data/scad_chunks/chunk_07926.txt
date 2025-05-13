@@ -1,0 +1,14 @@
+module text_heart(char, width, thickness, spacing) {
+    radius = 0.5 * width / (1 + cos(45));
+    half_thickness = thickness / 2;
+	difference() {
+		heart_with_ears(width, thickness, spacing);
+		translate([0, 0, half_thickness])
+        linear_extrude(half_thickness) 
+        offset(-half_thickness) 
+            heart(radius, center = true);
+	}
+	translate([0, radius / 4, half_thickness])
+    linear_extrude(half_thickness)  
+        text(char, font = "Arial Black", size = radius * 1.2, valign = "center", halign="center");
+}

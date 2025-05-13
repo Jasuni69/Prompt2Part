@@ -1,0 +1,1 @@
+function bb_hub(type)             = type[6]; //! Inner rim thickness guesstimate

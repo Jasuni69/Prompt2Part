@@ -1,0 +1,2 @@
+function move_along(j, z, path_S) =
+     j >= len(path_S) - 1 || z <= path_S[j] ? j : move_along(j + 1, z, path_S);

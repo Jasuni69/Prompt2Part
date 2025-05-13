@@ -1,0 +1,1 @@
+function rail_pitch(type)      = type[4];   //! Distance between screws

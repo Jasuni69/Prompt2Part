@@ -1,0 +1,12 @@
+module Tz(z=0,help=false){
+    multmatrix([
+        [1,0,0,0],
+        [0,1,0,0],    
+        [0,0,1,z],
+        [0,0,0,1],    
+        ])children();    
+    MO(!$children);
+    HelpTxt("Tz",["z",z],help);
+}
+
+// short for rotate(a,v=[0,0,0])

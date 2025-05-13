@@ -1,0 +1,10 @@
+module showColors()
+	pieces(len($colorNames)/2)///2)
+		g(X(every(30)),TOFRONT())
+	{	
+	opaq(detailColor($valPtr))
+		box(5);	
+	clear(shellColor($valPtr))
+		box(20);
+}
+*/

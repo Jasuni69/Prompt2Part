@@ -1,0 +1,6 @@
+function _same_r(r, h, filled, thickness) =
+    let(c = _vx_circle(r, filled, thickness))
+    [
+        for(i = 0; i < h; i = i + 1)
+            for(pt = c) [each pt, i]
+    ];

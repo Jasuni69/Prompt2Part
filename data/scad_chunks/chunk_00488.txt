@@ -1,0 +1,1 @@
+function iec_flange_r(type) = type[14]; //! Flange corner radius

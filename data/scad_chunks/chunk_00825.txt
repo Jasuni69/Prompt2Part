@@ -1,0 +1,1 @@
+function smd_coax_lug_size(type)  = type[6]; //! lug size

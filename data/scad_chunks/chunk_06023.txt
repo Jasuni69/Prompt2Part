@@ -1,0 +1,4 @@
+module line_of(spacing, n, l, p1, p2) {
+    deprecate("line_copies");
+    line_copies(spacing, n, l, p1, p2) children();
+}

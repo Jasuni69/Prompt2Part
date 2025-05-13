@@ -1,0 +1,20 @@
+function hypot(x,y,z=0) = 
+    assert( is_vector([x,y,z]), "\nImproper number(s).")
+    norm([x,y,z]);
+
+
+// Function: factorial()
+// Synopsis: Returns the factorial of the given integer.
+// Topics: Math
+// See Also: hypot(), sqr(), log2()
+// Usage:
+//   x = factorial(n, [d]);
+// Description:
+//   Returns the factorial of the given integer value, or n!/d! if d is given.  
+// Arguments:
+//   n = The integer number to get the factorial of.  (n!)
+//   d = If given, the returned value is (n! / d!)
+// Example:
+//   x = factorial(4);  // Returns: 24
+//   y = factorial(6);  // Returns: 720
+//   z = factorial(9);  // Returns: 362880

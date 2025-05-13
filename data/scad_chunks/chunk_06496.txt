@@ -1,0 +1,56 @@
+function tilt(to, cp, reverse=false, p=_NO_ARG) =
+    assert(is_vector(to, zero=false), "'to' must be a non-zero vector.")
+    assert(is_undef(cp) || is_vector(cp), "'cp' must be a vector.")
+    assert(is_bool(reverse))
+    let( m = rot(from=UP, to=to, cp=cp, reverse=reverse) )
+    p==_NO_ARG ? m : apply(m, p);
+
+
+
+//////////////////////////////////////////////////////////////////////
+// Section: Scaling
+//////////////////////////////////////////////////////////////////////
+
+
+// Function&Module: scale()
+//
+// Synopsis: Scales children arbitrarily.
+// SynTags: Trans, Path, VNF, Mat, Ext
+// Topics: Affine, Matrices, Transforms, Scaling
+// See Also: xscale(), yscale(), zscale()
+//
+// Usage: As Module
+//   scale(SCALAR) CHILDREN;
+//   scale([X,Y,Z]) CHILDREN;
+// Usage: Scale Points
+//   pts = scale(v, p, [cp=]);
+// Usage: Get Scaling Matrix
+//   mat = scale(v, [cp=]);
+//
+// Description:
+//   Scales by the [X,Y,Z] scaling factors given in `v`.  If `v` is given as a scalar number, all axes are scaled uniformly by that amount.
+//   * Called as the built-in module, scales all children.
+//   * Called as a function with a point in the `p` argument, returns the scaled point.
+//   * Called as a function with a list of points in the `p` argument, returns the list of scaled points.
+//   * Called as a function with a [bezier patch](beziers.scad) in the `p` argument, returns the scaled patch.
+//   * Called as a function with a [VNF structure](vnf.scad) in the `p` argument, returns the scaled VNF.
+//   * Called as a function without a `p` argument, and a 2D list of scaling factors in `v`, returns an affine2d scaling matrix.
+//   * Called as a function without a `p` argument, and a 3D list of scaling factors in `v`, returns an affine3d scaling matrix.
+//
+// Arguments:
+//   v = Either a numeric uniform scaling factor, or a list of [X,Y,Z] scaling factors.  Default: 1
+//   p = If called as a function, the point or list of points to scale.
+//   ---
+//   cp = If given, centers the scaling on the point `cp`.
+//
+// Example(NORENDER):
+//   pt1 = scale(3, p=[3,1,4]);        // Returns: [9,3,12]
+//   pt2 = scale([2,3,4], p=[3,1,4]);  // Returns: [6,3,16]
+//   pt3 = scale([2,3,4], p=[[1,2,3],[4,5,6]]);  // Returns: [[2,6,12], [8,15,24]]
+//   mat2d = scale([2,3]);    // Returns: [[2,0,0],[0,3,0],[0,0,1]]
+//   mat3d = scale([2,3,4]);  // Returns: [[2,0,0,0],[0,3,0,0],[0,0,4,0],[0,0,0,1]]
+//
+// Example(2D):
+//   path = circle(d=50,$fn=12);
+//   #stroke(path,closed=true);
+//   stroke(scale([1.5,3],p=path),closed=true);

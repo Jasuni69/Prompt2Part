@@ -1,0 +1,1 @@
+function light_strip_clip_slot(light) = light_strip_width(light) + clearance;       //! Clip slot size

@@ -1,0 +1,7 @@
+module test_f_mod() {
+    _test_fn2arg(
+        function (a,b) f_mod(a,b),
+        [[21,3,0],[22,7,1],[23,3,2],[24,3,0]]
+    );
+}
+test_f_mod();

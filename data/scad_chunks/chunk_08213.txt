@@ -1,0 +1,22 @@
+module test_golden_spiral_extrude_hollow() {
+    echo("==== test_golden_spiral_extrude_hollow ====");
+    $fn = 12;
+
+    shape_pts = concat(
+        shape_circle(radius = 3),
+        shape_circle(radius = 2)
+    );
+
+    golden_spiral_extrude(
+        shape_pts, 
+        from = 5, 
+        to = 10, 
+        point_distance = 1,
+        scale = 10,
+        triangles = "HOLLOW"
+    );
+
+}
+
+test_golden_spiral_extrude_solid();
+test_golden_spiral_extrude_hollow();

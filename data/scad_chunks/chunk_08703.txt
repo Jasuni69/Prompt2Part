@@ -1,0 +1,1 @@
+function _set_y(turtle, y) = [[_get_x(turtle), y], _get_angle(turtle)];

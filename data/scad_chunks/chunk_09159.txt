@@ -1,0 +1,6 @@
+function next_x(x, dir, columns, wrapping) = 
+    let(nx = x + _next_x_table[dir])
+    wrapping ? (nx + columns) % columns : nx;
+    
+// get y value by dir
+_next_y_table = [0, 1, 0, -1];

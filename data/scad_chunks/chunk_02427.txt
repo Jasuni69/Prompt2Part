@@ -1,0 +1,36 @@
+module main_assembly() pose([170, 335, 0], exploded = false) pose([ 42.20, 0.00, 159.60 ], exploded = true)
+assembly("main") {
+    RPI_case_assembly();
+
+    explode(20, explode_children = true) {
+        pbox_base_screws(box);
+
+        back_assembly();
+    }
+}
+
+if($preview) {
+    if(assembly == "main")
+        main_assembly();
+    else if(assembly == "case")
+        case_assembly();
+    else if(assembly == "back")
+        back_assembly();
+    else if(assembly == "RPI")
+        RPI_assembly();
+    else if(assembly == "RPI_case")
+        RPI_case_assembly();
+    else if(assembly == "enviro_case")
+        enviro_case_assembly();
+}
+else {
+    gap = 5;
+
+    enviro_plus_case_stl();
+
+    translate([0, -depth - gap])
+        enviro_plus_case_base_stl();
+
+    translate([0, -2 * (depth + gap)])
+        bulkhead_stl();
+}

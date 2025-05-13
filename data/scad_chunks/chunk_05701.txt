@@ -1,0 +1,14 @@
+function squircle(size, squareness=0.5, style="fg", anchor=CENTER, spin=0, atype="box") =
+    assert(squareness >= 0 && squareness <= 1)
+    assert(is_num(size) || is_vector(size,2))
+    assert(in_list(atype, ["box", "perim"]))
+    let(
+        size = is_num(size) ? [size,size] : point2d(size),
+        path = style == "fg" ? _squircle_fg(size, squareness)
+            : style == "superellipse" ? _squircle_se(size, squareness)
+            : style == "bezier" ? _squircle_bz(size, squareness)
+            : assert(false, "Style must be \"fg\" or \"superellipse\"")
+    ) reorient(anchor, spin, two_d=true, size=atype=="box"?size:undef, path=atype=="box"?undef:path, p=path, extent=true);
+
+
+/* FG squircle functions */

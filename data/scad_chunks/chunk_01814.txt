@@ -1,0 +1,1 @@
+function battery_usb_offset(type)    = type[9]; //! USB connector offset from the top

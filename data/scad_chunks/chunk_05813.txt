@@ -1,0 +1,89 @@
+module path_extrude(path, convexity=10, clipsize=100) {
+    req_children($children);
+    rotmats = cumprod([
+       for (i = idx(path,e=-2)) let(
+           vec1 = i==0? UP : unit(path[i]-path[i-1], UP),
+           vec2 = unit(path[i+1]-path[i], UP)
+       ) rot(from=vec1,to=vec2)
+    ]);
+    // This adds a rotation midway between each item on the list
+    interp = rot_resample(rotmats,n=2,method="count");
+    epsilon = 0.0001;  // Make segments ever so slightly too long so they overlap.
+    ptcount = len(path);
+    attachable(){
+       for (i = [0:1:ptcount-2]) {
+           pt1 = path[i];
+           pt2 = path[i+1];
+           dist = norm(pt2-pt1);
+           T = rotmats[i];
+           difference() {
+               translate(pt1) {
+                   multmatrix(T) {
+                       down(clipsize/2/2) {
+                           if ((dist+clipsize/2) > 0) {
+                               linear_extrude(height=dist+clipsize/2, convexity=convexity) {
+                                   children();
+                               }
+                           }
+                       }
+                   }
+               }
+               translate(pt1) {
+                   hq = (i > 0)? interp[2*i-1] : T;
+                   multmatrix(hq) down(clipsize/2+epsilon) cube(clipsize, center=true);
+               }
+               translate(pt2) {
+                   hq = (i < ptcount-2)? interp[2*i+1] : T;
+                   multmatrix(hq) up(clipsize/2+epsilon) cube(clipsize, center=true);
+               }
+           }
+       }
+       union();
+    }
+}
+
+
+
+// Module: cylindrical_extrude()
+// Synopsis: Extrudes 2D children outwards around a cylinder.
+// SynTags: Geom
+// Topics: Miscellaneous, Extrusion, Rotation
+// See Also: cyl(), plot_revolution()
+// Usage:
+//   cylindrical_extrude(ir|id=, or|od=, [size=], [convexity=], [spin=], [orient=]) 2D-CHILDREN;
+// Description:
+//   Chops the 2D children into rectangles and extrudes each rectangle as a facet around an
+//   approximate cylindrical shape.  Uses $fn/$fa/$fs to control the number of facets.
+//   By default the calculation assumes that the children occupy in the X direction one revolution of the
+//   cylinder of specified radius/diameter and are not more than 1000 units tall (in the Y direction).
+//   If the children are in fact much smaller in width then this assumption is inefficient.  If the children
+//   are wider then they will be truncated at one revolution.  To address either of these problems you can set
+//   the `size` parameter.  Note that the specified height isn't very important: it just needs to be larger than
+//   the actual height of the children, which is why it defaults to 1000. If you set `size` to a scalar then
+//   that only changes the X value and the Y value remains at the default of 1000.
+//   .
+//   When performing the wrap, the X=0 line of the children maps to the Y- axis and the facets are centered on the Y- axis.
+//   This is not consistent with how cylinder() creates its facets.  If `$fn` is a multiple of 4 then the facets will line
+//   up with a cylinder.  Otherwise you must rotate a cylinder by 90 deg in the case of `$fn` even or `90-360/$fn/2` if `$fn` is odd.
+// Arguments:
+//   ir = The inner radius to extrude from.
+//   or = The outer radius to extrude to.
+//   ---
+//   od = The outer diameter to extrude to.
+//   id = The inner diameter to extrude from.
+//   size = If a scalar, the width of the 2D children.  If a vector, the [X,Y] size of the 2D children.  Default: [`2*PI*or`,1000]
+//   convexity = The max number of times a line could pass though a wall.  Default: 10
+//   spin = Amount in degrees to spin around cylindrical axis.  Default: 0
+//   orient = The orientation of the cylinder to wrap around, given as a vector.  Default: UP
+// Example:  Basic example with defaults.  This will run faster with large facet counts if you set `size=100`
+//   cylindrical_extrude(or=50, ir=45)
+//       text(text="Hello World!", size=10, halign="center", valign="center");
+// Example: Spin Around the Cylindrical Axis
+//   cylindrical_extrude(or=50, ir=45, spin=90)
+//       text(text="Hello World!", size=10, halign="center", valign="center");
+// Example: Orient to the Y Axis.
+//   cylindrical_extrude(or=40, ir=35, orient=BACK)
+//       text(text="Hello World!", size=10, halign="center", valign="center");
+// Example(Med): You must give a size argument for this example where the child wraps fully around the cylinder
+//   cylindrical_extrude(or=27, ir=25, size=300, spin=-85)
+//       zrot(-10)text(text="This long text wraps around the cylinder.", size=10, halign="center", valign="center");

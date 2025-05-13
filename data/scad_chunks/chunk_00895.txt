@@ -1,0 +1,1 @@
+function rod_end_screw_length(type)          = type[9];    //! length of the screw from eye center, not the bore

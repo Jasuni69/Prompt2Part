@@ -1,0 +1,19 @@
+function are_points_on_plane(points, plane, eps=EPSILON) =
+    assert( _valid_plane(plane), "\nInvalid plane." )
+    assert( is_matrix(points,undef,3) && len(points)>0, "\nInvalid pointlist." ) // using is_matrix it accepts len(points)==1
+    assert( is_finite(eps) && eps>=0, "\nThe tolerance should be a positive number." )
+    _pointlist_greatest_distance(points,plane) < eps;
+
+
+/// Internal Function: is_point_above_plane()
+/// Usage:
+///   bool = _is_point_above_plane(plane, point);
+/// Topics: Geometry, Planes
+/// Description:
+///   Given a plane as [A,B,C,D] where the cartesian equation for that plane
+///   is Ax+By+Cz=D, determines if the given 3D point is on the side of that
+///   plane that the normal points toward.  The normal of the plane is the
+///   same as [A,B,C].
+/// Arguments:
+///   plane = The [A,B,C,D] coefficients for the first plane equation `Ax+By+Cz=D`.
+///   point = The 3D point to test.

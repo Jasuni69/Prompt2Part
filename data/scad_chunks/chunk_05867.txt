@@ -1,0 +1,141 @@
+function _turtle3d_list_command(command,arcsteps,movescale, lastT,lastPre,index) =
+   let(
+       reverse_index = search(["reverse"], command, 0)[0],
+       reverse = len(reverse_index)==1,
+       arcind = search(["arc"], command, 0)[0],
+       moveind = search(["move"], command, 0)[0],
+       movearcok = (arcind==[] || max(arcind)==0) && (moveind==[] || max(moveind)==0)
+   )
+   assert(len(reverse_index)<=1, str("Only one \"reverse\" is allowed at index ",index))
+   assert(!reverse || reverse_index[0]%2==0, str("Error processing compound command at index ",index))
+   assert(movearcok, str("\"move\" or \"arc\" must appear at the beginning of the compound command at index ",index))
+   assert(!reverse || len(command)%2==1,str("Odd number of entries in [keyword,value] list (after removing \"reverse\") at index ",index))
+   assert(reverse || len(command)%2==0,str("Odd number of entries in [keyword,value] list at index ",index))
+   let(
+       
+       command = list_remove(command, reverse_index),
+       keys=command[0]=="move" ?
+               struct_set([
+                           ["move", 0],
+                           ["twist",0],
+                           ["grow",1],
+                           ["shrink",1],
+                           ["steps",1],
+                           ["roll",0],
+                          ],
+                          command, grow=false)
+          :command[0]=="arc" ?
+               struct_set([
+                           ["arc", 0],
+                           ["up", 0],
+                           ["down", 0],
+                           ["left", 0],
+                           ["right", 0],
+                           ["twist",0],
+                           ["grow",1],
+                           ["shrink",1],
+                           ["steps",0],
+                           ["roll",0],
+                           ["rot", 0],
+                           ["todir", 0],
+                           ["xrot", 0],
+                           ["yrot", 0],
+                           ["zrot", 0],
+                          ],
+                          command, grow=false)
+          :assert(false,str("Unknown compound turtle3d command \"",command,"\" at index ",index)),
+       move = command[0]=="move" ? movescale*struct_val(keys,"move") : 0,
+       flip = reverse ? xflip() : ident(4),            // If reverse is given we set flip 
+       radius = movescale*first_defined([struct_val(keys,"arc"),0]),  // arc radius if given
+       twist = struct_val(keys,"twist"),
+       grow = force_list(struct_val(keys,"grow"),2),
+       shrink = force_list(struct_val(keys, "shrink"),2)
+   )
+   assert(is_num(radius), str("Radius parameter to \"arc\" must be a number in command at index ",index))
+   assert(is_vector(grow,2), str("Parameter to \"grow\" must be a scalar or 2d vector at index ",index))
+   assert(is_vector(shrink,2), str("Parameter to \"shrink\" must be a scalar or 2d vector at index ",index))
+   let(
+       scaling = point3d(v_div(grow,shrink),1),
+       usersteps = struct_val(keys,"steps"),
+       roll = struct_val(keys,"roll"),
+       ////////////////////////////////////////////////////////////////////////////////////////
+       ////  Next section is computations for relative rotations: "left", "right", "up" or "down"
+       right = default(struct_val(keys,"right"),0),
+       left = default(struct_val(keys,"left"),0),
+       up = default(struct_val(keys,"up"),0),
+       down = default(struct_val(keys,"down"),0),
+       angleok = assert(command[0]=="move" || (is_num(right) && is_num(left) && is_num(up) && is_num(down)),
+                        str("Must give numeric argument to \"left\", \"right\", \"up\" and \"down\" in command at index ",index))
+                 command[0]=="move" || ((up-down==0 || abs(left-right)<180) && (left-right==0 || abs(up-down)<180))
+   )
+   assert(command[0]=="move" || right==0 || left==0, str("Cannot specify both \"left\" and \"right\" in command at index ",index))
+   assert(command[0]=="move" || up==0 || down==0, str("Cannot specify both \"up\" and \"down\" in command at index ",index))
+   assert(angleok, str("Mixed angles must all be below 180 at index ",index))
+   let(
+        newdir = apply(zrot(left-right)*yrot(down-up),RIGHT),     // This is the new direction turtle points relative to RIGHT
+        relaxis = left-right == 0 ? BACK
+                : down-up == 0 ? UP
+                : cross(RIGHT,newdir),         // This is the axis of rotation for "right", "left", "up" or "down"
+        angle = command[0]=="move" ? 0 :
+                  left-right==0 || down-up==0 ? down-up+left-right :
+                  vector_angle(RIGHT,newdir),    // And this is the angle for that case.
+        center = -radius * (                     // Center of rotation for this case
+                      left-right == 0 ? [0,0,sign(down-up)]
+                    : down-up == 0 ? [0,sign(right-left),0]
+                    :       unit(cross(RIGHT,cross(RIGHT,newdir)),[0,0,0])
+                 ),    
+        ///////////////////////////////////////////////
+        // Next we compute values for absolute rotations: "xrot", "xrot", "yrot", "zrot", and "todir"
+        //
+        xrotangle = struct_val(keys,"xrot"),
+        yrotangle = struct_val(keys,"yrot"),
+        zrotangle = struct_val(keys,"zrot"),
+        rot = struct_val(keys,"rot"),
+        todir = struct_val(keys,"todir"),
+        // Compute rotation angle and axis for the absolute rotation (or undef if no absolute rotation is given)
+        abs_angle_axis =
+            command[0]=="move" ? [undef,CENTER] :
+            let(nzcount=len([for(entry=[xrotangle,yrotangle,zrotangle,rot,todir]) if (entry!=0) 1]))
+            assert(nzcount<=1, str("You can only define one of \"xrot\", \"yrot\", \"zrot\", \"rot\", and \"todir\" at index ",index))
+            rot!=0 ?   assert(is_matrix(rot,4,4),str("Argument to \"rot\" is not a 3d transformation matrix at index ",index))
+                       rot_decode(rot)
+          : todir!=0 ? assert(is_vector(todir,3),str("Argument to \"todir\" is not a length 3 vector at index ",index))
+                       rot_decode(rot(from=v, to=todir))
+          : xrotangle!=0 ? [xrotangle, RIGHT]
+          : yrotangle!=0 ? [yrotangle, BACK]
+          : zrotangle!=0 ? [zrotangle, UP]
+          : [undef,CENTER],
+        absangle = abs_angle_axis[0],
+        absaxis = abs_angle_axis[1],
+        // Computes the extra shift and center with absolute rotation
+        Trot = _rotpart(lastT),  
+        shift = _transpart(lastT), 
+        v = apply(Trot,RIGHT),           // Current direction
+        projv = v - (absaxis*v)*absaxis, // Component of rotation axis orthogonal to v
+        abscenter = is_undef(absangle) ? undef : sign(absangle) * radius * cross(absaxis,projv),    // absangle might be undef if command is "move"
+        slope = absaxis*v / norm(projv),       // This computes the shift in the direction along the rotational axis
+        vshift = is_undef(absangle) ? undef : absaxis*slope* 2*PI*radius*absangle/360
+    )
+    // At this point angle is nonzero if and only if a relative angle command (left, right, up down) was given,
+    //               absangle is defined if and only if an absolute angle command was given
+    assert(is_undef(absangle) || absangle!=0, str("Arc rotation with zero angle at index ",index))
+    assert(angle==0 || is_undef(absangle), str("Mixed relative and absolute rotations at index ",index))
+    assert(is_int(usersteps) && usersteps>=0 && (command[0]=="arc" || usersteps>=1),
+           str("Steps value ",usersteps," invalid at index ",index))
+    assert(is_undef(absangle) || !all_zero(projv), str("Rotation acts as twist, which does not produce a valid arc at index ",index))
+    let( 
+        steps = usersteps != 0 ? usersteps
+              : arcsteps != 0 ? arcsteps
+              : ceil(segs(abs(radius)) * abs(first_defined([absangle,angle]))/360),
+        // The next line computes a list of pairs [trans,pretrans] for the segment or arc
+        result =  is_undef(absangle)
+                  ? [for(n=[1:1:steps]) let(frac=n/steps)
+                              [lastT * flip * right(frac*move) * (angle==0?ident(4):rot(frac*angle,v=relaxis,cp=center)) * xrot(frac*roll),
+                               lastPre * zrot(frac*twist) * scale(lerp([1,1,1],scaling,frac))]
+                    ]
+                  : [for(n=[1:1:steps]) let(frac=n/steps) 
+                              [move(shift+vshift*frac) * rot(frac*absangle,v=absaxis,cp=abscenter)*Trot * xrot(frac*roll),
+                               lastPre * zrot(frac*twist) * scale(lerp([1,1,1],scaling,frac))]
+                    ]
+    )                     // Transpose converts the result into a list of the form [[trans1,trans2,...],[pretran1,pretran2,...]],
+    transpose(result);    // which is required by _tupdate

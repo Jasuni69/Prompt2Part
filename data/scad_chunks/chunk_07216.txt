@@ -1,0 +1,15 @@
+function b(n,bool)=  is_list(n)?[for(i=[0:len(n)-1])b(n[i],bool)]:
+                               is_num(n)?bool||is_undef(bool)?n?true:
+                                                                false:
+                                                              n?n:
+                                                                0:
+                                         bool?n?true:  // n = bool
+                                                false:
+                                              n?1:
+                                                0;
+
+/*
+echo(b(1),b(true))
+echo(boolTrue=b(1,true),b(true,true));
+echo(boolFalse=b(1,false),b(true,false));
+// */

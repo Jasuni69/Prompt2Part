@@ -1,0 +1,4 @@
+function _hashmap_puts(m, kv_lt, leng, _indices_hash, i = 0) =
+    i == leng ? m :
+	let(kv = kv_lt[i])
+	_hashmap_puts(hashmap_put(m, kv[0], kv[1], hash = _indices_hash), kv_lt, leng, _indices_hash, i + 1);

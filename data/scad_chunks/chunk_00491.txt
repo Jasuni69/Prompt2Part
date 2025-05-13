@@ -1,0 +1,1 @@
+function iec_depth(type)    = type[17]; //! Depth of the body below the flange

@@ -1,0 +1,26 @@
+module Box(x=8,y,z=5,d2,c=3.5,s=1.5,eck=4,outer=true,fnC=36,fnS=24,help){
+  red=c>s?c:s;
+  
+  iz=is_list(x)?x.z:z;
+  ix=is_list(x)?x.x:x;
+  y=is_list(x)?x.y:y;
+  
+  x=is_num(y)||outer?ix:
+                    Umkreis(eck,ix-red)+red;
+  d2=is_undef(d2)?ix:
+                  outer?d2:
+                        Umkreis(eck,d2-red)+red;
+
+  hErr=s/2-cos(90/ceil(fnS/2))*s/2+.00001; // missing sphere piece
+  z=iz+hErr*2;
+
+  T(z=z/2-hErr)  minkowski(){
+    if(is_num(y))cube([x -red, y -red, z-s-minVal],center=true);
+        else cylinder(h=z -s -minVal, d1=x -red, d2=d2 -red, $fn=eck, center=true);
+    if(c>s)cylinder(minVal,d=c-s,center=true,$fn=fnC);
+    //OctaH(d=s,n=fnS);
+    sphere(d=s,$fn=fnS);
+    }
+    
+HelpTxt("Box",["x",x,"y",y,"z",z,"d2",d2,"c",c,"s",s,"eck",eck,"outer",outer,"fnC",fnC,"fnS",fnS],help);
+}

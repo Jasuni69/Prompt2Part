@@ -1,0 +1,6 @@
+function lengthPoints(pts=[], _i=0, _sum=0) = _i<len(pts)-2? lengthPoints(pts, _i+1, _sum + distanceBetween(pts[_i], pts[_i+1])) : _sum; 
+
+// given two points, a, b, find equation for line that is parallel to line 
+// segment but offset to the right by offset dist
+// equation is of the form c*x+d*y=e
+// represented as array [ c, d, e ]

@@ -1,0 +1,19 @@
+function _sum(v,_total,_i=0) = _i>=len(v) ? _total : _sum(v,_total+v[_i], _i+1);
+
+
+
+
+// Function: mean()
+// Synopsis: Returns the mean value of a list of values.
+// Topics: Math, Statistics
+// See Also: sum(), mean(), median(), product()
+// Usage:
+//   x = mean(v);
+// Description:
+//   Returns the arithmetic mean/average of all entries in the given array.
+//   If passed a list of vectors, returns a vector of the mean of each part.
+// Arguments:
+//   v = The list of values to get the mean of.
+// Example:
+//   mean([2,3,4]);  // returns 3.
+//   mean([[1,2,3], [3,4,5], [5,6,7]]);  // returns [3, 4, 5]

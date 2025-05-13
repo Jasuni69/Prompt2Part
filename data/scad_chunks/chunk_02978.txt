@@ -1,0 +1,64 @@
+module TestCoordTranslations()
+{
+  module TestPCB2Box(x,y,z, face, sourceCoord)
+  {
+    X = translate2Box_X (x, face, sourceCoord);
+    Y = translate2Box_Y (y, face, sourceCoord);
+    Z = translate2Box_Y (z, face, sourceCoord);
+    echo (str(getPartName(face), " sourceCoord", sourceCoord, " to Box Coord [X=" , x, ", y=", y, ", z=", z, "] -> [x=" , X, ", y=", Y, ", z=", Z, "] for PCB "));
+  }
+  module TestX2LeftOrigin(x, face)
+  {
+    X = translateX2LeftOrigin (x, face);
+    echo (str(getPartName(face), " X to LeftOrigin [" , x, "] -> [" , X, "]"));
+  }
+  
+  TestPCB2Box(0,0,0, yappLeft, [yappCoordPCB, undef, "Main"]);
+  TestPCB2Box(0,0,0, yappRight, [yappCoordPCB, undef, "Main"]);
+  TestPCB2Box(0,0,0, yappFront, [yappCoordPCB, undef, "Main"]);
+  TestPCB2Box(0,0,0, yappBack, [yappCoordPCB, undef, "Main"]);
+  TestPCB2Box(0,0,0, yappLid, [yappCoordPCB, undef, "Main"]);
+  TestPCB2Box(0,0,0, yappBase, [yappCoordPCB, undef, "Main"]);
+  
+  /*
+  TestPCB2Box(0,0,0, yappLeft, [yappCoordPCB, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappRight, [yappCoordPCB, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappFront, [yappCoordPCB, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappBack, [yappCoordPCB, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappLid, [yappCoordPCB, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappBase, [yappCoordPCB, yappAltOrigin]);
+    
+  TestPCB2Box(0,0,0, yappLeft, [yappCoordBoxInside]);
+  TestPCB2Box(0,0,0, yappRight, [yappCoordBoxInside]);
+  TestPCB2Box(0,0,0, yappFront, [yappCoordBoxInside]);
+  TestPCB2Box(0,0,0, yappBack, [yappCoordBoxInside]);
+  TestPCB2Box(0,0,0, yappLid, [yappCoordBoxInside]);
+  TestPCB2Box(0,0,0, yappBase, [yappCoordBoxInside]);
+  
+  TestPCB2Box(0,0,0, yappLeft, [yappCoordBoxInside, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappRight, [yappCoordBoxInside, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappFront, [yappCoordBoxInside, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappBack, [yappCoordBoxInside, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappLid, [yappCoordBoxInside, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappBase, [yappCoordBoxInside, yappAltOrigin]);
+      
+  TestPCB2Box(0,0,0, yappLeft, [yappCoordBox]);
+  TestPCB2Box(0,0,0, yappRight, [yappCoordBox]);
+  TestPCB2Box(0,0,0, yappFront, [yappCoordBox]);
+  TestPCB2Box(0,0,0, yappBack, [yappCoordBox]);
+  TestPCB2Box(0,0,0, yappLid, [yappCoordBox]);
+  TestPCB2Box(0,0,0, yappBase, [yappCoordBox]);
+  
+  TestPCB2Box(0,0,0, yappLeft, [yappCoordBox, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappRight, [yappCoordBox, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappFront, [yappCoordBox, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappBack, [yappCoordBox, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappLid, [yappCoordBox, yappAltOrigin]);
+  TestPCB2Box(0,0,0, yappBase, [yappCoordBox, yappAltOrigin]);
+  */
+} //TestCoordTranslations
+
+//TestCoordTranslations();
+
+//===========================================================
+// Test module for making masks

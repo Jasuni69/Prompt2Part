@@ -1,0 +1,44 @@
+module puzzle_piece(side_length, spacing) {
+	$fn = 48;
+
+	circle_radius = side_length / 10;
+	half_circle_radius = circle_radius / 2;
+    half_side_length = side_length / 2;
+	side_length_div_4 = side_length / 4;
+	bulge_circle_radius = circle_radius - spacing;
+
+    circle_x = half_circle_radius - half_side_length - spacing;
+    circle_y = side_length_div_4 - half_side_length;
+    circle_y2 = side_length_div_4 * 3 - half_side_length;
+    
+    module df_circles() {
+        translate([circle_x, circle_y]) 
+            circle(circle_radius);
+        translate([circle_x, circle_y2]) 
+            circle(circle_radius);
+    }
+    
+    module bulge_circles() {
+        translate([side_length + circle_x, circle_y]) 
+            circle(bulge_circle_radius);
+        translate([side_length + circle_x, circle_y2]) 
+            circle(bulge_circle_radius);    
+    }
+
+    translate([half_side_length - spacing, half_side_length - spacing]) {
+        difference() {
+            square(side_length - spacing, center = true);            
+            // left
+            df_circles();
+            // top
+            rotate(-90) 
+                df_circles();       
+        }
+
+        // right
+        bulge_circles();
+        // bottom
+        rotate(-90) 
+            bulge_circles();
+    }
+}

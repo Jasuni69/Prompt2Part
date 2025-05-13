@@ -1,0 +1,1 @@
+function faceplate_boss_size(type)      = type[3]; //! Centre boss outer d, inner d and height

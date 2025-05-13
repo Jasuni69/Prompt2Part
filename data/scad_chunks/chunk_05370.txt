@@ -1,0 +1,3 @@
+function _quant_anch(x) = approx(x,0) ? 0 : sign(x);
+
+// Make arbitrary anchor legal for a given geometry

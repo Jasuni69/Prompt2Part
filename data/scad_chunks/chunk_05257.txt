@@ -1,0 +1,31 @@
+function ends_with(str,pattern) = _is_liststr(str) && substr_match(str,len(str)-len(pattern),pattern);
+
+
+
+// Function: str_split()
+// Synopsis: Splits a longer string wherever a given substring occurs.
+// Topics: Strings
+// See Also: suffix(), str_find(), substr_match(), starts_with(), ends_with(), str_split(), str_join(), str_strip()
+// Usage:
+//   string_list = str_split(str, sep, [keep_nulls]);
+// Description:
+//   Breaks an input string into substrings using a separator or list of separators.  If keep_nulls is true
+//   then two sequential separator characters produce an empty string in the output list.  If keep_nulls is false
+//   then no empty strings are included in the output list.
+//   .
+//   If sep is a single string then each character in sep is treated as a delimiting character and the input string is
+//   split at every delimiting character.  Empty strings can occur whenever two delimiting characters are sequential.
+//   If sep is a list of strings then the input string is split sequentially using each string from the list in order.
+//   If keep_nulls is true then the output will have length equal to `len(sep)+1`, possibly with trailing null strings
+//   if the string runs out before the separator list.
+// Arguments:
+//   str = String to split.
+//   sep = a string or list of strings to use for the separator
+//   keep_nulls = boolean value indicating whether to keep null strings in the output list.  Default: true
+// Example:
+//   s1=str_split("abc+def-qrs*iop","*-+");     // Returns ["abc", "def", "qrs", "iop"]
+//   s2=str_split("abc+*def---qrs**iop+","*-+");// Returns ["abc", "", "def", "", "", "qrs", "", "iop", ""]
+//   s3=str_split("abc      def"," ");          // Returns ["abc", "", "", "", "", "", "def"]
+//   s4=str_split("abc      def"," ",keep_nulls=false); // Returns ["abc", "def"]
+//   s5=str_split("abc+def-qrs*iop",["+","-","*"]);     // Returns ["abc", "def", "qrs", "iop"]
+//   s6=str_split("abc+def-qrs*iop",["-","+","*"]);     // Returns ["abc+def", "qrs*iop", "", ""]

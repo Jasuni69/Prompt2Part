@@ -1,0 +1,18 @@
+function helix(l,h,turns,angle, r, r1, r2, d, d1, d2)=
+    let(
+        r1=get_radius(r=r,r1=r1,d=d,d1=d1,dflt=1),
+        r2=get_radius(r=r,r1=r2,d=d,d1=d2,dflt=1),
+        length = first_defined([l,h])
+    )
+    assert(num_defined([length,turns,angle])==2,"Must define exactly two of l/h, turns, and angle")
+    assert(is_undef(angle) || length!=0, "Cannot give length 0 with an angle")
+    let(
+        // length advances dz for each turn
+        dz = is_def(angle) && length!=0 ? 2*PI*r1*tan(angle) : length/abs(turns),
+
+        maxtheta = is_def(turns) ? 360*turns : 360*length/dz,
+        N = segs(max(r1,r2))
+    )
+    [for(theta=lerpn(0,maxtheta, max(3,ceil(abs(maxtheta)*N/360))))
+       let(R=lerp(r1,r2,theta/maxtheta))
+       [R*cos(theta), R*sin(theta), abs(theta)/360 * dz]];

@@ -1,0 +1,15 @@
+module test_f_odd() {
+    _test_fn1arg(
+        function (a) f_odd(a),
+        [
+            [-3, true ],
+            [-2, false],
+            [-1, true ],
+            [ 0, false],
+            [ 1, true ],
+            [ 2, false],
+            [ 3, true ],
+        ]
+    );
+}
+test_f_odd();

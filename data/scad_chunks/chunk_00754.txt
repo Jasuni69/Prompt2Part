@@ -1,0 +1,1 @@
+function psu_screw_hole_radius(type) = type[6];     //! Clearance hole for screw, bigger than normal on ATX

@@ -1,0 +1,21 @@
+module gyro(radius, layers, spacing) {
+	h = radius / 3;
+    half_r = radius / 2.75;
+    r_step = (radius - half_r) / (layers - 1);
+    
+    module rings() {
+        ring_thickness = r_step - spacing;
+        circle(half_r);
+        for(i = [1:layers - 1]) {
+            hollow_out(ring_thickness) 
+                circle(half_r + r_step * i);        
+        }
+    }
+
+    rotate_extrude()
+    intersection() {
+        translate([0, -h]) 
+            square([radius, h * 2]);
+        rings();
+    }
+}

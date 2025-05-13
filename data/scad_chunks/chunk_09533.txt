@@ -1,0 +1,23 @@
+function bezier_polyline(bezier, splinesteps=16, N=3) = let(
+		segs = (len(bezier)-1)/N
+	) concat(
+		[for (seg = [0:segs-1], i = [0:splinesteps-1]) bezier_path_point(bezier, seg, i/splinesteps, N=N)],
+		[bezier_path_point(bezier, segs-1, 1, N=N)]
+	);
+
+
+
+// Function: fillet_path()
+// Usage:
+//   fillet_path(pts, fillet, [maxerr]);
+// Description:
+//   Takes a 3D polyline path and fillets the corners, returning a 3d cubic (degree 3) bezier path.
+// Arguments:
+//   pts = 3D Polyline path to fillet.
+//   fillet = The radius to fillet/round the polyline corners by.
+//   maxerr = Max amount bezier curve should diverge from actual radius curve.  Default: 0.1
+// Example(2D):
+//   pline = [[40,0], [0,0], [35,35], [0,70], [-10,60], [-5,55], [0,60]];
+//   bez = fillet_path(pline, 10);
+//   trace_polyline(pline, showpts=true, size=0.5, color="green");
+//   trace_bezier(bez, size=1);

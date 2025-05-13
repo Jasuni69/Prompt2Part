@@ -1,0 +1,32 @@
+module Linse(dia=10,r=7.07107,name,messpunkt=true,fn,help){
+
+InfoTxt("Linse",["Dicke",dick,"Kreisgrad",str(grad,"°")],name);
+
+r=is_list(r)?r:[r,r];
+tx=Kathete(r[0],dia/2);
+tx2=Kathete(r[1],dia/2);
+grad=2*asin((dia/2)/r[0]);    
+grad2=2*asin((dia/2)/r[1]);    
+dick=(r[0]-tx) + (r[1]-tx2);
+ifn=is_undef(fn)?fs2fn(r=r[0],fs=fs,grad=grad):fn;
+ifn2=is_undef(fn)?fs2fn(r=r[1],fs=fs,grad=grad2):fn;
+
+   polygon(concat(
+    kreis(rand=0,r=r[0],grad=grad,t=[tx*sign(r[0]),0],fn=ifn),
+    kreis(rand=0,r=r[1],grad=grad2,rot=-180,t=[-tx2*sign(r[1]),0],fn=ifn2)
+    )
+   ); 
+  if(messpunkt){
+      Pivot([tx,0],active=[1,0,0,1,0],messpunkt=messpunkt);
+      Pivot([0,dia/2],active=[1,0,0,1,1],messpunkt=messpunkt);
+      Pivot([-tx2,0],active=[1,0,0,1,1],messpunkt=messpunkt);
+      
+  }
+ HelpTxt("Linse",[
+ "dia",dia,
+ "r",r,
+ "name",name,
+ "messpunkt=",messpunkt,
+ "fn",fn],
+  help);
+}

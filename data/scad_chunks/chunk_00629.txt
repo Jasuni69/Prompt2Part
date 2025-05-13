@@ -1,0 +1,1 @@
+function tx_x_pitch(type)           = type[5];  //! Screw hole x pitch

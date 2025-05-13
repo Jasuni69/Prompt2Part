@@ -1,0 +1,9 @@
+function version_cmp(a,b) =
+    let(
+        a = version_to_list(a),
+        b = version_to_list(b),
+        cmps = [for (i=[0:1:2]) if(a[i]!=b[i]) a[i]-b[i]]
+    ) cmps==[]? 0 : cmps[0];
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

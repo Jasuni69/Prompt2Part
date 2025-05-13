@@ -1,0 +1,68 @@
+function _find_one_tangent(curve, edge, curve_offset=[0,0,0], closed=true) =
+    let(
+        angles = [
+            for (i = [0:len(curve)-(closed?1:2)])
+            let(
+                plane = plane3pt( edge[0], edge[1], curve[i]),
+                tangent = [curve[i], select(curve,i+1)]
+            ) plane_line_angle(plane,tangent)
+        ],
+        zero_cross = [
+            for (i = [0:len(curve)-(closed?1:2)])
+            if (sign(angles[i]) != sign(select(angles,i+1)))
+            i
+        ],
+        d = [
+            for (i = zero_cross)
+            point_line_distance(curve[i]+curve_offset, edge)
+        ]
+    ) zero_cross[min_index(d)];
+
+
+// Function: associate_vertices()
+// Synopsis: Create vertex association to control how {{skin()}} links vertices. 
+// SynTags: PathList
+// Topics: Extrusion, Skinning, Paths
+// See Also: skin()
+// Usage:
+//   newpoly = associate_vertices(polygons, split);
+// Description:
+//   Takes as input a list of polygons and duplicates specified vertices in each polygon in the list through the series so
+//   that the input can be passed to `skin()`.  This allows you to decide how the vertices are linked up rather than accepting
+//   the automatically computed minimal distance linkage.  However, the number of vertices in the polygons must not decrease in the list.
+//   The output is a list of polygons that all have the same number of vertices with some duplicates.  You specify the vertex splitting
+//   using the `split`, which is a list where each entry corresponds to a polygon: split[i] is a value or list specifying which vertices in polygon i to split.
+//   Give the empty list if you don't want a split for a particular polygon.  If you list a vertex once then it is split and mapped to
+//   two vertices in the next polygon.  If you list it N times then N copies are created to map to N+1 vertices in the next polygon.
+//   You must ensure that each mapping produces the correct number of vertices to exactly map onto every vertex of the next polygon.
+//   If you split only vertex i of a polygon, that means it will map to vertices i and i+1 of the next polygon.  Vertex 0 always
+//   maps to vertex 0 and the last vertices always map to each other, so if you want something different than that you'll need to reindex
+//   your polygons.
+// Arguments:
+//   polygons = list of polygons to split
+//   split = list of lists of split vertices
+// Example(FlatSpin,VPD=17,VPT=[0,0,2]):  If you skin together a square and hexagon using the optimal distance method you get two triangular faces on opposite sides:
+//   sq = regular_ngon(4,side=2);
+//   hex = apply(rot(15),hexagon(side=2));
+//   skin([sq,hex], slices=10, refine=10, method="distance", z=[0,4]);
+// Example(FlatSpin,VPD=17,VPT=[0,0,2]):  Using associate_vertices you can change the location of the triangular faces.  Here they are connect to two adjacent vertices of the square:
+//   sq = regular_ngon(4,side=2);
+//   hex = apply(rot(15),hexagon(side=2));
+//   skin(associate_vertices([sq,hex],[[1,2]]), slices=10, refine=10, sampling="segment", z=[0,4]);
+// Example(FlatSpin,VPD=17,VPT=[0,0,2]): Here the two triangular faces connect to a single vertex on the square.  Note that we had to rotate the hexagon to line them up because the vertices match counting forward, so in this case vertex 0 of the square matches to vertices 0, 1, and 2 of the hexagon.
+//   sq = regular_ngon(4,side=2);
+//   hex = apply(rot(60),hexagon(side=2));
+//   skin(associate_vertices([sq,hex],[[0,0]]), slices=10, refine=10, sampling="segment", z=[0,4]);
+// Example(3D): This example shows several polygons, with only a single vertex split at each step:
+//   sq = regular_ngon(4,side=2);
+//   pent = pentagon(side=2);
+//   hex = hexagon(side=2);
+//   sep = regular_ngon(7,side=2);
+//   profiles = associate_vertices([sq,pent,hex,sep], [1,3,4]);
+//   skin(profiles ,slices=10, refine=10, method="distance", z=[0,2,4,6]);
+// Example(3D): The polygons cannot shrink, so if you want to have decreasing polygons you'll need to concatenate multiple results.  Note that it is perfectly ok to duplicate a profile as shown here, where the pentagon is duplicated:
+//   sq = regular_ngon(4,side=2);
+//   pent = pentagon(side=2);
+//   grow = associate_vertices([sq,pent], [1]);
+//   shrink = associate_vertices([sq,pent], [2]);
+//   skin(concat(grow, reverse(shrink)), slices=10, refine=10, method="distance", z=[0,2,2,4]);

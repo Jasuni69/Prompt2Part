@@ -1,0 +1,3 @@
+function door_latch_offset() = width / 2 + 1; //! Offset of the axle from the door edge
+
+nut_trap_depth = round_to_layer(screw_head_height(screw)) + 4 * layer_height;

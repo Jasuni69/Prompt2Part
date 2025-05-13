@@ -1,0 +1,5 @@
+module sealing_strip_test()
+    sealing_strip(100);
+
+if($preview)
+    sealing_strip_test();

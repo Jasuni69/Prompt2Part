@@ -1,0 +1,2 @@
+function stack_push(stack, elem) = [elem, stack];
+// function stack_pop(stack) = stack;

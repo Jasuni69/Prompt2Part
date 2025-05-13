@@ -1,0 +1,1 @@
+function smd_coax_pin_d(type)     = type[5]; //! Central pin diameter

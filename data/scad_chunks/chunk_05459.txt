@@ -1,0 +1,113 @@
+function get_slop() = is_undef($slop) ? 0 : $slop;
+
+
+// Constant: INCH
+// Synopsis: A constant containing the  number of millimeters in an inch. `25.4`
+// Topics: Constants
+// Description:
+//   The number of millimeters in an inch.
+// Example(2D):
+//   square(2*INCH, center=true);
+// Example(3D):
+//   cube([4,3,2.5]*INCH, center=true);
+INCH = 25.4;
+
+
+// Constant: IDENT
+// Synopsis: A constant containing the 3D identity transformation matrix.
+// SynTags: Mat
+// Topics: Constants, Affine, Matrices, Transforms
+// See Also: ident()
+// Description: Identity transformation matrix for three-dimensional transforms.  Equal to `ident(4)`.  
+IDENT=ident(4);
+
+
+
+// Section: Directional Vectors
+//   Vectors useful for `rotate()`, `mirror()`, and `anchor` arguments for `cuboid()`, `cyl()`, etc.
+
+// Constant: LEFT
+// Synopsis: The left-wards (X-) direction vector constant `[-1,0,0]`.
+// Topics: Constants, Vectors
+// See Also: RIGHT, FRONT, BACK, UP, DOWN, CENTER
+// Description: Vector pointing left.  [-1,0,0]
+// Example(3D): Usage with `anchor`
+//   cuboid(20, anchor=LEFT);
+LEFT  = [-1,  0,  0];
+
+// Constant: RIGHT
+// Synopsis: The right-wards (X+) direction vector constant `[1,0,0]`.
+// Topics: Constants, Vectors
+// See Also: LEFT, FRONT, BACK, UP, DOWN, CENTER
+// Description: Vector pointing right.  [1,0,0]
+// Example(3D): Usage with `anchor`
+//   cuboid(20, anchor=RIGHT);
+RIGHT = [ 1,  0,  0];
+
+// Constant: FRONT
+// Aliases: FWD, FORWARD
+// Synopsis: The front-wards (Y-) direction vector constant `[0,-1,0]`.
+// Topics: Constants, Vectors
+// See Also: LEFT, RIGHT, BACK, UP, DOWN, CENTER
+// Description: Vector pointing forward.  [0,-1,0]
+// Example(3D): Usage with `anchor`
+//   cuboid(20, anchor=FRONT);
+FRONT = [ 0, -1,  0];
+FWD = FRONT;
+FORWARD = FRONT;
+
+// Constant: BACK
+// Synopsis: The backwards (Y+) direction vector constant `[0,1,0]`.
+// Topics: Constants, Vectors
+// See Also: LEFT, RIGHT, FRONT, UP, DOWN, CENTER
+// Description: Vector pointing back.  [0,1,0]
+// Example(3D): Usage with `anchor`
+//   cuboid(20, anchor=BACK);
+BACK  = [ 0,  1,  0];
+
+// Constant: BOTTOM
+// Aliases: BOT, DOWN
+// Synopsis: The down-wards (Z-) direction vector constant `[0,0,-1]`.
+// Topics: Constants, Vectors
+// See Also: LEFT, RIGHT, FRONT, BACK, UP, CENTER
+// Description: Vector pointing down.  [0,0,-1]
+// Example(3D): Usage with `anchor`
+//   cuboid(20, anchor=BOTTOM);
+BOTTOM  = [ 0,  0, -1];
+BOT = BOTTOM;
+DOWN = BOTTOM;
+
+// Constant: TOP
+// Aliases: UP
+// Synopsis: The top-wards (Z+) direction vector constant `[0,0,1]`.
+// Topics: Constants, Vectors
+// See Also: LEFT, RIGHT, FRONT, BACK, DOWN, CENTER
+// Description: Vector pointing up.  [0,0,1]
+// Example(3D): Usage with `anchor`
+//   cuboid(20, anchor=TOP);
+TOP = [ 0,  0,  1];
+UP = TOP;
+
+// Constant: CENTER
+// Aliases: CTR, CENTRE
+// Synopsis: The center vector constant `[0,0,0]`.
+// Topics: Constants, Vectors
+// See Also: LEFT, RIGHT, FRONT, BACK, UP, DOWN
+// Description: Zero vector.  Centered.  [0,0,0]
+// Example(3D): Usage with `anchor`
+//   cuboid(20, anchor=CENTER);
+CENTER = [ 0,  0,  0];  // Centered zero vector.
+CTR = CENTER;
+CENTRE = CENTER;
+
+// Function: EDGE()
+// Synopsis: Named edge anchor constants
+// Topics: Constants, Attachment
+// Usage:
+//   EDGE(i)
+//   EDGE(direction,i)
+// Description:
+//   A shorthand for the named anchors "edge0", "top_edge0", "bot_edge0", etc.
+//   Use `EDGE(i)` to get "edge<i>".  Use `EDGE(TOP,i)` to get "top_edge<i>" and
+//   use `EDGE(BOT,i)` to get "bot_edge(i)".  You can also use
+//   `EDGE(CTR,i)` to get "edge<i>" and you can replace TOP or BOT with simply 1 or -1.

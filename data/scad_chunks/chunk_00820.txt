@@ -1,0 +1,1 @@
+function smd_coax_base_size(type) = type[1]; //! Size of the insulating base

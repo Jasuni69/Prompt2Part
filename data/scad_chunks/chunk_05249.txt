@@ -1,0 +1,42 @@
+function suffix(str,len) =
+    len>=len(str)? str : substr(str, len(str)-len,len);
+
+
+// Section: String Searching
+
+
+// Function: str_find()
+// Synopsis: Finds a substring in a string.
+// Topics: Strings
+// See Also: suffix(), str_find(), substr_match(), starts_with(), ends_with(), str_split(), str_join(), str_strip()
+// Usage:
+//   ind = str_find(str,pattern,[last=],[all=],[start=]);
+// Description:
+//   Searches input string `str` for the string `pattern` and returns the index or indices of the matches in `str`.
+//   By default `str_find()` returns the index of the first match in `str`.  If `last` is true then it returns the index of the last match.
+//   If the pattern is the empty string the first match is at zero and the last match is the last character of the `str`.
+//   If `start` is set then the search begins at index start, working either forward and backward from that position.  If you set `start`
+//   and `last` is true then the search will find the pattern if it begins at index `start`.  If no match exists, returns `undef`.
+//   If you set `all` to true then `str_find()` returns all of the matches in a list, or an empty list if there are no matches.
+// Arguments:
+//   str = String to search.
+//   pattern = string pattern to search for
+//   ---
+//   last = set to true to return the last match. Default: false
+//   all = set to true to return all matches as a list.  Overrides last.  Default: false
+//   start = index where the search starts
+// Example:
+//   a=str_find("abc123def123abc","123");   // Returns 3
+//   b=str_find("abc123def123abc","b");     // Returns 1
+//   c=str_find("abc123def123abc","1234");  // Returns undef
+//   d=str_find("abc","");                  // Returns 0
+//   e=str_find("abc123def123", "123", start=4);     // Returns 9
+//   f=str_find("abc123def123abc","123",last=true);  // Returns 9
+//   g=str_find("abc123def123abc","b",last=true);    // Returns 13
+//   h=str_find("abc123def123abc","1234",last=true); // Returns undef
+//   i=str_find("abc","",last=true);                 // Returns 3
+//   j=str_find("abc123def123", "123", start=8, last=true));  // Returns 3
+//   k=str_find("abc123def123abc","123",all=true);   // Returns [3,9]
+//   l=str_find("abc123def123abc","b",all=true);     // Returns [1,13]
+//   m=str_find("abc123def123abc","1234",all=true);  // Returns []
+//   n=str_find("abc","",all=true);                  // Returns [0,1,2]

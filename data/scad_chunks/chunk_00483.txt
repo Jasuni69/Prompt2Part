@@ -1,0 +1,1 @@
+function iec_bezel_h(type)  = type[9];  //! Bezel height

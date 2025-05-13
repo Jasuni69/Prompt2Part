@@ -1,0 +1,35 @@
+function polyRound(radiipoints,fn=5,mode=0)=
+  /*Takes a list of radii points of the format [x,y,radius] and rounds each point
+    with fn resolution
+    mode=0 - automatic radius limiting - DEFAULT
+    mode=1 - Debug, output radius reduction for automatic radius limiting
+    mode=2 - No radius limiting*/
+  let(
+    p=getpoints(radiipoints), //make list of coordinates without radii
+    Lp=len(p),
+    //remove the middle point of any three colinear points, otherwise adding a radius to the middle of a straigh line causes problems
+    radiiPointsWithoutTrippleColinear=[
+      for(i=[0:len(p)-1]) if(
+        // keep point if it isn't colinear or if the radius is 0
+        !isColinear(
+          p[listWrap(i-1,Lp)],
+          p[listWrap(i+0,Lp)],
+          p[listWrap(i+1,Lp)]
+        )||
+        p[listWrap(i+0,Lp)].z!=0
+      ) radiipoints[listWrap(i+0,Lp)] 
+    ],
+    newrp2=processRadiiPoints(radiiPointsWithoutTrippleColinear),
+    plusMinusPointRange=mode==2?1:2,
+    temp=[
+      for(i=[0:len(newrp2)-1]) //for each point in the radii array
+      let(
+        thepoints=[for(j=[-plusMinusPointRange:plusMinusPointRange])newrp2[listWrap(i+j,len(newrp2))]],//collect 5 radii points
+        temp2=mode==2?round3points(thepoints,fn):round5points(thepoints,fn,mode)
+      )
+      mode==1?temp2:newrp2[i][2]==0?
+        [[newrp2[i][0],newrp2[i][1]]]: //return the original point if the radius is 0
+        CentreN2PointsArc(temp2[0],temp2[1],temp2[2],0,fn) //return the arc if everything is normal
+    ]
+  )
+  [for (a = temp) for (b = a) b];//flattern and return the array

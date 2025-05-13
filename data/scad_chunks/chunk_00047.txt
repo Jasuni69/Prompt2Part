@@ -1,0 +1,49 @@
+
+ttracks_y = pcbs_y + 150;
+translate([840, ttracks_y])
+    ttracks();
+
+translate([x0 + 35, inserts_y])
+    inserts();
+
+translate([x0, inserts_y])
+    ring_terminals();
+
+translate([x0, nuts_y])
+    nuts();
+
+translate([x0, washers_y])
+    washers();
+
+translate([x0, threaded_inserts_y])
+    threaded_inserts();
+
+translate([x0, screws_y])
+    screws();
+
+translate([x0, circlips_y])
+    circlips();
+
+translate([x0, o_rings_y])
+    o_rings();
+
+translate([x0 + 20, springs_y])
+    springs();
+
+translate([x0 + 50, sealing_strip_y])
+    sealing_strip_test();
+
+translate([x0, tubings_y])
+    tubings();
+
+translate([x0, pillars_y])
+    pillars();
+
+translate([x0, ball_bearings_y])
+    ball_bearings();
+
+translate([x0, pulleys_y])
+    pulleys();
+
+translate([x0, leadnuts_y])
+    leadnuts();

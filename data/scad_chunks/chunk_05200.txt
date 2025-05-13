@@ -1,0 +1,14 @@
+function c_imag(z) = 
+     is_vector(z,2) ? z.y
+   : is_num(z[0][0]) ? z*[0,1]
+   : [for(vec=z) vec * [0,1]];
+
+
+// Function: c_ident()
+// Synopsis: Returns an n by n complex identity matrix.
+// Topics: Math, Complex Numbers
+// See Also: complex(), c_mul(), c_div(), c_conj(), c_real(), c_imag(), c_ident(), c_norm()
+// Usage:
+//   I = c_ident(n)
+// Description:
+//   Produce an n by n complex identity matrix

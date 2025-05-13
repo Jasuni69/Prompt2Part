@@ -1,0 +1,4 @@
+module fixing_block_holes(screw = def_screw) //! Position children on all the holes
+    for(p = fixing_block_holes(screw))
+        multmatrix(p)
+            children();

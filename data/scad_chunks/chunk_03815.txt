@@ -1,0 +1,8 @@
+module runFor(conditionList=[true])
+{
+	$totalPieces=len(conditionList);
+  valPtrs=[for(i=[0:1:(len(conditionList)-1)])
+            if(conditionList[i]) i];
+	for($valPtr=valPtrs)
+      children();
+}

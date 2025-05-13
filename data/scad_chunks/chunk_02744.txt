@@ -1,0 +1,40 @@
+module aluProSection(profileType,detailed) {
+	x = profileType[5];
+	y = profileType[6];
+	w = profileType[3][0];
+	sx = -(x-1)*w/2;
+	sy = -(y-1)*w/2;
+	
+	w1 = profileType[2][0];
+	
+	if (!detailed) {
+		// simple rectangle
+		square([w1 * x,w1 * y],center=true);
+	
+	} else {
+		difference() {
+			union() {
+				for (i=[0:x-1])
+					for (j=[0:y-1])
+						translate([sx + w * i, sy + w * j,0]) aluProBasicSection(profileType);
+			
+				// fill-in sides
+				if (y > 1)
+					for (i=[0:y-2])
+						for (j=[0,1]) 
+							mirror([j,0,0])
+								translate([sx + (x-1) * w/2, sy + i*w + w/2,0])
+									aluProSide(profileType[3]);
+			}
+
+			// remove hollows
+			if (y > 1)
+				for (i=[0:y-2])
+					for (j=[0,1]) 
+						mirror([j,0,0])
+							translate([sx + (x-1) * w/2, sy + i*w,0])
+								rotate([0,0,90]) aluProHollow(profileType[2]);
+		}
+	}
+		
+}

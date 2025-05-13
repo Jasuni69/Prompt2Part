@@ -1,0 +1,1 @@
+function isConfining(truePart=0,falsePart=0) = partIs(confinementPartName())?truePart:falsePart;

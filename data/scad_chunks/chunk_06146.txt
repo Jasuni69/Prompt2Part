@@ -1,0 +1,31 @@
+function front_half(p,y=0) = half_of(p, FRONT, [0,y,0]);
+
+
+
+// Function&Module: back_half()
+// Synopsis: Masks the front half of an object along the X-Z plane, leaving the back half.
+// SynTags: Geom, VNF, Path, Region
+// Topics: Partitions, Masking
+// See Also: front_half(), left_half(), right_half(), top_half(), bottom_half(), half_of(), intersection()
+//
+// Usage:
+//   back_half([s], [y]) CHILDREN;
+//   back_half(planar=true, [s], [y]) CHILDREN;
+// Usage: as function
+//   result = back_half(p, [y]);
+//
+// Description:
+//   Slices an object at a vertical X-Z cut plane, and masks away everything that is in front of it.
+//   The `s` parameter is needed for the module version to control the size of the masking cube.
+//   If `s` is too large then the preview display will flip around and display the wrong half,
+//   but if it is too small it won't fully mask your model.  
+// Arguments:
+//   p = VNF, region or path to slice (function version)
+//   s = Mask size to use.  Use a number larger than twice your object's largest axis.  If you make this too large, OpenSCAD's preview rendering may display the wrong half.  (Module version)  Default: 100
+//   y = The Y coordinate of the cut-plane.  Default: 0
+//   planar = If true, perform a 2D operation.  (Module version)  Default: false. 
+// Examples:
+//   back_half() sphere(r=20);
+//   back_half(y=8) sphere(r=20);
+// Example(2D):
+//   back_half(planar=true) circle(r=20);

@@ -1,0 +1,304 @@
+module generic_threaded_rod(
+    d, l, pitch, profile,
+    left_handed=false, internal=false,
+    bevel, bevel1, bevel2, 
+    starts=1,
+    d1, d2, length, h, height,
+    blunt_start, blunt_start1, blunt_start2,
+    lead_in, lead_in1, lead_in2,
+    lead_in_ang, lead_in_ang1, lead_in_ang2,
+    end_len, end_len1, end_len2,
+    lead_in_shape="default",
+    teardrop=false,
+    anchor, spin, orient
+) {
+    len = one_defined([l,length,h,height],"l,length,h,height");
+    bevel1 = first_defined([bevel1,bevel]);
+    bevel2 = first_defined([bevel2,bevel]);
+    blunt_start1 = first_defined([blunt_start1, blunt_start, true]);
+    blunt_start2 = first_defined([blunt_start2, blunt_start, true]);                           
+    r1 = get_radius(d1=d1, d=d);
+    r2 = get_radius(d1=d2, d=d);
+    lead_in1 = first_defined([lead_in1, lead_in]);
+    lead_in2 = first_defined([lead_in2, lead_in]);
+    lead_in_func = is_func(lead_in_shape) ? lead_in_shape
+                 : assert(is_string(lead_in_shape),"lead_in_shape must be a function or string")
+                   let(ind = search([lead_in_shape], _lead_in_table,0)[0])
+                   assert(ind!=[],str("Unknown lead_in_shape, \"",lead_in_shape,"\""))
+                   _lead_in_table[ind[0]][1];
+    dummy0 = 
+      assert(all_positive([pitch]),"Thread pitch must be a positive value")
+      assert(all_positive([len]),"Length must be a postive value")
+      assert(is_path(profile),"Profile must be a path")
+      assert(is_bool(blunt_start1), "blunt_start1/blunt_start must be boolean")
+      assert(is_bool(blunt_start2), "blunt_start2/blunt_start must be boolean")
+      assert(is_bool(left_handed))
+      assert(all_positive([r1,r2]), "Must give d or both d1 and d2 as positive values")
+      assert(is_undef(bevel1) || is_num(bevel1) || is_bool(bevel1) || bevel1=="reverse", "bevel1/bevel must be a number, boolean or \"reverse\"")
+      assert(is_undef(bevel2) || is_num(bevel2) || is_bool(bevel2) || bevel2=="reverse", "bevel2/bevel must be a number, boolean or \"reverse\"");
+    sides = quantup(segs(max(r1,r2)), starts);
+    rsc = internal? (1/cos(180/sides)) : 1;    // Internal radius adjusted for faceting
+    islop = internal? 2*get_slop() : 0;
+    r1adj = r1 * rsc + islop;
+    r2adj = r2 * rsc + islop;
+
+    extreme = internal? max(column(profile,1)) : min(column(profile,1));
+    profile = !internal ? profile
+            : let(
+                 maxidx = [for(i=idx(profile)) if (profile[i].y==extreme) i],
+                 cutpt = len(maxidx)==1 ? profile(maxidx[0]).x
+                       : mean([profile[maxidx[0]].x, profile[maxidx[1]].x])
+              )
+              [
+                 for(entry=profile) if (entry.x>=cutpt) [entry.x-cutpt-1/2,entry.y], 
+                 for(entry=profile) if (entry.x<cutpt) [entry.x-cutpt+1/2,entry.y]
+              ];
+    profmin = pitch * min(column(profile,1));
+    pmax = pitch * max(column(profile,1));
+    rmax = max(r1adj,r2adj)+pmax;
+
+    // These parameters give the size of the bevel, negative for an outward bevel (e.g. on internal thread mask)  
+    bev1 = (bevel1=="reverse"?-1:1)*(internal?-1:1) *
+               ( is_num(bevel1)? bevel1
+               : bevel1==false? 0
+               : blunt_start1? (bevel1==undef?0
+                               :internal ? r1/6
+                               :(r1+profmin)/6)
+               : pmax-profmin);
+    bev2 = (bevel2=="reverse"?-1:1)*(internal?-1:1) *
+               ( is_num(bevel2)? bevel2
+               : bevel2==false? 0
+               : blunt_start2? (bevel2==undef?0
+                               :internal ? r2/6
+                               :(r2+profmin)/6)
+               : pmax-profmin);
+    // This is the bevel size used for constructing the polyhedron.  The bevel is integrated when blunt start is on, but
+    // applied later via difference/union if blunt start is off, so set bevel to zero in the latter case.  
+    bevel_size1 = blunt_start1?bev1:0;
+    bevel_size2 = blunt_start2?bev2:0;
+    // This is the bevel size for clipping, which is only done when blunt start is off
+    clip_bev1 = blunt_start1?0:bev1;
+    clip_bev2 = blunt_start2?0:bev2;
+    end_len1_base = !blunt_start1? 0 : first_defined([end_len1,end_len, 0]);
+    end_len2_base = !blunt_start2? 0 : first_defined([end_len2,end_len, 0]);    
+    // Enlarge end lengths to give sufficient room for requested bevel
+    end_len1 = abs(bevel_size1)>0 ? max(end_len1_base, abs(bevel_size1)) : end_len1_base;
+    end_len2 = abs(bevel_size2)>0 ? max(end_len2_base, abs(bevel_size2)) : end_len2_base;
+    // length to create below/above z=0, with an extra revolution in non-blunt-start case so
+    // the threads can continue to the specified length and we can clip off the blunt start                       
+    len1 = -len/2 - (blunt_start1?0:pitch);   
+    len2 =  len/2 + (blunt_start2?0:pitch);
+
+    // Thread turns below and above z=0, with extra to ensure we go beyond the length needed
+    turns1 = len1/pitch-1;
+    turns2 = len2/pitch+1;
+    dir = left_handed? -1 : 1;
+    dummy2=
+        assert(abs(bevel_size1)+abs(bevel_size2)<len, "Combined bevel size exceeds length of screw")
+        assert(r1adj+extreme*pitch-bevel_size1>0, "bevel1 is too large to fit screw diameter")
+        assert(r2adj+extreme*pitch-bevel_size2>0, "bevel2 is too large to fit screw diameter");
+         
+    margin1 = profile[0].y==extreme ? profile[0].x : -1/2;
+    margin2 = last(profile).y==extreme? last(profile).x : 1/2;
+    lead_in_default = pmax-profmin;//2*pitch;
+        // 0*360/10;// /4/32*360; higlen_default;//0*4/32*360; //2/32*360;//360*max(pitch/2, pmax-depth)/(2*PI*r2adj);
+    // lead_in length needs to be quantized to match the samples
+    lead_in_ang1 = !blunt_start1? 0 :
+         let(
+             user_ang = first_defined([lead_in_ang1,lead_in_ang])
+         )
+         assert(is_undef(user_ang) || is_undef(lead_in1), "Cannot define lead_in/lead_in1 by both length and angle")
+         quantup(
+                 is_def(user_ang) ? user_ang : default(lead_in1, lead_in_default)*360/(2*PI*r1adj)
+                 , 360/sides);
+    lead_in_ang2 = !blunt_start2? 0 :
+         let(
+             user_ang = first_defined([lead_in_ang2,lead_in_ang])
+         )
+         assert(is_undef(user_ang) || is_undef(lead_in2), "Cannot define lead_in/lead_in2 by both length and angle")
+         quantup(
+                 is_def(user_ang) ? user_ang : default(lead_in2, lead_in_default)*360/(2*PI*r2adj)
+                 , 360/sides);
+    // cut_ang also need to be quantized, but the comparison is offset by 36*turns1/starts, so we need to pull that factor out
+    // of the quantization.  (The loop over angle starts at 360*turns1/starts, not at a multiple of 360/sides.)  
+//    cut_ang1 = 360 * (len1/pitch-margin1+end_len1/pitch) / starts + lead_in_ang1;
+//    cut_ang2 = 360 * (len2/pitch-margin2-end_len2/pitch) / starts - lead_in_ang2;
+    cut_ang1 = quantup(360 * (len1/pitch-margin1+end_len1/pitch) / starts + lead_in_ang1-360*turns1/starts,360/sides)+360*turns1/starts;
+    cut_ang2 = quantdn(360 * (len2/pitch-margin2-end_len2/pitch) / starts - lead_in_ang2-360*turns1/starts,360/sides)+360*turns1/starts;
+    dummy1 =
+      assert(cut_ang1<cut_ang2, "lead in length are too long for the amount of thread: they overlap")
+      assert(is_num(lead_in_ang1), "lead_in1/lead_in must be a number")
+      assert(r1adj+profmin>0 && r2adj+profmin>0, "Screw profile deeper than rod radius");
+    map_threads = right((r1adj + r2adj) / 2)                   // Shift profile out to thread radius
+                * affine3d_skew(sxz=(r2adj-r1adj)/len)         // Skew correction for tapered threads
+                * frame_map(x=[0,0,1], y=[1,0,0])          // Map profile to 3d, parallel to z axis
+                * scale(pitch);                            // scale profile by pitch
+    start_steps = sides / starts;
+
+    // This is the location for clipping the polyhedron, below the bevel, if one is present, or at length otherwise
+    // Clipping is done before scaling to pitch, so we need to divide by the pitch
+    rod_clip1 = (len1+abs(bevel_size1))/pitch;
+    rod_clip2 = (len2-abs(bevel_size2))/pitch;
+    prof3d=path3d(profile,1);
+    thread_verts = [
+        // Outer loop constructs a vertical column of the screw at each angle
+        // covering 360/starts degrees of the cylinder.  
+        for (step = [0:1:start_steps])
+            let(
+                ang = 360 * step/sides,
+                dz = step / start_steps,    // z offset for threads at this angle
+                rot_prof = zrot(ang*dir)*map_threads,   // Rotate profile to correct angular location
+                full_profile =  [   // profile for the entire rod
+                    for (turns = [turns1:1:turns2]) 
+                        let(
+                            tang = turns/starts * 360 + ang,
+                            // EPSILON offset prevents funny looking extensions of the thread from its very tip
+                            // by forcing values near the tip to evaluate as less than zero = beyond the tip end
+                            hsc = tang < cut_ang1 ? lead_in_func(-EPSILON+1-(cut_ang1-tang)/lead_in_ang1,PI*2*r1adj*lead_in_ang1/360 )
+                                : tang > cut_ang2 ? lead_in_func(-EPSILON+1-(tang-cut_ang2)/lead_in_ang2,PI*2*r2adj*lead_in_ang2/360 )
+                                : [1,1],
+                            shift_and_scale = [[hsc.x, 0], [0,hsc.y], [dz+turns,(1-hsc.y)*extreme]]
+                        )
+                        // This is equivalent to apply(right(dz+turns)*higscale, profile)
+                        //
+                        // The right movement finds the position of the thread along
+                        // what will be the z axis after the profile is mapped to 3d,
+                        // and higscale creates a taper and the end of the threads.  
+                        each prof3d*shift_and_scale
+                ],
+                // Clip profile at the ends of the rod and add a z coordinate
+                full_profile_clipped = [
+                    for(pts=full_profile) [max(rod_clip1,min(rod_clip2,pts.x)), pts.y, 0]
+                ]
+            )
+            [
+              [0,0,len1],
+              //if (true) apply(rot_prof, [len1/pitch,extreme+2/pitch ,0]), 
+              if (bevel_size1) apply(rot_prof, [len1/pitch,extreme-bevel_size1/pitch ,0]), 
+              each apply(rot_prof, full_profile_clipped),
+              if (bevel_size2) apply(rot_prof, [len2/pitch,extreme-bevel_size2/pitch ,0]), 
+              //if (true) apply(rot_prof, [len2/pitch,extreme+2/pitch ,0]), 
+              [0, 0, len2]
+            ]
+    ];
+    style=internal?"concave":"convex";
+    thread_vnf = vnf_join([
+                           for (i=[0:1:starts-1])
+                             zrot(i*360/starts, p=vnf_vertex_array(thread_verts, reverse=left_handed, style=style,col_wrap=false)),
+                          ]);
+    slope = (r1adj-r2adj)/len;
+    dummy3 = 
+      assert(r1adj+pmax-clip_bev1>0, "bevel1 is too large to fit screw diameter")
+      assert(r2adj+pmax-clip_bev2>0, "bevel2 is too large to fit screw diameter")
+      assert(abs(clip_bev1)+abs(clip_bev2)<len, "Combined bevel size exceeds length of screw");
+    attachable(anchor,spin,orient, r1=r1adj, r2=r2adj, l=len) {
+        union(){
+          difference() {
+              vnf_polyhedron(thread_vnf,convexity=10);              
+              if (clip_bev1>0)
+                  rotate_extrude()
+                      polygon([[                         0,-len/2],
+                               [r1adj+pmax-clip_bev1      ,-len/2],
+                               [r1adj+pmax-slope*clip_bev1,-len/2+clip_bev1],
+                               [                    rmax+1,-len/2+clip_bev1],
+                               [                    rmax+1, len1-1],
+                               [                         0, len1-1]]);
+              if (clip_bev2>0)
+                  rotate_extrude()
+                      polygon([[                         0, len/2],
+                               [r2adj+pmax-clip_bev2      , len/2],
+                               [r2adj+pmax+slope*clip_bev2, len/2-clip_bev2],
+                               [                    rmax+1, len/2-clip_bev2],
+                               [                    rmax+1, len2+1],
+                               [                         0, len2+1]]);
+              if (!blunt_start1 && clip_bev1<=0)
+                  down(len/2) cuboid([2*rmax+1,2*rmax+1, -len1+1], anchor=TOP);                     
+              if (!blunt_start2 && clip_bev2<=0)
+                  up(len/2) cuboid([2*rmax+1,2*rmax+1, len2+1], anchor=BOTTOM);
+          }
+
+          // Add bevel for internal thread mask
+          if (clip_bev1<0) 
+              down(len/2+.001)cyl(l=-clip_bev1, r2=r1adj+profmin, r1=r1adj+profmin+slope*clip_bev1-clip_bev1,anchor=BOTTOM);
+          if (clip_bev2<0) 
+              up(len/2+.001)cyl(l=-clip_bev2, r1=r2adj+profmin, r2=r2adj+profmin+slope*clip_bev1-clip_bev2,anchor=TOP);
+
+          // Add teardrop profile
+          if (teardrop!=false) {
+              fact = is_num(teardrop) ? assert(teardrop>=0,"teardrop value cannot be negative")1-1/sqrt(2)+teardrop
+                   : is_bool(teardrop) ? 1-1/sqrt(2)+0.05
+                   : teardrop=="max" ? 1/sqrt(2)
+                   : assert(false,"invalid teardrop value");
+              dummy = assert(fact<=1/sqrt(2), "teardrop value too large");
+              pdepth = pmax-profmin;              
+              trap1 = back((r1adj+pmax)/sqrt(2),path3d(list_rotate(trapezoid(ang=45,w1 = (r1adj+pmax)*sqrt(2), h = (r1adj+pmax)*fact,anchor=FWD),1),-l/2));
+              trap2 = back((r2adj+pmax)/sqrt(2),path3d(list_rotate(trapezoid(ang=45,w1 = (r2adj+pmax)*sqrt(2), h = (r2adj+pmax)*fact,anchor=FWD),1), l/2));
+              yproj = [[1,0,0],[0,0,0],[0,0,1]];
+              p1a=trap1[0]+unit([0,0,-l/2]-trap1[0])*pdepth*3/4;
+              p1b=last(trap1)+unit([0,0,-l/2]-last(trap1))*pdepth*3/4;
+              p2a=trap2[0]+unit([0,0,l/2]-trap2[0])*pdepth*3/4;
+              p2b=last(trap2)+  unit([0,0,l/2]-last(trap2))*pdepth*3/4     ;
+              cut1 = reverse([p1a, p1a*yproj, p1b*yproj, p1b]);
+              cut2 = reverse([p2a, p2a*yproj, p2b*yproj, p2b]);
+              vert = [
+                      [each cut1, each trap1],
+                      [each cut2, each trap2]
+              ];
+              vnf_polyhedron(vnf_vertex_array(vert,caps=true,col_wrap=true));
+              //     Old code creates an internal teardrop which unfortunately doesn't print well
+              //ang = min(45,opp_hyp_to_ang(rmax+profmin, rmax+pmax));
+              //xrot(-90) teardrop(l=l, r1=r1adj+profmin, r2=r2adj+profmin, ang=ang, cap_h1=r1adj+pmax, cap_h2=r2adj+pmax);
+          }
+        }
+        children();
+    }
+}
+
+
+
+// Module: generic_threaded_nut()
+// Synopsis: Creates a generic threaded nut.
+// SynTags: Geom
+// Topics: Threading, Screws
+// See Also: generic_threaded_rod()
+// Usage:
+//   generic_threaded_nut(nutwidth, id, h|height|thickness, pitch, profile, [$slop], ...) [ATTACHMENTS];
+// Description:
+//   Constructs a hexagonal or square nut for an generic threaded rod using a user-supplied thread profile.
+//   See {{generic_threaded_rod()}} for details on the profile specification.  
+// Arguments:
+//   nutwidth = outer dimension of nut from flat to flat.
+//   id = inner diameter of threaded hole, measured from bottom of threads
+//   h / height / thickness = height/thickness of nut.
+//   pitch = Thread spacing.
+//   profile = Thread profile.
+//   ---
+//   shape = specifies shape of nut, either "hex" or "square".  Default: "hex"
+//   left_handed = if true, create left-handed threads.  Default = false
+//   starts = The number of lead starts.  Default = 1
+//   id1 = inner diameter at the bottom
+//   id2 = inner diameter at the top
+//   bevel = if true, bevel the outside of the nut.  Default: true for hex nuts, false for square nuts
+//   bevel1 = if true, bevel the outside of the nut bottom.
+//   bevel2 = if true, bevel the outside of the nut top. 
+//   bevang = set the angle for the outside nut bevel.  Default: 30
+//   ibevel = if true, bevel the inside (the hole).   Default: true
+//   ibevel1 = if true bevel the inside, bottom end.
+//   ibevel2 = if true bevel the inside, top end.
+//   blunt_start = If true apply truncated blunt start threads at both ends.  Default: true
+//   blunt_start1 = If true apply truncated blunt start threads bottom end.
+//   blunt_start2 = If true apply truncated blunt start threads top end.
+//   end_len = Specify the unthreaded length at the end after blunt start threads.  Default: 0
+//   end_len1 = Specify unthreaded length at the bottom
+//   end_len2 = Specify unthreaded length at the top
+//   lead_in = Specify linear length of the lead in section of the threading with blunt start threads
+//   lead_in1 = Specify linear length of the lead in section of the threading at the bottom with blunt start threads
+//   lead_in2 = Specify linear length of the lead in section of the threading at the top with blunt start threads
+//   lead_in_ang = Specify angular length in degrees of the lead in section of the threading with blunt start threads
+//   lead_in_ang1 = Specify angular length in degrees of the lead in section of the threading at the bottom with blunt start threads
+//   lead_in_ang2 = Specify angular length in degrees of the lead in section of the threading at the top with blunt start threads
+//   lead_in_shape = Specify the shape of the thread lead in by giving a text string or function.  Default: "default"
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//   $slop = The printer-specific slop value, which adds clearance (`4*$slop`) to internal threads.

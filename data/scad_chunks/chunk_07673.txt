@@ -1,0 +1,80 @@
+module Text(text="»«",size=5,h,cx,cy,cz,center=0,spacing=1,fn=24,radius=0,rot=[0,0,0],font="Bahnschrift:style=bold",style,help,name,textmetrics=true,viewPos=false,trueSize="body")
+{
+//useVersion=23; // to activate
+textmetrics=version()[0]<2022?false:textmetrics;
+Echo(str("Sizing inactive trueSize=",trueSizeSW),color="warning",condition=trueSize!="size"&&( (!textmetrics&&trueSize!="body")||(is_num(useVersion)&&useVersion<22.208) ) );
+trueSizeSW=is_num(useVersion)&&useVersion<22.208?"size":trueSize;
+inputSize=size;
+
+style=is_string(style)?style:styles[style];
+fontstr=is_undef(style)?font:str(font,":style=",style);
+hp=assert(textmetrics)textmetrics(text="hpbdlq",font=fontstr,size=1,spacing=spacing).size.y;
+cap=assert(textmetrics)textmetrics(text="HTAME",font=fontstr,size=1,spacing=spacing).size.y;
+
+size=trueSizeSW=="body"?size*.72:
+                        trueSizeSW=="hp"?size/hp:
+                                         trueSizeSW=="cap"?size/cap:
+                                                              size;
+
+    h=is_undef(h)?size:h;
+    cx=center?is_undef(cx)?1:cx:is_undef(cx)?0:cx;
+    cy=center?is_undef(cy)?1:cy:is_undef(cy)?0:cy;
+    cz=center?is_undef(cz)?1:cz:is_undef(cz)?0:cz;
+   
+    text=str(text);
+    lenT=len(text);
+    font=is_num(font)?fonts[font]:font;
+    
+    
+    txtSizeX=textmetrics?textmetrics(text=text,font=fontstr,size=size,spacing=spacing).size.x:size*spacing*lenT;
+    txtSizeY=textmetrics?textmetrics(text=text,font=fontstr,size=size,spacing=spacing).size.y:size;
+    fontSize=[for(i=[0:lenT-1])textmetrics?
+      textmetrics(text=stringChunk(txt=text,length=i),font=fontstr,size=size,spacing=spacing).advance.x + textmetrics(text=text[i],font=fontstr,size=size,spacing=1).advance.x/2*(cx?1:1)
+      
+      :
+      (size*spacing)*i];
+      
+ //echo(fontSize);
+ //echo(txtSizeX);
+ valign=cy?b(cy,false)<0?"bottom":b(cy,false)>1?"top":"center":"baseline";
+ 
+ if(text)if(!radius){   
+    if(h)    
+    rotate(rot)translate([0,0,cz?-abs(h)/2:h<0?h:0]) linear_extrude(abs(h),convexity=10){
+    text(str(text),size=size,halign=cx?"center":"left",valign=valign,font=fontstr,spacing=spacing,$fn=fn);
+    }
+    else rotate(rot)translate([0,0,cz?-h/2:0])text(text,size=size,halign=cx?"center":"left",valign=valign,spacing=spacing,font=fontstr,$fn=fn); 
+    }
+else rotate(center?gradB(txtSizeX/2,radius+(cy?-txtSizeY/2:0)):0)for(i=[0:len(text)-1])rotate(-gradB(fontSize[i],radius+(cy?-txtSizeY/2:0)))
+    if(h)    
+    translate([0,radius,0])rotate(rot)Tz(cz?-abs(h)/2:h<0?h:0){
+    %color("Chartreuse")if(viewPos&&$preview)translate([0,-1])rotate(-30)circle($fn=3);// pos Marker
+    linear_extrude(abs(h),convexity=10)text(text[i],size=size,halign=true?"center":"left",valign=valign,font=fontstr,$fn=fn);
+    }
+    else  translate([0,radius,cz?-h/2:0])rotate(rot)text(text[i],size=size,halign=true?"center":"left",valign=valign,font=fontstr,$fn=fn); 
+    
+    
+ InfoTxt("Text",["font",font,"style",style,"trueSize",trueSizeSW,"size",str(inputSize," ⇒ ",size)],name);   
+        
+ HelpTxt("Text",[
+"text",str("\"",text,"\""),
+"size",inputSize,
+"h",str(h," /*0 for 2D*/"),
+"cx",cx,
+"cy",cy,
+"cz",cz,
+"center",center,
+"spacing",spacing,
+"fn",fn,
+"radius",radius, 
+"rot",rot,
+"font",str("\"",font,"\""),
+"style",str("\"",style,"\""),
+"name",name,
+"textmetrics",textmetrics,
+"viewPos",viewPos,
+"trueSize",str("\"",trueSize,"\""," /* body,size,hp,cap */")
+],help);
+
+ 
+}

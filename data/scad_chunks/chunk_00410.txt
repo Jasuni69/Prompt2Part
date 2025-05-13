@@ -1,0 +1,1 @@
+function pulley_teeth(type)            = type[2];  //! Number of teeth

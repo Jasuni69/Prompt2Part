@@ -1,0 +1,49 @@
+module terminal_block(type, ways) { //! Draw a power supply terminal block
+    tl = terminal_block_length(type, ways);
+    depth = terminal_block_depth(type);
+    depth2 = terminal_block_depth2(type);
+    div = terminal_block_divider(type);
+    h = terminal_block_height(type);
+    h2 = terminal_block_height2(type);
+    pitch = terminal_block_pitch(type);
+    back_wall = depth - depth2;
+    contact_depth = depth2 - back_wall;
+    contact_width = pitch - div;
+    contact_h = 0.4;
+    washer_t = 1.2;
+    translate([0, -tl]) {
+        color(grey(20)) {
+            cube([depth, tl, h2]);
+
+            translate([depth2, 0])
+                cube([depth - depth2, tl, h]);
+
+            for(i = [0 : ways])
+                translate([0, i * pitch + div])
+                    rotate([90, 0, 0])
+                        linear_extrude(div)
+                            hull() {
+                                r = 2;
+                                square([depth, eps]);
+
+                                translate([depth - eps, 0])
+                                    square([eps, h]);
+
+                                translate([r, h - r])
+                                    circle4n(r);
+                            }
+        }
+        color("silver")
+            for(i = [0 : ways - 1]) translate([0, i * pitch + div, h2]) {
+                translate([back_wall, 1])
+                    cube([contact_depth, contact_width - 2, contact_h]);
+
+                translate([back_wall + contact_depth / 2 - contact_width / 2, 0])
+                    cube([contact_width, contact_width, contact_h + washer_t]);
+
+                translate([back_wall + contact_depth / 2, contact_width / 2, contact_h + washer_t])
+                    not_on_bom() no_explode()
+                        screw(M3_pan_screw, 8);
+            }
+    }
+}

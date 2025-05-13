@@ -1,0 +1,16 @@
+module hinge_screw_positions(type) { //! Place children at the screw positions
+    screws = hinge_screws(type);
+    w = hinge_width(type);
+    d = hinge_depth(type);
+    r = hinge_radius(type);
+    m = hinge_margin(type);
+    assert(screws > 1, "must be at least two screws");
+    w_pitch = (w - 2 * r) / (screws - 1);
+    d_pitch = d - 2 * r - m;
+    wr = washer_radius(screw_washer(hinge_screw(type)));
+    assert(w_pitch >= wr && norm([w_pitch, d_pitch]) >= 2 * wr && d_pitch >= 0, "not enough room for screws");
+
+    for(i = [0 : screws - 1])
+        translate([-w / 2 + r + i * w_pitch, r + m + (i % 2) * d_pitch])
+            children();
+}

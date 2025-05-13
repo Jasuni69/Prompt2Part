@@ -1,0 +1,40 @@
+module Pin(l=10,d=5,cut=true,mitte=true,grad=60,lippe=0.4,spiel=.1,center=true,name,help){
+$info=false;
+    rdiff=lippe+spiel;
+cut=is_list(cut)?cut:[cut,cut];    
+pol=[is_bool(cut[0])?round(d):cut[0],is_bool(cut[1])?round(d):cut[1]];
+
+l=is_num(l)?[l/2,l/2]:l;    
+ 
+cuth=[min(d,l[0]*1.8),min(d,l[1]*1.8)];
+   
+hkomplett=l[0]+l[1]+2*tan(grad)*rdiff; 
+ translate([0,0,center?0:l[0]+tan(grad)*rdiff]){
+mirror([0,0,1])difference(){
+    union(){
+        cylinder(l[0],d=d);
+        Tz(l[0])Kegel(d+rdiff*2,d,grad=grad);
+        Tz(l[0])R(180)Kegel(d+rdiff*2,d-1,grad=40);
+      if(mitte) Kegel(d+rdiff*2,d-1,grad=45);
+    }
+  if(cut[0])  Tz(l[0]+0.2)Polar(pol[0],d-1)LinEx(cuth[0],min(cuth[0]/2.5,+1.0),0,grad=45,$d=d,center=true)Tri(h=d,top=+1,center=1,grad=45,r=0.3,fn=24);
+   linear_extrude(200,center=true,convexity=3)Kreis(r=d,rand=d/2-rdiff+spiel);
+}    
+difference(){
+    union(){
+        cylinder(l[1],d=d);
+        Tz(l[1])Kegel(d+rdiff*2,d,grad=grad);
+        Tz(l[1])R(180)Kegel(d+rdiff*2,d-1,grad=40);
+      if(mitte) Kegel(d+rdiff*2,d-1,grad=45);
+    }
+  if(cut[1])  Tz(l[1]+0.2)Polar(pol[1],d-1)LinEx(cuth[1],min(cuth[1]/2.5,1),0,grad=45,$d=d,center=true)Tri(h=d,top=+1,center=1,grad=45,r=0.3,fn=24);
+   linear_extrude(200,center=true,convexity=3)Kreis(r=d,rand=d/2-rdiff+spiel);
+}
+}
+//if(achse)cylinder(h=achse,d=d+rdiff*2,center=true);
+
+InfoTxt("Pin",["l",l[0]+l[1],"reale höhe",hkomplett,"halb",str(l,"/",[l[0]+tan(grad)*rdiff,l[1]+tan(grad)*rdiff]),"plus",str(2*tan(grad)*rdiff,"/",tan(grad)*rdiff)],name);
+
+HelpTxt("Pin",["l",l,"d",d,"cut",cut,"mitte",mitte,"grad",grad,"lippe",lippe,"spiel",spiel,"center",center,"name",name],help);
+
+}

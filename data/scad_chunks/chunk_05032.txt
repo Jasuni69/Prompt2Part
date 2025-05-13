@@ -1,0 +1,6 @@
+function _mb_cuboid_basic(point, inv_size, xp, neg) =
+   let(
+       point=inv_size * point,
+       dist = xp >= 1100 ? max(v_abs(point))
+                         : (abs(point.x)^xp + abs(point.y)^xp + abs(point.z)^xp) ^ (1/xp)
+      ) neg/dist;

@@ -1,0 +1,5 @@
+module pcb_grid(type, x, y, z = 0, i = 0)  //! Positions children at specified grid position
+    translate(pcb_grid_pos(type, x, y, z, i))
+        children();
+
+// allows negative ordinates to represent offsets from the far edge

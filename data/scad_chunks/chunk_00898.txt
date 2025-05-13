@@ -1,0 +1,1 @@
+function rod_end_bearing_rim(type)           = type[12];   //! Outer rim thickness guesstimate

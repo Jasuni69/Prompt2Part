@@ -1,0 +1,1 @@
+function terminal_block_height(type)  = type[2];    //! Height of the dividers

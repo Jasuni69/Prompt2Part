@@ -1,0 +1,88 @@
+function GR(a,b,ratio=ratio)=a+(b-a)/ratio; 
+ 
+chld=is_undef(chld)?$children:chld;
+
+// we using two mirrored parts so each triangle is half and the angle from center hence only a quarter
+fn=max(fn,2);
+angle= mirror?360 / (fn*4):360/fn/2; 
+dicke=is_undef(dicke)?0:dicke;
+
+
+tri=is_undef(tri)?let(a=[0,0])[
+  a, // a first point at center
+  a + [sin( angle), cos( angle)]* radius,  // b the adjactant sides end point at angle and length
+  a + [sin(-angle), cos(-angle)]* radius, // c
+  ]
+                  :tri;
+  
+  a=tri[0];
+  b=tri[1];
+  c=tri[2];
+  
+  //iratio=rands(1.5,2.0,5,seed);
+  iratio=[1,1,1,1,1]*ratio;
+  
+// side length
+  sA=norm(c-b);
+  sB=norm(c-a);
+  sC=norm(b-a);
+// circumfence
+  u=(sA+sB+sC);
+  s=u/2;
+  
+// inner diameter
+  $d=sqrt( ((s-sA)*(s-sB)*(s-sC))/s )*2-dicke;
+    
+  if ($d>(d*2)&&rec>0){
+    if(case==1){
+     // the smaller resulting tri will be cut in two the next time (case 1)
+        Penrose(rec=rec-1, tri= [c       , GR(a, b), b], case=1,fn=fn,chld=chld,d=d, dicke=dicke, mirror=mirror, color= 0,ratio=iratio[0], seed = seed * rec + 0)children();
+
+    // the bigger gets cut in 3 the next time
+        Penrose(rec=rec-1, tri= [GR(a, b), c       , a], case=2,fn=fn,chld=chld,d=d, dicke=dicke, mirror=mirror, color= 1,ratio=iratio[1], seed = seed * rec + 1000)children();
+    }
+    if(case==2){
+        Penrose(rec=rec-1, tri= [GR(b, a), GR(b, c), b], case= 2,fn=fn,chld=chld,d=d, dicke=dicke, mirror=mirror, color= 2,ratio=iratio[2], seed = seed * rec + 2000)children();
+        Penrose(rec=rec-1, tri= [GR(b, c), GR(b, a), a], case= 1,fn=fn,chld=chld,d=d, dicke=dicke, mirror=mirror, color= 3,ratio=iratio[3], seed = seed * rec + 3000)children();
+        Penrose(rec=rec-1, tri= [GR(b, c),        c, a], case= 2,fn=fn,chld=chld,d=d, dicke=dicke, mirror=mirror, color= 4,ratio=iratio[4], seed = seed * rec + 4000)children();
+    }
+  }
+
+    
+   else { // only draw the pattern at the last recursion
+   
+   iM=[ (sA*a.x+sB*b.x+sC*c.x)/u ,  (sA*a.y+sB*b.y+sC*c.y)/u ];
+   $pos=iM;
+   $tri=tri;
+    color(color/5*[1,1,1]){
+    rotate(90/fn)
+      if(chld)T(iM)children();
+      //T((a+(b+c)/2)/2)children();
+       else {
+        offset(-dicke/2)polygon(tri);
+        }
+
+    if(mirror)mirror([1,0])rotate(90/fn)
+      if(chld)T(iM)children();//T((a+(b+c)/2)/2)children();
+      
+       else offset(-dicke/2)polygon(tri);
+    }
+  }
+} // end Penrose
+
+
+
+/** \page Polygons \name RectTiling
+RectTiling() tiles a rectangle in random smaller rectangles
+\param size size
+\param ratio [min:max] dividing ratio or list or num
+\param d minimal size (recursive stop condition)
+\param dicke space thickness between
+\param seed  seed for randomness
+\param $size $seed output data
+\param chld use children
+\param info help info help
+*/
+//RectTiling(dicke=0);
+
+//RectTiling(ratio=[2.7,2],d=5);

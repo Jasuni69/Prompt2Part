@@ -1,0 +1,1 @@
+function carriage_pitch_x(type)      = type[6]; //! Screw hole x pitch

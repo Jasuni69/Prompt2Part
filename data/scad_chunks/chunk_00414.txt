@@ -1,0 +1,1 @@
+function pulley_hub_dia(type)          = type[6];  //! Hub diameter

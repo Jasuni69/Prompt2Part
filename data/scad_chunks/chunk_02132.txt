@@ -1,0 +1,1 @@
+function pbox_width(type)      = type[9]; //! Internal width

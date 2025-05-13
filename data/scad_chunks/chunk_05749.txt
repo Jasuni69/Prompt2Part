@@ -1,0 +1,40 @@
+module vnf_polyhedron(vnf, convexity=2, cp="centroid", anchor="origin", spin=0, orient=UP, atype="hull") {
+    vnf = is_vnf_list(vnf)? vnf_join(vnf) : vnf;
+    assert(in_list(atype, _ANCHOR_TYPES), "\nAnchor type must be \"hull\" or \"intersect\".");
+    attachable(anchor,spin,orient, vnf=vnf, extent=atype=="hull", cp=cp) {
+        polyhedron(vnf[0], vnf[1], convexity=convexity);
+        children();
+    }
+}
+
+
+// Module: vnf_wireframe()
+// Synopsis: Creates a wireframe model from a VNF.
+// SynTags: VNF
+// Topics: VNF Manipulation
+// See Also: vnf_polyhedron()
+// Usage:
+//   vnf_wireframe(vnf, [width]);
+// Description:
+//   Given a VNF, creates a wire frame ball-and-stick model of the polyhedron with a cylinder for
+//   each edge and a sphere at each vertex.  The width parameter specifies the width of the sticks
+//   that form the wire frame and the diameter of the balls.
+// Arguments:
+//   vnf = A VNF structure
+//   width = width of the cylinders forming the wire frame.  Default: 1
+// Example(3D):
+//   $fn=32;
+//   ball = sphere(r=20, $fn=6);
+//   vnf_wireframe(ball,width=1);
+// Example(3D):
+//   include <BOSL2/polyhedra.scad>
+//   $fn=32;
+//   cube_oct = regular_polyhedron_info("vnf",
+//                      name="cuboctahedron", or=20);
+//   vnf_wireframe(cube_oct);
+// Example(3D): The spheres at the vertex are imperfect at aligning with the cylinders, so especially at low $fn things look prety ugly.  This is normal.
+//   include <BOSL2/polyhedra.scad>
+//   $fn=8;
+//   octahedron = regular_polyhedron_info("vnf",
+//                         name="octahedron", or=20);
+//   vnf_wireframe(octahedron,width=5);

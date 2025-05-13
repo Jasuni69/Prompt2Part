@@ -1,0 +1,1 @@
+function cot(x) = 1 / tan(x);

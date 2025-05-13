@@ -1,0 +1,1 @@
+function battery_length(type)        = type[2]; //! Total length including terminals

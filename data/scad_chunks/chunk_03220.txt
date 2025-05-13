@@ -1,0 +1,14 @@
+module SmoothWall(width, height, wall_width) {
+  $fa = ($fa >= 12) ? 1 : $fa;
+  $fs = ($fs >= 2) ? 0.4 : $fs;
+
+  rotate([-90, 180, -90])
+  linear_extrude(width)
+    translate([wall_width/2, 0, 0])
+    hull() {
+      translate([0, wall_width/2, 0])
+        circle(r=wall_width/2);
+      translate([0, height-wall_width/2, 0])
+        circle(r=wall_width/2);
+    }
+}

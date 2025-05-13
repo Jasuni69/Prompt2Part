@@ -1,0 +1,11 @@
+module decorate_top_front( d ) { 
+    xc = slot_point;
+    bw = 28;  // bottom 
+    uw = 28;  // upper 
+    bp = -9; // base point
+    tp = 0- (box_def.z - ( 8+ ( uw/2)) ); // top point
+    hull(){
+        translate([xc,bp, 0 ]) cylinder(d=bw, h=d.z);
+        translate([xc,tp, 0]) cylinder(d=uw, h=d.z);
+     }
+}

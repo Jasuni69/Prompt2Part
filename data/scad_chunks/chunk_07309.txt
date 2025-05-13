@@ -1,0 +1,51 @@
+module Arc(r=10,deg=90,r2,fn=36,dicke,center=false,cP=true,rot=0,rand,help){
+dicke=is_num(dicke)?[dicke,dicke]:dicke;
+rand=is_num(rand)?[rand,rand]:dicke?dicke:rand;
+deg=is_list(deg)?deg:rand?[deg,deg]:[deg,0];
+rot=is_num(rot)?[rot,0]:rot;
+r2=is_list(r)?r[1]:r2;
+r=is_num(r)?r:r[0];
+
+
+points=rand?concat(arc(r=r,deg=deg[0],r2=r2,rot=(center?-deg[0]/2:0)+rot[0],fn=fn),
+                   arc(r=r+rand[0],deg=deg[1],r2=is_undef(r2)?r+rand[1]:r2+rand[1],rot=(center?-deg[1]/2:0)+rot[1],fn=fn,rev=true)
+                   )
+          
+          : concat(cP?[[0,0]]:[],arc(r=r,deg=deg,r2=r2,rot=(center?-deg[0]/2:0)+rot[0],fn=fn));
+
+
+polygon(points,convexity=5);
+
+HelpTxt("Arc",["r",r,"deg",deg,"r2",r2,"fn",fn,"dicke",dicke,"center",center,"cP",cP,"rot",rot,"rand",rand],help);
+}
+
+
+/** \page Polygons \name VorterantQ
+\brief Vorterant Q creates a rotor for the Quad Vorterant pump
+\param size rotor diameter
+\param ofs rounding edge
+\param adjusted  if size is adjusted to the edge offset
+\param fs fn fraqments
+\param name help  name help
+\param h for 180°twist and volume calculation message
+*/
+
+/// Vorterant Q creates a rotor for the Quad Vorterant pump
+//Grid(e=3,es=10*sqrt(2))rotate(($idx.x+$idx.y)%2?0:90)rotate(t0)VorterantQ();
+//Polar(4,10.0,rotE=90)VorterantQ(h=10);
+
+
+/*
+VorterantQ(ofs=2,adjusted=true);
+x=10-sqrt(2)*2;
+Tz(.1)Color()offset(2)Linse(dia=x*2,r=x*sqrt(2));
+//*/
+
+/*
+VorterantQ();
+Kreis(10,dicke=.1);
+T(10){
+Kreis(10*sqrt(2),dicke=.1);
+Pivot();
+}
+//*/

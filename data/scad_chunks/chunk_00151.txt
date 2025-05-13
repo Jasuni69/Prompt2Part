@@ -1,0 +1,12 @@
+module pocket_handles() {
+    if($preview) {
+        pocket_handle_assembly(handle);
+
+        if(show_holes)
+            #pocket_handle_holes(handle);
+    }
+    else
+        pocket_handle(handle);
+}
+
+pocket_handles();

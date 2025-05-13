@@ -1,0 +1,7 @@
+function _path_plane(path, ind, i,closed) =
+    i<(closed?-1:0) ? undef :
+    !is_collinear(path[ind],path[ind-1], select(path,i))?
+        [select(path,i)-path[ind-1],path[ind]-path[ind-1]] :
+        _path_plane(path, ind, i-1);
+
+// Find the direction of the path at the cut points

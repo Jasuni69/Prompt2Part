@@ -1,0 +1,24 @@
+module extrude_bezier_along_bezier(bezier, path, pathsteps=16, bezsteps=16, bezN=3, pathN=3) {
+	bez_points = simplify2d_path(bezier_polyline(bezier, bezsteps, bezN));
+	path_points = simplify3d_path(path3d(bezier_polyline(path, pathsteps, pathN)));
+	extrude_2dpath_along_3dpath(bez_points, path_points);
+}
+
+
+
+// Module: trace_bezier()
+// Description:
+//   Renders 2D or 3D bezier paths and their associated control points.
+//   Useful for debugging bezier paths.
+// Arguments:
+//   bez = the array of points in the bezier.
+//   N = Mark the first and every Nth vertex after in a different color and shape.
+//   size = diameter of the lines drawn.
+// Example(2D):
+//   bez = [
+//       [-10,   0],  [-15,  -5],
+//       [ -5, -10],  [  0, -10],  [ 5, -10],
+//       [ 14,  -5],  [ 15,   0],  [16,   5],
+//       [  5,  10],  [  0,  10]
+//   ];
+//   trace_bezier(bez, N=3, size=0.5);

@@ -1,0 +1,1 @@
+function spade_shank(type) = type[4]; //! Shank width

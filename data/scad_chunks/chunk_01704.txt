@@ -1,0 +1,1 @@
+function pcb_components(type)   = type[11]; //! List of components

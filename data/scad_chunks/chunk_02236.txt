@@ -1,0 +1,15 @@
+function cam_front_size(cam) = cam_back_size(cam) + [ //! Outside dimensions of the case
+    2 * (wall + clearance),
+    2 * (wall + clearance),
+    pcb_thickness(camera_pcb(cam)) + cam_front_clearance(cam) + wall
+];
+
+hinge_screw = M2_cap_screw;
+hinge_nut = screw_nut(hinge_screw);
+hinge_screw_length = 12;
+
+hinge_r = nut_trap_radius(hinge_nut) + 3 * extrusion_width;
+hinge_h = wall + nut_trap_depth(hinge_nut);
+hinge_offset = hinge_r + 1;
+
+bracket_screw = M3_dome_screw;

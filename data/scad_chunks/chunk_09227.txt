@@ -1,0 +1,2 @@
+function _fst_v2(pts, leng, v1, p, i) = 
+    i == leng || cross(pts[v1] - p, pts[i] - p) != org ? i : _fst_v2(pts, leng, v1, p, i + 1);

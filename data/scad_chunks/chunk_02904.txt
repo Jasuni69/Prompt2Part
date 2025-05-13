@@ -1,0 +1,138 @@
+module processFaceList(face, list, casePart, listType, subtract)
+{
+  assert(!is_undef(listType), "processFaceList: listType must be passed in");
+  assert(!is_undef(subtract), "processFaceList: subtract must be passed in");
+  
+    //
+    //      [0]pos_x->|
+    //                |
+    //  L  |          +-----------+  ^ 
+    //  E  |          |           |  |
+    //  F  |          |<[2]length>|  [3]height
+    //  T  |          +-----------+  v   
+    //     |            ^
+    //     |            | [1]pos_y
+    //     |            v
+    //     |   +----------------------------- pcb(0,0)
+    //     |
+    //     +--------------------------------- box(0,0)
+
+//  if (printMessages) echo ("------------------------------"); 
+//  if (printMessages) echo ("processCutoutList started"); 
+
+  // Setup translations for the requested face
+  if (face == yappLeft) 
+  { 
+    if (printMessages) echo(str("Process ", listType, " on Left Face"));
+    rot_X = 90;      // Y
+    rot_Y = -90;     // X
+    rot_Z = 180;     // Z    
+    offset_x = 0;
+    offset_y = -wallThickness;
+    offset_z = (casePart==yappPartLid) ? -shellHeight : 0;
+    
+    wallDepth = wallThickness;
+    if (listType=="cutout") 
+    {
+      processCutoutList_Face(face, list, casePart, false, true, false, rot_X, rot_Y, rot_Z, offset_x, offset_y, offset_z, wallDepth);
+    } //-- listType=="cutout"
+    else if (listType=="ridgeExt")
+    {
+      processRidgeExtList_Face(face, list, casePart, false, true, false, rot_X, rot_Y, rot_Z, offset_x, offset_y, offset_z, wallDepth, subtract);
+      
+    } //-- (listType=="ridgeExt") 
+  }
+  else if (face == yappRight) 
+  {  
+    if (printMessages) echo(str("Process ", listType, " on Right Face"));
+    rot_X = 90;      //-- Y
+    rot_Y = -90;     //-- X
+    rot_Z = 180;     //-- Z
+    offset_x = 0;
+    offset_y = shellWidth - (wallThickness);
+    offset_z = (casePart==yappPartLid) ? -shellHeight : 0;
+    wallDepth = wallThickness;
+    if (listType=="cutout") 
+    {
+      processCutoutList_Face(face, list, casePart, false, true, true, rot_X, rot_Y, rot_Z, offset_x, offset_y, offset_z, wallDepth);
+    } // listType=="cutout"
+    else if (listType=="ridgeExt")
+    {
+      processRidgeExtList_Face(face, list, casePart, false, true, true, rot_X, rot_Y, rot_Z, offset_x, offset_y, offset_z, wallDepth, subtract);
+      
+    } // (listType=="ridgeExt") 
+  }
+  else if (face == yappFront) 
+  {
+    if (printMessages) echo(str("Process ", listType, " on Front Face"));
+    rot_X = 0;      //-- Y
+    rot_Y = -90;    //-- X
+    rot_Z = 0;      //-- Z
+    offset_x = shellLength + wallThickness;
+    offset_y = 0;
+    offset_z = (casePart==yappPartLid) ? -shellHeight : 0;
+    wallDepth = wallThickness;
+    if (listType=="cutout") 
+    {
+      processCutoutList_Face(face, list, casePart, false, true, false, rot_X, rot_Y, rot_Z, offset_x, offset_y, offset_z, wallDepth);
+    } //-- listType=="cutout"
+    else if (listType=="ridgeExt")
+    {
+      processRidgeExtList_Face(face, list, casePart, false, true, false, rot_X, rot_Y, rot_Z, offset_x, offset_y, offset_z, wallDepth, subtract);
+      
+    } //-- (listType=="ridgeExt") 
+  }
+  else if (face == yappBack) 
+  {
+    if (printMessages) echo(str("Process ", listType, " on Back Face"));
+    rot_X = 0;      //-- Y
+    rot_Y = -90;    //-- X
+    rot_Z = 0;      ///-- Z
+    offset_x = wallThickness; 
+    offset_y = 0;
+    offset_z = (casePart==yappPartLid) ? -shellHeight : 0;
+    wallDepth = wallThickness;
+    if (listType=="cutout") 
+    {
+      processCutoutList_Face(face, list, casePart, false, true, true, rot_X, rot_Y, rot_Z, offset_x, offset_y, offset_z, wallDepth);
+    } //-- listType=="cutout"
+    else if (listType=="ridgeExt")
+    {
+      processRidgeExtList_Face(face, list, casePart, false, true, true, rot_X, rot_Y, rot_Z, offset_x, offset_y, offset_z, wallDepth, subtract);
+      
+    } //-- (listType=="ridgeExt") 
+  }
+  else if (face == yappLid) 
+  {
+    if (printMessages) echo(str("Process ", listType, " on Lid Face"));
+    rot_X = 0;
+    rot_Y = 0;
+    rot_Z = 0;
+    offset_x = 0;
+    offset_y = 0;
+    offset_z = -lidPlaneThickness;
+    wallDepth = lidPlaneThickness;
+    if (listType=="cutout") 
+    {
+      processCutoutList_Face(face, list, casePart, true, false, true, rot_X, rot_Y, rot_Z, offset_x, offset_y, offset_z, wallDepth);
+    } //-- listType=="cutout"
+  }
+  else if (face == yappBase) 
+  {
+    if (printMessages) echo(str("Process ", listType, " on Base Face"));
+    rot_X = 0;
+    rot_Y = 0;
+    rot_Z = 0;
+    offset_x = 0;
+    offset_y = 0;
+    offset_z = -basePlaneThickness;
+    wallDepth = basePlaneThickness;
+    if (listType=="cutout") 
+    {
+      processCutoutList_Face(face, list, casePart, true, false, false, rot_X, rot_Y, rot_Z, offset_x, offset_y, offset_z, wallDepth);
+    } //-- listType=="cutout"
+  } 
+} //-- processFaceList()
+
+
+//===========================================================

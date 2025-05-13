@@ -1,0 +1,7 @@
+function circular_pitch(mm_per_tooth=5) = mm_per_tooth;
+
+
+// Function: diametral_pitch()
+// Description: Get tooth density expressed as "diametral pitch".
+// Arguments:
+//   mm_per_tooth = Distance between teeth around the pitch circle, in mm.

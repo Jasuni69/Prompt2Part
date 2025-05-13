@@ -1,0 +1,29 @@
+function comp_spring(type, l = 0) = //! Calculate the mesh for spring
+    let(wire_d = spring_gauge(type),
+        r1 = (spring_od(type) - wire_d) / 2,
+        r2 = (spring_od2(type) - wire_d) / 2,
+        h = l ? l : spring_length(type),
+        H = spring_ground(type) ? h + wire_d * 0.75 : h - wire_d,
+        turns = spring_turns(type),
+        closed = spring_closed(type),
+        open = turns - 2 * closed,
+        open_H = H - 2 * closed * wire_d,
+        offset = (h - H) / 2,
+        sides = r2sides(r1),
+        path = [for(i = [0 : sides * turns],
+                    t = i / sides,
+                    top = t > turns / 2,
+                    u = top ? turns - t : t,
+                    v = (u < closed ? u < 0.25 ? 0
+                                               : u < 1 ? wire_d * (u - 0.25) / 0.75
+                                                       : wire_d * u
+                                    : wire_d * closed + open_H / open * (u - closed)
+                        ) + offset,
+                    z = top ? h - v : v,
+                    r = t <= closed ? r2
+                                    : t >= turns - closed ? r1
+                                                          : r2 + (r1 - r2) * (t - closed) / open,
+                    a = t * 360
+                   ) [r * sin(a), -r * cos(a), z]],
+        profile = circle_points(wire_d / 2 - eps, $fn = 16)
+       ) concat(type, [concat(sweep(path, profile), [l])]);

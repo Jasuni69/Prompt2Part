@@ -1,0 +1,27 @@
+module fastened_corner_block_assembly(thickness, screw = def_screw, thickness_below = undef, thickness_side2 = undef, name = false, show_block = true, star_washers = true, short_insert = false) { //! Printed block with all fasteners
+    thickness2 = !is_undef(thickness_below) ? thickness_below : thickness;
+    thickness3 = !is_undef(thickness_side2) ? thickness_side2 : thickness;
+    insert = screw_insert(screw, short_insert);
+    function screw_len(t) = screw_length(screw, t + overshoot, star_washers ? 2 : 1, insert);
+    screw_length = screw_len(thickness);
+    screw_length2 = screw_len(thickness2);
+    screw_length3 = screw_len(thickness3);
+
+    if(show_block)
+        corner_block_assembly(screw, name, short_insert) children();
+
+    if(thickness)
+        corner_block_h_holes(screw, 0, short_insert)
+            translate_z(thickness)
+                screw_and_washer(screw, screw_length, star_washers);
+
+    if(thickness3)
+        corner_block_h_holes(screw, 1, short_insert)
+            translate_z(thickness3)
+                screw_and_washer(screw, screw_length3, star_washers);
+
+    if(thickness2)
+        corner_block_v_hole(screw, short_insert)
+            translate_z(thickness2)
+                screw_and_washer(screw, screw_length2, star_washers);
+}

@@ -1,0 +1,82 @@
+function vollwelle(r=1,r2,grad=+60,grad2=+0,h=0,l,extrude=+5,center=true,xCenter=1,fn=12,x0=0,mitte=0,tMitte,g2End=[1,1],minF,z)=
+let(
+    fn=is_list(fn)?fn:[fn,fn],
+    grad=is_list(grad)?grad:[grad,grad],
+    grad2=is_list(grad2)?[max(grad2[0],-grad[0]),max(grad2[1],-grad[1])]:[max(grad2,-grad[0]),max(grad2,-grad[0])],
+    sc=1,// scaling r center
+    r2=is_num(r2)?r2:is_list(r)?r[1]:r,
+    r=is_list(r)?r[0]:r,
+
+ //r mittelpunkt verschiebung für tangenten Kontakt
+/* tangY=[r*sin(grad[0])-tan(90-grad[0])*(r-cos(grad[0])*r), 
+           r*sin(grad[1])-tan(90-grad[1])*(r-cos(grad[1])*r)],// */
+           
+    mitte=max(0,is_undef(tMitte)?mitte:tMitte - tan(grad[0]/2)*r - tan(grad[1]/2)*r),
+    w=grad[0]-90,//del=echo(w,grad[0]-90),
+    wOben=(grad[1]-90),
+    hR=r-sin(90-grad[0])*r,
+    hRO=r-sin(90-grad[1])*r,
+    hR2=r2-sin(90-grad[0])*r2,
+    hR2O=r2-sin(90-grad[1])*r2,
+    h=max(hR+hR2,hRO+hR2O,h),
+    hDiv=h-(hR+hR2),
+    hDivOben=h-(hRO+hR2O),
+    //hDiv=is_undef(h)?0:w>0?h-(sin(w)*r+sin(w)*r2):h-((sin(w)*r+sin(w)*r2))*0,
+    y=2*cos(w)*r*sc+(hDiv*-tan(w)*2),
+    yOben=2*cos(wOben)*r*sc+(hDivOben*-tan(wOben)*2),// kreis r2 oben incl. l1
+    y2Oben=2*cos(wOben)*r2,// kreis r2 oben ohne l1
+    y2=2*cos(w)*r2,
+    
+    x=  sin(w)*r+hDiv*1,
+    x2= sin(w)*r2 ,
+//    l0 länge unterhalb (-y) l1 länge oberhalb (+y)
+    l0=is_undef(l)?y/2+y2/2+sin(grad2[0])*r2+mitte/2:is_list(l)?is_undef(l[0])?y/2+y2/2+sin(grad2[0])*r2+mitte/2:l[0]:l/2,
+    l1=is_undef(l)?yOben/2+y2Oben/2+sin(grad2[1])*r2+mitte/2:is_list(l)?is_undef(l[1])?yOben/2+y2Oben/2+sin(grad2[1])*r2+mitte/2:l[1]:l/2,
+    extrude=xCenter==0?extrude-hDiv/2
+                       :xCenter>0?extrude-x-r
+                                   :xCenter<-1?xCenter<-2?extrude+x2+cos(grad2[1])*r2
+                                                          :extrude+x2+cos(grad2[0])*r2
+                                               :extrude+x2+r2,
+   
+    trans=is_num(z)?[+0,center?0:l0,z]:[+0,center?0:l0],// all points translation
+    g2End=is_list(g2End)?g2End:[g2End,g2End],
+    yKL1=l1-(yOben/2+y2Oben/2+mitte/2+sin(grad2[1])*r2),   // Abstand Kreisende bis l1
+    yKL0=l0+(-y/2-y2/2-mitte/2-sin(grad2[0])*r2),         // Abstand Kreisende bis l0
+    g2EndX0=grad2[0]!=90? g2End[0]? yKL0*tan(grad2[0]):  // End Punkt unten winkel verlängerung
+                                    0:
+                          0,
+    g2EndX1=grad2[1]!=90? g2End[1]? yKL1*tan(grad2[1]):  // End Punkt oben winkel verlängerung
+                                    0:
+                          0
+    )
+concat(
+
+    [concat([extrude-x2-cos(grad2[1])*r2+g2EndX1,l1],is_num(z)?0:[])]+[trans]//oben Kreis verl.
+    , kreis(r=r2,rand=0,rot=-90+grad2[1],center=false,grad=-grad[1]-grad2[1],t=[extrude-x2,yOben/2+y2Oben/2+mitte/2]+trans,fn=fn[0],minF=minF,z=z)//oben
+    , kreis(r=r,r2=r*sc,rand=0,rot=90-grad[1],grad=grad[1],t=[extrude+x,mitte/2]+trans,fn=fn[1],center=false,minF=minF,z=z)//mitte oben
+    , kreis(r=r,r2=r*sc,rand=0,rot=90,grad=grad[0],t=[extrude+x,-mitte/2]+trans,fn=fn[1],center=false,minF=minF,z=z)//mitte unten
+    , kreis(r=r2,rand=0,rot=grad[0]-90,center=false,grad=-grad[0]-grad2[0],t=[extrude-x2,-y/2-y2/2-mitte/2]+trans,fn=fn[0],minF=minF,z=z)  //unten 
+   
+    ,[concat([extrude-x2-cos(grad2[0])*r2+g2EndX0,-l0],is_num(z)?0:[])]+[trans]//unten Kreis verl.
+    ,[concat([x0,-l0],is_num(z)?0:[])]+[trans]//unten
+    ,[concat([x0,l1],is_num(z)?0:[])]+[trans]//oben
+
+    );
+
+    
+
+    
+/** \name SWelle
+\page Polygons
+SWelle() creates 2 attached arcsegments to form a wave (or S shape)
+/param r,r2  radii
+/param h y height 
+/param deg contact angle
+/param ext  x extension
+/param lap  [-x,-y] overlap
+/param center center y -1,0,1
+/param fs  fragment Size
+/param name help name help
+*/
+
+//SWelle(center=+1,h=7,deg=45);

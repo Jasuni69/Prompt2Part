@@ -1,0 +1,23 @@
+function altaz_to_xyz(alt,az=undef,r=undef) = let(
+		p = az==undef? alt[0] : alt,
+		t = 90 - (az==undef? alt[1] : az),
+		rad = az==undef? alt[2] : r
+	) rad*[cos(p)*cos(t), cos(p)*sin(t), sin(p)];
+
+
+// Function: xyz_to_altaz()
+// Usage:
+//   xyz_to_altaz(x,y,z);
+//   xyz_to_altaz([X,Y,Z]);
+// Description:
+//   Convert 3D cartesian coordinates to altitude/azimuth/range coordinates.
+//   Returns [altitude,azimuth,range], where altitude is angle above the
+//   XY plane, azimuth is degrees clockwise of Y+ on the XY plane, and
+//   range is the distance from the origin.
+// Arguments:
+//   x = X coordinate.
+//   y = Y coordinate.
+//   z = Z coordinate.
+// Examples:
+//   aa = xyz_to_altaz(20,30,40);
+//   aa = xyz_to_altaz([40,50,70]);

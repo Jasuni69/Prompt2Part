@@ -1,0 +1,1 @@
+function nut_dome_height(type)  = let(d = nut_dome(type)) d ? d[0] : nut_thickness(type); //! Height of the domed version

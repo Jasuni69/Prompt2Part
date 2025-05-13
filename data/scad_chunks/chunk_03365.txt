@@ -1,0 +1,2 @@
+function ifAnyOf(where,what,sep=":")= (len([for(el=split(where,sep))
+                if(str(what)==el)1])!=0)?true:false;

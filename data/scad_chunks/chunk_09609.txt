@@ -1,0 +1,34 @@
+module thinning_brace(h=50, l=100, thick=5, ang=30, strut=5, wall=3, center=true)
+{
+	deprecate("thinning_brace()", "thinning_triangle(..., diagonly=true)");
+	thinning_triangle(h=h, l=l, thick=thick, ang=ang, strut=strut, wall=wall, diagonly=true, center=center);
+}
+
+
+// Module: sparse_strut()
+//
+// Description:
+//   Makes an open rectangular strut with X-shaped cross-bracing, designed to reduce
+//   the need for support material in 3D printing.
+//
+// Usage:
+//   sparse_strut(h, l, thick, [strut], [maxang], [max_bridge], [orient], [align])
+//
+// Arguments:
+//   h = height of strut wall.
+//   l = length of strut wall.
+//   thick = thickness of strut wall.
+//   maxang = maximum overhang angle of cross-braces.
+//   max_bridge = maximum bridging distance between cross-braces.
+//   strut = the width of the cross-braces.
+//   orient = Orientation of the length axis of the shape.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Y`.
+//   align = Alignment of the shape.  Use the `V_` constants from `constants.scad`.  Default: `V_CENTER`.
+//
+// Example: Typical Shape
+//   sparse_strut(h=40, l=100, thick=3);
+// Example: Thinner Strut
+//   sparse_strut(h=40, l=100, thick=3, strut=2);
+// Example: Larger maxang
+//   sparse_strut(h=40, l=100, thick=3, strut=2, maxang=45);
+// Example: Longer max_bridge
+//   sparse_strut(h=40, l=100, thick=3, strut=2, maxang=45, max_bridge=30);

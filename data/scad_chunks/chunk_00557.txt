@@ -1,0 +1,15 @@
+module ttrack_hole_positions(type, length) { //! Position children over screw holes
+    P = ttrack_screw_pitch(type);
+    H  = ttrack_height(type);
+    B = H - (ttrack_slot_height(type) +  ttrack_top_thickness(type));
+
+    count = floor(length / P);
+    first = (length - count * P)/2;
+
+    c = first < P/3 ? count - 1 : count;  // we don't want screws right on the edge
+    N = (length - c * P)/2;
+
+    for (y = [N:P:length-N])
+        translate([0,length/2 - y, -H + B])
+            children();
+}

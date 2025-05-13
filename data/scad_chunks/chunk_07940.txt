@@ -1,0 +1,22 @@
+module magatama(radius, height, type, spacing) {
+	half_r = radius / 2;
+	
+	color(type == "ying" ? "DarkSlateGray" : "white")
+	linear_extrude(height, twist = twist)
+	difference() {
+	    offset(r = -spacing)
+		union() {
+			difference() {
+				pie(radius, [0, 180]);
+				translate([-half_r, 0])
+					circle(half_r);
+			}
+			translate([half_r, 0])
+				circle(half_r);
+		}
+		
+		translate([half_r, 0])
+		offset(r = spacing)
+		    circle(half_r / 3);
+	}
+}

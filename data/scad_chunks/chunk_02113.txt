@@ -1,0 +1,1 @@
+function pocket_handle_screw(type)     = type[2]; //! Screw type, can be countersunk or not

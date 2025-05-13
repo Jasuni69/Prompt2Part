@@ -1,0 +1,26 @@
+module prism(n=3, h=1, l=1, r=undef, d=undef, circum=false, center=false)
+{
+	deprecate("prism()", "cyl()");
+	radius = get_radius(r=r, d=d, dflt=l/2/sin(180/n));
+	cyl(r=radius, l=h, circum=circum, $fn=n, realign=true, center=center);
+}
+
+
+// Module: right_triangle()
+//
+// Description:
+//   Creates a 3D right triangular prism.
+//
+// Usage:
+//   right_triangle(size, [orient], [align|center]);
+//
+// Arguments:
+//   size = [width, thickness, height]
+//   orient = The axis to place the hypotenuse along.  Only accepts `ORIENT_X`, `ORIENT_Y`, or `ORIENT_Z` from `constants.scad`.  Default: `ORIENT_Y`.
+//   align = The side of the origin to align to.  Use `V_` constants from `constants.scad`.  Default: `V_UP+V_BACK+V_RIGHT`.
+//   center = If given, overrides `align`.  A true value sets `align=V_CENTER`, false sets `align=V_UP+V_BACK+V_RIGHT`.
+//
+// Example: Centered
+//   right_triangle([60, 10, 40], center=true);
+// Example: *Non*-Centered
+//   right_triangle([60, 10, 40]);

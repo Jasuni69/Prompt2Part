@@ -1,0 +1,11 @@
+function char_to_num(c) = ord(c) - ord("0");
+
+// ======================================
+// calculate_number
+// ======================================
+// Calculate the number from a few of characters "0" ... "9"
+// to a decimal number
+// For example string "123" becomes number 123
+// s     : the string
+// first : the index of the first character.
+// last  : the index of the separator "#" (after the digits).

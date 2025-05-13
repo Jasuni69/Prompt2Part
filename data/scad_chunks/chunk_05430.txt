@@ -1,0 +1,20 @@
+function _corners(v, except=[]) =
+    v==[] ? CORNERS_NONE :
+    (is_string(v) || is_vector(v) || _is_corner_array(v))? _corners([v], except=except) :
+    (is_string(except) || is_vector(except) || _is_corner_array(except))? _corners(v, except=[except]) :
+    except==[]? _normalize_corners(sum([for (x=v) _corner_set(x)])) :
+    let(
+        a = _normalize_corners(sum([for (x=v) _corner_set(x)])),
+        b = _normalize_corners(sum([for (x=except) _corner_set(x)]))
+    ) _normalize_corners(a - b);
+
+
+/// Internal Function: _corner_edges()
+/// Topics: Corners
+/// Description:
+///   Returns [XCOUNT,YCOUNT,ZCOUNT] where each is the count of edges aligned with that
+///   axis that are in the edge set and touch the given corner.
+/// Arguments:
+///   edges = Standard edges array.
+///   v = Vector pointing to the corner to count edge intersections at.
+/// See Also: CORNERS_NONE, CORNERS_ALL, _corners()

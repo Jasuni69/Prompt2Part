@@ -1,0 +1,3 @@
+function multmatrix(M, poly) = is_poly_vector(poly) ?
+  [for (p = poly) _multmatrix(M=M,poly=p)] :
+  _multmatrix(M=M,poly=poly);

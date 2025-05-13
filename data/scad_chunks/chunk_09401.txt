@@ -1,0 +1,16 @@
+function sortidx(l, idx=undef) =
+	(l==[])? [] :
+	let(
+		ll=enumerate(l,idx=idx),
+		sidx = [1:len(ll[0])-1]
+	)
+	array_subindex(sort(ll, idx=sidx), 0);
+
+
+// Function: unique()
+// Usage:
+//   unique(arr);
+// Description:
+//   Returns a sorted list with all repeated items removed.
+// Arguments:
+//   arr = The list to uniquify.

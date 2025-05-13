@@ -1,0 +1,1 @@
+function cable_strip_length(depth, travel, extra = 15) = ceil(travel / 2 + 2 * extra + PI * depth); //! Calculate circular cable strip length

@@ -1,0 +1,8 @@
+module roundBatteryBase(h,d){
+	union(){
+		//nub
+		cylinder(r=d/6,h=h);
+		//cell
+		cylinder(r=d/2,h=0.97*h);
+	}
+}

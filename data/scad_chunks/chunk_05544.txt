@@ -1,0 +1,18 @@
+function f_gt(a,b) = f_2arg_simple(function (a,b) a>b)(a,b);
+
+
+// Function: f_lt()
+// Synopsis: Returns a function to compare if `a` is less than `b`.
+// Topics: Function Literals, Comparators
+// See Also: f_cmp(), f_gt(), f_lt(), f_gte(), f_lte(), f_eq(), f_neq(), f_approx(), f_napprox()
+// Usage:
+//   fn = f_lt();
+//   fn = f_lt(b);
+//   fn = f_lt(a,b);
+// Description:
+//   A factory that generates function literals based on `a < b`, where one
+//   or both of the arguments can be replaced with constants.
+// Example:
+//   fn_lt = f_lt();       // = function(a,b) a<b;
+//   fn_lt3 = f_lt(3);     // = function(a) a<3;
+//   fn_3lt4 = f_lt(3,4);  // = function() 3<4;

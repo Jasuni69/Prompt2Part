@@ -1,0 +1,26 @@
+module roof_router(convexity)
+{
+  if(version()[0] < 2024)
+    fake_roof(convexity=convexity)
+      children();
+  else
+    roof(convexity=convexity)
+      children();
+}
+
+
+// ==============================================================
+//
+// fake_roof
+// ---------
+// Version 1
+// January 31, 2025
+// By: Stone Age Sculptor
+// License: CC0 (Public Domain)
+//
+// Warning: It does not work well yet.
+//
+// The roof function is imitated.
+// A minkowski with a upside down cone 
+// on the negative 2D shape is used
+// for a fake roof().

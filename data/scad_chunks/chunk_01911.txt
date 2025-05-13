@@ -1,0 +1,1 @@
+function box_boss_r(type) = ceil(corrected_radius(box_insert_r(type)) + box_wall(type));

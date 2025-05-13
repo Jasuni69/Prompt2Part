@@ -1,0 +1,7 @@
+module ring(or, ir) //! Create a ring with specified external and internal radii
+        difference() {
+            circle4n(or);
+
+            if(ir > 0)
+                circle4n(ir);
+        }

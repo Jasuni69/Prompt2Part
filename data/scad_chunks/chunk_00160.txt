@@ -1,0 +1,13 @@
+module foot_stl() foot(foot);
+
+wall = 2;
+top_thickness = 2;
+base_thickness = 2;
+inner_rad = 8;
+
+width = 80;
+depth = 45;
+height = 40;
+
+box1 = pbox(name = "box1",       wall = wall, top_t = top_thickness, base_t = base_thickness, radius = inner_rad, size = [width, depth, height], screw = M2_cap_screw, ridges = [8, 1]);
+box2 = pbox(name = "smooth_box", wall = wall, top_t = top_thickness, base_t = base_thickness, radius = inner_rad, size = [width, depth, height], foot = foot);

@@ -1,0 +1,72 @@
+function _circle_or_sphere_line_intersection(r, cp, line, bounded=false, d, eps=EPSILON) =
+  let(r=get_radius(r=r,d=d,dflt=undef))
+  assert(is_num(r) && r>0, "\nRadius must be positive")
+  assert(is_bool(bounded) || is_bool_list(bounded,2), "\nInvalid bound condition")
+  let(
+      bounded = force_list(bounded,2),
+      closest = line_closest_point(line,cp),
+      d = norm(closest-cp)
+  )
+  d > r ? [] :
+  let(
+     isect = approx(d,r,eps) ? [closest] :
+             let( offset = sqrt(r*r-d*d),
+                  uvec=unit(line[1]-line[0])
+             ) [closest-offset*uvec, closest+offset*uvec]
+  )
+  [for(p=isect)
+     if ((!bounded[0] || (p-line[0])*(line[1]-line[0])>=0)
+        && (!bounded[1] || (p-line[1])*(line[0]-line[1])>=0)) p];
+
+
+// Function: circle_circle_intersection()
+// Synopsis: Find the intersection points of two 2d circles.
+// Topics: Geometry, Circles
+// See Also: circle_line_intersection(), circle_circle_intersection(), circle_2tangents(), circle_3points(), circle_point_tangents(), circle_circle_tangents()
+// Usage:
+//   pts = circle_circle_intersection(r1|d1=, cp1, r2|d2=, cp2, [eps]);
+// Description:
+//   Compute the intersection points of two circles.  Returns a list of the intersection points, which
+//   contains two points in the general case, one point for tangent circles, or returns an empty list
+//   if the circles do not intersect.
+// Arguments:
+//   r1 = Radius of the first circle.
+//   cp1 = Centerpoint of the first circle.
+//   r2 = Radius of the second circle.
+//   cp2 = Centerpoint of the second circle.
+//   eps = Tolerance for detecting tangent circles.  Default: EPSILON
+//   ---
+//   d1 = Diameter of the first circle.
+//   d2 = Diameter of the second circle.
+// Example(2D,NoAxes): Circles intersect in two points. 
+//   $fn=32;
+//   cp1 = [4,4];  r1 = 3;
+//   cp2 = [7,7];  r2 = 2;
+//   pts = circle_circle_intersection(r1, cp1, r2, cp2);
+//   move(cp1) stroke(circle(r=r1), width=0.2, closed=true);
+//   move(cp2) stroke(circle(r=r2), width=0.2, closed=true);
+//   color("red") move_copies(pts) circle(r=.3);
+// Example(2D,NoAxes): Circles are tangent, so one intersection point:
+//   $fn=32;
+//   cp1 = [4,4];  r1 = 4;
+//   cp2 = [4,10]; r2 = 2;
+//   pts = circle_circle_intersection(r1, cp1, r2, cp2);
+//   move(cp1) stroke(circle(r=r1), width=0.2, closed=true);
+//   move(cp2) stroke(circle(r=r2), width=0.2, closed=true);
+//   color("red") move_copies(pts) circle(r=.3);
+// Example(2D,NoAxes): Another tangent example:
+//   $fn=32;
+//   cp1 = [4,4];  r1 = 4;
+//   cp2 = [5,5];  r2 = 4-sqrt(2);
+//   pts = circle_circle_intersection(r1, cp1, r2, cp2);
+//   move(cp1) stroke(circle(r=r1), width=0.2, closed=true);
+//   move(cp2) stroke(circle(r=r2), width=0.2, closed=true);
+//   color("red") move_copies(pts) circle(r=.3);
+// Example(2D,NoAxes): Circles do not intersect.  Returns empty list. 
+//   $fn=32;
+//   cp1 = [3,4];  r1 = 2;
+//   cp2 = [7,10]; r2 = 3;
+//   pts = circle_circle_intersection(r1, cp1, r2, cp2);
+//   move(cp1) stroke(circle(r=r1), width=0.2, closed=true);
+//   move(cp2) stroke(circle(r=r2), width=0.2, closed=true);
+//   color("red") move_copies(pts) circle(r=.3);

@@ -1,0 +1,1 @@
+function kp_screw_separation(type) = type[4]; //! Separation of bolts in the base

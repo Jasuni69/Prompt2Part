@@ -1,0 +1,87 @@
+module Kehle(rad=2.5,dia,r,l=20,angle=360,grad=0,a=90,ax=90,fn=0,fn2,fs=fs,fa=fa,r2=0,spiel,lap=spiel,center=false, use2D=false,end=false,fase=false,fillet,help)
+{
+  use2D=is_parent(needs2D)?true: use2D;
+    fillet=is_list(fillet)?fillet:[fillet,fillet];
+    fase=is_bool(fase)?fase?1:0:fase;
+    end=is_bool(end)?end?1:0:end;
+    angle=grad?grad:angle;
+    spiel=is_undef(spiel)?is_list(lap)?lap
+                                      :[lap,lap]
+                         :is_list(spiel)?spiel
+                                        :[spiel,spiel];
+    center=center?true:false;
+    dia=is_undef(r)?dia:2*r;
+  $info=false;
+    
+    if(is_undef(dia)&&l&&!use2D&&rad>0){
+        difference(){
+            Tz(fase&&$preview?.05:0)scale([1,1,sign(l)])linear_extrude(height=abs(l) -(fase&&$preview?.1:0),$fn=fn,convexity=5,center=center)
+            {
+                difference()
+                {
+                   translate([-spiel[0],-spiel[1]]) square([sin(-90+ax)*rad+rad+spiel[0],sin(a-90)*rad+rad+spiel[1]]);
+                    T(rad,rad)rotate(r2)circle(rad,$fn=is_undef(fn2)?round(fs2fn(r=rad,minf=16,fs=fs,grad=360,fa=fa)/4)*4:fn2);
+                }
+            }
+        if(fase)T(x=rad,y=rad)Tz(center?-l/2:0)Kegel(d2=0,d1=Hypotenuse(rad+spiel[0],rad+spiel[1])*2,fn=fn2,fs=fs);
+        if(fase>1)T(x=rad,y=rad)Tz(center?l/2:l)R(180)Kegel(d2=0,d1=Hypotenuse(rad+spiel[0],rad+spiel[1])*2,fn=fn2,fs=fs);
+        }
+        
+    if(is_num(fillet[0]))intersection(){
+        Tz(center?-l/2:0)R(45,90)T(0,-fillet[0])RotEx(90,cut=true,fn=fn/360*90,fs=fs)T(fillet[0])rotate(-45)Kehle(use2D=true,a=ax,ax=a,fn2=fn2,fs=fs,rad=rad,spiel=spiel); 
+        T(-spiel[0],-spiel[1],-500)cube([rad+spiel[0],rad+spiel[1],600]);
+    }
+    if(is_num(fillet[1]))intersection(){
+       Tz(center?l/2:l)R(-45,-90)T(0,-fillet[1])RotEx(90,cut=true,fn=fn/360*90,fs=fs)T(fillet[1])rotate(-45)Kehle(use2D=true,a=a,ax=ax,fn2=fn2,fs=fs,rad=rad,spiel=spiel); 
+        T(-spiel[0],-spiel[1],l-100)cube([rad+spiel[0],rad+spiel[1],600]);
+    }
+    
+        
+        
+        
+       if(end==2)R(x=-90)T(y=center?0:-l/2) MKlon(ty=l/2)RotEx(grad=90,cut=1,fn=fn,fs=fs)Kehle(a=a,ax=ax,rad=rad,spiel=spiel, use2D=true,fn2=fn2,fs=fs,help=false);
+       if(end==-2)R(x=-90)T(y=center?0:-l/2) MKlon(ty=l/2)R(90,0,90)RotEx(grad=90,cut=1,fn=fn,fs=fs)Kehle(a=ax,ax=a,rad=rad,spiel=spiel, use2D=true,fn2=fn2,fs=fs);    
+       if(end==1)Tz(center?-l/2:0)R(-90)RotEx(grad=90,cut=1,fn=fn,fs=fs)Kehle(a=a,ax=ax,rad=rad,spiel=spiel, use2D=true,fn2=fn2,fs=fs);     
+    }
+    
+    if(use2D&&rad>0)translate([is_num(dia)?dia/2:0,0])difference(){
+           translate([-spiel[0],-spiel[1]]) square([sin(-90+ax)*rad+rad+spiel[0],sin(a-90)*rad+rad+spiel[1]]);
+            T(rad,rad)rotate(r2)circle(rad,$fn=is_undef(fn2)?round(fs2fn(r=rad,minf=16,fs=fs,grad=360)/4)*4:fn2,$fs=fs);
+        }
+// dia   
+    if(!is_undef(dia)&&!use2D&&rad>0){
+      rotate(center?-180-angle/2:0)difference(){
+        rotate(fase&&$preview?.05:0)rotate_extrude(angle=angle-(fase&&$preview?.1:0),$fn=fn?fn:dia?fs2fn(minf=24,r=dia/2,fs=fs,fa=fa):0,convexity=5,$fs=fs,$fa=fa)
+            difference()
+            {
+                T(dia/2)translate([-spiel[0],-spiel[1]])square([sin(-90+ax)*rad+rad+spiel[0],sin(a-90)*rad+rad+spiel[1]]);
+                T(dia/2)T(rad,rad)rotate(r2)circle(rad,$fn=is_undef(fn2)?round(fs2fn(r=rad,minf=16,fs=fs,grad=360,fa=fa)/4)*4:fn2,$fs=fs);
+                if(dia>-rad*2)T(-200,-100)square(200);
+            }
+          if(fase&&angle)T(dia/2+rad,z=rad)R(-90*sign(dia))Kegel(d2=0,d1=Hypotenuse(rad+spiel[0],rad+spiel[1])*2,fn=fn2,fs=fs);
+          if(fase>1&&angle)rotate(angle)T(dia/2+rad,z=rad)R(90*sign(dia))Kegel(d2=0,d1=Hypotenuse(rad+spiel[0],rad+spiel[1])*2,fn=fn2,fs=fs);    
+        }
+
+
+    
+    if(angle)rotate(center?-180-angle/2:0){
+         if(is_num(fillet[0]))intersection(){// fillet[0]
+            T(dia/2,minVal*sign(dia))R(45,0,-90)T(0,-fillet[0])rotate(dia<0?[0,0,90]:[0])RotEx(90,cut=true,fn=fn/360*90,fs=fs)T(fillet[0])rotate(-45)Kehle(use2D=true,a=a,ax=ax,fn2=fn2,rad=rad,spiel=spiel,fs=fs); 
+            RotEx(fn=fn,fs=fs)T(dia/2)translate([-spiel[0],-spiel[1]])square([rad+spiel[0],rad+spiel[1]]);
+    }
+        if(is_num(fillet[1]))intersection(){// fillet[1]
+            rotate(angle)T(dia/2,-minVal*sign(dia))rotate([135,0,90])T(0,-fillet[1])R(z=dia<0?90:0)RotEx(90,cut=true,fn=fn/360*90,fs=fs)T(fillet[1])rotate(-45)Kehle(use2D=true,a=ax,ax=a,fn2=fn2,rad=rad,spiel=spiel,fs=fs); 
+            RotEx(fn=fn,fs=fs)T(dia/2)translate([-spiel[0],-spiel[1]])square([rad+spiel[0],rad+spiel[1]]);       
+    }   
+        
+     if(end>0) T(dia/2,+minVal*sign(dia)) rotate(dia<0?0:-90) RotEx(grad=90,cut=1,fn=fn)Kehle(a=a,ax=ax,rad=rad,spiel=spiel, use2D=true,fn2=fn2,fs=fs);
+      if(end==2) rotate(angle)T(dia/2,-minVal*sign(dia))rotate(dia<0?-90:0) RotEx(grad=90,cut=1,fn=fn)Kehle(a=a,ax=ax,rad=rad,spiel=spiel, use2D=true,fn2=fn2,fs=fs); 
+     if(end<0) T(dia/2,minVal*sign(dia)) rotate(-90) R(-90,dia<0?-180:-90)RotEx(grad=90,cut=1,fn=fn)Kehle(a=ax,ax=a,rad=rad,spiel=[spiel.y,spiel.x], use2D=true,fn2=fn2,fs=fs);
+      if(end==-2) rotate(angle)T(dia/2,-minVal*sign(dia))R(dia<0?-180:90)R(y=90) RotEx(grad=90,cut=1,fn=fn)Kehle(a=ax,ax=a,rad=rad,spiel=[spiel.y,spiel.x], use2D=true,fn2=fn2,fs=fs);          
+    
+        
+    }
+    }
+HelpTxt("Kehle",["rad",rad,"dia",dia,"l",l,"angle",angle,"grad",grad,"a",a,",ax=",ax,"fn",fn,"fn2",fn2,"fs",fs,"fa",fa,"r2",r2,"spiel",spiel,"center",center, "use2D", use2D,"end",end,"fase",fase,"fillet",fillet],help);
+
+}

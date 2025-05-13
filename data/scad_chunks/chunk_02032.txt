@@ -1,0 +1,1 @@
+function door_hinge_pin_x() = -dia / 2;                     //! X offset of the hinge pin

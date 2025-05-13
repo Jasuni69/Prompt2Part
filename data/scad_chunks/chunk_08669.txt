@@ -1,0 +1,4 @@
+function _chain_move(cmd, arg1, arg2) =
+    cmd == "forward" || cmd == "xu_move" ? _xu_move(arg1, arg2) : 
+    cmd == "yu_move" ? _yu_move(arg1, arg2) : 
+    cmd == "zu_move" ? _zu_move(arg1, arg2) : _chain_turn(cmd, arg1, arg2);

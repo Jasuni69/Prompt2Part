@@ -1,0 +1,4 @@
+function _mb_capsule_cutoff(dv, hl, r, cutoff, neg) = let(
+    dist = dv.z<-hl ? norm(dv-[0,0,-hl])
+      : dv.z<hl ? norm([dv.x,dv.y]) : norm(dv-[0,0,hl])
+) neg * mb_cutoff(dist, cutoff) * r/dist;

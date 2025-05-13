@@ -1,0 +1,11 @@
+function bezier_patch_points(patch, u, v) =
+    assert(is_range(u) || is_vector(u) || is_finite(u), "\nInput u is invalid.")
+    assert(is_range(v) || is_vector(v) || is_finite(v), "\nInput v is invalid.")
+      !is_num(u) && !is_num(v) ?
+            let(
+                vbezes = [for (i = idx(patch[0])) bezier_points(column(patch,i), u)]
+            )
+            [for (i = idx(vbezes[0])) bezier_points(column(vbezes,i), v)]
+    : is_num(u) && is_num(v)? bezier_points([for (bez = patch) bezier_points(bez, v)], u)
+    : is_num(u) ? bezier_patch_points(patch,force_list(u),v)[0]
+    :             column(bezier_patch_points(patch,u,force_list(v)),0);

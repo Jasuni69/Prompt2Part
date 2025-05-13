@@ -1,0 +1,1 @@
+function door_hinge_stat_width() = stat_width;              //! Width of the stationary part

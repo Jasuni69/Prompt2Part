@@ -1,0 +1,1 @@
+function rocker_button(type)   = type[12];  //! How far the button extends from the bezel

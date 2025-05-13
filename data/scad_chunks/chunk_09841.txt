@@ -1,0 +1,8 @@
+module test_any() {
+	assert(any([0,false,undef]) == false);
+	assert(any([1,false,undef]) == true);
+	assert(any([1,5,true]) == true);
+	assert(any([[0,0], [0,0]]) == false);
+	assert(any([[0,0], [1,0]]) == true);
+}
+test_any();

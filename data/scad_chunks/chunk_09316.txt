@@ -1,0 +1,13 @@
+function Pedestal(h) =
+  let(
+    r = pedestal_base_rad*exp(-h*h/pedestal_base_thickness) +
+        pedestal_ripple_rad*pow(sin(h*pedestal_ripple*180/pedestal_top),2) +
+        pedestal_connect_rad
+  )
+  [ for (a=[0:360])
+      [ r*cos(a), r*sin(a), h ]
+  ];
+
+basepointarrays = [for (h=[0:layer_step:pedestal_top]) Pedestal(h)];
+
+ClosePoints(concat(basepointarrays, artpointarrays));

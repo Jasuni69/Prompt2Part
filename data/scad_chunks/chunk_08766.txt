@@ -1,0 +1,2 @@
+function _add(buckets, b_numbers, bucket, elem, idx) = 
+	[for(i = 0; i < b_numbers; i = i + 1) i == idx ? [each bucket, elem] : buckets[i]];

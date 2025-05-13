@@ -1,0 +1,22 @@
+function base_radius(mm_per_tooth=5, number_of_teeth=11, pressure_angle=28)
+	= pitch_radius(mm_per_tooth, number_of_teeth) * cos(pressure_angle);
+
+
+
+// Section: Modules
+
+
+// Module: gear_tooth_profile()
+// Description:
+//   Creates the 2D profile for an individual gear tooth.
+// Arguments:
+//   mm_per_tooth  = This is the "circular pitch", the circumference of the pitch circle divided by the number of teeth
+//   number_of_teeth = Total number of teeth along the rack
+//   pressure_angle = Controls how straight or bulged the tooth sides are. In degrees.
+//   backlash = Gap between two meshing teeth, in the direction along the circumference of the pitch circle
+//   bevelang = Angle of beveled gear face.
+//   clearance = Gap between top of a tooth on one gear and bottom of valley on a meshing gear (in millimeters)
+//   interior = If true, create a mask for difference()ing from something else.
+//   valleys = If true, adds valley extentions to the base of the gear tooth.  Default: true
+// Example(2D):
+//   gear_tooth_profile(mm_per_tooth=5, number_of_teeth=20, pressure_angle=20);

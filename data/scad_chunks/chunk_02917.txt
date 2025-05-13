@@ -1,0 +1,67 @@
+module shellConnectors(shellPartRaw) 
+{
+  for ( conn = connectors )
+  {
+    //-- Add yappThroughLid option
+    shellPart = (isTrue(yappThroughLid, conn)) ? ((shellPartRaw==yappPartBase) ? yappPartLid : yappPartBase) : shellPartRaw;
+    
+    invertPart = isTrue(yappThroughLid, conn);
+    
+    allCorners = (isTrue(yappAllCorners, conn)) ? true : false;
+    primeOrigin = (!isTrue(yappBackLeft, conn) && !isTrue(yappFrontLeft, conn) && !isTrue(yappFrontRight, conn) && !isTrue(yappBackRight, conn) && !isTrue(yappAllCorners, conn) ) ? true : false;
+    
+    //-- Get the desired coordinate system    
+    theCoordSystem = getCoordSystem(conn, yappCoordPCB);    
+    face = (shellPart==yappPartBase) ? yappBase : yappLid ;
+ 
+    theLength = getLength(theCoordSystem);
+    theWidth = getWidth(theCoordSystem);
+   
+    connX = translate2Box_X (conn[0], face, theCoordSystem);
+    connY = translate2Box_Y (conn[1], face, theCoordSystem);
+
+    connX2 = translate2Box_X (theLength - conn[0], face, theCoordSystem);
+    connY2 = translate2Box_Y (theWidth - conn[1], face, theCoordSystem);
+
+    outD    = minOutside(conn[5]+1, conn[6]);
+    
+    mirror([0,0,invertPart])
+    {
+      
+      if (primeOrigin || allCorners || isTrue(yappBackLeft, conn))
+        connectorNew(shellPart, 
+        theCoordSystem, 
+        connX, 
+        connY, 
+        conn, 
+        outD);
+
+      if (allCorners || isTrue(yappFrontLeft, conn))
+        connectorNew(shellPart, 
+        theCoordSystem, 
+        connX2, 
+        connY, 
+        conn, 
+        outD);
+
+      if (allCorners || isTrue(yappFrontRight, conn))
+        connectorNew(shellPart, 
+        theCoordSystem, 
+        connX2, 
+        connY2, 
+        conn, 
+        outD);
+
+      if (allCorners || isTrue(yappBackRight, conn))
+        connectorNew(shellPart, 
+        theCoordSystem, 
+        connX, 
+        connY2, 
+        conn, 
+        outD);
+    }//mirror
+  } // for ..
+} //-- shellConnectors()
+
+
+//===========================================================

@@ -1,0 +1,1 @@
+function strap_insert(type) = screw_insert(strap_screw(type)); //! The insert type

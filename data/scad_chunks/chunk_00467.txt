@@ -1,0 +1,1 @@
+function extrusion_center_hole(type)            = abs(extrusion_center_hole_wd(type));  //! Diameter of center hole or side if square

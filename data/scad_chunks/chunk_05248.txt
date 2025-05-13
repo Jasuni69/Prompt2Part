@@ -1,0 +1,17 @@
+function _substr(str,pos,len,substr="") =
+    len <= 0 || pos>=len(str) ? substr :
+    _substr(str, pos+1, len-1, str(substr, str[pos]));
+
+
+// Function: suffix()
+// Synopsis: Returns the last few characters of a string.
+// Topics: Strings
+// See Also: suffix(), str_find(), substr_match(), starts_with(), ends_with(), str_split(), str_join(), str_strip()
+// Usage:
+//   newstr = suffix(str,len);
+// Description:
+//   Returns the last `len` characters from the input string `str`.
+//   If `len` is longer than the length of `str`, then the entirety of `str` is returned.
+// Arguments:
+//   str = The string to get the suffix of.
+//   len = The number of characters of suffix to get.

@@ -1,0 +1,78 @@
+module showPCBMarkers(thePCB)
+{  
+  pcb_Length     = pcbLength(thePCB[0]); 
+  pcb_Width      = pcbWidth(thePCB[0]); 
+  pcb_Thickness  = pcbThickness(thePCB[0]); 
+
+  posX          = translate2Box_X(0, yappBase, [yappCoordPCB, yappGlobalOrigin, thePCB[0]]);
+  posY          = translate2Box_Y(0, yappBase, [yappCoordPCB, yappGlobalOrigin, thePCB[0]]);
+  posZ          = translate2Box_Z(0, yappBase, [yappCoordPCB, yappGlobalOrigin, thePCB[0]]);
+
+  {
+    markerHeight=shellHeight+onLidGap+10;
+    //-- Back Left 
+    translate([0, 0, (markerHeight/2) -posZ - 5]) 
+      color("red",0.50)
+        %cylinder(
+          r = .5,
+          h = markerHeight,
+          center = true);
+
+    translate([0, pcb_Width, (markerHeight/2) -posZ - 5]) 
+      color("red",0.50)
+        %cylinder(
+          r = .5,
+          h = markerHeight,
+          center = true);
+
+    translate([pcb_Length, pcb_Width, (markerHeight/2) -posZ - 5]) 
+      color("red",0.50)
+        %cylinder(
+          r = .5,
+          h = markerHeight,
+          center = true);
+
+    translate([pcb_Length, 0, (markerHeight/2) -posZ - 5]) 
+      color("red",0.50)
+        %cylinder(
+          r = .5,
+          h = markerHeight,
+          center = true);
+
+    translate([(shellLength/2)-posX, 0, pcb_Thickness])
+      rotate([0,90,0])
+        color("red",0.50)
+          %cylinder(
+            r = .5,
+            h = shellLength+(wallThickness*2)+paddingBack,
+            center = true);
+
+    translate([(shellLength/2)-posX, pcb_Width, pcb_Thickness])
+      rotate([0,90,0])
+        color("red",0.50)
+          %cylinder(
+            r = .5,
+            h = shellLength+(wallThickness*2)+paddingBack,
+            center = true);
+
+    translate([0, (shellWidth/2)-posY, pcb_Thickness])
+      rotate([90,90,0])
+        color("red",0.50)
+          %cylinder(
+            r = .5,
+            h = shellWidth+(wallThickness*2)+paddingLeft,
+            center = true);
+
+    translate([pcb_Length, (shellWidth/2)-posY, pcb_Thickness])
+      rotate([90,90,0])
+        color("red",0.50)
+          %cylinder(
+            r = .5,
+            h = shellWidth+(wallThickness*2)+paddingLeft,
+            center = true);
+            
+  } // show_markers   
+} //-- showMarkersPCB()
+
+
+//===========================================================

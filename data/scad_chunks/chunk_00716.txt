@@ -1,0 +1,4 @@
+function belt_pitch_to_back(type) = belt_thickness(type) - belt_pitch_height(type); //! Offset of the back from the pitch radius
+//
+// We model the belt path at the pitch radius of the pulleys and the pitch line of the belt to get an accurate length.
+//

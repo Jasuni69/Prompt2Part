@@ -1,0 +1,17 @@
+function _lrc_maze(layers, rows, columns) =  
+    [
+        for(z = [0:layers - 1])
+        [
+            for(y = [0:rows - 1]) 
+            [
+                for(x = [0:columns - 1])
+                cell(
+                    x, y, z,
+                    // all cells have up/top/right walls
+                    Z_Y_X_WALL, 
+                    // unvisited
+                    UNVISITED 
+                )
+            ]
+        ]
+    ];

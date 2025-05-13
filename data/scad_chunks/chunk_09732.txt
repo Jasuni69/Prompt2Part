@@ -1,0 +1,6 @@
+function _find_first_noncoplanar(plane, points, i) = 
+	(i >= len(points) || !coplanar(plane, points[i]))? i :
+	_find_first_noncoplanar(plane, points, i+1);
+
+
+// vim: noexpandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

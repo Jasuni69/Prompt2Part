@@ -1,0 +1,77 @@
+module KlammerOLD(l=10,grad=250,d=4,rad2=5,offen,breite=2.5,deg2=[12.5,12.5],fn=fn,help){
+    $x=breite;
+    $d=breite;
+    $r=breite/2;
+    grad=is_list(grad)?grad:grad/[2,2];
+    deg2=is_num(offen)?[offen/2,offen/2]:is_list(deg2)?deg2:deg2*[1,1];
+    w2=[deg2[0]-90+grad[0],deg2[1]-90+grad[1]];
+    l=is_list(l)?l:[l,l];
+    rad2=is_list(rad2)?rad2:[1,1]*rad2;
+    
+ if($children){   
+  rotate(-(grad[1]-grad[0])/2)RotEx(vSum(grad),center=true,fn=fn)T(d/2)children();  //centerring
+
+  union(){ //arme
+    $helpM=0;
+    $info=0;
+    MKlon(mz=0,my=1){
+        rotate(($idx?grad[0]:grad[1])-90.01)T(0,($idx?rad2[0]:rad2[1])+breite+d/2)rotate(270-($idx?w2[0]:w2[1])){
+            RotEx(($idx?w2[0]:w2[1]),fn=fn/2)T(($idx?rad2[0]:rad2[1])+breite)mirror([1,0])children();//Bogen
+            T($idx?rad2[0]:rad2[1])union(){
+                R(90)linear_extrude(height=$idx?l[0]:l[1])T(breite)mirror([1,0])children(); // Arm grade
+                T(+breite/2,$idx?-l[0]:-l[1])rotate(180) RotEx(cut=true,grad=180,fn=fn/4)T(-breite/2)children(); //Endstück
+            }
+        }
+    }
+  }
+  }else union(){
+      $info=0;
+      $helpM=0;
+     Kreis(grad=vSum(grad),rot=(grad[1]-grad[0])/2,center=true,r=d/2,rand=-breite,fn=fn); 
+     MKlon(mz=0,my=1){
+         rotate((grad[$idx]-90.01))T(0,($idx?rad2[0]:rad2[1])+breite+d/2)rotate(180){
+             Kreis(grad=($idx?w2[0]:w2[1]),fn=fn/2,center=false,r=($idx?rad2[0]:rad2[1]),rot=-90,rand=-breite);
+            rotate(-($idx?w2[0]:w2[1]))T(0,($idx?rad2[0]:rad2[1])){ square([$idx?l[0]:l[1],breite]);
+             T($idx?l[0]:l[1],breite/2)Kreis(grad=180,fn=fn/4,center=false,rot=-90,r=breite/2,rand=0);
+            }
+         }
+         
+     } 
+      
+  } 
+  
+  
+  
+HelpTxt("Klammer",[
+  "l",l,
+  "grad",grad,
+  "d",d,
+  "rad2",rad2,
+  "offen",offen,
+  "deg2",deg2,
+  "breite",breite,
+  "fn",fn]
+  ,help);
+
+}
+
+
+
+/** \page Products \name CGear \brief CGear() makes a cycloidal gear using roof
+\param z number teeth
+\param h height optional list for helical [h] or fishbone [h,h] or [h,h,h]
+\param module teeth modul size
+\param deg angle
+\param d  shaft diameter
+\param f fraction from gear
+\param r optional r for twist angle calculation
+\param chamfer chamfer height
+\param deg2 bevel gear angle // experimental
+\param spiel clearance
+\param lap overlap
+\param fn fs fraqments
+\param help help
+*/
+
+//CGear(d=3,deg=-45,h=3);
+//CGear(d=3,deg=-45,h=[3,3],deg2=40);

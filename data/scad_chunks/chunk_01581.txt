@@ -1,0 +1,1 @@
+function ax_diode_size(type)   = type[1]; //! Body length, diameter and corner radius

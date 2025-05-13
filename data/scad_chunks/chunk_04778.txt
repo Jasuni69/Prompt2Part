@@ -1,0 +1,20 @@
+function double_fillet(h=1, r1=1, r2=1, xoffset1=0, xoffset2=0, closed=true) = 
+  let(
+    ah = abs(h),
+    xL = r1 + r2 + xoffset2,
+    yL = ah - r1 - r2,
+    L = max(sqrt(xL * xL + yL * yL), r1 + r2),
+    a1 = 90-acos( (r1 + r2) / L ),
+    a2 = atan2( yL, xL ),
+    a = a1 + a2,
+    c1 = [xoffset1,ah-r1],
+    c2 = c1 + [xL,-yL],
+    arc1 = arc(r=r1, angle=-a, offsetAngle=90,c=c1),
+    arc2 = arc(r=r2, angle=-a, offsetAngle=-90,c=c2)
+  )
+  mirror([0,h < 0 ? 1 : 0],
+  concat(
+    closed ? [[0,0],[0,ah]] : [],
+    arc1,
+    reverse(arc2)
+  ));

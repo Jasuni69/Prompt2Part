@@ -1,0 +1,1 @@
+function wire_hole_radius(cable) = ceil(4 * cable_radius(cable) + 1) / 4; //! Radius of a hole to accept a bundle of wires, rounded up to standard metric drill size

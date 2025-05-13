@@ -1,0 +1,29 @@
+module noop() children();
+
+
+// Module: pie_slice()
+//
+// Description:
+//   Creates a pie slice shape.
+//
+// Usage:
+//   pie_slice(ang, l|h, r|d, [orient], [align|center]);
+//   pie_slice(ang, l|h, r1|d1, r2|d2, [orient], [align|center]);
+//
+// Arguments:
+//   ang = pie slice angle in degrees.
+//   h = height of pie slice.
+//   r = radius of pie slice.
+//   r1 = bottom radius of pie slice.
+//   r2 = top radius of pie slice.
+//   d = diameter of pie slice.
+//   d1 = bottom diameter of pie slice.
+//   d2 = top diameter of pie slice.
+//   orient = Orientation of the pie slice.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Z`.
+//   align = Alignment of the pie slice.  Use the `V_` constants from `constants.scad`.  Default: `V_CENTER`.
+//   center = If given, overrides `align`.  A true value sets `align=V_CENTER`, false sets `align=ALIGN_POS`.
+//
+// Example: Cylindrical Pie Slice
+//   pie_slice(ang=45, l=20, r=30);
+// Example: Conical Pie Slice
+//   pie_slice(ang=60, l=20, d1=50, d2=70);

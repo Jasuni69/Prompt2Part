@@ -1,0 +1,2 @@
+function smd_size(size) = //! Convert size to 1/100" notation
+    str(smd_100th(size.x), smd_100th(size.y));

@@ -1,0 +1,1 @@
+function slider(l=30, w=10, h=10, base=10, wall=5, ang=30, chamfer=2, anchor=BOTTOM, spin=0, orient=UP) = no_function("slider");

@@ -1,0 +1,1 @@
+function iec_bezel_r(type)  = type[10]; //! Bezel corner radius

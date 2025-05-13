@@ -1,0 +1,1 @@
+function AxialFunc1(z, ang) = 5*(cos(log(z/5+1)*360) + 2);

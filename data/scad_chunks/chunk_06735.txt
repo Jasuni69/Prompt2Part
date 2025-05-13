@@ -1,0 +1,7 @@
+module test_f_napprox() {
+    _test_fn2arg_simple(
+        function (a,b) f_napprox(a,b),
+        [[4,3,true],[3,3,false],[3,4,true],[1/3,0.33333333333333333333333333,false]]
+    );
+}
+test_f_napprox();

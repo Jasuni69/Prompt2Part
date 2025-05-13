@@ -1,0 +1,50 @@
+//-- pcb dimensions -- very important!!!
+// Electro cookie 30 row
+pcbLength           = 88.9; // Front to back
+pcbWidth            = 52.1; // Side to side
+pcbThickness        = 1.7;
+                            
+//-- padding between pcb and inside wall
+paddingFront        = 3;
+paddingBack         = 3;
+paddingRight        = 3;
+paddingLeft         = 3;
+
+//-- Edit these parameters for your own box dimensions
+wallThickness       = 2.0;
+basePlaneThickness  = 1.5;
+lidPlaneThickness   = 1.5;
+
+//-- Total height of box = lidPlaneThickness 
+//                       + lidWallHeight 
+//--                     + baseWallHeight 
+//                       + basePlaneThickness
+//-- space between pcb and lidPlane :=
+//--      (bottonWallHeight+lidWallHeight) - (standoffHeight+pcbThickness)
+baseWallHeight      = 12;
+lidWallHeight       = 11;
+
+//-- ridge where base and lid off box can overlap
+//-- Make sure this isn't less than lidWallHeight
+ridgeHeight         = 5.0;
+ridgeSlack          = 0.3;
+roundRadius         = 3.0;
+
+//-- How much the PCB needs to be raised from the base
+//-- to leave room for solderings and whatnot
+standoffHeight      = 10.0;  //-- used only for pushButton and showPCB
+standoffPinDiameter = 1.7;
+standoffHoleSlack   = 0.4;
+standoffDiameter    = 4.0;
+
+
+
+//-- C O N T R O L -------------//-> Default ---------
+showSideBySide      = true;     //-> true
+previewQuality      = 5;        //-> from 1 to 32, Default = 5
+renderQuality       = 12;       //-> from 1 to 32, Default = 8
+onLidGap            = 10;
+shiftLid            = 5;
+colorLid            = "YellowGreen";   
+alphaLid            = 1;//0.25;   
+colorBase           = "BurlyWood";

@@ -1,0 +1,1 @@
+function psu_face_cutouts(type)      = type[2];     //! List of polygons to remove

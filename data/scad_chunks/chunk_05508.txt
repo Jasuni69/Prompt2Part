@@ -1,0 +1,19 @@
+function _cyl_line_intersection(R, line, ref) =
+   assert(point2d(line[1]-line[0]) != [0,0], "Prism appears to be parallel to cylinder.  Unable to find prism endpoints.")
+   let(
+       line2d = path2d(line),
+       cisect = circle_line_intersection(r=R, cp=[0,0], line=line2d)
+   )
+   len(cisect)<2 ? [] :
+   let(
+       linevec = line2d[1]-line2d[0],
+       dz = line[1].z-line[0].z,
+       pts = [for(pt=cisect)
+          let(t = (pt-line2d[0])*linevec/(linevec*linevec))  // position parameter for line
+          [pt.x,pt.y,dz * t + line[0].z]]
+   )
+   is_undef(ref) ? pts :
+   let(   
+      dist = [for(pt=pts) ref*pt]
+   )
+   dist[0]>dist[1] ? pts[0] : pts[1];

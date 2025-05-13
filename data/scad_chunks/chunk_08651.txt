@@ -1,0 +1,4 @@
+function _get(t, cmd) = 
+    cmd == "point" ? _pt(t) : 
+    cmd == "unit_vectors" ? _unit_vts(t) : 
+    assert(false, "unknown command");

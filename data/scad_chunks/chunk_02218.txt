@@ -1,0 +1,1 @@
+function handle_width() = dia;              //! The width, i.e. diameter

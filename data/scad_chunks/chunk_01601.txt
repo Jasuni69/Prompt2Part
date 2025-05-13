@@ -1,0 +1,1 @@
+function ribbon_clamp_slot_depth() = cable_strip_thickness + inch(0.05); //! Depth of slot to accept a ribbon cable and a cable strip

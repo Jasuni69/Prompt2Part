@@ -1,0 +1,7 @@
+module vslot4040_inner(offset=0){
+    p = "M-12.91,6.1 h6.91 chamfer1.2 v6.91 l3.58,3.58 h5.04 l3.58,-3.58 v-6.91 chamfer1.2 h6.91 l3.58,-3.58 v-5.04 l-3.58,-3.58 h-6.91 chamfer1.2 v-6.91 l-3.58,-3.58 h-5.04 l-3.58,3.58 v6.91 chamfer1.2 h-6.91 l-3.58,3.58 v5.04";
+    pts = svgPoints(p)[0];
+    pts1 = (len(pts) > 1 && pts[0][0] == pts[len(pts)-1][0] && pts[0][1] == pts[len(pts)-1][1])? [for(i=[0:len(pts)-2]) pts[i]] : pts;
+    pts2 = offset== 0? pts1 : offset_pts(pts1, -offset);
+    polygon(pts2);
+}

@@ -1,0 +1,1 @@
+function rd_cm_choke_csep(type) = type[4]; //! Central separator thickness in slot, total thickness, height

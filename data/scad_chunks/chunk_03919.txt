@@ -1,0 +1,17 @@
+module pressNutM3(marginUp=margin(0),marginDown=margin(0),
+				dSpike=margin(2,.5),hSpike=margin(4.5,.5),rSpike=5.5,
+				washerOnly=false)
+g(TOUP(),solid())
+{
+  opaq(grey)
+  g(align(XCENTER,YCENTER)
+    ,Z(margin(0,-marginUp-marginDown)))
+  stack()
+    tubeFast(dOuter=margin(13),h =margin(.9,marginUp+marginDown))
+    if(!washerOnly)Z(-0.01)tubeFast(dOuter=margin(4),h = margin(5,marginUp)-.9
+                    + marginUp);
+  	pieces(4)
+			g(turnXY(spanAllButLast()),Y(-rSpike),Z(0.05)
+				,chamfer(0,-1.5),cscale(.7,1,1))
+						tube(d=dSpike,h=hSpike);                  
+}

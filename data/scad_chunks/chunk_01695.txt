@@ -1,0 +1,1 @@
+function pcb_length(type)       = type[2];  //! Length

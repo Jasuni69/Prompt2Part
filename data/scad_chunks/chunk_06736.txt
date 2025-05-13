@@ -1,0 +1,12 @@
+module test_f_or() {
+    _test_fn2arg(
+        function (a,b) f_or(a,b),
+        [
+            [false, false, false],
+            [true , false, true ],
+            [false, true , true ],
+            [true , true , true ]
+        ]
+    );
+}
+test_f_or();

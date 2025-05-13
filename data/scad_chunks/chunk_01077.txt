@@ -1,0 +1,1 @@
+function toggle_angle(type)    = type[14];      //! Angle of the paddle

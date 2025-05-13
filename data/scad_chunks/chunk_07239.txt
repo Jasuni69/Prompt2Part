@@ -1,0 +1,24 @@
+function stringChunk(txt,start=0,length,string="")=
+  let(
+    start=abs(start),
+    length=is_undef(length)?len(str(txt))-start:length
+  )
+  len(string)<length&&start<len(txt)?stringChunk(txt=txt,length=length,start=start+1,string=str(string,str(txt)[start])):string;
+
+//echo(stringChunk(1234,start=0));
+/** \name nut
+\page Functions
+nut() creates points for a groove dovetail or notch
+\param e elements number of notches
+\param es distance of notches
+\param a  top length
+\param b  bottom length (can be undef)
+\param base base height
+\param h  height of notches
+\param s length of object
+\param shift move a in x
+\param grad  angle (can be list if b is undef)
+\param z  add z value to points
+\param t translate
+*/
+//polygon(nut(base=2));

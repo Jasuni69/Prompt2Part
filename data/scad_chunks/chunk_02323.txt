@@ -1,0 +1,1 @@
+function strap_key(type) = strap_panel(type) - panel_clearance;

@@ -1,0 +1,49 @@
+module thinning_triangle(h=50, l=100, thick=5, ang=30, strut=5, wall=3, diagonly=false, center=undef, orient=ORIENT_Y, align=V_CENTER)
+{
+	dang = atan(h/l);
+	dlen = h/sin(dang);
+	orient_and_align([thick, l, h], orient, align, center=center, noncentered=V_UP+V_BACK, orig_orient=ORIENT_Y) {
+		difference() {
+			union() {
+				if (!diagonly) {
+					translate([0, 0, -h/2])
+						narrowing_strut(w=thick, l=l, wall=strut, ang=ang);
+					translate([0, -l/2, 0])
+						xrot(-90) narrowing_strut(w=thick, l=h-0.1, wall=strut, ang=ang);
+				}
+				intersection() {
+					cube(size=[thick, l, h], center=true);
+					xrot(-dang) yrot(180) {
+						narrowing_strut(w=thick, l=dlen*1.2, wall=strut, ang=ang);
+					}
+				}
+				cube(size=[wall, l-0.1, h-0.1], center=true);
+			}
+			xrot(-dang) {
+				translate([0, 0, h/2]) {
+					cube(size=[thick+0.1, l*2, h], center=true);
+				}
+			}
+		}
+	}
+}
+
+
+// Module: thinning_brace()
+// Status: DEPRECATED, use `thinning_triangle(..., diagonly=true)` instead.
+//
+// Description:
+//   Makes a triangular wall which thins to a smaller width in the center,
+//   with angled supports to prevent critical overhangs.  Basically an alias
+//   of thinning_triangle(), with diagonly=true.
+//
+// Usage:
+//   thinning_brace(h, l, thick, [ang], [strut], [wall], [center])
+//
+// Arguments:
+//   h = height of wall.
+//   l = length of wall.
+//   thick = thickness of wall.
+//   ang = maximum overhang angle of diagonal brace.
+//   strut = the width of the diagonal brace.
+//   wall = the thickness of the thinned portion of the wall.

@@ -1,0 +1,110 @@
+function mask2d_chamfer(edge, angle, inset=0, excess=0.01, mask_angle=90, flat_top=false, x, y, h, w, width, height, anchor=CENTER,spin=0) =
+    assert(is_undef(x) || all_positive([x]))
+    assert(is_undef(y) || all_positive([y]))
+    assert(is_undef(w) || all_positive([w]))
+    assert(is_undef(h) || all_positive([h]))
+    assert(is_undef(height) || all_positive([height]))
+    assert(is_undef(width) || all_positive([width]))
+    assert(is_undef(edge) || all_positive([edge]))            
+    assert(all_nonnegative([excess]))
+    assert(is_finite(mask_angle) && mask_angle>0 && mask_angle<180)
+    assert(is_finite(inset)||is_vector(inset,2))
+    assert(is_undef(angle) || angle>mask_angle-90, str("angle must be larger than ",mask_angle-90," for chamfer to fit"))
+    let(
+        inset = is_list(inset)? inset : [inset,inset],
+        h = one_defined([h,height],"h,height",dflt=undef),
+        w = one_defined([w,width],"w,width",dflt=undef),
+        dummy = assert(num_defined([y,h])<=1, "Cannot defined both h / height and y")
+                assert(num_defined([x,w])<=1, "Cannot defined both w / width and x"),
+        y = is_def(h) ? assert(all_positive([h]), "height / h must be postitive")
+                        h/sin(mask_angle) : y, 
+        xy = is_def(w) ? assert(is_undef(edge), "Cannot combine edge with width")
+                         assert(num_defined([y,angle])<=1, "Conflicting values of width, y and angle given")
+                         let(
+                             angle=default(angle,mask_angle/2),
+                             y = is_def(y) ? y
+                               : w/tan(angle)
+                         )                               
+                         [w+y*cos(mask_angle),y]
+           : is_def(x) ? assert(num_defined([y,edge,angle])<=1, "Conflicting values of x, y, height, edge and angle given")
+                         (
+                             is_def(y) ? [x,y]
+                           : is_def(edge) ? let(yopt=quadratic_roots(1,-2*x*cos(mask_angle), x^2-edge^2,real=true))
+                                           assert(yopt!=[] && max(yopt)>0, "edge too short for x value")
+                                           [x,max(yopt)]
+                           : let(angle=default(angle,mask_angle/2))
+                             [x,law_of_sines(a=x,A=90-mask_angle+angle,B=90-angle)]
+                         )
+           : is_def(y) ? assert(num_defined([edge,angle])<=1, "Conflicting or insufficient values of x, y, height, edge and angle given")
+                         (
+                             is_def(edge) ? let(xopt=quadratic_roots(1,-2*y,cos(mask_angle), y^2-edge^2,real=true))
+                                            assert(xopt!=[], "edge too short for y value")
+                                            [x,max(xopt)]
+                           : let(angle=default(angle,mask_angle/2))
+                             [law_of_sines(a=y,A=90-angle,B=90-mask_angle+angle), y]
+                         )
+           : assert(is_def(edge), "Must give one of x, y, w/width, h/height, or edge")
+             let(angle=default(angle,mask_angle/2))
+             [law_of_sines(a=edge,A=mask_angle, B=90-mask_angle+angle),
+              law_of_sines(a=edge,A=mask_angle, B=90-angle)],
+        dummy3=assert(xy.x > xy.y*cos(mask_angle), str("Chamfer does not fit with mask_angle ",mask_angle)),
+        // These computations are just for the error message...actually only work without inset
+        // ref_pt = polar_to_xy(xy.y, mask_angle),
+        // angle = 90-atan(ref_pt.y/(xy.x-ref_pt.x)),
+        outside_corner = _inset_corner(
+                            [
+                              polar_to_xy(xy.y,mask_angle),
+                              [0,0],
+                              [xy.x,0]
+                            ],
+                            mask_angle, inset, excess, flat_top),
+        dummy2=assert(outside_corner[1][2].x>0,str("Angle of chamfer is too small to fit on mask angle ",mask_angle,
+                                                   ".  Either increase angle or add x inset to make space.")),
+        path = deduplicate(concat(outside_corner[0], select(outside_corner[1],[0,2])),closed=true)
+    ) reorient(anchor,spin, two_d=true, path=path, extent=false, p=path);
+
+
+// Function&Module: mask2d_rabbet()
+// Synopsis: Creates a rabbet mask shape.
+// SynTags: Geom, Path
+// Topics: Shapes (2D), Paths (2D), Path Generators, Attachable, Masks (2D)
+// See Also: corner_profile(), edge_profile(), face_profile()
+// Usage: As Module
+//   mask2d_rabbet(size, [mask_angle], [excess]) [ATTACHMENTS];
+// Usage: As Function
+//   path = mask2d_rabbet(size, [mask_angle], [excess]);
+// Description:
+//   Creates a 2D rabbet mask shape.  When differenced away, this mask
+//   creates at the corner a rectanguler space of the specified size.
+//   This mask can be extruding into a 3D mask for an edge, or
+//   you can use that same extruded shape to make an interior shelf decoration between two walls.
+//   As a 2D mask, this is designed to be differenced away from the edge of a shape that with its corner at the origin and one edge on the X+ axis and the other mask_angle degrees counterclockwise from the X+ axis.  
+//   If called as a function, returns a 2D path of the outline of the mask shape.
+// Arguments:
+//   size = The size of the rabbet, either as a scalar or an [X,Y] list.
+//   mask_angle = Number of degrees in the corner angle to mask.  Default: 90
+//   excess = Extra amount of mask shape to creates on the X and quasi-Y sides of the shape. Default: 0.01
+//   ---
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+// Example(2D): 2D Rabbet Mask
+//   mask2d_rabbet(size=10);
+// Example(2D): 2D Asymmetrical Rabbet Mask
+//   mask2d_rabbet(size=[5,10]);
+// Example(2D): 2D Mask for a acute angle edge
+//   mask2d_rabbet(size=10, mask_angle=75);
+// Example(2D): 2D Mask for obtuse angle edge.  If the obtuse angle is too large the rabbet will not fit.  If that happens, you will need to increase the rabbet width.  
+//   mask2d_rabbet(size=10, mask_angle=125);
+// Example: Masking by Edge Attachment
+//   diff()
+//   cube([50,60,70],center=true)
+//       edge_profile([TOP,"Z"],except=[BACK,TOP+LEFT])
+//           mask2d_rabbet(size=10);
+// Example: Making an interior shelf
+//   %render() difference() {
+//       move(-[5,0,5]) cube(30, anchor=BOT+LEFT);
+//       cube(310, anchor=BOT+LEFT);
+//   }
+//   xrot(90)
+//       linear_extrude(height=30, center=true)
+//           mask2d_rabbet(size=[5,10]);

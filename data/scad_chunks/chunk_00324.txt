@@ -1,0 +1,1 @@
+function microswitch_button_clr(type)= type[16];    //! Button colour

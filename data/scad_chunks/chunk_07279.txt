@@ -1,0 +1,18 @@
+module Schnitt(on=$preview,r=0,x=0,y=0,z=-0.01,rx=0,ry=0,sizex,sizey,sizez,center=0,help){
+  sizex=is_undef(sizex)?bed?printBed.x:max(viewportSize*5,150):sizex;
+  sizey=is_undef(sizey)?bed?printBed.y:max(viewportSize*5,150):sizey;
+  sizez=is_undef(sizez)?bed?100:max(viewportSize*5,150):sizez;
+  
+    center=is_bool(center)?center?1:0:center;
+    if($children)difference()
+    {
+      union()children();
+      if((on&&$preview)||on==2)  translate([x,y,z])rotate([rx,ry,r])color([1,0,0,1])translate([center>0?-sizex/2:0,abs(center)==1?-sizey/2:-sizey,center>1||center<0?-sizez/2:0])cube([sizex,sizey,sizez],center=false);
+    }
+
+Echo("»»»»––SCHNITT in render! ––«««« \n",color="warning",condition=on==2);
+
+HelpTxt("Schnitt",["on",on,"r",r,"x",x,"y",y,"z",z,"rx",rx,"ry",ry,"sizex",sizex,"sizey",sizey,"sizez",sizez,"center",center],help);
+
+MO(!$children);     
+}

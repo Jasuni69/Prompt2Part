@@ -1,0 +1,4 @@
+module test_min_length() {
+    assert(min_length(["foobar", "bazquxx", "abcd"]) == 4);
+}
+test_min_length();

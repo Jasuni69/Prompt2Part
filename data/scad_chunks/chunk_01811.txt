@@ -1,0 +1,1 @@
+function battery_pos_height(type)    = type[6]; //! Positive terminal height above the casing

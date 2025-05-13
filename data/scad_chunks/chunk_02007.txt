@@ -1,0 +1,3 @@
+function drag_chain_outer_size(type) = //! Link outer dimensions
+    let(s = drag_chain_size(type), z = s.z + drag_chain_bwall(type) + drag_chain_twall(type))
+        [s.x + z, s.y + 4 * drag_chain_wall(type) + 2 * drag_chain_clearance(type), z];

@@ -1,0 +1,2 @@
+function psu_shroud_centre_y(type) =                                            //! Shroud centre relative to PSU centre
+    psu_width(type) / 2 + clearance / 2 + wall - psu_shroud_width(type) / 2;

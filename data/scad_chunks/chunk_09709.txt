@@ -1,0 +1,7 @@
+function Q_Neg(q) = -q;
+
+
+// Function: Q_Conj()
+// Usage:
+//   Q_Conj(q)
+// Description: Returns the conjugate of quaternion `q`.

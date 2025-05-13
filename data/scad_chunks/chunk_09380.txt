@@ -1,0 +1,30 @@
+function all(l, i=0, fail=false) =
+	(i>=len(l) || fail)? (!fail) :
+	all(
+		l, i=i+1, fail=(
+			is_array(l[i])? !all(l[i]) :
+			!l[i]
+		)
+	);
+
+
+// Function: count_true()
+// Usage:
+//   count_true(l)
+// Description:
+//   Returns the number of items in `l` that evaluate as true.
+//   If `l` is a lists of lists, this is applied recursively to each
+//   sublist.  Returns the total count of items that evaluate as true
+//   in all recursive sublists.
+// Arguments:
+//   l = The list to test for true items.
+//   nmax = If given, stop counting if `nmax` items evaluate as true.
+// Example:
+//   count_true([0,false,undef]);  // Returns 0.
+//   count_true([1,false,undef]);  // Returns 1.
+//   count_true([1,5,false]);      // Returns 2.
+//   count_true([1,5,true]);       // Returns 3.
+//   count_true([[0,0], [0,0]]);   // Returns 0.
+//   count_true([[0,0], [1,0]]);   // Returns 1.
+//   count_true([[1,1], [1,1]]);   // Returns 4.
+//   count_true([[1,1], [1,1]], nmax=3);  // Returns 3.

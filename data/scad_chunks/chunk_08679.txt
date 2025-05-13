@@ -1,0 +1,6 @@
+function _derive1_p(base, rules, rules_pr, seed) = 
+    _join([
+        for(ci = [0:len(base) - 1]) 
+        let(c = base[ci], v = [for(r = rules) if(r[0] == c) r[1]])
+        v == [] ? c : c_or_v(c, v, rules, rules_pr, len(v), seed, ci)
+    ]);

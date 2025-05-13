@@ -1,0 +1,1 @@
+function gm_shaft_length(type) = gm_shaft(type).z; //! Length of the shaft

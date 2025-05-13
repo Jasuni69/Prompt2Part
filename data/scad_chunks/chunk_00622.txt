@@ -1,0 +1,1 @@
+function display_depth(type) = display_ts_thickness(type) + display_thickness(type) + display_pcb_offset(type).z + pcb_thickness(display_pcb(type)); //! Total thickness including touch screen and PCB

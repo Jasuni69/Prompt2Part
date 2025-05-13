@@ -1,0 +1,1 @@
+function BLDC_prop_shaft_length(type)           = type[23]; //! Prop shaft length, including threaded section

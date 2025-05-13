@@ -1,0 +1,1 @@
+function ldr_thickness(type)   = type[4]; //! Thickness

@@ -1,0 +1,2 @@
+module translate_z(z)                                                               //! Shortcut for Z only translations
+    translate([0, 0, z]) children();

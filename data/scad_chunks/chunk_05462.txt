@@ -1,0 +1,1 @@
+module round_corners(path, method="circle", radius, r, cut, joint, width, k, closed=true, verbose=false) {no_module();}

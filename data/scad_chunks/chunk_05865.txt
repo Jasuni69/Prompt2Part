@@ -1,0 +1,6 @@
+function _tupdate(state, tran, pretran) =
+    [
+     concat(state[0],tran),
+     concat(state[1],pretran),
+     each list_tail(state,2)
+    ];

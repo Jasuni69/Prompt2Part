@@ -1,0 +1,8 @@
+module test_acosh() {
+	assert(abs(acosh(cosh(-2))-2) < eps);
+	assert(abs(acosh(cosh(-1))-1) < eps);
+	assert(abs(acosh(cosh(0))) < eps);
+	assert(abs(acosh(cosh(1))-1) < eps);
+	assert(abs(acosh(cosh(2))-2) < eps);
+}
+test_acosh();

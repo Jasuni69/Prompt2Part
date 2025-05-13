@@ -1,0 +1,1 @@
+function meter_bezel_rad(type) = meter_bezel_wall(type);                                          //! Printed bezel corner radius

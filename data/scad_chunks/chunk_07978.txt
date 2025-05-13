@@ -1,0 +1,3 @@
+columns = len(mask[0]);
+
+random_city(rows, columns, mask);

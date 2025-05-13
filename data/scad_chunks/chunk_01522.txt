@@ -1,0 +1,1 @@
+function rd_xtal_flange(type) = type[2]; //! Crystal flange width and thickness

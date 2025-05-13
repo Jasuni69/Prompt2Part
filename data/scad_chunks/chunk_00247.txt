@@ -1,0 +1,8 @@
+module gear_motors()
+    layout([for(g = gear_motors) gm_box(g).x], 10)
+        gear_motor(gear_motors[$i]);
+
+
+
+if($preview)
+    gear_motors();

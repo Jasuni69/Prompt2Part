@@ -1,0 +1,15 @@
+module al_clad_resistor_assembly(type, value, sleeved = true, sleeving = HSHRNK32, sleeving_length = 15) { //! Draw aluminium clad resistor with optional sleaving, positions children at the screw positions
+    al_clad_resistor(type, value);
+
+    if(sleeved)
+        for(end = [-1, 1])
+            translate([end * (al_clad_length(type) + sleeving_length + 0) / 2, 0,  al_clad_height(type) / 2])
+                rotate([0, 90, 0])
+                    scale([1.5, 0.66, 1])
+                        tubing(sleeving, sleeving_length);
+
+    al_clad_resistor_hole_positions(type)
+        children();
+}
+
+TO220_hole_y = 2.9; // Distance to hole from top of tab

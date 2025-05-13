@@ -1,0 +1,1 @@
+function Sehne(n,r,a)=is_undef(a)?2*r*sin(180/n):2*r*sin(a/2);// n-eck oder a=α winkel zum r=radius

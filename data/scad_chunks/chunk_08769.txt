@@ -1,0 +1,3 @@
+function _split_str_impl(t, delimiter) = 
+    len(search(delimiter, t)) == 0 ? 
+        [t] : _split_t_by(search(delimiter, t, 0)[0], t);

@@ -1,0 +1,17 @@
+module back(y=0) translate([0,y,0]) children();
+
+
+// Module: down()
+//
+// Description:
+//   Moves children down (in the Z- direction) by the given amount.
+//
+// Usage:
+//   down(z) ...
+//
+// Arguments:
+//   z = Scalar amount to move down.
+//
+// Example:
+//   #sphere(d=10);
+//   down(20) sphere(d=10);

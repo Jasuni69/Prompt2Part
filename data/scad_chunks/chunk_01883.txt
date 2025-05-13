@@ -1,0 +1,1 @@
+function cable_height(cable) = cable_bundle(cable).y; //! Height in flat clip

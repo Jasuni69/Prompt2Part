@@ -1,0 +1,12 @@
+module camera_housing(cam) {
+    front = cam_front_size(cam);
+
+    camera_front(cam, 0);
+
+    translate([front.x, 0])
+        camera_back(cam);
+
+    translate([-front.x / 2 - 2 - hinge_r, 0])
+        rotate(90)
+            camera_bracket(cam);
+}

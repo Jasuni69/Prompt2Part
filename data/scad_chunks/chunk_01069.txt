@@ -1,0 +1,1 @@
+function toggle_inset(type)    = type[6];       //! How far the metal is inset into the body

@@ -1,0 +1,2 @@
+module ring_terminal_hole(type, h = 0)  //! Drill hole for the screw
+    drill(screw_clearance_radius(ringterm_screw(type)), h);

@@ -1,0 +1,25 @@
+module pocket_handle_assembly(type) { //! Assembly with fasteners in place
+    f = pocket_handle_flange(type);
+    screw = pocket_handle_screw(type);
+    nut = screw_nut(screw);
+    t = pocket_handle_panel_t(type);
+    washers = screw_head_height(screw) ? 2 : 1;
+    screw_length = screw_length(screw, f.z + t, washers, nyloc = true);
+
+    translate_z(f.z + t / 2) hflip() {
+        stl_colour(pp1_colour)
+            render() pocket_handle(type);
+
+        pocket_handle_hole_positions(type) {
+            translate_z(f.z + t)
+                explode(15, true)
+                    nut_and_washer(nut, true);
+
+            vflip()
+                if(washers == 2)
+                    screw_and_washer(screw, screw_length);
+                else
+                    screw(screw, screw_length);
+        }
+    }
+}

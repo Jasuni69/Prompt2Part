@@ -1,0 +1,6 @@
+module springs()
+    layout([for(s = springs) spring_od2(s)], 5)
+        comp_spring(springs[$i]);
+
+if($preview)
+    springs();

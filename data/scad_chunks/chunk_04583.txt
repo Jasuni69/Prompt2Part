@@ -1,0 +1,16 @@
+module dovetail_block( d, dtspec, clr=CLEAR ) {
+    mpy = (d.y/2)- ((dtspec[1]/2) +(clr/2) );
+    // note no taper
+    ctspec = [ dtspec[0], dtspec[1]+clr, dtspec[2]+clr,  ];
+    translate([0,0,0]) rotate([0,0,0]) 
+    difference() {
+        cube ( d );
+        translate([d.x+CS,mpy,d.z+clr]) rotate([0,180,0]) dovetail_rail( d.x+CS2, ctspec );
+    }
+}
+
+/* =========================
+    cd - cylinder diameter
+    ch - cylinder height
+    cfn=$fn - cylinder $fn
+   ========================= */

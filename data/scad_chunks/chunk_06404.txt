@@ -1,0 +1,183 @@
+function point_in_polygon(point, poly, nonzero=false, eps=EPSILON) =
+    // Original algorithms from http://geomalgorithms.com/a03-_inclusion.html
+    assert( is_vector(point,2) && is_path(poly,dim=2) && len(poly)>2,
+            "\nThe point and polygon should be in 2D. The polygon should have more that 2 points." )
+    assert( is_finite(eps) && (eps>=0), "\nThe tolerance should be a non-negative value." )
+    // Check bounding box
+    let(
+        box = pointlist_bounds(poly)
+    )
+    point.x<box[0].x-eps || point.x>box[1].x+eps
+        || point.y<box[0].y-eps || point.y>box[1].y+eps  ? -1
+    :
+    // Does the point lie on any edges?  If so return 0.
+    let(
+        segs = pair(poly,true),
+        on_border = [for (seg=segs)
+                       if (norm(seg[0]-seg[1])>eps && _is_point_on_line(point, seg, SEGMENT, eps=eps)) 1]
+    )
+    on_border != [] ? 0 :
+    nonzero    // Compute winding number and return 1 for interior, -1 for exterior
+      ? let(
+            winding = [
+                       for(seg=segs)
+                         let(
+                             p0=seg[0]-point,
+                             p1=seg[1]-point
+                         )
+                         if (norm(p0-p1)>eps)
+                             p0.y <=0
+                                ? p1.y > 0 && cross(p0,p1-p0)>0 ? 1 : 0
+                                : p1.y <=0 && cross(p0,p1-p0)<0 ? -1: 0
+            ]
+        )
+        sum(winding) != 0 ? 1 : -1
+      : // or compute the crossings with the ray [point, point+[1,0]]
+        let(
+            cross = [
+                     for(seg=segs)
+                       let(
+                           p0 = seg[0]-point,
+                           p1 = seg[1]-point
+                       )
+                       if (
+                           ( (p1.y>eps && p0.y<=eps) || (p1.y<=eps && p0.y>eps) )
+                           &&  -eps < p0.x - p0.y *(p1.x - p0.x)/(p1.y - p0.y)
+                       )
+                       1
+            ]
+        )
+        2*(len(cross)%2)-1;
+
+
+
+// Function: polygon_line_intersection()
+// Synopsis: Find intersection between 2d or 3d polygon and a line, segment or ray.  
+// Topics: Geometry, Polygons, Lines, Intersection
+// See Also: polygon_area(), centroid(), polygon_normal(), point_in_polygon(), polygon_line_intersection()
+// Usage:
+//   pt = polygon_line_intersection(poly, line, [bounded], [nonzero], [eps]);
+// Description:
+//   Takes a possibly bounded line, and a 2D or 3D planar polygon, and finds their intersection.  Note the polygon is
+//   treated as its boundary and interior, so the intersection may include both points and line segments.  
+//   If the line does not intersect the polygon then returns `undef`.  
+//   In 3D if the line is not on the plane of the polygon but intersects it then you get a single intersection point.
+//   Otherwise the polygon and line are in the same plane, or when your input is 2D, you get a list of segments and 
+//   single point lists.  Use `is_vector` to distinguish these two cases.
+//   .
+//   In the 2D case, a common result is a list containing a single segment, which lists the two intersection points
+//   with the boundary of the polygon.
+//   When single points are in the intersection (the line just touches a polygon corner) they appear on the segment
+//   list as lists of a single point
+//   (like single point segments) so a single point intersection in 2D has the form `[[[x,y,z]]]` as compared
+//   to a single point intersection in 3D, which has the form `[x,y,z]`.  You can identify whether an entry in the
+//   segment list is a true segment by checking its length, which is 2 for a segment and 1 for a point.  
+// Arguments:
+//   poly = The 3D planar polygon to find the intersection with.
+//   line = A list of two distinct 3D points on the line.
+//   bounded = If false, the line is considered unbounded.  If true, it is treated as a bounded line segment.  If given as `[true, false]` or `[false, true]`, the boundedness of the points are specified individually, allowing the line to be treated as a half-bounded ray.  Default: false (unbounded)
+//   nonzero = set to true to use the nonzero rule for determining it points are in a polygon.  See point_in_polygon.  Default: false.
+//   eps = Tolerance in geometric comparisons.  Default: `EPSILON` (1e-9)
+// Example(3D): The line intersects the 3d hexagon in a single point. 
+//   hex = zrot(140,p=rot([-45,40,20],p=path3d(hexagon(r=15))));
+//   line = [[5,0,-13],[-3,-5,13]];
+//   isect = polygon_line_intersection(hex,line);
+//   stroke(hex,closed=true);
+//   stroke(line);
+//   color("red")move(isect)sphere(r=1,$fn=12);
+// Example(2D): In 2D things are more complicated.  The output is a list of intersection parts, in the simplest case a single segment.
+//   hex = hexagon(r=15);
+//   line = [[-20,10],[25,-7]];
+//   isect = polygon_line_intersection(hex,line);
+//   stroke(hex,closed=true);
+//   stroke(line,endcaps="arrow2");
+//   color("red")
+//     for(part=isect)
+//        if(len(part)==1)
+//          move(part[0]) sphere(r=1);
+//        else
+//          stroke(part);
+// Example(2D): Here the line is treated as a ray. 
+//   hex = hexagon(r=15);
+//   line = [[0,0],[25,-7]];
+//   isect = polygon_line_intersection(hex,line,RAY);
+//   stroke(hex,closed=true);
+//   stroke(line,endcap2="arrow2");
+//   color("red")
+//     for(part=isect)
+//        if(len(part)==1)
+//          move(part[0]) circle(r=1,$fn=12);
+//        else
+//          stroke(part);
+// Example(2D): Here the intersection is a single point, which is returned as a single point "path" on the path list.
+//   hex = hexagon(r=15);
+//   line = [[15,-10],[15,13]];
+//   isect = polygon_line_intersection(hex,line,RAY);
+//   stroke(hex,closed=true);
+//   stroke(line,endcap2="arrow2");
+//   color("red")
+//     for(part=isect)
+//        if(len(part)==1)
+//          move(part[0]) circle(r=1,$fn=12);
+//        else
+//          stroke(part);
+// Example(2D): Another way to get a single segment
+//   hex = hexagon(r=15);
+//   line = rot(30,p=[[15,-10],[15,25]],cp=[15,0]);
+//   isect = polygon_line_intersection(hex,line,RAY);
+//   stroke(hex,closed=true);
+//   stroke(line,endcap2="arrow2");
+//   color("red")
+//     for(part=isect)
+//        if(len(part)==1)
+//          move(part[0]) circle(r=1,$fn=12);
+//        else
+//          stroke(part);
+// Example(2D): Single segment again
+//   star = star(r=15,n=8,step=2);
+//   line = [[20,-5],[-5,20]];
+//   isect = polygon_line_intersection(star,line,RAY);
+//   stroke(star,closed=true);
+//   stroke(line,endcap2="arrow2");
+//   color("red")
+//     for(part=isect)
+//        if(len(part)==1)
+//          move(part[0]) circle(r=1,$fn=12);
+//        else
+//          stroke(part);
+// Example(2D): Solution is two points
+//   star = star(r=15,n=8,step=3);
+//   line = rot(22.5,p=[[15,-10],[15,20]],cp=[15,0]);
+//   isect = polygon_line_intersection(star,line,SEGMENT);
+//   stroke(star,closed=true);
+//   stroke(line);
+//   color("red")
+//     for(part=isect)
+//        if(len(part)==1)
+//          move(part[0]) circle(r=1,$fn=12);
+//        else
+//          stroke(part);
+// Example(2D): Solution is list of three segments
+//   star = star(r=25,ir=9,n=8);
+//   line = [[-25,12],[25,12]];
+//   isect = polygon_line_intersection(star,line);
+//   stroke(star,closed=true);
+//   stroke(line,endcaps="arrow2");
+//   color("red")
+//     for(part=isect)
+//        if(len(part)==1)
+//          move(part[0]) circle(r=1,$fn=12);
+//        else
+//          stroke(part);
+// Example(2D): Solution is a mixture of segments and points
+//   star = star(r=25,ir=9,n=7);
+//   line = [left(10,p=star[8]), right(50,p=star[8])];
+//   isect = polygon_line_intersection(star,line);
+//   stroke(star,closed=true);
+//   stroke(line,endcaps="arrow2");
+//   color("red")
+//     for(part=isect)
+//        if(len(part)==1)
+//          move(part[0]) circle(r=1,$fn=12);
+//        else
+//          stroke(part);

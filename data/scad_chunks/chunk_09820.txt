@@ -1,0 +1,13 @@
+module test_quant() {
+	assert(quant(-4,3) == -3);
+	assert(quant(-3,3) == -3);
+	assert(quant(-2,3) == -3);
+	assert(quant(-1,3) == 0);
+	assert(quant(0,3) == 0);
+	assert(quant(1,3) == 0);
+	assert(quant(2,3) == 3);
+	assert(quant(3,3) == 3);
+	assert(quant(4,3) == 3);
+	assert(quant(7,3) == 6);
+}
+test_quant();

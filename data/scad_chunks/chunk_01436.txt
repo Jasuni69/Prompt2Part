@@ -1,0 +1,1 @@
+function ringterm_extent(type)    = ringterm_length(type) / sqrt(2); //! Space to leave

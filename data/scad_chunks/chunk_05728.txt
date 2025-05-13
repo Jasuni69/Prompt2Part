@@ -1,0 +1,16 @@
+function _cleave_connected_region(region, eps=EPSILON) =
+    len(region)==1 ? region[0] :
+    let(
+        outer   = deduplicate(region[0]),             //
+        holes   = [for(i=[1:1:len(region)-1])         // deduplication possibly unneeded
+                      deduplicate( region[i] ) ],     //
+        extridx = [for(li=holes) max_index(column(li,0)) ],
+        // the right extreme vertex for each hole sorted by decreasing x values
+        extremes = sort( [for(i=idx(holes)) [ i, extridx[i], -holes[i][extridx[i]].x] ], idx=2 )
+    )
+    _polyHoles(outer, holes, extremes, eps, 0);
+
+
+// connect the hole paths one at a time to the outer path.
+// 'extremes' is the list of the right extreme vertex of each hole sorted by decreasing abscissas
+// see: _cleave_connected_region(region, eps)

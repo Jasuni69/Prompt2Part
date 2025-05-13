@@ -1,0 +1,13 @@
+module createRidgeTorus(ridgeH = 0.65, ridgeAngle = 70, dRidge = 115.3, dRidgeEnd = 120.65, ridgeDepth = 1.2) {
+	rRidge = dRidge / 2;
+	rRidgeEnd = dRidgeEnd / 2;
+	rotate_extrude()
+		polygon(points = [
+			[0, 0],
+			[0, -ridgeDepth],
+			[rRidge - ridgeH * tan(90 - ridgeAngle), -ridgeDepth],
+			[rRidge,  - (ridgeDepth - ridgeH)],
+			[rRidgeEnd,  - (ridgeDepth - ridgeH + (rRidgeEnd - rRidge) / tan(ridgeAngle))],
+			[rRidgeEnd, 0]
+		]);
+}

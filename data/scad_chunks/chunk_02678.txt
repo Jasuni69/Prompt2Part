@@ -1,0 +1,21 @@
+module pose(a = [55, 0, 25], t = [0, 0, 0], exploded = undef, d = undef) //! Pose an assembly for rendering to png by specifying rotation `a`, translation `t` and optionally `d`, `exploded = true for` just the exploded view or `false` for unexploded only.
+    let($zoomed = is_undef(d)
+            ? is_undef($zoomed)
+                ? undef
+                : $zoomed
+            : is_undef(exploded)
+                ? 3
+                : exploded
+                    ? 2
+                    : 1)
+        if(is_undef($pose) || !is_undef($posed) || (!is_undef(exploded) && exploded != !!exploded()))
+            children();
+        else
+            let($posed = true) // only pose the top level
+                rotate([55, 0, 25])
+                    translate_z(is_undef(d) ? 0 : 140 - d)
+                        rotate([-a.x, 0, 0])
+                            rotate([0, -a.y, 0])
+                                rotate([0, 0, -a.z])
+                                    translate(-t)
+                                        children();

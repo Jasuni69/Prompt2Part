@@ -1,0 +1,6 @@
+module test_last() {
+    list = [1,2,3,4];
+    assert(last(list)==4);
+    assert(last([])==undef);
+}
+test_last();

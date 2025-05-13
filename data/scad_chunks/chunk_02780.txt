@@ -1,0 +1,5 @@
+module tray_outside(dimensions, thickness=2, curved=true, top_bevel_radius=undef, bottom_thickness=undef) {
+	tray_single(dimensions, thickness=thickness, curved=curved, bottom_bevel_radius=0, top_bevel_radius=top_bevel_radius, bottom_thickness=bottom_thickness);
+}
+
+// Draws an inverted rounded cube used to scoop out inside using difference().

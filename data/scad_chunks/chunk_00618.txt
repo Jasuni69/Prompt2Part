@@ -1,0 +1,1 @@
+function display_touch_screen(type) = type[8];  //! Touch screen position and size

@@ -1,0 +1,21 @@
+function _polygon_step(poly, ind, u, dir, length) =
+    let(ind = posmod(ind,len(poly)))
+    u==0 && dir<0 ? _polygon_step(poly, ind-1, 1, dir, length)
+  : u==1 && dir>0 ? _polygon_step(poly, ind+1, 0, dir, length)
+  : let(
+        seg = select(poly,ind,ind+1),
+        seglen = norm(seg[1]-seg[0]),
+        frac_needed = length / seglen
+    )
+    dir>0 ?
+            ( (1-u) < frac_needed ? _polygon_step(poly,ind+1,0,dir,length-(1-u)*seglen)
+                                 : [lerp(seg[0],seg[1],u+frac_needed),ind,u+frac_needed]
+            )
+          :
+            ( u < frac_needed ? _polygon_step(poly,ind-1,1,dir,length-u*seglen)
+                                 : [lerp(seg[0],seg[1],u-frac_needed),ind,u-frac_needed]
+            );
+
+
+// This function needs more error checking?
+// Needs check for zero overlap case and zero joint case

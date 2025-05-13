@@ -1,0 +1,10 @@
+function pb_valuesToString(list, seperator=",", _i=0, _s="") = _i>len(list)-1? _s : pb_valuesToString(list, seperator, _i+1, str(_s, list[_i],_i==len(list)-1? "" : seperator));
+
+
+
+//  function pb_removeAdjacentDuplicates(s)
+//
+//  Removes adjacent duplicate points
+//  pts             (list)    List of points.
+//  testLastToFirst (boolean) Set to false if you want to skip testing last point to first point.
+//  return          (string)  String containing all items from the list.

@@ -1,0 +1,1 @@
+function NEMA_black_caps(type)   = type[12]; //! End caps are black

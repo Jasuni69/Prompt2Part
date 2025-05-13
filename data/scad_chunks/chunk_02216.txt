@@ -1,0 +1,28 @@
+module hinge_fastened_assembly(type, thickness1, thickness2, angle, show_hinge = true) { //! Assembled hinge with its fasteners
+    if(show_hinge)
+        hinge_assembly(type, angle);
+
+    screw = hinge_screw(type);
+    nut = screw_nut(screw);
+    t = hinge_thickness(type);
+    kr = hinge_knuckle_dia(type) / 2;
+
+    module fasteners(thickness)
+        if(thickness)
+            hinge_screw_positions(type) {
+                translate_z(t)
+                    screw_and_washer(screw, screw_length(screw, t + thickness, 2, nyloc = true));
+
+                translate_z(-thickness)
+                    vflip()
+                        nut_and_washer(nut, true);
+            }
+
+    fasteners(thickness1);
+
+    translate([0, -kr, kr])
+        rotate([-angle, 0, 0])
+            translate([0, -kr, - kr])
+                rotate(180)
+                     fasteners(thickness2);
+}

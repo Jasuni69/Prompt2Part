@@ -1,0 +1,56 @@
+module generic_bottle_cap(
+    wall = 2,
+    texture = "none",
+    height,
+    thread_depth,
+    thread_od, 
+    tolerance = .2,
+    neck_od,
+    flank_angle = 15,
+    pitch = 4,
+    anchor = BOTTOM,
+    spin = 0,
+    orient = UP
+) {
+    $fn = segs(33 / 2);
+    dummy = assert(num_defined([thread_od,neck_od,thread_depth])==2, "Must define exactly two of thread_od, neck_od and thread_depth")
+            assert(is_def(thread_depth) || (all_positive([neck_od,thread_od]) && thread_od>neck_od), "thread_od must be larger than neck_od")
+            assert(is_undef(thread_depth) || all_positive([thread_depth,first_defined([neck_od,thread_od])]), "thread_depth, and neck_od/thread_od must be positive");
+    thread_depth = !is_undef(thread_depth) ? thread_depth :  (thread_od - neck_od)/2;
+    neck_od = !is_undef(neck_od) ? neck_od : thread_od-2*thread_depth;
+    thread_od = !is_undef(thread_od) ? thread_od : neck_od+2*thread_depth;
+    threadOuterDTol = thread_od + 2*tolerance;
+    w = threadOuterDTol + 2 * wall;                               
+    h = height + wall;
+    neckOuterDTol = neck_od + 2 * tolerance;
+
+    diamMagMult = (w > 32.58) ? w / 32.58 : 1;
+    heightMagMult = (height > 11.2) ? height / 11.2 : 1;
+
+    anchors = [
+        named_anchor("inside-top", [0, 0, -(h / 2 - wall)])
+    ];
+    attachable(anchor, spin, orient, d = w, l = h, anchors = anchors) {
+        down(h / 2) {
+            difference() {
+                union() {
+                    // For the knurled and ribbed caps the PCO caps in BOSL2 cut into the wall
+                    // thickness so the wall+texture are the specified wall thickness.  That
+                    // seems wrong so this does specified thickness+texture
+                    if (texture == "knurled") 
+                        cyl(d=w + 1.5*diamMagMult, l=h, texture="diamonds", tex_size=[3,3], style="concave", anchor=BOT);
+                    else if (texture == "ribbed") 
+                        cyl(d=w + 1.5*diamMagMult, l=h, texture="ribs", tex_size=[3,3], style="min_edge", anchor=BOT);
+                    else 
+                        cyl(d = w, l = h, anchor = BOTTOM);
+                }
+                up(wall) cyl(d = threadOuterDTol, h = h, anchor = BOTTOM);
+            }
+            up(wall + pitch / 2) {
+                thread_helix(d = neckOuterDTol+.02, pitch = pitch, thread_depth = thread_depth+.01, flank_angle = flank_angle,
+                             turns = ((height - pitch) / pitch), lead_in = -thread_depth, internal = true, anchor = BOTTOM);
+            }
+        }
+        children();
+    }
+}

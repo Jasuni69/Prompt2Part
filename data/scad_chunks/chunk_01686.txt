@@ -1,0 +1,1 @@
+function pot_size(type) = let(d = pot_body(type)) len(d) > 3 ? [d.x , d.y, d.z] : [d.x, d.x, d.y]; //! Get pot body dimensions

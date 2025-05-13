@@ -1,0 +1,22 @@
+function compare_vals(a, b) =
+	(a==b)? 0 :
+	(a==undef)? -1 :
+	(b==undef)? 1 :
+	((a==[] || a=="" || a[0]!=undef) && (b==[] || b=="" || b[0]!=undef))? (
+		compare_lists(a, b)
+	) : (a<b)? -1 :
+	(a>b)? 1 : 0;
+
+
+// Function: compare_lists()
+// Usage:
+//   compare_lists(a, b)
+// Description:
+//   Compare contents of two lists.
+//   Returns <0 if `a`<`b`.
+//   Returns 0 if `a`==`b`.
+//   Returns >0 if `a`>`b`.
+//   Results are undefined if elements are not of similar types.
+// Arguments:
+//   a = First list to compare.
+//   b = Second list to compare.

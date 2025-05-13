@@ -1,0 +1,26 @@
+module lmXuu_housing(size=8, tab=7, gap=5, wall=3, tabwall=5, screwsize=3, anchor=BOTTOM, spin=0, orient=UP)
+{
+    info = lmXuu_info(size);
+    d = info[0];
+    l = info[1];
+    linear_bearing_housing(d=d, l=l, tab=tab, gap=gap, wall=wall, tabwall=tabwall, screwsize=screwsize, orient=orient, spin=spin, anchor=anchor) children();
+}
+
+
+// Module: lmXuu_bearing()
+// Synopsis: Creates a standardized LM*UU linear bearing cartridge.
+// SynTags: Geom
+// Topics: Parts, Bearings
+// See Also: linear_bearing(), linear_bearing_housing(), lmXuu_info(), lmXuu_bearing(), lmXuu_housing(), ball_bearing()
+// Usage:
+//   lmXuu_bearing(size) [ATTACHMENTS];
+// Description:
+//   Creates a model of an lmXuu linear ball bearing cartridge.
+// Arguments:
+//   size = Standard lmXuu inner size.
+//   ---
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+// Example:
+//   lmXuu_bearing(size=10);

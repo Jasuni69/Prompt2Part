@@ -1,0 +1,38 @@
+module smd_sot(type, value) { //! Draw an SMD transistor
+    vitamin(str("smd_sot(", type[0], ", \"", value, "\"): ", type[0], " package ", value));
+
+    size = smd_sot_size(type);
+    z0 = smd_sot_z(type);
+    z2 = z0 + size.z;
+    z1 = z2 - smd_sot_lead_z(type);
+    slant = 7;                              //! 7 degree body draft angle
+    pitch = smd_sot_lead_pitch(type);
+    span = smd_sot_lead_span(type);
+    leads = floor(size.x / pitch) + 1;
+    ls = smd_sot_lead_size(type);
+
+    r = ls.z;
+    gullwing = rounded_path([[0, 0, ls.z / 2], [0, ls.y - ls.z, ls.z / 2], r, [0, ls.y -ls.z + z1 - ls.z, z1 - ls.z / 2], r, [0, span / 2, z1 - ls.z / 2]], $fn = fn);
+
+    color(grey(20))
+        hull()
+            for(z = [z0, z1, z2], inset = abs(z - z1) * tan(slant))
+                translate_z(z)
+                    cube([size.x - 2 * inset, size.y - 2 * inset, eps], center = true);
+
+    color(silver) {
+        for(i = [0 : leads - 1])
+            translate([i * pitch - size.x / 2 + (size.x - (leads - 1) * pitch) / 2, -span / 2])
+                sweep(gullwing, rectangle_points(ls.x, ls.z));
+
+        rotate(180)
+            translate([0, -span / 2])
+                sweep(gullwing, rectangle_points(smd_sot_tab_width(type), ls.z));
+    }
+
+    color("white")
+        translate_z(z0 + size.z)
+            linear_extrude(eps)
+                resize([size.x - 4 * (z2 - z1) * tan(slant), size.y / 2])
+                    text(value, halign = "center", valign = "center");
+}

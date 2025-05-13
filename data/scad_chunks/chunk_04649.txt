@@ -1,0 +1,5 @@
+function flatternArray(array)=
+// public version of flatternRecursion, has simplified params to avoid confusion
+// array= array to be flatterned
+// return= array that been flatterend by one level of nesting
+flatternRecursion(array);

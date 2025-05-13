@@ -1,0 +1,38 @@
+function union(regions=[],b=undef,c=undef,eps=EPSILON) =
+    let(regions=_list_three(regions,b,c))
+    len(regions)==0? [] :
+    len(regions)==1? regions[0] :
+    let(regions=[for (r=regions) is_path(r)? [r] : r])
+    union([
+           _filter_region_parts(regions[0],regions[1],["OS", "O"], eps=eps),           
+           for (i=[2:1:len(regions)-1]) regions[i]
+          ],
+          eps=eps
+    );
+
+
+// Function&Module: difference()
+// Synopsis: Performs a Boolean difference operation.
+// SynTags: Geom, Region
+// Topics: Boolean Operations, Regions, Polygons, Shapes2D, Shapes3D
+// See Also: union(), intersection(), diff(), intersect(), exclusive_or()
+// Usage:
+//   difference() CHILDREN;
+//   region = difference(regions);
+//   region = difference(REGION1,REGION2);
+//   region = difference(REGION1,REGION2,REGION3);
+// Description:
+//   When called as a function, and given a list of {{regions}} or 2D {{polygons}}, 
+//   takes the first region or polygon and differences away all other regions/polygons from it.  The resulting
+//   region is returned.
+//   When called as the built-in module, makes the set difference of the given children.
+//   This function is **much** slower than the native difference module acting on geometry,
+//   so you should only use it when you need a point list for further processing.  
+// Arguments:
+//   regions = List of regions or polygons to difference.
+// Example(2D):
+//   shape1 = move([-8,-8,0], p=circle(d=50));
+//   shape2 = move([ 8, 8,0], p=circle(d=50));
+//   for (shape = [shape1,shape2])
+//       stroke(shape, width=0.5, color="red", closed=true);
+//   color("green") region(difference(shape1,shape2));

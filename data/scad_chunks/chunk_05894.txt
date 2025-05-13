@@ -1,0 +1,20 @@
+function unique_count(list) =
+    assert(is_list(list) || is_string(list), "Invalid input." )
+    list == [] ? [[],[]] : 
+    is_homogeneous(list,1) && ! is_list(list[0])
+    ?    let( sorted = _group_sort(list) )
+        [ [for(s=sorted) s[0] ], [for(s=sorted) len(s) ] ]
+    :   let( 
+            list = sort(list),
+            ind = [0, for(i=[1:1:len(list)-1]) if (list[i]!=list[i-1]) i] 
+        )
+        [ select(list,ind), deltas( concat(ind,[len(list)]) ) ];
+
+
+
+// Section: Sorting
+
+
+// returns true for valid index specifications idx in the interval [imin, imax) 
+// note that idx can't have any value greater or EQUAL to imax
+// this allows imax=INF as a bound to numerical lists

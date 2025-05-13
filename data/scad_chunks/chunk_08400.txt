@@ -1,0 +1,2 @@
+function _nz_worley_chebyshev(p, nbrs) =
+    _nz_worley_from(nbrs, [for(nbr = nbrs) _chebyshev(nbr, p)]);

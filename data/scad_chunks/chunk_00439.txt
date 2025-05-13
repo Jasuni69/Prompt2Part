@@ -1,0 +1,1 @@
+function NEMA_hole_pitch(type)   = type[9]; //! Screw hole pitch

@@ -1,0 +1,6 @@
+module pipe(id,od,l){
+	difference(){
+		cylinder(r=od/2,h=l,center=true);
+		cylinder(r=id/2,h=l+1,center=true);
+	}
+}

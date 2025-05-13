@@ -1,0 +1,30 @@
+function gear2d(
+	mm_per_tooth    = 3,     //this is the "circular pitch", the circumference of the pitch circle divided by the number of teeth
+	number_of_teeth = 11,    //total number of teeth around the entire perimeter
+	teeth_to_hide   = 0,     //number of teeth to delete to make this only a fraction of a circle
+	pressure_angle  = 28,    //Controls how straight or bulged the tooth sides are. In degrees.
+	clearance       = undef, //gap between top of a tooth on one gear and bottom of valley on a meshing gear (in millimeters)
+	backlash        = 0.0,   //gap between two meshing teeth, in the direction along the circumference of the pitch circle
+	bevelang        = 0.0,
+	interior        = false
+) = let(
+		r = root_radius(mm_per_tooth, number_of_teeth, clearance, interior),
+		ang = 360/number_of_teeth/2,
+		pts = [
+			for (i = [0:1:number_of_teeth-teeth_to_hide-1] ) let(
+				mat = matrix3_zrot(-i*360/number_of_teeth) * matrix3_translate([0,r,0])
+			) each matrix3_apply(
+				gear_tooth_profile(
+					mm_per_tooth    = mm_per_tooth,
+					number_of_teeth = number_of_teeth,
+					pressure_angle  = pressure_angle,
+					clearance       = clearance,
+					backlash        = backlash,
+					bevelang        = bevelang,
+					interior        = interior,
+					valleys         = false
+				), [mat]
+			),
+			if (teeth_to_hide>0) [0,0]
+		]
+	) pts;

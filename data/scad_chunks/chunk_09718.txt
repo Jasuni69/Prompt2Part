@@ -1,0 +1,8 @@
+function Q_Angle(q) = 2 * acos(q[3]);
+
+
+// Function: Q_Rot_Vector()
+// Usage:
+//   Q_Rot_Vector(v,q);
+// Description:
+//   Returns the vector `v` after rotating it by the quaternion `q`.

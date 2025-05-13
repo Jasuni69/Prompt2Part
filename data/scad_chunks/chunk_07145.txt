@@ -1,0 +1,30 @@
+T(15)Kehle(rad=r,fillet=+10,spiel=[0.1,1]);  // fillet added
+}
+
+//Kehle circular
+T(20)Kehle(rad=r,dia=10,spiel=[1,2]);
+T(34)Kehle(rad=r,dia=-7,spiel=[0.3,5]);
+
+T(45){
+  Color(l=.8)rotate(30)Kehle(rad=r,dia=5,center=true,grad=60,fillet=0);
+  Color(0.3,l=.8)rotate(150)Kehle(rad=r,dia=5,center=true,grad=120,fase=2);
+  Pille(4,center=false,rad=[0,1]);
+  mirror([0,0,1])cylinder(2,d=5+r*2);
+  
+}
+
+
+T(20,-20)rotate(180){
+ T(+9) Kehle(rad=r,dia=10,spiel=[1,2],grad=90,center=true);
+ T(-10)Kehle(rad=r,dia=10,spiel=[1,2],end=2,grad=90);
+ T(-20)Kehle(rad=r,dia=10,spiel=[1,2],end=-1,grad=90);
+ T(-30)Kehle(rad=r,dia=10,spiel=[1,2],end=+0,fillet=true,fase=+2,grad=90);
+
+}
+
+T()rotate(-90)REcke(rad=r,h=8,r=8,help=1);
+
+T(+0, +20){Buchtung(size=10,help=true,r=r);
+T(-12.5)Buchtung(size=[10,2*r],deltaPhi=90,r=r);
+T(-25)Buchtung(size=[6,8],rmin=+1,r=r,l=20,phase=180);
+}

@@ -1,0 +1,25 @@
+module Balg(sizex=16,sizey=16,z=10.0,kerb=6.9,rand=-0.5,help){
+  minVal=0.001;
+  sizey=is_list(sizex)?sizex.y:sizey;
+  sizex=is_list(sizex)?sizex.x:sizex;
+  HelpTxt("Balg",["sizex",sizex,"sizey",sizey,"z",z,"kerb",kerb,"rand",rand],help);
+   //Y Falz
+   T(z=z+z/2)difference(){
+       cube([sizex,sizey,z],true);
+       Klon(tx=(50-kerb/2+sizex/2))rotate(45)MKlon(tz=-minVal)Kegel(fn=4,d1=hypotenuse(100,100),d2=hypotenuse(100-kerb,100-kerb),name=0);
+       MKlon(ty=sizey/2+50-kerb/2,mz=0)difference(){
+           rotate(45)MKlon(tz=-minVal)Kegel(fn=4,d1=hypotenuse(100,100),d2=hypotenuse(100-kerb,100-kerb),name=0);
+           MKlon(tx=sizex/2+59.0+rand,mz=0)T(0,-54.4)  MKlon(tz=-minVal,rz=+0)rotate(+0)Kegel(fn=4,d1=hypotenuse(100,100),d2=hypotenuse(100-kerb,100-kerb),v=1.4,name=0);
+       }
+    }
+    
+   //X falz 
+ T(z=z/2)difference(){
+     cube([sizex,sizey,z],true);
+     MKlon(ty=sizey/2+50-kerb/2,mz=0)rotate(45)Mklon(tz=-minVal)Kegel(fn=4,d1=hypotenuse(100,100),d2=hypotenuse(100-kerb,100-kerb),name=0);      
+     MKlon(tx=50-kerb/2+sizex/2,mz=0) difference(){
+         rotate(45) MKlon(tz=-minVal)Kegel(fn=4,d1=hypotenuse(100,100),d2=hypotenuse(100-kerb,100-kerb),name=0);
+         MKlon(ty=(sizey/2+59+rand)/1+0,mz=0) T(-54.4)  MKlon(tz=-minVal,rz=+0)rotate(+0)Kegel(fn=4,d1=hypotenuse(100,100),d2=hypotenuse(100-kerb,100-kerb),v=1.4,name=0);
+     }
+ }
+}

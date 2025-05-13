@@ -1,0 +1,1 @@
+function exploded() = is_undef($exploded_parent) ? is_undef($explode) ? 0 : $explode : 0;   //! Returns the value of `$explode` if it is defined, else `0`

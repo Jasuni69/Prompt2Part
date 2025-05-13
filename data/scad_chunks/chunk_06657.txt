@@ -1,0 +1,11 @@
+module test_parse_int() {
+    assert(parse_int("0") == 0);
+    assert(parse_int("3") == 3);
+    assert(parse_int("7655") == 7655);
+    assert(parse_int("+3") == 3);
+    assert(parse_int("+7655") == 7655);
+    assert(parse_int("-3") == -3);
+    assert(parse_int("-7655") == -7655);
+    assert(parse_int("ffff",16) == 65535);
+}
+test_parse_int();

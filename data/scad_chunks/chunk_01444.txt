@@ -1,0 +1,1 @@
+function rail_bore(type)       = type[5];   //! Counter bore diameter for screw head

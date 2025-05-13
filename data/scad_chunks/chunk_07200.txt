@@ -1,0 +1,4 @@
+function gradB(b,r)=360/(PI*r*2)*b; // winkel zur Bogen strecke b des Kreisradiuses r
+
+
+/// angle of a chord

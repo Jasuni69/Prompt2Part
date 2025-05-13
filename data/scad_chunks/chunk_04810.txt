@@ -1,0 +1,7 @@
+function pb_is_CW(pts=[], _i=0, _r=0) = _i==len(pts)? _r>0 : pb_is_CW(pts, _i+1, _r + cross(_i==len(pts)-1? pts[0] : pts[_i+1], pts[_i]));
+
+//  function pb_is_2d(p)
+//
+//  Tests if the value p is a 2D point.
+//  p       (list)  A list of two numbers representing a 2D point.
+//  return  (bool)  true if p is a 2D point otherwise false.

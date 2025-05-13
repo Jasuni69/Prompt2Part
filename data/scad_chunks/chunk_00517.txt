@@ -1,0 +1,13 @@
+module printed_washer(type, name = false) { //! Create printed washer
+    stl(name ? name : str("M", washer_size(type) * 10, "_washer"));
+    t = round_to_layer(washer_thickness(type));
+    or = washer_radius(type);
+    ir = washer_id(type) / 2;
+    stl_colour(pp1_colour)
+        linear_extrude(t, center = false, convexity = 2)
+            poly_ring(or, ir);
+
+    if($children)
+        translate_z(t)
+            children();
+}

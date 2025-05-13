@@ -1,0 +1,22 @@
+function sampling(size, r, start, k, sd) =
+    let(
+        w = r / sqrt(2),
+        rows = floor(size.y / w),
+        columns = floor(size.x / w),
+        pts = is_undef(start) ? [[rands(0, size.x, 1, sd)[0], rands(0, size.y, 1, sd + 1)[0]]] : 
+              is_num(start[0]) ? [start] : start,
+        active = pts,
+        pij = [for(pt = pts) [floor(pt.x / w), floor(pt.y / w), pt]],
+        grid = [
+            for(j = [0:rows - 1]) 
+            [
+                for(i = [0:columns - 1])
+                let(found = find_index(pij, function(ij) ij[0] == i && ij[1] == j))
+                if(found != -1)
+                    pij[found][2]
+                else 
+                    undef
+            ]
+        ]
+    )
+    [r, k, w, active, grid, rows, columns, []];

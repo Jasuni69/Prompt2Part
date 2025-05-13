@@ -1,0 +1,1 @@
+function sbr_screw_separation_x(type)   = type[7];  //! Screw separation in X direction

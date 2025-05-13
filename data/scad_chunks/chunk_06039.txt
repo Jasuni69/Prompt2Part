@@ -1,0 +1,74 @@
+function arc_copies(
+    n=6,
+    r=undef,
+    rx=undef, ry=undef,
+    d=undef, dx=undef, dy=undef,
+    sa=0, ea=360,
+    rot=true,
+    p=_NO_ARG
+) =
+    let(
+        rx = get_radius(r1=rx, r=r, d1=dx, d=d, dflt=1),
+        ry = get_radius(r1=ry, r=r, d1=dy, d=d, dflt=1),
+        sa = posmod(sa, 360),
+        ea = posmod(ea, 360),
+        extra_n = (abs(ea-sa)<0.01)?1:0,
+        delt = (((ea<=sa)?360.0:0)+ea-sa)/(n-1+extra_n),
+        mats = [
+            for (i = [0:1:n-1])
+            let(
+                ang = sa + (i * delt),
+                pos =[rx*cos(ang), ry*sin(ang), 0],
+                ang2 = rot? atan2(ry*sin(ang), rx*cos(ang)) : 0
+            )
+            translate(pos) * zrot(ang2)
+        ]
+    )
+    p==_NO_ARG? mats : [for (m = mats) apply(m, p)];
+
+
+
+// Function&Module: sphere_copies()
+// Synopsis: Distributes copies of children over the surface of a sphere. 
+// SynTags: MatList, Trans
+// Topics: Transformations, Distributors, Rotation, Copiers
+// See Also: rot_copies(), xrot_copies(), yrot_copies(), zrot_copies(), arc_copies(), move_copies(), xcopies(), ycopies(), zcopies(), line_copies(), grid_copies() 
+//
+// Usage:
+//   sphere_copies(n, r|d=, [cone_ang=], [scale=], [perp=]) CHILDREN;
+// Usage: As a function to translate points, VNF, or Bezier patches
+//   copies = sphere_copies(n, r|d=, [cone_ang=], [scale=], [perp=], p=);
+// Usage: Get Translation Matrices
+//   mats = sphere_copies(n, r|d=, [cone_ang=], [scale=], [perp=]);
+//
+// Description:
+//   When called as a module, spreads children semi-evenly over the surface of a sphere or ellipsoid.
+//   When called as a function, *without* a `p=` argument, returns a list of transformation matrices, one for each copy.
+//   When called as a function, *with* a `p=` argument, returns a list of transformed copies of `p=`.
+//
+// Arguments:
+//   n = How many copies to evenly spread over the surface.
+//   r = Radius of the sphere to distribute over
+//   ---
+//   d = Diameter of the sphere to distribute over
+//   cone_ang = Angle of the cone, in degrees, to limit how much of the sphere gets covered.  For full sphere coverage, use 180.  Measured pre-scaling.  Default: 180
+//   scale = The [X,Y,Z] scaling factors to reshape the sphere being covered.
+//   perp = If true, rotate children to be perpendicular to the sphere surface.  Default: true
+//   p = Either a point, pointlist, VNF or Bezier patch to be translated when used as a function.
+//
+// Side Effects:
+//   `$pos` is set to the relative post-scaled centerpoint of each child copy, and can be used to modify each child individually.
+//   `$theta` is set to the theta angle of the child from the center of the sphere.
+//   `$phi` is set to the pre-scaled phi angle of the child from the center of the sphere.
+//   `$rad` is set to the pre-scaled radial distance of the child from the center of the sphere.
+//   `$idx` is set to the index number of each child being copied.
+//
+//
+// Example:
+//   sphere_copies(n=250, d=100, cone_ang=45, scale=[3,3,1])
+//       cylinder(d=10, h=10, center=false);
+//
+// Example:
+//   sphere_copies(n=500, d=100, cone_ang=180)
+//       color(unit(point3d(v_abs($pos))))
+//           cylinder(d=8, h=10, center=false);

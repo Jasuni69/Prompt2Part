@@ -1,0 +1,7 @@
+module test_f_lte() {
+    _test_fn2arg_simple(
+        function (a,b) f_lte(a,b),
+        [[4,3,false],[3,3,true],[3,4,true]]
+    );
+}
+test_f_lte();

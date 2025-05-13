@@ -1,0 +1,29 @@
+function subdivide_and_slice(profiles, slices, numpoints, method="length", closed=false) =
+  let(
+    maxsize = max_length(profiles),
+    numpoints = is_undef(numpoints) ? maxsize :
+                numpoints == "lcm" ? lcmlist([for(p=profiles) len(p)]) :
+                is_num(numpoints) ? round(numpoints) : undef
+  )
+  assert(is_def(numpoints), "Parameter numpoints must be \"max\", \"lcm\" or a positive number")
+  assert(numpoints>=maxsize, "Number of points requested is smaller than largest profile")
+  let(fixpoly = [for(poly=profiles) subdivide_path(poly, numpoints,method=method)])
+  slice_profiles(fixpoly, slices, closed);
+
+
+
+// Function: slice_profiles()
+// Synopsis: Linearly interpolates between path profiles.
+// SynTags: PathList
+// Topics: Paths, Path Subdivision
+// See Also: subdivide_and_slice()
+// Usage:
+//   profs = slice_profiles(profiles, slices, [closed]);
+// Description:
+//   Given an input list of profiles, linearly interpolate between each pair to produce a
+//   more finely sampled list.  The parameters `slices` specifies the number of slices to
+//   be inserted between each pair of profiles and can be a number or a list.
+// Arguments:
+//   profiles = list of paths to operate on.  They must be lists of the same shape and length.
+//   slices = number of slices to insert between each pair, or a list to vary the number inserted.
+//   closed = set to true if last profile connects to first one.  Default: false

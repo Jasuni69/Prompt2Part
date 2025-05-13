@@ -1,0 +1,9 @@
+module R(x=0,y=0,z=0,help=false)
+{
+    rotate([x,y,z])children();
+    MO(!$children);
+    HelpTxt("R",["x",x,"y",y,"z",z],help);
+}
+
+
+// short for multmatrix and skewing objects

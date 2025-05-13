@@ -1,0 +1,2 @@
+function pbox_screw(type) =         //! Foot screw if got feet else base_screw
+    let(foot = pbox_foot(type)) foot ? foot_screw(foot) : pbox_base_screw(type);

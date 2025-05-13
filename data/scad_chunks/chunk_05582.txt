@@ -1,0 +1,15 @@
+function f_ord(a) = f_1arg(function(a) ord(a))(a);
+
+
+// Function: f_str()
+// Synopsis: Returns a function to get the string representation of an arbitrary value.
+// Topics: Function Literals, String Operators
+// See Also: f_len(), f_chr(), f_ord(), f_str(), f_str2(), f_str3()
+// Usage:
+//   fn = f_str();
+//   fn = f_str(a);
+// Description:
+//   A factory that generates function literals based on `str(a)`, where the `a`
+//   argument can optionally be replaced with a constant.
+// Arguments:
+//   a = If given, replaces the argument.

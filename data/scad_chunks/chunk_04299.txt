@@ -1,0 +1,1 @@
+function reflectX(x=1)=let(y=-1,z=-1,vector=[-1,-1,-1,-1]) scale(-x,-y,-z,-vector);

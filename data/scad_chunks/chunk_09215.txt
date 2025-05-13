@@ -1,0 +1,1 @@
+function _zdominant_x(x, xd, sx) = xd >= 0 ? x + sx : x;

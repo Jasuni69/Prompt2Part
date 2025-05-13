@@ -1,0 +1,9 @@
+module test_lerp() {
+	assert(lerp(-20,20,0) == -20);
+	assert(lerp(-20,20,0.25) == -10);
+	assert(lerp(-20,20,0.5) == 0);
+	assert(lerp(-20,20,0.75) == 10);
+	assert(lerp(-20,20,1) == 20);
+	assert(lerp([10,10],[30,-10],0.5) == [20,0]);
+}
+test_lerp();

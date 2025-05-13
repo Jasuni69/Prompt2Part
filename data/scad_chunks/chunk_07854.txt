@@ -1,0 +1,14 @@
+module triangle_splice_one_line(tri_leng, tris, line_width) {
+    half_leng = tri_leng / 2;
+    height = half_leng * sqrt(3);
+    hd3 = height / 3;
+    
+    for(i = [0 : tris - 1]) {
+        x_offset = half_leng * i;
+        is_even = i % 2 == 0;
+        translate([x_offset, is_even ? 0 : hd3, 0]) 
+        mirror([0, is_even ? 0 : 1, 0])
+            children();    
+    }
+
+}

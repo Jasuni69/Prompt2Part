@@ -1,0 +1,11 @@
+function sinh(x) =
+    assert(is_finite(x), "\nThe input must be a finite number.")
+    (exp(x)-exp(-x))/2;
+
+// Function: cosh()
+// Synopsis: Returns the hyperbolic cosine of the given value.
+// Topics: Math, Trigonometry
+// See Also: sinh(), cosh(), tanh(), asinh(), acosh(), atanh()
+// Usage:
+//   a = cosh(x);
+// Description: Takes a value `x`, and returns the hyperbolic cosine of it.

@@ -1,0 +1,93 @@
+module terminal_35(ways, colour = "blue") { //! Draw 3.5mm terminal block
+    vitamin(str("terminal_35(", ways, "): Terminal block ", ways, " way 3.5mm"));
+    pitch = 3.5;
+    width = ways * pitch;
+    depth = 7;
+    height = 8.3;
+    chamfer_h = 3;
+    chamfer_d = 1;
+    box_z = 0.5;
+    box_w = 2.88;
+    box_h = 4.1;
+    wire_z = 2;
+    wire_d = 2;
+    pin_l = 4.2;
+    pin_d = 0.9;
+
+    module single() {
+        screw_r = 1;
+        color(colour) {
+            rotate([90, 0, 0])
+                linear_extrude(pitch, center = true)
+                    polygon(points = [
+                        [ depth / 2,               0],
+                        [ depth / 2,               box_z],
+                        [-depth / 2 + 1,           box_z],
+                        [-depth / 2 + 1,           box_z + box_h],
+                        [ depth / 2,               box_z + box_h],
+                        [ depth / 2,               height - chamfer_h],
+                        [ depth / 2 - chamfer_d,   height],
+                        [ -screw_r - eps,          height],
+                        [ -screw_r - eps,          box_z + box_h],
+                        [  screw_r + eps,          box_z + box_h],
+                        [  screw_r + eps,          height],
+                        [-depth / 2,               height],
+                        [-depth / 2,               0],
+                    ]);
+
+            linear_extrude(box_z + box_h)
+                difference() {
+                    square([depth, pitch], center = true);
+
+                    translate([1, 0])
+                        square([depth, box_w], center = true);
+
+
+                }
+
+            translate_z(box_z + box_h)
+                linear_extrude(height - box_z - box_h)
+                    difference() {
+                        square([2 * screw_r + 0.1, pitch], center = true);
+
+                        circle(screw_r);
+                    }
+        }
+        color("silver") {
+            screw_z = box_z + box_h;
+            translate_z(screw_z) {
+                cylinder(r = screw_r, h = height - screw_z - 1);      // screw
+
+                linear_extrude(height - screw_z - 0.5)
+                    difference() {
+                        circle(1);
+
+                        square([4, 0.5], center = true);       // screw slot
+
+                        square([0.5, 1.7], center = true);     // second screw slot
+                    }
+
+            }
+            translate_z(box_z - pin_l)
+                cylinder(d = pin_d, h = pin_l + box_z, $fn = fn); // pin
+
+            solder(pin_d / 2);
+
+            translate_z(box_z + box_h / 2)                      // terminal
+                rotate([0, -90, 0]) {
+                    linear_extrude(depth - 2, center = true)
+                        difference() {
+                            square([box_h, box_w], center = true);
+
+                            translate([wire_z - box_z - box_h / 2, 0])
+                                circle(d = wire_d);
+                        }
+                    translate_z(depth / 2 - 1.5)
+                        cube([box_h, box_w, 1], center = true);
+                }
+        }
+    }
+    for(i = [0: ways -1])
+        translate([0, i * pitch - width / 2 + pitch / 2])
+            single();
+}

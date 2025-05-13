@@ -1,0 +1,9 @@
+module test_binomial_coefficient() {
+    assert_equal(binomial_coefficient(2,1), 2);
+    assert_equal(binomial_coefficient(3,2), 3);
+    assert_equal(binomial_coefficient(4,2), 6);
+    assert_equal(binomial_coefficient(10,7), 120);
+    assert_equal(binomial_coefficient(10,7), binomial(10)[7]);
+    assert_equal(binomial_coefficient(15,4), binomial(15)[4]);
+}
+test_binomial_coefficient();

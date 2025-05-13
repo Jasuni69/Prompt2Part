@@ -1,0 +1,57 @@
+module Nut(e=2,es=10,a=6,b=6,base=1,h=1,s,center=true,shift=0,winkel,grad,name,help){
+  grad=is_undef(winkel)?assert(grad!=0)grad:assert(winkel!=0)winkel;
+  
+  esA=is_undef(s)?es:s/e;
+  a= is_undef(a)?is_undef(b)?(esA/2+1*h*tan(90+grad)):esA+2*h*tan(90+grad)-b:a;
+  
+  s=is_undef(s)?is_num(grad)&&is_num(b)?e*(a+b-2*h*tan(90+grad)):
+                                       is_undef(es)?assert( is_num(b) && is_num(a),"define a + b")a+b:
+                                                    e * es:
+                s;
+ 
+
+  es=is_num(grad)&&is_num(b)?a+b-2*h*tan(90+grad):
+                  s/e;
+
+  b=is_undef(grad)?is_undef(b)?es-a:
+                               b:
+                  2*(h*tan(90+grad))+es-a;
+    
+    
+    points=assert(e>0,"Nut has no elements")[[s,base],[s,0],[0,0],[0,base],
+for(i=[0:e-1])each[
+    [b/2+i*es,base],    
+    [es/2-a/2+shift+i*es,h+base],
+    [es/2+a/2+shift+i*es,h+base],
+    [(es-b/2)+i*es,base]]
+    ];
+    path=[[for(i=[0:len(points)-1])i]];
+     //   echo (points,path);
+    
+
+ translate(center?[-s/2,-base]:[0,0])   polygon(points,path,convexity=10);
+    winkel1=atan(h/(es/2-a/2-b/2+shift));
+    winkel2=atan(h/(es/2-a/2-b/2-shift));
+    
+   InfoTxt("Nut",concat(["winkel",str(winkel1,shift?str(" /",winkel2):"","°"),
+    "Länge",s,
+    "Abstand",es],
+    "Abstand a",negRed(es-a),
+    "Abstand b",negRed(es-b),
+    grad?["b",negRed(b)]:[])
+    ,name); 
+
+   HelpTxt("Nut",[
+   "e",e,
+   "es",es,
+   "a",a,
+   "b",b,
+   "base",base,
+   "h",h,
+   "s",s,
+   "center",center,
+   "shift",shift,
+   "grad",grad,
+   "name",name],
+   help);  
+}

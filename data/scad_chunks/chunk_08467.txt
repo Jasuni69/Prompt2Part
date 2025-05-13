@@ -1,0 +1,5 @@
+function _isolines_pn_label(pts, threshold) =
+    [
+        for(row = pts)
+        [for(p = row) [each p, p.z >= threshold]]
+    ];

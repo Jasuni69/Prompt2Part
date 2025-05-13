@@ -1,0 +1,13 @@
+function _vx_contour(points) = 
+    let(
+        // always start from the left-bottom pt
+        fst = min(points) + [-1, -1]
+    )
+    _travel(hashset(points, hash = _pt2_hash), fst, fst);
+
+_nxt_offset = [
+    [1,  0],   // RIGHT
+    [0, -1],   // DOWN
+    [0,  1],   // UP
+    [-1, 0]    // LEFT
+];

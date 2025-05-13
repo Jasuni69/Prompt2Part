@@ -1,0 +1,31 @@
+function _makefaces_recurse(startind1, startind2, numfirst, numsecond, lenlist, closed, firstind=0, secondind=0, faces=[]) =
+    // We are done if *both* firstind and secondind reach their max value, which is the last point if !closed or one past
+    // the last point if closed (wrapping around).  If you don't check both you can leave a triangular gap in the output.
+    ((firstind == numfirst - (closed?0:1)) && (secondind == numsecond - (closed?0:1)))? faces :
+    _makefaces_recurse(
+        startind1, startind2, numfirst, numsecond, lenlist, closed, firstind+1, secondind+lenlist[firstind],
+        lenlist[firstind]==0? (
+            // point in original path has been deleted in offset path, so it has no match.  We therefore
+            // make a triangular face using the current point from the offset (second) path
+            // (The current point in the second path can be equal to numsecond if firstind is the last point)
+            concat(faces,[[secondind%numsecond+startind2, firstind+startind1, (firstind+1)%numfirst+startind1]])
+            // in this case a point or points exist in the offset path corresponding to the original path
+        ) : (
+            concat(faces,
+                // First generate triangular faces for all of the extra points (if there are any---loop may be empty)
+                [for(i=[0:1:lenlist[firstind]-2]) [firstind+startind1, secondind+i+1+startind2, secondind+i+startind2]],
+                // Finish (unconditionally) with a quadrilateral face
+                [
+                    [
+                        firstind+startind1,
+                        (firstind+1)%numfirst+startind1,
+                        (secondind+lenlist[firstind])%numsecond+startind2,
+                        (secondind+lenlist[firstind]-1)%numsecond+startind2
+                    ]
+                ]
+            )
+        )
+    );
+
+
+// Determine which of the shifted segments are good

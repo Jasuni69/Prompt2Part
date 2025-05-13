@@ -1,0 +1,8 @@
+function gear_shorten_skew(teeth1,teeth2,helical1,helical2,profile_shift1="auto",profile_shift2="auto",pressure_angle=20) =
+    let(
+         profile_shift1 = auto_profile_shift(teeth1,pressure_angle,helical1,profile_shift=profile_shift1),
+         profile_shift2 = auto_profile_shift(teeth2,pressure_angle,helical2,profile_shift=profile_shift2),
+         ax = gear_dist(mod=1,teeth1,teeth2,helical,profile_shift1,profile_shift2,pressure_angle=pressure_angle),
+         y = ax - (teeth1+teeth2)/2/cos(helical)
+    )
+    profile_shift1+profile_shift2-y;

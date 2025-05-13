@@ -1,0 +1,4 @@
+function _real_triangulate(shape_pts, collector, indices, v, num_of_vertices, count, epsilon) = 
+    count <= 0 ? [] : 
+    num_of_vertices == 2 ? collector : 
+                           _triangulate_real_triangulate_sub(shape_pts, collector, indices, v, num_of_vertices, count - 1,  epsilon);

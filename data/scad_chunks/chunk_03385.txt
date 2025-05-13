@@ -1,0 +1,6 @@
+function setType(type,protoData)=
+    [for (i =[0:1: len(protoData)])
+      (i != type[0])
+        ? protoData[i]
+        : type
+    ];

@@ -1,0 +1,6 @@
+function _turtle3d(commands, state, index=0) =
+    index >= len(commands) ? state :
+    _turtle3d(commands,
+            _turtle3d_command(commands[index],commands[index+1],commands[index+2],state,index),
+            index+_turtle3d_command_len(commands,index)
+        );

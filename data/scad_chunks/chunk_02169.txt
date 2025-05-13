@@ -1,0 +1,1 @@
+function bbox_depth(type)      = type[6]; //! Internal depth

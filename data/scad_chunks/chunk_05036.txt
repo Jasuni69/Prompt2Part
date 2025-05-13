@@ -1,0 +1,19 @@
+function mb_cuboid(size, squareness=0.5, cutoff=INF, influence=1, negative=false, hide_debug=false) =
+   assert(is_num(cutoff) && cutoff>0, "\ncutoff must be a positive number.")
+   assert(is_finite(influence) && influence>0, "\ninfluence must be a positive number.")
+   assert(squareness>=0 && squareness<=1, "\nsquareness must be inside the range [0,1].")
+   assert((is_finite(size) && size>0) || (is_vector(size) && all_positive(size)), "\nsize must be a positive number or a 3-vector of positive values.")
+   let(
+       xp = _squircle_se_exponent(squareness),
+       neg = negative ? -1 : 1,
+       inv_size = is_num(size) ? 2/size
+                : [[2/size.x,0,0],[0,2/size.y,0],[0,0,2/size.z]],
+        vnf=[neg, hide_debug ? debug_tetra(0.02) : _debug_cube(size,squareness)]
+   )
+   !is_finite(cutoff) && influence==1 ? [function(point) _mb_cuboid_basic(point, inv_size, xp, neg), vnf]
+ : !is_finite(cutoff) ? [function(point) _mb_cuboid_influence(point, inv_size, xp, 1/influence, neg), vnf]
+ : influence==1 ? [function(point) _mb_cuboid_cutoff(point, inv_size, xp, cutoff, neg), vnf]
+ : [function (point) _mb_cuboid_full(point, inv_size, xp, 1/influence, cutoff, neg), vnf];
+
+
+/// metaball rounded cylinder / cone

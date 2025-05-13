@@ -1,0 +1,21 @@
+function is_type(x,types) =
+    is_list(types)? in_list(typeof(x),types) :
+    is_string(types)? typeof(x) == types :
+    assert(is_list(types)||is_string(types));
+
+
+// Function: is_def()
+// Synopsis: Returns true if `x` is not `undef`.
+// Topics: Type Checking
+// See Also: typeof(), is_type(), is_str()
+// Usage:
+//   bool = is_def(x);
+// Description:
+//   Returns true if `x` is not `undef`.  False if `x==undef`.
+// Arguments:
+//   x = value to check
+// Example:
+//   bool = is_def(undef);  // Returns: false
+//   bool = is_def(false);  // Returns: true
+//   bool = is_def(42);     // Returns: true
+//   bool = is_def("foo");  // Returns: true

@@ -1,0 +1,38 @@
+module Ccube(size=20,c=2,c2,center=true,sphere=false,grad=0,help){
+    c2=is_undef(c2)?0.5773*c:c2;//Eulerkonst?
+    s=is_list(size)?size:[size,size,size];
+    scaleS=max(s[0]-c,s[1]-c,s[2]-c);
+    
+    //sc=[Hypotenuse(s[0],s[2])-c,Hypotenuse(s[0],s[0])-c,Hypotenuse(s[2],s[0])-c];
+   sc1=[Hypotenuse(s[0]-c,s[0]-c)/2+Hypotenuse(s[1]-c,s[1]-c)/2,Hypotenuse(s[0]-c,s[0]-c)/2+Hypotenuse(s[1]-c,s[1]-c)/2,5000];
+   sc2=[Hypotenuse(s[2]-c,s[2]-c)/2+Hypotenuse(s[0]-c,s[0]-c)/2,5000,Hypotenuse(s[0]-c,s[0]-c)/2+Hypotenuse(s[2]-c,s[2]-c)/2];    
+   sc3=[5000,Hypotenuse(s[2]-c,s[2]-c)/2+Hypotenuse(s[1]-c,s[1]-c)/2,Hypotenuse(s[1]-c,s[1]-c)/2+Hypotenuse(s[2]-c,s[2]-c)/2];     
+    
+    
+    sce=[2*norm(s-[c,c,c])-c2,1*norm(s-[c,c,c])-c2,2*norm(s-[c,c,c])-c2
+    ];
+    
+    
+    
+  translate(center?[0,0,0]:s/2)intersection(){
+      cube(s,center=true);
+      rotate([0,0,45])cube(sc1,center=true);
+      rotate([0,45,0])cube(sc2,center=true);
+      rotate([45,0,0])cube(sc3,center=true);
+      
+
+     Color()rotate([0,0,45])R(grad+90-54.74)cube(sce,center=true);
+     Color()rotate([0,0,-45])R(grad+90-54.74)cube(sce,center=true);
+     Color()rotate([0,0,135])R(grad+90-54.74)cube(sce,center=true);
+     Color()rotate([0,0,-135])R(grad+90-54.74)cube(sce,center=true);
+     if(sphere)Color(0.1) scale([1/scaleS*s[0],1/scaleS*s[1],1/scaleS*s[2]])sphere(norm(s/2)-c-sphere);
+ 
+  } 
+ HelpTxt("Ccube",[
+  "size",size,
+  "c",c,
+  "c2",c2,
+  "center",center,
+  "sphere",sphere,
+  "grad",grad],help);
+}

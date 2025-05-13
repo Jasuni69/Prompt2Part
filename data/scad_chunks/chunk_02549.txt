@@ -1,0 +1,6 @@
+module solder(ir = 0.3) { //! Maybe add solder meniscus if $solder is set
+    if(!is_undef($solder))
+        vflip()
+            translate_z($solder.z)
+                solder_meniscus(ir = ir, r = $solder.x);
+}

@@ -1,0 +1,61 @@
+function is_polygon_convex(poly,eps=EPSILON) =
+    assert(is_path(poly), "\nThe input should be a 2D or 3D polygon." )
+    let(
+        lp = len(poly),
+        p0 = poly[0]
+    )
+    assert( lp>=3 , "\nA polygon must have at least 3 points." )
+    let( crosses = [for(i=[0:1:lp-1]) cross(poly[(i+1)%lp]-poly[i], poly[(i+2)%lp]-poly[(i+1)%lp]) ] )
+    len(p0)==2
+      ? let( size = max([for(p=poly) norm(p-p0)]), tol=pow(size,2)*eps )
+        assert( size>eps, "\nThe polygon is self-crossing or its points are collinear." )
+        min(crosses) >=-tol || max(crosses)<=tol
+      : let( ip = _noncollinear_triple(poly,error=false,eps=eps) )
+        assert( ip!=[], "\nThe points are collinear.")
+        let( 
+            crx   = cross(poly[ip[1]]-poly[ip[0]],poly[ip[2]]-poly[ip[1]]),
+            nrm   = crx/norm(crx),
+            plane = concat(nrm, nrm*poly[0]), 
+            prod  = crosses*nrm,
+            size  = norm(poly[ip[1]]-poly[ip[0]]),
+            tol   = pow(size,2)*eps
+        )
+        assert(_pointlist_greatest_distance(poly,plane) < size*eps, "\nThe polygon points are not coplanar.")
+        let(
+            minc = min(prod),
+            maxc = max(prod) ) 
+        minc>=-tol || maxc<=tol;
+
+
+// Function: convex_distance()
+// Synopsis: Compute distance between convex hull of two point lists. 
+// Topics: Geometry, Convexity, Distance
+// See also: convex_collision(), hull()
+// Usage:
+//   dist = convex_distance(points1, points2,eps);
+// Description:
+//   Returns the smallest distance between a point in convex hull of `points1`
+//   and a point in the convex hull of `points2`. All the points in the lists
+//   should have the same dimension, either 2D or 3D.
+//   A zero result means the hulls intercept whithin a tolerance `eps`.
+// Arguments:
+//   points1 = first list of 2d or 3d points.
+//   points2 = second list of 2d or 3d points.
+//   eps = tolerance in distance evaluations. Default: EPSILON.
+// Example(2D):
+//    pts1 = move([-3,0], p=square(3,center=true));
+//    pts2 = rot(a=45, p=square(2,center=true));
+//    pts3 = [ [2,0], [1,2],[3,2], [3,-2], [1,-2] ];
+//    polygon(pts1);
+//    polygon(pts2);
+//    polygon(pts3);
+//    echo(convex_distance(pts1,pts2)); // Returns: 0.0857864
+//    echo(convex_distance(pts2,pts3)); // Returns: 0
+// Example(3D):
+//    sphr1 = sphere(2,$fn=10);
+//    sphr2 = move([4,0,0], p=sphr1);
+//    sphr3 = move([4.5,0,0], p=sphr1);
+//    vnf_polyhedron(sphr1);
+//    vnf_polyhedron(sphr2);
+//    echo(convex_distance(sphr1[0], sphr2[0])); // Returns: 0
+//    echo(convex_distance(sphr1[0], sphr3[0])); // Returns: 0.5

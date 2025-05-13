@@ -1,0 +1,7 @@
+module test_num_defined() {
+    assert(num_defined([undef,undef,true,false,undef]) == 2);
+    assert(num_defined([9,undef,true,false,undef]) == 3);
+    assert(num_defined([undef,9,true,false,undef]) == 3);
+    assert(num_defined(["foo",9,true,false,undef]) == 4);
+}
+test_num_defined();

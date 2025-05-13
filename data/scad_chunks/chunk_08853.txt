@@ -1,0 +1,8 @@
+function tile_size(t) = t[4];
+
+tile_eq = function(t1, t2, epsilon = 0.0001) 
+    abs(tile_x(t1) - tile_x(t2)) < epsilon && 
+	abs(tile_y(t1) - tile_y(t2)) < epsilon && 
+	tile_angle(t1) == tile_angle(t2);
+	
+tile_hash = function(t) tile_type(t) + tile_angle(t);

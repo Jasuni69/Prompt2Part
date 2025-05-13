@@ -1,0 +1,1 @@
+function tangentenP(grad=60,rad=20,r=0,deg)=TangentenP(is_undef(deg)?grad:180-deg,rad,r);

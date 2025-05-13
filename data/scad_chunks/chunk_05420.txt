@@ -1,0 +1,13 @@
+function _edges_vec_txt(x) = is_string(x)? str("\"", x, "\"") :
+    assert(is_string(x) || is_vector(x,3), str(x))
+    let(
+        lst = concat(
+            x.z>0? ["TOP"]   : x.z<0? ["BOT"]  : [],
+            x.y>0? ["BACK"]  : x.y<0? ["FWD"]  : [],
+            x.x>0? ["RIGHT"] : x.x<0? ["LEFT"] : []
+        ),
+        out = [
+           for (i = idx(lst))
+           i>0? str("+",lst[i]) : lst[i]
+        ]
+    ) out;

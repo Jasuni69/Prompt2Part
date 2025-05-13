@@ -1,0 +1,36 @@
+module Star(e=5,r1=10,r2=5,grad=[0,0],grad2,radial=false,fn=0,fn2,d,od,id,r,help){
+  kfn=is_num(fn2)?round(fn2):d?max(12,fs2fn(r=abs(d/2),fs=fs)):12;
+  r1=is_num(od)||is_list(od)?od/2
+               :is_list(r)?r[0]:r1;
+  r2=is_num(id)||is_list(id)?id/2
+               :is_list(r)?r[1]:r2;
+  
+  od=assert(is_num(r1)||is_list(r1),str("Star r1=",r1))r1*2;
+  id=assert(is_num(r2)||is_list(r2),str("Star r2=",r2))r2*2;
+  
+  points=concat(
+    star(e=e,r1=r1,r2=r2,grad=grad,grad2=grad2,radial=radial,fn=fn,z=undef),
+    d? kreis(d=d,rand=0,fn=kfn,endPoint=false):[]
+    );
+
+  paths=[
+    [for(i=[0:len(star(e=e,fn=fn))-1])i],
+   if(d) [for(i=[0:len(kreis(rand=0,fn=kfn,endPoint=false))-1])i+len(star(e=e,fn=fn))]
+    ];
+polygon(points,paths,convexity=5);
+
+HelpTxt("Star",["e",e,"r1",r1,"r2",r2,"grad",grad,"grad2",grad2,"radial",radial,"fn",fn,"fn2",fn2,"d",d,"od",od,"id",id],help);
+
+}
+
+/** \name Tdrop
+\page Polygons
+Tdrop() creates a Teardrop polygon
+\param r radius
+\param d diameter ↦ r
+\param deg  angle
+\param cut   flat top cut
+\param fn,fs fragments
+\param name name
+\param help help
+*/

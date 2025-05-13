@@ -1,0 +1,7 @@
+module test_path_closest_point(){
+   path = circle(d=100,$fn=6);
+   pt = [20,10];
+   closest = path_closest_point(path, pt);
+   assert_approx(closest, [5, [38.1698729811, 20.4903810568]]);
+}
+test_path_closest_point();

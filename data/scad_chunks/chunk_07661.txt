@@ -1,0 +1,26 @@
+module Kegelmantel(d=10,d2=5,v=1,rand=n(2),loch=4.5,grad=0,h=0,center=false,fn=fn,name,help)
+{
+    v=grad?tan(grad):v;
+  translate([0,0,center?d>d2?(d2-d)/4*v:(d-d2)/4*v:0])  difference()
+    {
+        Kegel(d1=d,d2=d2,v=v,h=h,name=name,fn=fn);
+       //T(z=-.001) Kegel(d1=d-2*rand,d2=0,v=v,n=0);
+       if(d2<d)T(z=-rand*v) Kegel(d1=d,d2=0,v=v,name=0,fn=fn);
+       if(d<d2)T(z=-d2/2*v+((d2-d)/2*v)+rand*v) Kegel(d1=0,d2=d2,v=v,name=0,fn=fn); 
+        cylinder(1000,d=loch,center=true,$fn=fn);
+    }
+   InfoTxt("Kegelmantel",["wandstärke", sin(atan(v))*rand],name);
+   HelpTxt("Kegelmantel",[
+    "d",d,
+    "d2",d2,
+    "v",v,
+   "rand",rand,
+   "loch",loch,
+   "grad",grad,
+   "h",h,
+   "center",center,
+   "fn",fn,
+   "name",name],
+   help);
+    
+}

@@ -1,0 +1,6 @@
+function _trim_shape_impl(shape_pts, from, to, epsilon) = 
+    let(
+        pts = [for(i = from; i <= to; i = i + 1) shape_pts[i]],
+        trimmed = _trim_lines(__lines_from(pts), epsilon)
+    )
+    len(shape_pts) == len(trimmed) ? trimmed : _trim_shape_impl(trimmed, 0, len(trimmed) - 1, epsilon);

@@ -1,0 +1,52 @@
+module debug_nurbs(control,degree,splinesteps=16,width=1, size, mult,weights,type="clamped",knots, show_weights, show_knots=false, show_index=true)
+{  
+  $fn=8;
+  size = default(size, 3*width);
+  show_weights = default(show_weights, is_def(weights));
+  N=len(control);
+  twodim = len(control[0])==2;
+  curve = nurbs_curve(control=control,degree=degree,splinesteps=splinesteps, mult=mult,weights=weights, type=type, knots=knots);
+  stroke(curve, width=width, closed=type=="closed");//, color="green");
+  stroke(control, width=width/2, color="lightblue", closed=type=="closed");
+  if (show_knots){
+    knotpts = nurbs_curve(control=control, degree=degree, splinesteps=1, mult=mult, weights=weights, type=type, knots=knots);
+    echo(knotpts);
+    color([1,.5,1])
+      move_copies(knotpts)
+        if (twodim)circle(r=width);
+        else sphere(r=width);
+  }
+  color("blue")
+    if (show_index)
+      move_copies(control){
+        let(label = str($idx),
+            anch = show_weights && is_def(weights[$idx]) && weights[$idx]!=1 ? FWD : CENTER)
+          if (twodim) text(text=label, size=size, anchor=anch);
+          else rot($vpr) text3d(text=label, size=size, anchor=anch);
+    }
+  color("blue")
+    if ( show_weights)
+      move_copies(control){
+        if(is_def(weights[$idx]) && weights[$idx]!=1)
+          let(label = str("w=",weights[$idx]), 
+              anch = show_index ? BACK : CENTER
+              )
+          if (twodim) fwd(size/2*0)text(text=label, size=size, anchor=anch);
+          else rot($vpr) text3d(text=label, size=size, anchor=anch);
+    }
+  
+}  
+
+
+// Section: NURBS Surfaces
+
+
+// Function: is_nurbs_patch()
+// Synopsis: Returns true if the given item looks like a NURBS patch.
+// Topics: NURBS Patches, Type Checking
+// Usage:
+//   bool = is_nurbs_patch(x);
+// Description:
+//   Returns true if the given item looks like a NURBS patch. (a 2D array of 3D points.)
+// Arguments:
+//   x = The value to check the type of.

@@ -1,0 +1,15 @@
+function _is_point_on_line(point, line, bounded=false, eps=EPSILON) =
+    let( 
+        v1 = (line[1]-line[0]),
+        v0 = (point-line[0]),
+        t  = v0*v1/(v1*v1),
+        bounded = force_list(bounded,2),
+        norm_crossprod = len(v1)==2 ? abs(cross(v0,v1)) : norm(cross(v0,v1))
+    ) 
+    norm_crossprod <= eps*norm(v1) 
+    && (!bounded[0] || t>=-eps) 
+    && (!bounded[1] || t<1+eps) ;
+
+
+///Internal - distance from point `d` to the line passing through the origin with unit direction n
+///_dist2line works for any dimension

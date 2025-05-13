@@ -1,0 +1,7 @@
+module door_hinge_stat_hole_positions(dir = 0) { //! Position children over the screws holes of the stationary part
+    hole_pitch = dia + (stat_length - dia) / 2;
+
+    for(side = [-1, 1])
+        translate([side * hole_pitch / 2, dir * (stat_width / 2 + washer_thickness(screw_washer(pin_screw))), thickness])
+            children();
+}

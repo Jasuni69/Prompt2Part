@@ -1,0 +1,40 @@
+module hygrometer() { //! Draw a hygrometer
+    vitamin("hygrometer(): Mini LCD Digital Thermometer / Hygrometer");
+
+    $fa = fa; $fs = fs;
+
+    explode(40) {
+        color(grey(30))
+            rotate_extrude()
+                polygon([
+                    [0,                0],
+                    [aperture_d / 2,   0],
+                    [aperture_d / 2,   flange_t],
+                    [flange_d2 / 2,    flange_t2],
+                    [flange_d / 2,     flange_t],
+                    [flange_d / 2,     0],
+                    [od / 2,           0],
+                    [od / 2,          -h],
+                    [0,               -h]
+                ]);
+
+        color("#94A7AB")
+            cylinder(d = aperture_d, h = eps);
+
+        color("black")
+            linear_extrude(0.2, center = true) {
+                translate([0, 3])
+                    text("20_4", font = "7 segment", valign = "bottom", halign = "center", size = aperture_d / 6);
+
+                translate([7, 3])
+                    text("C", font = "7 segment", valign = "bottom", halign = "center", size = aperture_d / 8);
+
+                translate([-1.9, 0.5])
+                    text("50", font = "7 segment", valign = "top", halign = "center", size = aperture_d / 2.7);
+
+                translate([0, -aperture_d / 6])
+                    text("          %", font = "Arial", valign = "center", halign = "center", size = aperture_d / 6);
+            }
+
+    }
+}

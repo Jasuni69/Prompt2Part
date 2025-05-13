@@ -1,0 +1,20 @@
+function str_replace_char(str,char,replace) =
+   assert(is_str(str))
+   assert(is_str(char) && len(char)==1, "Search pattern 'char' must be a single character string")
+   assert(is_str(replace))
+   str_join([for(c=str) c==char ? replace : c]);
+
+
+// Function: downcase()
+// Synopsis: Lowercases all characters in a string.
+// Topics: Strings
+// See Also: suffix(), str_find(), substr_match(), starts_with(), ends_with(), str_split(), str_join(), str_strip(), upcase(), downcase()
+// Usage:
+//   newstr = downcase(str);
+// Description:
+//   Returns the string with the standard ASCII upper case letters A-Z replaced
+//   by their lower case versions.
+// Arguments:
+//   str = String to convert.
+// Example:
+//   s=downcase("ABCdef");   // Returns "abcdef"

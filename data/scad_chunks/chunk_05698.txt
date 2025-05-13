@@ -1,0 +1,28 @@
+function glued_circles(r, spread=10, tangent=30, d, anchor=CENTER, spin=0) =
+    let(
+        r = get_radius(r=r, d=d, dflt=10),
+        r2 = (spread/2 / sin(tangent)) - r,
+        cp1 = [spread/2, 0],
+        cp2 = [0, (r+r2)*cos(tangent)],
+        sa1 = 90-tangent,
+        ea1 = 270+tangent,
+        lobearc = ea1-sa1,
+        lobesegs = ceil(segs(r)*lobearc/360),
+        sa2 = 270-tangent,
+        ea2 = 270+tangent,
+        subarc = ea2-sa2,
+        arcsegs = ceil(segs(r2)*abs(subarc)/360),
+        // In the tangent zero case the inner curves are missing so we need to complete the two
+        // outer curves.  In the other case the inner curves are present and endpoint=false
+        // prevents point duplication.  
+        path = tangent==0 ?
+                    concat(arc(n=lobesegs+1, r=r, cp=-cp1, angle=[sa1,ea1]),
+                           arc(n=lobesegs+1, r=r, cp=cp1, angle=[sa1+180,ea1+180]))
+                :
+                    concat(arc(n=lobesegs, r=r, cp=-cp1, angle=[sa1,ea1], endpoint=false),
+                           [for(theta=lerpn(ea2+180,ea2-subarc+180,arcsegs,endpoint=false))  r2*[cos(theta),sin(theta)] - cp2],
+                           arc(n=lobesegs, r=r, cp=cp1, angle=[sa1+180,ea1+180], endpoint=false),
+                           [for(theta=lerpn(ea2,ea2-subarc,arcsegs,endpoint=false))  r2*[cos(theta),sin(theta)] + cp2]),
+        maxx_idx = max_index(column(path,0)),
+        path2 = reverse_polygon(list_rotate(path,maxx_idx))
+    ) reorient(anchor,spin, two_d=true, path=path2, extent=true, p=path2);

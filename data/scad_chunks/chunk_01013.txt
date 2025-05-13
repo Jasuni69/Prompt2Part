@@ -1,0 +1,1 @@
+function gt_screw_r(type)      = type[9];   //! Screw head radius

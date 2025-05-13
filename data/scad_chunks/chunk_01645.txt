@@ -1,0 +1,1 @@
+function blower_width(type)       = type[3]; //! Width of enclosing rectangle

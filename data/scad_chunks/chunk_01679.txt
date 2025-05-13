@@ -1,0 +1,1 @@
+function pot_boss_h(type)   = type[9];  //! Boss height

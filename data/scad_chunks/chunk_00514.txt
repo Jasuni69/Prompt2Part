@@ -1,0 +1,6 @@
+module penny_washer(type) { //! Draw penny version of specified plain washer
+    penny = penny_washer(type);
+    assert(penny, "no penny version");
+    washer(penny)
+        children();
+}

@@ -1,0 +1,6 @@
+module BLDC_bell_screw_positions(type, n = 4) { //! Positions children at the bell screw holes
+    if (BLDC_bell_holes(type))
+        rotate(is_list(BLDC_bell_holes(type)) && len(BLDC_bell_holes(type)) == 3 ? 30 : 0)
+            BLDC_screw_positions(BLDC_bell_holes(type), n)
+                children();
+}

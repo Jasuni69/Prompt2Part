@@ -1,0 +1,6 @@
+function CountersunkDriveAcrossFlats(diameter) =
+  (diameter <= 14) ?
+    HexDriveAcrossFlats(HexDriveAcrossFlats(diameter)) :
+    round(0.6*diameter);
+
+// Provides metric countersunk hex (Allen) drive widths across the corners.

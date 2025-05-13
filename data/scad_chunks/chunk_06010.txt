@@ -1,0 +1,128 @@
+function regular_polyhedron_info(
+    info=undef, name=undef,
+    index=undef, type=undef,
+    faces=undef, facetype=undef,
+    hasfaces=undef, side=undef,
+    ir=undef, mr=undef, or=undef,
+    r=undef, d=undef,
+    anchor=CENTER,
+    facedown=true, stellate=false,
+    longside=undef, h=undef, height=undef  // special parameters for trapezohedron
+) = let(
+        argcount = num_defined([side,ir,mr,or,r,d])
+    )
+    assert(name=="trapezohedron" || argcount<=1, "You must specify only one of 'side', 'ir', 'mr', 'or', 'r', and 'd'")
+    assert(name!="trapezohedron" || num_defined([ir,mr,or])==0, "Trapezohedron does not accept 'ir', 'mr' or 'or'")
+    let(  
+        //////////////////////
+        //Index values into the _polyhedra_ array
+        //
+        pname = 0,        // name of polyhedron
+        class = 1,        // class name (e.g. platonic, archimedean)
+        facecount = 2,    // number of faces
+        facevertices = 3, // vertices on the faces, e.g. [3] for all triangles, [3,4] for triangles and squares
+        edgelen = 4,      // length of the edge for the vertex list in the database
+        in_radius = 5,    // in radius for unit polyhedron (shortest side 1)
+        mid_radius = 6,   // mid radius for unit polyhedron
+        out_radius = 7,   // out radius for unit polyhedron
+        volume = 8,       // volume of unit polyhedron (data not validated, not used right now)
+        vertices = 9,     // vertex list (in arbitrary order)
+        //////////////////////
+        or = get_radius(r=r,r1=or,d=d),
+        stellate_index = search([name], _stellated_polyhedra_, 1, 0)[0],
+        name = stellate_index==[] ? name : _stellated_polyhedra_[stellate_index][1],
+        stellate = stellate_index==[] ? stellate : _stellated_polyhedra_[stellate_index][2],
+        indexlist = (
+            name=="trapezohedron" ? [0] : [  // dumy list of one item
+                for(i=[0:1:len(_polyhedra_)-1]) (
+                    if (
+                        (is_undef(name) || _polyhedra_[i][pname]==name) &&
+                        (is_undef(type) || _polyhedra_[i][class]==type) &&
+                        (is_undef(faces) || _polyhedra_[i][facecount]==faces) &&
+                        (
+                            is_undef(facetype) || 0==compare_lists(
+                                is_list(facetype)? reverse(sort(facetype)) : [facetype],
+                                _polyhedra_[i][facevertices]
+                            )
+                        ) &&
+                        (is_undef(hasfaces) || any([for (ft=hasfaces) in_list(ft,_polyhedra_[i][facevertices])]))
+                    ) i
+                )
+            ]
+        )
+    )
+    len(indexlist)==0 ? []
+  :
+    let(validindex = is_undef(index) || (index>=0 && index<len(indexlist)))
+    assert(validindex, str(
+        len(indexlist),
+        " polyhedra meet specifications, so 'index' must be in [0,",
+        len(indexlist)-1,
+        "], but 'index' is ",
+        index
+    ))
+    let(
+        entry = (
+            name == "trapezohedron"? (
+                _trapezohedron(faces=faces, side=side, longside=longside, h=h, r=r, d=d, height=height)
+            ) : (
+                _polyhedra_[!is_undef(index)?
+                    indexlist[index] :
+                    indexlist[0]]
+            )
+        ),
+        valid_facedown = is_bool(facedown) || in_list(facedown, entry[facevertices])
+    )
+    assert(name == "trapezohedron" || num_defined([longside,h,height])==0, "The 'longside', 'h' and 'height' parameters are only allowed with trapezohedrons")
+    assert(valid_facedown,str("'facedown' set to ",facedown," but selected polygon only has faces with size(s) ",entry[facevertices]))
+    let(
+        scalefactor = (
+            name=="trapezohedron" ? 1 : (
+                argcount == 0? 1     // Default side=1 if no size info given
+              : is_def(side) ? side  
+              : is_def(ir) ? ir/entry[in_radius] 
+              : is_def(mr) ? mr/entry[mid_radius] 
+              :              or/entry[out_radius]
+            ) / entry[edgelen]
+        ),
+        face_triangles = hull(entry[vertices]),
+        faces_normals_vertices = _stellate_faces(
+            entry[edgelen], stellate, entry[vertices],
+            entry[facevertices]==[3]?
+                [face_triangles, [for(face=face_triangles) _facenormal(entry[vertices],face)]] :
+                _full_faces(entry[vertices], face_triangles)
+        ),
+        faces = faces_normals_vertices[0],
+        faces_vertex_count = [for(face=faces) len(face)],
+        facedown = facedown == true ? (stellate==false? entry[facevertices][0] : 3) : facedown,
+        down_direction = facedown == false?  [0,0,-1] :
+            faces_normals_vertices[1][search(facedown, faces_vertex_count)[0]],
+        scaled_points = scalefactor * rot(p=faces_normals_vertices[2], from=down_direction, to=[0,0,-1]),
+        bounds = pointlist_bounds(scaled_points),
+        boundtable = [bounds[0], [0,0,0], bounds[1]],
+        translation = [for(i=[0:2]) -boundtable[1+anchor[i]][i]],
+        face_normals = rot(p=faces_normals_vertices[1], from=down_direction, to=[0,0,-1]),
+        radius_scale = name=="trapezohedron" ? 1 : scalefactor * entry[edgelen]
+    )
+    info == "fullentry" ? [
+        scaled_points,
+        translation,
+        stellate ? faces : face_triangles,
+        faces,
+        face_normals,
+        radius_scale*entry[in_radius]
+    ] :
+    info == "vnf" ? [move(translation,p=scaled_points), faces] :
+    info == "vertices" ? move(translation,p=scaled_points) :
+    info == "faces" ? faces :
+    info == "face normals" ? face_normals :
+    info == "in_radius" ? radius_scale * entry[in_radius] :
+    info == "mid_radius" ? radius_scale * entry[mid_radius] :
+    info == "out_radius" ? radius_scale * entry[out_radius] :
+    info == "index set" ? indexlist :
+    info == "face vertices" ? (stellate==false? entry[facevertices] : [3]) :
+    info == "edge length" ? scalefactor * entry[edgelen] :
+    info == "center" ? translation :
+    info == "type" ? entry[class] :
+    info == "name" ? entry[pname] :
+    assert(false, str("Unknown info type '",info,"' requested"));

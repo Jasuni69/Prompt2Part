@@ -1,0 +1,1 @@
+function faston_insul_crimp_d(type) = type[12]; //! Outside diameter of the insulation crimp

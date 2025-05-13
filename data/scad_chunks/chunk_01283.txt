@@ -1,0 +1,24 @@
+module scs_bearing_block_assembly(type, part_thickness, screw_type, nut_type) { //! Assembly with screws and nuts in place
+
+    scs_bearing_block(type);
+
+    screw_type = is_undef(screw_type) ? scs_screw(type) : screw_type;
+    nut_type = is_undef(nut_type) ? screw_nut(screw_type) : nut_type;
+    washer_type = nut_washer(nut_type);
+    washer_thickness = washer_type ? washer_thickness(washer_type) : 0;
+
+    G = scs_block_side_height(type);
+    nut_offset = G + part_thickness + nut_thickness(nut_type) + washer_thickness;
+    screw_length = screw_longer_than(nut_offset);
+
+    scs_bearing_block_hole_positions(type) {
+        screw(screw_type, screw_length);
+
+        translate_z(-nut_offset)
+            nut(nut_type)
+                if (washer_type)
+                    washer(washer_type);
+    }
+}
+
+/* SBR bearing blocks */

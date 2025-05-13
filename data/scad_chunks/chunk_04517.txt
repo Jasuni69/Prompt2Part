@@ -1,0 +1,13 @@
+module nutcatch_parallel (options, kind = "hexagon", height_clearance = 0, width_clearance = 0) {
+  n = nut_data(options, kind);
+
+  hexagon(d = hex_inscribed_circle_d(n.width + width_clearance), h = n.thickness + height_clearance);
+}
+
+//
+// nutcatch_sidecut - generate a sidecut nutcatch
+//
+// Usage:
+//
+//     nutcatch_sidecut("M3");
+//

@@ -1,0 +1,3 @@
+function GearRotXY(t) = RotZ(360*t);
+// This spirals the protruding ridges around the donut-shaped ring.
+// Note that this rotation around the y-axis is the first operation below.

@@ -1,0 +1,1 @@
+function hinge_z(cam) = cam_screw_length(cam) - hinge_r;

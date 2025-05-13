@@ -1,0 +1,55 @@
+module extrusion_inner_corner_bracket(type, grub_screws = true, backwards = false, extrusion = undef) { //! Inner corner bracket for extrusion
+    extrusion = is_undef(extrusion) ? extrusion_inner_corner_bracket_extrusion(type) : extrusion;
+    vitamin(str("extrusion_inner_corner_bracket(", type[0], "): Extrusion inner corner bracket for ", extrusion[0]));
+
+    size = extrusion_inner_corner_bracket_size(type);
+    tnut = extrusion_inner_corner_bracket_tnut(type);
+    screw_offsets = extrusion_inner_corner_bracket_screw_offsets(type);
+    bottomTabOffset = 4;
+    topTabOffset = 10;
+    sizeBottom = [size.y - bottomTabOffset, nut_square_width(tnut), size.z];
+    sizeTop    = [size.x - topTabOffset,    nut_square_width(tnut), size.z];
+    tab = t_nut_tab(tnut);
+    tabSizeZ = nut_thickness(tnut);
+    screw = find_screw(hs_grub, nut_size(tnut));
+    holeRadius = screw_pilot_hole(screw);
+    depth = (extrusion_width(extrusion) - extrusion_center_square(extrusion)) / 2;
+
+    offset = extrusion_tab_thickness(extrusion) + tabSizeZ;
+    offset2 = extrusion_tab_thickness(extrusion) - nut_thickness(tnut, true) + nut_thickness(tnut);
+    translate([backwards ? offset2 : -offset,  -offset])
+        rotate([-90, 0, 0]) {
+            color("silver") {
+                translate([(size.y + bottomTabOffset) / 2, 0, tabSizeZ])
+                    rotate([0, 180, 0])
+                        extrusionSlidingNut(sizeBottom, tab[0], tab[1], tabSizeZ, holeRadius, (bottomTabOffset - size.y) / 2 + screw_offsets.y);
+
+                translate([tabSizeZ, 0, (size.x + topTabOffset) / 2])
+                    rotate([0, -90, 0])
+                        extrusionSlidingNut(sizeTop, tab[0], tab[0], tabSizeZ, holeRadius, -(topTabOffset - size.x) / 2 - screw_offsets.x);
+
+                translate([0, -tab[1] / 2]) {
+                    cube([bottomTabOffset, tab[1], size.z]);
+                    cube([size.z, tab[1], topTabOffset]);
+                }
+            }
+            if(grub_screws)
+                not_on_bom() no_explode() {
+                    screw_len = screw_shorter_than(depth);
+                    gap = depth - screw_len;
+                    screw_z = offset - gap;
+
+                    rotate([0, -90, 180])
+                        if(backwards)
+                            translate([size.x - screw_offsets.x, 0, -offset2 + gap])
+                                vflip()
+                                    screw(screw, screw_len);
+                        else
+                            translate([size.x - screw_offsets.x, 0, screw_z])
+                                screw(screw, screw_len);
+
+                    translate([size.y - screw_offsets.y, 0, screw_z])
+                        screw(screw, screw_len);
+                }
+        }
+}

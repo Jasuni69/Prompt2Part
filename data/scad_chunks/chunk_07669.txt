@@ -1,0 +1,14 @@
+module Dreieck(h=10,ha=10,ha2=0,s=1,name,c=0,2D=0,grad=0)
+{
+   s=grad?tan(grad/2)*2*(sqrt(3)/2):s;  
+  //echo(*2);atan(((ha/(sqrt(3)/2)*s)/2)/ha)
+    
+    
+  r=(sqrt(3)/3)*ha/(sqrt(3)/2);
+  r2=(sqrt(3)/3)*(ha2?ha2:ha)/(sqrt(3)/2);
+ if(!2D)T(c?h/2:0,z=c?ha/2-r:ha-r) R(0,-90) scale([1,s,1])cylinder(h=h,r1=r,r2=r2,$fn=3); 
+ if(2D)T(x=c?ha/2-r:ha-r) R(0,0) scale([1,s,1])circle(r=r,$fn=3);    
+    
+    
+   if(name)echo(str("»»» »»» ",name," Dreieck Höhe= ", ha," Breite= ",ha/(sqrt(3)/2)*s," Winkel= ",2*atan(s/2/(sqrt(3)/2))            )); 
+}

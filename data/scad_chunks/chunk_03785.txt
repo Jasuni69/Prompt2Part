@@ -1,0 +1,4 @@
+function expandParentsStripArgs(child,derivedParts=$derivedParts)=
+          join([for(p = split(
+                expandParents(child,derivedParts),","))
+                stripPartArgs(p)],",");

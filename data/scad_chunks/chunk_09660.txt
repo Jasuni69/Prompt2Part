@@ -1,0 +1,21 @@
+module chamfer_mask_x(l=1.0, chamfer=1.0, align=V_CENTER) {
+	chamfer_mask(l=l, chamfer=chamfer, orient=ORIENT_X, align=align);
+}
+
+
+// Module: chamfer_mask_y()
+// Usage:
+//   chamfer_mask_y(l, chamfer, [align]);
+// Description:
+//   Creates a shape that can be used to chamfer a 90 degree edge along the Y axis.
+//   Difference it from the object to be chamfered.  The center of the mask
+//   object should align exactly with the edge to be chamfered.
+// Arguments:
+//   l = Height of mask
+//   chamfer = size of chamfer
+//   align = Alignment of the cylinder.  Use the V_ constants from constants.h.  Default: centered.
+// Example:
+//   difference() {
+//       fwd(40) cube(80);
+//       right(80) #chamfer_mask_y(l=80, chamfer=20);
+//   }

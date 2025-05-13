@@ -1,0 +1,5 @@
+module test_c_div() {
+    assert_equal(c_div([56,29],[9,-4]), [4,5]);
+    assert_equal(c_div([-174,27],[-7,2]), [24,3]);
+}    
+test_c_div();

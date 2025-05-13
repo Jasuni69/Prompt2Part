@@ -1,0 +1,50 @@
+  // Make the rounded rect thru the end of the ridge extansion
+ ,[45,ridgeExtTop - 15-3, 20, 6,  3, yappRoundedRect]
+
+  // Make the hexagonal thru the end of the ridge extansion
+ ,[38,ridgeExtTop - 15, 6, 6,  0, yappPolygon, 0, 30, shapeHexagon, yappCenter]
+
+
+];
+
+cutoutsLeft =   
+[
+  // Make the hole thru the end of the ridge extansion
+  // Height = ridgeExtTop - height of the ext - the diameter of the circle
+  [25,ridgeExtTop-10-3, 0,  0,  3, yappCircle]
+
+  // Make the rounded rect thru the end of the ridge extansion
+ ,[45,ridgeExtTop - 15-3, 10, 6,  3, yappRoundedRect]
+
+  // Make the hexagonal thru the end of the ridge extansion
+ ,[38,ridgeExtTop - 15, 6, 6,  0, yappPolygon, 0, 30, shapeHexagon, yappCenter]
+
+
+];
+
+cutoutsRight =  
+[
+  // Make the hole thru the end of the ridge extansion
+  [25,ridgeExtTop-10-3, 0,  0,  3, yappCircle]
+
+  // Make the hole thru the end of the ridge extansion
+ ,[25,ridgeExtTop-10-3, 6,  6,  0, yappPolygon, shape6ptStar, yappLeftOrigin]
+
+  // Make the rounded rect thru the end of the ridge extansion
+ ,[45,ridgeExtTop - 15-3, 20, 6,  3, yappRoundedRect]
+
+  // Make the hexagonal thru the end of the ridge extansion
+ ,[38,ridgeExtTop - 15, 6, 6,  0, yappPolygon, 0, 30, shapeHexagon, yappCenter]
+
+
+];
+
+***/
+
+//===================================================================
+//  *** Ridge Extension ***
+//    Extension from the lid into the case for adding split opening at various heights
+//-------------------------------------------------------------------
+//  Default origin = yappCoordBox: box[0,0,0]
+//
+//  Parameters:

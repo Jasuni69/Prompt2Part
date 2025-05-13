@@ -1,0 +1,105 @@
+module Tile(opt=tile,ofs=ofs,dicke=dicke,fn=fn,d=d,dist=dist,rad=rad)T(ofs)render()Rund(rad){
+assert(min(d)>0);
+  if(opt==100)children();
+  if(opt==1)circle(d=max(d),$fn=fn); // ngon
+  if(opt==2)square(d,center=true); // squares
+// blocks
+  if(opt==3){
+    MKlon(ty=d.y/4+dist.y/4)square(vMult(d,[1,.5])-[0,dist.y/2],true);
+    }
+//tri blocks
+  if(opt==4)Polar(fn/2,d.x/4)square([d.x/2,dicke?dicke:1],center=true);//Tri
+//tri Hex
+
+  
+ if(opt==5){
+    f=sqrt(3)/2;
+    d=max(d)/f; 
+    dicke=(is_list(dicke)?1:[1,1])*(dicke?dicke:d/2);
+    
+    Polar(3,rot=30)hull(){circle(d=dicke.y,$fn=6);T(d/2-dicke.x/2)circle(d=dicke.x,$fn=fn);}
+  //color("red")Polar(3,dicke/2,rot=30)circle(d=dicke,$fn=6);
+  } 
+ 
+//triangles Hex  
+if(opt==6)difference(){
+    circle(d=d.x,$fn=fn);
+    Polar(fn,d.x/2,rot=0)square([d.x,dicke?dicke:dist.y],true);
+  }  
+  
+/*//triangles Hex   
+  if(opt==6){
+    d=umkreis(3,max(d))/sqrt(3);
+    Polar(6,max(d)/2,rot=30)offset(-max(dist)/2)rotate(60)circle(d=d,$fn=3);
+    }
+    //*/
+    
+//triangles 
+  if(opt==7)MKlon((max(d)+dist.x)/sqrt(3)/2)circle(d=max(d)/sqrt(3)*2,$fn=3);
+//Star
+  if(opt==8)rotate(180/fn)Star(e=round(fn),d/2,d/3);// star 
+ // diamonds Hex
+  if(opt==9)difference(){
+    circle(d=d.x,$fn=fn);
+    Polar(3,d.x/2,rot=0)square([d.x,dicke?dicke:dist.y],true);
+  }
+  
+//PentaTile
+  if(opt==10)difference(){
+    circle(d=d.x,$fn=fn);
+    square([d.x+2,dicke?dicke:dist.y],true);
+  }
+  if(opt==11)difference(){
+    circle(d=d.x,$fn=fn);
+    Polar(fn/2,d.x/2,rot=180/fn)square([d.x,dicke?dicke:dist.y],true);
+  }
+
+//Cairo
+  if(opt==12)union(){
+    dist=max(dist);
+    d=max(d);
+    MKlon(ty=-d)offset(-dist/2)polygon(FiveGon(d*0.75,d*0.25,d*0.5,d));
+    rotate(90)MKlon(ty=d*0.5)offset(-dist/2)polygon(FiveGon(d*0.75,d*0.25,d*0.5,d));
+  }
+//Penta floral  
+  if(opt==13){ 
+    d=max(d);
+    p=[for(i=[0:3])[cos(i*60),sin(i*60)]*d/2/(sqrt(3)/2)+[0,d],[0,0]];
+    Polar(6,rot=rot?rot:90+atan(sqrt(3)/9))offset(-max(dist)/2)polygon(p);
+  }
+
+  union(){
+  dicke=dicke?dicke:1;
+  //3halfcircle 
+    if(opt==14){d=max(d)/sqrt(3);
+      Polar(3,d/2+dist.x*0,rotE=rot*0)Kreis(d=d,grad=180,rcenter=true,rand=dicke,rot=90);}
+  //6halfcircle
+    if(opt==15)Polar(6,max(d)/4+dist.x/4,rot=30,rotE=rot*+1)Kreis(d=max(d)/2,grad=180,rcenter=true,rand=dicke,rot=90);
+  //6Wave
+    if(opt==16)Polar(6,max(d)/4,rot=30,rotE=rot*0){d=d/4;
+                MKlon(max(d)/2)Kreis(d=max(d),grad=180,rcenter=true,rand=dicke,rot=$idx*180+90);}
+  }
+
+
+}
+
+} // end Tesselation
+
+
+
+/** \name Penrose Tiling
+\page Polygons
+Penrose() creates a penrose tiling or children arrangement
+\param rec recursion limit (optional)
+\param tri start triangle [p0,p1,p2] (optional)
+\param radius penrose size via fn and radius ↦ tri
+\param case  tiling start case
+\param dicke space between triangles
+\param ratio tiling ratio
+\param fn symetry ↦ tri
+\param d triangle size limit (recursion stop condition)
+\param mirror mirror triangles for symetry ↦ tri
+\param $d $pos $tri output variables - inner diameter center triangle points
+
+*/
+//Polar(10)Penrose(mirror=0,fn=10,d=5);

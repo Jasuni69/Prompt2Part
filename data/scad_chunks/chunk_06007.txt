@@ -1,0 +1,1 @@
+function _even_perms(v) = [v, [v[2], v[0], v[1]], [v[1],v[2],v[0]]];

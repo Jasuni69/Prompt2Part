@@ -1,0 +1,1 @@
+function pulley_offset(type) = -pulley_hub_length(type) - pulley_flange_thickness(type) - pulley_width(type) / 2; //! Offset of the belt path centre

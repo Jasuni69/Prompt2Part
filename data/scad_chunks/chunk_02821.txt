@@ -1,0 +1,26 @@
+module FlexHex(l=100,w=100,h=2,grid=10,gap=1.5,irregularity=50,s=rands(0,10000,1)[0])
+{
+  d=grid/sin(60)-gap;
+  wc=ceil(w/grid/sin(60)+4);
+  lc=ceil(l/grid+4);
+  rs=rands(-grid/400*irregularity,grid/400*irregularity,wc*lc*4+2,s);
+
+  if(h>0)
+  {
+    linear_extrude(h,convexity=2)
+      MakeGrid();
+  }
+  else
+  {
+    MakeGrid();
+  }
+
+  module MakeGrid()
+  {
+    for(yc=[0:l/grid+1], xc=[0:w/grid/sin(60)+1])
+      translate([-w/2+(xc*grid)*sin(60),-l/2+yc*grid+(xc%2)*(grid/2),0])
+        irregularHexagon(h,d,xc,yc,rs,wc);
+  }
+}
+
+// Keep the parameters the same as the 3D module.

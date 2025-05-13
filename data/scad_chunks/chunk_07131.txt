@@ -1,0 +1,10 @@
+module Knob()T(-10)rotate(-150)R(0)Halb(1,y=1)union(){
+ Pille(l=3,d=30,center=false,rad=[0,2]);
+ Tz(3){
+   Strebe(grad=-20,h=15,d=10,rad=[7,2]);
+    Tz(15)T(15*tan(-20)) {
+      Pivot(messpunkt=5);
+      Pille(d=20,l=5,center=false,rad=2);
+    }
+ }
+}

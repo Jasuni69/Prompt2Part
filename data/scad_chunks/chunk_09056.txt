@@ -1,0 +1,10 @@
+function update(cells, cell) = 
+    let(
+        x = cell.x,
+        y = cell.y,
+        z = cell.z,
+        rowY = [for(c = cells[z][y]) if(c.x == x) cell else c]
+    )
+    m_replace(cells, z, y, rowY);
+
+// is (x, y) visited?

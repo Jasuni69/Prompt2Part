@@ -1,0 +1,10 @@
+module ssr_shroud_assembly(type, cable_d, name) //! The printed parts with inserts fitted
+assembly(str("SSR_shroud_", name), ngb = true) {
+
+    translate_z(ssr_shroud_height(type))
+        vflip()
+            stl_colour(pp1_colour) ssr_shroud(type, cable_d, name);
+
+    ssr_shroud_hole_positions(type)
+        insert(insert);
+}

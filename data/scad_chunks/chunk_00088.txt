@@ -1,0 +1,5 @@
+module al_clad_resistors()
+    layout([for(a = al_clad_resistors) al_clad_width(a)], 5, true)
+        rotate(90)
+            al_clad_resistor_assembly(al_clad_resistors[$i], 4.7)
+                screw(al_clad_hole(al_clad_resistors[$i]) > 3 ? M3_pan_screw : M2p5_pan_screw, 16);

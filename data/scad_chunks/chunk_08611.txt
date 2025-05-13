@@ -1,0 +1,16 @@
+function _interpolate(t, degree, points, knots, weights) =
+    let(
+        d = len(points[0]),
+        n = len(points),
+        kts = is_undef(knots) ? _knots(n, degree) : knots,
+        wts = is_undef(weights) ? _weights(n) : weights,
+        v = [
+            for(i = 0; i < n; i = i + 1) 
+            let(wt = wts[i])
+            [each points[i] * wt, wt]
+        ],
+        ts = _ts(t, degree, kts),
+        s = ts[1],
+        nvs = _v(v, s, ts[0], degree, kts, d)[s]
+    )
+    [for(i = 0; i < d; i = i + 1) nvs[i]] / nvs[d];

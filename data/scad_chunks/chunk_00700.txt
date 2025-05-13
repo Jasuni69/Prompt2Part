@@ -1,0 +1,50 @@
+    [-13.8 + 12.5, 23.862 / 2 - 4.7], [8.5, 4, 1],
+    [62.2, 48.8] // FOV
+];
+
+rpi_camera_pcb = ["", "",  36, 36, 1.6, 0, 3.2, 0, "green", false, [[3.5, -3.5], [-3.5, -3.5], [3.5, 3.5], [-3.5, 3.5]],
+    [
+        [18,    4.25,  0, "-flat_flex", true],
+        [-3.8, -7.8,  0, "smd_led", LED0805, "red"],
+    ],
+    []];
+
+rpi_camera = ["rpi_camera", "Raspberry Pi focusable camera", rpi_camera_pcb, [0, 0],
+    [
+        [[13, 13, 3], 0],
+        [[22,  4, 3], 2 - eps],
+        [[0, 0, 8.5], 7],
+        [[0, 0,  12], 6],
+        [[0, 11, 4.3], 14 / 2, [8/2, 11/2, 1]],
+    ],
+    [0, 18 - 1.5 - 2.5], [8, 5, 1.6],
+    [54, 41] // FOV
+];
+
+esp32_cam_x = 1; // Seems to vary as mine is offset but pictures on the web show it more centered.
+
+ESP32_module =  ["", "", 18, 26, 0.8,   0, 0.7, [1.1, 1.1, 0, gold], grey(18), false, [
+        for(x = [0,1], y = [0:13]) [x * 18, y * 1.27 + 1.4],       // Hole positions on the edge
+        for(x = [0:9]) [18 / 2 + (x - 4.5) * 1.27, 0],
+
+    ],
+    [
+        [18 / 2,        9.7 - 3.4 / 2 , 0, "block", 15.75, 17.6 - 3.4, 2.2, silver, false, 0.3, 0.3], // can
+        [18 / 2 - 2.65, 9.7 ,           0, "block", 10.4,  17.6,       2.2, silver, false, 0.3, 0.3], // can
+        [12.7, -6.5,  45, "smd_res", RES0502],
+        [15.15, -8.3, -90, "smd_coax", U_FL_R_SMT_1],
+        // Antenna
+        let(x = [0.9, 3.2, 5.7, 8.1, 10.6, 12.8, 15, 15.2])
+        each [
+            for(i = [0, 5,6,7])  [x[i],                -2.8,  0, "block", 0.6,             4.8, 0.2, gold], // long verticals
+            for(i = [1: 4])      [x[i],                -2.05, 0, "block", 0.6,             3.3, 0.2, gold], // short verticals
+            for(i = [0, 2, 4,5])[(x[i] + x[i + 1]) / 2, -0.7, 0, "block", x[i + 1] - x[i], 0.6, 0.2, gold], // top horizontals
+            for(i = [1, 3])     [(x[i] + x[i + 1]) / 2, -3.4, 0, "block", x[i + 1] - x[i], 0.6, 0.2, gold], // lower horizontals
+        ]
+     ],
+];
+
+ESP32_CAM_pcb = ["", "", 27, 40, 1.7, 2.5, 0, 0, grey(15), false, [],
+    [
+        [27 / 2, 26 / 2, 0, "-pcb", 0, ESP32_module],
+        for(side = [-1, 1]) [side * inch(0.45) + 27 / 2, -(4.2 + inch(.35)), 0, "-2p54joiner", 1, 8],

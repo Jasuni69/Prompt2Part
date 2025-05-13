@@ -1,0 +1,47 @@
+function bezier_segment_length(curve, start_u=0, end_u=1, max_deflect=0.01) =
+	let(
+		segs = len(curve) * 2,
+		path = [
+			for (i=[0:1:segs])
+			let(u=lerp(start_u, end_u, i/segs))
+			bez_point(curve,u)
+		],
+		defl = max([
+			for (i=[0:1:len(path)-3]) let(
+				mp = (path[i] + path[i+2]) / 2
+			) norm(path[i+1] - mp)
+		]),
+		mid_u = lerp(start_u, end_u, 0.5)
+	)
+	defl <= max_deflect? path_length(path) :
+	sum([
+		for (i=[0:1:segs-1]) let(
+			su = lerp(start_u, end_u, i/segs),
+			eu = lerp(start_u, end_u, (i+1)/segs)
+		) bezier_segment_length(curve, su, eu, max_deflect)
+	]);
+
+
+
+// Function: fillet3pts()
+// Usage:
+//   fillet3pts(p0, p1, p2, r);
+// Description:
+//   Takes three points, defining two line segments, and works out the
+//   cubic (degree 3) bezier segment (and surrounding control points)
+//   needed to approximate a rounding of the corner with radius `r`.
+//   If there isn't room for a radius `r` rounding, uses the largest
+//   radius that will fit.  Returns [cp1, endpt1, cp2, cp3, endpt2, cp4]
+// Arguments:
+//   p0 = The starting point.
+//   p1 = The middle point.
+//   p2 = The ending point.
+//   r = The radius of the fillet/rounding.
+//   maxerr = Max amount bezier curve should diverge from actual radius curve.  Default: 0.1
+// Example(2D):
+//   p0 = [40, 0];
+//   p1 = [0, 0];
+//   p2 = [30, 30];
+//   trace_polyline([p0,p1,p2], showpts=true, size=0.5, color="green");
+//   fbez = fillet3pts(p0,p1,p2, 10);
+//   trace_bezier(slice(fbez, 1, -2), size=1);

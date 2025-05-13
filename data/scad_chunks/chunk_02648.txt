@@ -1,0 +1,2 @@
+module ellipse(xr, yr)                                                              //! Draw an ellipse
+    scale([1, yr / xr]) circle4n(xr);

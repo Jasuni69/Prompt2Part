@@ -1,0 +1,22 @@
+module joiner_quad(spacing1=undef, spacing2=undef, xspacing=undef, yspacing=undef, h=40, w=10, l=10, a=30, n=2, alternate=true, screwsize=undef, guides=true, slop=PRINTER_SLOP, orient=ORIENT_Y, align=V_CENTER)
+{
+	spacing1 = first_defined([spacing1, xspacing, 100]);
+	spacing2 = first_defined([spacing2, yspacing, 50]);
+	if ($children > 0) {
+		difference() {
+			children();
+			joiner_quad_clear(spacing1=spacing1, spacing2=spacing2, h=h, w=w, a=a, clearance=0.1, orient=orient, align=align);
+		}
+	}
+	orient_and_align([w+spacing1, spacing2, h], orient, align, orig_orient=ORIENT_Y) {
+		zrot_copies(n=2) {
+			back(spacing2/2) {
+				joiner_pair(spacing=spacing1, n=n, h=h, w=w, l=l, a=a, screwsize=screwsize, guides=guides, slop=slop);
+			}
+		}
+	}
+}
+
+
+
+// vim: noexpandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

@@ -1,0 +1,75 @@
+module Surface(x=20,y,zBase=5,deltaZ=.25,res=6,waves=false,
+rand=true,seed=42,randsize=1,randSizeY,freqX=1,freqY,ampX=1,waveSkewX=+0,ampY,waveSkewY,ampRoundX=0,rfX=+1,ampRoundY,rfY,versch=[0,0],abs=false,exp=1,expY,sinDelta=0,sinDeltaY,mult=false,name,help){
+
+
+HelpTxt("Surface",[
+  "x",x,
+  "y",y,
+  "zBase",zBase,
+  "deltaZ",deltaZ,
+  "res",res,
+  "waves", waves,
+  "rand",rand,
+  "seed",seed,
+  "randsize",randsize,
+  "randSizeY",randSizeY,
+  "freqX",freqX,
+  "freqY",freqY,
+  "ampX",ampX,
+  "waveSkewX",waveSkewX,
+  "ampY",ampY,
+  "waveSkewY",waveSkewY,
+  "ampRoundX",ampRoundX,
+  "rfX",rfX,
+  "ampRoundY",ampRoundY,
+  "rfY",rfY,
+  "versch",versch,
+  "abs",abs,
+  "exp",exp,
+  "expY",expY,
+  "sinDelta",sinDelta,
+  "sinDeltaY",sinDeltaY,
+  "mult",mult,
+  "name",name
+  
+  ],help);
+/*
+if(help){
+    echo(str("<font color='",helpMColor,"', size=3><b>Help Surface"));
+    echo(str("<font color='",helpMColor,"', size=2> Surface(x=",x,",y=",y,", zBase=",zBase," // mm size "));
+    echo(str("<font color='",helpMColor,"', size=2> deltaZ=",deltaZ,", res=",res," // random change +− and resolution points/mm "));
+    echo(str("<font color='#5500aa', size=2> waves=",waves,", rand=",rand,", // pattern waves and/or random"));
+    echo(str("<font color='#5500aa', size=2> seed=",seed,", randsize=",randsize,",randSizeY=",randSizeY,", //random seed, random size y strech"));
+    echo(str("<font color='#5500aa', size=2> freqX=",freqX,", freqY=",freqY,", ampX=",ampX,",waveSkewX=",waveSkewX,", ampY=",ampY,", waveSkewY=",waveSkewY,", // wave frequenz and amplitude XY"));
+    echo(str("<font color='#5500aa', size=2> ampRoundX=",ampRoundX,", rfX=",rfX,",ampRoundY=",ampRoundY,",rfY=",rfY,", // rounded Waveform ⇒ coarse, roundig factor"));
+    echo(str("<font color='#5500aa', size=2> versch=",versch,", name=",name,", abs=",abs,", exp=",exp,", expY=",expY,", sinDelta=",sinDelta,", sinDeltaY=",sinDeltaY,"mult=",mult,",); // move wave pattern  show info and abs values, exponent, move sin center waves only"));
+}// */
+
+y=is_undef(y)?x:y;//assert(x!=0&&y!=0)
+randSizeY=assert(randsize!=0&&randSizeY!=0)is_undef(randSizeY)?1/randsize:1/randSizeY;
+freqY=is_undef(freqY)?freqX:freqY;
+ampY=is_undef(ampY)?ampX:ampY;
+waveSkewY=is_undef(waveSkewY)?waveSkewX:waveSkewY;
+ampRoundY=is_undef(ampRoundY)?ampRoundX:ampRoundY;
+rfY=is_undef(rfY)?rfX:rfY;
+expY=is_undef(expY)?exp:expY;
+sinDeltaY=is_undef(sinDeltaY)?sinDelta:sinDeltaY;
+
+    
+
+if(waves)InfoTxt("Surface",["λ X/Y",str(10/freqX,"/",10/freqY," mm - λ¼=",10/freqX/4,"/",10/freqY/4," mm")],name);
+    
+rowl=assert(x>0)x; //frame x values
+rowly=assert(y>0)y;//frame y values
+
+resolution=1/res;//[10,5,2.5,1,0.5,0.25,0.125]
+//randSizeY=1/randSizeY;
+
+
+random=rands(-deltaZ,deltaZ,((rowl+1)*(rowly+1)*randSizeY)/min(randsize,1),seed);
+
+/*
+z1=0;
+z2=0.5; 
+alternate=[for(h=[0:y+1])for(i=[0:x+0])h%2?i%2?deltaZ:deltaZ/2:i%2?deltaZ/2:deltaZ];
+alternate3=[for(h=[0:y+1])for(i=[0:x+0])h%4?i%3?z1:z2:i%2?z2:z1];

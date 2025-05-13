@@ -1,0 +1,68 @@
+module trapezoidal_threaded_nut(
+	od=17.4,
+	id=10,
+	h=10,
+	pitch=2,
+	thread_depth=undef,
+	thread_angle=15,
+	profile=undef,
+	left_handed=false,
+	starts=1,
+	bevel=true,
+	slop=undef,
+	orient=ORIENT_Z,
+	align=V_CENTER
+) {
+	depth = min((thread_depth==undef? pitch/2 : thread_depth), pitch/2/tan(thread_angle));
+	slop = default(slop, PRINTER_SLOP);
+	orient_and_align([od/cos(30),od,h], orient, align) {
+		difference() {
+			cylinder(d=od/cos(30), h=h, center=true, $fn=6);
+			trapezoidal_threaded_rod(
+				d=id,
+				l=h+1,
+				pitch=pitch,
+				thread_depth=depth,
+				thread_angle=thread_angle,
+				profile=profile,
+				left_handed=left_handed,
+				starts=starts,
+				internal=true,
+				slop=slop
+			);
+			if (bevel) {
+				zflip_copy() {
+					down(h/2+0.01) {
+						cylinder(r1=id/2+slop, r2=id/2+slop-depth, h=depth, center=false);
+					}
+				}
+			}
+		}
+	}
+}
+
+
+// Section: Triangular Threading
+
+// Module: threaded_rod()
+// Description:
+//   Constructs a standard metric or UTS threaded screw rod.  This method
+//   makes much smoother threads than the naive linear_extrude method.
+// Arguments:
+//   d = Outer diameter of threaded rod.
+//   l = length of threaded rod.
+//   pitch = Length between threads.
+//   left_handed = if true, create left-handed threads.  Default = false
+//   bevel = if true, bevel the thread ends.  Default: false
+//   bevel1 = if true, bevel the axis-negative end of the thread.  Default: false
+//   bevel2 = if true, bevel the axis-positive end of the thread.  Default: false
+//   internal = If true, make this a mask for making internal threads.
+//   slop = printer slop calibration to allow for tight fitting of parts.  Default: `PRINTER_SLOP`
+//   orient = Orientation of the rod.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Z`.
+//   align = Alignment of the rod.  Use the `V_` constants from `constants.scad`.  Default: `V_CENTER`.
+// Example(2D):
+//   projection(cut=true)
+//       threaded_rod(d=10, l=15, pitch=2, orient=ORIENT_X);
+// Examples(Med):
+//   threaded_rod(d=10, l=20, pitch=1.25, left_handed=true, $fa=1, $fs=1);
+//   threaded_rod(d=25, l=20, pitch=2, $fa=1, $fs=1);

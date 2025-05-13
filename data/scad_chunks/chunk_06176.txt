@@ -1,0 +1,34 @@
+function affine3d_skew_xz(xa=0, za=0) =
+    assert(is_finite(xa))
+    assert(is_finite(za))
+    [
+        [      1, 0, tan(xa), 0],
+        [      0, 1,       0, 0],
+        [tan(za), 0,       1, 0],
+        [      0, 0,       0, 1]
+    ];
+
+
+// Function: affine3d_skew_yz()
+// Synopsis: Returns a 3D (4x4) YZ-plane skewing transformation matrix.
+// SynTags: Mat
+// Topics: Affine, Matrices, Transforms, Skewing
+// See Also: skew(), affine3d_skew(), affine3d_skew_xy(), affine3d_skew_xz(), affine2d_skew()
+// Usage:
+//   mat = affine3d_skew_yz(ya);
+//   mat = affine3d_skew_yz(za=);
+//   mat = affine3d_skew_yz(ya, za);
+// Description:
+//   Returns the 4x4 affine3d matrix to perform a skew transformation along the YZ plane.
+// Arguments:
+//   ya = Skew angle, in degrees, in the direction of the Y axis.  Default: 0
+//   za = Skew angle, in degrees, in the direction of the Z axis.  Default: 0
+// Example:
+//   mat = affine3d_skew_yz(ya=45,za=-45);
+//   // Returns:
+//   //   [
+//   //     [ 1, 0, 0, 0],
+//   //     [ 1, 1, 0, 0],
+//   //     [-1, 0, 1, 0],
+//   //     [ 0, 0, 0, 1]
+//   //   ]

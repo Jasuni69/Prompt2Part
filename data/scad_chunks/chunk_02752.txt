@@ -1,0 +1,25 @@
+module aluProTwistLockNut(tlnt) {
+	vitamin(str("AluExtTwistNut: Aluminium Extrusion Twist Nut"));
+
+	if (simplify) {
+		color("silver")
+		render()
+		translate([0,0,-tlnt[2] -tlnt[3] - (tlnt[4] - tlnt[3])])
+		translate([0,0,(tlnt[2]-1)/2]) rotate([90,0,0]) trapezoidPrism(tlnt[1],tlnt[0],tlnt[2]-1,-(tlnt[1] - tlnt[0])/2,tlnt[0],center=true);
+	
+	} else {
+		color("silver")
+		render()
+		translate([0,0,-tlnt[2] -tlnt[3] - (tlnt[4] - tlnt[3])]) 
+		difference() {
+			union() {
+				translate([0,0,tlnt[2]-0.5-eta]) cube([tlnt[1],tlnt[0],1+2*eta],center=true);
+				translate([0,0,(tlnt[2]-1)/2]) rotate([90,0,0]) trapezoidPrism(tlnt[1],tlnt[0],tlnt[2]-1,-(tlnt[1] - tlnt[0])/2,tlnt[0],center=true);
+			
+				translate([0,0,tlnt[3]/2 + tlnt[2]-eta]) cube([tlnt[0],tlnt[0],tlnt[3] + eta],center=true);
+			}
+	
+			translate([0,0,-1]) cylinder(h=20, r=tlnt[2]/2, $fn=8);
+		}
+	}
+}

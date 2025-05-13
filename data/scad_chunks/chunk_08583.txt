@@ -1,0 +1,10 @@
+function _bezier_curve_impl(t_step, points) = 
+    let(
+        t_end = ceil(1 / t_step), 
+        n = len(points) - 1, 
+        range = [0:len(points[0]) - 1]
+    ) 
+    [
+        each [for(t = 0; t < t_end; t = t + 1) _coordinate(range, t * t_step, points, n)], 
+        _coordinate(range, 1, points, n)
+    ];

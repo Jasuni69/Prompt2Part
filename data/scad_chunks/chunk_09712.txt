@@ -1,0 +1,7 @@
+function Q_Normalize(q) = q/norm(q);
+
+
+// Function: Q_Dist()
+// Usage:
+//   Q_Dist(q1, q2)
+// Description: Returns the "distance" between two quaternions.

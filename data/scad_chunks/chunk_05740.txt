@@ -1,0 +1,29 @@
+function _link_indicator(l,imin,imax) =
+    len(l) == 0  ? repeat(imax-imin+1,0) :
+    imax-imin<100 || len(l)<400 ? [for(si=search(list([imin:1:imax]),l,1)) si!=[] ? 1: 0 ] :
+    let(
+        pivot   = floor((imax+imin)/2),
+        lesser  = [ for(li=l) if( li< pivot) li ],
+        greater = [ for(li=l) if( li> pivot) li ]
+    )
+    concat( _link_indicator(lesser ,imin,pivot-1),
+            search(pivot,l,1) ? 1 : 0 ,
+            _link_indicator(greater,pivot+1,imax) ) ;
+
+// Function: vnf_triangulate()
+// Synopsis: Triangulates the faces of a VNF.
+// SynTags: VNF
+// Topics: VNF Manipulation
+// See Also: vnf_reverse_faces(), vnf_quantize(), vnf_merge_points(), vnf_drop_unused_points(), vnf_slice(), vnf_unify_faces() 
+// Usage:
+//   vnf2 = vnf_triangulate(vnf);
+// Description:
+//   Triangulates faces in the VNF that have more than 3 vertices.
+// Arguments:
+//   vnf = VNF to triangulate
+// Example(3D):
+//   include <BOSL2/polyhedra.scad>
+//   vnf = zrot(33,regular_polyhedron_info("vnf", "dodecahedron", side=12));
+//   vnf_polyhedron(vnf);
+//   triangulated = vnf_triangulate(vnf);
+//   color("red")vnf_wireframe(triangulated,width=.3);

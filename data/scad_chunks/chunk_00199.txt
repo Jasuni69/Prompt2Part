@@ -1,0 +1,11 @@
+module positions()
+    for(i = [1 : 10]) {
+        translate([(i * i + i) / 2 + 3 * i , 8])
+            let($r = i / 2)
+                children();
+
+        let(d = i + 0.5)
+            translate([(d * d + d) / 2 + 3 * d, 19])
+                let($r = d / 2)
+                    children();
+    }

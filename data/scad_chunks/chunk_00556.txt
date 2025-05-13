@@ -1,0 +1,6 @@
+module ttrack_assembly(type, length, colour = "LightSlateGray") {
+    ttrack(type, length, colour);
+    ttrack_hole_positions(type, length)
+        explode(20)
+            screw(ttrack_screw(type), 15);
+}

@@ -1,0 +1,44 @@
+function torx_info(size) =
+    let( 
+        info_arr = [      // Depth is from metric socket head screws, ISO 14583
+            //T#     OD     ID     H        Re     Ri
+            [  1, [  0.90,  0.65,  0.40,  0.059, 0.201]],  // depth interpolated
+            [  2, [  1.00,  0.73,  0.44,  0.069, 0.224]],  // depth interpolated
+            [  3, [  1.20,  0.87,  0.53,  0.081, 0.266]],  // depth interpolated
+            [  4, [  1.35,  0.98,  0.59,  0.090, 0.308]],  // depth interpolated
+            [  5, [  1.48,  1.08,  0.65,  0.109, 0.330]],  // depth interpolated
+            [  6, [  1.75,  1.27,  0.775, 0.132, 0.383]],
+            [  7, [  2.08,  1.50,  0.886, 0.161, 0.446]],  // depth interpolated
+            [  8, [  2.40,  1.75,  1.0,   0.190, 0.510]],
+            [  9, [  2.58,  1.87,  1.078, 0.207, 0.554]],  // depth interpolated
+            [ 10, [  2.80,  2.05,  1.142, 0.229, 0.598]],
+            [ 15, [  3.35,  2.40,  1.2,   0.267, 0.716]],  // depth interpolated
+            [ 20, [  3.95,  2.85,  1.4,   0.305, 0.859]],  // depth interpolated
+            [ 25, [  4.50,  3.25,  1.61,  0.375, 0.920]],  
+            [ 27, [  5.07,  3.65,  1.84,  0.390, 1.108]],
+            [ 30, [  5.60,  4.05,  2.22,  0.451, 1.194]],
+            [ 40, [  6.75,  4.85,  2.63,  0.546, 1.428]],
+            [ 45, [  7.93,  5.64,  3.115, 0.574, 1.796]],
+            [ 50, [  8.95,  6.45,  3.82,  0.775, 1.816]],
+            [ 55, [ 11.35,  8.05,  5.015, 0.867, 2.667]],
+            [ 60, [ 13.45,  9.60,  5.805, 1.067, 2.883]],
+            [ 70, [ 15.70, 11.20,  6.815, 1.194, 3.477]],
+            [ 80, [ 17.75, 12.80,  7.75,  1.526, 3.627]],
+            [ 90, [ 20.20, 14.40,  8.945, 1.530, 4.468]],
+            [100, [ 22.40, 16.00, 10.79,  1.720, 4.925]],
+        ],
+        found = struct_val(info_arr,size)
+    )
+    assert(found, str("Unsupported Torx size, ",size))
+    found;
+
+
+// Function: torx_diam()
+// Synopsis: Returns the diameter of a torx drive.
+// Topics: Screws, Masks
+// See Also: phillips_mask(), hex_drive_mask(), torx_mask(),  phillips_depth(), phillips_diam(), torx_info()
+// Usage:
+//   diam = torx_diam(size);
+// Description: Get the typical outer diameter of Torx profile.
+// Arguments:
+//   size = Torx size.

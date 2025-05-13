@@ -1,0 +1,5 @@
+module tile00(tile_width, line_width) {
+	arc(0.5 * tile_width, [0, 90], line_width);
+	translate([tile_width, tile_width])
+		arc(0.5 * tile_width, [180, 270], line_width);
+}

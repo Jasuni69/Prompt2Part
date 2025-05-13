@@ -1,0 +1,38 @@
+module torus(
+	r=undef,  d=undef,
+	r2=undef, d2=undef,
+	or=undef, od=undef,
+	ir=undef, id=undef,
+	orient=ORIENT_Z, align=V_CENTER, center=undef
+) {
+	orr = get_radius(r=or, d=od, dflt=1.0);
+	irr = get_radius(r=ir, d=id, dflt=0.5);
+	majrad = get_radius(r=r, d=d, dflt=(orr+irr)/2);
+	minrad = get_radius(r=r2, d=d2, dflt=(orr-irr)/2);
+	orient_and_align([(majrad+minrad)*2, (majrad+minrad)*2, minrad*2], orient, align, center=center) {
+		rotate_extrude(convexity=4) {
+			right(majrad) circle(minrad);
+		}
+	}
+}
+
+
+
+// Section: Spheroids
+
+
+// Module: staggered_sphere()
+//
+// Description:
+//   An alternate construction to the standard `sphere()` built-in, with different triangulation.
+//
+// Usage:
+//   staggered_sphere(r|d, [circum])
+//
+// Arguments:
+//   r = Radius of the sphere.
+//   d = Diameter of the sphere.
+//   circum = If true, circumscribes the perfect sphere of the given size.
+//
+// Example:
+//   staggered_sphere(d=100, circum=true, $fn=10);

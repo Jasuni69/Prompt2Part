@@ -1,0 +1,27 @@
+function webbing_shape(r1,r2,r3,c2) = 
+  let(
+    inf = 1e9,
+    d = norm(c2),
+    a2 = atan2(c2.y, c2.x),
+    a = r1+r3,
+    b = r2+r3,
+    B = getLawCosB(a, b, d),
+    C = getLawCosC(a, b, d),
+    c3 = [a*cos(B), a*sin(B)],
+    a1 = atan2(c3.y, c3.x-d), // distnace between centers of r3 and r2
+    minr = min(r1,r2), maxr = max(r1,r2),
+    points = d+minr <= maxr ? // check if one circle is within another
+      circle(r=max(r1,r2), c=[maxr==r2 ? d : 0, 0]) :
+      (r3 >= inf) ? 
+        concat(
+          arc(r=r1, angle=180, offsetAngle=180, c=[0,0], center=true),
+          arc(r=r2, angle=180, offsetAngle=0, c=[d,0], center=true)
+        ) :
+        concat(
+          arc(r=r1, angle=2*(180-B), offsetAngle=180, c=[0,0], center=true),
+          arc(r=r3, angle=-C, offsetAngle=180-B, c=[c3.x,-c3.y]),
+          arc(r=r2, angle=2*a1, offsetAngle=0, c=[d,0], center=true),
+          arc(r=r3, angle=-C, offsetAngle=180+a1, c=c3)
+        )
+  )
+  rotate(a=a2, poly=points);

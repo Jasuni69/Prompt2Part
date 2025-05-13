@@ -1,0 +1,1 @@
+function ax_diode_wire(type)   = type[2]; //! Wire diameter

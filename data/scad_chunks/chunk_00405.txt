@@ -1,0 +1,5 @@
+module variac_hole_positions(type, pitch = undef)   //! Position children at the screw positions
+    for(i = [0 : variac_screws(type) - 1])
+        rotate(360 * (i + 0.5) / variac_screws(type) - 90)
+            translate([pitch ? pitch : variac_screw_pitch(type), 0])
+                children();

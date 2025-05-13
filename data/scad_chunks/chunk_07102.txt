@@ -1,0 +1,2 @@
+function lsystem_turtle(basis, rules, levels=5, step=1, angle=90, startang=0) =
+    turtle(_lsystem_to_turtle(_lsystem_recurse(basis, rules, levels), step=step, angle=angle, startang=startang));

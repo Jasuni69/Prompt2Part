@@ -1,0 +1,38 @@
+function bezier_close_to_axis(bezier, N=3, axis="X") =
+	let(
+		bezend = len(bezier)-1,
+		sp = bezier[0],
+		ep = bezier[bezend]
+	) (axis=="X")? concat(
+		[for (i=[0:N-1]) lerp([sp.x,0], sp, i/N)],
+		bezier,
+		[for (i=[1:N]) lerp(ep, [ep.x,0], i/N)],
+		[for (i=[1:N]) lerp([ep.x,0], [sp.x,0], i/N)]
+	) : (axis=="Y")? concat(
+		[for (i=[0:N-1]) lerp([0,sp.y], sp, i/N)],
+		bezier,
+		[for (i=[1:N]) lerp(ep, [0,ep.y], i/N)],
+		[for (i=[1:N]) lerp([0,ep.y], [0,sp.y], i/N)]
+	) : (
+		assert_in_list("axis", axis, ["X","Y"])
+	);
+
+
+// Function: bezier_offset()
+// Usage:
+//   bezier_offset(inset, bezier, [N], [axis]);
+// Description:
+//   Takes a 2D bezier path and closes it with a matching reversed path that is closer to the given axis by distance `inset`.
+// Arguments:
+//   inset = Amount to lower second path by.
+//   bezier = The 2D bezier path.
+//   N = The degree of the bezier curves.  Cubic beziers have N=3.  Default: 3
+//   axis = The axis to offset towards, "X", or "Y".  Default: "X"
+// Example(2D):
+//   bez = [[50,30], [40,10], [10,50], [0,30], [-10, 10], [-30,10], [-50,20]];
+//   closed = bezier_offset(5, bez);
+//   trace_bezier(closed, size=1);
+// Example(2D):
+//   bez = [[30,50], [10,40], [50,10], [30,0], [10, -10], [10,-30], [20,-50]];
+//   closed = bezier_offset(5, bez, axis="Y");
+//   trace_bezier(closed, size=1);

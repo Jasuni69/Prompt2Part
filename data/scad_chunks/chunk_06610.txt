@@ -1,0 +1,9 @@
+module test_polygon_normal() {
+   circ = path3d(circle($fn=37, r=3));
+
+   assert_approx(polygon_normal(circ), UP);
+   assert_approx(polygon_normal(rot(from=UP,to=[1,2,3],p=circ)), unit([1,2,3]));
+   assert_approx(polygon_normal(rot(from=UP,to=[4,-2,3],p=reverse(circ))), -unit([4,-2,3]));
+   assert_approx(polygon_normal(path3d([[0,0], [10,10], [11,10], [0,-1], [-1,1]])), UP);
+}
+*test_polygon_normal();

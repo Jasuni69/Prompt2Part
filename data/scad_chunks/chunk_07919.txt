@@ -1,0 +1,3 @@
+function px_spiral(init_leng, max_leng, clockwise = false) =
+    let(org = [0, 0])
+    [org, each _px_spiral(org, init_leng, max_leng, clockwise, 0)];

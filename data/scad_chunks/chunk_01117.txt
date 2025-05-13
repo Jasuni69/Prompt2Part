@@ -1,0 +1,1 @@
+function rocker_spades(type)   = type[13];  //! Spade types and positions

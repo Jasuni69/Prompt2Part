@@ -1,0 +1,3 @@
+function getPCBName(yappPCBName, vector) = (getVector(yappPCBName, vector) == false) ? "Main" : pcbByName(getVector(yappPCBName, vector))[0];
+
+//-- Change to reference the top of the PCB not the bottom

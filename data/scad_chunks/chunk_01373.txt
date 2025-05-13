@@ -1,0 +1,1 @@
+function tc_spade_pitch(type)  = type[11];  //! Terminal spade pitch

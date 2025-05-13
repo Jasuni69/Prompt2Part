@@ -1,0 +1,26 @@
+module demo(){
+    steps = 40;
+    l1 = 20;
+    l2 = 5;
+    ls = (l2-l1)/steps;
+    w1 = 8;
+    w2 = 0;
+    ws = (w2-w1)/steps;
+    h = 50;
+    hs = h / steps;
+    wh = w1 * 0.5;
+    
+    a = 90;
+    as = a/steps;
+    points = [[0,wh],[l1, wh],[l1,-wh],[0,-wh]];
+    pl = [for (i=[0:steps])
+        [rotateAroundZ(points[0][0], points[0][1], i*hs, i*as),
+        rotateAroundZ(points[1][0]+i*ls, points[1][1]+ i*ws*0.5, i*hs, i*as),
+        rotateAroundZ(points[2][0]+i*ls, points[2][1]- i*ws*0.5, i*hs, i*as),
+        rotateAroundZ(points[3][0], points[3][1], i*hs, i*as)]
+    ];
+    
+    buildMeshFromPointLayers(pl, true, true,true);
+}
+
+demo();

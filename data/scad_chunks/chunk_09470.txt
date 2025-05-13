@@ -1,0 +1,5 @@
+function is_def(v) = (version_num() > 20190100)? !is_undef(v) : (v != undef);
+
+
+// Function: is_str()
+// Description: Given a value, returns true if it is a string.

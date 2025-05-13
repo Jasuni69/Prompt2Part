@@ -1,0 +1,1 @@
+function strap_extension(type = strap) = type[4]; //! How much length of the strap that can pull out

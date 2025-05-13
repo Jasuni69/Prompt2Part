@@ -1,0 +1,50 @@
+module Buchtung(size=[10,5],l=10,r=2.5,rmin=0,center=true,fn=fn,fn2=fn,phase=360,deltaPhi=-90,help){
+    
+    size=is_list(size)?size:[size,size];
+    rmin=is_list(rmin)?rmin:[rmin,rmin,rmin,rmin];
+    r=is_list(r)?r:[r,r,r,r];
+  loop=len(quad(fn=fn2));
+  points=[
+      for (i=[0:fn])
+        let(
+          zscale=l/(fn),
+          rscale=r-rmin,
+          ir=(1+sin((i*phase/fn+deltaPhi)%360))/2*rscale+rmin
+          )
+        each quad(size,r=ir,z=i*zscale,fn=fn2)
+        ];
+  
+/*
+    for (i=[0:fn-1]){
+      
+        j=i+1;
+        zscale=l/fn;
+        rscale=r-rmin;
+        $info=0;
+        $helpM=false;
+        translate(center?[0,0,-l/2]:[0,0,0]+size/2)Color(i/((fn-1)*1.1))hull(){
+          $idx=i;
+        Tz(i*zscale)linear_extrude(minVal,scale=0)Quad(size,r=(1+sin(i*phase/fn+deltaPhi))*rscale/2+rmin,fn=fn2);
+        Tz(j*zscale+minVal){
+          $idx=j;
+          linear_extrude(minVal,scale=0)Quad(size,r=(1+sin(j*phase/fn+deltaPhi))*rscale/2+rmin,fn=fn2);
+          }
+        }
+    }
+// */
+
+//translate(center?[0,0,-l/2]:[0,0.0,0]+size/2)PolyH(points,loop=floor(fn2/4)*4+4,name=false);
+translate(center?[0,0,-l/2]:[0,0.0,0]+size/2)PolyH(points,loop=loop,name=false);
+
+    
+HelpTxt("Buchtung",[
+    "size",size,
+    "l",l,
+    "r",r,
+    "rmin",rmin,
+    "fn",fn,
+    "fn2=",fn2,
+    "phase",phase,
+    "deltaPhi",deltaPhi],
+     help);
+}

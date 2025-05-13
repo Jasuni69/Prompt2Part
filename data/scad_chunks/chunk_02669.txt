@@ -1,0 +1,9 @@
+module slot(r, l, h = 100, center = false) //! Make a horizontal slot suitable for CNC routing, set h = 0 for 2D version
+    extrude_if(h, center)
+        hull() {
+            translate([l / 2,0])
+                drill(r, 0);
+
+            translate([-l / 2,0])
+                drill(r, 0);
+        }

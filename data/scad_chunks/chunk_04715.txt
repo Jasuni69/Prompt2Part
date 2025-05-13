@@ -1,0 +1,3 @@
+function vsum(v,i=0) = len(v)-1 > i ? v[i] + vsum(v, i+1) : v[i];
+
+// depth of first elements, not necessarily max depth of a structure

@@ -1,0 +1,42 @@
+module variac(type, thickness = 3, dial = true) {   //! Draw the specified variac with screws and possibly the dial when it is fixed and not rotating
+    vitamin(str("variac(", type[0], ", 3): Variac ", type[1]));
+    dia = variac_diameter(type);
+    w = variac_bulge_width(type);
+    h = variac_height(type);
+
+    bulge_r = variac_bulge_dia(type) - dia / 2;
+
+    module shape() {
+        circle(d = dia);
+
+        translate([-w / 2, -bulge_r])
+            square([w, bulge_r]);
+    }
+
+    translate_z(-h) {
+        color("#A66955") {
+            linear_extrude(h)
+                difference() {
+                    shape();
+
+                    variac_hole_positions(type)
+                        circle(screw_radius(variac_screw(type)));
+                }
+
+            linear_extrude(h - 10)
+                shape();
+        }
+        color("silver")
+            translate_z(1)
+                cylinder(d = variac_shaft_dia(type), h = h + variac_shaft_length(type) - 1);
+
+        if(dial)
+            translate_z(thickness + h)
+                variac_dial(type);
+
+        translate_z(thickness + h + (dial ? variac_dial_thickness(type) : 0))
+            not_on_bom()
+                variac_hole_positions(type)
+                    screw_and_washer(variac_screw(type), 16);
+    }
+}

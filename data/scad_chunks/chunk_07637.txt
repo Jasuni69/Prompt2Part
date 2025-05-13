@@ -1,0 +1,94 @@
+module Quad(x=20,y,r,r1,r2,r3,r4,grad=90,grad2=90,fn=fn,center=true,messpunkt=false,basisX=0,trueX=false,centerX,tangent=true,rad,name,help){
+    assert(grad!=0&&grad2!=0);
+    basisX=is_bool(basisX)?basisX?1:0:is_undef(centerX)?basisX:is_bool(centerX)?centerX?1:0:centerX;
+    
+    r=is_undef(rad)?r:rad;
+    fn=is_list(fn)?fn:[fn];
+    
+    y=is_num(y)?y:
+                is_list(x)?x[1]:
+                           x;
+    xNum=is_list(x)?x[0]:x;
+    rundung=runden(min(xNum,y)/PHI/2,2);
+    //r=is_undef(r)?[rundung,rundung,rundung,rundung]:is_list(r)?r:[r,r,r,r];
+
+    r1=is_num(r1)?r1:is_undef(r[0])?is_num(r)?r:rundung:r[0];
+    r2=is_num(r2)?r2:is_undef(r[1])?is_num(r)?r:rundung:r[1];
+    r3=is_num(r3)?r3:is_undef(r[2])?is_num(r)?r:rundung:r[2];
+    r4=is_num(r4)?r4:is_undef(r[3])?is_num(r)?r:rundung:r[3];
+    
+       
+    rf1=1/sin(grad);
+    rf2=1/sin(grad2);
+    shiftX1=tan(grad-90)*y-r1*2*tan(grad-90);
+    shiftX2=tan(grad2-90)*y-r2*2*tan(grad2-90);
+    shiftX3=tan(grad-90)*y-r3*2*tan(grad-90);
+    shiftX4=tan(grad2-90)*y-r4*2*tan(grad2-90);
+    
+
+
+    // konstante x basis mit Rundung (tangetial punkte) / trueX= reale breite
+    bx1L=r3-r3*rf1+shiftX3/2;
+    bx1R=r4-r4*rf2-shiftX4/2; 
+    bx2L=r1-r1*rf1-shiftX1/2;
+    bx2R=r2-r2*rf2+shiftX4/2;
+ 
+    bxL=sign(basisX)*tan(90-grad2)*(y/2);
+    bxR=-sign(basisX)*tan(90-grad)*(y/2);    
+    x=is_list(x)?trueX?basisX==-1?x[0]-bx2L-bx2R:x[0]-bx1L-bx1R:x[0]-bxL-bxR:trueX?basisX==-1?x-bx2L-bx2R:x-bx1L-bx1R:x-bxL-bxR; 
+    trueX1=x+bx1L+bx1R; // real x1 breite
+    trueX2=x+bx2L+bx2R; // real x2 breite
+    
+    p1=-x/2+shiftX1/2-r1*1/tan(grad);
+    p2=x/2+shiftX2/2-r2*1/tan(grad2);
+    p3=-x/2-shiftX3/2+r3*1/tan(grad);
+    p4=x/2-shiftX4/2+r4*1/tan(grad2);
+    x1=abs(p3)+abs(p4);   
+    x2=abs(p1)+abs(p2);
+    
+    
+  
+    cTrans=is_list(center)?([center.x?b(center.x,false)<0?-x:
+                                                           0:
+                                      x,center.y?b(center.y,false)<0?-y:
+                                                                      0:
+                                                 y]
+                           /2):
+    
+    
+    
+           (center?[basisX==1?tangent?-p3+(p3-p4)/2:
+                                     (bx1L-bx1R)/2:
+                            basisX==-1?tangent?-p1+(p1-p2)/2:
+                                               (bx2L-bx2R)/2:
+                                      0,sign(basisX)*y/2]:
+                  tangent?basisX==1?[x/2+shiftX3/2-r3*1/tan(grad),y/2]:// center= false
+                                    [x/2-shiftX1/2+r1*1/tan(grad),y/2]:
+                          basisX==1?[bx1L+x/2,y/2]:
+                                    basisX==-1?[bx2L+x/2,y/2]:
+                                    [x/2,y/2]);
+   
+        
+    k1=Kreis(rand=0,r=r1,t=[-x/2+r1*rf1+shiftX1/2,y/2-r1]+cTrans,grad=180-grad,rot=grad-180,fn=fn[0%len(fn)]/360*(180-grad),center=false);
+    k2=Kreis(rand=0,r=r2,t=[x/2-r2*rf2+shiftX2/2,y/2-r2]+cTrans,grad=grad2,rot=-45+45,fn=fn[1%len(fn)]/360*grad2,center=false);
+    k3=Kreis(rand=0,r=r3,t=[-x/2+r3*rf1-shiftX3/2,-y/2+r3]+cTrans,grad=grad,rot=-225+45,fn=fn[2%len(fn)]/360*grad,center=false);
+    k4=Kreis(rand=0,r=r4,t=[x/2-r4*rf2-shiftX4/2,-y/2+r4]+cTrans,grad=180-grad2,rot=grad2 ,fn=fn[3%len(fn)]/360*(180-grad2),center=false);
+ 
+ union(){
+     polygon(concat(k1,k2,k4,k3),convexity=5);
+     if(messpunkt){
+         Pivot([p1,y/2]+cTrans,active=[1,0,0,1,1],messpunkt=messpunkt);
+         Pivot([p2,y/2]+cTrans,active=[1,0,0,1,1],messpunkt=messpunkt);
+         Pivot([p3,-y/2]+cTrans,active=[1,0,0,1,1],messpunkt=messpunkt);
+         Pivot([p4,-y/2]+cTrans,active=[1,0,0,1,1],messpunkt=messpunkt);
+     }
+     
+ }
+    
+  if(r1+r2>abs(trueX2)||r3+r4>abs(trueX1))Echo("Quad x too small or r too big",color="red");  
+  if(r1+r1*sin(90-grad)+r3+r3*sin(grad-90)>abs(y)||r2+r2*sin(grad2-90)+r4+r4*sin(90-grad2)>abs(y))Echo("Quad y too small or r too big",color="red");
+      
+  InfoTxt("Quad",["TangentsizeX1",x1,"sizeX2",x2,"real",str(trueX1,"/",trueX2),"r",r],name);
+      
+  HelpTxt("Quad",["x",x,"y",y,"r",r,"grad",grad,"grad2",grad2,"fn",fn,"center",center,"name",name,"messpunkt",messpunkt,"trueX",trueX,"centerX",centerX,"tangent",tangent],help);
+}

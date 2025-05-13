@@ -1,0 +1,1 @@
+function nz_perlin3(x, y, z, seed) = _pnoise3(x, y, z, seed);

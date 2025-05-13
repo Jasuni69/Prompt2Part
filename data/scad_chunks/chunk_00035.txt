@@ -1,0 +1,40 @@
+module PlotPolarFunction(PolarFuncN, max_r, min_step=-1) {
+  num_circle_steps = (min_step <= 0) ? 360 :
+    ceil((max_r * 2*PI / min_step) / 8)*8;
+  ang_step = 360 / num_circle_steps;
+  eff_minstep = (min_step <= 0) ? 2*PI*max_r/num_circle_steps : min_step;
+  num_r_steps = ceil(max_r / eff_minstep);
+  r_step = (max_r - 0.001*eff_minstep) / num_r_steps;
+  minplot = 0.001*r_step;
+
+  pointarrays = concat(
+    [
+      [ for (a = [0:ang_step:359.9999])
+          [max_r * cos(a), max_r * sin(a), 0]
+      ]
+    ],
+
+    [ for (r = [max_r:-r_step:0.000001*r_step])
+        [ for (a = [0:ang_step:359.9999]) let(
+              z = CallPolarFunc(r, a, PolarFuncN),
+              zchecked = z < minplot ? minplot : z
+            )
+            [r * cos(a), r * sin(a), zchecked]
+        ]
+    ]
+  );
+
+  PlotClosePoints(pointarrays);
+}
+
+
+// Plots the numbered function AxialFunc1 through AxialFunc9, where
+// AxialFuncN is 1 through 9.  Each function is a function of z-height and
+// angle, and returns the radius outward in the xy-plane.
+// max_r is the outer radius, and min_step is the smallest step size between
+// points.
+// minz_stepz_maxz should be [minz, stepz, maxz], and likewise for y,
+// specifying the domain to be plotted.
+// To guarantee a properly manifold shape, the routine will only render
+// strictly positive values (r>0) of the defined function.  Add an offset if
+// needed to achieve this.

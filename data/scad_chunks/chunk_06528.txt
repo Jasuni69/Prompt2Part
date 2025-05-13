@@ -1,0 +1,22 @@
+function all_integer(x) =
+    is_num(x)? is_int(x) :
+    is_list(x)? (x != [] && [for (xx=x) if(!is_int(xx)) 1] == []) :
+    false;
+
+
+// Function: is_nan()
+// Synopsis: Return true if the argument is "not a number".
+// Topics: Type Checking
+// See Also: typeof(), is_type(), is_str(), is_def(), is_int(), is_finite()
+// Usage:
+//   bool = is_nan(x);
+// Description:
+//   Returns true if a given value `x` is nan, a floating point value representing "not a number".
+// Arguments:
+//   x = value to check
+// Example:
+//   bool = is_nan(undef);  // Returns: false
+//   bool = is_nan(false);  // Returns: false
+//   bool = is_nan(42);     // Returns: false
+//   bool = is_nan("foo");  // Returns: false
+//   bool = is_nan(NAN);    // Returns: true

@@ -1,0 +1,2 @@
+function det_help(m, i, r) = len(r) == 0 ? 1 :
+    m[len(m)-len(r)][r[i]]*det_help(m,0,remove(r,i)) - (i+1<len(r)? det_help(m, i+1, r) : 0);

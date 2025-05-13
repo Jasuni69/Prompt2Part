@@ -1,0 +1,1 @@
+function spool_height(type)        = spool_width(type) + 2 * spool_hub_thickness(type); //! Outside width

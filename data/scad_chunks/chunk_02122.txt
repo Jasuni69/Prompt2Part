@@ -1,0 +1,2 @@
+function pbox(name, wall, top_t, base_t, radius, size, foot = false, screw = false, short_insert = false, ridges = [0, 0]) //! Construct a printed box property list
+    = concat([name, wall, top_t, base_t, foot, screw, short_insert, radius, ridges], size);

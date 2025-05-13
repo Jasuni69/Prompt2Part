@@ -1,0 +1,1 @@
+function blower_bore(type)        = type[5]; //! The air intake hole diameter

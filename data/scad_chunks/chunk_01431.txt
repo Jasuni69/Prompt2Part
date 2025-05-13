@@ -1,0 +1,1 @@
+function ringterm_width(type)        = type[4];    //! Width of the tail

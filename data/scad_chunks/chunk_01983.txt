@@ -1,0 +1,1 @@
+function ssr_shroud_pitch(type) = ssr_width(type) + 2 * wall - 2 * boss_r - eps;

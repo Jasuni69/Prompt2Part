@@ -1,0 +1,8 @@
+module hookLidOutsidePre()
+{
+  //if (printMessages) echo("hookLidOutsidePre() ..");
+  
+} //-- hookLidOutsidePre()
+
+//===========================================================
+//-- origin = box(0,0,shellHeight)

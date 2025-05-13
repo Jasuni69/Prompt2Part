@@ -1,0 +1,45 @@
+module gear_tooth_profile(
+	mm_per_tooth    = 3,     //this is the "circular pitch", the circumference of the pitch circle divided by the number of teeth
+	number_of_teeth = 11,    //total number of teeth around the entire perimeter
+	pressure_angle  = 28,    //Controls how straight or bulged the tooth sides are. In degrees.
+	backlash        = 0.0,   //gap between two meshing teeth, in the direction along the circumference of the pitch circle
+	bevelang        = 0.0,   //Gear face angle for bevelled gears.
+	clearance       = undef, //gap between top of a tooth on one gear and bottom of valley on a meshing gear (in millimeters)
+	interior        = false,
+	valleys         = true
+) {
+	path = gear_tooth_profile(
+		mm_per_tooth    = mm_per_tooth,
+		number_of_teeth = number_of_teeth,
+		pressure_angle  = pressure_angle,
+		backlash        = backlash,
+		bevelang        = bevelang,
+		clearance       = clearance,
+		interior        = interior,
+		valleys         = valleys
+	);
+	polygon(path);
+}
+
+
+// Module: gear2d()
+// Description:
+//   Creates a 2D involute spur gear, with reasonable defaults for all the parameters.
+//   Normally, you should just specify the first 2 parameters, and let the rest be default values.
+//   Meshing gears must match in mm_per_tooth, pressure_angle, and twist,
+//   and be separated by the sum of their pitch radii, which can be found with pitch_radius().
+// Arguments:
+//   mm_per_tooth  = This is the "circular pitch", the circumference of the pitch circle divided by the number of teeth
+//   number_of_teeth = Total number of teeth along the rack
+//   teeth_to_hide = Number of teeth to delete to make this only a fraction of a circle
+//   pressure_angle = Controls how straight or bulged the tooth sides are. In degrees.
+//   clearance = Gap between top of a tooth on one gear and bottom of valley on a meshing gear (in millimeters)
+//   backlash = Gap between two meshing teeth, in the direction along the circumference of the pitch circle
+//   bevelang = Angle of beveled gear face.
+//   interior = If true, create a mask for difference()ing from something else.
+// Example(2D): Typical Gear Shape
+//   gear2d(mm_per_tooth=5, number_of_teeth=20);
+// Example(2D): Lower Pressure Angle
+//   gear2d(mm_per_tooth=5, number_of_teeth=20, pressure_angle=20);
+// Example(2D): Partial Gear
+//   gear2d(mm_per_tooth=5, number_of_teeth=20, teeth_to_hide=15, pressure_angle=20);

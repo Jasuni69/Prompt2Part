@@ -1,0 +1,43 @@
+function accumulate(func, list, init=0) =
+    assert(is_function(func))
+    assert(is_list(list))
+    let(
+        l = len(list),
+        a = function (x, i, out)
+            i >= l ? out :
+            let( x=func(x,list[i]) )
+            a(x, i+1, [each out, x])
+    ) a(init, 0, []);
+
+
+// Function: while()
+// Synopsis: While a `cond` function returns true, iteratively calls a work function, returning the final result.
+// Topics: Function Literals, Looping, Iteration
+// See Also: map(), filter(), reduce(), accumulate(), while(), for_n()
+// Usage:
+//   x = while(init, cond, func);
+// Description:
+//   Repeatedly calls the function literals in `cond` and `func` until the `cond` call returns false.
+//   Both `cond` and `func` have the signature `function (i,x)`. The variable `i` is passed the iteration
+//   number, starting with 0.  On the first iteration, the variable `x` is given by `init`.  On subsequent
+//   iterations, `x` is given by the results of the previous call to `func`.  Returns the resulting `x` of
+//   the final iteration.  In pseudo-code, this is effectively:
+//   ```
+//   function while(init, cond, func):
+//       x = init;
+//       i = 0;
+//       while cond(i, x):
+//           x = func(i, x);
+//           i = i + 1;
+//       return x;
+//   ```
+// Arguments:
+//   init = The initial value for `x`.
+//   cond = A function literal with signature `function (i,x)`, called to determine if the loop should continue.  Returns true if the loop should continue.
+//   func = A function literal with signature `function (i,x)`, called on each iteration.  The returned value is passed as `x` on the next iteration.
+// Example:
+//   fibs = while(
+//       init = [1,1],
+//       cond = function (i,x) select(x,-1)<25,
+//       func = function (i,x) concat(x, [sum(select(x,-2,-1))])
+//   );  // Returns: [1,1,2,3,5,8,13,21]

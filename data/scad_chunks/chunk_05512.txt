@@ -1,0 +1,31 @@
+function _prism_fillet_plane(name, bot, top, d, k, N, overlap,debug) = 
+    let(
+        dir = sign(top[0].z-bot[0].z),    // Negative if we are upside down, with "top" below "bot"
+        isect = [for (i=idx(top)) plane_line_intersection([0,0,1,0], [top[i],bot[i]])]
+    )
+    d==0 ? [isect,
+            if (overlap!=0) isect,
+            if (overlap!=0) move(overlap*dir*DOWN,isect),
+      ] :
+    let(
+        base_normal = -path3d(path_normals(path2d(isect), closed=true)),
+        mesh = transpose([for(i=idx(top))
+          assert(norm(top[i]-isect[i])>=d,"Prism is too short for fillet to fit")
+          let(
+              d_step = isect[i]+abs(d)*unit(top[i]-isect[i]),
+              edgepoint = isect[i]+d*dir*base_normal[i],
+              bez = _smooth_bez_fill([d_step, isect[i], edgepoint],k)
+          )
+          [
+            each bezier_curve(bez,N,endpoint=true),
+            if (overlap!=0) edgepoint + overlap*dir*DOWN
+          ]
+        ])
+    )
+    assert(debug || is_path_simple(path2d(select(mesh,-2)),closed=true),"Fillet doesn't fit: it intersects itself")
+    mesh;
+
+
+// This function was written for a z-aligned cylinder but the actual
+// upstream assumption is an x-aligned cylinder, so input is rotated and
+// output is un-rotated.

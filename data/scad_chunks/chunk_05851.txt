@@ -1,0 +1,15 @@
+function _bt_nearest(p, k, points, tree, answers=[]) =
+    assert( is_list(tree) 
+            && (   ( len(tree)==1 && is_list(tree[0]) )
+                || ( len(tree)==4 && is_num(tree[0]) && is_num(tree[1]) ) ), 
+            "\nThe tree is invalid.")
+    len(tree)==1
+    ?   _insert_many(answers, k, [for(entry=tree[0]) [entry, norm(points[entry]-p)]])
+    :   let( d = norm(p-points[tree[0]]) )
+        len(answers)==k && ( d > last(answers)[1]+tree[1] ) ? answers :
+        let(
+            answers1 = _insert_sorted(answers, k, [tree[0],d]),
+            answers2 = _bt_nearest(p, k, points, tree[2], answers1),
+            answers3 = _bt_nearest(p, k, points, tree[3], answers2)
+         )
+         answers3;

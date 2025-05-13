@@ -1,0 +1,45 @@
+function _working_pressure_angle(teeth1,profile_shift1, teeth2, profile_shift2, pressure_angle, helical) =
+  let(
+      pressure_angle = atan(tan(pressure_angle)/cos(helical))
+  )
+  teeth1==0 || teeth2==0 ? pressure_angle
+  :
+  let(
+      rhs = 2*(profile_shift1+profile_shift2)/(teeth1+teeth2)*cos(helical)*tan(pressure_angle) + _invol(pressure_angle)
+  )
+  assert(rhs>0, "Total profile shift is too small, so working pressure angle is negative, and no valid gear separation exists")
+  let(
+      pa_eff = root_find(function (x) _invol(x)-rhs, 1, 75)
+  )
+  pa_eff;
+
+
+
+// Function: gear_dist_skew()
+// Usage:
+// Synopsis: Returns the distance between two helical gear centers with skew axes.  
+// Topics: Gears, Parts
+// See Also: gear_dist(), worm(), worm_gear(), pitch_radius(), outer_radius()
+// Usage:
+//   dist = gear_dist_skew(mod=|diam_pitch=|circ_pitch=, teeth1, teeth2, helical1, helical2, [profile_shift1], [profile_shift2], [pressure_angle=]
+// Description:
+//   Calculate the distance between two helical gears that mesh with non-parallel axes, taking into account
+//   profile shift and the helical angles.
+// Arguments:
+//   teeth1 = Total number of teeth in the first gear.  If given 0, we assume this is a rack or worm.
+//   teeth2 = Total number of teeth in the second gear.  If given 0, we assume this is a rack or worm.
+//   helical1 = The helical angle (from vertical) of the teeth on the first gear. 
+//   helical1 = The helical angle (from vertical) of the teeth on the second gear.
+//   profile_shift1 = Profile shift factor x for the first gear.  Default: "auto"
+//   profile_shift2 = Profile shift factor x for the second gear.  Default: "auto"
+//   ---
+//   diam_pitch = The diametral pitch, or number of teeth per inch of pitch diameter.  The diametral pitch is a completely different thing than the pitch diameter.
+//   mod = The module of the gear (pitch diameter / teeth)
+//   circ_pitch = The circular pitch, the distance between teeth centers around the pitch circle.
+//   pressure_angle = The pressure angle of the gear.
+//   backlash = Add extra space to produce a total of 2*backlash between the two gears. 
+// Example(3D,Med,NoAxes,VPT=[-0.302111,3.7924,-9.252],VPR=[55,0,25],VPD=155.556): Non-parallel Helical Gears (without any profile shifting)
+//   circ_pitch=5; teeth1=15; teeth2=24; ha1=45; ha2=30; thick=10;
+//   d = gear_dist_skew(circ_pitch=circ_pitch, teeth1, teeth2, helical1=ha1, helical2=ha2);
+//   left(d/2) spur_gear(circ_pitch, teeth1, helical=ha1, thickness=thick, gear_spin=-90);
+//   right(d/2) xrot(ha1+ha2) spur_gear(circ_pitch, teeth2, helical=ha2, thickness=thick, gear_spin=90-180/teeth2);

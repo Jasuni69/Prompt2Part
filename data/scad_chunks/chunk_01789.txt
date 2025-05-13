@@ -1,0 +1,1 @@
+function pdip_pin_h(type) = type[3]; //! Pin height

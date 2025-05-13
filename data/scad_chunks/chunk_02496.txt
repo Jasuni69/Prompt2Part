@@ -1,0 +1,2 @@
+function coreXY_drive_pulley_x_alignment(type) = //! Belt alignment offset of the drive pulley relative to the anchor pulley
+    (pulley_od(coreXY_drive_pulley(type)) - pulley_od(coreXY_toothed_idler(type))) / 2;

@@ -1,0 +1,1 @@
+function fixing_block_width(screw = def_screw) = 4 * wall + 3 * insert_outer_d(screw_insert(screw)); //! Width given screw size

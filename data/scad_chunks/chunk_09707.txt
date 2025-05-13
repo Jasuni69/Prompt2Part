@@ -1,0 +1,12 @@
+function Q_Mul(a, b) = [
+	a[3]*b.x  + a.x*b[3] + a.y*b.z  - a.z*b.y,
+	a[3]*b.y  - a.x*b.z  + a.y*b[3] + a.z*b.x,
+	a[3]*b.z  + a.x*b.y  - a.y*b.x  + a.z*b[3],
+	a[3]*b[3] - a.x*b.x  - a.y*b.y  - a.z*b.z,
+];
+
+
+// Function: Q_Dot()
+// Usage:
+//   Q_Dot(a, b)
+// Description: Calculates the dot product between quaternions `a` and `b`.

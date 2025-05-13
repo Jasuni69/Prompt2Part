@@ -1,0 +1,50 @@
+function align_polygon(reference, poly, angles, cp, trans, return_ind=false) =
+    let(reference=force_path(reference,"reference"),
+        poly=force_path(poly,"poly"))
+    assert(is_undef(trans) || (is_undef(angles) && is_undef(cp)), "\nCannot give both angles/cp and trans as input.")
+    let(
+        trans = is_def(trans) ? trans :
+            assert( (is_vector(angles) && len(angles)>0) || valid_range(angles),
+                "\nThe `angle` parameter must be a range or a non void list of numbers.")
+            [for(angle=angles) zrot(angle,cp=cp)]
+    )
+    assert(is_path(reference,dim=2), "reference must be a 2D polygon")
+    assert(is_path(poly,dim=2), "poly must be a 2D polygon")
+    assert(len(reference)==len(poly), "The polygons must have the same length.")
+    let(     // alignments is a vector of entries of the form: [polygon, error]
+        alignments = [
+            for(T=trans)
+              reindex_polygon(
+                  reference,
+                  apply(T,poly),
+                  return_error=true
+              )
+        ],
+        scores = column(alignments,1),
+        minscore = min(scores),
+        minind = [for(i=idx(scores)) if (scores[i]<minscore+EPSILON) i],
+        dummy = is_def(angles) ? echo(best_angles = select(list(angles), minind)):0,
+        best = minind[0]
+    )
+    return_ind ? (is_def(angles) ? list(angles)[best] : best)
+    : alignments[best][0];
+    
+
+// Function: are_polygons_equal()
+// Synopsis: Check if two polygons (not necessarily in the same point order) are equal.  
+// Topics: Geometry, Polygons, Comparators
+// See Also: reindex_polygon(), align_polygon(), are_polygons_equal()
+// Usage:
+//    bool = are_polygons_equal(poly1, poly2, [eps])
+// Description:
+//    Returns true if poly1 and poly2 are the same polongs
+//    within given epsilon tolerance.
+// Arguments:
+//    poly1 = first polygon
+//    poly2 = second polygon
+//    eps = tolerance for comparison
+// Example(NORENDER):
+//    are_polygons_equal(pentagon(r=4),
+//                   rot(360/5, p=pentagon(r=4))); // returns true
+//    are_polygons_equal(pentagon(r=4),
+//                   rot(90, p=pentagon(r=4)));    // returns false

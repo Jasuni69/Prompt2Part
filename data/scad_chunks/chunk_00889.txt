@@ -1,0 +1,1 @@
+function rod_end_bore_width(type)            = type[3];    //! Width

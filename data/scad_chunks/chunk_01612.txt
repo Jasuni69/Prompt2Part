@@ -1,0 +1,1 @@
+function sheet_thickness(type) = type[2]; //! Thickness

@@ -1,0 +1,37 @@
+module chamfer_hole_mask(r=undef, d=undef, chamfer=0.25, ang=45, from_end=false, overage=0.1)
+{
+	r = get_radius(r=r, d=d, dflt=1);
+	h = chamfer * (from_end? 1 : tan(90-ang));
+	r2 = r + chamfer * (from_end? tan(ang) : 1);
+	$fn = segs(r);
+	difference() {
+		union() {
+			cylinder(r=r2, h=overage, center=false);
+			down(h) cylinder(r1=r, r2=r2, h=h, center=false);
+		}
+		cylinder(r=r-overage, h=h*2.1+overage, center=true);
+	}
+}
+
+
+
+// Section: Filleting/Rounding
+
+// Module: fillet_mask()
+// Usage:
+//   fillet_mask(l|h, r, [orient], [align], [center])
+// Description:
+//   Creates a shape that can be used to fillet a vertical 90 degree edge.
+//   Difference it from the object to be filletted.  The center of the mask
+//   object should align exactly with the edge to be filletted.
+// Arguments:
+//   l = Length of mask.
+//   r = Radius of the fillet.
+//   orient = Orientation of the mask.  Use the `ORIENT_` constants from `constants.h`.  Default: vertical.
+//   align = Alignment of the mask.  Use the `V_` constants from `constants.h`.  Default: centered.
+//   center = If true, centers vertically.  If false, lift up to sit on top of the XY plane.  Overrides `align`.
+// Example:
+//   difference() {
+//       cube(size=100, center=false);
+//       #fillet_mask(l=100, r=25, orient=ORIENT_Z, align=V_UP);
+//   }

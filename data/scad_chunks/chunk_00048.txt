@@ -1,0 +1,50 @@
+translate([x0 + 170, leadnuts_y])
+    rod_ends();
+
+translate([x0 + 120, leadnuts_y])
+    leadnuthousings();
+
+translate([x0, linear_bearings_y]) {
+    translate([0, -30])
+        linear_bearings();
+
+    rods();
+}
+
+translate([x0, steppers_y])
+    stepper_motors();
+
+translate([x0 + 450, steppers_y])
+    gear_motors();
+
+translate([x0, sheets_y])
+    sheets();
+
+translate([x0, pcbs_y])
+    pcbs();
+
+translate([x0, displays_y])
+    displays();
+
+translate([x0, fans_y]) {
+    fans();
+
+    translate_z(3)
+        fan_guards();
+}
+
+translate([760, fans_y])
+    variacs();
+
+translate([x0, psus_y]) {
+    psus();
+
+    psu_shrouds();
+}
+
+zipties_y = 0;
+bulldogs_y = zipties_y + 30;
+swiss_clips_y = bulldogs_y + 35;
+
+translate([x1, zipties_y])
+    zipties();

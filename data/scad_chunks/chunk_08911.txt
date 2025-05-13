@@ -1,0 +1,5 @@
+function node(position, option) = [
+    position,                   // position
+    rands(0, 1, len(position)), // velocity
+    option                      // option
+];

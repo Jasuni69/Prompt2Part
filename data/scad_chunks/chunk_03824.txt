@@ -1,0 +1,2 @@
+function spanAllButLast(range=360, totalPieces = $totalPieces)
+  = span(range=range,allButLast = true,totalPieces = totalPieces);

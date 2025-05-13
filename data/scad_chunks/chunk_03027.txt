@@ -1,0 +1,25 @@
+module hookBaseOutside()
+{
+  translate([(shellLength/2)-7.5,(shellWidth-wallThickness)-3,1])
+  {
+    difference()
+    {
+      union()
+      {
+        cube([15,10,10]);
+        translate([0,10,5])
+          rotate([0,90,0])
+            cylinder(d=10, h=15);
+      }
+      translate([-1,10,5])
+      {
+        rotate([0,90,0])
+          color("red") cylinder(d=4.5, h=17);
+      }
+      translate([4.8,0,-0.5])
+        cube([5.4,16,11]);
+    }
+  
+  } // translate
+  
+} //  hookBaseOutside()

@@ -1,0 +1,1 @@
+function spring_ground(type) = type[6]; //! Are the ends ground flat

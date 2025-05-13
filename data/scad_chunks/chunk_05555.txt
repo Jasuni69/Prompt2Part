@@ -1,0 +1,18 @@
+function f_nand(a,b) = f_2arg(function(a,b) !(a && b))(a,b);
+
+
+// Function: f_xor()
+// Synopsis: Returns a function to check if either `a` or `b`, but not both, are true.
+// Topics: Function Literals, Logic, Boolean Operations
+// See Also: f_or(), f_and(), f_nor(), f_nand(), f_xor(), f_not()
+// Usage:
+//   fn = f_xor();
+//   fn = f_xor(a=);
+//   fn = f_xor(b);
+//   fn = f_xor(a=,b=);
+// Description:
+//   A factory that generates function literals based on `(!a && b) || (a && !b)`, where
+//   either or both of the `a` or `b` arguments can be replaced with constants.
+// Arguments:
+//   a = If given, replaces the first argument.
+//   b = If given, replaces the second argument.

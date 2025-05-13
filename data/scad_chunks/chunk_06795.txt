@@ -1,0 +1,4 @@
+module test_trapezoid() {
+    assert_equal(trapezoid(w1=100,w2=80,h=60,anchor=CENTER), [[50,-30],[-50,-30],[-40,30],[40,30]]);
+}
+test_trapezoid();

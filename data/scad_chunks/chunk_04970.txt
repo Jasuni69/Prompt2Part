@@ -1,0 +1,438 @@
+module stroke(
+    path, width=1, closed,
+    endcaps,       endcap1,        endcap2,        joints,       dots,
+    endcap_width,  endcap_width1,  endcap_width2,  joint_width,  dots_width,
+    endcap_length, endcap_length1, endcap_length2, joint_length, dots_length,
+    endcap_extent, endcap_extent1, endcap_extent2, joint_extent, dots_extent,
+    endcap_angle,  endcap_angle1,  endcap_angle2,  joint_angle,  dots_angle,
+    endcap_color,  endcap_color1,  endcap_color2,  joint_color,  dots_color, color,
+    trim, trim1, trim2, singleton_scale=2,
+    convexity=10
+) {
+    no_children($children);
+    module setcolor(clr) {
+        if (clr==undef) {
+            children();
+        } else {
+            color(clr) children();
+        }
+    }
+    function _shape_defaults(cap) =
+        cap==undef?     [1.00, 0.00, 0.00] :
+        cap==false?     [1.00, 0.00, 0.00] :
+        cap==true?      [1.00, 1.00, 0.00] :
+        cap=="butt"?    [1.00, 0.00, 0.00] :
+        cap=="round"?   [1.00, 1.00, 0.00] :
+        cap=="chisel"?  [1.00, 1.00, 0.00] :
+        cap=="square"?  [1.00, 1.00, 0.00] :
+        cap=="block"?   [2.00, 1.00, 0.00] :
+        cap=="diamond"? [2.50, 1.00, 0.00] :
+        cap=="dot"?     [2.00, 1.00, 0.00] :
+        cap=="x"?       [2.50, 0.40, 0.00] :
+        cap=="cross"?   [3.00, 0.33, 0.00] :
+        cap=="line"?    [3.50, 0.22, 0.00] :
+        cap=="arrow"?   [3.50, 0.40, 0.50] :
+        cap=="arrow2"?  [3.50, 1.00, 0.14] :
+        cap=="tail"?    [3.50, 0.47, 0.50] :
+        cap=="tail2"?   [3.50, 0.28, 0.50] :
+        is_path(cap)?   [0.00, 0.00, 0.00] :
+        assert(false, str("Invalid cap or joint: ",cap));
+
+    function _shape_path(cap,linewidth,w,l,l2) = (
+        cap=="butt" || cap==false || cap==undef ? [] : 
+        cap=="round" || cap==true ? scale([w,l], p=circle(d=1, $fn=max(8, segs(w/2)))) :
+        cap=="chisel"?  scale([w,l], p=circle(d=1,$fn=4)) :
+        cap=="diamond"? circle(d=w,$fn=4) :
+        cap=="square"?  scale([w,l], p=square(1,center=true)) :
+        cap=="block"?   scale([w,l], p=square(1,center=true)) :
+        cap=="dot"?     circle(d=w, $fn=max(12, segs(w*3/2))) :
+        cap=="x"?       [for (a=[0:90:270]) each rot(a,p=[[w+l/2,w-l/2]/2, [w-l/2,w+l/2]/2, [0,l/2]]) ] :
+        cap=="cross"?   [for (a=[0:90:270]) each rot(a,p=[[l,w]/2, [-l,w]/2, [-l,l]/2]) ] :
+        cap=="line"?    scale([w,l], p=square(1,center=true)) :
+        cap=="arrow"?   [[0,0], [w/2,-l2], [w/2,-l2-l], [0,-l], [-w/2,-l2-l], [-w/2,-l2]] :
+        cap=="arrow2"?  [[0,0], [w/2,-l2-l], [0,-l], [-w/2,-l2-l]] :
+        cap=="tail"?    [[0,0], [w/2,l2], [w/2,l2-l], [0,-l], [-w/2,l2-l], [-w/2,l2]] :
+        cap=="tail2"?   [[w/2,0], [w/2,-l], [0,-l-l2], [-w/2,-l], [-w/2,0]] :
+        is_path(cap)? cap :
+        assert(false, str("Invalid endcap: ",cap))
+    ) * linewidth;
+
+    closed = default(closed, is_region(path));
+    check1 = assert(is_bool(closed))
+             assert(!closed || num_defined([endcaps,endcap1,endcap2])==0, "Cannot give endcap parameter(s) with closed path or region");
+
+    dots = dots==true? "dot" : dots;
+
+    endcap1 = first_defined([endcap1, endcaps, dots, "round"]);
+    endcap2 = first_defined([endcap2, endcaps, if (!closed) dots, "round"]);
+    joints  = first_defined([joints, dots, "round"]);
+    check2 =
+      assert(is_bool(endcap1) || is_string(endcap1) || is_path(endcap1))
+      assert(is_bool(endcap2) || is_string(endcap2) || is_path(endcap2))
+      assert(is_bool(joints)  || is_string(joints)  || is_path(joints));
+
+    endcap1_dflts = _shape_defaults(endcap1);
+    endcap2_dflts = _shape_defaults(endcap2);
+    joint_dflts   = _shape_defaults(joints);
+
+    endcap_width1 = first_defined([endcap_width1, endcap_width, dots_width, endcap1_dflts[0]]);
+    endcap_width2 = first_defined([endcap_width2, endcap_width, dots_width, endcap2_dflts[0]]);
+    joint_width   = first_defined([joint_width, dots_width, joint_dflts[0]]);
+
+    endcap_length1 = first_defined([endcap_length1, endcap_length, dots_length, endcap1_dflts[1]*endcap_width1]);
+    endcap_length2 = first_defined([endcap_length2, endcap_length, dots_length, endcap2_dflts[1]*endcap_width2]);
+    joint_length   = first_defined([joint_length, dots_length, joint_dflts[1]*joint_width]);
+
+    endcap_extent1 = first_defined([endcap_extent1, endcap_extent, dots_extent, endcap1_dflts[2]*endcap_width1]);
+    endcap_extent2 = first_defined([endcap_extent2, endcap_extent, dots_extent, endcap2_dflts[2]*endcap_width2]);
+    joint_extent   = first_defined([joint_extent, dots_extent, joint_dflts[2]*joint_width]);
+
+    endcap_angle1 = first_defined([endcap_angle1, endcap_angle, dots_angle]);
+    endcap_angle2 = first_defined([endcap_angle2, endcap_angle, dots_angle]);
+    joint_angle = first_defined([joint_angle, dots_angle]);
+    
+    check3 =
+      assert(all_nonnegative([endcap_length1]))
+      assert(all_nonnegative([endcap_length2]))
+      assert(all_nonnegative([joint_length]));
+      assert(all_nonnegative([endcap_extent1]))
+      assert(all_nonnegative([endcap_extent2]))
+      assert(all_nonnegative([joint_extent]));
+      assert(is_undef(endcap_angle1)||is_finite(endcap_angle1))
+      assert(is_undef(endcap_angle2)||is_finite(endcap_angle2))
+      assert(is_undef(joint_angle)||is_finite(joint_angle))
+      assert(all_positive([singleton_scale]))
+      assert(all_positive(width));
+      
+    endcap_color1 = first_defined([endcap_color1, endcap_color, dots_color, color]);
+    endcap_color2 = first_defined([endcap_color2, endcap_color, dots_color, color]);
+    joint_color = first_defined([joint_color, dots_color, color]);
+
+    // We want to allow "paths" with length 1, so we can't use the normal path/region checks
+    paths = is_matrix(path) ? [path] : path;
+    assert(is_list(paths),"The path argument must be a list of 2D or 3D points, or a region.");
+    attachable(two_d=len(path[0])==2)
+    {
+      for (path = paths) {
+          pathvalid = is_path(path,[2,3]) || same_shape(path,[[0,0]]) || same_shape(path,[[0,0,0]]);
+
+          check4 = assert(pathvalid,"The path argument must be a list of 2D or 3D points, or a region.")
+                   assert(is_num(width) || len(width)==len(path),
+                          "width must be a number or a vector the same length as the path (or all components of a region)");
+          path = deduplicate( closed? list_wrap(path) : path );
+          width = is_num(width)? [for (x=path) width]
+                : closed? list_wrap(width)
+                : width;
+          check4a=assert(len(width)==len(path), "path had duplicated points and width was given as a list: this is not allowd");
+
+          endcap_shape1 = _shape_path(endcap1, width[0], endcap_width1, endcap_length1, endcap_extent1);
+          endcap_shape2 = _shape_path(endcap2, last(width), endcap_width2, endcap_length2, endcap_extent2);
+
+          trim1 = width[0] * first_defined([
+              trim1, trim,
+              (endcap1=="arrow")? endcap_length1-0.01 :
+              (endcap1=="arrow2")? endcap_length1*3/4 :
+              0
+          ]);
+
+          trim2 = last(width) * first_defined([
+              trim2, trim,
+              (endcap2=="arrow")? endcap_length2-0.01 :
+              (endcap2=="arrow2")? endcap_length2*3/4 :
+              0
+          ]);
+          check10 = assert(is_finite(trim1))
+                    assert(is_finite(trim2));
+
+          if (len(path) == 1) {
+              if (len(path[0]) == 2) {
+                  // Endcap1
+                  setcolor(endcap_color1) {
+                      translate(path[0]) {
+                          mat = is_undef(endcap_angle1)? ident(3) : zrot(endcap_angle1);
+                          multmatrix(mat) polygon(scale(singleton_scale,endcap_shape1));
+                      }
+                  }
+              } else {
+                  // Endcap1
+                  setcolor(endcap_color1) {
+                      translate(path[0]) {
+                          $fn = segs(width[0]/2);
+                          if (is_undef(endcap_angle1)) {
+                              rotate_extrude(convexity=convexity) {
+                                  right_half(planar=true) {
+                                      polygon(endcap_shape1);
+                                  }
+                              }
+                          } else {
+                              rotate([90,0,endcap_angle1]) {
+                                  linear_extrude(height=max(widths[0],0.001), center=true, convexity=convexity) {
+                                      polygon(endcap_shape1);
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          } else {
+              dummy=assert(trim1<path_length(path)-trim2, "Path is too short for endcap(s).  Try a smaller width, or set endcap_length to a smaller value.");
+              // This section shortens the path to allow room for the specified endcaps.  Note that if
+              // the path is closed, there are not endcaps, so we don't shorten the path, but in that case we
+              // duplicate entry 1 so that the path wraps around a little more and we can correctly create all the joints.
+              // (Why entry 1?  Because entry 0 was already duplicated by a list_wrap() call.)  
+              pathcut = path_cut_points(path, [trim1, path_length(path)-trim2], closed=false);
+              pathcut_su = _cut_to_seg_u_form(pathcut,path);
+              path2 = closed ? [each path, path[1]]
+                             : _path_cut_getpaths(path, pathcut, closed=false)[1];
+              widths = closed ? [each width, width[1]]
+                              : _path_select(width, pathcut_su[0][0], pathcut_su[0][1], pathcut_su[1][0], pathcut_su[1][1]);
+              start_vec = path[0] - path[1];
+              end_vec = last(path) - select(path,-2);
+
+              if (len(path[0]) == 2) {  // Two dimensional case
+                  // Straight segments
+                  setcolor(color) {
+                      for (i = idx(path2,e=-2)) {
+                          seg = select(path2,i,i+1);
+                          delt = seg[1] - seg[0];
+                          translate(seg[0]) {
+                              rot(from=BACK,to=delt) {
+                                  trapezoid(w1=widths[i], w2=widths[i+1], h=norm(delt), anchor=FRONT);
+                              }
+                          }
+                      }
+                  }
+
+                  // Joints
+                  setcolor(joint_color) {
+                      for (i = [1:1:len(path2)-2]) {
+                          $fn = quantup(segs(widths[i]/2),4);
+                          translate(path2[i]) {
+                              if (joints != undef && joints != "round" && joints != "square") {
+                                  joint_shape = _shape_path(
+                                                    joints, widths[i],
+                                                    joint_width,
+                                                    joint_length,
+                                                    joint_extent  
+                                  );
+                                  v1 = unit(path2[i] - path2[i-1]);
+                                  v2 = unit(path2[i+1] - path2[i]);
+                                  mat = is_undef(joint_angle)
+                                    ? rot(from=BACK,to=v1)
+                                    : zrot(joint_angle);
+                                  multmatrix(mat) polygon(joint_shape);
+                              } else {
+                                  // These are parallel to the path
+                                  v1 = path2[i] - path2[i-1];
+                                  v2 = path2[i+1] - path2[i];
+                                  ang = modang(v_theta(v2) - v_theta(v1));
+                                  // Need 90 deg offset to make wedge perpendicular to path, and the wedge
+                                  // position depends on whether we turn left (ang<0) or right (ang>0)
+                                  theta = v_theta(v1) - sign(ang)*90;
+
+                                  if (!approx(ang,0)){
+                                      // This section creates a rounded wedge to fill in gaps.  The wedge needs to be oversized for overlap
+                                      // in all directions, including its apex, but not big enough to create artifacts.
+                                      // The core of the wedge is the proper arc we need to create.  We then add side points based
+                                      // on firstang and secondang, where we try 1 degree, but if that appears too big we based it
+                                      // on the segment length.  We pick the radius based on the smaller of the width at this point
+                                      // and the adjacent width, which could be much smaller---meaning that we need a much smaller radius.
+                                      // The apex offset we pick to be simply based on the width at this point. 
+                                      firstang = sign(ang)*min(1,0.5*norm(v1)/PI/widths[i]*360);
+                                      secondang = sign(ang)*min(1,0.5*norm(v2)/PI/widths[i]*360);
+                                      firstR = 0.5*min(widths[i], lerp(widths[i],widths[i-1], abs(firstang)*PI*widths[i]/360/norm(v1)));
+                                      secondR = 0.5*min(widths[i], lerp(widths[i],widths[i+1], abs(secondang)*PI*widths[i]/360/norm(v2)));
+                                      apex_offset = widths[i]/10;
+                                      arcpath = [
+                                                 firstR*[cos(theta-firstang), sin(theta-firstang)], 
+                                                 each arc(d=widths[i], angle=[theta, theta+ang],n=joints=="square"?2:undef),
+                                                 secondR*[cos(theta+ang+secondang), sin(theta+ang+secondang)],
+                                                 -apex_offset*[cos(theta+ang/2), sin(theta+ang/2)]
+                                      ];
+                                      polygon(arcpath);
+                                  }
+                              }
+                          }
+                      }
+                  }
+                  if (!closed){
+                    // Endcap1
+                    setcolor(endcap_color1) {
+                        translate(path[0]) {
+                            mat = is_undef(endcap_angle1)? rot(from=BACK,to=start_vec) :
+                                zrot(endcap_angle1);
+                            multmatrix(mat) polygon(endcap_shape1);
+                        }
+                    }
+
+                    // Endcap2
+                    setcolor(endcap_color2) {
+                        translate(last(path)) {
+                            mat = is_undef(endcap_angle2)? rot(from=BACK,to=end_vec) :
+                                zrot(endcap_angle2);
+                            multmatrix(mat) polygon(endcap_shape2);
+                        }
+                    }
+                  }
+              } else {  // Three dimensional case
+                  rotmats = cumprod([
+                      for (i = idx(path2,e=-2)) let(
+                          vec1 = i==0? UP : unit(path2[i]-path2[i-1], UP),
+                          vec2 = unit(path2[i+1]-path2[i], UP)
+                      ) rot(from=vec1,to=vec2)
+                  ]);
+
+                  sides = [
+                      for (i = idx(path2,e=-2))
+                      quantup(segs(max(widths[i],widths[i+1])/2),4)
+                  ];
+
+                  // Straight segments
+                  setcolor(color) {
+                      for (i = idx(path2,e=-2)) {
+                          dist = norm(path2[i+1] - path2[i]);
+                          w1 = widths[i]/2;
+                          w2 = widths[i+1]/2;
+                          $fn = sides[i];
+                          translate(path2[i]) {
+                              multmatrix(rotmats[i]) {
+                                  cylinder(r1=w1, r2=w2, h=dist, center=false);
+                              }
+                          }
+                      }
+                  }
+
+                  // Joints
+                  setcolor(joint_color) {
+                      for (i = [1:1:len(path2)-2]) {
+                          $fn = sides[i];
+                          translate(path2[i]) {
+                              if (joints != undef && joints != "round") {
+                                  joint_shape = _shape_path(
+                                      joints, width[i],
+                                      joint_width,
+                                      joint_length,
+                                      joint_extent
+                                  );
+                                  multmatrix(rotmats[i] * xrot(180)) {
+                                      $fn = sides[i];
+                                      if (is_undef(joint_angle)) {
+                                          rotate_extrude(convexity=convexity) {
+                                              right_half(planar=true) {
+                                                  polygon(joint_shape);
+                                              }
+                                          }
+                                      } else {
+                                          rotate([90,0,joint_angle]) {
+                                              linear_extrude(height=max(widths[i],0.001), center=true, convexity=convexity) {
+                                                  polygon(joint_shape);
+                                              }
+                                          }
+                                      }
+                                  }
+                              } else {
+                                  corner = select(path2,i-1,i+1);
+                                  axis = vector_axis(corner);
+                                  ang = vector_angle(corner);
+                                  if (!approx(ang,0)) {
+                                      frame_map(x=path2[i-1]-path2[i], z=-axis) {
+                                          zrot(90-0.5) {
+                                              rotate_extrude(angle=180-ang+1) {
+                                                  arc(d=widths[i], start=-90, angle=180);
+                                              }
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+                  if (!closed){
+                    // Endcap1
+                    setcolor(endcap_color1) {
+                        translate(path[0]) {
+                            multmatrix(rotmats[0] * xrot(180)) {
+                                $fn = sides[0];
+                                if (is_undef(endcap_angle1)) {
+                                    rotate_extrude(convexity=convexity) {
+                                        right_half(planar=true) {
+                                            polygon(endcap_shape1);
+                                        }
+                                    }
+                                } else {
+                                    rotate([90,0,endcap_angle1]) {
+                                        linear_extrude(height=max(widths[0],0.001), center=true, convexity=convexity) {
+                                            polygon(endcap_shape1);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Endcap2
+                    setcolor(endcap_color2) {
+                        translate(last(path)) {
+                            multmatrix(last(rotmats)) {
+                                $fn = last(sides);
+                                if (is_undef(endcap_angle2)) {
+                                    rotate_extrude(convexity=convexity) {
+                                        right_half(planar=true) {
+                                            polygon(endcap_shape2);
+                                        }
+                                    }
+                                } else {
+                                    rotate([90,0,endcap_angle2]) {
+                                        linear_extrude(height=max(last(widths),0.001), center=true, convexity=convexity) {
+                                            polygon(endcap_shape2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                  }
+              }
+          }
+      }
+      union();
+    }
+}
+
+
+// Function&Module: dashed_stroke()
+// Synopsis: Draws a dashed line along a path or region boundary.
+// SynTags: Geom, PathList
+// Topics: Paths, Drawing Tools
+// See Also: stroke(), path_cut()
+// Usage: As a Module
+//   dashed_stroke(path, dashpat, [width=], [closed=]);
+// Usage: As a Function
+//   dashes = dashed_stroke(path, dashpat, [closed=]);
+// Description:
+//   Given a path (or region) and a dash pattern, creates a dashed line that follows that
+//   path or region boundary with the given dash pattern.
+//   - When called as a function, returns a list of dash sub-paths.
+//   - When called as a module, draws all those subpaths using `stroke()`.
+//   .
+//   When called as a module the dash pattern is multiplied by the line width.  When called as
+//   a function the dash pattern applies as you specify it.  
+// Arguments:
+//   path = The path or region to subdivide into dashes.
+//   dashpat = A list of alternating dash lengths and space lengths for the dash pattern.  This will be scaled by the width of the line.
+//   ---
+//   width = The width of the dashed line to draw.  Module only.  Default: 1
+//   closed = If true, treat path as a closed polygon.  Default: false
+//   fit = If true, shrink or stretch the dash pattern so that the path ends ofter a logical dash.  Default: true
+//   roundcaps = (Module only) If true, draws dashes with rounded caps.  This often looks better.  Default: true
+//   mindash = (Function only) Specifies the minimal dash length to return at the end of a path when fit is false.  Default: 0.5
+// Example(2D): Open Path
+//   path = [for (a=[-180:10:180]) [a/3,20*sin(a)]];
+//   dashed_stroke(path, [3,2], width=1);
+// Example(2D): Closed Polygon
+//   path = circle(d=100,$fn=72);
+//   dashpat = [10,2, 3,2, 3,2];
+//   dashed_stroke(path, dashpat, width=1, closed=true);
+// Example(FlatSpin,VPD=250): 3D Dashed Path
+//   path = [for (a=[-180:5:180]) [a/3, 20*cos(3*a), 20*sin(3*a)]];
+//   dashed_stroke(path, [3,2], width=1);

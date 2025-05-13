@@ -1,0 +1,50 @@
+showOriginCoordBox        = false;      //-> Shows red bars representing the origin for yappCoordBox : only in preview 
+showOriginCoordBoxInside  = false;      //-> Shows blue bars representing the origin for yappCoordBoxInside : only in preview 
+showOriginCoordPCB        = false;      //-> Shows blue bars representing the origin for yappCoordBoxInside : only in preview 
+showMarkersPCB            = false;      //-> Shows black bars corners of the PCB : only in preview 
+showMarkersCenter         = false;      //-> Shows magenta bars along the centers of all faces  
+inspectX                  = 0;          //-> 0=none (>0 from Back)
+inspectY                  = 13.5;          //-> 0=none (>0 from Right)
+inspectZ                  = 0;          //-> 0=none (>0 from Bottom)
+inspectXfromBack          = true;       //-> View from the inspection cut foreward
+inspectYfromLeft          = true;       //-> View from the inspection cut to the right
+inspectZfromBottom        = true;       //-> View from the inspection cut up
+//---------------------------
+//--     C O N T R O L     --
+//---------------------------
+
+//===================================================================
+// *** PCB Supports ***
+// Pin and Socket standoffs 
+//-------------------------------------------------------------------
+//  Default origin =  yappCoordPCB : pcb[0,0,0]
+//
+//  Parameters:
+//   Required:
+//    p(0) = posx
+//    p(1) = posy
+//   Optional:
+//    p(2) = Height to bottom of PCB : Default = standoff_Height
+//    p(3) = PCB Gap : Default = -1 : Default for yappCoordPCB=pcb_Thickness, yappCoordBox=0
+//    p(4) = standoff_Diameter    Default = standoff_Diameter;
+//    p(5) = standoff_PinDiameter Default = standoff_PinDiameter;
+//    p(6) = standoff_HoleSlack   Default = standoff_HoleSlack;
+//    p(7) = filletRadius (0 = auto size)
+//    p(8) = Pin Length : Default = 0 -> PCB Gap + standoff_PinDiameter
+//             Indicated length of pin without the half sphere on top
+//    n(a) = { <yappBoth> | yappLidOnly | yappBaseOnly }
+//    n(b) = { <yappPin>, yappHole, yappTopPin } 
+//             yappPin = Pin on Base and Hole on Lid 
+//             yappHole = Hole on Both
+//             yappHole = Hole on Base and Pin on Lid
+//    n(c) = { yappAllCorners, yappFrontLeft | <yappBackLeft> | yappFrontRight | yappBackRight }
+//    n(d) = { <yappCoordPCB> | yappCoordBox | yappCoordBoxInside }
+//    n(e) = { yappNoFillet } : Removes the internal and external fillets and the Rounded tip on the pins
+//    n(f) = [yappPCBName, "XXX"] : {Specify a PCB defaults to "Main"
+//-------------------------------------------------------------------
+pcbStands = 
+[
+  [5,  10, undef, undef, 2, 1]  // Original method
+ ,[15,  10, undef, undef, 4, 2, undef, undef, pcbThickness() + 2 ] // Custom Length of PCB Thickness + 2
+ ,[25,  10, undef, undef, 4, 2, undef, undef, 999 , yappHole]  // Default Hole in Lid and Pin in Base Pin Length is ignored
+ ,[35,  10, undef, undef, 4, 2, yappHole]  // Default Hole in Lid and Pin in Base Pin Length is ignored

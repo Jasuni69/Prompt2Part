@@ -1,0 +1,6 @@
+function _hashset_add_by(buckets, b_numbers, elem, eq, hash, f_eq) =
+    let(
+	    idx = hash(elem) % b_numbers,
+		bucket = buckets[idx]
+	)
+	bucket != [] && f_eq(bucket, elem, eq) != -1 ? buckets : _add(buckets, b_numbers, bucket, elem, idx);

@@ -1,0 +1,6 @@
+module pi_hole_locations(type) { //! Locations of photo interrupter mounting holes
+    translate([0, -(pi_base_length(type) - pi_base_width(type)) / 2, 0])
+        children();
+    translate([0, (pi_base_length(type) - pi_base_width(type)) / 2, 0])
+        children();
+}

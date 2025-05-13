@@ -1,0 +1,6 @@
+module decorate_top(d) {
+    rotate([0,0,180]) translate([0-d.x,0-d.y,0])
+    translate([d.x/2,(d.y/2)+3,0])
+    NeedleGauge();
+    
+}

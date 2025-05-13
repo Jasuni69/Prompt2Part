@@ -1,0 +1,29 @@
+//  Default origin = yappCoordBox: box[0,0,0]
+//
+//  Parameters:
+//   (0) = posx
+//   (1) = posy/z
+//   (2) = rotation degrees CCW
+//   (3) = depth : positive values go into case (Remove) negative valies are raised (Add)
+//   (4) = plane {yappLeft | yappRight | yappFront | yappBack | yappTop | yappBottom}
+//   (5) = font
+//   (6) = size
+//   (7) = "label text"
+//-------------------------------------------------------------------
+
+labelsPlane =
+[
+    [5, 18, -90, 1, yappLid, "Liberation Mono:style=bold", 6, "DMR" ]
+
+    ,[83.5,           22,   -90, 1, yappLid, "Liberation Mono:style=bold", 4, "Front" ]
+    ,[83.5-(2.54*3),  22,   -90, 1, yappLid, "Liberation Mono:style=bold", 4, "Drive" ]
+    ,[83.5-(2.54*6),  22,   -90, 1, yappLid, "Liberation Mono:style=bold", 4, "Rear" ]
+    ,[83.5-(2.54*9),  22,   -90, 1, yappLid, "Liberation Mono:style=bold", 4, "Pool" ]
+    ,[83.5,           57,   -90, 1, yappLid, "Liberation Mono:style=bold", 4, "Alarm" ]
+    ,[83.5-(2.54*3),  57,   -90, 1, yappLid, "Liberation Mono:style=bold", 4, "Muted" ]
+    ,[83.5-(2.54*12), 47,   -90, 1, yappLid, "Liberation Mono:style=bold", 4, "Mute" ]
+];
+
+
+//---- This is where the magic happens ----
+YAPPgenerate();

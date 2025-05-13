@@ -1,0 +1,32 @@
+function compare_lists(a, b) =
+    a==b? 0 :
+    let(
+        cmps = [
+            for (i = [0:1:min(len(a),len(b))-1])
+            let( cmp = compare_vals(a[i],b[i]) )
+            if (cmp!=0) cmp
+        ]
+    )
+    cmps==[]? (len(a)-len(b)) : cmps[0];
+
+
+
+// Section: Finding the index of the minimum or maximum of a list
+
+
+// Function: min_index()
+// Synopsis: Returns the index of the minimum value in the given list.
+// Topics: List Handling
+// See Also: max_index(), is_increasing(), is_decreasing()
+// Usage:
+//   idx = min_index(vals);
+//   idxlist = min_index(vals, all=true);
+// Description:
+//   Returns the index of the first occurrence of the minimum value in the given list. 
+//   If `all` is true then returns a list of all indices where the minimum value occurs.
+// Arguments:
+//   vals = vector of values
+//   all = set to true to return indices of all occurrences of the minimum.  Default: false
+// Example:
+//   a = min_index([5,3,9,6,2,7,8,2,1]); // Returns: 8
+//   b = min_index([5,3,9,6,2,7,8,2,7],all=true); // Returns: [4,7]

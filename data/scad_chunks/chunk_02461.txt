@@ -1,0 +1,12 @@
+function bezier_join(path1, path2, d, d2 = undef) = let( //! Join two paths with a Bezier curve, control points are the path ends are `d` and `d2` from the ends in the same direction.
+        d2 = is_undef(d2) ? d : d2,
+        l = len(path1),
+        p0 = path1[l - 1],
+        p1 = p0 + unit(p0 - path1[l - 2]) * d,
+        p3 = path2[0],
+        p2 = p3 + unit(path2[0] - path2[1]) * d2,
+        v = [p0, p1, p2, p3],
+        segs = path_length(v) / $fs,
+        path = [for(i = [1 : segs - 1], t = i / segs) bezier(t, v)],
+        len = len(path)
+    ) concat(path1, path, path2);

@@ -1,0 +1,20 @@
+function is_matrix(A,m,n,square=false) =
+   is_list(A)
+   && (( is_undef(m) && len(A) ) || len(A)==m)
+   && (!square || len(A) == len(A[0]))
+   && is_vector(A[0],n)
+   && is_consistent(A);
+
+
+// Function: is_matrix_symmetric()
+// Synopsis: Checks if matrix is symmetric
+// Topics: Matrices
+// See Also: is_matrix(), is_rotation()
+// Usage:
+//   b = is_matrix_symmetric(A, [eps])
+// Description:
+//   Returns true if the input matrix is symmetric, meaning it approximately equals its transpose.  
+//   The matrix can have arbitrary entries.  
+// Arguments:
+//   A = matrix to test
+//   eps = epsilon for comparing equality.  Default: 1e-12

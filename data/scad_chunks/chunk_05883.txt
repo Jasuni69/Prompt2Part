@@ -1,0 +1,30 @@
+function max_index(vals, all=false) =
+    assert( is_vector(vals) && len(vals)>0 , "Invalid or empty list of numbers.")
+    all ? search(max(vals),vals,0) : search(max(vals), vals)[0];
+
+
+// Section: Dealing with duplicate list entries
+
+
+// Function: find_approx()
+// Synopsis: Finds the indexes of the item(s) in the given list that are approximately the given value.
+// Topics: List Handling
+// See Also: in_list()
+// Usage:
+//   idx = find_approx(val, list, [start=], [eps=]);
+//   indices = find_approx(val, list, all=true, [start=], [eps=]);
+// Description:
+//   Finds the first item in `list` that matches `val` to within `eps` tolerance, returning the index.  Returns `undef` if there is no match.
+//   If `all=true` then returns all the items that agree within `eps` and returns the empty list if no such items exist.  
+// Arguments:
+//   val = The value to search for.  
+//   list = The list to search.
+//   ---
+//   start = The index to start searching from.  Default: 0
+//   all = If true, returns a list of all matching item indices.  Default: false
+//   eps = The maximum allowed floating point rounding error for numeric comparisons.  Default: EPSILON (1e-9)
+// Example:
+//   find_approx(3,[4,5,3.01,2,2.99], eps=0.1);  // Returns 2
+//   find_approx(9,[4,5,3.01,2,2.99], eps=0.1);  // Returns undef
+//   find_approx(3,[4,5,3.01,2,2.99], all=true, eps=0.1);  // Returns [2,4]
+//   find_approx(9,[4,5,3.01,2,2.99], all=true, eps=0.1);  // Returns []

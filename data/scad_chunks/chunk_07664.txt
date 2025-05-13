@@ -1,0 +1,23 @@
+module Torus2(m=5,trx=10,a=1,rq=1,d=5,w=2,name,new=true,help)//m=feinheit,trx = abstand mitte,rq = sin verschiebung , a=amplitude, w wellen
+{
+
+//if(new&&w==2)rotate(90/w)WaveEx(grad=360,trx=trx-a/2*1,try=trx+a/2*1,f=w,tf=w,fv=0,tfv=0,r=d/2,ta=a/2,a=-rq/2);
+if(new)rotate(-90/w)WaveEx(grad=360,trx=trx,try=trx,f=w,tf=-w,fv=0,tfv=180,r=d/2,ta=a,a=rq/2,fn=360/m);    
+
+if(!new)echo("<H3> <font color=red> For Torus2 use 'new=true' (WaveEx)");
+if(new)echo("<H4> <font color=green>Torus2 is using WaveEx");    
+if(!new)rotate ([0,0,0])for (i=[0:m:360])
+    { 
+
+        hull()
+        {
+        rotate ([0,0,i])translate([trx+(sin(w*i)*a),0,0])rotate([90,0,0])cylinder(.01,d1=sin(w*i)*rq+d,d2=0,$fn=200/m,center=false);
+            
+        rotate ([0,0,i-m])translate([trx+(sin(w*(i-m))*a),0,0])rotate([90,0,0])cylinder(.01,d1=sin(w*(i-m))*rq+d,$fn=200/m,d2=0,center=false);
+        } 
+    }
+ 
+
+ InfoTxt("Torus2",["Wellen",w,"amplitude",a,"Radius",trx],name);
+ HelpTxt("Torus2",["m",m,"trx",trx,"a",a,"rq",rq,"d",d,"w",w,"name",name],help);
+}

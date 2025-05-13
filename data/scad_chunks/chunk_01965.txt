@@ -1,0 +1,4 @@
+function knob(name = "knob", top_d = 12, bot_d = 15, height = 18, shaft_length, skirt = [20, 2], pointer = false, corner_r = 2, screw = M3_grub_screw, shaft_d, flat_d, flat_h, recess) = //! Constructor
+[
+    name, top_d, bot_d, height, corner_r, shaft_d, shaft_length, flat_d, flat_h, screw, skirt, recess, pointer
+];

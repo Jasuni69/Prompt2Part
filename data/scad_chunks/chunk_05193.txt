@@ -1,0 +1,3 @@
+function c_mul(z1,z2) =
+    is_matrix([z1,z2],2,2) ? _c_mul(z1,z2) :
+    _combine_complex(_c_mul(_split_complex(z1), _split_complex(z2)));

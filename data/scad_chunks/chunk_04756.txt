@@ -1,0 +1,7 @@
+function bounds(poly) = is_3d_poly(poly) ?
+  (is_poly_vector(poly) ?
+    _bounds_multi_3d(poly) :
+    _bounds_3d(poly)) :
+  (is_poly_vector(poly) ?
+    _bounds_multi_2d(poly) :
+    _bounds_2d(poly));

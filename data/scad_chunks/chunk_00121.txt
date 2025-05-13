@@ -1,0 +1,1 @@
+function penny_diameter(w) = let(p = penny_washer(w)) washer_diameter(p ? p : w);

@@ -1,0 +1,9 @@
+function sierpinski_carpet(n = 4, angle = 90, leng = 1, heading = 0, start = [0, 0]) = 
+    let(
+        axiom = "F",
+        rules = [
+            ["F", "F+F-F-F-G+F+F+F-F"],
+            ["G", "GGG"]
+        ]
+    )
+    lsystem2(axiom, rules, n, angle, leng, heading, start, forward_chars = "G");

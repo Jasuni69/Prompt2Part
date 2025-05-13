@@ -1,0 +1,212 @@
+function prismoid(
+    size1, size2, h, shift=[0,0],
+    rounding=0, rounding1, rounding2,
+    chamfer=0, chamfer1, chamfer2,
+    l, height, length, center,
+    anchor=DOWN, spin=0, orient=UP, xang, yang,
+    _return_dim=false
+    
+) =
+    assert(is_undef(shift) || is_num(shift) || len(shift)==2, "shift must be a number or list of length 2")
+    assert(is_undef(size1) || is_num(size1) || len(size1)==2, "size1 must be a number or list of length 2")
+    assert(is_undef(size2) || is_num(size2) || len(size2)==2, "size2 must be a number or list of length 2")  
+    let(
+        xang = force_list(xang,2),
+        yang = force_list(yang,2),
+        yangOK = len(yang)==2 && (yang==[undef,undef] || (all_positive(yang) && yang[0]<180 && yang[1]<180)),
+        xangOK = len(xang)==2 && (xang==[undef,undef] || (all_positive(xang) && xang[0]<180 && xang[1]<180)),
+        size1=force_list(size1,2),
+        size2=force_list(size2,2),
+        h=first_defined([l,h,length,height]),
+        shift = force_list(shift,2)
+    )
+    assert(xangOK, "prismoid angles must be scalar or 2-vector, strictly between 0 and 180")
+    assert(yangOK, "prismoid angles must be scalar or 2-vector, strictly between 0 and 180")
+    assert(xang==[undef,undef] || shift.x==undef, "Cannot specify xang and a shift.x value together")
+    assert(yang==[undef,undef] || shift.y==undef, "Cannot specify yang and a shift.y value together")
+    assert(all_positive([h]) || is_undef(h), "h must be a positive value")
+    let(
+        hx = _trapezoid_dims(h,size1.x,size2.x,shift.x,xang)[0],
+        hy = _trapezoid_dims(h,size1.y,size2.y,shift.y,yang)[0]
+    )
+    assert(num_defined([hx,hy])>0, "Height not given and specification does not determine prismoid height")
+    assert(hx==undef || hy==undef || approx(hx,hy),
+           str("X and Y angle specifications give rise to conflicting height values ",hx," and ",hy))
+    let(
+        h = first_defined([hx,hy]),
+        x_h_w1_w2_shift = _trapezoid_dims(h,size1.x,size2.x,shift.x,xang),
+        y_h_w1_w2_shift = _trapezoid_dims(h,size1.y,size2.y,shift.y,yang)
+    )
+    let(
+        s1 = [x_h_w1_w2_shift[1], y_h_w1_w2_shift[1]],
+        s2 = [x_h_w1_w2_shift[2], y_h_w1_w2_shift[2]],
+        shift = [x_h_w1_w2_shift[3], y_h_w1_w2_shift[3]]
+    )
+    assert(is_vector(s1,2), "Insufficient information to define prismoid")
+    assert(is_vector(s2,2), "Insufficient information to define prismoid")
+    assert(all_nonnegative(concat(s1,s2)),"Degenerate prismoid geometry")
+    assert(s1.x+s2.x>0 && s1.y+s2.y>0, "Degenerate prismoid geometry")
+    assert(is_num(rounding) || is_vector(rounding,4), "rounding must be a number or 4-vector")
+    assert(is_undef(rounding1) || is_num(rounding1) || is_vector(rounding1,4), "rounding1 must be a number or 4-vector")
+    assert(is_undef(rounding2) || is_num(rounding2) || is_vector(rounding2,4), "rounding2 must be a number or 4-vector")
+    assert(is_num(chamfer) || is_vector(chamfer,4), "chamfer must be a number or 4-vector")
+    assert(is_undef(chamfer1) || is_num(chamfer1) || is_vector(chamfer1,4), "chamfer1 must be a number or 4-vector")
+    assert(is_undef(chamfer2) || is_num(chamfer2) || is_vector(chamfer2,4), "chamfer2 must be a number or 4-vector")
+    let(
+        chamfer1=force_list(default(chamfer1,chamfer),4),
+        chamfer2=force_list(default(chamfer2,chamfer),4),
+        rounding1=force_list(default(rounding1,rounding),4),
+        rounding2=force_list(default(rounding2,rounding),4)
+    )
+    assert(all_nonnegative(chamfer1), "chamfer/chamfer1 must be non-negative")
+    assert(all_nonnegative(chamfer2), "chamfer/chamfer2 must be non-negative")
+    assert(all_nonnegative(rounding1), "rounding/rounding1 must be non-negative")
+    assert(all_nonnegative(rounding2), "rounding/rounding2 must be non-negative")        
+    assert(all_zero(v_mul(rounding1,chamfer1),0),
+           "rounding1 and chamfer1 (possibly inherited from rounding and chamfer) cannot both be nonzero at the same corner")
+    assert(all_zero(v_mul(rounding2,chamfer2),0),
+           "rounding2 and chamfer2 (possibly inherited from rounding and chamfer) cannot both be nonzero at the same corner")
+    let(
+        rounding1 = default(rounding1, rounding),
+        rounding2 = default(rounding2, rounding),
+        chamfer1 = default(chamfer1, chamfer),
+        chamfer2 = default(chamfer2, chamfer),
+        anchor = get_anchor(anchor, center, BOT, BOT),
+        path1 = rect(s1, rounding=rounding1, chamfer=chamfer1, anchor=CTR),
+        path2 = rect(s2, rounding=rounding2, chamfer=chamfer2, anchor=CTR),
+        points = [
+                    each path3d(path1, -h/2),
+                    each path3d(move(shift, path2), +h/2),
+                 ],
+        faces = hull(points),
+        vnf = [points, faces]
+    )
+    _return_dim ? [reorient(anchor,spin,orient, size=[s1.x,s1.y,h], size2=s2, shift=shift, p=vnf),point3d(s1,h),s2,shift]
+                : reorient(anchor,spin,orient, size=[s1.x,s1.y,h], size2=s2, shift=shift, p=vnf);
+
+
+
+// Function&Module: regular_prism()
+// Synopsis: Creates a regular prism with roundovers and chamfering
+// SynTags: Geom, VNF
+// Topics: Textures, Rounding, Chamfers, Shapes (3D), Attachable 
+// See Also: cyl(), rounded_prism(), texture(), linear_sweep(), EDGE(), FACE()
+// Usage: Normal prisms
+//   regular_prism(n, h|l=|height=|length=, r, [center=], [realign=]) [ATTACHMENTS];
+//   regular_prism(n, h|l=|height=|length=, d=|id=|od=|ir=|or=|side=, ...) [ATTACHMENTS];
+//   regular_prism(n, h|l=|height=|length=, r1=|d1=|id1=|od1=|ir1=|or1=|side1=,r2=|d2=|id2=|od2=|ir2=|or2=|side2=, ...) [ATTACHMENTS];
+// Usage: Chamferred end prisms
+//   regular_prism(n, h, r, chamfer=, [chamfang=], [from_end=], ...);
+//   regular_prism(n, h, r, chamfer1=, [chamfang1=], [from_end=], ...);
+//   regular_prism(n, h, r, chamfer2=, [chamfang2=], [from_end=], ...);
+//   regular_prism(n, h, r, chamfer1=, chamfer2=, [chamfang1=], [chamfang2=], [from_end=], ...);
+// Usage: Rounded end prisms
+//   regular_prism(n, h, r, rounding=, ...);
+//   regular_prism(n, h, r, rounding1=, ...);
+//   regular_prism(n, h, r, rounding2=, ...);
+//   regular_prism(n, h, r, rounding1=, rounding2=, ...);
+// Usage: Textured prisms
+//   regular_prism(n, h, r, texture=, [tex_size=]|[tex_reps=], [tex_depth=], [tex_rot=], [tex_samples=], [style=], [tex_inset=], ...);
+// Usage: Called as a function to get a VNF
+//   vnf = rounded_prism(...);
+// Description:
+//   Creates a prism whose ends are similar `n`-sided regular polygons, with optional rounding, chamfers or textures.
+//   You can specify the size of the ends using diameter or radius measured either inside or outside.  Alternatively
+//   you can give the length of the side of the polygon.  You can specify chamfers and roundings for the ends, but not
+//   the vertical edges.  See {{rounded_prism()}} for prisms with rounded vertical edges.  You can also specify texture for the side
+//   faces, but note that texture is not compatible with any roundings or chamfers.
+//   See [Texturing](skin.scad#section-texturing) for more details on how textures work.  
+//   .
+//   Anchors are based on the VNF of the prism.  Especially for tapered or shifted prisms, this may give unexpected anchor positions, such as top side anchors
+//   being located at the bottom of the shape, so confirm anchor positions before use.  
+//   Additional named face and edge anchors are located on the side faces and vertical edges of the prism.
+//   You can use `EDGE(i)`, `EDGE(TOP,i)` and `EDGE(BOT,i)` as a shorthand for accessing the named edge anchors, and `FACE(i)` for the face anchors.
+//   When you use `shift`, which moves the top face of the prism, the spin for the side face and edges anchors will align
+//   the child with the edge or face direction.  The "edge0" anchor identifies an edge located along the X+ axis, and then edges
+//   are labeled counting up in the clockwise direction.  Similarly "face0" is the face immediately clockwise from "edge0", and face
+//   labeling proceeds clockwise.  The top and bottom edge anchors label edges directly above and below the face with the same label.
+//   If you set `realign=true` then "face0" is oriented in the X+ direction.  
+//   .
+//   This module is very similar to {{cyl()}}.  It differs in the following ways:  you can specify side length or inner radius/diameter, you can apply roundings with
+//   different `$fn` than the number of prism faces, you can apply texture to the flat faces without forcing a high facet count,
+//   anchors are located on the true object instead of the ideal cylinder and you can anchor to the edges and faces.  
+// Named Anchors:
+//   "edge0", "edge1", etc. = Center of each side edge, spin pointing up along the edge.  Can access with EDGE(i)
+//   "face0", "face1", etc. = Center of each side face, spin pointing up.  Can access with FACE(i)
+//   "top_edge0", "top_edge1", etc = Center of each top edge, spin pointing clockwise (from top). Can access with EDGE(TOP,i)
+//   "bot_edge0", "bot_edge1", etc = Center of each bottom edge, spin pointing clockwise (from bottom).  Can access with EDGE(BOT,i)
+//   "top_corner0", "top_corner1", etc = Top corner, pointing in direction of associated edge anchor, spin up along associated edge
+//   "bot_corner0", "bot_corner1", etc = Bottom corner, pointing in direction of associated edge anchor, spin up along associated edge
+// Arguments:
+//   l / h / length / height = Length of prism
+//   r = Outer radius of prism.  
+//   center = If given, overrides `anchor`.  A true value sets `anchor=CENTER`, false sets `anchor=DOWN`.
+//   ---
+//   r1/or1 = Outer radius of the bottom of prism
+//   r2/or2 = Outer radius of the top end of prism
+//   d = Outer Diameter of prism
+//   d1 / od1 = Outer diameter of bottom of prism
+//   d2 / od2 = Outer diameter of top end of prism
+//   ir = Inner radius of prism
+//   ir1 = Inner radius of bottom of prism
+//   ir2 = Inner radius of top of prism
+//   id = Inner diameter of prism
+//   id1 = Inner diameter of bottom of prism
+//   id2 = Inner diameter of top of prism
+//   side = Side length of prism faces
+//   side1 = Side length of prism faces at the bottom
+//   side2 = Side length of prism faces at the top
+//   shift = [X,Y] amount to shift the center of the top end with respect to the center of the bottom end.
+//   chamfer = The size of the chamfers on the ends of the prism.  (Also see: `from_end=`)  Default: none.
+//   chamfer1 = The size of the chamfer on the bottom end of the prism.  (Also see: `from_end1=`)  Default: none.
+//   chamfer2 = The size of the chamfer on the top end of the prism.  (Also see: `from_end2=`)  Default: none.
+//   chamfang = The angle in degrees of the chamfers away from the ends of the prismr.  Default: Chamfer angle is halfway between the endcap and side face.
+//   chamfang1 = The angle in degrees of the bottom chamfer away from the bottom end of the prism.  Default: Chamfer angle is halfway between the endcap and side face.
+//   chamfang2 = The angle in degrees of the top chamfer away from the top end of the prism.  Default: Chamfer angle is halfway between the endcap and side face.
+//   from_end = If true, chamfer is measured along the side face from the ends of the prism, instead of inset from the edge.  Default: `false`.
+//   from_end1 = If true, chamfer on the bottom end of the prism is measured along the side face from the end of the prism, instead of inset from the edge.  Default: `false`.
+//   from_end2 = If true, chamfer on the top end of the prism is measured along the side face from the end of the prism, instead of inset from the edge.  Default: `false`.
+//   rounding = The radius of the rounding on the ends of the prism.  Default: none.
+//   rounding1 = The radius of the rounding on the bottom end of the prism.
+//   rounding2 = The radius of the rounding on the top end of the prism.
+//   realign = If true, rotate the prism by half the angle of one face so that a face points in the X+ direction.  Default: false
+//   teardrop = If given as a number, rounding around the bottom edge of the prism won't exceed this many degrees from vertical.  If true, the limit angle is 45 degrees.  Default: `false`
+//   clip_angle = If given as a number, rounding around the bottom edge of the prism won't exceed this many degrees from vertical, with the rounding stopping at the bottom of the prism.  Default: (no clipping)
+//   texture = A texture name string, or a rectangular array of scalar height values (0.0 to 1.0), or a VNF tile that defines the texture to apply to vertical surfaces.  See {{texture()}} for what named textures are supported.
+//   tex_size = An optional 2D target size (2-vector or scalar) for the textures.  Actual texture sizes will be scaled somewhat to evenly fit the available surface. Default: `[5,5]`
+//   tex_reps = If given instead of tex_size, a scalar or 2-vector giving the number of texture tile repetitions in the horizontal and vertical directions.
+//   tex_inset = If numeric, lowers the texture into the surface by the specified proportion, e.g. 0.5 would lower it half way into the surface.  If `true`, insets by exactly its full depth.  Default: `false`
+//   tex_rot = Rotate texture by specified angle, which must be a multiple of 90 degrees.  Default: 0
+//   tex_depth = Specify texture depth; if negative, invert the texture.  Default: 1.  
+//   tex_samples = Minimum number of "bend points" to have in VNF texture tiles.  Default: 8
+//   style = {{vnf_vertex_array()}} style used to triangulate heightfield textures.  Default: "min_edge"
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+// Example:  Simple prism
+//   regular_prism(5,r=10,h=25);
+// Example:  With end rounding
+//   regular_prism(5,r=10,h=25,rounding=3,$fn=32);
+// Example:  With teardrop end rounding
+//   regular_prism(5,r=10,h=25,rounding=3,teardrop=40,$fn=32);
+// Example:  With clipped end rounding
+//   regular_prism(5,r=10,h=25,rounding=3,clip_angle=40,$fn=32);
+// Example:  By side length at bottom, inner radius at top, shallow chamfer
+//   regular_prism(7, side1=10, ir2=7, height=20,chamfer2=2,chamfang2=20);
+// Example: With shift
+//   regular_prism(4, d=12, h=10, shift=[12,7]);
+// Example: Attaching child to face
+//   regular_prism(5, d1=15, d2=10, h=20)
+//     recolor("lightblue")
+//       attach("face1",BOT) regular_prism(n=4,r1=3,r2=1,h=3);
+// Example: Attaching child to edge
+//   regular_prism(5, d1=15, d2=10, h=20)
+//     recolor("lightblue")
+//       attach("edge2",RIGHT) cuboid([4,4,20]);
+// Example: Placing child on top along an edge of a regular prism is possible with the top_edge anchors, but you cannot use {{align()}} or {{attach()}}, so you must manually anchor and spin the child by half of the polygon angle (180/n) to get to face0 and then 360/n more for each subsequent face.  If you set `realign=true` then you don't need the initial angle for face0.  
+//    regular_prism(5, d1=25, d2=20, h=15, realign=false) color("lightblue"){
+//       position("top_edge1") prismoid([5,5],[2,2],h=3,spin=-360/5*1.5,anchor=RIGHT+BOT);
+//       position("top_edge3") prismoid([5,5],[2,2],h=3,spin=-360/5*3.5,anchor=RIGHT+BOT);
+//    }
+// Example: Textured prism
+//   regular_prism(5, side=25, h=50, texture="diamonds", tex_size=[5,5], style="concave");

@@ -1,0 +1,71 @@
+module pcbHolders() 
+{        
+  for ( stand = pcbStands )
+  {
+    //-- Get the PCBinfo 
+    thePCBName = getPCBName(yappPCBName, stand);
+   
+    pcb_Length = pcbLength(thePCBName);
+    pcb_Width = pcbWidth(thePCBName);
+    pcb_Thickness = pcbThickness(thePCBName);
+    standoff_Height = standoffHeight(thePCBName);
+    pcbStandHeight  = getParamWithDefault(stand[2], standoff_Height);
+    filletRad = getParamWithDefault(stand[7],0);
+  //  standType = isTrue(yappHole, stand) ? yappHole : yappPin;
+    standType = 
+			isTrue(yappHole, stand) ? yappHole : 
+			isTrue(yappTopPin, stand) ? yappTopPin : 
+			yappPin;
+
+//    p(8) = Pin Length : Default = 0
+//    pinLength = getParamWithDefault(stand[8],0);
+    
+
+    //-- Calculate based on the Coordinate system
+    coordSystem = getCoordSystem(stand, yappCoordPCB);
+    
+    
+    offsetX   = translate2Box_X(0, yappBase, coordSystem);
+    offsetY   = translate2Box_Y(0, yappBase, coordSystem);
+    
+    connX   = stand[0];
+    connY   = stand[1];
+    
+    lengthX   = coordSystem[0]==yappCoordPCB ? pcb_Length 
+              : coordSystem[0]==yappCoordBox ? shellLength 
+              : coordSystem[0]==yappCoordBoxInside ? shellInsideLength 
+              : undef;
+              
+    lengthY   = coordSystem[0]==yappCoordPCB ? pcb_Width 
+              : coordSystem[0]==yappCoordBox ? shellWidth 
+              : coordSystem[0]==yappCoordBoxInside ? shellInsideWidth 
+              : undef;
+        
+    allCorners = (isTrue(yappAllCorners, stand)) ? true : false;
+    primeOrigin = (!isTrue(yappBackLeft, stand) && !isTrue(yappFrontLeft, stand) && !isTrue(yappFrontRight, stand) && !isTrue(yappBackRight, stand) && !isTrue(yappAllCorners, stand) ) ? true : false;
+
+    if (!isTrue(yappLidOnly, stand))
+    {
+      if (primeOrigin || allCorners || isTrue(yappBackLeft, stand))
+         translate([offsetX+connX, offsetY + connY, basePlaneThickness])
+          pcbStandoff(yappPartBase, pcbStandHeight, filletRad, standType, "green", !isTrue(yappNoFillet, stand),stand);
+
+      if (allCorners || isTrue(yappFrontLeft, stand))
+         translate([offsetX + lengthX - connX, offsetY + connY, basePlaneThickness])
+          pcbStandoff(yappPartBase, pcbStandHeight, filletRad, standType, "green", !isTrue(yappNoFillet, stand),stand);
+
+      if (allCorners || isTrue(yappFrontRight, stand))
+        translate([offsetX + lengthX - connX, offsetY + lengthY - connY, basePlaneThickness])
+          pcbStandoff(yappPartBase, pcbStandHeight, filletRad, standType, "green", !isTrue(yappNoFillet, stand),stand);
+
+      if (allCorners || isTrue(yappBackRight, stand))
+        translate([offsetX + connX, offsetY + lengthY - connY, basePlaneThickness])
+          pcbStandoff(yappPartBase, pcbStandHeight, filletRad, standType, "green", !isTrue(yappNoFillet, stand),stand);
+    } //if
+  } //for  
+} //-- pcbHolders()
+
+
+
+//===========================================================
+// Place the Pushdown in the Lid

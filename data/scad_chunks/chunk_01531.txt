@@ -1,0 +1,1 @@
+function rd_module_radius(type)    = type[3]; //! Corner radius

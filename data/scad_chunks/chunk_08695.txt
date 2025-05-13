@@ -1,0 +1,4 @@
+function _set(t, point, angle) =
+    !is_undef(point) ? _set_point(t, point) :
+    !is_undef(angle) ? _set_angle(t, angle) :
+    assert(false, "no target to set");

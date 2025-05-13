@@ -1,0 +1,9 @@
+module Select(n=0){
+if(n==0||n==true)children();
+else if(n!=false&&(is_list(n)||n>0)) for(i=n)children(max(i-1,0)%$children);
+}
+
+
+
+
+/// short for translate[];

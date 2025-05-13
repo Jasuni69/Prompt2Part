@@ -1,0 +1,9 @@
+function _bounds_2d(poly) =
+    let(
+      points = get_points(poly),
+      minX = min([for (p = points) p.x]),
+      maxX = max([for (p = points) p.x]),
+      minY = min([for (p = points) p.y]),
+      maxY = max([for (p = points) p.y])
+    )
+    [[minX,minY],[maxX,maxY]];

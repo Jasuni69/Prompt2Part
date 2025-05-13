@@ -1,0 +1,28 @@
+function lerp(a,b,u) =
+    assert(same_shape(a,b), "\nBad or inconsistent inputs to lerp.")
+    is_finite(u)? (1-u)*a + u*b :
+    assert(is_finite(u) || is_vector(u) || valid_range(u), "\nInput u to lerp must be a number, vector, or valid range.")
+    [for (v = u) (1-v)*a + v*b ];
+
+
+// Function: lerpn()
+// Synopsis: Returns exactly `n` values, linearly interpolated between `a` and `b`.
+// Topics: Interpolation, Math
+// See Also: v_lookup(), lerp()
+// Usage:
+//   x = lerpn(a, b, n);
+//   x = lerpn(a, b, n, [endpoint]);
+// Description:
+//   Returns exactly `n` values, linearly interpolated between `a` and `b`.
+//   If `endpoint` is true, then the last value will exactly equal `b`.
+//   If `endpoint` is false, then the last value will be `a+(b-a)*(1-1/n)`.
+// Arguments:
+//   a = First value or vector.
+//   b = Second value or vector.
+//   n = The number of values to return.
+//   endpoint = If true, the last value will be exactly `b`.  If false, the last value will be one step less.
+// Example:
+//   l = lerpn(-4,4,9);        // Returns: [-4,-3,-2,-1,0,1,2,3,4]
+//   l = lerpn(-4,4,8,false);  // Returns: [-4,-3,-2,-1,0,1,2,3]
+//   l = lerpn(0,1,6);         // Returns: [0, 0.2, 0.4, 0.6, 0.8, 1]
+//   l = lerpn(0,1,5,false);   // Returns: [0, 0.2, 0.4, 0.6, 0.8]

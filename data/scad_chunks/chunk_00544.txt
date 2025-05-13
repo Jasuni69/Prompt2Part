@@ -1,0 +1,1 @@
+function tbolt_head_length(type)    = type[2];   //! Head length for t-track bolt

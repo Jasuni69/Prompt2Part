@@ -1,0 +1,56 @@
+module extrusionSlidingNut(size, tabSizeY1, tabSizeY2, tabSizeZ, holeRadius, holeOffset = 0, hammerNut = false) {
+    // center section
+    stem_h = size.z - tabSizeZ;
+    translate_z(-stem_h)
+        linear_extrude(stem_h)
+            difference() {
+                square([size.x, size.y], center = true);
+                if(hammerNut) {
+                    translate([size.x / 2, size.y / 2])
+                        rotate(180)
+                            fillet(1);
+                    translate([-size.x / 2, -size.y / 2])
+                        fillet(1);
+                }
+                if(holeRadius)
+                    translate([holeOffset, 0])
+                        circle(holeRadius);
+            }
+    linear_extrude(tabSizeZ)
+        difference() {
+            square([size.x, tabSizeY1 == tabSizeY2 ? size.y : tabSizeY2], center = true);
+            if(holeRadius)
+                translate([holeOffset, 0])
+                    circle(holeRadius);
+        }
+
+    thread_d = 2 * holeRadius;
+    if(show_threads)
+        translate([holeOffset, 0, -stem_h])
+            female_metric_thread(thread_d, metric_coarse_pitch(thread_d), size.z, center = false);
+
+    // add the side tabs
+    tab_h = size.z - 2 * stem_h;
+    chamfer =tab_h / 4;
+    for(m = [0, 1])
+        mirror([0, m, 0])
+            if(tabSizeY1 == tabSizeY2)
+                translate([-size.x / 2, size.y / 2])
+                    hull() {
+                        cube([size.x, (tabSizeY1 - size.y) / 2 - chamfer, tab_h]);
+
+                        translate_z(chamfer)
+                            cube([size.x, (tabSizeY1 - size.y) / 2,tab_h - 2 * chamfer]);
+                    }
+
+            else {
+                dy = (tabSizeY1 - tabSizeY2) / 2;
+                cubeZ = tabSizeZ - dy;
+                translate([-size.x / 2, tabSizeY2 / 2])
+                    cube([size.x, (tabSizeY1 - tabSizeY2) / 2, cubeZ]);
+
+                translate([0, tabSizeY2 / 2, cubeZ])
+                    rotate([0, -90, 0])
+                        right_triangle(tabSizeZ - cubeZ, dy, size.x, center = true);
+            }
+}

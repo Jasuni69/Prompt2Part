@@ -1,0 +1,6 @@
+module assertEqualNum(expected, actual, epsilon = 0.0001) {
+    assert(
+        abs(expected - actual) <= epsilon, 
+        str("expected: ", expected, ", but: ", actual)
+    );
+}

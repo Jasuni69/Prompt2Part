@@ -1,0 +1,98 @@
+function vnf_small_offset(vnf, delta, merge=true) =
+   let(
+        vnf = merge ? vnf_merge_points(vnf) : vnf, 
+        vertices = vnf[0],
+        faces = vnf[1],
+        vert_faces = group_data(
+            [for (i = idx(faces), vert = faces[i]) vert],
+            [for (i = idx(faces), vert = faces[i]) i]
+        ),
+        normals = [for(face=faces) polygon_normal(select(vertices,face))],   // Normals for each face
+        offset = [for(vertex=idx(vertices))
+                    let(
+                        vfaces = vert_faces[vertex], // Faces that surround this vertex
+                        adjacent_normals = select(normals,vfaces),
+                        angles = [for(faceind=vfaces)
+                                    let(
+                                        thisface = faces[faceind],
+                                        vind = search(vertex,thisface)[0]
+                                    )
+                                    vector_angle(select(vertices, select(thisface,vind-1,vind+1)))
+                                 ]
+                    )
+                    vertices[vertex] +unit(angles*adjacent_normals)*delta
+                 ]
+    )
+    [offset,faces];
+
+// Function: vnf_sheet()
+// Synopsis: Extends a VNF into a thin sheet by extruding normal to the VNF
+// SynTags: VNF
+// Topics: VNF Manipulation
+// See Also: vnf_small_offset(), vnf_boundary(), vnf_merge_points()
+// Usage:
+//   newvnf = vnf_sheet(vnf, delta, [style=], [merge=]);
+// Description:
+//   Constructs a thin sheet from a vnf by offsetting the vnf along the normal vectors estimated at
+//   each vertex by averaging the normals of the adjacent faces.  This is done using {{vnf_small_offset()}.
+//   The `delta` parameter is a 2-vector specifying the offset distances for both surfaces that form the
+//   final sheet. The values for each offset must be small enough so that no points cross each other
+//   when the offset is computed, because that results in invalid geometry and rendering errors.
+//   Rendering errors may not manifest until you add other objects to your model.  
+//   **It is your responsibility to avoid invalid geometry!**
+//   .
+//   Once the offsets to the original VNFs are computed, they are connected by filling
+//   in the boundary strips between them.
+//   .
+//   A negative offset value extends the surface toward its "inside", which is the side that appears purple
+//   in the "thrown together" view. Extending only toward the inside with a delta of `[0,-value]` or
+//   `[-value,0]` (the order doesn't matter) means that your original VNF remains unchanged in the output.
+//   Both offset surfaces may be extended in the same direction as long as the offset values are different.
+//   .
+//   **The input VNF must not contain duplicate points.**  By default, vnf_sheet() calls {{vnf_merge_points()}}
+//   to remove duplicate points, although this operation can be slow. If you are **certain** there are no
+//   duplicate points, you can set `merge=false` to disable the automatic point merge and save time. The
+//   result of running on a VNF with duplicate points is likely to be incorrect or invalid, or it may result in cryptic errors.
+// Arguments:
+//   vnf = vnf to process
+//   delta = a 2-vector specifying two different offsets from the original VNF, in any order. Positive values offset the VNF from its "exterior" side, and negative values offset from the "interior" side.
+//   ---
+//   style = {{vnf_vertex_array()}} style to use.  Default: "default"
+//   merge = If false, then do not run {{vnf_merge_points()}}.  Default: true
+// Example(3D,VPD=350,VPR=[60,0,40],VPT=[0,107,15]): In this example, the top of the surface is "interior", so a negative thickness extends that side upward, preserving the "exterior" side of the surface at the bottom.
+//   pts = [
+//       for(x=[30:5:180]) [
+//           for(y=[-6:0.5:6])
+//               [7*y,x, sin(x)*y^2]
+//       ]
+//   ];
+//   vnf=vnf_vertex_array(pts);
+//   vnf_polyhedron(vnf_sheet(vnf,[-10,0]));
+// Example(3D,ThrownTogether=true,VPD=350,VPR=[60,0,40],VPT=[0,107,15]): Same as previous example, but with both sides offset equally. The offset order doesn't matter. The output is shown transparent with the original surface inside. We can also set `merge=false` if we know our original VNF has no duplicate points.
+//   pts = [
+//       for(x=[30:5:180]) [
+//           for(y=[-6:0.5:6])
+//               [7*y,x, sin(x)*y^2]
+//       ]
+//   ];
+//   vnf=vnf_vertex_array(pts, reverse=true);
+//   vnf_polyhedron(vnf);
+//   %vnf_polyhedron(vnf_sheet(vnf, [-6,6],
+//       merge=false));
+// Example(3D): This example has multiple holes.
+//   pts = [
+//       for(x=[-10:2:10]) [
+//           for(y=[-10:2:10])
+//               [x,1.4*y,(-abs(x)^3+y^3)/250]
+//       ]
+//   ];
+//   vnf = vnf_vertex_array(pts);
+//   newface = list_remove(vnf[1],
+//       [43,42,63,88,108,109,135,
+//       134,129,155,156,164,165]);
+//   newvnf = [vnf[0],newface];
+//   vnf_polyhedron(vnf_sheet(newvnf,[2,0]));
+// Example(3D,VPD=320): When only a negative offset is applied to a sphere, the sheet is constructed inward, so the object appears unchanged, but cutting it in half reveals that we have changed the sphere into a shell.  
+//   vnf = sphere(d=100, $fn=28);
+//   left_half()
+//     vnf_polyhedron(vnf_sheet(vnf,[0,-15]));

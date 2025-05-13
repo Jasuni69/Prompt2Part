@@ -1,0 +1,1 @@
+function light_strip_clip_wall() = wall;                                            //! Clip wall thickness

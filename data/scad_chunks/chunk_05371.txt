@@ -1,0 +1,180 @@
+function _make_anchor_legal(anchor,geom) =
+   in_list(geom[0], ["prismoid","trapezoid"]) ? [for(v=anchor) _quant_anch(v)]
+ : in_list(geom[0], ["conoid", "extrusion_extent"]) ? [anchor.x,anchor.y, _quant_anch(anchor.z)]
+ : anchor;
+    
+
+
+// Module: attach()
+// Synopsis: Attaches children to a parent object at an anchor point and with anchor orientation.
+// SynTags: Trans
+// Topics: Attachments
+// See Also: attachable(), position(), align(), face_profile(), edge_profile(), corner_profile()
+// Usage:
+//   PARENT() attach(parent, child, [align=], [spin=], [overlap=], [inside=], [inset=], [shiftout=]) CHILDREN;
+//   PARENT() attach(parent, [overlap=], [spin=]) CHILDREN;
+// Description:
+//   Attaches children to a parent object at an anchor point or points, oriented in the anchor direction.
+//   This module differs from {{position()}} and {{align()}} in that it rotates the children to
+//   the anchor direction, which generally means it places the children on the surface of a parent.
+//   There are two modes of operation, parent anchor (single argument) and parent-child anchor (double argument).
+//   In most cases you should use the parent-child (double argument) version of `attach()`.  
+//   .
+//   The parent-child anchor (double argument) version is usually easier to use, and it is more powerful because it supports
+//   alignment.  You provide an anchor on the parent (`parent`) and an anchor on the child (`child`).
+//   This module connects the `child` anchor on the child to the `parent` anchor on the parent.  
+//   Imagine pointing the parent and child anchor arrows at each other and pushing the objects
+//   together until they meet at the anchor point.    The most basic case
+//   is `attach(TOP,BOT)` which puts the bottom of the child onto the top of the parent.  If you
+//   do `attach(RIGHT,BOT)` this puts the bottom of the child onto the right anchor of the parent.
+//   When an object is attached to the top or bottom its BACK direction will remaing pointing BACK.
+//   When an object is attached to one of the other anchors its FRONT will be pointed DOWN and its
+//   BACK pointed UP.  You can change this using the `spin=` argument to attach().  Note that this spin
+//   rotates around the attachment vector and is not the same as the spin argument to the child, which
+//   will usually rotate around some other direction that may be hard to predict.  For 2D objects you cannot
+//   give spin because it is not possible to spin around the attachment vector; spinning the object around the Z axis
+//   would change the child orientation so that the anchors are no longer parallel.  Furthermore, any spin
+//   parameter you give to the child will be ignored so that the attachment condition of parallel anchors is preserved.  
+//   .
+//   As with {{align()}} you can use the `align=` parameter to align the child to an edge or corner of the
+//   face where that child is attached.  For example `attach(TOP,BOT,align=RIGHT)` would stand the child
+//   up on the top while aligning it with the right edge of the top face, and `attach(RIGHT,BOT,align=TOP)` which
+//   stand the object on the right face while aligning with the top edge.  If you apply spin using the
+//   argument to `attach()` then it will be taken into account for the alignment.  If you apply spin with
+//   a parameter to the child it will NOT be taken into account.  The special spin value "align" will
+//   spin the child so that the child's BACK direction is pointed towards the aligned edge on the parent. 
+//   Note that spin is not permitted for
+//   2D objects because it would change the child orientation so that the anchors are no longer parallel.  
+//   When you use `align=` you can also adjust the position using `inset=`, which shifts the child
+//   away from the edge or corner it is aligned to.
+//   .
+//   Note that the concept of alignment doesn't always make sense for objects without corners, such as spheres or cylinders.
+//   In same cases the alignments using such children will be odd because the alignment computation is trying to
+//   place a non-existent corner somewhere.  Because attach() doesn't have in formation about the child when
+//   it runs it cannot handle curved shapes differently from cubes, so this behavior cannot be changed.  
+//   .
+//   If you give `inside=true` then the anchor arrows are lined up so they are pointing the same direction and
+//   the child object will be located inside the parent.  In this case a default "remove" tag is applied to
+//   the children.  
+//   .
+//   Because the attachment process forces an orientation and anchor point for the child, it overrides
+//   any such specifications you give to the child:  **both `anchor=` and `orient=` given to the child are
+//   ignored** with the **double argument** version of `attach()`.  As noted above, you can give `spin=` to the
+//   child but using the `spin=` parameter to `attach()` is more likely to be useful.
+//   .
+//   You can overlap attached children into the parent by giving the `$overlap` value
+//   which is 0 by default, or by the `overlap=` argument.    This is to prevent OpenSCAD
+//   from making non-manifold objects.  You can define `$overlap=` as an argument in a parent
+//   module to set the default for all attachments to it.  When you give `inside=true`, a positive overlap
+//   value shifts the child object outward.
+//   .
+//   If you specify an `inset=` value then the child is shifted away from any edges it is aligned to, towards the middle
+//   of the parent.  The `shiftout=` parameter is intended to simplify differences with aligned objects
+//   placed inside the parent.  It will shift the child outward along every direction where it is aligned with
+//   the parent.  For an inside child this is equivalent to giving a positive overlap and negative inset value.
+//   For a child with `inside=false` it is equivalent to a negative overlap and negative inset.  
+//   .
+//   The single parameter version of `attach()` is rarely needed; to use it, you give only the `parent` anchor.  The `align` direction
+//   is not permitted.  In this case the child is placed at the specified parent anchor point
+//   and rotated to the anchor direction.  For example, `attach(TOP) cuboid(2);` will place a small
+//   cube **with its center** located at the TOP anchor of the parent, so just half the cube will project
+//   from the parent.  If you want the cube sitting on the parent you need to anchor the cube to its bottom:
+//   `attach(TOP) cuboid(2,anchor=BOT);`.
+//   .
+//   The **single argument** version of `attach()` **respects `anchor=` and `orient=` given to the child.**
+//   These options will probably be necessary, in fact, to get the child correctly positioned.  Note that
+//   giving `spin=` to `attach()` in this case is the same as applying `zrot()` to the child. 
+//   .
+//   For a step-by-step explanation of
+//   attachments, see the [Attachments Tutorial](Tutorial-Attachments).
+// Arguments:
+//   parent = The parent anchor point to attach to or a list of parent anchor points.
+//   child = Optional child anchor point.  If given, orients the child to connect this anchor point to the parent anchor.
+//   ---
+//   align = If `child` is given you can specify alignment or list of alistnments to shift the child to an edge or corner of the parent. 
+//   inset = Shift aligned children away from their alignment edge/corner by this amount.  Default: 0
+//   overlap = Amount to sink child into the parent.  Equivalent to `down(X)` after the attach.  This defaults to the value in `$overlap`, which is `0` by default.
+//   inside = If `child` is given you can set `inside=true` to attach the child to the inside of the parent for diff() operations.  Default: false
+//   shiftout = Shift an inside object outward so that it overlaps all the aligned faces.  Default: 0
+//   spin = Amount to rotate the parent around the axis of the parent anchor.  Can set to "align" to align the child's BACK with the parent aligned edge.  (Only permitted in 3D.)
+// Side Effects:
+//   `$anchor` set to the parent anchor value used for the child.
+//   `$align` set to the align value used for the child.  
+//   `$idx` set to a unique index for each child, increasing by alignment first.
+//   `$attach_anchor` for each anchor given, this is set to the `[ANCHOR, POSITION, ORIENT, SPIN]` information for that anchor.
+//   if inside is true then set default tag to "remove"
+//   `$attach_to` is set to the value of the `child` argument, if given.  Otherwise, `undef`
+//   `$edge_angle` is set to the angle of the edge if the anchor is on an edge and the parent is a prismoid or vnf with "hull" anchoring
+//   `$edge_length` is set to the length of the edge if the anchor is on an edge and the parent is a prismoid or vnf with "hull" anchoring
+// Example: Cylinder placed on top of cube:
+//   cuboid(50)
+//     attach(TOP,BOT) cylinder(d1=30,d2=15,h=25);
+// Example: Cylinder on right and front side of cube:
+//   cuboid(50)
+//     attach([RIGHT,FRONT],BOT) cylinder(d1=30,d2=15,h=25);
+// Example:  Using `align` can align child object(s) with edges
+//   prismoid(50,25,25) color("green"){
+//     attach(TOP,BOT,align=[BACK,FWD]) cuboid(4);
+//     attach(RIGHT,BOT,align=[TOP,BOT]) cuboid(4);
+//   }
+// Example: One aligned to the corner upside down (light blue) and one inset fromt the corner (pink), one aligned on a side (orange) and one rotated and aligned (green).
+//   cuboid(30) {
+//     attach(TOP,TOP,align=FRONT+RIGHT) color("lightblue") prismoid(5,3,3);
+//     attach(TOP,BOT,inset=3,align=FRONT+LEFT) color("pink") prismoid(5,3,3);
+//     attach(FRONT,RIGHT,align=TOP) color("orange") prismoid(5,3,3);
+//     attach(FRONT,RIGHT,align=RIGHT,spin=90) color("lightgreen") prismoid(5,3,3);    
+//   }
+// Example: Rotation not a multiple of 90 degrees with alignment.  The children are aligned on a corner.  
+//   cuboid(30)
+//     attach(FRONT,BOT,spin=33,align=[RIGHT,LEFT,TOP,BOT,RIGHT+TOP])
+//       color("lightblue")cuboid(4);
+// Example: Anchoring the cone onto the sphere gives a single point of contact. 
+//   spheroid(d=20) 
+//       attach([1,1.5,1], BOTTOM) cyl(l=11.5, d1=10, d2=5);
+// Example: Using the `overlap` option can help:
+//   spheroid(d=20) 
+//       attach([1,1.5,1], BOTTOM, overlap=1.5) cyl(l=11.5, d1=10, d2=5);
+// Example: Alignment works on the sides of cylinders but you can only align with either the top or bototm face:
+//   cyl(h=30,d=10)
+//     attach([LEFT,[1,1.3]], BOT,align=TOP) cuboid(6);
+// Example: Attaching to edges.  The light blue and orange objects are attached to edges.  The purple object is attached to an edge and aligned. 
+//   prismoid([20,10],[10,10],7){
+//     attach(RIGHT+TOP,BOT,align=FRONT) color("pink")cuboid(2);
+//     attach(BACK+TOP, BOT) color("lightblue")cuboid(2);
+//     attach(RIGHT+BOT, RIGHT) color("orange")cyl(h=8,d=1);
+//   }
+// Example: Attaching inside the parent.  For inside attachment the anchors are lined up pointing the same direction, so the most natural way to anchor the child is using its TOP anchor.  This is equivalent to anchoring outside with the BOTTOM anchor and then lowering the child into the parent by its full depth.  
+//   back_half()
+//     diff()
+//     cuboid(20)
+//       attach(TOP,TOP,inside=true,shiftout=0.01) cyl(d1=10,d2=5,h=10);
+// Example: Attaching inside the parent with alignment
+//   diff()
+//   cuboid(20){
+//     attach(TOP,TOP,inside=true,align=RIGHT,shiftout=.01) cuboid([8,7,3]);
+//     attach(TOP,TOP,inside=true,align=LEFT+FRONT,shiftout=0.01) cuboid([3,4,5]);
+//     attach(RIGHT+FRONT, TOP, inside=true) cuboid([10,3,5]);
+//     attach(RIGHT+FRONT, TOP, inside=true, align=TOP,shiftout=.01) cuboid([5,1,2]);  
+//   }
+// Example: Attaching a 3d edge mask.  Simple 2d masks can be done using {{edge_profile()}} but this mask varies along its length.
+//   module wavy_edge(length,cycles, r, steps, n)
+//   {
+//     rmin = is_vector(r) ? r[0] : 0.01;
+//     rmax = is_vector(r) ? r[1] : r;
+//     layers = [for(z=[0:steps])
+//                   let(
+//                        r=rmin+(rmax-rmin)/2*(cos(z*360*cycles/steps)+1)
+//                   )
+//                   path3d( concat([[0,0]],
+//                                  arc(corner=path2d([BACK,CTR,RIGHT]), n=n, r=r)),
+//                           z/steps*length-length/2)
+//               ];
+//     attachable([rmax,rmax,length]){
+//         skin(layers,slices=0);
+//         children();
+//     }  
+//   }            
+//   diff()
+//   cuboid(25)
+//     attach([TOP+RIGHT,TOP+LEFT,TOP+FWD, FWD+RIGHT], FWD+LEFT, inside=true, shiftout=.01)
+//       wavy_edge(length=25.1,cycles=1.4,r=4,steps=24,n=15);

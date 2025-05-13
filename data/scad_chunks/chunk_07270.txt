@@ -1,0 +1,84 @@
+module Grid(e=[2,2,1],es=10,s,center=true,name,help){
+  
+     name=is_undef(name)?is_undef($info)?false:
+                                                   $info:
+                                   name;
+
+    function n0(e)=is_undef(e)?1:max(round(e),0);
+    function n0s(e)=max(e-1,1);// e-1 must not be 0
+    center=is_list(center)?v3(center):[center,center,center];
+    e=is_list(e)?is_num(e[2])?[max(round(e[0]),0),max(round(e[1]),0),n0(e[2])]:
+                    [round(e.x),round(e.y),1]: // z = 1
+        es[2]?[n0(e),n0(e),n0(e)]:
+        [n0(e),n0(e),1];
+    
+    es=is_undef(s)?is_list(es)?is_num(es[2])?es:
+                                concat(es,[0]):
+                    is_undef(es)?[0:0:0]:
+                        [es,es,es]:
+       is_list(s)?is_num(s[2])?[s[0]/n0s(e[0]),s[1]/n0s(e[1]),s[2]/n0s(e[2])]:
+                    [s[0]/n0s(e[0]),s[1]/n0s(e[1]),0]:
+        [s/n0s(e[0]),s/n0s(e[1]),s/n0s(e[2])];
+        
+   MO(!$children);
+   InfoTxt("Grid",[str("Gridsize(",e,")"),str(e[0]*e[1]*e[2]," elements= ",(e[0]-1)*es[0],"×",(e[1]-1)*es[1],"×",(e[2]-1)*es[2],"mm \n element spacing= ",es," mm",
+    
+    center.x?str("\n\tX ",-(e[0]-1)*es[0]/2," ⇔ ",(e[0]-1)*es[0]/2," mm"):"",
+    center.y?str("\n\tY ",-(e[1]-1)*es[1]/2," ⇔ ",(e[1]-1)*es[1]/2," mm"):"",
+    center.z?str("\n\tZ ",-(e[2]-1)*es[2]/2," ⇔ ",(e[2]-1)*es[2]/2," mm"):"")
+    ],name);  
+    
+    
+       
+    HelpTxt("Grid",[
+    "e",e
+    ,"es",es
+    ,"s",[(e[0]-1)*es[0],(e[1]-1)*es[1],(e[2]-1)*es[2]]
+    ,"center",center
+    ,"name",name]
+    ,help);
+    
+    centerPos=[
+   center.x?((1-e[0])*es[0])/2:0,
+   center.y?((1-e[1])*es[1])/2:0,
+   center.z?((1-e[2])*es[2])/2:0];
+
+   if(e.x&&e.y&&e.z) for(x=[0:e[0]-1],y=[0:e[1]-1],z=[0:e[2]-1]){
+       $idx=[x,y,z];
+       $idx2=[e.y*e.x*z + e.x*y + x, e.y*e.x*z + e.y*x + y];
+       $pos=[x*es.x,y*es.y,z*es.z]+centerPos;
+       $info=norm($idx)?false:name;
+       $tab=is_undef($tab)?1:b($tab,false)+1;
+       $es=es;
+      // $helpM=norm($idx)?false:$helpM;
+       translate([x*es[0],y*es[1],z*es[2]]+centerPos)children();
+   }
+}
+
+//Grid(4)Text($pos.xy,size=3);
+
+// Grid but with alternating row offset - hex or circle packing
+//HexGrid()circle(d=$es.y);
+//HexGrid()circle(d=Umkreis(6,$d-.1),$fn=6);
+
+/** \name HexGrid \page Modifier
+HexGrid() children(); creates an interlaced grid of children
+\param e elements [x,y] e+.1 or -.1 will change the pattern
+\param es element spacing [x,y]
+\param center true/false or ±num for x/y shift, can be a list
+\param $d $r $es $idx $idx2 $pos output for children
+\param name help  name help
+*/
+
+//HexGrid(center=[-3,+0]);
+/*  //sphere packing
+difference(){
+lift=(sqrt(6)/3);
+rotate(30)cylinder(5*lift*2-2,r=5,$fn=6);
+
+echo( sin(atan(sqrt(2)) ), lift );
+color("yellow",.5)HexGrid(7.1,center=true,es=5)sphere($r);
+color("magenta",.5) Tz(5 * lift-1) HexGrid(7.1,es=5,center=[+3,3])sphere($r);
+color("cyan",.5)Tz(2* (5 * lift-1))HexGrid(7.1,es=5,center=[-3,3])sphere($r);
+}
+//*/

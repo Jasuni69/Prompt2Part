@@ -1,0 +1,37 @@
+function superellipse(n=2.5,r=10,z,fn=fn)=
+let(
+  r2=is_undef(r2)?is_list(r)?r.y:
+                             r:
+                  r2,
+  r=is_list(r)?r.x:r,
+  
+    n11=is_list(n)?n[0]:n,
+    n12=is_list(n)?n[1]:n,
+    n13=is_list(n)?n[2]:n,
+    n14=is_list(n)?n[3]:n,
+    n2=is_undef(n2)?n:n2,
+    n21=is_list(n2)?n2[0]:n2,
+    n22=is_list(n2)?n2[1]:n2,
+    n23=is_list(n2)?n2[2]:n2,
+    n24=is_list(n2)?n2[3]:n2
+   )
+is_undef(z)?[for(f=[0:fn])let(i=f%fn*360/fn)each[
+    if(i<=90)[r*pow(sin(i),2/n11),r2*pow(cos(i),2/n21)],
+    if(i>90&&i<=180)[r*pow(abs(sin(i)),2/n12),-r2*pow(abs(cos(i)),2/n22)],
+    if(i>180&&i<=270)[-r*pow(abs(sin(i)),2/n13),-r2*pow(abs(cos(i)),2/n23)],
+    if(i>270&&i)[-r*pow(abs(sin(i)),2/n14),r2*pow(abs(cos(i)),2/n24)],
+    ]
+    ]:
+    [for(f=[0:fn])let(i=f%fn*360/fn)each[
+    if(i<=90)[r*pow(sin(i),2/n11),r2*pow(cos(i),2/n21),z],
+    if(i>90&&i<=180)[r*pow(abs(sin(i)),2/n12),-r2*pow(abs(cos(i)),2/n22),z],
+    if(i>180&&i<=270)[-r*pow(abs(sin(i)),2/n13),-r2*pow(abs(cos(i)),2/n23),z],
+    if(i>270&&i)[-r*pow(abs(sin(i)),2/n14),r2*pow(abs(cos(i)),2/n24),z],
+    ]
+    ];
+
+
+//polygon(superellipse(r=[5,2]));
+//Coil(points=superellipse(r=[3,2],n=3.5));
+
+// wall calculates perimeter number according to nozzle size for "soll"mm

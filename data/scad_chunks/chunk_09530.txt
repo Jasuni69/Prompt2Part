@@ -1,0 +1,23 @@
+function bezier_path_point(path, seg, u, N=3) = bez_point(select(path,seg*N,(seg+1)*N), u);
+
+
+
+// Function: bezier_path_closest_point()
+// Usage:
+//   bezier_path_closest_point(bezier,pt)
+// Description:
+//   Finds the closest part of the given bezier path to point `pt`.
+//   Returns [segnum, u] for the closest position on the bezier path to the given point `pt`.
+// Arguments:
+//   path = A bezier path to approximate.
+//   pt = The point to find the closest curve point to.
+//   N = The degree of the bezier curves.  Cubic beziers have N=3.  Default: 3
+//   max_err = The maximum allowed error when approximating the closest approach.
+// Example(2D):
+//   pt = [100,0];
+//   bez = [[0,0], [20,40], [60,-25], [80,0], [100,25], [140,25], [160,0]];
+//   pos = bezier_path_closest_point(bez, pt);
+//   xy = bezier_path_point(bez,pos[0],pos[1]);
+//   trace_bezier(bez, N=3);
+//   color("red") translate(pt) sphere(r=1);
+//   color("blue") translate(xy) sphere(r=1);

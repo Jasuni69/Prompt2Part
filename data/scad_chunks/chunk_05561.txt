@@ -1,0 +1,18 @@
+function f_sub(a,b) = f_2arg(function(a,b) a - b)(a,b);
+
+
+// Function: f_mul()
+// Synopsis: Returns a function to multiply `a` by `b`.
+// Topics: Function Literals, Math Operators
+// See Also: f_add(), f_sub(), f_mul(), f_div(), f_mod(), f_pow(), f_neg()
+// Usage:
+//   fn = f_mul();
+//   fn = f_mul(a=);
+//   fn = f_mul(b);
+//   fn = f_mul(a=,b=);
+// Description:
+//   A factory that generates function literals based on `a * b`, where either
+//   or both of the `a` or `b` arguments can be replaced with constants.
+// Arguments:
+//   a = If given, replaces the first argument.
+//   b = If given, replaces the second argument.

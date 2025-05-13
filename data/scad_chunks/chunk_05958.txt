@@ -1,0 +1,1 @@
+module yring(n=2,r=0,sa=0,cp=[0,0,0],rot=true) yrot_copies(n=n,r=r,sa=sa,cp=cp,subrot=rot) children();

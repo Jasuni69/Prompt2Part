@@ -1,0 +1,48 @@
+module cactus(w) {
+    linear_extrude(w * 3) {
+        translate([2 * w, w * 7]) 
+        scale(w) 
+            blocks(
+                vx_polygon([
+                    [0, 2],
+                    [3, 2],
+                    [5, 4],
+                    [5, 10],
+                    [5, 10],
+                    [3, 10],
+                    [3, 6],
+                    [0, 4],
+                    
+                ], filled = true)
+            );
+
+        translate([-2 * w, w * 5]) 
+        scale(w)
+            blocks(
+                vx_polygon([
+                    [-1, 0],
+                    [-3, 0],
+                    [-6, 2],
+                    [-6, 6],
+                    [-6, 6],
+                    [-4, 6],
+                    [-4, 4],
+                    [-1, 2],
+                    
+                ], filled = true)
+            );       
+        
+        scale(w) 
+            blocks(
+                vx_polygon([
+                    [-2, 0],
+                    [2, 0],
+                    [2, 20],
+                    [1, 22],
+                    [0, 22],
+                    [-1, 22],
+                    [-2, 20]
+                ], filled = true)        
+            ); 
+    }
+}

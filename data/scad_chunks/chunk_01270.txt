@@ -1,0 +1,1 @@
+function scs_circlip(type)              = type[15]; //! Circlip used

@@ -1,0 +1,111 @@
+function _ofs_face_edge(face,firstlen,second=false) =
+   let(
+       itry = min_index(face),
+       i = select(face,itry-1)<firstlen ? itry-1:itry,
+       edge1 = select(face,[i,i-1]),
+       edge2 = select(face,i+1)<firstlen ? select(face,[i+1,i+2])
+                                         : select(face,[i,i+1])
+   )
+   (second ? edge2 : edge1)-[0,firstlen];
+
+
+
+// Function&Module: sweep()
+// Synopsis: Construct a 3d object from arbitrary transformations of a 2d polygon path.
+// SynTags: VNF, Geom
+// Topics: Extrusion, Sweep, Paths, Textures
+// See Also: sweep_attach(), linear_sweep(), rotate_sweep(), spiral_sweep(), path_sweep(), path_sweep2d(), offset_sweep()
+// Usage: As Module
+//   sweep(shape, transforms, [closed], [caps], [style], [convexity=], [anchor=], [spin=], [orient=], [atype=]) [ATTACHMENTS];
+// Usage: As Function
+//   vnf = sweep(shape, transforms, [closed], [caps], [style], [anchor=], [spin=], [orient=], [atype=]);
+// Description:
+//   The input `shape` must be a non-self-intersecting 2D polygon or region, and `transforms`
+//   is a list of 4x4 transformation matrices.  The sweep algorithm applies each transformation in sequence
+//   to the shape input and links the resulting polygons together to form a polyhedron.
+//   If `closed=true` then the first and last transformation are linked together.
+//   As a function, returns the VNF for the polyhedron.  As a module, computes the polyhedron.
+//   .
+//   The `caps` parameter controls what happens at the ends of the polyhedron.  If `closed=true` the shape links to itself and has no
+//   ends, but when `closed` is false, the two ends are, by default capped with flat faces.  If you set `caps=false` then the ends
+//   receive no faces and the resulting non-manifold polyhedron has exposed edges.  You can also set caps to a number, which adds a
+//   rounded cap with the specified radius, or you can set caps to an {{offset_sweep()}} end treatment, and the specified sweep will
+//   be attached as a cap.  Note that you are **adding** a rounded cap, not rounding the specified shape as is common for many other
+//   library modules.  The rounded cap is attached to the end face and may not blend neatly with the swept shape unless the sides of
+//   the swept shape are perpendicular to the end cap.  
+//   .
+//   This is a powerful, general framework for producing polyhedra.  It is important
+//   to ensure that your resulting polyhedron does not include any self-intersections, or it will
+//   be invalid and generate CGAL errors.  If you get such errors, most likely you have an
+//   overlooked self-intersection.  The errors do not occur when your shape is alone
+//   in your model, but errors arise if you add a second object to the model.  This may mislead you into
+//   thinking the second object caused a problem.  Even adding a simple cube to the model reveals the problem.
+//   .
+//   You can apply a texture to the sweep object using the usual texture parameters.
+//   See [Texturing](skin.scad#section-texturing) for more details on how textures work.
+//   This works by passing through to {{vnf_vertex_array()}}, which also has more details on
+//   texturing.  Note that textures work only when the shape is a path; you cannot apply a texture to a region.
+//   The texture tiles are oriented on the path sweep so that the Y axis of the tile is aligned with the sweep direction.
+//   .
+//   
+// Arguments:
+//   shape = 2d path or region, describing the shape to be swept.
+//   transforms = list of 4x4 matrices to apply
+//   closed = set to true to form a closed (torus) model.  Default: false
+//   caps = if closed is false, set caps to false to leave the ends open.  Other values are true to create a flat cap, a number a rounded cap, or an {{offset_sweep()}} end treatment to create the specified offset sweep.  Can be a single value or pair of values to control the caps independently at each end.  Default: true
+//   style = vnf_vertex_array style.  Default: "min_edge"
+//   ---
+//   convexity = convexity setting for use with polyhedron. (module only) Default: 10
+//   texture = A texture name string, or a rectangular array of scalar height values (0.0 to 1.0), or a VNF tile that defines the texture to apply to vertical surfaces.  See {{texture()}} for what named textures are supported.
+//   tex_size = An optional 2D target size (2-vector or scalar) for the texture at the first point of your shape and first transformation.  Actual texture sizes will be scaled somewhat to evenly fit the available surface. Default: `[5,5]`
+//   tex_reps = If given instead of tex_size, a scalar or 2-vector giving the integer number of texture tile repetitions in the horizontal and vertical directions.
+//   tex_inset = If numeric, lowers the texture into the surface by the specified proportion, e.g. 0.5 would lower it half way into the surface.  If `true`, insets by exactly its full depth.  Default: `false`
+//   tex_rot = Rotate texture by specified angle, which must be a multiple of 90 degrees.  Default: 0
+//   tex_depth = Specify texture depth; if negative, invert the texture.  Default: 1.  
+//   tex_samples = Minimum number of "bend points" to have in VNF texture tiles.  Default: 8
+//   tex_extra = number of extra lines of a hightfield texture to add at the end.  Can be a scalar or 2-vector to give x and y values.  Default: 1
+//   tex_skip = number of lines of a heightfield texture to skip when starting.  Can be a scalar or two vector to give x and y values.  Default: 0
+//   normals = if provided, used this array of normals for calculating the texture.  Dimension should be len(transforms) x len(shape).  
+//   cp = Centerpoint for determining "intersect" anchors or centering the shape.  Determintes the base of the anchor vector.  Can be "centroid", "mean", "box" or a 3D point.  Default: "centroid"
+//   atype = Select "hull" or "intersect" anchor types.  Default: "hull"
+//   anchor = Translate so anchor point is at the origin. Default: "origin"
+//   spin = Rotate this many degrees around Z axis after anchor. Default: 0
+//   orient = Vector to rotate top toward after spin (module only)
+// Named Anchors:
+//   "origin" = The native position of the shape.  
+// Anchor Types:
+//   "hull" = Anchors to the virtual convex hull of the shape.
+//   "intersect" = Anchors to the surface of the shape.
+// Example(VPR=[45,0,74],VPD=175,VPT=[-3.8,12.4,19]): A bent object that also changes shape along its length.
+//   radius = 75;
+//   angle = 40;
+//   shape = circle(r=5,$fn=32);
+//   T = [for(i=[0:25]) xrot(-angle*i/25,cp=[0,radius,0])*scale([1+i/25, 2-i/25,1])];
+//   sweep(shape,T);
+// Example: This is the "sweep-drop" example from list-comprehension-demos.
+//   function drop(t) = 100 * 0.5 * (1 - cos(180 * t)) * sin(180 * t) + 1;
+//   function path(t) = [0, 0, 80 + 80 * cos(180 * t)];
+//   function rotate(t) = 180 * pow((1 - t), 3);
+//   step = 0.01;
+//   path_transforms = [for (t=[0:step:1-step]) translate(path(t)) * zrot(rotate(t)) * scale([drop(t), drop(t), 1])];
+//   sweep(reverse(circle(1, $fn=12)), path_transforms);
+// Example: Another example from list-comprehension-demos
+//   function f(x) = 3 - 2.5 * x;
+//   function r(x) = 2 * 180 * x * x * x;
+//   pathstep = 1;
+//   height = 100;
+//   shape_points = subdivide_path(square(10),40,closed=true);
+//   path_transforms = [for (i=[0:pathstep:height]) let(t=i/height) up(i) * scale([f(t),f(t),i]) * zrot(r(t))];
+//   sweep(shape_points, path_transforms);
+// Example: Twisted container.  Note that this technique doesn't create a fixed container wall thickness.
+//   shape = subdivide_path(square(30,center=true), 40, closed=true);
+//   outside = [for(i=[0:24]) up(i)*rot(i)*scale(1.25*i/24+1)];
+//   inside = [for(i=[24:-1:2]) up(i)*rot(i)*scale(1.2*i/24+1)];
+//   sweep(shape, concat(outside,inside));
+// Example: "sweet-drop" with a dots texture
+//   function drop(t) = 100 * 0.5 * (1 - cos(180 * t)) * sin(180 * t) + 1;
+//   function path(t) = [0, 0, 80 + 80 * cos(180 * t)];
+//   function rotate(t) = 180 * pow((1 - t), 3);
+//   step = 0.01;
+//   path_transforms = [for (t=[0:step:1-step]) translate(path(t)) * zrot(rotate(t)) * scale([drop(t), drop(t), 1])];
+//   sweep(reverse(circle(1, $fn=12)), path_transforms, texture="dots", tex_reps=[12,12],tex_depth=.1);

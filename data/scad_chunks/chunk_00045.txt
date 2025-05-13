@@ -1,0 +1,50 @@
+x3 = x2 + 130;
+x4 = x3 + 200;
+x5 = 900;
+x6 = x5 + 150;
+
+cable_grommets_y = 0;
+
+translate([x5, cable_grommets_y])
+    cable_grommets();
+
+translate([x5, cable_grommets_y + 45])
+    led_bezels();
+
+translate([x5 + 50, cable_grommets_y])
+    ribbon_clamps();
+
+translate([x5 + 95, cable_grommets_y])
+    press_fits();
+
+fixing_blocks_y = cable_grommets_y + 60;
+translate([x5, fixing_blocks_y])
+    fixing_blocks();
+
+corner_blocks_y = fixing_blocks_y + 30;
+translate([x5, corner_blocks_y])
+    corner_blocks();
+
+screw_knobs_y = corner_blocks_y + 70;
+translate([x5, screw_knobs_y])
+    screw_knobs();
+
+knobs_y = screw_knobs_y + 40;
+translate([660, knobs_y])
+    printed_pulley_test();
+
+translate([x5, knobs_y])
+    knobs();
+
+clips_y = knobs_y + 50;
+translate([x5, clips_y])
+    cable_clips();
+
+strap_y = clips_y + 50;
+translate([x5 + 60, strap_y])
+    strap_handles();
+
+translate([x6, strap_y])
+   feet();
+
+handle_y = strap_y + 50;

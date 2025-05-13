@@ -1,0 +1,85 @@
+function crown_gear(
+    circ_pitch,
+    teeth,
+    backing,
+    face_width=5,
+    pressure_angle=20,
+    clearance,
+    backlash=0,
+    profile_shift=0,
+    slices=10,
+    bottom,
+    thickness,
+    diam_pitch,
+    pitch,
+    mod,
+    gear_spin=0,
+    anchor=CTR,
+    spin=0,
+    orient=UP
+) = let(
+        pitch = _inherit_gear_pitch("crown_gear()", pitch, circ_pitch, diam_pitch, mod, warn=false),
+        PA = _inherit_gear_pa(pressure_angle)
+    )
+    assert(is_integer(teeth) && teeth>0)
+    assert(is_finite(PA) && PA>=0 && PA<90, "Bad pressure_angle value.")
+    assert(clearance==undef || (is_finite(clearance) && clearance>=0))
+    assert(is_finite(backlash) && backlash>=0)
+    assert(is_finite(gear_spin))
+    assert(num_defined([thickness,backing,bottom])<=1, "Can define only one of thickness, backing and bottom")
+    let(
+        a = _adendum(pitch, profile_shift),
+        d = _dedendum(pitch, clearance, profile_shift),
+        bottom = is_def(bottom) ?
+                     assert(is_finite(bottom) && bottom>d, "bottom is invalid or too small for teeth")
+                     bottom
+               : is_def(thickness) ?
+                     assert(is_finite(thickness) && thickness>a+d, "thickness is invalid or too small for teeth")
+                     thickness - a
+               : is_def(backing) ?
+                     assert(all_positive([backing]), "backing must be a positive value")
+                     backing+d
+               : 2*d+a,  // default case
+        mod = module_value(circ_pitch=pitch),
+        ir = mod * teeth / 2,
+        or = ir + face_width,
+        profiles = [
+            for (slice = [0:1:slices-1])
+            let(
+                u = slice / (slices-1),
+                r = or - u*face_width,
+                wpa = acos(ir * cos(PA) / r),
+                profile = select(
+                    rack2d(
+                        mod=mod, teeth=1,
+                        pressure_angle=wpa,
+                        clearance=clearance,
+                        backlash=backlash,
+                        profile_shift=profile_shift,
+                        rounding=false
+                    ), 2, -3
+                ),
+                delta = profile[1] - profile[0],
+                slope = delta.y / delta.x,
+                C = profile[0].y - slope * profile[0].x,
+                profile2 = profile[1].x > 0
+                  ? [profile[0], [0,C], [0,C], profile[3]]
+                  : profile,
+                m = back(r) * xrot(90),
+                tooth = apply(m, path3d(profile2)),
+                rpitch = pitch * r / ir
+            )
+            assert(profile[3].x <= rpitch/2, "face_width is too wide for the given gear geometry.  Either decrease face_width, or increase the module or tooth count.")
+            [
+                for (i = [0:1:teeth-1])
+                let(a = gear_spin - i * 360 / teeth) 
+                each zrot(a, p=tooth)
+            ]
+        ],
+        rows = [
+            [for (p=profiles[0]) [p.x,p.y,-bottom]],
+            each profiles,
+            [for (p=last(profiles)) [p.x,p.y,last(profiles)[0].z]],
+        ],
+        vnf = vnf_vertex_array(rows, col_wrap=true, caps=true)
+    ) reorient(anchor,spin,orient, r=or, h=2*bottom, p=vnf);

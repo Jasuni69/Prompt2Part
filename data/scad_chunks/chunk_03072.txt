@@ -1,0 +1,30 @@
+
+
+cutoutsLeft = 
+[
+ //--  0,  1,  2,  3, 4, n
+  // All 4 Coordinate combinations of (yappOrigin | yappCenter) and  (yappCoordBox | yappCoordPCB)
+  [25,15, 20, 10,  2, yappRoundedRect]
+ ,[25,15, 20, 10,  2, yappRoundedRect, yappCoordPCB]
+ ,[25,15, 20, 10,  2, yappRoundedRect, yappCenter]
+ ,[25,15, 20, 10,  2, yappRoundedRect, yappCenter, yappCoordPCB]
+];
+
+cutoutsRight = 
+[
+  // All 8 Coordinate combinations
+  [25,15, 20, 10,  2, yappRoundedRect, yappCenter]
+ ,[25,15, 20, 10,  2, yappRoundedRect, yappCenter, yappCoordPCB]
+ ,[25,15, 20, 10,  2, yappRoundedRect, yappCenter, yappCoordPCB, yappLeftOrigin]
+ ,[25,15, 20, 10,  2, yappRoundedRect, yappCenter, yappLeftOrigin]
+ ,[25,15, 20, 10,  2, yappRoundedRect]
+ ,[25,15, 20, 10,  2, yappRoundedRect, yappCoordPCB]
+ ,[25,15, 20, 10,  2, yappRoundedRect, yappCoordPCB, yappLeftOrigin]
+ ,[25,15, 20, 10,  2, yappRoundedRect, yappLeftOrigin]
+];
+
+
+
+
+//---- This is where the magic happens ----
+YAPPgenerate();

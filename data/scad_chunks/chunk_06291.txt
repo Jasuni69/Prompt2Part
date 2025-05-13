@@ -1,0 +1,27 @@
+function phillips_diam(size, depth) =
+    assert(in_list(size,["#0","#1","#2","#3","#4",0,1,2,3,4]))
+    let(
+        num = is_num(size) ? size : ord(size[1]) - ord("0"),
+        shaft = _phillips_shaft(num),
+        g =     [0.81, 1.27, 2.29, 3.81, 5.08][num],
+        h1 = adj_ang_to_opp(g/2, _ph_bot_angle()),   // height of the small conical tip
+        h2 = adj_ang_to_opp((shaft-g)/2, 90-_ph_side_angle())   // height of larger cone
+    )
+    depth<h1 || depth>= h1+h2 ? undef :
+    2 * tan(_ph_side_angle())*(depth-h1) + g;
+
+
+// Section: Hex drive
+
+// Module: hex_drive_mask()
+// Synopsis: Creates a mask for a hex drive recess.
+// SynTags: Geom
+// Topics: Screws, Masks
+// See Also: phillips_mask(), hex_drive_mask(), torx_mask(),  phillips_depth(), phillips_diam(), robertson_mask()
+// Usage:
+//   hex_drive_mask(size, length, [anchor], [spin], [orient], [$slop]) [ATTACHMENTS];
+// Description:
+//   Creates a mask for hex drive.  Note that the hex recess specs requires
+//   a slightly oversized recess.  You can use $slop to increase the size by 
+//   `2 * $slop` if necessary.  
+//

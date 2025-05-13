@@ -1,0 +1,1 @@
+function leadnuthousing_mount_screw_len(type)   = type[9];  //! Mounting screw length

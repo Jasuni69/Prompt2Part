@@ -1,0 +1,4 @@
+function scale(x=1,y=1,z=1,vector=[1,1,1,1])= [ [ x*vector[0], 0, 0,0],
+                [0,  y*vector[1], 0, 0],
+                [0, 0,  z*vector[2],0],
+                  [0,0,0,1]];

@@ -1,0 +1,154 @@
+module W5(kurv=15,arms=3,detail=.3,h=50,tz=+0,start=0.7,end=13.7,topdiameter=1,topenddiameter=1,bottomenddiameter=+2,inv=0)
+{
+
+    Polar(e=arms)for (i=[start:detail:end])
+    {
+        
+        
+        j=i+detail;
+        hull()
+        {
+            R(z=i*kurv)T(i,0,tz*-2*h/(2*PI*(i)))R(inv*180)cylinder(h/(2*PI*(i)),d1=n(topenddiameter)+i/end*n(bottomenddiameter),d2=n(topdiameter),$fn=fn);
+            R(z=j*kurv)T(j,0,tz*-2*h/(2*PI*(j)))R(inv*180)cylinder(h/(2*PI*(j)),d1=n(topenddiameter)+j/end*n(bottomenddiameter),d2=n(topdiameter),$fn=fn);
+        }
+    }
+ 
+
+}
+
+fonts=[
+"Bahnschrift",
+"Alef",
+"Amiri",
+"Arial",
+"Caladea",
+"Calibri",
+"David CLM",
+"David libre",
+"Deja Vu Sans",
+"Ebrima",
+"Echolon",
+"Forelle",
+"Frank Ruehl CLM",
+"Frank Ruhl Hofshi",
+"Franklin Gothic Medium",
+"Gabrielle",
+"Gabriola",
+"Gadugi",
+"Gentium Basic",
+"Gentium Book Basic",
+"Georgia",
+"Impact",
+"Ink Free",
+"Liberation Mono",
+"Liberation Sans",
+"Liberation Sans Narrow",
+"Liberation Serif",
+"Linux Biolinum G",
+"Linux Libertine Display G",
+"Linux Libertine G",
+"Lucida Console",
+"Noto Sans",
+"OpenSymbol",
+"Palatino Linotype",
+"Politics Head",
+"Reem Kufi",
+"Rubik",
+"SamsungImagination",
+"Segoe Print",
+"Segoe Script",
+"Segoe UI",
+"SimSun",
+"Sitka Banner",
+"Sitka Display",
+"Sitka Heading",
+"Sitka Small",
+"Sitka Subheading",
+"Sitka Subheading",
+"Sitka Text",
+"Source Code Pro",
+"Source Sans Pro",
+"Source Serif Pro",
+"Tahoma",
+"Times New Roman",
+"Trebuchet MS",
+"Unispace",
+"Verdana",
+"Yu Gothic",
+"Yu Gothic UI",
+"cinnamon cake",
+"gotische",
+"Webdings","Wingdings","EmojiOne Color",
+];
+
+styles=[
+
+"Condensed",
+"Condensed Oblique",
+"Condensed Bold",
+"Condensed Bold Oblique",
+"Condensed Bold Italic",
+"SemiCondensed",
+"SemiLight Condensed",
+"SemiLight SemiCondensed",
+"SemiBold SemiCondensed",
+"SemiBold Condensed",
+"Light Condensed",
+"Light SemiCondensed",
+"SemiLight",
+"Light",
+"ExtraLight",
+"Light Italic",
+"Bold",
+"Bold SemiCondensed",
+"Semibold",
+"Semibold Italic",
+"Bold Italic",
+"Bold Oblique",
+"Black",
+"Black Italic",
+"Book",
+"Regular",
+"Italic",
+"Medium",
+"Oblique",
+];
+
+
+/*
+Text("123ABCiiII",spacing=.9,radius=20,textmetrics=1,center=+1,cy=false,viewPos=true);
+%circle(20);
+// */
+//Cring(txt="iiiAAA",tSpacing=1.0);
+
+/** \page Objects
+Text() creates text
+\name Text
+##Example
+Text(123,h=0);  
+Text(text="WWiiABCiiXX",radius=10);
+
+\param text textstring or number
+\param size text size
+\param h  text height Z for 2D h=0
+\param cx,cy,cz center  center modes
+\param spacing text spacing
+\param fn text resolution
+\param radius  polar text arrangement
+\param rot     rotation vector for text
+\param font    text font (name or number) echo(fonts)
+\param style   text style ( name or number) echo(styles)
+\param help show help
+\param name text name
+\param textmetrics  use textmetrics
+\param viewPos  show letter positions
+\param trueSize="body" text size = body height allow the use of pt() point, hp=size of letters "hp",cap=cap height
+
+
+*/
+//echo(textmetrics("hp",size=1));
+
+
+
+//Text("fhpbdlqQPXMALTfF",size=10,trueSize="versal",cy=+0);
+//%square([100,10]);

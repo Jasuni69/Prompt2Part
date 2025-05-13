@@ -1,0 +1,1 @@
+function coreXY_upper_belt_colour(type)     = type[5]; //! Colour of the upper belt

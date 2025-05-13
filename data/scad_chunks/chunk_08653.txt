@@ -1,0 +1,10 @@
+function _cmd(t, cmd, point, unit_vectors, leng, angle) = 
+    cmd == "forward" || cmd == "xforward" ? _xu_forward(t, leng) : 
+    cmd == "roll" ? _xu_turn(t, -angle) : 
+    cmd == "pitch" ? _yu_turn(t, -angle) : 
+    cmd == "turn" || cmd == "zturn" ? _zu_turn(t, angle) : 
+    cmd == "xturn" ? _xu_turn(t, angle) : 
+    cmd == "yturn" ? _yu_turn(t, angle) : 
+    cmd == "yforward" ? _yu_forward(t, leng) : 
+    cmd == "zforward" ? _zu_forward(t, leng) : 
+    _get(t, cmd);

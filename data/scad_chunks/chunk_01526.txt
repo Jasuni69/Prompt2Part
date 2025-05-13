@@ -1,0 +1,21 @@
+module radial_lead(start, end, z, tail, lead) {
+    $fn = fn;
+    profile = is_list(lead) ? rectangle_points(lead.x , lead.y) : circle_points(lead / 2);
+    color(silver)
+        if(start == end)
+            translate([start.x, start.y, -tail])
+                linear_extrude(tail + z)
+                    polygon([for(p = profile) [p.x, p.y]]);
+        else {
+            dz = 2 * [0, 0, is_list(lead) ? norm(lead) : lead];
+
+            top = [start.x, start.y, z];
+            bot = [end.x,   end.y,   0];
+
+            path = [top, top - dz, bot + dz, bot];
+            rpath = concat(bezier_path(path, 20), [bot - [0, 0, tail]]);
+            sweep(rpath, profile);
+        }
+    translate(end)
+        solder((is_list(lead) ? min(lead) : lead) / 2);
+}

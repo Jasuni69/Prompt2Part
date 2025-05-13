@@ -1,0 +1,5 @@
+module leadnuthousing_screw_positions(type) { //! Get screw positions to mount the leadnut housing
+    for(p = [[-1,-1], [1,-1], [1,1], [-1,1]])
+        translate([p.x * leadnuthousing_screw_dist_l(type)/2, p.y * leadnuthousing_screw_dist_w(type)/2, 0])
+            children();
+}

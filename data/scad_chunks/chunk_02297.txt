@@ -1,0 +1,37 @@
+module 2screw_block(screw = def_screw, name = false, short_insert = false) { //! Generate the STL for a printed 2screw block
+    r = 1;
+    cb_width = 2screw_block_width(screw, short_insert);
+    cb_height = corner_block_width(screw, short_insert);
+    cb_depth = cb_height;
+    insert = screw_insert(screw, short_insert);
+    corner_rad = insert_outer_d(insert) / 2 + wall;
+    offset = corner_block_hole_offset(screw, short_insert);
+
+    stl(name ? name : str("2screw_block", "_M", screw_radius(screw) * 20, short_insert ? "_s" : ""))
+        difference() {
+            hull()  {
+                translate([-cb_width / 2 + r, r])
+                    cylinder(r = r, h = 1);
+
+                translate([cb_width / 2 - r, r])
+                    cylinder(r = r, h = 1);
+
+                translate([0, offset, offset])
+                    sphere(corner_rad);
+
+                translate([0, offset])
+                    cylinder(r = corner_rad, h = 1);
+
+                translate([0, r, offset])
+                    rotate([-90, 0, 180])
+                        rounded_cylinder(r = corner_rad, h = r, r2 = r);
+            }
+            2screw_block_v_hole(screw, short_insert)
+                insert_hole(insert, overshoot);
+
+            2screw_block_h_hole(screw, short_insert)
+                insert_hole(insert, overshoot, true);
+
+            children();
+        }
+}

@@ -1,0 +1,7 @@
+function _lcm(a,b) =
+    assert(is_int(a) && is_int(b), "\nInvalid non-integer parameters to lcm.")
+    assert(a!=0 && b!=0, "\nArguments to lcm must be non-zero.")
+    abs(a*b) / gcd(a,b);
+
+
+// Computes lcm for a list of values

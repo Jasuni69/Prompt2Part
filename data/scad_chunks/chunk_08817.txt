@@ -1,0 +1,12 @@
+function _intersection_ps(closed_shape, line_pts, epsilon) = 
+    let(
+        npts = [
+            for(i = [0:len(closed_shape) - 2]) 
+            let(p = __line_intersection2(line_pts, [closed_shape[i], closed_shape[i + 1]], epsilon = epsilon))
+            if(p != []) p
+        ],
+        leng = len(npts)
+    )
+    leng < 2 ? npts : 
+    leng == 2 ? (npts[0] != npts[1] ? npts : [npts[0]]) :
+    hashset_elems(hashset(npts, hash = _pt2_hash));

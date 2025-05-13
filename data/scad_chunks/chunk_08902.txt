@@ -1,0 +1,10 @@
+function _foliage_scroll(size, spirals, max_spirals, min_radius, angle_step, done) =
+    let(
+        more_spirals = try_add_spiral(size, spirals, max_spirals, min_radius, done),
+        nx_spirals = [
+            for(i = 0; i < len(more_spirals); i = i + 1)
+            if(i < done) more_spirals[i] else spiral_step(more_spirals[i], angle_step)
+        ],
+        nx_done = count(nx_spirals, function(s) spiral_angle(s) > 630)
+    )
+    nx_done < len(nx_spirals)? _foliage_scroll(size, nx_spirals, max_spirals, min_radius, angle_step, nx_done) : nx_spirals;

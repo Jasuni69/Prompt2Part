@@ -1,0 +1,5 @@
+module fixing_block_test(screw)
+    if($preview)
+        fastened_fixing_block_assembly(3, screw = screw);
+    else
+        fixing_block(screw);

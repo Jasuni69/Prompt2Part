@@ -1,0 +1,2 @@
+function printed_pulley_od(tooth_count, tooth_pitch, pitch_line_offset)
+    = tooth_count * tooth_pitch / PI - 2 * pitch_line_offset;

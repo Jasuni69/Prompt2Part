@@ -1,0 +1,1 @@
+function ttrack_opening(type)       = type[3];   //! Width of the opening

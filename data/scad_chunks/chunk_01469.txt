@@ -1,0 +1,6 @@
+module rail_assembly(carriage, length, pos, carriage_end_colour = grey(20), carriage_wiper_colour = grey(20)) { //! Rail and carriage assembly
+    rail(carriage_rail(carriage), length);
+
+    translate([pos, 0])
+        carriage(carriage, carriage_end_colour, carriage_wiper_colour);
+}

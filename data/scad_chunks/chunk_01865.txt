@@ -1,0 +1,1 @@
+function bulldog_radius(type)    = type[6];     //! Outside radius of the back corners

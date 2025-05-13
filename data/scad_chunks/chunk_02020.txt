@@ -1,0 +1,6 @@
+function psu_shroud_width(type)  =                                              //! Outside width of the shroud
+    let(terminals = psu_terminals(type))
+        terminals ?
+            let(y = terminals.y, tb = terminals.z)
+                 wall + clearance / 2 + y + 3 * terminal_block_pitch(tb) + terminal_block_divider(tb) / 2 + wall / 2
+        : psu_width(type) + 2 * wall + clearance;

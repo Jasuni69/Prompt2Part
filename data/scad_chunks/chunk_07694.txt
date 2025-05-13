@@ -1,0 +1,9 @@
+module Reuleaux(rU=5,name,fn=fn){
+  r=rU/(sqrt(3)/3); 
+  intersection_for (i=[0,120,240])
+                {
+                  rotate(i)T(rU)  circle(r=r,$fn=fn);
+
+                } 
+  if(name)echo(str(name," Reuleaux rU=",rU," r=",r));              
+}

@@ -1,0 +1,43 @@
+function contour(f, isovalue, bounding_box, pixel_size, pixel_count=undef, use_centers=true, smoothing=undef, closed=true, exact_bounds=false, show_stats=false, _mball=false) =
+    assert(all_defined([f, isovalue]), "\nThe parameters f and isovalue must both be defined.")
+    assert(is_function(f) ||
+        (is_list(f) &&
+            // _mball=true allows pixel_size and bounding_box to coexist with f as array, because metaballs2d() already calculated them
+            (_mball || 
+                ((is_def(bounding_box) && is_undef(pixel_size)) || (is_undef(bounding_box) && is_def(pixel_size)))
+            )
+        )
+        , "\nWhen f is an array, either bounding_box or pixel_size is required (but not both).")
+    assert(is_list(isovalue) && len(isovalue)==2 && is_num(isovalue[0]) && is_num(isovalue[1]),
+           "\nThe isovalue parameter must be a list of two numbers")
+    let(
+        isovalmin = isovalue[0], 
+        isovalmax = isovalue[1], 
+        dumiso1 = assert(isovalmin < isovalmax, str("\nBad isovalue range (", isovalmin, ", >= ", isovalmax, "), should be expressed as [min_value, max_value].")),
+        dumiso2 = assert(isovalmin != -INF || isovalmax != INF, "\nIsovalue range must be finite on one end."),
+        exactbounds = is_def(exact_bounds) ? exact_bounds : is_list(f),
+        smoothpasses = is_undef(smoothing) ? ((is_list(use_centers) || use_centers==true) ? 2 : 0) : abs(smoothing),
+        // new pixel or bounding box centered around original, to fit whole pixels
+        bbox0 = is_num(bounding_box)
+            ? let(hb=0.5*bounding_box) [[-hb,-hb],[hb,hb]]
+            : bounding_box,
+        autopixsize = is_def(pixel_size) ? pixel_size : _getautopixsize(bbox0, default(pixel_count,32^2)),
+        pixsize = _mball ? pixel_size : _getpixsize(autopixsize, bbox0, exactbounds),
+        bbox = _mball ? bounding_box : _getbbox2d(pixsize, bbox0, exactbounds, f),
+        bbcheck = assert(all_positive(bbox[1]-bbox[0]), "\nbounding_box must be a vector range [[xmin,ymin],[xmax,ymax]]."),
+        // proceed with isosurface computations
+        pixels = _contour_pixels(pixsize, bbox,
+            fieldarray=is_function(f)?undef:f, fieldfunc=is_function(f)?f:undef,
+            pixcenters=use_centers, isovalmin=isovalmin, isovalmax=isovalmax, closed=closed),
+        segtablemin = is_list(use_centers) || use_centers ? _MTriSegmentTable : _MSquareSegmentTable,
+        segtablemax = is_list(use_centers) || use_centers ? _MTriSegmentTable_reverse : _MSquareSegmentTable_reverse,
+        pathlist = _contour_vertices(pixels, pixsize, isovalmin, isovalmax, segtablemin, segtablemax),
+        region = _assemble_partial_paths(pathlist, closed),
+        smoothregion = _region_smooth(region, smoothpasses, bbox),
+        finalregion = closed ? smoothregion
+            : [for(p=smoothregion) _pathpts_on_bbox(p, bbox)>1 ? p : concat(p, [p[0]])],
+        dum2 = show_stats ? _showstats_contour(pixsize, bbox, isovalmin, isovalmax, pixels, finalregion) : 0
+) finalregion;
+
+
+/// internal function: do multiple 2-point smoothing passes of all the paths in a region

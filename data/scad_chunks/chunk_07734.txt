@@ -1,0 +1,3 @@
+module CyclGear(z=20,modul=2,w=45,h=4,h2=.5,grad=45,achse=3.5,achsegrad=60,light=false,lock=false,center=true,lRand=wall(0.8,$info=false),lRandBase,d=0,rot,rotZahn=1,linear=false,preview=true,spiel=0.075,f=3,fn=24,name,help){
+CyclGetriebe(z=z,modul=modul,w=w,h=h,h2=h2,grad=grad,achse=achse,achsegrad=achsegrad,light=light,lock=lock,center=center,lRand=lRand,lRandBase=lRandBase,d=d,rot=rot,rotZahn=rotZahn,linear=linear,preview=preview,spiel=spiel,f=f,fn=fn,name,help);
+}

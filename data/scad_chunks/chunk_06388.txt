@@ -1,0 +1,72 @@
+module show_plane(plane, size, offset=0)
+{
+    size = force_list(size,2);
+    offset = force_list(offset, 2, 0);
+    checks =
+      assert(is_vector(size,2), "\nThe size parameter must be a scalar or 2-vector")
+      assert(is_vector(offset,2), "\nThe offset parameter must be a scalar or 2-vector");
+    pts = move(offset,rect(size));
+    axes = [UP, BACK, RIGHT];
+    n = plane_normal(plane);
+    ang = [for(v=axes) abs(plane_line_angle(plane, [CTR,v]))];
+    axis = axes[max_index(ang)];
+    face = [for(pt=pts)
+             axis==UP? [pt.x,pt.y,(plane[3]-plane.x*pt.x-plane.y*pt.y)/plane.z]
+           : axis==BACK? [pt[0],(plane[3]-plane.x*pt[0]-plane.z*pt[1])/plane.y,pt[1]]
+           :             [(plane[3]-plane.y*pt[0]-plane.z*pt[1])/plane.x,pt[0],pt[1]]
+           ];
+    vnf = [face, [count(face)]];
+    vnf_polyhedron(vnf) children();
+}
+
+
+
+// Section: Circle Calculations
+
+// Function: circle_line_intersection()
+// Synopsis: Find the intersection points between a 2d circle and a line, ray or segment.
+// Topics: Geometry, Circles, Lines, Intersection
+// See Also: circle_line_intersection(), circle_circle_intersection(), circle_2tangents(), circle_3points(), circle_point_tangents(), circle_circle_tangents()
+// Usage:
+//   pts = circle_line_intersection(r|d=, cp, line, [bounded], [eps=]);
+// Description:
+//   Find intersection points between a 2D circle and a line, ray or segment specified by two points.
+//   By default the line is unbounded.  Returns the list of zero or more intersection points.
+// Arguments:
+//   r = Radius of circle
+//   cp = Center of circle
+//   line = Two points defining the line
+//   bounded = False for unbounded line, true for a segment, or a vector [false,true] or [true,false] to specify a ray with the first or second end unbounded.  Default: false
+//   ---
+//   d = Diameter of circle
+//   eps = Epsilon used for identifying the case with one solution.  Default: `1e-9`
+// Example(2D): Standard intersection returns two points.
+//   line = [[-15,2], [15,7]];
+//   cp = [1,2]; r = 10;
+//   translate(cp) circle(r=r);
+//   color("black") stroke(line, endcaps="arrow2", width=0.5);
+//   isects = circle_line_intersection(r=r, cp=cp, line=line);
+//   color("red") move_copies(isects) circle(d=1);
+// Example(2D): Tangent intersection returns one point.
+//   line = [[-10,12], [10,12]];
+//   cp = [1,2]; r = 10;
+//   translate(cp) circle(r=r);
+//   color("black") stroke(line, endcaps="arrow2", width=0.5);
+//   isects = circle_line_intersection(r=r, cp=cp, line=line);
+//   color("#f44") move_copies(isects) circle(d=1);
+// Example(2D): A bounded ray might intersect only in one direction.
+//   line = [[-5,2], [5,7]];
+//   extended = [line[0], line[0]+22*unit(line[1]-line[0])];
+//   cp = [1,2]; r = 10;
+//   translate(cp) circle(r=r);
+//   color("gray") dashed_stroke(extended, width=0.2);
+//   color("black") stroke(line, endcap2="arrow2", width=0.5);
+//   isects = circle_line_intersection(r=r, cp=cp, line=line, bounded=[true,false]);
+//   color("#f44") move_copies(isects) circle(d=1);
+// Example(2D): If they don't intersect at all, then an empty list is returned.
+//   line = [[-12,12], [12,8]];
+//   cp = [-5,-2]; r = 10;
+//   translate(cp) circle(r=r);
+//   color("black") stroke(line, endcaps="arrow2", width=0.5);
+//   isects = circle_line_intersection(r=r, cp=cp, line=line);
+//   color("#f44") move_copies(isects) circle(d=1);

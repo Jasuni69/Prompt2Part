@@ -1,0 +1,16 @@
+function _bezier(radius, centre_dist, tangent_angle, t_step, ctrl_p1) = 
+    let(
+        ctrl_p = ptf_rotate([radius * tan(tangent_angle), -radius], tangent_angle),
+        ctrl_p2 = [-ctrl_p.x, ctrl_p.y] + [centre_dist / 2, 0],
+        ctrl_p3 = [-ctrl_p2.x, ctrl_p2.y],
+        ctrl_p4 = [-ctrl_p1.x, ctrl_p1.y]
+    ) 
+    bezier_curve(
+        t_step,
+        [
+            ctrl_p1,
+            ctrl_p2,
+            ctrl_p3,
+            ctrl_p4        
+        ]
+    );

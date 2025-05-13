@@ -1,0 +1,7 @@
+module test__normalize_plane(){
+    plane = rands(-5,5,4,seed=333)+[10,0,0,0];
+    plane2 = _normalize_plane(plane);
+    assert_approx(norm(point3d(plane2)),1);
+    assert_approx(plane*plane2[3],plane2*plane[3]);
+}
+test__normalize_plane();

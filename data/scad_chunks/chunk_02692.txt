@@ -1,0 +1,4 @@
+module vitamin(description) {                //! Describe a vitamin for the BOM entry and precede it with a module call that creates it, eg. "widget(42): Widget size 42"
+    if(bom_mode(2))
+        echo(str("~", description, !is_undef($hidden) ? " - not shown" : ""));
+}

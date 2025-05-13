@@ -1,0 +1,42 @@
+module text3d(text, h, size=10, font, spacing=1.0, direction="ltr", language="en", script="latin",
+              height, thickness, atype, center=false,
+              anchor, spin=0, orient=UP) {
+    no_children($children);
+    h = one_defined([h,height,thickness],"h,height,thickness",dflt=1);
+    assert(is_undef(atype) || in_list(atype,["ycenter","baseline"]), "atype must be \"ycenter\" or \"baseline\"");
+    assert(is_bool(center));
+    assert(is_undef($attach_to),"text3d() does not support parent-child anchor attachment with two parameters");
+    atype = default(atype, center?"ycenter":"baseline");
+    anchor = default(anchor, center?CENTER:LEFT);
+    geom = attach_geom(size=[size,size,h]);
+    ha = anchor.x<0? "left" 
+       : anchor.x>0? "right" 
+       : "center";
+    va = anchor.y<0? "bottom" 
+       : anchor.y>0? "top" 
+       : atype=="baseline"? "baseline"
+       : "center";
+    m = _attach_transform([0,0,anchor.z],spin,orient,geom);
+    multmatrix(m) {
+        $parent_anchor = anchor;
+        $parent_spin   = spin;
+        $parent_orient = orient;
+        $parent_geom   = geom;
+        $parent_size   = _attach_geom_size(geom);
+        $attach_to   = undef;
+        if (_is_shown()) {
+            _color($color) {
+                linear_extrude(height=h, center=true)
+                    _text(
+                        text=text, size=size, font=font,
+                        halign=ha, valign=va, spacing=spacing,
+                        direction=direction, language=language,
+                        script=script
+                    );
+            }
+        }
+    }
+}
+
+
+// This could be replaced with _cut_to_seg_u_form

@@ -1,0 +1,6 @@
+function any(l, func) =
+    assert(is_list(l), "The input is not a list." )
+    assert(func==undef || is_func(func))
+    is_func(func)
+      ? _any_func(l, func)
+      : _any_bool(l);

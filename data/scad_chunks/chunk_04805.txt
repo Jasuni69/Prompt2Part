@@ -1,0 +1,10 @@
+function split(s,separator=" ") = separator=="" ? [for(i=[0:1:len(s)-1]) s[i]] :
+  let(t=separator, e=len(s), f=len(t),
+    _s=function(b,c,d,r) b<e ?
+      (s[b]==t[c] ?
+        (c+1 == f ?
+          _s(b+1,0,b+1,concat(r,substr(s,d,b-c))) : // full separator match, concat substr to result
+          _s(b+1,c+1,d,r) ) : // separator match char, more to test
+        _s(b-c+1,0,d,r) ) : // separator mismatch
+      concat(r,substr(s,d,e))) // end of input string, return result
+  _s(0,0,0,[]);

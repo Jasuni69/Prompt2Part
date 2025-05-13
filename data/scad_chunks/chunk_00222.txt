@@ -1,0 +1,6 @@
+module mains_sockets()
+    layout([for(s = mains_sockets) mains_socket_width(s)], 5)
+        mains_socket(mains_sockets[$i]);
+
+if($preview)
+    mains_sockets();

@@ -1,0 +1,1 @@
+function spring_gauge(type)  = type[2]; //! Wire gauge

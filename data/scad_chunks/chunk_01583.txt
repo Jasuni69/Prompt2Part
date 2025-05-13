@@ -1,0 +1,1 @@
+function ax_diode_colour(type) = type[3]; //! Body colour and stripe colour

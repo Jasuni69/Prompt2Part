@@ -1,0 +1,9 @@
+function plant(n = 4, angle = 25, leng = 1, heading = 0, start = [0, 0]) = 
+    let(
+        axiom = "X",
+        rules = [
+            ["X", "F+[[X]-X]-F[-FX]+X"],
+            ["F", "FF"]
+        ]
+    )
+    lsystem2(axiom, rules, n, angle, leng, heading, start);

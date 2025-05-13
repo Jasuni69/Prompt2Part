@@ -1,0 +1,6 @@
+module test_affine3d_rot_from_to() {
+    assert(approx(affine3d_rot_from_to(UP,FRONT), affine3d_xrot(90)));
+    assert(approx(affine3d_rot_from_to(UP,RIGHT), affine3d_yrot(90)));
+    assert(approx(affine3d_rot_from_to(BACK,LEFT), affine3d_zrot(90)));
+}
+test_affine3d_rot_from_to();

@@ -1,0 +1,10 @@
+module test_c_real(){
+    M = [
+           [ [3,4], [9,-1], [4,3] ],
+           [ [2,9], [4,9], [3,-1] ]
+        ];
+    assert_equal(c_real(M), [[3,9,4],[2,4,3]]);
+    assert_equal(c_real(           [ [3,4], [9,-1], [4,3] ]), [3,9,4]);
+    assert_equal(c_real([3,4]),3);
+}
+test_c_real();

@@ -1,0 +1,1 @@
+function belt_thickness(type)    = type[3]; //! Total thickness including teeth

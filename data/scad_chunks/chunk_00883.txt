@@ -1,0 +1,6 @@
+function nozzle_cone_length(type) = type[7];
+
+barrel_tap_dia = 5;
+
+barrel_dia = 6;
+insulator_dia = 12;

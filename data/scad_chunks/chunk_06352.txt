@@ -1,0 +1,13 @@
+function _valid_plane(p, eps=EPSILON) = is_vector(p,4) && ! approx(norm(p),0,eps);
+
+
+/// Internal Function: _is_at_left()
+/// Usage:
+///   pt = point_left_of_line2d(point, line);
+/// Topics: Geometry, Points, Lines
+/// Description:
+///   Return true iff a 2d point is on or at left of the line defined by `line`.
+/// Arguments:
+///   pt = The 2d point to check position of.
+///   line  = Array of two 2d points forming the line segment to test against.
+///   eps = Tolerance in the geometrical tests.

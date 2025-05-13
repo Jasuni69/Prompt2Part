@@ -1,0 +1,21 @@
+module dragon_body_scales(body_r, body_fn, one_scale_points_faces) {
+	double_scale_r = PI * body_r / body_fn * 2;
+
+	module ring_scales() {
+	    a_step = 360 / body_fn;
+		for(a = [0:body_fn - 1]) {
+			rotate([0, a * a_step, 0])
+			polyhedron(
+			     one_scale_points_faces[0], 
+				 one_scale_points_faces[1]
+		    );
+		}
+	}
+	
+	a = 180 / body_fn;
+	for(y = [0:1]) {
+		translate([0, y * double_scale_r])
+		rotate([0, (y % 2) * a])
+		    ring_scales();
+	}	
+}

@@ -1,0 +1,14 @@
+function no_function(name) =
+   assert(false,str("You called ",name,"() as a function, but it is available only as a module"));
+
+
+// Module: no_module()
+// Synopsis: Assert that the argument exists only as a function and not as a module.
+// Topics: Error Checking
+// See Also: no_children(), no_function()
+// Usage:
+//   no_module();
+// Description:
+//   Asserts that the called module exists only as a function.
+// Example:
+//   module foo() { no_module(); }

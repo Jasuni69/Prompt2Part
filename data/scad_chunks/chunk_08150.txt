@@ -1,0 +1,17 @@
+module test_each_hexagon(hex_r, pts_all_lines) {
+    // ==== test_hexagons_lv2 ====
+    assertEqualNum(19, hex_r);
+    
+    expects = [
+            [[-34.641, 0], [0, 0], [34.641, 0]],
+            [[-17.3205, 30], [17.3205, 30]],
+            [[-17.3205, -30], [17.3205, -30]]
+    ];
+    
+    for(i = [0:len(pts_all_lines) - 1]) {
+        assertEqualPoints(
+            expects[i], 
+            pts_all_lines[i]
+        );
+    }
+}

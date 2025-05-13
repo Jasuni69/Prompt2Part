@@ -1,0 +1,24 @@
+function xval(target_func) = function(a,b) target_func(b);
+
+
+
+//////////////////////////////////////////////////////////////////////
+// Section: Comparator Generators
+
+
+// Function: f_cmp()
+// Synopsis: Returns a function to compare values.
+// Topics: Function Literals, Comparators
+// See Also: f_cmp(), f_gt(), f_lt(), f_gte(), f_lte(), f_eq(), f_neq(), f_approx(), f_napprox()
+// Usage:
+//   fn = f_cmp();
+//   fn = f_cmp(b);
+//   fn = f_cmp(a,b);
+// Description:
+//   A factory that generates function literals that compare `a` and `b`, where one or
+//   both arguments can be replaced with constants.  If `a` and `b` are equal, the function
+//   literal will return 0.  If a<b then -1 is returned.  If a>b then 1 is returned.
+// Example:
+//   fn_cmp = f_cmp();       // = function(a,b) a==b?0: a>b?1: -1;
+//   fn_cmp3 = f_cmp(3);     // = function(a) a==3?0: a>3?1: -1;
+//   fn_3cmp4 = f_cmp(3,4);  // = function() 3==4?0: 3>4?1: -1;

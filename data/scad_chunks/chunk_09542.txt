@@ -1,0 +1,19 @@
+module revolve_bezier_offset_shell(bezier, offset=1, splinesteps=16, N=3, convexity=10, angle=360, orient=ORIENT_X, align=V_CENTER) {
+	revolve_bezier(bezier=bezier_offset(offset, bezier), splinesteps=splinesteps, N=N, orient=orient, align=align);
+}
+
+
+// Module: extrude_2d_shapes_along_bezier()
+// Usage:
+//   extrude_2d_shapes_along_bezier(bezier, [splinesteps], [N], [convexity], [clipsize]) ...
+// Description:
+//   Extrudes 2D children along a bezier path.
+// Arguments:
+//   bezier = array of points for the bezier path to extrude along.
+//   splinesteps = number of segments to divide each bezier segment into. default=16
+// Example(FR):
+//   path = [ [0, 0, 0], [33, 33, 33], [66, -33, -33], [100, 0, 0] ];
+//   extrude_2d_shapes_along_bezier(path) difference(){
+//       circle(r=10);
+//       fwd(10/2) circle(r=8);
+//   }

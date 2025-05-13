@@ -1,0 +1,71 @@
+module Pille(
+l=10,
+d,//+5,
+rad,
+rad2,
+r,
+center=true,
+fn=fn,
+fn2=fn/4,
+loch=false,
+grad=360,
+2D=false,
+name,
+help
+){
+2D=is_parent(needs2D)&&!$children?2D?b(2D,false):
+                                 1:
+                              b(2D,false);
+  
+  
+fn2=is_list(fn2)?fn2:[fn2,fn2];
+r=is_undef(r)?is_undef(d)?l/2:d/2:r;
+rad=is_undef(rad)?2*r<l?r*[1,1]:l/2*[1,1]:is_list(rad)?rad*sign(r):[rad,rad?rad:undef]*sign(r);
+
+rad2=is_undef(rad2)?is_num(rad[1])?rad[1]:
+                                   r<l?r:
+                                       l-rad[0]:
+                    rad2*sign(r);
+d=is_undef(r)?abs(d):abs(r*2);
+deltaRx=max(0,rad[0]-d/2);
+deltaRy=Kathete(rad[0],deltaRx);
+ausgleich=rad[0]-deltaRy;
+rgrad=asin(deltaRy/rad[0]);
+
+deltaRx2=max(0,rad2-d/2);
+deltaRy2=Kathete(rad2,deltaRx2);
+ausgleich2=rad2-deltaRy2;
+grad2=asin(deltaRy2/rad2);
+
+Echo(str("Pille zu kurz! ",l-rad[0]+ausgleich-rad2+ausgleich2),color="red",condition=l+ausgleich+ausgleich2-rad[0]-rad2<0);
+
+points=concat([
+if(!loch)[0,0],
+if(!loch)[0,l]],
+rad2==0?[[d/2,l]]:Kreis(r=rad2,rand=0,grad=grad2,t=[d/2-rad2,l-rad2+ausgleich2],fn=fn2[1],center=false,rot=90-grad2),
+rad[0]==0?[[d/2,0]]:Kreis(r=rad[0],rand=0,grad=rgrad,t=[d/2-rad[0],rad[0]-ausgleich],fn=fn2[0],center=false,rot=90)
+
+);
+
+if(!2D)if(rgrad==90&&grad2==90)Tz(center?-l/2:0)RotEx(grad=grad,fn=fn)polygon(points);
+    else Tz(center?-l/2:0)RotEx(grad=grad,fn=fn)polygon(clampToX0(points));
+if(2D)T(0,center?-l/2:0)polygon(points);    
+
+  InfoTxt("Pille",["Länge",l,"Rundung",str(rad[0],"/",rad2,str(rad[0]>d/2?" Spitz":rad[0]==d/2?" Rund":" Flach","/",rad2>d/2?"Spitz":rad2==d/2?"Rund":"Flach")),"Durchmesser",d,"Radius",d/2,"Grad",str(grad,"°")],name);    
+     
+  HelpTxt("Pille",["l",l,"d",d,"fn",fn,"fn2",fn2,"center",center,"name",name,"rad",rad,"rad2",rad2,"loch",loch,"grad",grad,"2D",2D,],help);
+}
+
+
+
+/** \page Objects
+  \name Disphenoid
+  Disphenoid() creates a disphenoid
+  \param h height 
+  \param l length
+  \param b width
+  \param r edge radius
+  \param ty,tz,delta distortion
+  \param fn fragments
+  \param help activate help
+*/

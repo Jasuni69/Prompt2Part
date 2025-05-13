@@ -1,0 +1,19 @@
+module test_all_negative() {
+    assert(all_negative(-2));
+    assert(!all_negative(0));
+    assert(!all_negative(2));
+    assert(!all_negative([0,0,0]));
+    assert(!all_negative([0,1,2]));
+    assert(!all_negative([3,1,2]));
+    assert(!all_negative([3,-1,2]));
+    assert(all_negative([-3,-1,-2]));
+    assert(!all_negative([-3,1,-2]));
+    assert(!all_negative([[-5,-7],[-3,-1,-2]]));
+    assert(!all_negative([[-5,-7],[-3,1,-2]]));
+    assert(!all_negative([]));
+    assert(!all_negative(true));
+    assert(!all_negative(false));
+    assert(!all_negative("foo"));
+    assert(!all_negative([0:1:2]));
+}
+test_all_negative();

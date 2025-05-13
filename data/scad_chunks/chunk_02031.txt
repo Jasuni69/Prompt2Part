@@ -1,0 +1,14 @@
+module psu_shroud_fastened_assembly(type, cable_d, thickness, name, cables = 1, screw = screw) //! Assembly with screws in place
+{
+    screw_length = screw_length(screw,thickness + counter_bore, 2, true);
+
+    psu_shroud_assembly(type, cable_d, name, cables);
+
+    translate_z(-thickness)
+        psu_shroud_hole_positions(type)
+            vflip()
+                screw_and_washer(screw, screw_length, true);
+
+    psu_shroud_cable_positions(type, cable_d, cables)
+        cable_tie(cable_d / 2, thickness);
+}

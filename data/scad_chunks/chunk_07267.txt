@@ -1,0 +1,30 @@
+module Klon(tx=0,ty=0,tz=0,rx=0,ry=0,rz=0,center=true,help=false){
+    union(){
+        $idx=0;
+        translate([tx,ty,tz])rotate([rx,ry,rz])children();
+    }
+    union(){
+         $idx=1;
+        $helpM=0;
+        $info=0;
+        $idxON=false; 
+    if(center)translate([-tx,-ty,-tz])rotate([-rx,-ry,-rz])children();
+    else rotate([-rx,-ry,-rz])children();
+    }   
+    MO(!$children); 
+    HelpTxt("Klon",["tx",tx,"ty",ty,"tz",tz,"rx",rx,"ry",ry,"rz",rz,"center",center],help);   
+}
+
+
+
+/**
+\page Modifier
+\name Halb
+Halb() Object Cuts away half of Object at [0,0,0]
+\param i  inverse side 
+\param x,y,z  cutting axis
+\param 2D for 2D objects
+\param size  cuttingblock size
+*/
+
+//Halb(x=1)sphere(5);

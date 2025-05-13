@@ -1,0 +1,12 @@
+module aluProBore(boreType, $fn=16) {
+	union() {
+		circle(r=aluProBore_r(boreType));
+	
+		intersection() {
+			circle(r=aluProBore_outsetR(boreType));
+			for (i=[0:3]) 
+				rotate([0,0,i*90 + 45]) 	
+				square([aluProBore_outsetR(boreType)*2,aluProBore_outsetW(boreType)], center=true);
+		}
+	}
+}

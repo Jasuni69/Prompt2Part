@@ -1,0 +1,13 @@
+module test_f_3arg() {
+    assert_equal(str(f_3arg(function (a,b,c) a+b+c)), "function(a, b, c) ((((a == undef) && (b == undef)) && (c == undef)) ? function(x, y, z) target_func(x, y, z) : (((a == undef) && (b == undef)) ? function(x, y) target_func(x, y, c) : (((a == undef) && (c == undef)) ? function(x, y) target_func(x, b, y) : (((b == undef) && (c == undef)) ? function(x, y) target_func(a, x, y) : ((a == undef) ? function(x) target_func(x, b, c) : ((b == undef) ? function(x) target_func(a, x, c) : ((c == undef) ? function(x) target_func(a, b, x) : function() target_func(a, b, c))))))))");
+    assert_equal(str(f_3arg(function (a,b,c) a+b+c)(3)), "function(x, y) target_func(a, x, y)");
+    assert_equal(str(f_3arg(function (a,b,c) a+b+c)(3,4)), "function(x) target_func(a, b, x)");
+    assert_equal(str(f_3arg(function (a,b,c) a+b+c)(3,4,1)), "function() target_func(a, b, c)");
+    assert_equal(f_3arg(function (a,b,c) a+b+c)()(4,2,1), 7);
+    assert_equal(f_3arg(function (a,b,c) a+b+c)(3)(7,3), 13);
+    assert_equal(f_3arg(function (a,b,c) a+b+c)(a=2)(7,1), 10);
+    assert_equal(f_3arg(function (a,b,c) a/b/c)(a=24)(3,2), 4);
+    assert_equal(f_3arg(function (a,b,c) a+b+c)(3,7)(3), 13);
+    assert_equal(f_3arg(function (a,b,c) a+b+c)(3,7,3)(), 13);
+}
+test_f_3arg();

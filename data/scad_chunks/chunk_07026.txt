@@ -1,0 +1,28 @@
+module test_linear_solve(){
+  M = [[-2,-5,-1,3],
+       [3,7,6,2],
+       [6,5,-1,-6],
+       [-7,1,2,3]];
+  assert_approx(linear_solve(M, [-3,43,-11,13]), [1,2,3,4]);
+  assert_approx(linear_solve(M, [[-5,8],[18,-61],[4,7],[-1,-12]]), [[1,-2],[1,-3],[1,-4],[1,-5]]);
+  assert_approx(linear_solve([[2]],[4]), [2]);
+  assert_approx(linear_solve([[2]],[[4,8]]), [[2, 4]]);
+  assert_approx(linear_solve(select(M,0,2), [2,4,4]), [   2.254871220604705e+00,
+                                                         -8.378819388897780e-01,
+                                                          2.330507118860985e-01,
+                                                          8.511278195488737e-01]);
+  assert_approx(linear_solve(submatrix(M,idx(M),[0:2]), [2,4,4,4]),
+                 [-2.457142857142859e-01,
+                   5.200000000000000e-01,
+                   7.428571428571396e-02]);
+  assert_approx(linear_solve([[1,2,3,4]], [2]), [0.066666666666666, 0.13333333333, 0.2, 0.266666666666]);
+  assert_approx(linear_solve([[1],[2],[3],[4]], [4,3,2,1]), [2/3]);
+  rd = [[-2,-5,-1,3],
+        [3,7,6,2],
+        [3,7,6,2],
+        [-7,1,2,3]];
+  assert_equal(linear_solve(rd,[1,2,3,4]),[]);
+  assert_equal(linear_solve(select(rd,0,2), [2,4,4]), []);
+  assert_equal(linear_solve(transpose(select(rd,0,2)), [2,4,3,4]), []);
+}
+test_linear_solve();

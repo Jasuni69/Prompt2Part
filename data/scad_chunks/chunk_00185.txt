@@ -1,0 +1,8 @@
+module flat_hinges()
+    layout([for(h = hinges) hinge_width(h)], 10)
+        if($preview)
+            hinge_fastened_assembly(hinges[$i], 3, 3, angle);
+        else
+            hinge_male(hinges[$i]);
+
+flat_hinges();

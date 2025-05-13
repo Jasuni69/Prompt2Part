@@ -1,0 +1,22 @@
+module pie_slice(
+    h, r, ang=30, center,
+    r1, r2, d, d1, d2, l, length, height,
+    anchor, spin=0, orient=UP
+) {
+    l = one_defined([l, h,height,length],"l,h,height,length",dflt=1);
+    r1 = get_radius(r1=r1, r=r, d1=d1, d=d, dflt=10);
+    r2 = get_radius(r1=r2, r=r, d1=d2, d=d, dflt=10);
+    maxd = max(r1,r2)+0.1;
+    anchor = get_anchor(anchor, center, BOT, BOT);
+    attachable(anchor,spin,orient, r1=r1, r2=r2, l=l) {
+        difference() {
+            cyl(r1=r1, r2=r2, h=l);
+            if (ang<180) rotate(ang) back(maxd/2) cube([2*maxd, maxd, l+0.1], center=true);
+            difference() {
+                fwd(maxd/2) cube([2*maxd, maxd, l+0.2], center=true);
+                if (ang>180) rotate(ang-180) back(maxd/2) cube([2*maxd, maxd, l+0.1], center=true);
+            }
+        }
+        children();
+    }
+}

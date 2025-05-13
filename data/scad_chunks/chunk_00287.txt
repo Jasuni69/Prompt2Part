@@ -1,0 +1,1 @@
+function  d_flange_width(type)     = type[5];   //! Width of the flange

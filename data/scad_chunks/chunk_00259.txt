@@ -1,0 +1,7 @@
+module hanging_holes() {
+    rotate(45)
+        #hanging_hole(z = 10, ir = 3, h = 30)
+            circle(r = 10);
+}
+
+hanging_holes();

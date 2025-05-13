@@ -1,0 +1,5 @@
+function _t2d_impl(t, cmd, point, angle, leng) =
+    is_undef(t) ? _turtle(point, angle) : 
+    is_undef(cmd) ? _set(t, point, angle) :
+    is_string(cmd) ? _cmd(t, cmd, point, angle, leng) :
+                     _cmds(t, cmd);

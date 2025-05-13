@@ -1,0 +1,1 @@
+function hot_end_duct_offset(type)        = type[11];   //! Offset of circular duct centre from the nozzle

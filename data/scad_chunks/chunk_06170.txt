@@ -1,0 +1,31 @@
+function affine3d_zrot(ang=0) =
+    assert(is_finite(ang))
+    [
+        [cos(ang), -sin(ang), 0, 0],
+        [sin(ang),  cos(ang), 0, 0],
+        [       0,         0, 1, 0],
+        [       0,         0, 0, 1]
+    ];
+
+
+// Function: affine3d_rot_by_axis()
+// Synopsis: Returns a 3D (4x4) arbitrary-axis rotation transformation matrix.
+// SynTags: Mat
+// Topics: Affine, Matrices, Transforms, Rotation
+// See Also: rot(), xrot(), yrot(), zrot(), affine2d_zrot()
+// Usage:
+//   mat = affine3d_rot_by_axis(u, ang);
+// Description:
+//   Returns the 4x4 affine3d matrix to perform a rotation of a 3D vector around an axis.
+// Arguments:
+//   u = 3D axis vector to rotate around.
+//   ang = number of degrees to rotate.
+// Example:
+//   mat = affine3d_rot_by_axis([1,1,1], 120);
+//   // Returns approx:
+//   //   [
+//   //     [ 0, 0, 1, 0],
+//   //     [ 1, 0, 0, 0],
+//   //     [ 0, 1, 0, 0],
+//   //     [ 0, 0, 0, 1]
+//   //   ]

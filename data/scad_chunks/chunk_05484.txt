@@ -1,0 +1,65 @@
+module _offset_sweep_region(region, height, 
+                    bottom, top, 
+                    h, l, length, ends, bot, top_hole, bot_hole, bottom_hole, ends_hole, 
+                    offset="round", r=0, steps=16,
+                    quality=1, check_valid=true,
+                    extra=0,
+                    cut=undef, chamfer_width=undef, chamfer_height=undef,
+                    joint=undef, k=0.75, angle=45,
+                    convexity=10,anchor="base",cp="centroid",
+                    spin=0, orient=UP, atype="hull")
+{
+    connected_reg = region_parts(region);
+    vnf_h_list = [for(reg=connected_reg)
+                    offset_sweep(path=reg[0], height=height, h=h, l=l, length=length, bot=bot, top=top, bottom=bottom, ends=ends,
+                                 offset=offset, r=r, steps=steps,
+                                 quality=quality, check_valid=check_valid, extra=extra, cut=cut, chamfer_width=chamfer_width,
+                                 chamfer_height=chamfer_height, joint=joint, k=k, angle=angle, _return_height=true)];
+    vnf_list = column(vnf_h_list,0);
+    height = vnf_h_list[0][1];
+
+    holes = [for(reg=connected_reg, i=[1:1:len(reg)-1]) reg[i]];
+
+    anchors = [
+          named_anchor("zcenter", [0,0,0], UP),
+          named_anchor("base", [0,0,-height/2], UP),
+          named_anchor("top", [0,0,height/2], UP)          
+        ];
+    bottom_hole=first_defined([bottom_hole, bot_hole, ends_hole, bottom, ends]);
+    top_hole = first_defined([top_hole,ends_hole,top,ends]);
+    if (in_list(atype,["hull","intersect"]))
+        attachable(anchor,spin,orient,region=region,h=height,cp=cp,anchors=anchors,extent=atype=="hull"){
+            down(height/2)
+              difference(){
+                 for(vnf=vnf_list)
+                     polyhedron(vnf[0],vnf[1],convexity=convexity);
+                 for(path=holes)
+                     offset_sweep(path=path, height=height, h=h, l=l, length=length, bot=bot, top=top_hole, bottom=bottom_hole, 
+                                  offset=offset, r=r, steps=steps,
+                                  quality=quality, check_valid=check_valid, extra=extra+0.1, cut=cut, chamfer_width=chamfer_width,
+                                  chamfer_height=chamfer_height, joint=joint, k=k, angle=angle, _flipdir=true,convexity=convexity);
+              }
+            children();
+        }
+    else {
+        allvnf=vnf_join(vnf_list);
+        attachable(anchor,spin.orient,vnf=allvnf, cp=cp,anchors=anchors, extent = atype=="surf_hull"){
+              difference(){
+                 for(vnf=vnf_list)
+                     vnf_polyhedron(vnf,convexity=convexity);
+                 for(path=holes)
+                     offset_sweep(path=path, height=height, h=h, l=l, length=length, bot=bot, top=top_hole, bottom=bottom_hole, 
+                                  offset=offset, r=r, steps=steps,
+                                  quality=quality, check_valid=check_valid, extra=extra+0.1, cut=cut, chamfer_width=chamfer_width,
+                                  chamfer_height=chamfer_height, joint=joint, k=k, angle=angle, _flipdir=true,convexity=convexity);
+              }
+            children();
+        }
+    }
+}   
+
+
+
+
+// This function does the actual work of repeatedly calling offset() and concatenating the resulting face and vertex lists to produce
+// the inputs for the polyhedron module.

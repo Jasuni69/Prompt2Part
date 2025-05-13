@@ -1,0 +1,8 @@
+module polar(d, a){
+    data = _pb_polar($pb_pts, [d,$pb_angle+a]);
+    $pb_pts = concat($pb_pts, data[0]);
+    $pb_angle = data[2];
+    $pb_ctrl_pts = data[3];
+    if (pb_do_render($children, parent_module(0))) pb_draw();
+    children();  
+}

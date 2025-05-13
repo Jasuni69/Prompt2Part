@@ -1,0 +1,207 @@
+module drawLabels(casePart, subtract)
+{
+	function textDirection(code) = 
+		(code == yappTextRightToLeft) ? "rtl" :
+		(code == yappTextTopToBottom) ? "ttb" :
+		(code == yappTextBottomToTop) ? "btt" :
+		"ltr";
+		
+	function textHalign(code) = 
+		(code == yappTextHAlignCenter) ? "center" :
+		(code == yappTextHAlignRight) ? "right" :
+		"left";
+		
+	function textValign(code) = 
+		(code == yappTextVAlignTop) ? "top" :
+		(code == yappTextVAlignCenter) ? "center" :
+		(code == yappTextVAlignBaseLine) ? "baseline" :
+		"bottom";
+		
+
+  for ( label = labelsPlane )
+  {    
+    // If we are adding to the lid  we need to shift it because we are drawing before the lid is positioned
+    shiftX = (!subtract) ? -shellLength/2 : 0 ;
+    shiftY = (!subtract) ? -shellWidth/2 : 0 ;
+        
+    shiftZ = (!subtract) 
+      ? (casePart== yappPartLid) 
+        ? (lidWallHeight + lidPlaneThickness) 
+        : -baseWallHeight - basePlaneThickness
+      : 0 ;
+        
+    //-- Optional:
+    expandBy = getParamWithDefault(label[8],0);
+
+		//-- Add additional text properties
+    theDirection = getYappValueWithDefault(label[9], yappTextLeftToRight);
+    theHalign = getYappValueWithDefault(label[10], yappTextHAlignLeft);
+    theValign = getYappValueWithDefault(label[11], yappTextVAlignBottom);
+    theSpacing = getParamWithDefault(label[12], 1);
+
+		color("red")
+    translate([shiftX, shiftY, shiftZ])
+    {
+    //-- Check if the label is valid for the for subtract value 
+    if (((label[3] > 0) && subtract) || ((label[3] < 0) && !subtract))
+    {
+      theDepth = (subtract) ? label[3] : -label[3];
+        
+      if ((casePart== yappPartLid) && (label[4]==yappLid))
+      {
+        if (printMessages) echo ("Draw text on Lid (top)");
+        offset_depth = (subtract) ?  0.01 : theDepth -0.01;
+        
+        translate([label[0], label[1], offset_depth - theDepth]) 
+        {
+          rotate([0,0,label[2]])
+          { 
+            linear_extrude(theDepth) 
+            {
+              offset(r=expandBy)
+              text(label[7]
+                    , font=label[5]
+                    , size=label[6]
+                    , direction=textDirection(theDirection)
+                    , halign=textHalign(theHalign)
+                    , valign=textValign(theValign)
+										, spacing=theSpacing);
+            } // rotate
+          } // extrude
+        } // translate
+      } //  if lid/lid
+      
+      if ((casePart== yappPartBase) && (label[4]==yappBase))
+      {
+        if (printMessages) echo ("Draw text on Base (bottom)");
+        offset_depth = (subtract) ?  -0.01 : -theDepth + 0.01;
+        
+        translate([label[0], shellWidth-label[1], offset_depth]) 
+        {
+          rotate([0,0,180-label[2]])
+          {
+            mirror([1,0,0]) 
+            linear_extrude(theDepth) 
+            {
+              {
+                offset(r=expandBy)
+                text(label[7]
+                      , font=label[5]
+                      , size=label[6]
+											, direction=textDirection(theDirection)
+											, halign=textHalign(theHalign)
+											, valign=textValign(theValign)
+											, spacing=theSpacing);
+              } // mirror..
+            } // rotate
+          } // extrude
+        } // translate
+      } //  if base/base
+
+      if (label[4]==yappFront)
+      {
+        if (printMessages) echo ("Draw text on Front");
+        offset_v = (casePart==yappPartLid) ? -shellHeight : 0;
+        offset_depth = (subtract) ?  0.01 : theDepth - 0.01;
+
+        translate([shellLength - theDepth + offset_depth, label[0], offset_v + label[1]]) 
+        {
+          rotate([90,0-label[2],90])
+          {
+            linear_extrude(theDepth) 
+            {
+              offset(r=expandBy)
+              text(label[7]
+                      , font=label[5]
+                      , size=label[6]
+											, direction=textDirection(theDirection)
+											, halign=textHalign(theHalign)
+											, valign=textValign(theValign)
+											, spacing=theSpacing);
+            } // extrude
+          } // rotate
+        } // translate
+      } //  if base/front
+      if (label[4]==yappBack)
+      {
+        if (printMessages) echo ("Draw text on Back", casePart);
+        offset_v = (casePart==yappPartLid) ? -shellHeight : 0;
+        offset_depth = (subtract) ?  -0.01 : -theDepth + 0.01;
+
+        translate([offset_depth, shellWidth-label[0], offset_v + label[1]]) 
+        {
+          rotate([90,0+label[2],90])
+          mirror([1,0,0])
+          {
+            linear_extrude(theDepth) 
+            {
+              offset(r=expandBy)
+              text(label[7]
+                      , font=label[5]
+                      , size=label[6]
+											, direction=textDirection(theDirection)
+											, halign=textHalign(theHalign)
+											, valign=textValign(theValign)
+											, spacing=theSpacing);
+            } // extrude
+          } // rotate
+        } // translate
+      } //  if base/back
+      
+      if (label[4]==yappLeft)
+      {
+        if (printMessages) echo ("Draw text on Left", casePart);
+        offset_v = (casePart==yappPartLid) ? -shellHeight : 0;
+        offset_depth = (subtract) ?  -0.01 : -theDepth + 0.01;
+        translate([label[0], theDepth+offset_depth, offset_v + label[1]]) 
+        {
+          rotate([90,-label[2],0])
+          {
+            linear_extrude(theDepth) 
+            {
+              offset(r=expandBy)
+              text(label[7]
+                    , font=label[5]
+                    , size=label[6]
+										, direction=textDirection(theDirection)
+										, halign=textHalign(theHalign)
+										, valign=textValign(theValign)
+										, spacing=theSpacing);
+            } // extrude
+          } // rotate
+        } // translate
+      } //  if..base/left
+      
+      if (label[4]==yappRight)
+      {
+        if (printMessages) echo ("Draw text on Right");
+        offset_v = (casePart==yappPartLid) ? -shellHeight : 0;
+        offset_depth = (subtract) ?  0.01 : theDepth - 0.01;
+        // Not sure why this is off by 1.5!!!
+        translate([shellLength-label[0], shellWidth + offset_depth, -1.5 + offset_v + label[1]]) 
+        {
+          rotate([90,label[2],0])
+          {
+            mirror([1,0,0])
+            linear_extrude(theDepth) 
+            {
+              offset(r=expandBy)
+              text(label[7]
+                    , font=label[5]
+                    , size=label[6]
+										, direction=textDirection(theDirection)
+										, halign=textHalign(theHalign)
+										, valign=textValign(theValign)
+										, spacing=theSpacing);
+            } // extrude
+          } // rotate
+        } // translate
+      } //  if..base/right
+    } // Valid check
+    } // Translate
+  } // for labels
+  
+} //-- drawLabels()
+
+
+//===========================================================

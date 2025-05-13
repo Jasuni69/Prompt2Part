@@ -1,0 +1,31 @@
+module trace_bezier_patches(patches=[], tris=[], size=1, showcps=false, splinesteps=16)
+{
+	if (showcps) {
+		for (patch = patches) {
+			place_copies(flatten(patch)) color("red") sphere(d=size*2);
+			color("cyan")
+			for (i=[0:len(patch)-1], j=[0:len(patch[i])-1]) {
+				if (i<len(patch)-1) extrude_from_to(patch[i][j], patch[i+1][j]) circle(d=size);
+				if (j<len(patch[i])-1) extrude_from_to(patch[i][j], patch[i][j+1]) circle(d=size);
+			}
+			vnf = bezier_patch(patch, splinesteps=splinesteps);
+			color("blue") place_copies(vnf[0]) sphere(d=size);
+		}
+		for (patch = tris) {
+			place_copies(flatten(patch)) color("red") sphere(d=size*2);
+			color("cyan")
+			for (i=[0:len(patch)-2], j=[0:len(patch[i])-2]) {
+				extrude_from_to(patch[i][j], patch[i+1][j]) circle(d=size);
+				extrude_from_to(patch[i][j], patch[i][j+1]) circle(d=size);
+				extrude_from_to(patch[i+1][j], patch[i][j+1]) circle(d=size);
+			}
+			vnf = bezier_triangle(patch, splinesteps=splinesteps);
+			color("blue") place_copies(vnf[0]) sphere(d=size);
+		}
+	}
+	bezier_polyhedron(patches=patches, tris=tris, splinesteps=splinesteps);
+}
+
+
+
+// vim: noexpandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

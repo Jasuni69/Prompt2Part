@@ -1,0 +1,4 @@
+function _struct_valid(spec, func, name) =
+        spec==[] ? true :
+        assert(is_list(spec) && len(spec)>=2 && spec[0]=="for",str("Specification for \"", name, "\" is an invalid structure"))
+        assert(spec[1]==func, str("Specification for \"",name,"\" is for a different function (",func,")"));

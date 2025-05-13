@@ -1,0 +1,3 @@
+function radiusSH(s,h)=((s/2)^2+h^2)/(2*h);
+
+/// distance chord s to center

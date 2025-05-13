@@ -1,0 +1,8 @@
+function carve_left(x, y, cells, columns) = 
+    let(
+        x_minus_one = x - 1,
+        nx = x_minus_one < 0 ? x_minus_one + columns : x_minus_one
+    )
+    m_replace(cells, y, nx, [nx, y, TOP_WALL, UNVISITED]);
+
+// go down and carve the top wall of the bottom cell

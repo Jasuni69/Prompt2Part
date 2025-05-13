@@ -1,0 +1,6 @@
+module ribbon_cable(ways, length)                   //! Add ribbon cable to the BOM
+    vitamin(str(": Ribbon cable ", ways, " way ", length, "mm"));
+
+//
+// Cable sizes
+//

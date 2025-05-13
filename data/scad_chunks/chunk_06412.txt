@@ -1,0 +1,15 @@
+function clockwise_polygon(poly) =
+    assert(is_path(poly,dim=2), "\nInput should be a 2d polygon.")
+    is_polygon_clockwise(poly) ? poly : reverse_polygon(poly);
+
+
+// Function: ccw_polygon()
+// Synopsis: Return counter-clockwise version of a polygon. 
+// Topics: Geometry, Polygons, Clockwise
+// See Also: is_polygon_clockwise(), clockwise_polygon(), reverse_polygon()
+// Usage:
+//   newpoly = ccw_polygon(poly);
+// Description:
+//   Given a 2D polygon poly, returns the counter-clockwise winding version of that poly.
+// Arguments:
+//   poly = The list of 2D path points for the perimeter of the polygon.

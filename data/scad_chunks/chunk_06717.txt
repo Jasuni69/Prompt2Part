@@ -1,0 +1,9 @@
+module test_simple_hash() {
+    assert_equal(simple_hash(true), 1000398);
+    assert_equal(simple_hash(false), 1028531);
+    assert_equal(simple_hash(53), 8385);
+    assert_equal(simple_hash("Foobar"), 1065337);
+    assert_equal(simple_hash([]), 0);
+    assert_equal(simple_hash([[10,20],[-5,3]]), 42685374681);
+}
+test_simple_hash();

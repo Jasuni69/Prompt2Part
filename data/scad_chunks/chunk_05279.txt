@@ -1,0 +1,62 @@
+function format(fmt, vals) =
+    assert(is_str(fmt))
+    let(
+        parts = str_split(fmt,"{")
+    ) str_join([
+        for(i = idx(parts))
+        let(
+            found_brace = i==0 || [for (c=parts[i]) if(c=="}") c] != [],
+            err = assert(found_brace, "Unbalanced { in format string."),
+            p = i==0? [undef,parts[i]] : str_split(parts[i],"}"),
+            fmta = p[0],
+            raw = p[1]
+        ) each [
+            assert(i<99)
+            is_undef(fmta)? "" : let(
+                fmtb = str_split(fmta,":"),
+                num = is_digit(fmtb[0])? parse_int(fmtb[0]) : (i-1),
+                left = fmtb[1][0] == "-",
+                fmtb1 = default(fmtb[1],""),
+                fmtc = left? substr(fmtb1,1) : fmtb1,
+                zero = fmtc[0] == "0",
+                lch = fmtc==""? "" : fmtc[len(fmtc)-1],
+                hastyp = is_letter(lch),
+                typ = hastyp? lch : "s",
+                fmtd = hastyp? substr(fmtc,0,len(fmtc)-1) : fmtc,
+                fmte = str_split((zero? substr(fmtd,1) : fmtd), "."),
+                wid = parse_int(fmte[0]),
+                prec = parse_int(fmte[1]),
+                val = assert(num>=0&&num<len(vals)) vals[num],
+                unpad = typ=="s"? (
+                        let( sval = str(val) )
+                        is_undef(prec)? sval :
+                        substr(sval, 0, min(len(sval)-1, prec))
+                    ) :
+                    (typ=="d" || typ=="i")? format_int(val) :
+                    typ=="b"? (val? "true" : "false") :
+                    typ=="B"? (val? "TRUE" : "FALSE") :
+                    typ=="f"? downcase(format_fixed(val,default(prec,6))) :
+                    typ=="F"? upcase(format_fixed(val,default(prec,6))) :
+                    typ=="g"? downcase(format_float(val,default(prec,6))) :
+                    typ=="G"? upcase(format_float(val,default(prec,6))) :
+                    assert(false,str("Unknown format type: ",typ)),
+                padlen = max(0,wid-len(unpad)),
+                padfill = str_join([for (i=[0:1:padlen-1]) zero? "0" : " "]),
+                out = left? str(unpad, padfill) : str(padfill, unpad)
+            )
+            out, raw
+        ]
+    ]);
+
+
+
+// Section: Checking character class
+
+// Function: is_lower()
+// Synopsis: Returns true if all characters in the string are lowercase.
+// Topics: Strings
+// See Also: is_lower(), is_upper(), is_digit(), is_hexdigit(), is_letter()
+// Usage:
+//   x = is_lower(s);
+// Description:
+//   Returns true if all the characters in the given string are lowercase letters. (a-z)

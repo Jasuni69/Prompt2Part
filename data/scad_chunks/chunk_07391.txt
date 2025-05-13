@@ -1,0 +1,32 @@
+module Laser3D(h=4,layer=10,var=0.002,name,on=-1){
+
+  if(on==1)for (i=[0:h/layer:h]){
+        c=i/h;
+  T(z=i/h*var) color([c,c,c]) projection(cut=true)T(z=-i)children();
+    }
+   
+   if(on==-1) for(i=[+0.0:h/layer:h]){
+       
+        color([i/h,i/h,i/h])T(z=i*+0.01) intersection(){
+          T(-500,-500,i) cube([1000,1000,layer]);
+          T(z=-i*0.000)  children();
+          }
+      } 
+      
+    if(on==0) children();     
+    
+    T(z=-.48)color([0,0,0])cube([1000,1000,1],true);
+    
+    MO(!$children);
+    InfoTxt("Laser3D",["color resolution=",str(h/layer,"mm")],name);  
+    
+}
+
+/** \name Elllipse
+Ellipse creates an ellipse with optional children
+\param x first semi axis can be [x,x] (absolute values)
+\param y second semi axis can be [y,y]
+\param z optional 
+\param rand thickness for 2D 
+\param fn fs fa fraqment resolution
+*/

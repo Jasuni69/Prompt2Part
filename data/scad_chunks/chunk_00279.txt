@@ -1,0 +1,1 @@
+function magnet_id(type)    = type[3]; //! Inside diameter if a ring

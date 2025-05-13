@@ -1,0 +1,47 @@
+function cumprod(list,right=false) =
+    list==[] ? [] :
+    is_matrix(list) ?
+                [for (a = list[0], 
+                      i = 1
+                        ;
+                      i <= len(list)
+                        ;
+                      a = i<len(list) ? v_mul(a,list[i]) : 0,
+                      i = i+1)
+                    a]
+   :  
+    assert(is_vector(list) || (is_matrix(list[0],square=true) && is_consistent(list)),
+           "\nInput must be a listector, a list of listectors, or a list of matrices.")
+    [for (a = list[0],
+          i = 1
+            ;
+          i <= len(list)
+            ;
+          a = i<len(list) ? (right ? a*list[i] : list[i]*a) : 0,
+          i = i+1)
+        a];
+
+
+// Function: convolve()
+// Synopsis: Returns the convolution of `p` and `q`.
+// Topics: Math, Statistics
+// See Also: sum(), mean(), median(), product(), cumsum()
+// Usage:
+//   x = convolve(p,q);
+// Description:
+//   Given two vectors, or one vector and a path or
+//   two paths of the same dimension, finds the convolution of them.
+//   If both parameter are vectors, returns the vector convolution.
+//   If one parameter is a vector and the other a path,
+//   convolves using products by scalars and returns a path. 
+//   If both parameters are paths, convolve using scalar products
+//   and returns a vector.
+//   The returned vector or path has length len(p)+len(q)-1.
+// Arguments:
+//   p = The first vector or path.
+//   q = The second vector or path.
+// Example:
+//   a = convolve([1,1],[1,2,1]); // Returns: [1,3,3,1]
+//   b = convolve([1,2,3],[1,2,1])); // Returns: [1,4,8,8,3]
+//   c = convolve([[1,1],[2,2],[3,1]],[1,2,1])); // Returns: [[1,1],[4,4],[8,6],[8,4],[3,1]]
+//   d = convolve([[1,1],[2,2],[3,1]],[[1,2],[2,1]])); // Returns:  [3,9,11,7]

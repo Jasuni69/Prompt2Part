@@ -1,0 +1,5 @@
+function translate3Dcoords(points,tran=[0,0,0],mult=[1,1,1])=[for(i=[0:len(points)-1])[
+  (points[i].x*mult.x)+tran.x,
+  (points[i].y*mult.y)+tran.y,
+  (points[i].z*mult.z)+tran.z
+]];

@@ -1,0 +1,10 @@
+function are_regions_equal(region1, region2, either_winding=false) =
+    let(
+        region1=force_region(region1),
+        region2=force_region(region2)
+    )
+    assert(is_region(region1) && is_region(region2), "\nOne of the inputs is not a region.")
+    len(region1) != len(region2)? false :
+    __are_regions_equal(either_winding?_clockwise_region(region1):region1,
+                        either_winding?_clockwise_region(region2):region2,
+                        0);

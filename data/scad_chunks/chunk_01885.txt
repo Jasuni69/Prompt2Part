@@ -1,0 +1,9 @@
+function twisted_cable(cable, path, irot = 0, frot = 0) = let(      //! Return the paths for a twisted cable, `irot` is the initial rotation and frot the final rotation
+        tlen = cable_tlen(cable),               // Twist length
+        r = cable_wire_size(cable) / 2,
+        pitch = cable_twisted_radius(cable) - r,
+        wires = cable_wires(cable),
+        bottom = wires > 4 ? 3 : 2,
+        irot = irot + 90 - 180 * (bottom - 1) / wires
+    )
+    spiral_paths(path, wires, pitch, round(path_length(path) / tlen) - frot / 360, irot);

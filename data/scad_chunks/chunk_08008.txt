@@ -1,0 +1,9 @@
+function hilbert_curve(n = 5, angle = 90, leng = 1, heading = 0, start = [0, 0]) = 
+    let(
+        axiom = "A",
+        rules = [
+            ["A", "-BF+AFA+FB-"],
+            ["B", "+AF-BFB-FA+"]
+        ]
+    )
+    lsystem2(axiom, rules, n, angle, leng, heading, start);

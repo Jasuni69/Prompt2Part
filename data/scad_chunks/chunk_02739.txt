@@ -1,0 +1,6 @@
+module aluProSide(sideType) {
+	// x side
+	w = sideType[0];
+	t = sideType[1];
+	translate([w/2-t-eta,-w/4,0]) square([t+eta,w/2]);	
+}

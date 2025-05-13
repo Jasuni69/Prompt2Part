@@ -1,0 +1,42 @@
+module thermal_cutout(type) { //! Draw specified thermal cutout
+    vitamin(str("thermal_cutout(", type[0], "): Thermal cutout ", type[0]));
+
+    w = tc_width(type);
+    t = tc_thickness(type);
+    h = tc_body_height(type);
+    bw = tc_body_width(type);
+    bl = tc_body_length(type);
+    spade = spade6p4;
+
+    $fa = fa; $fs = fs;
+
+    color("silver") {
+        linear_extrude(tc_thickness(type))
+            difference() {
+                hull()
+                    for(side = [-1, 1])
+                        translate([side *(tc_length(type) - w) / 2, 0])
+                            circle(d = w);
+
+                thermal_cutout_hole_positions(type)
+                    circle(d = tc_hole_dia(type));
+            }
+
+        body_inset = tc_body_inset(type);
+        translate_z((h - body_inset) / 2)
+            cube([bl - 2 * body_inset, bw + 2 * eps, h - body_inset], center = true);
+    }
+
+    color("black")
+        translate_z(h / 2 + eps)
+            cube([bl, bw, h], center = true);
+
+    for(side = [-1, 1])
+        translate([side * tc_spade_pitch(type) / 2, 0, h])
+            rotate(90)
+                spade(spade, tc_spade_height(type) - h);
+
+    translate_z(t)
+        thermal_cutout_hole_positions(type)
+            children();
+}

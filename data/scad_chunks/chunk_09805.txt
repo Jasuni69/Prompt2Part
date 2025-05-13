@@ -1,0 +1,33 @@
+module xflip_copy(offset=0, cp=[0,0,0])
+{
+	mirror_copy(v=[1,0,0], offset=offset, cp=cp) children();
+}
+
+
+// Module: yflip_copy()
+//
+// Description:
+//   Makes a copy of the children, mirrored across the Y axis.
+//
+// Usage:
+//   yflip_copy([cp], [offset]) ...
+//
+// Arguments:
+//   offset = Distance to offset children back, before copying.
+//   cp = A point that lies on the mirroring plane.
+//
+// Side Effects:
+//   `$orig` is true for the original instance of children.  False for the copy.
+//   `$idx` is set to the index value of each copy.
+//
+// Example:
+//   yflip_copy() xrot(-90) cylinder(h=20, r1=4, r2=0);
+//   color("blue",0.25) cube([15,0.01,15], center=true);
+//
+// Example:
+//   yflip_copy(offset=5) xrot(-90) cylinder(h=20, r1=4, r2=0);
+//   color("blue",0.25) cube([15,0.01,15], center=true);
+//
+// Example:
+//   yflip_copy(cp=[0,-5,0]) xrot(-90) cylinder(h=20, r1=4, r2=0);
+//   color("blue",0.25) fwd(5) cube([15,0.01,15], center=true);

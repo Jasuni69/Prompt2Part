@@ -1,0 +1,16 @@
+module ZigZag(e=5,es=0,x=50,y=7,mod=2,delta=+0,base=2,shift=0,center=true,name,help){
+   x=es?e*es:x; 
+   es=es?es:x/e;
+  T(center?-x/2:0)  polygon(ZigZag(e=e,x=x,y=y,mod=mod,delta=delta,base=base,shift=shift),convexity=5);
+ abst=x/e;
+ h=y-base;   
+ InfoTxt("ZigZag",["Winkel",str(atan((abst/2+shift)/h),"°+",atan((abst/2-shift)/h),"°=",atan((abst/2+shift)/h)+atan((abst/2-shift)/h),"°"),"Spitzenabstand",abst,"Zackenhöhe",h],name);
+Echo("‼ use Nut(a=0,b=0)",color="redring"); 
+HelpTxt("ZigZag",["e",e,"es",es,"x",x,"y",y,"mod",mod,"delta",delta,"base",base,"shift",shift,"center",center,"name",name],help); 
+
+}
+
+//union()Color(){
+//Nut(a=5,b=5);
+//Tz(.1)Nut(a=undef,b=1,grad=40);
+//}

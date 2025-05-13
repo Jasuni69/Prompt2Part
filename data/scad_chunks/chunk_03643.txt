@@ -1,0 +1,8 @@
+function join( arr, sp="", _ret="", _i=0)=
+   (
+    _i<len(arr)?
+        join( arr, sp=sp
+            , _ret= str(_ret,_i==0?"":sp,arr[_i])
+            , _i=_i+1 )
+    :_ret
+   );

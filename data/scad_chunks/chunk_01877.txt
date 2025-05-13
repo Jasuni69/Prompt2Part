@@ -1,0 +1,9 @@
+function cable_merge(cable1, cable2) = //! Combine the wires of two cables
+    assert(cable_wire_size(cable1) == cable_wire_size(cable2))
+    assert(cable_is_ribbon(cable1) == cable_is_ribbon(cable2))
+    cable(cable_wires(cable1) + cable_wires(cable2),
+          cable_wire_size(cable1),
+          concat(cable_wire_colours(cable1), cable_wire_colours(cable1)),
+          cable_is_ribbon(cable1));
+
+// numbers from https://en.wikipedia.org/wiki/Circle_packing_in_a_circle

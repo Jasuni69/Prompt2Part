@@ -1,0 +1,24 @@
+function path3d(points, fill=0) =
+    assert(is_num(fill))
+    assert(is_path(points, dim=undef, fast=true), "\nInput to path3d is not a path.")
+    let (
+        change = len(points[0])-3,
+        M = change < 0? [[1,0,0],[0,1,0]] : 
+            concat(ident(3), repeat([0,0,0],change)),
+        result = points*M
+    )
+    assert(is_def(result), "\nInput to path3d is invalid.")
+    fill == 0 || change>=0 ? result : result + repeat([0,0,fill], len(result));
+
+
+// Function: point4d()
+// Synopsis: Convert a vector to 4d. 
+// Topics: Coordinates, Points
+// See Also: point2d(), path2d(), point3d(), path3d(), path4d()
+// Usage:
+//   pt = point4d(p, [fill]);
+// Description:
+//   Returns a 4D vector/point from a 2D or 3D vector.
+// Arguments:
+//   p = The coordinates to force into a 4D vector/point.
+//   fill = Scalar value to fill missing values in vector with.  Default: 0

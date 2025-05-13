@@ -1,0 +1,8 @@
+function teardrop_minus_x(r, y, h) = //! Calculate the ordinate of a compensated teardrop given y and layer height.
+    let(fr = h / 2,
+        hpot = r - fr,
+        x2 = sqr(hpot) - sqr(y),
+        x = x2 > 0 ? sqrt(x2) : 0,
+        X = y >= -hpot / sqrt(2) ? x + fr : 0
+    )
+    X >= extrusion_width ? X : 0;

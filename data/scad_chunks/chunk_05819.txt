@@ -1,0 +1,17 @@
+module round3d(r, or, ir, size=1000)
+{
+    req_children($children);
+    or = get_radius(r1=or, r=r, dflt=0);
+    ir = get_radius(r1=ir, r=r, dflt=0);
+    attachable(){
+       offset3d(or, size=size)
+           offset3d(-ir-or, size=size)
+               offset3d(ir, size=size)
+                   children();
+       union();
+    }
+}
+
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

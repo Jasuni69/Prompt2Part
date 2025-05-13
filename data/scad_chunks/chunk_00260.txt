@@ -1,0 +1,12 @@
+module dimensions_3d_xy() {
+    dimension([0,0,0], [10,10,0], "", 0.2);
+    dimension([0,0,0], [10,-10,0], "", 0.2);
+    dimension([0,0,0], [-10,10,0], "");
+    dimension([0,0,0], [-10,-10,0], "");
+
+
+    dimension([0,0,0], [0,10,0], "");
+    dimension([0,0,0], [0,-10,0], "");
+    dimension([0,0,0], [10,0,0], "",rot_around_dim=0);
+    dimension([0,0,0], [-10,0,0], "", rot_around_dim=90);
+}

@@ -1,0 +1,1 @@
+function servo_motor_shaft(type)     = type[4]; //! Shaft type

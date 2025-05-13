@@ -1,0 +1,9 @@
+module ht_cap(type) { //! Draw specified cap
+    vitamin(str("ht_cap(", type[0], "): PVC Waterpipe - ", type[1]));
+    tube_id = pipe_od(type) - pipe_wall(type) * 2;
+
+    cylinder(pipe_wall(type), r = tube_id/2 + pipe_wall(type) + 2.6);
+
+    translate_z(-pipe_length(type) - 5)
+        tube(or = tube_id/2 + pipe_wall(type), ir = tube_id/2, h = pipe_length(type) + 5, center = false);
+}

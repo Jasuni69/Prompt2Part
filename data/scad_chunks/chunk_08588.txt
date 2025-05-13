@@ -1,0 +1,8 @@
+function _stroke(stroke_pts, p1, p2, scale_step, i) =
+    let(
+        leng = norm(__to3d(p2) - __to3d(p1)),
+        m = _rz_matrix(p1, p2),
+        s = 1 + scale_step * i,
+        off_p = [0, leng]
+    )
+    [for(p = stroke_pts * s) m * (p + off_p) + p1];

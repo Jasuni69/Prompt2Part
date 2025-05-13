@@ -1,0 +1,1 @@
+function gm_boss(type)         = type[2]; //! Motor boss diameter, corner radius, height and colour

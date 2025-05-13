@@ -1,0 +1,10 @@
+module BLDC_screw_positions(holes, n = 4) { //! Screw positions utility function
+    hole_count = is_list(holes) ? len(holes) : 4;
+    for($i = [0 : min(n, hole_count) - 1]) {
+        spacing = is_list(holes) ? holes[$i] : holes;
+        rotate($i * 360 / hole_count)
+            translate([spacing / 2, 0])
+                rotate(-$i * 90)
+                    children();
+    }
+}

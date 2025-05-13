@@ -1,0 +1,11 @@
+function stack(direction=TOUP,spaceBy=0,mergeBy=0,geom=$geomInfo)
+    = setType($type_geomInfoStacking
+		,[direction,//$stackDirection=
+  	direction*abs(mergeBy),//$stackOverlap=
+  	direction*abs(spaceBy)//$stackSpaceBy=])
+    ]);
+//	 $geomInfo=set(geom);
+//	g(align(direction))
+	//	children();
+
+//different geomInfo setter Functions

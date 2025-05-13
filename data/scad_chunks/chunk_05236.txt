@@ -1,0 +1,1 @@
+function highlight_this() = no_function("highlight_this");

@@ -1,0 +1,264 @@
+function _gear_tooth_profile(
+    circ_pitch,
+    teeth,
+    pressure_angle = 20,
+    clearance,
+    backlash = 0.0,
+    helical = 0,
+    internal = false,
+    profile_shift = 0.0,
+    shorten = 0, 
+    mod,
+    diam_pitch,
+    pitch,
+    center = false
+) = let(
+    // Calculate a point on the involute curve, by angle.
+    _involute = function(base_r,a)
+        let(b=a*PI/180) base_r * [cos(a)+b*sin(a), sin(a)-b*cos(a)],
+
+    steps = !is_undef($gear_steps) ? $gear_steps : 16,
+    circ_pitch = circular_pitch(pitch=pitch, circ_pitch=circ_pitch, diam_pitch=diam_pitch, mod=mod),
+    mod = module_value(circ_pitch=circ_pitch),
+    clear = default(clearance, 0.25 * mod),
+
+    // Calculate the important circle radii
+    arad = outer_radius(circ_pitch, teeth, helical=helical, profile_shift=profile_shift, internal=internal, shorten=shorten),
+    prad = pitch_radius(circ_pitch, teeth, helical=helical),
+    brad = _base_radius(circ_pitch, teeth, pressure_angle, helical=helical),
+    rrad = _root_radius_basic(circ_pitch, teeth, clear, helical=helical, profile_shift=profile_shift, internal=internal),
+    srad = max(rrad,brad),
+    tthick = circ_pitch/PI / cos(helical) * (PI/2 + 2*profile_shift * tan(pressure_angle)) + (internal?backlash:-backlash),
+    tang = tthick / prad / 2 * 180 / PI,
+
+    // Generate a lookup table for the involute curve angles, by radius
+    involute_lup = [
+        for (i=[0:5:arad/PI/brad*360])
+            let(
+                xy = _involute(brad,i),
+                pol = xy_to_polar(xy)
+            )
+            if (pol.x <= arad * 1.1) [pol.x, 90-pol.y]
+    ],
+
+    // Generate reverse lookup table for involute radii, by angle
+    involute_rlup = mirror([-1,1],p=involute_lup), // swaps X and Y columns.
+
+    a_ang = lookup(arad, involute_lup),
+    p_ang = lookup(prad, involute_lup),
+    b_ang = lookup(brad, involute_lup),
+    r_ang = lookup(rrad, involute_lup),
+    s_ang = lookup(srad, involute_lup),
+    soff = tang + (b_ang - p_ang),
+    ma_rad = min(arad, lookup(90-soff+0.05*360/teeth/2, involute_rlup)),
+    ma_ang = lookup(ma_rad, involute_lup),
+    cap_steps = ceil((ma_ang + soff - 90) / 5),
+    cap_step = (ma_ang + soff - 90) / cap_steps,
+    ax = circ_pitch/4 - ang_adj_to_opp(pressure_angle, circ_pitch/PI),
+
+    // Calculate the undercut a meshing rack might carve out of this tooth.
+    undercut = [
+        for (a=[atan2(ax,rrad):-1:-90])
+        let(
+            bx = -a/360 * 2*PI*prad,
+            x = bx + ax,
+            y = prad - circ_pitch/PI + profile_shift*circ_pitch/PI,
+            pol = xy_to_polar(x,y)
+        )
+        if (pol.x < arad*1.05)
+        [pol.x, pol.y-a+180/teeth]
+    ],
+    uc_min = min_index(column(undercut,0)),
+
+    // Generate a fast lookup table for the undercut.
+    undercut_lup = [for (i=idx(undercut)) if (i>=uc_min) undercut[i]],
+
+    // The u values to use when generating the tooth.
+    us = [for (i=[0:1:steps*2]) i/steps/2],
+
+    // Find top of undercut.
+    undercut_max = max([
+        0,
+        for (u = us) let(
+            r = lerp(rrad, ma_rad, u),
+            a1 = lookup(r, involute_lup) + soff,
+            a2 = lookup(r, undercut_lup),
+            a = internal || r < undercut_lup[0].x? a1 : min(a1,a2),
+            b = internal || r < undercut_lup[0].x? false : a1>a2
+        ) if(a<90+180/teeth && b) r
+    ]),
+
+    // Generate the left half of the tooth.
+    tooth_half_raw = deduplicate([
+        for (u = us)
+            let(
+                r = lerp(rrad, ma_rad, u),
+                a1 = lookup(r, involute_lup) + soff,
+                a2 = lookup(r, undercut_lup),
+                a = internal || r < undercut_lup[0].x? a1 : min(a1,a2)
+            )
+            if ( internal || r > (rrad+clear) )
+            if (!internal || r < (ma_rad-clear) )
+            if (a < 90+180/teeth)
+            polar_to_xy(r, a),
+        if (!internal)
+            for (i=[0:1:cap_steps-1]) let(
+                a = ma_ang + soff - i * (cap_step-1)
+            ) polar_to_xy(ma_rad, a),
+    ]),
+
+    // Round out the clearance valley
+    rcircum = 2 * PI * (internal? ma_rad : rrad),
+    rpart = (180/teeth-tang)/360,
+    line1 = internal
+          ? select(tooth_half_raw,-2,-1)
+          : select(tooth_half_raw,0,1),
+    line2 = internal
+          ? [[0,ma_rad],[-1,ma_rad]]
+          : zrot(180/teeth, p=[[0,rrad],[1,rrad]]),
+    isect_pt = line_intersection(line1,line2),
+    rcorner = internal
+      ? [last(line1), isect_pt, line2[0]]
+      : [line2[0], isect_pt, line1[0]],
+    maxr =  norm(rcorner[0]-rcorner[1])*tan(vector_angle(rcorner)/2),  // Max radius that will actually fit on the corner
+    round_r = min(maxr, clear, rcircum*rpart),
+    rounded_tooth_half = deduplicate([
+        if (!internal && round_r>0) each arc(n=8, r=round_r, corner=rcorner),
+        if (!internal && round_r<=0) isect_pt,
+        each tooth_half_raw,
+        if (internal && round_r>0) each arc(n=8, r=round_r, corner=rcorner),
+        if (internal && round_r<=0) isect_pt,
+    ]),
+
+    // Strip "jaggies" if found.
+    strip_left = function(path,i)
+        i > len(path)? [] :
+        norm(path[i]) >= undercut_max? [for (j=idx(path)) if(j>=i) path[j]] :
+        let(
+            angs = [
+                for (j=[i+1:1:len(path)-1]) let(
+                    p = path[i],
+                    np = path[j],
+                    r = norm(np),
+                    a = v_theta(np-p)
+                ) if(r<undercut_max) a
+            ],
+            mti = !angs? 0 : min_index(angs),
+            out = concat([path[i]], strip_left(path, i + mti + 1))
+        ) out,
+    tooth_half = !undercut_max? rounded_tooth_half :
+        strip_left(rounded_tooth_half, 0),
+
+    // look for self-intersections in the gear profile.  If found, clip them off
+    invalid = [for(i=idx(tooth_half)) if (atan2(tooth_half[i].y,tooth_half[i].x)>90+180/teeth) i],
+    clipped = invalid==[] ? tooth_half
+            : let(
+                   ind = last(invalid),
+                   ipt = line_intersection([[0,0],polar_to_xy(1,90+180/teeth)], select(tooth_half,ind,ind+1)),
+                   c = prad - mod*(1-profile_shift) - norm(ipt)
+              )
+              echo(str(teeth, " tooth gear profile clipped at clearance = ",c))
+              [
+                 ipt,
+                 each slice(tooth_half, ind+1,-1)
+              ], 
+    
+    // Mirror the tooth to complete it.
+    full_tooth = deduplicate([
+        each clipped, 
+        each reverse(xflip(clipped)),
+    ]),
+    // Reduce number of vertices.
+    tooth = path_merge_collinear(
+        resample_path(full_tooth, n=ceil(2*steps), keep_corners=30, closed=false)
+    ),
+    out = center? fwd(prad, p=tooth) : tooth
+) out;
+
+
+// Section: Gear Assemblies
+
+// Function: planetary_gears()
+// Synopsis: Calculate teeth counts and angles for planetary gear assembly with specified ratio.
+// Usage:
+//   gear_data = planetary_gears(mod=|circ_pitch=|diam_pitch=, n, max_teeth, ring_carrier=|carrier_ring=|sun_carrier=|carrier_sun=|sun_ring=|ring_sun=, [helical=], [gear_spin=]);
+// Description:
+//   Calculates a planetary gear assembly that approximates a desired transmission ratio.  A planetary gear assembly can be regarded as having three
+//   elements: the outer ring gear, the central sun gear, and a carrier that holds several planet gears, which fit between the sun and ring.
+//   The transmission ratio of a planetary gear assembly depends on which element is fixed and which ones are considered the input and output shafts.
+//   The fixed element can be the ring gear, the sun gear, or the carrier, and then you specify the desired ratio between the other two.
+//   You must also specify a maximum number of teeth on the ring gear.  The function calculates the best approximation to your desired
+//   transmission ratio under that constraint: a large enough increase in the allowed number of teeth will yield a more accurate approximation.  The planet gears
+//   appear uniformly spaced around the sun gear, but this uniformity is often only approximate.  Exact uniformity occurs when teeth_sun+teeth_ring
+//   is a multiple of the number of planet gears.
+//   .
+//   You specify the desired ratio using one of six parameters that identify which ratio you want to specify, and which is the driven element.
+//   Each different ratio is limited to certain bounds.  For the case of the fixed carrier system, the sun and ring rotate in opposite directions.
+//   This is sometimes indicated by a negative transmission ratio.  For these cases you can give a positive or negative value.  
+//   .
+//   The return is a list of entries that describe the elements of the planetary assembly.  The list entries are:
+//   - ["sun", teeth, profile_shift, spin]
+//   - ["ring", teeth, profile_shift, spin]
+//   - ["planets", teeth, profile_shift, spins, positions, angles]
+//   - ["ratio", realized_ratio]
+//   .
+//   The sun and ring gear are assumed to be placed at the origin.  The planet gears are placed at the list of positions.  The gears all
+//   have a spin in degrees.  The planets list also includes the angular position of each planet in the `angles` list.
+//   One of the planets always appears on the X+ axis when `gear_spin` is zero.  The final list entry gives the realized ratio of
+//   the assembly, so you can determine how closely it approaches your desired ratio.  This will always be a positive value.  
+//   .
+//   The sun gear appears by default with a tooth pointing on the Y+ axis with no spin, so if gear_spin is not used then the sun gear spin will
+//   always be zero.  If you set `gear_spin` then the drive gear for the ratio you specified will be rotated by the specified angle and all
+//   of the other gears will be rotated appropriately.
+//   .
+//   The computation of planetary gear assembles is about determining the teeth counts on the sun, ring and planet gears,
+//   and the angular positions of the planet gears.
+//   The tooth size or helical angle are needed only for determining proper profile shifting and for determining the
+//   gear positions for the profiled shifted gears.  To control the size of the assembly, do a planetary calculation
+//   with a module of 1 and then scale the module to produce the required gear dimensions.  Remember, you should never
+//   use `scale()` on gears; change their size by scaling the module or one of the other tooth size parameters.  
+// Arguments:
+//   n = Number of planetary gears
+//   max_teeth = maximum number of teeth allowed on the ring gear
+//   ---
+//   mod = The module of the gear, pitch diameter divided by tooth count. 
+//   diam_pitch = The diametral pitch, or number of teeth per inch of pitch diameter.  The diametral pitch is a completely different thing than the pitch diameter.
+//   circ_pitch = distance between teeth centers around the pitch circle.
+//   ring_carrier = set ring/carrier transmission ratio to this value in a ring driven system, must be between 1 and 2
+//   carrier_ring = set carrier/ring transmission ratio to this value in a carrier driven system, must be between 1/2 and 1
+//   sun_carrier = set sun/carrier transmission ratio to this value in a sun driven system, must be larger than 2
+//   carrier_sun = set carrier/sun transmission ratio to this value in a carrier driven system, must be smaller than 1/2
+//   ring_sun = set ring/sun transmission ratio to this value in a ring driven system, must have absolute value smaller than 1
+//   sun_ring = set sun/ring transmission ratio to this value in a sun driven system, must have absolute value larger than 1
+//   helical = create gears with specified helical angle.  Default: 0
+//   gear_spin = rotate the driven gear by this number of degrees.  Default:0
+// Example(2D,NoAxes,Anim,Frames=90,FrameMS=30,VPT=[-0.875705,-0.110537,-66.3877],VPR=[0,0,0],VPD=102,Med): In this example we request a ring/carrier ratio of 1.341 and the system produced has a ratio of 4/3.  The sun is fixed, the input is carried by the ring, and the carrier, shown as the blue triangle, is the output, rotating approximately in accordance with the requested ratio.  
+//   mod=1;
+//   gear_data = planetary_gears(mod=mod, n=3, max_teeth=28, ring_carrier=1.341, gear_spin=4/3*360/3*$t);
+//   ring_gear2d(mod=mod, teeth=gear_data[1][1], profile_shift=gear_data[1][2], gear_spin=gear_data[1][3],backing=2);
+//   stroke(gear_data[2][4],closed=true,color="blue",width=2);
+//     spur_gear2d(mod=mod, teeth=gear_data[0][1], profile_shift=gear_data[0][2], gear_spin=gear_data[0][3]);  //sun
+//   color("red")move_copies(gear_data[2][4])
+//     spur_gear2d(mod=mod, teeth=gear_data[2][1], profile_shift=gear_data[2][2], gear_spin=gear_data[2][3][$idx]);
+// Example(2D,Med,NoAxes,Anim,FrameMS=60,Frames=90,VPT=[-0.125033,0.508151,-66.3877],VPR=[0,0,0],VPD=192.044): In this example we request a sun/carrier ratio of 3.6 and get exactly that ratio.  The carrier shown as the blue pentagon moves very slowly as the central sun turns.  The ring is fixed.  
+//   mod=1;
+//   gear_data = planetary_gears(mod=mod, n=5, max_teeth=70, sun_carrier=3.6, gear_spin=3.6*360/5*$t);
+//   ring_gear2d(mod=mod, teeth=gear_data[1][1], profile_shift=gear_data[1][2], gear_spin=gear_data[1][3],backing=2);
+//   stroke(gear_data[2][4],closed=true,color="blue");
+//   color("gold")
+//     spur_gear2d(mod=mod, teeth=gear_data[0][1], profile_shift=gear_data[0][2], gear_spin=gear_data[0][3]);  //sun
+//   color("red")move_copies(gear_data[2][4])
+//       spur_gear2d(mod=mod, teeth=gear_data[2][1], profile_shift=gear_data[2][2], gear_spin=gear_data[2][3][$idx]);
+// Example(3D,Med,NoAxes,Anim,Frames=7,FrameMS=50,VPT=[0.128673,0.24149,0.651451],VPR=[38.5,0,21],VPD=222.648): Here we request a sun/ring ratio of 3 and it is exactly achieved.  The carrier, shown in blue, is fixed.  This example is shown with helical gears.  It is important to remember to flip the sign of the helical angle for the planet gears.  
+//   $fn=81;
+//   mod=1;
+//   helical=25;
+//   gear_data = planetary_gears(mod=mod, n=4, max_teeth=82, sun_ring=3, helical=helical,gear_spin=360/27*$t);
+//   ring_gear(mod=mod, teeth=gear_data[1][1], profile_shift=gear_data[1][2], helical=helical, gear_spin=gear_data[1][3],backing=4,thickness=7);
+//   color("blue"){
+//       move_copies(gear_data[2][4]) cyl(h=12,d=4);
+//       down(9)linear_extrude(height=3)scale(1.2)polygon(gear_data[2][4]);
+//   }    
+//   spur_gear(mod=mod, teeth=gear_data[0][1], profile_shift=gear_data[0][2], helical=helical, gear_spin=gear_data[0][3]);  //sun
+//   color("red")move_copies(gear_data[2][4])
+//       spur_gear(mod=mod, teeth=gear_data[2][1], profile_shift=gear_data[2][2], helical=-helical, gear_spin=gear_data[2][3][$idx]);

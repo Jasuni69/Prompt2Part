@@ -1,0 +1,22 @@
+module bs_shape( d, btn_d, btn_h, stalk_d, ra=0, f=$fn) {
+    bdr = btn_d/2;
+    stend = max((d.x+btn_d), (btn_d*2));
+    stht= (d.z-btn_h)+CS2;
+    hull(){ // button
+        translate([bdr,d.y/2,wt]) cylinder( d=btn_d, h=btn_h, $fn=f, center=true );
+        rotate([0,0,ra])
+        translate([stend-bdr,d.y/2,wt]) cylinder( d=btn_d, h=btn_h, $fn=f, center=true );
+    }
+    hull() { // stalk
+        translate([bdr,d.y/2,d.z/2]) cylinder( d=stalk_d, h=stht, $fn=f, center=true  );
+        rotate([0,0,ra])
+        translate([stend-bdr,d.y/2,d.z/2]) cylinder( d=stalk_d, h=stht, $fn=f, center=true  );
+    }
+} //bs_shape
+
+
+/* =========================
+    td - bounding box of shape
+    wfn - $fn of sphere that gets quarterd and squished
+    dst - 3vec of factors passed to scale()
+   ========================= */

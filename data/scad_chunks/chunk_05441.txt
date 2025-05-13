@@ -1,0 +1,24 @@
+function parent() =
+    let(
+        geom = default($parent_geom, attach_geom([0,0,0]))
+    )                 
+    [$transform, geom];
+
+
+// Module: restore()
+// Synopsis: Restores transformation state and attachment geometry from a description
+// Topics: Transforms, Attachments, Descriptions
+// See Also: parent()
+// Usage:
+//   restore([desc]) CHILDREN;
+// Description:
+//   Restores the transformation and parent geometry contained in the specified description which you obtained with {{parent()}}.  
+//   If you don't give a description then restores the global world coordinate system with a zero size cuboid object as the parent.
+// Arguments:
+//   desc = saved description to restore.  Default: restore to world coordinates
+// Example(3D):  The pink cube is a child of the green cube, but {{restore()}} restores the state to the yellow parent cube, so the pink cube attaches to the yellow cube
+//  left(5) cuboid(10)
+//    let(save_pt = parent())
+//    attach(RIGHT,BOT) recolor("green") cuboid(3)
+//    restore(save_pt)
+//      attach(FWD,BOT) recolor("pink") cuboid(3);

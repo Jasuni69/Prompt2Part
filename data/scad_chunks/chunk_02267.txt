@@ -1,0 +1,2 @@
+function corner_block_holes(screw, short_insert = false) =  //! List of transforms to all holes
+    concat([corner_block_v_hole(screw, short_insert)], corner_block_h_holes(screw, short_insert));

@@ -1,0 +1,2 @@
+module pcb_cutouts(type, angle = undef)  //! Make cut outs to clear components on a PCB
+    pcb_components(type, true, angle);

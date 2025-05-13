@@ -1,0 +1,1 @@
+function drag_chain_supports(type)    = type[7]; //! Whether to print version of chain with or without supports

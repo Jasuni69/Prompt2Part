@@ -1,0 +1,31 @@
+module pbox_mid_shape(type) {
+    ridges = pbox_ridges(type);
+    offset = ridges.y + pbox_wall(type) / 2;
+    rad = pbox_radius(type) + offset;
+    w = pbox_width(type) + 2 * offset;
+    d = pbox_depth(type) + 2 * offset;
+
+    module waves(length) {
+        l = length - 2 * rad;
+
+        waves = round(l / ridges.x);
+        points = 16;
+        translate([-l / 2, ridges.y / 2])
+            polygon(concat([[0, -10]], [for(i = [0 : waves * points], a = 360 * i / points) [i * l / waves / points, -cos(a) * ridges.y / 2] ], [[l, -10]]));
+    }
+
+    difference() {
+        rounded_square([w, d], rad, center = true);
+
+        if(ridges.y)
+            for(side = [-1, 1]) {
+                translate([0,  side * d / 2])
+                    rotate(90 + side * 90)
+                        waves(w);
+
+                translate([side * w / 2, 0])
+                    rotate(side * 90)
+                        waves(d);
+            }
+     }
+}

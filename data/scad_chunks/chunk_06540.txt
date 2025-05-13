@@ -1,0 +1,28 @@
+function _any_bool(l, i=0, out=false) =
+    i >= len(l) || out? out :
+    _any_bool(l, i=i+1, out=out || l[i]);
+
+
+// Function: all()
+// Synopsis: Returns true if all items in the argument list are true.
+// Topics: Type Checking
+// See Also: any(), num_true()
+// Usage:
+//   bool = all(l);
+//   bool = all(l, func);   // Requires OpenSCAD 2021.01 or later.
+// Requirements:
+//   Requires OpenSCAD 2021.01 or later to use the `func` argument.
+// Description:
+//   Returns true if all items in list `l` evaluate as true.
+//   If `func` is given then returns true if the function evaluates as true on all list etnries. 
+//   Items that evaluate as true include nonempty lists, nonempty strings, and nonzero numbers.
+// Arguments:
+//   l = The list to test for true items.
+//   func = An optional function literal of signature (x), returning bool, to test each list item with.
+// Example:
+//   test1 = all([0,false,undef]);  // Returns false.
+//   test2 = all([1,false,undef]);  // Returns false.
+//   test3 = all([1,5,true]);       // Returns true.
+//   test4 = all([[0,0], [0,0]]);   // Returns true.
+//   test5 = all([[0,0], [1,0]]);   // Returns true.
+//   test6 = all([[1,1], [1,1]]);   // Returns true.

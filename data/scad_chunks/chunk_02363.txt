@@ -1,0 +1,28 @@
+module round_grommet_top(diameter, thickness, od = undef) { //! Generate the STL for a round grommet top half
+    chamfer = layer_height;
+    h = wall + thickness + wall;
+    r1 = diameter / 2;
+    r2 = od == undef ? corrected_radius(r1) + wall : od / 2;
+    r3 = r2 + overlap;
+    r0 = r1 + 1;
+    stl(str("round_grommet_top_", round(diameter * 10), "_", thickness))
+        union() {
+            rotate_extrude()
+                polygon([
+                    [r0, 0],
+                    [r3 - chamfer, 0],
+                    [r3, chamfer],
+                    [r3, wall],
+                    [r2, wall],
+                    [r2, h - chamfer],
+                    [r2 - chamfer, h],
+                    [r0, h],
+                ]);
+
+            render() difference() {
+                cylinder(r = r0 + eps, h = h);
+
+                poly_cylinder(r = r1, h = 100, center = true);
+            }
+        }
+}

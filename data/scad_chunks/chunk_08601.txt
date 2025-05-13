@@ -1,0 +1,2 @@
+function _does_pt_cross(pi, pj, pt) = 
+    ((pi.y - pt.y) * (pj.y - pt.y) < 0) && (pt.x < lookup(pt.y, [[pi.y, pi.x], [pj.y, pj.x]]));

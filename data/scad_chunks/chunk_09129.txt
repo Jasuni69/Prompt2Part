@@ -1,0 +1,7 @@
+function updated(p, dots) =
+    let(x = p.x, y = p.y, rowY = dots[y]) 
+    [
+        for(r = [0:len(dots) - 1])
+        if(r == y) [for(c = [0:len(rowY) - 1]) c == x || rowY[c]]
+        else dots[r]
+    ];

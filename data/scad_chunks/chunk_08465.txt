@@ -1,0 +1,16 @@
+function _subdivide_project(points, faces, radius, detail) = 
+    detail == 0 ? [points * radius / norm(points[0]), faces] :
+    let(
+		rows = detail + 1,
+	    subdivided_pts = [
+			for(face = faces)
+		    each _tri_subdivide_pts([for(i = face) points[i]], radius, rows)
+		],
+		pts_number_per_tri = (rows + 1) * (rows + 2) / 2,
+	    subdivided_faces = _tri_subdivide_faces(rows),
+		flatten_faces = [
+			for(i = [0:pts_number_per_tri:(len(faces) - 1) * pts_number_per_tri], face = subdivided_faces)
+			face + [i, i, i]
+		]
+	)   
+	[subdivided_pts, flatten_faces];

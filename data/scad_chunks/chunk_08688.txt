@@ -1,0 +1,8 @@
+function _forward(t, leng) = 
+    _turtle(
+        [
+            _get_x(t) + leng * cos(_get_angle(t)), 
+            _get_y(t) + leng * sin(_get_angle(t))
+        ], 
+        _get_angle(t)
+    );

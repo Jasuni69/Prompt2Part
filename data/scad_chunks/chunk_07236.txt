@@ -1,0 +1,37 @@
+function naca(l = 10, naca, m=+0.00, p=0.0,t=0.12,fn=fn,dir=0,asymP,z)=
+ let(
+  m=is_undef(naca)?m:(naca-naca%1000)/100000,
+  p=is_undef(naca)?p:(naca-(naca-naca%1000)-naca%100)/1000,
+  t=is_undef(naca)?t:(naca%100)/100,
+ range=dir?[0:1:fn/2-1]:[fn/2-1:-1:0],
+ asymP=is_undef(asymP)?10*(1-p):asymP,// asymetric point distribution
+ naca_func=function(x,t=t) +5*t*(0.2969*sqrt(x) - 0.1260*x - 0.3516*pow(x,2.0) + 0.2843*pow(x,3) - 0.1015*pow(x,+4)),
+ naca_t=function(t=t,fn=fn/2,l=l,y=dir?1:-1)
+  let(
+   // c=l/(fn -1),
+   // x=1/(fn-1)
+  )
+  [ for(n=range)
+    let(
+    x=1/((fn-1)*(asymP+1)-asymP*n)
+    )
+    concat([n*x*l,naca_func(x*n,t=t)*y*l],is_undef(z)?[]:z) ],
+
+ naca_camber = function(m=m,p=p,fn=fn/2,l=l,sig=1,xScale=1)
+  let(
+    //c=l/(fn-1),
+    //x=1/(fn-1)
+    )
+  [ for(n=range) 
+    let(
+    x=1/((fn-1)*(asymP+1)-asymP*n)
+    )
+    concat([n*x*l*xScale,(n*x<p?m/p^2 * (2 * p*x*n - (n*x)^2):
+                                m/(1-p)^2 * ((1-2*p) + 2*p*x*n - (n*x)^2))
+                          *sig*l],is_undef(z)?[]:0)
+  ]
+ )
+//  WIP not using 4. for the realitonship http://www.aerospaceweb.org/question/airfoils/q0041.shtml
+//x=x - sin(atan(dy_camber/dx) ) * naca_t.x 
+//y=naca_camber.y + cos(atan(dy_camber/dx) ) * naca_t.x 
+dir?naca_camber(xScale=0)+naca_t():concat(naca_camber(xScale=0)+naca_t(),naca(l=l,m=m,p=p,t=t,fn=fn,dir=1,asymP=asymP,z=z));

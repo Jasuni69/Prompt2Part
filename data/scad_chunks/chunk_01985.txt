@@ -1,0 +1,1 @@
+function ssr_shroud_extent(type, cable_d) = 2 * boss_r + 1 + cable_d + rad; //! How far it extends beyond the SSR

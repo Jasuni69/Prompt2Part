@@ -1,0 +1,25 @@
+function plane_from_polygon(poly, check_coplanar=true, eps=EPSILON, fast) =
+    assert( is_path(poly,dim=3), "\nInvalid polygon." )
+    assert( is_finite(eps) && (eps>=0), "\nThe tolerance should be a non-negative value." )
+    let(
+        dep = is_def(fast) ? echo("In plane_from_polygon() the 'fast' parameter is deprecated; use 'check_coplanar' instead.") true : false,
+        check = dep ? fast : check_coplanar,
+        poly_normal = polygon_normal(poly)
+    )
+    is_undef(poly_normal) ? undef :
+    let(
+        plane = plane_from_normal(poly_normal, poly[0])
+    )
+    !check ? plane : are_points_on_plane(poly, plane, eps=eps) ? plane : undef;
+
+
+// Function: plane_normal()
+// Synopsis: Returns the normal vector to a plane. 
+// Topics: Geometry, Planes
+// See Also: plane3pt(), plane3pt_indexed(), plane_from_normal(), plane_from_points(), plane_from_polygon(), plane_normal(), plane_offset()
+// Usage:
+//   vec = plane_normal(plane);
+// Description:
+//   Returns the unit length normal vector for the given plane.
+// Arguments:
+//   plane = The `[A,B,C,D]` plane definition where `Ax+By+Cz=D` is the formula of the plane.

@@ -1,0 +1,46 @@
+function is_nurbs_patch(x) =
+    is_list(x) && is_list(x[0]) && is_vector(x[0][0]) && len(x[0]) == len(x[len(x)-1]);  
+
+
+
+// Function: nurbs_patch_points()
+// Synopsis: Computes specifies point(s) on a NURBS surface patch
+// Topics: NURBS Patches
+// See Also: nurbs_vnf(), nurbs_curve()
+// Usage:
+//   pointgrid = nurbs_patch_points(patch, degree, [splinesteps], [u=], [v=], [weights=], [type=], [mult=], [knots=]);
+// Description:
+//   Sample a NURBS patch on a point set.  If you give splinesteps then it will sampled uniformly in the spline
+//   parameter between the knots, ensuring that a sample appears at every knot.  If you instead give u and v then
+//   the values at those points in parameter space will be returned.  The various NURBS parameters can all be
+//   single values, if the NURBS has the same parameters in both directions, or pairs listing the value for the
+//   two directions.  
+// Arguments:
+//   patch = rectangular list of control points in any dimension
+//   degree = a scalar or 2-vector giving the degree of the NURBS in the two directions
+//   splinesteps = a scalar or 2-vector giving the number of segments between each knot in the two directions
+//   ---
+//   u = evaluation points in the u direction of the patch
+//   v = evaluation points in the v direction of the patch
+//   mult = a single list or pair of lists giving the knot multiplicity in the two directions. Default: all 1
+//   knots = a single list of pair of lists giving the knot vector in each of the two directions.  Default: uniform
+//   weights = a single list or pair of lists giving the weight at each control point in the patch.  Default: all 1
+//   type = a single string or pair of strings giving the NURBS type, where each entry is one of "clamped", "open" or "closed".  Default: "clamped"
+// Example(3D,NoScale): Computing points on a patch using ranges
+//   patch = [
+//       [[-50, 50,  0], [-16, 50,  20], [ 16, 50,  20], [50, 50,  0]],
+//       [[-50, 16, 20], [-16, 16,  40], [ 16, 16,  40], [50, 16, 20]],
+//       [[-50,-16, 20], [-16,-16,  40], [ 16,-16,  40], [50,-16, 20]],
+//       [[-50,-50,  0], [-16,-50,  20], [ 16,-50,  20], [50,-50,  0]],
+//   ];
+//   pts = nurbs_patch_points(patch, 3, u=[0:.1:1], v=[0:.3:1]);
+//   move_copies(flatten(pts)) sphere(r=2,$fn=16);
+// Example(3D,NoScale): Computing points using splinesteps
+//   patch = [
+//       [[-50, 50,  0], [-16, 50,  20], [ 16, 50,  20], [50, 50,  0]],
+//       [[-50, 16, 20], [-16, 16,  40], [ 16, 16,  40], [50, 16, 20]],
+//       [[-50,-16, 20], [-16,-16,  40], [ 16,-16,  40], [50,-16, 20]],
+//       [[-50,-50,  0], [-16,-50,  20], [ 16,-50,  20], [50,-50,  0]],
+//   ];
+//   pts = nurbs_patch_points(patch, 3, splinesteps=5);
+//   move_copies(flatten(pts)) sphere(r=2,$fn=16);

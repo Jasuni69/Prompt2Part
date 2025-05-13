@@ -1,0 +1,19 @@
+module bentStrip3D(places=[X(10)],y=$y,thick=3)
+{
+  allPlaces=placesOnly(places);
+
+  g(Z(-y/2))
+    for(limit=[0:1:(len(allPlaces)-2)])
+    {
+      base =multAll([for(i=[0:1:limit])allPlaces[i]]);
+      hull()
+      two()
+        multmatrix(
+          vals(base,base*allPlaces[limit+1]))
+      linear_extrude(y)  circle(d=thick);
+    }
+}
+
+//makes a 2D strip of abaselement and a list of transormations
+//Example:
+//bentStrip([X(30),turnXY(20),Y(40),X(80)])circle(5);

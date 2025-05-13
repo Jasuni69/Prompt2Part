@@ -1,0 +1,4 @@
+module circle4n(r, d = undef) {                     //! Circle with multiple of 4 vertices
+    R = is_undef(d) ? r : d / 2;
+    circle(R, $fn = r2sides4n(R));
+}

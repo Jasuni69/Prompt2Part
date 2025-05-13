@@ -1,0 +1,22 @@
+function _q_rotation(a, v) = 
+    let(
+        uv = v / norm(v),
+        s = sin(a / 2) * uv,
+        w = sin(a) * uv,
+
+        xx = 2 * s.x ^ 2,
+        yy = 2 * s.y ^ 2,
+        zz = 2 * s.z ^ 2,
+
+        xy = 2 * s.x * s.y,
+        xz = 2 * s.x * s.z,
+        yz = 2 * s.y * s.z
+    )
+    [
+        [1 - yy - zz, xy - w.z, xz + w.y],
+        [xy + w.z, 1 - xx - zz, yz - w.x],
+        [xz - w.y, yz + w.x, 1 - xx - yy]
+    ];
+    
+// turn the turtle around the x'-axis
+// return a new unit vector

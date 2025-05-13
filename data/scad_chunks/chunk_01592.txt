@@ -1,0 +1,1 @@
+function spool_hub_bore(type)      = type[6]; //! Bore through the hub

@@ -1,0 +1,1 @@
+function pot_thread_d(type) = type[5];  //! Nomininal thread diameter

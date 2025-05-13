@@ -1,0 +1,39 @@
+module Cell(cp=[0,0],p=[[1,1],[5,5],[1,5],[5,1]]){
+
+distances=[for(i=[0:len(p)-1])norm(p[i]-cp)];
+minDist=min(distances);
+
+
+
+  difference(){
+      translate(cp)circle(max(distances),$fn=6);
+
+    for(i=[0:len(p)-1]){
+      pH=(p[i]-cp)/2;
+      deg=atan2(pH[0],pH[1]);
+      translate(cp+pH)rotate(-deg)translate([-max(size),0])square(max(size)*2);
+    }
+  }
+}  
+  
+}
+
+
+
+
+/** \page Polygons
+Arc() creates an arc
+\param r radius
+\param deg angle
+\param r2 end radius at deg
+\param fn fragments
+\param dicke fringe thickness
+\param center center arc rotation
+\param cP center Point
+\param rot rotate arc [r,rand]
+
+*/
+//Arc(r=10,deg=90,r2=8,rand=2);
+//Arc(r=10,deg=90,rand=[5,1]);
+
+//Arc(r=10,deg=[110,0],center=0);

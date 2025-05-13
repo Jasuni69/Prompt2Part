@@ -1,0 +1,35 @@
+module spring_dog_spring(head_r, spring_levels, line_thickness, line_distance, peg_radius, plate_h, spacing) {
+    spring_sides = 36;
+    h = spring_levels * line_thickness;
+
+    module plate_back() {
+        difference() {
+            linear_extrude(plate_h + spacing) 
+                circle(head_r);  
+            connector_peg(peg_radius, spacing = spacing, void = true, $fn = spring_sides);
+        }         
+    }
+
+    module plate_front() {
+        linear_extrude(plate_h + spacing) 
+            circle(head_r);  
+        
+        translate([0, 0, plate_h + spacing]) 
+            connector_peg(peg_radius, spacing = spacing, $fn = spring_sides);  
+    }    
+    
+    color("yellow") {
+        plate_back();
+        
+        translate([0, 0, line_thickness / 2])  toy_spring(
+            head_r - line_thickness / 1.5, 
+            spring_levels, 
+            spring_sides, 
+            line_thickness,
+            line_distance
+        );
+        
+        translate([0, 0, h + line_distance * spring_levels]) 
+            plate_front();
+    }
+}

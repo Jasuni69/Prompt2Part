@@ -1,0 +1,1 @@
+function insert_length(type)         = type[1];     //! Length

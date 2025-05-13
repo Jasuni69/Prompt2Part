@@ -1,0 +1,16 @@
+function stern (e=5,r1=10,r2=5,mod=2,delta=+0,z)=
+let(
+  schritt=360/(e*mod))
+  is_num(z)?
+    [for(i=[0:e*mod-1])
+    i%mod<mod/2+round(delta)?[sin(i*schritt%360)*r1,cos(i*schritt%360)*r1,z]:
+                             [sin(i*schritt%360)*r2,cos(i*schritt%360)*r2,z]
+    ]:
+    [for(i=[0:e*mod -1])
+      i%mod<mod/2+round(delta)?[sin(i*schritt%360)*r1,cos(i*schritt%360)*r1]:
+                               [sin(i*schritt%360)*r2,cos(i*schritt%360)*r2]
+    ];
+
+
+
+//polygon(stern());

@@ -1,0 +1,100 @@
+function line_copies(spacing, n, l, p1, p2, p=_NO_ARG) =
+    assert(is_undef(spacing) || is_finite(spacing) || is_vector(spacing))
+    assert(!is_list(spacing) || len(spacing)==2 || len(spacing)==3, "Vector `spacing` must have length 2 or 3")
+    assert(is_undef(n) || is_finite(n))
+    assert(is_undef(l) || is_finite(l) || is_vector(l))
+    assert(is_undef(p1) || is_vector(p1))
+    assert(is_undef(p2) || is_vector(p2))
+    assert(is_undef(p2) || is_def(p1), "If p2 is given must also give p1")
+    assert(is_undef(p2) || is_undef(l), "Cannot give both p2 and l")
+    assert(is_undef(n) || num_defined([l,spacing,p2])==1,"If n is given then must give exactly one of 'l', 'spacing', or the 'p1'/'p2' pair")
+    assert(is_def(n) || num_defined([l,spacing,p2])>=1,"If n is not given then must give at least one of 'l', 'spacing', or the 'p1'/'p2' pair")
+    assert(!(is_vector(spacing) && is_vector(l) && vector_angle(spacing,l)>EPSILON), "Cannot give conflicting vector 'spacing' and vector 'l' value.")
+    assert(!(is_vector(spacing) && is_def(p2)), "Cannot combine vector 'spacing' with the 'p1'/'p2' pair")
+    let(
+        ll = is_def(l)? scalar_vec3(l, 0)
+           : is_def(spacing) && is_def(n)? (n-1) * scalar_vec3(spacing, 0)
+           : is_def(p1) && is_def(p2)? point3d(p2-p1)
+           : undef,
+        cnt = is_def(n)? n
+            : is_def(spacing) && is_def(ll) ? floor(norm(ll) / norm(scalar_vec3(spacing, 0)) + 1.000001)
+            : 2,
+        spc = cnt<=1? [0,0,0]
+            : is_undef(spacing) && is_def(ll)? ll/(cnt-1) 
+            : is_num(spacing) && is_def(ll)? ll/(cnt-1)
+            : scalar_vec3(spacing, 0)
+    )
+    assert(!is_undef(cnt), "Need two of `spacing`, 'l', 'n', or `p1`/`p2` arguments in `line_copies()`.")
+    let( spos = !is_undef(p1)? point3d(p1) : -(cnt-1)/2 * spc )
+    [for (i=[0:1:cnt-1]) translate(i * spc + spos, p=p)];
+
+
+// Function&Module: grid_copies()
+// Synopsis: Places copies of children in an [X,Y] grid. 
+// SynTags: MatList, Trans
+// Topics: Transformations, Distributors, Translation, Copiers
+// See Also: move_copies(), xcopies(), ycopies(), zcopies(), line_copies(), rot_copies(), xrot_copies(), yrot_copies(), zrot_copies(), arc_copies(), sphere_copies()
+//
+// Usage:
+//   grid_copies(spacing, size=, [stagger=], [scale=], [inside=]) CHILDREN;
+//   grid_copies(n=, size=, [stagger=], [scale=], [inside=]) CHILDREN;
+//   grid_copies(spacing, [n], [stagger=], [scale=], [inside=]) CHILDREN;
+//   grid_copies(n=, inside=, [stagger], [scale]) CHILDREN;
+// Usage: As a function to translate points, VNF, or Bezier patches
+//   copies = grid_copies(spacing, size=, [stagger=], [scale=], [inside=], p=);
+//   copies = grid_copies(n=, size=, [stagger=], [scale=], [inside=], p=);
+//   copies = grid_copies(spacing, [n], [stagger=], [scale=], [inside=], p=);
+//   copies = grid_copies(n=, inside=, [stagger], [scale], p=);
+// Usage: Get Translation Matrices
+//   mats = grid_copies(spacing, size=, [stagger=], [scale=], [inside=]);
+//   mats = grid_copies(n=, size=, [stagger=], [scale=], [inside=]);
+//   mats = grid_copies(spacing, [n], [stagger=], [scale=], [inside=]);
+//   mats = grid_copies(n=, inside=, [stagger], [scale]);
+// Description:
+//   When called as a module, makes a square or hexagonal grid of copies of children, with an optional masking polygon or region.
+//   When called as a function, *without* a `p=` argument, returns a list of transformation matrices, one for each copy.
+//   When called as a function, *with* a `p=` argument, returns a list of transformed copies of `p=`.
+//
+// Arguments:
+//   spacing = Distance between copies in [X,Y] or scalar distance.
+//   n = How many columns and rows of copies to make.  Can be given as `[COLS,ROWS]`, or just as a scalar that specifies both.  If staggered, count both staggered and unstaggered columns and rows.  Default: 2 (3 if staggered)
+//   size = The [X,Y] size to spread the copies over.
+//   ---
+//   stagger = If true, make a staggered (hexagonal) grid.  If false, make square grid.  If `"alt"`, makes alternate staggered pattern.  Default: false
+//   inside = If given a list of polygon points, or a region, only creates copies whose center would be inside the polygon or region.  Polygon can be concave and/or self crossing.
+//   nonzero = If inside is set to a polygon with self-crossings then use the nonzero method for deciding if points are in the polygon.  Default: false
+//   p = Either a point, pointlist, VNF or Bezier patch to be translated when used as a function.
+//
+// Side Effects:
+//   `$pos` is set to the relative centerpoint of each child copy, and can be used to modify each child individually.
+//   `$col` is set to the integer column number for each child.
+//   `$row` is set to the integer row number for each child.
+//   `$idx` is set to a unique index for each child, progressing across rows first, from the bottom
+//
+// Examples:
+//   grid_copies(size=50, spacing=10) cylinder(d=10, h=1);
+//   grid_copies(size=50, spacing=[10,15]) cylinder(d=10, h=1);
+//   grid_copies(spacing=10, n=[13,7], stagger=true) cylinder(d=6, h=5);
+//   grid_copies(spacing=10, n=[13,7], stagger="alt") cylinder(d=6, h=5);
+//   grid_copies(size=50, n=11, stagger=true) cylinder(d=5, h=1);
+//
+// Example:
+//   poly = [[-25,-25], [25,25], [-25,25], [25,-25]];
+//   grid_copies(spacing=5, stagger=true, inside=poly)
+//      zrot(180/6) cylinder(d=5, h=1, $fn=6);
+//   %polygon(poly);
+//
+// Example: Using `$row` and `$col`
+//   grid_copies(spacing=8, n=8)
+//       color(($row+$col)%2?"black":"red")
+//           cube([8,8,0.01], center=false);
+//
+// Example: Makes a grid of hexagon pillars whose tops are all angled to reflect light at [0,0,50], if they were shiny.
+//   hexregion = circle(r=50.01,$fn=6);
+//   grid_copies(spacing=10, stagger=true, inside=hexregion)
+//     union() {   // Needed for OpenSCAD 2021.01 as noted above
+//       ref_v = (unit([0,0,50]-point3d($pos)) + UP)/2;
+//       half_of(v=-ref_v, cp=[0,0,5])
+//           zrot(180/6)
+//               cylinder(h=20, d=10/cos(180/6)+0.01, $fn=6);
+//     }

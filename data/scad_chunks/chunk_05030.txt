@@ -1,0 +1,2 @@
+function _mb_sphere_full(point, r, cutoff, ex, neg) = let(dist=norm(point))
+    neg * mb_cutoff(dist, cutoff) * (r/dist)^ex;

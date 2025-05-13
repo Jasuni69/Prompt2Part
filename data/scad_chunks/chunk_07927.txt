@@ -1,0 +1,24 @@
+module heart_chain(chars) {
+    $fn = 48;
+	heart_thickness = 2.5;
+	heart_width = 18;
+	spacing = 0.5;
+	leng = len(chars);
+
+    points_angles = archimedean_spiral(
+        arm_distance = 20,
+        init_angle = 720,
+        point_distance = 23.8,
+        num_of_points = leng 
+    ); 
+    
+    for(i = [0:leng - 1]) {
+        pt = points_angles[i][0];
+        angle = points_angles[i][1];
+        translate(pt)
+        rotate(angle + 90) 
+            text_heart(chars[i], heart_width, heart_thickness, spacing);       
+    }
+}
+
+heart_chain(chars);

@@ -1,0 +1,49 @@
+function circle_3points(pt1, pt2, pt3) =
+    (is_undef(pt2) && is_undef(pt3) && is_list(pt1))
+      ? circle_3points(pt1[0], pt1[1], pt1[2])
+      : assert( is_vector(pt1) && is_vector(pt2) && is_vector(pt3)
+                && max(len(pt1),len(pt2),len(pt3))<=3 && min(len(pt1),len(pt2),len(pt3))>=2,
+                "\nInvalid point(s)." )
+        is_collinear(pt1,pt2,pt3)? [undef,undef,undef] :
+        let(
+            v  = [ point3d(pt1), point3d(pt2), point3d(pt3) ], // triangle vertices
+            ed = [for(i=[0:2]) v[(i+1)%3]-v[i] ],    // triangle edge vectors
+            pm = [for(i=[0:2]) v[(i+1)%3]+v[i] ]/2,  // edge mean points
+            es = sortidx( [for(di=ed) norm(di) ] ),
+            e1 = ed[es[1]],                          // take the 2 longest edges
+            e2 = ed[es[2]],
+            n0 = vector_axis(e1,e2),                 // normal standardization
+            n  = n0.z<0? -n0 : n0,
+            sc = plane_intersection(
+                    [ each e1, e1*pm[es[1]] ],       // planes orthogonal to 2 edges
+                    [ each e2, e2*pm[es[2]] ],
+                    [ each n,  n*v[0] ]
+                ),  // triangle plane
+            cp = len(pt1)+len(pt2)+len(pt3)>6 ? sc : [sc.x, sc.y],
+            r  = norm(sc-v[0])
+        ) [ cp, r, n ];
+
+
+
+// Function: circle_point_tangents()
+// Synopsis: Given a circle and point, find tangents to circle passing through the point.
+// Topics: Geometry, Circles, Tangents
+// See Also: circle_line_intersection(), circle_circle_intersection(), circle_2tangents(), circle_3points(), circle_point_tangents(), circle_circle_tangents()
+// Usage:
+//   tangents = circle_point_tangents(r|d=, cp, pt);
+// Description:
+//   Given a 2d circle and a 2d point outside that circle, finds the 2d tangent point(s) on the circle for a
+//   line passing through the point.  Returns a list of zero or more 2D tangent points.
+// Arguments:
+//   r = Radius of the circle.
+//   cp = The coordinates of the 2d circle centerpoint.
+//   pt = The coordinates of the 2d external point.
+//   ---
+//   d = Diameter of the circle.
+// Example(2D):
+//   cp = [-10,-10];  r = 30;  pt = [30,10];
+//   tanpts = circle_point_tangents(r=r, cp=cp, pt=pt);
+//   color("yellow") translate(cp) circle(r=r);
+//   color("cyan") for(tp=tanpts) {stroke([tp,pt]); stroke([tp,cp]);}
+//   color("red") move_copies(tanpts) circle(d=3,$fn=12);
+//   color("blue") move_copies([cp,pt]) circle(d=3,$fn=12);

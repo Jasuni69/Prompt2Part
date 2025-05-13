@@ -1,0 +1,9 @@
+module magatama_dot(radius, height, type, spacing = 0.4) {
+	half_r = radius / 2;
+	
+	color(type == "ying" ? "black" : "white")
+	linear_extrude(height, twist = twist)
+	translate([half_r, 0])
+	offset(r = -spacing)
+		circle(half_r / 3);
+}

@@ -1,0 +1,38 @@
+module buttonCutout()
+{
+  for(button=pushButtons)
+  {
+    // Get the desired coordinate system    
+    theCoordSystem = getCoordSystem(button, yappCoordPCB);    
+   
+    xPos = translate2Box_X (button[0], yappLid, theCoordSystem);
+    yPos = translate2Box_Y (button[1], yappLid, theCoordSystem);
+    cWidth    = button[2];    
+    cLength   = button[3];
+    cRadius   = button[4];    
+    shape     = getShapeWithDefault(button[10],yappRectangle);
+    angle     = getParamWithDefault(button[11],0);
+    buttonSlack = getParamWithDefault(button[15],buttonSlack); 
+     
+    thePolygon = getVectorBase(yappPolygonDef, button);
+     
+    tmpArray = [[xPos, 
+                  yPos, 
+                  cWidth + buttonSlack*2, 
+                  cLength + buttonSlack*2,
+                  cRadius + buttonSlack, 
+                  shape, 
+                  0, 
+                  angle , 
+                  yappCenter,
+                  yappCoordBox, // Coordinates are already translated to yappCoordBox
+                  thePolygon// Polygon
+                ]];
+     processFaceList(yappLid, tmpArray, yappPartLid, "cutout", true);
+  } //-- for buttons
+  
+} //-- buttonCutout()
+
+
+//===========================================================
+//-- Create the cavity for the button

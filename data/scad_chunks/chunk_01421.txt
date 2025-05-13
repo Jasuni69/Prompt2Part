@@ -1,0 +1,1 @@
+function pipe_wall(type)   = type[3]; //! Wall thickness

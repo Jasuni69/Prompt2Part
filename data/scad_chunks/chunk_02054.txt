@@ -1,0 +1,33 @@
+module cable_clip_assembly(screw, thickness, cable1, cable2 = 0, flip = false, insert = false, nut = false, nyloc = true) { //! Cable clip with the fasteners
+    flip = flip || insert || nut;          // Screw must be below if using an insert or nut
+    insert = cable_clip_insert(screw, insert);
+    height = max(cable_clip_height(cable1, screw, insert, nut), cable2 ? cable_clip_height(cable2, screw, insert, nut) : 0);
+
+    stl_colour(pp1_colour) render()
+        translate([0, cable_clip_width(screw, insert, nut) / 2])
+            rotate([90, 0, 0])
+                cable_clip(screw, cable1, cable2, insert, nut);
+
+    the_nut = screw_nut(screw);
+    screw_len = nut ? screw_length(screw, thickness + wall,   nyloc ? 1 : 2, nyloc = nyloc, nut = !nyloc)
+                    : screw_length(screw, thickness + height, 2, nut = !nyloc && !insert, nyloc = !insert && nyloc, insert = insert);
+    translate_z(height)
+        if(flip)
+            if(insert)
+                insert(insert);
+            else
+                if(nut)
+                    translate_z(-height + wall)
+                        nut(the_nut, nyloc);
+                else
+                    nut_and_washer(the_nut, nyloc);
+        else
+            screw_and_washer(screw, screw_len);
+
+    translate_z(-thickness)
+        vflip()
+            if(flip)
+                screw_and_washer(screw, screw_len, insert || !nyloc);
+            else
+                nut_and_washer(the_nut, nyloc);
+}

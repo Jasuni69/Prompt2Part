@@ -1,0 +1,8 @@
+module test_vabs() {
+	assert(vabs([2,4,8]) == [2,4,8]);
+	assert(vabs([-2,-4,-8]) == [2,4,8]);
+	assert(vabs([-2,4,8]) == [2,4,8]);
+	assert(vabs([2,-4,8]) == [2,4,8]);
+	assert(vabs([2,4,-8]) == [2,4,8]);
+}
+test_vabs();

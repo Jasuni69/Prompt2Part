@@ -1,0 +1,16 @@
+module chamfer() {
+    difference() {
+        h = 1;
+        rounded_rectangle([20, 20, h], 2);
+
+        translate_z(h)
+            chamfer_hole(h + eps) {
+                circle(2);
+
+                translate([-1, 0])
+                    square([2, 5]);
+            }
+    }
+}
+
+chamfer();

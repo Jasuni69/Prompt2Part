@@ -1,0 +1,24 @@
+function _is_liststr(s) = is_list(s) || is_str(s);
+
+
+// Section: Extracting substrings
+
+// Function: substr()
+// Synopsis: Returns a substring from a string.
+// Topics: Strings
+// See Also: suffix(), str_find(), substr_match(), starts_with(), ends_with(), str_split(), str_join(), str_strip()
+// Usage:
+//   newstr = substr(str, [pos], [len]);
+// Description:
+//   Returns a substring from a string start at position `pos` with length `len`, or
+//   if `len` isn't given, the rest of the string.
+// Arguments:
+//   str = string to operate on
+//   pos = starting index of substring, or vector of first and last position.  Default: 0
+//   len = length of substring, or omit it to get the rest of the string.  If len is zero or less then the emptry string is returned.
+// Example:
+//   s1=substr("abcdefg",3,3);     // Returns "def"
+//   s2=substr("abcdefg",2);       // Returns "cdefg"
+//   s3=substr("abcdefg",len=3);   // Returns "abc"
+//   s4=substr("abcdefg",[2,4]);   // Returns "cde"
+//   s5=substr("abcdefg",len=-2);  // Returns ""

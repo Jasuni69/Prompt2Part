@@ -1,0 +1,40 @@
+function _convex_hull3(pts) = 
+    let(
+        sorted_pts = sorted(pts),
+        leng = len(sorted_pts),
+        p0 = sorted_pts[0],
+        v0 = 0,
+        v1 =  _fst_v1(sorted_pts, leng, p0, v0 + 1),
+        v2 = assert(v1 < leng, "common points") 
+             _fst_v2(sorted_pts, leng, v1, p0, v1 + 1),
+        n = assert(v2 < leng, "collinear points") 
+            cross(sorted_pts[v1] - p0, sorted_pts[v2] - p0),
+        v3_d = _fst_v3(sorted_pts, leng, n, 0, p0, v2 + 1),
+        v3 = v3_d[0],
+        d = assert(v3 < leng, "coplanar points")
+            v3_d[1],
+        fst_tetrahedron = d > 0 ? [
+                [v1, v0, v2],
+                [v0, v1, v3],
+                [v1, v2, v3],
+                [v2, v0, v3]
+            ] 
+            : 
+            [
+                [v0, v1, v2],
+                [v1, v0, v3],
+                [v2, v1, v3],
+                [v0, v2, v3]
+            ],
+        zeros = [for(j = [0:leng - 1]) 0],
+        init_vis = [for(i = [0:leng - 1]) zeros],
+        faces = _all_faces([v0, v1, v2, v3], sorted_pts, leng, init_vis, fst_tetrahedron), // counter-clockwise
+        reversed = [
+            for(face = faces)      // OpenSCAD requires clockwise.
+            [face[2], face[1], face[0]]
+        ]
+    )
+    [
+        sorted_pts,
+        reversed   
+    ];

@@ -1,0 +1,1 @@
+function resistor_hole(type)          = type[6]; //! Hole big enough to glue it into

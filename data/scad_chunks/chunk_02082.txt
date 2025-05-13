@@ -1,0 +1,28 @@
+module foot(type = foot) { //! Generate STL
+    h = foot_height(type);
+    t = foot_thickness(type);
+    r1 = washer_radius(screw_washer(foot_screw(type)));
+    r3 = foot_diameter(type) / 2;
+    r2 = r3 - h * tan(foot_slant(type));
+    r =  foot_rad(type);
+
+    stl("foot")
+        union() {
+            rotate_extrude(convexity = 3) {
+                hull() {
+                    translate([r1, 0])
+                        square([r3 - r1, eps]);
+
+                    for(x = [r1 + r, r2 - r])
+                        translate([x, h - r])
+                            circle4n(r);
+                }
+            }
+            linear_extrude(t)
+                difference() {
+                    circle(r1 + eps);
+
+                    poly_circle( screw_clearance_radius(foot_screw(type)));
+            }
+        }
+}

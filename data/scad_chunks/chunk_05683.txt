@@ -1,0 +1,13 @@
+function right_triangle(size=[1,1], center, anchor, spin=0) =
+    let(
+        size = is_num(size)? [size,size] : size,
+        anchor = get_anchor(anchor, center, [-1,-1], [-1,-1])
+    )
+    assert(is_vector(size,2), "Size must be a scalar or 2-vector")
+    assert(min(size)>0, "Must give positive size")
+    let(
+        path = [ [size.x/2,-size.y/2], [-size.x/2,-size.y/2], [-size.x/2,size.y/2] ],
+        anchors = [
+            named_anchor("hypot", CTR, unit([size.y,size.x])),
+        ]
+    ) reorient(anchor,spin, two_d=true, size=[size.x,size.y], anchors=anchors, p=path);

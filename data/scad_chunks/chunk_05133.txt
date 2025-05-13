@@ -1,0 +1,18 @@
+function flatten(l) =
+    !is_list(l)? l :
+    [for (a=l) if (is_list(a)) (each a) else a];
+
+
+// Function: full_flatten()
+// Synopsis: Recursively flattens nested sublists into a single list of non-list values.
+// Topics: Matrices, List Handling
+// See Also: column(), submatrix(), hstack(), flatten()
+// Usage:
+//   list = full_flatten(l);
+// Description: 
+//   Collects in a list all elements recursively found in any level of the given list.
+//   The output list is ordered in depth first order.
+// Arguments:
+//   l = List to flatten.
+// Example:
+//   l = full_flatten([[1,2,3], [4,5,[6,7,8]]]);  // returns [1,2,3,4,5,6,7,8]

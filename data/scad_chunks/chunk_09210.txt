@@ -1,0 +1,1 @@
+function _ydominant_xd(xd, ax, ay) = (xd >= 0 ? xd - ay : xd) + ax;

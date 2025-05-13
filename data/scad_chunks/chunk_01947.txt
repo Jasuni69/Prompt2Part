@@ -1,0 +1,4 @@
+module box_top(type)    //! Default top, can be overridden to customise
+    render_2D_sheet(box_top_sheet(type))
+        dxf(str(box_name(type), "_top"))
+            box_top_blank(type);

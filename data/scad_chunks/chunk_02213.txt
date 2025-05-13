@@ -1,0 +1,2 @@
+module hinge_female(type) //! The half without the pin
+    hinge_male(type, true);

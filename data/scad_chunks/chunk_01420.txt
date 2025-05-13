@@ -1,0 +1,1 @@
+function pipe_od(type)     = type[2]; //! Outside diameter

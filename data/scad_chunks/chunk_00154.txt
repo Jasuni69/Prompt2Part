@@ -1,0 +1,3 @@
+module leadnuts()
+    layout([for(n = leadnuts) leadnut_flange_dia(n)], 5)
+        leadnut(leadnuts[$i]);

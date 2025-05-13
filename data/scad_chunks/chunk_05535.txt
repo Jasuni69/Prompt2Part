@@ -1,0 +1,55 @@
+function simple_hash(x) =
+    let( m = 0.5 * (sqrt(5) - 1) )
+    is_num(x)? floor(m*x*256) :
+    is_list(x)? let(
+        l = len(x),
+        a = function(i,v) i>=l? v : a(i+1, m*v + simple_hash(x[i]))
+    ) floor(a(0,0)*4096) : let(
+        s = str(x),
+        l = len(s),
+        a = function(i,v) i>=l? v : a(i+1, m*v + ord(s[i]))
+    ) floor(a(0,0)*4096);
+
+
+// Function: hashmap()
+// Synopsis: Creates a hashmap manipulation function.
+// Topics: Function Literals, Data Structures, Hashing
+// See Also: simple_hash()
+// Usage: Creating an Empty HashMap.
+//   hm = hashmap([hashsize=]);
+// Usage: Creating a Populated HashMap.
+//   hm = hashmap(items=KEYVAL_LIST, [hashsize=]);
+// Usage: Adding an Entry
+//   hm2 = hm(key, val);
+// Usage: Adding Multiple Entries
+//   hm2 = hm(additems=KEYVAL_LIST);
+// Usage: Removing an Entry
+//   hm2 = hm(del=KEY);
+// Usage: Fetching a Value
+//   x = hm(key);
+// Usage: Iterating a HashMap
+//   for (kv=hm()) let(k=kv[0], v=kv[1]) ...
+// Description:
+//   This is a factory function for creating hashmap data structure functions.  You can use a hashmap
+//   to store large amounts of [key,value] data.  At around 4000 items, this becomes faster than using
+//   `search()` through the list.
+// Arguments:
+//   ---
+//   hashsize = The number of hashtable buckets to form.
+//   items = A list of [key,value] pairs to initialize the hashmap with.
+// FunctionLiteral Args:
+//   k = The key name.
+//   v = The value to store with the key.
+//   ---
+//   del = If given the key of an item to delete, makes a new hashmap with that item removed.
+//   additems = If given a list of [key,val] pairs, makes a new hashmap with the items added.
+// Example:
+//   hm = hashmap(items=[for (i=[0:9999]) [str("foo",i),i]]);
+//   a = hm("foo37");  // Returns: 37
+//   hm2 = hm("Blah", 39);  // Adds entry "Blah" with val 39.
+//   b = hm2("Blah");  // Returns: 39
+//   hm3 = hm2(additems=[["bar",39],["qux",21]]);  // Adds "bar" and "qux"
+//   hm4 = hm3(del="Blah");  // Deletes entry "Blah".
+//   for (kv = hm4()) {  // Iterates over all key/value pairs.
+//      echo(key=kv[0], val=kv[1]);
+//   }

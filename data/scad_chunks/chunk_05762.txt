@@ -1,0 +1,5 @@
+module vnf_hull(vnf, fast=false)
+{
+  if (is_vnf(vnf)) hull()vnf_polyhedron(vnf);
+  else hull_points(vnf, fast);
+}

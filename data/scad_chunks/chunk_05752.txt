@@ -1,0 +1,15 @@
+function vnf_area(vnf) =
+    let(verts=vnf[0])
+    sum([for(face=vnf[1]) polygon_area(select(verts,face))]);
+
+
+/// Internal Function: _vnf_centroid()
+/// Usage:
+///   vol = _vnf_centroid(vnf);
+/// Description:
+///   Returns the centroid of the given manifold VNF.  The VNF must describe a valid polyhedron with consistent face direction and
+///   no holes; otherwise the results are undefined.
+
+/// Divide the solid up into tetrahedra with the origin as one vertex.
+/// The centroid of a tetrahedron is the average of its vertices.
+/// The centroid of the total is the volume weighted average.

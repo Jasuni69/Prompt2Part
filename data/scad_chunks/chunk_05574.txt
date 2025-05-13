@@ -1,0 +1,15 @@
+function f_cos(a)  = f_1arg(function(a) cos(a))(a);
+
+
+// Function: f_tan()
+// Synopsis: Returns a function to calculate the tangent of a value.
+// Topics: Function Literals, Math Operators
+// See Also: f_sin(), f_cos(), f_tan(), f_asin(), f_acos(), f_atan(), f_atan2()
+// Usage:
+//   fn = f_tan();
+//   fn = f_tan(a);
+// Description:
+//   A factory that generates function literals based on `tan(a)`, where the `a`
+//   argument can optionally be replaced with a constant.
+// Arguments:
+//   a = If given, replaces the argument.

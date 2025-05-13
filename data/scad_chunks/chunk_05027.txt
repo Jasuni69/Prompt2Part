@@ -1,0 +1,1 @@
+function _mb_sphere_basic(point, r, neg) = neg*r/norm(point);

@@ -1,0 +1,2 @@
+function pcb_component(type, name, index = 0) = //! Return the component specified by name and index
+    [for(component = pcb_components(type)) if(component[3] == name) component][index];

@@ -1,0 +1,9 @@
+function equiChamfer(botTop,side,fnCorner=7,sideDiff=($skinThick*2)) = 
+			$removing
+			?chamfer( botTop, botTop, side-sideDiff,fnCorner = fnCorner)
+			:chamfer( botTop, botTop, side         ,fnCorner = fnCorner);
+
+
+//skin functions to create Skins for Objects
+
+$skinThick=1.5; //default wall Thickness for Skins is set to 1.5 mm

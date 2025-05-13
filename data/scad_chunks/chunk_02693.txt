@@ -1,0 +1,3 @@
+module not_on_bom(on = false)               //! Specify the following child parts are not on the BOM, for example when they are on a PCB that comes assembled
+    let($on_bom = on)
+        children();

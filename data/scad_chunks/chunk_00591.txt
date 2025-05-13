@@ -1,0 +1,1 @@
+function light_strip_clip_length(light) = light_strip_clip_slot(light) + 2 * wall;  //! Outside length of clip

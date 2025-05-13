@@ -1,0 +1,1 @@
+function carriage_clearance(type)    = type[5]; //! Gap under the carriage

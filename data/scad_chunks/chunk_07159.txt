@@ -1,0 +1,100 @@
+module BallSocket(d=10,opt=0,dist=15,spiel=.08,hole=8,wand=.7,nozzleS=5,rad,deg,closed=false,shortR=.05,undercut=0.3,help){
+
+part=[ 
+ "link",       // 0
+ "nozzle",    // 1 
+ "base",     // 2
+ "ball",    // 3
+ "socket"  // 4 
+];
+
+info=false;
+
+HelpTxt("BallSocket",["d",d,"opt",opt,"dist",dist,"spiel",spiel,"hole",hole,"wand",wand,"nozzleS",nozzleS,"rad",rad,"deg",deg,"closed",closed,"shortR",shortR,"undercut",undercut],help);
+
+echo(opt=str(opt,"-",part[opt]),dist=dist);
+
+;
+
+Echo(str("hole too big max=",d-(undercut+wand)*2),color="redring",condition=hole>d-(undercut+(opt==0||opt==2||opt==3?wand:0) )*2);
+Echo("dist too short",color="redring",condition=interSpace<wand);
+
+angle=acos(1-undercut/(d/2));//15;
+if(info)echo(angle=angle);
+
+
+neckR=hole/2+wand;
+socketR=d/2+spiel;
+socketOR=socketR+wand;
+
+lift=sin(angle)*d/2*(socketR-shortR)/socketR;
+l=dist+lift;
+
+interSpace=dist-Kathete(kat=neckR,hyp=socketOR)-Kathete(kat=neckR,hyp=d/2);
+
+%if(opt==0&&interSpace>0)Tz(lift+Kathete(socketOR,neckR))color("chartreuse",.5)Ring(interSpace,d=hole+wand*2+0.05,id=hole+.01,$info=false);
+
+
+  RotEx(cut=closed?true:false){
+   Rund(wand/2.5,min(5,d/3,interSpace))difference(){
+    union(){
+      Rund(1,0)union(){
+        T(y=l){
+          if(opt==0||opt==2||opt==3)circle(d=d,$fn=0); // ball
+          if(closed) circle(d=hole+wand*2,$fn=0);
+          //rotate(-90)Tri(h=l,top=true,grad=49);
+          
+        }
+        if(opt==0||opt==1||opt==4)square([d/2+spiel+wand+.25,2]); // bottom rim
+        if(opt==0||opt==1||opt==4)T(y=lift)scale([1,(socketOR-shortR)/socketOR])circle(r=socketOR,$fn=0); // socket
+        T(y=l/2)square([hole+wand*2,l],true); // neck tube
+      }
+      T(y=l/2)square([hole+wand*2,l],true); // neck tube
+      if(opt==2)square([d/2,5]); // base tube
+    }
+    if(opt==0||opt==1||opt==4)T(y=lift)scale([1,(socketR-shortR)/socketR])circle(r=socketR,$fn=0); // ball cut
+    T(-500+hole/2)square([1000,(closed?l:l+d)*2],true); // hole cut
+    T(y=-500)square(1000,true);// bottom cut
+    if(closed){
+    //T(x=-500)square(1000,true);// side cut
+    T(y=l)circle($fn=0,d=hole);
+    }
+    
+    }
+    
+
+  }
+if(opt==1)Tz(l -1){
+echo(nozzleDiameter=nozzleS);
+deg=is_undef(deg)?35:deg;
+rad=is_undef(rad)?max(wand,abs(nozzleS-hole)):rad;
+l2=abs(nozzleS-hole)/2/tan(deg)+rad + 1;
+  Anschluss(h=l2,d1=hole,rad=rad,grad=deg,d2=nozzleS,wand=-wand,center=false);
+  Tz(l2)Torus(dia=nozzleS+wand*2,d=wand);
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+/** \name WaveWasher
+\param od outer diameter
+\param id inner diameter
+\param h  height
+\param a  wave amplitude
+\param dicke thickness
+\param f  number of waves
+\param opt 1 vertical 2 radial
+\param cutangle  bottom cut contact angle
+\param fs fragment size
+\param
+*/
+
+//WaveWasher(f=10,h=2,cutangle=0);

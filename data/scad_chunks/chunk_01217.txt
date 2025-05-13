@@ -1,0 +1,1 @@
+function vero_strips(type)         = type[3];   //! Number of strips

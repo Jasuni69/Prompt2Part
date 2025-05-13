@@ -1,0 +1,4 @@
+function aluProBore_outsetR(boreType) = boreType[2]/2;
+
+// Core Types
+BR_20x20_Core = [9,2,0.75];

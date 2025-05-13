@@ -1,0 +1,51 @@
+function path4d(points, fill=0) = 
+   assert(is_num(fill) || is_vector(fill))
+   assert(is_path(points, dim=undef, fast=true), "\nInput to path4d is not a path.")
+   let (
+      change = len(points[0])-4,
+      M = change < 0 ? select(ident(4), 0, len(points[0])-1) :
+                       concat(ident(4), repeat([0,0,0,0],change)),
+      result = points*M
+   ) 
+   assert(is_def(result), "\nInput to path4d is invalid.")
+   fill == 0 || change >= 0 ? result :
+    let(
+      addition = is_list(fill) ? concat(0*points[0],fill) :
+                                 concat(0*points[0],repeat(fill,-change))
+    )
+    assert(len(addition) == 4, "\nFill is the wrong length.")
+    result + repeat(addition, len(result));
+
+
+
+// Section: Coordinate Systems
+
+// Function: polar_to_xy()
+// Synopsis: Convert 2D polar coordinates to cartesian coordinates. 
+// SynTags: Path
+// Topics: Coordinates, Points, Paths
+// See Also: xy_to_polar(), xyz_to_cylindrical(), cylindrical_to_xyz(), xyz_to_spherical(), spherical_to_xyz()
+// Usage:
+//   pt = polar_to_xy(r, theta);
+//   pt = polar_to_xy([R, THETA]);
+//   pts = polar_to_xy([[R,THETA], [R,THETA], ...]);
+// Description:
+//   Called with two arguments, converts the `r` and `theta` 2D polar coordinate into an `[X,Y]` cartesian coordinate.
+//   Called with one `[R,THETA]` vector argument, converts the 2D polar coordinate into an `[X,Y]` cartesian coordinate.
+//   Called with a list of `[R,THETA]` vector arguments, converts each 2D polar coordinate into `[X,Y]` cartesian coordinates.
+//   Theta is the angle counter-clockwise of X+ on the XY plane.
+// Arguments:
+//   r = distance from the origin.
+//   theta = angle in degrees, counter-clockwise of X+.
+// Example:
+//   xy = polar_to_xy(20,45);    // Returns: ~[14.1421365, 14.1421365]
+//   xy = polar_to_xy(40,30);    // Returns: ~[34.6410162, 15]
+//   xy = polar_to_xy([40,30]);  // Returns: ~[34.6410162, 15]
+//   xy = polar_to_xy([[40,30],[20,120]]);  // Returns: ~[[34.6410162, 15], [-10, 17.3205]]
+// Example(2D):
+//   r=40; ang=30; $fn=36;
+//   pt = polar_to_xy(r,ang);
+//   stroke(circle(r=r), closed=true, width=0.5);
+//   color("black") stroke([[r,0], [0,0], pt], width=0.5);
+//   color("black") stroke(arc(r=15, angle=ang), width=0.5);
+//   color("red") move(pt) circle(d=3);

@@ -1,0 +1,20 @@
+module test_f_is_finite() {
+    testfn = f_is_finite();
+    for (test = [
+        [undef,   false],
+        [false,   false],
+        [true,    false],
+        [-4,      true],
+        [0,       true],
+        [1.5,     true],
+        [3,       true],
+        [INF,     false],
+        [-INF,    false],
+        [NAN,     false],
+        ["foo",   false],
+        [[4,5,6], false]
+    ]) {
+        assert(testfn(test[0]) == test[1]);
+    }
+}
+test_f_is_finite();

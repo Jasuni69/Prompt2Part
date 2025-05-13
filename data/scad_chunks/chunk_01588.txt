@@ -1,0 +1,1 @@
+function spool_width(type)         = type[2]; //! Internal width

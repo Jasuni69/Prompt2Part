@@ -1,0 +1,18 @@
+module Klon(tx=0,ty=0,tz=0,rx=0,ry=0,rz=0,help=false){
+    union(){
+        $idx=0;
+        translate([tx,ty,tz])rotate([rx,ry,rz])children();
+    }
+    union(){
+         $idx=1;
+        $helpM=0;
+        $info=0;
+        $idxON=false; 
+    translate([-tx,-ty,-tz])rotate([-rx,-ry,-rz])children();  
+    }   
+    MO(!$children); 
+    HelpTxt("Klon",["tx",tx,"ty",ty,"tz",tz,"rx",rx,"ry",ry,"rz",rz],help);   
+}
+
+
+// Cuts away half of Object at [0,0,0]

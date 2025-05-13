@@ -1,0 +1,27 @@
+module door_hinge_stat_stl() { //! Generates the STL for the stationary part
+    stl("door_hinge_stat");
+
+    union() {
+        linear_extrude(thickness)
+            difference() {
+                rounded_square([stat_length, stat_width], rad);
+
+                door_hinge_stat_hole_positions()
+                    poly_circle(screw_clearance_radius(stat_screw));
+            }
+
+        rotate([90, 0, 0])
+            linear_extrude(stat_width, center = true)
+                difference() {
+                    hull() {
+                        translate([0, dia / 2 + stat_clearance])
+                            circle(d = dia);
+
+                        translate([0, 0.5])
+                            square([dia, 1], center = true);
+                    }
+                    translate([0, dia / 2 + stat_clearance])
+                        teardrop_plus(r = screw_clearance_radius(pin_screw), h = 0);
+               }
+    }
+}

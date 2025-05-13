@@ -1,0 +1,1 @@
+function pbox_short_insert(type)=type[6]; //! Use short inserts

@@ -1,0 +1,14 @@
+module test_furthest_point() {
+    ptlist = [for (i=count(100)) rands(-100,100,2,seed_value=8463+i)];
+    testpts = [for (i=count(100)) rands(-100,100,2,seed_value=6834+i)];
+    for (pt = testpts) {
+        pidx = furthest_point(pt,ptlist);
+        dists = [for (p=ptlist) norm(pt-p)];
+        mindist = max(dists);
+        assert(mindist == dists[pidx]);
+    }
+}
+test_furthest_point();
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

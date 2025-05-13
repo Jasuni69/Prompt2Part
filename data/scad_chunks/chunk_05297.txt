@@ -1,0 +1,8 @@
+function npt_threaded_rod(
+    size=1/2,
+    left_handed=false,
+    bevel,bevel1,bevel2,
+    hollow=false,
+    internal=false,
+    anchor, spin, orient
+)=no_function("npt_threaded_rod");

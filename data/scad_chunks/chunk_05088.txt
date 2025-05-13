@@ -1,0 +1,20 @@
+function _getbbox(voxel_size, bounding_box, exactbounds, f=undef) =
+    let(
+        voxsize0 = is_num(voxel_size) ? [voxel_size, voxel_size, voxel_size] : voxel_size,
+        bbox = is_list(bounding_box) ? bounding_box
+        : is_num(bounding_box) ? let(hb=0.5*bounding_box) [[-hb,-hb,-hb],[hb,hb,hb]]
+        : let( // bounding_box==undef if we get here, then f must be an array
+            bbnums = [len(f), len(f[0]), len(f[0][0])] - [1,1,1],
+            halfbb = 0.5 * v_mul(voxsize0, bbnums)
+        ) [-halfbb, halfbb]
+    )   exactbounds ?
+            bbox // if grow_bounds==false, we don't adjust bounding box
+        : let(    // adjust bounding box
+            bbcenter = mean(bbox),
+            bbnums = v_ceil(v_div(bbox[1]-bbox[0], voxsize0)),
+            halfbb = 0.5 * v_mul(voxsize0, bbnums)
+        ) [bbcenter - halfbb, bbcenter + halfbb];
+
+        
+/// _showstats_isosurface() (Private function) - called by isosurface()
+/// Display statistics about isosurface

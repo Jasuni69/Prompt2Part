@@ -1,0 +1,1 @@
+function fan_thickness(type)      = type[6];    //! Thickness of the frame

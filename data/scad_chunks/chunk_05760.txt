@@ -1,0 +1,70 @@
+function vnf_bend(vnf,r,d,axis="Z") =
+    let(
+        chk_axis = assert(in_list(axis,["X","Y","Z"])),
+        verts = vnf[0],
+        bounds = pointlist_bounds(verts),
+        bmin = bounds[0],
+        bmax = bounds[1],
+        dflt = axis=="Z"?
+            max(abs(bmax.y), abs(bmin.y)) :
+            max(abs(bmax.z), abs(bmin.z)),
+        r = get_radius(r=r,d=d,dflt=dflt),
+        extent = axis=="X" ? [bmin.y, bmax.y] : [bmin.x, bmax.x]
+    )
+    let(
+        span_chk = axis=="Z"?
+            assert(bmin.y > 0 || bmax.y < 0, "\nEntire shape MUST be completely in front of or behind y=0.") :
+            assert(bmin.z > 0 || bmax.z < 0, "\nEntire shape MUST be completely above or below z=0."),
+        steps = 1+ceil(segs(r) * (extent[1]-extent[0])/(2*PI*r)),
+        step = (extent[1]-extent[0]) / steps,
+        bend_at = [for(i = [1:1:steps-1]) i*step+extent[0]],
+        slicedir = axis=="X"? "Y" : "X",   // slice in y dir for X axis case, and x dir otherwise
+        sliced = vnf_triangulate(vnf_slice(vnf, slicedir, bend_at)),
+        coord = axis=="X" ? [0,sign(bmax.z),0] : axis=="Y" ? [sign(bmax.z),0,0] : [sign(bmax.y),0,0],
+        new_vert = [for(p=sliced[0])
+                       let(a=coord*p*180/(PI*r))
+                       axis=="X"? [p.x, p.z*sin(a), p.z*cos(a)] :
+                       axis=="Y"? [p.z*sin(a), p.y, p.z*cos(a)] :
+                       [p.y*sin(a), p.y*cos(a), p.z]]
+   ) [new_vert,sliced[1]];
+
+
+
+// Function&Module: vnf_hull()
+// Synopsis: Compute convex hull of VNF or 3d path
+// Usage: (as a function)
+//    vnf_hull = hull_vnf(vnf);
+// Usage: (as a module)
+//    vnf_hull(vnf,[fast]);
+// Description:
+//   Given a VNF or a list of 3d points, compute the convex hull
+//   and return it as a VNF.  This differs from {{hull()}} and {{hull3d_faces()}}, which
+//   return just the face list referenced to the input point list.  The returned
+//   point list contains all the points that are actually used in the input
+//   VNF, which may be many more points than are needed to represent the convex hull.
+//   This is not usually a problem, but you can run the somewhat slow {{vnf_drop_unused_points()}}
+//   function to fix this if necessary.
+//   .
+//   If you call this as a module with a VNF it invokes hull() on the polyhedron described by the VNF.
+//   The `fast` argument is ignored in this case.  If you call this as a module on a list of points then
+//   it calls {{hull_points()}} and passes the `fast` argument.  
+// Arguments:
+//   region = region or path listing points to compute the hull from.
+//   fast = (module only) if input is a point list (not a VNF) use a fasterer cheat that may handle more points, but could emit warnings.  Ignored if input is a VNF.  Default: false.  
+// Example(3D,Big,NoAxes,VPR=[55,0,25],VPT=[9.47096,-4.50217,8.45727],VPD=60.2654): Input is a VNF
+//   ellipse = xscale(2, p=circle($fn=48, r=3));
+//   pentagon = subdivide_path(pentagon(r=1), 20);
+//   vnf=path_sweep(pentagon, path3d(ellipse),
+//                  closed=true, twist=360*2);
+//   vnfhull = vnf_hull(vnf);
+//   vnf_polyhedron(vnf);
+//   move([10,10])
+//     vnf_polyhedron(vnfhull);
+// Example(3D,Med,NoAxes,VPR=[70.4,0,110.4],VPT=[5.97456,1.26459,18.0317],VPD=126): Input is a point list
+//   h=helix(l=40, turns=1, r=8);
+//   color("red")move_copies(h)
+//     sphere(r=0.5,$fn=12);
+//   vnf_polyhedron(vnf_hull(h));
+// Example(3D): As a module with a VNF as input
+//   vnf = torus(d_maj=4, d_min=4);
+//   vnf_hull(vnf);

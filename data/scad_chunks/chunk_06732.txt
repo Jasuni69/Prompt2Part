@@ -1,0 +1,7 @@
+module test_f_eq() {
+    _test_fn2arg_simple(
+        function (a,b) f_eq(a,b),
+        [[4,3,false],[3,3,true],[3,4,false]]
+    );
+}
+test_f_eq();

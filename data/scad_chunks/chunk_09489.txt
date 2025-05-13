@@ -1,0 +1,13 @@
+function echo_warning(msg, pfx="WARNING") =
+	f_echo(str("<p style=\"background-color: #ffffb0\"><b>", pfx, ":</b> ", msg, "</p>"));
+
+
+// Module: deprecate()
+// Usage:
+//   deprecate(name, [suggest]);
+// Description:
+//   Show module deprecation warnings.
+//   You can also use this as a function call from a function.
+// Arguments:
+//   name = The name of the module that is deprecated.
+//   suggest = If given, the module to recommend using instead.

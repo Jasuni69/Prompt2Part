@@ -1,0 +1,12 @@
+module DGlied1(l=12,l1,l2,la=0,d=3,h=5,spiel=0.4,spielZ=nozzle/2,rand=.6,freiwinkel=20,cap,winkel,shield=false,fn=fn)
+{
+winkel=is_list(winkel)?winkel:[winkel,winkel];
+shield=is_list(shield)?shield:[shield,shield];
+l1=is_undef(l1)?is_list(l)?l[0]:l:l1;
+l2=is_undef(l2)?is_list(l)?l[1]:l:l2;
+    mirror([+0,1,0])T(0,-l1)Glied(l1,la=la,spiel=spiel,spielZ=spielZ,d=d,h=h,rand=rand,freiwinkel=freiwinkel,cap=cap,winkel=winkel[0],shield=shield[0],fn=fn);
+    T(0,-l2)Glied(l2,la=la,d=d,h=h,spiel=spiel,spielZ=spielZ,rand=rand,freiwinkel=freiwinkel,cap=cap,winkel=winkel[1],shield=shield[1],fn=fn);
+}
+
+/// symetric Glied  male or female
+// SGlied(sym=+0);

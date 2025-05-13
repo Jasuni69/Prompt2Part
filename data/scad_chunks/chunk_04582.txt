@@ -1,0 +1,33 @@
+module dovetail_rail( tlen, dtspec ) {
+    bl=tlen;
+    bh = dtspec[0];
+    chw_t = dtspec[1];
+    chw_b = dtspec[2];
+    tpr = (len(dtspec)>3) ? dtspec[3] : 0;
+    tbk = (len(dtspec)>4) ? dtspec[4] : 0;
+    ih=0.01;  /// all but 2d
+    hb = chw_b/2;
+    points = [  [0,0], [0,chw_t], [bh, chw_t-hb], [bh,hb], ];    
+    mp = chw_t/2;  
+    ht = tpr/2;
+    ntw = chw_t - ht;
+    nbw = (chw_t-chw_b) - ht;
+    points2 = [ [0,ht], [0,ntw], [bh, mp+(nbw/2)], [bh, mp-(nbw/2)], ];    
+    hull(){
+        translate([0,0,bh]) rotate([0,90,0]) 
+          linear_extrude(height=ih) {  polygon( points ); }
+          if (tbk != 0) {
+            translate([tbk,0,bh]) rotate([0,90,0]) 
+              linear_extrude(height=ih) {  polygon( points ); }
+          }
+        translate([bl,0,bh]) rotate([0,90,0]) 
+          linear_extrude(height=ih) {  polygon( points2 ); }
+    }
+}//dovetailrail
+
+/* =====================
+    d - block desc (outside of notch)
+    dtspec - dovetail profile, see dovetail_rail()
+
+    note: no taper is taken from the notch shape
+   ===================== */

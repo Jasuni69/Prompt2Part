@@ -1,0 +1,19 @@
+module SmoothHole(radius, height, smooth_rad,
+  position=[0,0,0], rotation=[0,0,0]) {
+  $fa = ($fa >= 12) ? 1 : $fa;
+  $fs = ($fs >= 2) ? 0.4 : $fs;
+
+  extra_height = 0.002 * height;
+  
+  difference() {
+    children();
+    translate(position)
+      rotate(rotation)
+      translate([0, 0, -extra_height/2])
+      difference() {
+        translate([0, 0, -extra_height])
+          cylinder(r=radius+smooth_rad, h=height+2*extra_height);
+        HollowCylinder(radius+2*smooth_rad, radius, height+extra_height);
+      }
+  }
+}

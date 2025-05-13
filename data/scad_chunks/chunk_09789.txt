@@ -1,0 +1,45 @@
+module xdistribute(spacing=10, sizes=undef, l=undef)
+{
+	dir = V_RIGHT;
+	gaps = ($children < 2)? [0] :
+		is_def(sizes)? [for (i=[0:$children-2]) sizes[i]/2 + sizes[i+1]/2] :
+		[for (i=[0:$children-2]) 0];
+	spc = is_def(l)? ((l - sum(gaps)) / ($children-1)) : default(spacing, 10);
+	gaps2 = [for (gap = gaps) gap+spc];
+	spos = dir * -sum(gaps2)/2;
+	for (i=[0:$children-1]) {
+		totspc = sum(concat([0], slice(gaps2, 0, i)));
+		$pos = spos + totspc * dir;
+		$idx = i;
+		translate($pos) children(i);
+	}
+}
+
+
+// Module: ydistribute()
+//
+// Description:
+//   Spreads out each individual child along the Y axis.
+//   Every child is placed at a different position, in order.
+//   This is useful for laying out groups of disparate objects
+//   where you only really care about the spacing between them.
+//
+// Usage:
+//   ydistribute(spacing, [sizes])
+//   ydistribute(l, [sizes])
+//
+// Arguments:
+//   spacing = spacing between each child. (Default: 10.0)
+//   sizes = Array containing how much space each child will need.
+//   l = Length to distribute copies along.
+//
+// Side Effect:
+//   `$pos` is set to the relative centerpoint of each child copy, and can be used to modify each child individually.
+//   `$idx` is set to the index number of each child being copied.
+//
+// Example:
+//   ydistribute(sizes=[30, 20, 100], spacing=40) {
+//       cylinder(d=30, h=50, center=true);
+//       cube([10,20,30], center=true);
+//       sphere(r=50);
+//   }

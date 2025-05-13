@@ -1,0 +1,48 @@
+module expose_anchors(opacity=0.2) {
+    show_only("anchor-arrow")
+        children();
+    hide("anchor-arrow")
+        color(is_undef($color) || $color=="default" ? [0,0,0] :
+              is_string($color) ? $color
+                                : point3d($color),
+              opacity)
+            children();
+}
+
+
+
+// Module: show_transform_list()
+// Synopsis: Shows a list of transforms and how they connect.
+// SynTags: Geom
+// Topics: Attachments
+// See Also: generic_airplane(), anchor_arrow(), show_anchors(), expose_anchors(), frame_ref()
+// Usage:
+//   show_transform_list(tlist, [s]);
+//   show_transform_list(tlist) CHILDREN;
+// Description:
+//   Given a list of transformation matrices, shows the position and orientation of each one.
+//   A line is drawn from each transform position to the next one, and an orientation indicator is
+//   shown at each position.  If a child is passed, that child will be used as the orientation indicator.
+//   By default, a {{generic_airplane()}} is used as the orientation indicator.
+// Arguments:
+//   s = Length of the {{generic_airplane()}}.  Default: 5
+// Example:
+//   tlist = [
+//       zrot(90),
+//       zrot(90) * fwd(30) * zrot(30),
+//       zrot(90) * fwd(30) * zrot(30) *
+//           fwd(35) * xrot(-30),
+//       zrot(90) * fwd(30) * zrot(30) *
+//           fwd(35) * xrot(-30) * fwd(40) * yrot(15),
+//   ];
+//   show_transform_list(tlist, s=20);
+// Example:
+//   tlist = [
+//       zrot(90),
+//       zrot(90) * fwd(30) * zrot(30),
+//       zrot(90) * fwd(30) * zrot(30) *
+//           fwd(35) * xrot(-30),
+//       zrot(90) * fwd(30) * zrot(30) *
+//           fwd(35) * xrot(-30) * fwd(40) * yrot(15),
+//   ];
+//   show_transform_list(tlist) frame_ref();

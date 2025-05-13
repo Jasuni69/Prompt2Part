@@ -1,0 +1,14 @@
+function _propagate(nbr_dirs, compatibilities, wf_stack) =
+    let(wf = wf_stack[0], stack = wf_stack[1])
+    stack == [] ? wf :
+	let(
+		current_coord = stack[0],
+		cx = current_coord.x, 
+		cy = current_coord.y,
+		current_tiles = wf_eigenstates(wf)[cy][cx],
+		dirs = nbr_dirs[cy][cx],
+		nx_wf_stack = _doDirs(compatibilities, [wf, stack[1]], current_coord, current_tiles, dirs, len(dirs))
+	)
+    _propagate(nbr_dirs, compatibilities, nx_wf_stack);
+
+contradiction_msg = "A contradiction happens. Tiles have all been ruled out by your previous choices. Please try again.";

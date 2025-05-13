@@ -1,0 +1,14 @@
+module Kugelmantel(d=20,rand=n(2),fn=fn,help)
+{
+    difference()
+    {
+        sphere(d=d,$fn=fn);
+        sphere(d=d-2*rand,$fn=fn);
+        
+    }
+    
+HelpTxt("Kugelmantel",["d",d,
+    "rand",rand, 
+    "fn",fn,
+],help);
+}

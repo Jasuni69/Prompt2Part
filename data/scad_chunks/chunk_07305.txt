@@ -1,0 +1,59 @@
+module RectTiling(size=[30,40],ratio=[1.25:5],d=5,dicke=1,chld,seed=13,rec=0,info,help){
+chld=is_undef(chld)?$children:chld;
+assert (is_undef(ratio[2])?min(ratio)>=1:min([ratio[1],ratio[2]])>=1,"ratio <= 1");
+assert (d>0,"d need to be > 0");
+assert (is_num(dicke),"dicke need to be a number");
+
+ratio=is_num(ratio)?[1/(1-1/ratio),ratio]:ratio;
+if(rec==0&&info)echo(ratio=ratio);
+useRatio=is_list(ratio)?ratio[floor(rands(0,len(ratio),1,seed)[0])]
+                       :rands(ratio[0],ratio[2],1,seed)[0];
+if(info)echo(useRatio=useRatio,rec=rec);
+HelpTxt("RectTiling",["size",size,"ratio",ratio,"d",d,"dicke",dicke,"seed",seed,"info",info],help);
+
+  if(max(size)/useRatio>d+dicke*1.0&&max(size)-max(size)/useRatio>d+dicke&&rec<30){
+    if(size.x>size.y){
+      RectTiling(size=[size.x/useRatio,size.y],ratio=ratio,d=d,dicke=dicke,chld=chld,seed=seed+1,rec=rec+1, info=info)children();
+      translate([size.x/useRatio,0])RectTiling(size=[size.x-size.x/useRatio,size.y],ratio=ratio,d=d,dicke=dicke,chld=chld,seed=seed*2,rec=rec+1, info=info)children();
+    }
+    else {
+      RectTiling(size=[size.x,size.y/useRatio],ratio=ratio,d=d,dicke=dicke,chld=chld, seed=seed+1,rec=rec+1, info=info)children();
+      translate([0,size.y/useRatio])RectTiling(size=[size.x,size.y-size.y/useRatio],ratio=ratio,d=d,dicke=dicke,chld=chld, seed=seed*2,rec=rec+1, info=info)children();
+    }
+
+  }
+  else {
+    if(chld) {
+      $size=size;
+      $seed=seed;
+      translate(size/2)children();
+    }
+    else //color(rands(0,1,3))
+    Color(rands(0,1,1)[0],l=dicke?1:0.5)
+    offset(-dicke/2)square(size);
+
+    if(info)%color("grey")scale([1,1,2])translate(size/2)text(str(rec,"/",seed),size=d/4,halign="center",valign="center");
+   }
+
+}
+
+/** \page Polygons \name Voronoi
+\brief Voronoi() creates a Voronoi tiling
+\param size [x,y] size
+\param dicke gap width
+\param grid [x,y] base grid for cells
+\param of offset factor 
+\param seed seed for random offset
+\param center center [x,y]
+\param repeat [x,y] generate equal seed for start end to place tile for tesselation
+\param help help
+*/
+
+//Voronoi(dicke=.25,grid=5,center=[0,0],size=[12,10]);
+/*union(){ // endless tesselation
+seed=44;of=0.6;
+Voronoi(repeat=[1,1],seed=seed,of=of);
+T(50.1)Voronoi(repeat=[0,1],seed=seed,of=of);
+T(50.1,50.1)Voronoi(repeat=[0,1],seed=seed,of=of);
+}
+//*/

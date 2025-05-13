@@ -1,0 +1,8 @@
+function poly_div(n,d) =
+    assert( is_vector(n) && is_vector(d) , "Invalid polynomials." )
+    let( d = _poly_trim(d), 
+         n = _poly_trim(n) )
+    assert( d!=[0] , "Denominator cannot be a zero polynomial." )
+    n==[0]
+    ? [[0],[0]]
+    : _poly_div(n,d,q=[]);

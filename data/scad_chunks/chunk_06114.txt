@@ -1,0 +1,11 @@
+function slice_profiles(profiles,slices,closed=false) =
+  assert(is_num(slices) || is_list(slices))
+  let(listok = !is_list(slices) || len(slices)==len(profiles)-(closed?0:1))
+  assert(listok, "Input slices to slice_profiles is a list with the wrong length")
+  let(
+    count = is_num(slices) ? repeat(slices,len(profiles)-(closed?0:1)) : slices,
+    slicelist = [for (i=[0:len(profiles)-(closed?1:2)])
+      each lerpn(profiles[i], select(profiles,i+1), count[i]+1, false)
+    ]
+  )
+  concat(slicelist, closed?[]:[profiles[len(profiles)-1]]);

@@ -1,0 +1,18 @@
+function addArgVals(parts,valArray1,valArray2,valArray3,valArray4,valArray5
+			,valArray6,valArray7,valArray8,valArray9,valArray10)=
+      let(argValsArrays=collect(valArray1,valArray2,valArray3,valArray4,valArray5
+    			,valArray6,valArray7,valArray8,valArray9,valArray10)
+        ,partsAsArray= split(parts,",")
+        ,partsCount= len(partsAsArray))
+  join([for(pIndex=[0:1:partsCount-1])
+        let(partName= stripPartArgs(partsAsArray[pIndex])
+            ,argNames=split(stripPartName(partsAsArray[pIndex]),",")
+            ,nArgMax= -1 + (argNames==undef?0:len(argNames)))
+          str(partName,"("
+              ,join([for(i=[0:1:nArgMax])
+                    str(argNames[i],"=",argValsArrays[pIndex][i])]
+                    ,",")
+              ,")")
+        ],",");
+
+$currentPartArgs=undef;

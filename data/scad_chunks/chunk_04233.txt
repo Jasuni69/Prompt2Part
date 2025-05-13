@@ -1,0 +1,2 @@
+function push(vector,element)=concat(vector,[element]);
+//gets last element from a vetor

@@ -1,0 +1,19 @@
+module nema34_mount_holes(depth=5, l=5, slop=PRINTER_SLOP, orient=ORIENT_Z, align=V_CENTER)
+{
+	nema_mount_holes(size=34, depth=depth, l=l, slop=slop, orient=orient, align=align);
+}
+
+
+
+// Module: nema34_mount_holes()
+// Description: Creates a mask to use when making NEMA 34 stepper motor mounts.
+// Arguments:
+//   depth = The thickness of the mounting hole mask.  Default: 5
+//   l = The length of the slots, for making an adjustable motor mount.  Default: 5
+//   slop = The printer-specific slop value to make parts fit just right.  Default: `PRINTER_SLOP`
+//   orient = Orientation of the stepper.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Z`.
+//   align = Alignment of the stepper.  Use the `V_` constants from `constants.scad`.  Default: `V_CENTER`.
+// Example:
+//   nema34_mount_holes(depth=5, l=5);
+// Example:
+//   nema34_mount_holes(depth=5, l=0);

@@ -1,0 +1,58 @@
+module a_dancing_cube_no_joint(cube_width, holes, hole_radius, edge_width) {
+    module part_for_carve_a_sink(hole_radius, height, edge_width) {
+        module part_for_h_carving() {
+            leng = hole_radius + edge_width + .1;
+            rotate([0, 90, 0]) 
+            linear_extrude(leng) 
+                circle(hole_radius);
+                
+            rotate([-90, 0, 0]) 
+            linear_extrude(leng) 
+                circle(hole_radius);
+                
+            linear_extrude(2 * hole_radius, center = true) 
+                square(leng);
+        }
+
+        linear_extrude(height) 
+            circle(hole_radius);
+
+        translate([0, 0, height / 4]) 
+            part_for_h_carving();
+            
+        translate([0, 0, height * 3 / 4]) 
+            part_for_h_carving();
+    }
+
+    corner_r = hole_radius + edge_width;
+
+	module carved_parts() {
+        offset_v = cube_width - corner_r;
+		translate([corner_r, corner_r, 0]) 
+        rotate(180) 
+            part_for_carve_a_sink(hole_radius, cube_width, edge_width);
+				
+		translate([offset_v, corner_r, 0]) 
+        rotate(270) 
+            part_for_carve_a_sink(hole_radius, cube_width, edge_width);
+			
+        if(holes > 2) {			
+			translate([offset_v, offset_v, 0]) 
+            rotate(360) 
+                part_for_carve_a_sink(hole_radius, cube_width, edge_width);
+		} else if(holes > 3) {	
+			translate([corner_r, offset_v, 0]) 
+            rotate(90) 
+                part_for_carve_a_sink(hole_radius, cube_width, edge_width);		
+        }			
+	}
+    
+    neg_half_w = -cube_width / 2;
+	rotate(135) 
+    translate([neg_half_w, neg_half_w])
+	difference() {
+        linear_extrude(cube_width) 
+            rounded_square(cube_width, corner_r);
+		carved_parts();			
+	}
+}

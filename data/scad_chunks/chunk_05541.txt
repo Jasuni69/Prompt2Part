@@ -1,0 +1,19 @@
+function ival(target_func) = function(a,b) target_func(a);
+
+
+// Function: xval()
+// Synopsis: Generates a function with signature `(i,x)` that calls `func(x)`
+// Topics: Function Literals
+// See Also: f_1arg(), f_2arg(), f_3arg(), ival(), xval()
+// Usage:
+//   newfunc = xval(func);
+// Description:
+//   Wraps a single-argument function literal so that it can take two arguments,
+//   passing the first argument along to the wrapped function.
+// Arguments:
+//   target_func = The function of signature (x) to wrap.
+// FunctionLiteral Args:
+//   a = The argument that will be passed through.
+//   b = The argumen that will be discarded.
+// Example:
+//   x = while(0, ival(f_lt(5)), xval(f_add(1)));

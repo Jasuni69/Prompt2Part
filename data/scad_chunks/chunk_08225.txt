@@ -1,0 +1,13 @@
+module test_rounded_cylinder() {
+    echo("==== test_rounded_cylinder ====");
+
+    h = 25;
+    
+    rounded_cylinder(
+        radius = [20, 10], 
+        h = h, 
+        round_r = 3
+    );        
+}
+
+test_rounded_cylinder();

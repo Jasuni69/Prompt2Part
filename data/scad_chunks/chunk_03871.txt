@@ -1,0 +1,16 @@
+module bore(h=$hBore,d=$d,d2=$d2)
+{
+	$inverted=true;
+
+	tubeFast(h=h,d=d,d2=d2,dInner=undef,dOuter=undef,solid=true)
+	children();
+}
+
+//bentStripXZ([places],wide,thick=3)
+//makes a 3D strip of
+// thickness thick (circle base element)
+// and wideness=y,
+// ONLY  TURNS/MOVES inXZ plane are allowed in placelist
+// no alignment commands allowed.
+//Example:
+//bentStrip([X(30),turnXZ(20),X(40),turnXZ(-20),X(30)],y=10);

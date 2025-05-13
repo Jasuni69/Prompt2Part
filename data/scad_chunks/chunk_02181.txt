@@ -1,0 +1,2 @@
+function corner_holes(type) = let(short = bbox_short_inserts(type))
+    [for(p = corner_block_positions(type), q = corner_block_holes(bbox_screw(type), short_insert = short)) p * q];

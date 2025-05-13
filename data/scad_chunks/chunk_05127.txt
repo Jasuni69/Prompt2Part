@@ -1,0 +1,35 @@
+function idx(list, s=0, e=-1, step=1) =
+    assert(is_list(list)||is_string(list), "Invalid input." )
+    let( ll = len(list) )
+    ll == 0 ? [0:1:ll-1] :
+    let(
+        _s = posmod(s,ll),
+        _e = posmod(e,ll)
+    ) [_s : step : _e];
+
+
+// Section: Lists of Subsets
+
+
+// Function: pair()
+// Synopsis: Returns a list of overlapping consecutive pairs in a list.
+// Topics: List Handling, Iteration
+// See Also: idx(), triplet(), combinations(), permutations()
+// Usage:
+//   p = pair(list, [wrap]);
+//   for (p = pair(list, [wrap])) ...  // On each iteration, p contains a list of two adjacent items.
+// Description:
+//   Returns a list of all of the pairs of adjacent items from a list, optionally wrapping back to the front.  The pairs overlap, and
+//   are returned in order starting with the first two entries in the list.  If the list has less than two elements, the empty list is returned. 
+// Arguments:
+//   list = The list to use for making pairs
+//   wrap = If true, wrap back to the start from the end.  ie: return the last and first items as the last pair.  Default: false
+// Example(2D): Does NOT wrap from end to start,
+//   for (p = pair(circle(d=40, $fn=12)))
+//       stroke(p, endcap2="arrow2");
+// Example(2D): Wraps around from end to start.
+//   for (p = pair(circle(d=40, $fn=12), wrap=true))
+//       stroke(p, endcap2="arrow2");
+// Example:
+//   l = ["A","B","C","D"];
+//   echo([for (p=pair(l)) str(p.y,p.x)]);  // Outputs: ["BA", "CB", "DC"]

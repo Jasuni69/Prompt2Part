@@ -1,0 +1,11 @@
+module psu_screw_positions(type, face = undef) { //! Position children at the screw positions on the preferred mounting face, which can be overridden.
+    faces = psu_faces(type);
+    f = is_undef(face) ? faces && psu_face_holes(faces[f_bottom]) ? f_bottom
+                                                                  : f_front
+                       : face;
+    if(len(psu_faces(type)) > f)
+        multmatrix(psu_face_transform(type, f))
+            for(point = psu_face_holes(psu_faces(type)[f]))
+                translate([point.x, point.y])
+                    children();
+}

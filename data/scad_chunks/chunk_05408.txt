@@ -1,0 +1,10 @@
+function _three_edge_corner_dir(facevecs,edges) =
+      let(
+           v1 = vector_bisect(facevecs[0],facevecs[2]),
+           v2 = vector_bisect(facevecs[1],facevecs[2]),
+           p1 = plane_from_normal(rot(v=edges[0],a=90,p=v1)),
+           p2 = plane_from_normal(rot(v=edges[1],a=-90,p=v2)),
+           line = plane_intersection(p1,p2),
+           v3 = unit(line[1]-line[0],UP)
+       )
+       unit(v3,UP);

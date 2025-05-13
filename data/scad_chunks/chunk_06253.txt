@@ -1,0 +1,268 @@
+function spheroid(r, style="aligned", d, circum=false, anchor=CENTER, spin=0, orient=UP) =
+    let(
+        r = get_radius(r=r, d=d, dflt=1),
+        hsides = segs(r),
+        vsides = max(2,ceil(hsides/2)),
+        octa_steps = round(max(4,hsides)/4),
+        icosa_steps = round(max(5,hsides)/5),
+        stagger = style=="stagger"
+     )
+     circum && style=="orig" ?
+         let(
+              orig_sphere = spheroid(r,"aligned",circum=false),
+              dualvert = zrot(360/hsides/2,_dual_vertices(orig_sphere)),
+              culledvert = [
+                              [for(i=[0:2:2*hsides-1]) dualvert[i]],
+                              for(j=[1:vsides-2])
+                                 [for(i=[0:2:2*hsides-1]) dualvert[j*2*hsides+i]],
+                              [for(i=[1:2:2*hsides-1]) dualvert[i]]
+                           ],
+              vnf = vnf_vertex_array(culledvert,col_wrap=true,caps=true)
+          )
+          [reorient(anchor,spin,orient, r=r, p=vnf[0]), vnf[1]]
+     :
+     circum && (style=="octa" || style=="icosa") ?
+         let(
+              orig_sphere = spheroid(r,style,circum=false),
+              dualvert = _dual_vertices(orig_sphere),
+              faces = hull(dualvert)
+         )
+         [reorient(anchor,spin,orient, r=r, p=dualvert), faces]
+     :
+     style=="icosa" ?    // subdivide faces of an icosahedron and project them onto a sphere
+         let(
+             N = icosa_steps-1,
+             // construct an icosahedron
+             icovert=[ for(i=[-1,1], j=[-1,1]) each [[0,i,j*PHI], [i,j*PHI,0], [j*PHI,0,i]]],
+             icoface = hull(icovert),
+             // Subsample face 0 of the icosahedron
+             face0 = select(icovert,icoface[0]),
+             sampled = r * _subsample_triangle(face0,N),
+             dir0 = mean(face0),
+             point0 = face0[0]-dir0,
+             // Make a rotated copy of the subsampled triangle on each icosahedral face
+             tri_list = [sampled,
+                         for(i=[1:1:len(icoface)-1])
+                 let(face = select(icovert,icoface[i]))
+                 apply(frame_map(z=mean(face),x=face[0]-mean(face))
+                        *frame_map(z=dir0,x=point0,reverse=true),
+                       sampled)],
+             // faces for the first triangle group
+             faces = vnf_tri_array(tri_list[0],reverse=true)[1],
+             size = repeat((N+2)*(N+3)/2,3),
+             // Expand to full face list
+             fullfaces = [for(i=idx(tri_list)) each [for(f=faces) f+i*size]],
+             fullvert = flatten(flatten(tri_list))    // eliminate triangle structure
+         )
+         [reorient(anchor,spin,orient, r=r, p=fullvert), fullfaces]
+     :
+     let(
+        verts = circum && style=="stagger" ? _dual_vertices(spheroid(r,style,circum=false))
+              : circum && style=="aligned" ?
+                     let(
+                         orig_sphere = spheroid(r,"orig",circum=false),
+                         dualvert = _dual_vertices(orig_sphere),
+                         culledvert = zrot(360/hsides/2,
+                                           [dualvert[0],
+                                            for(i=[2:2:len(dualvert)-1]) dualvert[i],
+                                            dualvert[1]])
+                      )
+                      culledvert
+              : style=="orig"? [
+                                 for (i=[0:1:vsides-1])
+                                     let(phi = (i+0.5)*180/(vsides))
+                                     for (j=[0:1:hsides-1])
+                                         let(theta = j*360/hsides)
+                                         spherical_to_xyz(r, theta, phi),
+                               ]
+              : style=="aligned" || style=="stagger"?
+                         [ spherical_to_xyz(r, 0, 0),
+                           for (i=[1:1:vsides-1])
+                               let(phi = i*180/vsides)
+                               for (j=[0:1:hsides-1])
+                                   let(theta = (j+((stagger && i%2!=0)?0.5:0))*360/hsides)
+                                   spherical_to_xyz(r, theta, phi),
+                           spherical_to_xyz(r, 0, 180)
+                         ]
+              : style=="octa"?
+                      let(
+                           meridians = [
+                                        1,
+                                        for (i = [1:1:octa_steps]) i*4,
+                                        for (i = [octa_steps-1:-1:1]) i*4,
+                                        1,
+                                       ]
+                      )
+                      [
+                       for (i=idx(meridians), j=[0:1:meridians[i]-1])
+                           spherical_to_xyz(r, j*360/meridians[i], i*180/(len(meridians)-1))
+                      ]
+              : assert(in_list(style,["orig","aligned","stagger","octa","icosa"])),
+        lv = len(verts),
+        faces = circum && style=="stagger" ?
+                     let(ptcount=2*hsides)
+                     [
+                       [for(i=[ptcount-2:-2:0]) i],
+                       for(j=[0:hsides-1])
+                           [j*2, (j*2+2)%ptcount,ptcount+(j*2+2)%ptcount,ptcount+(j*2+3)%ptcount,ptcount+j*2],
+                       for(i=[1:vsides-3])
+                           let(base=ptcount*i)
+                           for(j=[0:hsides-1])
+                               i%2==0 ? [base+2*j, base+(2*j+1)%ptcount, base+(2*j+2)%ptcount,
+                                        base+ptcount+(2*j)%ptcount, base+ptcount+(2*j+1)%ptcount, base+ptcount+(2*j-2+ptcount)%ptcount]
+                                      : [base+(1+2*j)%ptcount, base+(2*j)%ptcount, base+(2*j+3)%ptcount,
+                                         base+ptcount+(3+2*j)%ptcount, base+ptcount+(2*j+2)%ptcount,base+ptcount+(2*j+1)%ptcount],
+                       for(j=[0:hsides-1])
+                          vsides%2==0
+                            ? [(j*2+3)%ptcount, j*2+1, lv-ptcount+(2+j*2)%ptcount, lv-ptcount+(3+j*2)%ptcount, lv-ptcount+(4+j*2)%ptcount]
+                            : [(j*2+3)%ptcount, j*2+1, lv-ptcount+(1+j*2)%ptcount, lv-ptcount+(j*2)%ptcount, lv-ptcount+(3+j*2)%ptcount],
+                       [for(i=[1:2:ptcount-1]) i],
+                     ]
+              : style=="aligned" || style=="stagger" ?  // includes case of aligned with circum == true
+                     [
+                       for (i=[0:1:hsides-1])
+                           let(b2 = lv-2-hsides)
+                           each [
+                                 [i+1, 0, ((i+1)%hsides)+1],
+                                 [lv-1, b2+i+1, b2+((i+1)%hsides)+1],
+                                ],
+                       for (i=[0:1:vsides-3], j=[0:1:hsides-1])
+                           let(base = 1 + hsides*i)
+                           each (
+                                 (stagger && i%2!=0)? [
+                                     [base+j, base+hsides+j%hsides, base+hsides+(j+hsides-1)%hsides],
+                                     [base+j, base+(j+1)%hsides, base+hsides+j],
+                                 ] : [
+                                     [base+j, base+(j+1)%hsides, base+hsides+(j+1)%hsides],
+                                     [base+j, base+hsides+(j+1)%hsides, base+hsides+j],
+                                 ]
+                           )
+                     ]
+              : style=="orig"? [
+                                [for (i=[0:1:hsides-1]) hsides-i-1],
+                                [for (i=[0:1:hsides-1]) lv-hsides+i],
+                                for (i=[0:1:vsides-2], j=[0:1:hsides-1])
+                                    each [
+                                          [(i+1)*hsides+j, i*hsides+j, i*hsides+(j+1)%hsides],
+                                          [(i+1)*hsides+j, i*hsides+(j+1)%hsides, (i+1)*hsides+(j+1)%hsides],
+                                    ]
+                               ]
+              : /*style=="octa"?*/
+                     let(
+                         meridians = [
+                                      0, 1,
+                                      for (i = [1:1:octa_steps]) i*4,
+                                      for (i = [octa_steps-1:-1:1]) i*4,
+                                      1,
+                                     ],
+                         offs = cumsum(meridians),
+                         pc = last(offs)-1,
+                         os = octa_steps * 2
+                     )
+                     [
+                      for (i=[0:1:3]) [0, 1+(i+1)%4, 1+i],
+                      for (i=[0:1:3]) [pc-0, pc-(1+(i+1)%4), pc-(1+i)],
+                      for (i=[1:1:octa_steps-1])
+                          let(m = meridians[i+2]/4)
+                          for (j=[0:1:3], k=[0:1:m-1])
+                              let(
+                                  m1 = meridians[i+1],
+                                  m2 = meridians[i+2],
+                                  p1 = offs[i+0] + (j*m1/4 + k+0) % m1,
+                                  p2 = offs[i+0] + (j*m1/4 + k+1) % m1,
+                                  p3 = offs[i+1] + (j*m2/4 + k+0) % m2,
+                                  p4 = offs[i+1] + (j*m2/4 + k+1) % m2,
+                                  p5 = offs[os-i+0] + (j*m1/4 + k+0) % m1,
+                                  p6 = offs[os-i+0] + (j*m1/4 + k+1) % m1,
+                                  p7 = offs[os-i-1] + (j*m2/4 + k+0) % m2,
+                                  p8 = offs[os-i-1] + (j*m2/4 + k+1) % m2
+                              )
+                              each [
+                                    [p1, p4, p3],
+                                    if (k<m-1) [p1, p2, p4],
+                                    [p5, p7, p8],
+                                    if (k<m-1) [p5, p8, p6],
+                                   ],
+                     ]
+    ) [reorient(anchor,spin,orient, r=r, p=verts), faces];
+
+
+
+// Function&Module: torus()
+// Synopsis: Creates an attachable torus.
+// SynTags: Geom, VNF
+// Topics: Shapes (3D), Attachable, VNF Generators
+// See Also: spheroid(), cyl()
+//
+// Usage: As Module
+//   torus(r_maj|d_maj, r_min|d_min, [center], ...) [ATTACHMENTS];
+//   torus(or|od, ir|id, ...) [ATTACHMENTS];
+//   torus(r_maj|d_maj, or|od, ...) [ATTACHMENTS];
+//   torus(r_maj|d_maj, ir|id, ...) [ATTACHMENTS];
+//   torus(r_min|d_min, or|od, ...) [ATTACHMENTS];
+//   torus(r_min|d_min, ir|id, ...) [ATTACHMENTS];
+// Usage: As Function
+//   vnf = torus(r_maj|d_maj, r_min|d_min, [center], ...);
+//   vnf = torus(or|od, ir|id, ...);
+//   vnf = torus(r_maj|d_maj, or|od, ...);
+//   vnf = torus(r_maj|d_maj, ir|id, ...);
+//   vnf = torus(r_min|d_min, or|od, ...);
+//   vnf = torus(r_min|d_min, ir|id, ...);
+//
+// Description:
+//   Creates an attachable toroidal shape.
+//
+// Figure(2D,Med):
+//   module dashcirc(r,start=0,angle=359.9,dashlen=5) let(step=360*dashlen/(2*r*PI)) for(a=[start:step:start+angle]) stroke(arc(r=r,start=a,angle=step/2));
+//   r = 75; r2 = 30;
+//   down(r2+0.1) #torus(r_maj=r, r_min=r2, $fn=72);
+//   color("blue") linear_extrude(height=0.01) {
+//       dashcirc(r=r,start=15,angle=45);
+//       dashcirc(r=r-r2, start=90+15, angle=60);
+//       dashcirc(r=r+r2, start=180+45, angle=30);
+//       dashcirc(r=r+r2, start=15, angle=30);
+//   }
+//   rot(240) color("blue") linear_extrude(height=0.01) {
+//       stroke([[0,0],[r+r2,0]], endcaps="arrow2",width=2);
+//       right(r) fwd(9) rot(-240) text("or",size=10,anchor=CENTER);
+//   }
+//   rot(135) color("blue") linear_extrude(height=0.01) {
+//       stroke([[0,0],[r-r2,0]], endcaps="arrow2",width=2);
+//       right((r-r2)/2) back(8) rot(-135) text("ir",size=10,anchor=CENTER);
+//   }
+//   rot(45) color("blue") linear_extrude(height=0.01) {
+//       stroke([[0,0],[r,0]], endcaps="arrow2",width=2);
+//       right(r/2) back(8) text("r_maj",size=9,anchor=CENTER);
+//   }
+//   rot(30) color("blue") linear_extrude(height=0.01) {
+//       stroke([[r,0],[r+r2,0]], endcaps="arrow2",width=2);
+//       right(r+r2/2) fwd(8) text("r_min",size=7,anchor=CENTER);
+//   }
+//
+// Arguments:
+//   r_maj = major radius of torus ring. (use with 'r_min', or 'd_min')
+//   r_min = minor radius of torus ring. (use with 'r_maj', or 'd_maj')
+//   center = If given, overrides `anchor`.  A true value sets `anchor=CENTER`, false sets `anchor=DOWN`.
+//   ---
+//   d_maj  = major diameter of torus ring. (use with 'r_min', or 'd_min')
+//   d_min = minor diameter of torus ring. (use with 'r_maj', or 'd_maj')
+//   or = outer radius of the torus. (use with 'ir', or 'id')
+//   ir = inside radius of the torus. (use with 'or', or 'od')
+//   od = outer diameter of the torus. (use with 'ir' or 'id')
+//   id = inside diameter of the torus. (use with 'or' or 'od')
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//
+// Example:
+//   // These all produce the same torus.
+//   torus(r_maj=22.5, r_min=7.5);
+//   torus(d_maj=45, d_min=15);
+//   torus(or=30, ir=15);
+//   torus(od=60, id=30);
+//   torus(d_maj=45, id=30);
+//   torus(d_maj=45, od=60);
+//   torus(d_min=15, id=30);
+//   torus(d_min=15, od=60);
+//   vnf_polyhedron(torus(d_min=15, od=60), convexity=4);
+// Example: Standard Connectors
+//   torus(od=60, id=30) show_anchors();

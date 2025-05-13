@@ -1,0 +1,31 @@
+function module_value(circ_pitch, mod, pitch, diam_pitch) =
+    let( circ_pitch = circular_pitch(circ_pitch, mod, pitch, diam_pitch) )
+    circ_pitch / PI;
+
+
+/// Function: _adendum()
+/// Usage:
+///   ad = _adendum(circ_pitch, [profile_shift]);
+///   ad = _adendum(diam_pitch=, [profile_shift=]);
+///   ad = _adendum(mod=, [profile_shift=]);
+/// Topics: Gears
+/// Description:
+///   The height of the top of a gear tooth above the pitch radius circle.
+/// Arguments:
+///   circ_pitch = The circular pitch, the distance between teeth centers around the pitch circle.
+///   profile_shift = Profile shift factor x.  Default: 0 
+///   ---
+///   diam_pitch = The diametral pitch, or number of teeth per inch of pitch diameter.  The diametral pitch is a completely different thing than the pitch diameter.
+///   mod = The module of the gear (pitch diameter / teeth)
+/// Example:
+///   ad = _adendum(circ_pitch=5);
+///   ad = _adendum(mod=2);
+/// Example(2D):
+///   circ_pitch = 5; teeth = 17;
+///   pr = pitch_radius(circ_pitch, teeth);
+///   adn = _adendum(circ_pitch=5);
+///   #spur_gear2d(circ_pitch=circ_pitch, teeth=teeth);
+///   color("black") {
+///       stroke(circle(r=pr),width=0.1,closed=true);
+///       stroke(circle(r=pr+adn),width=0.1,closed=true);
+///   }

@@ -1,0 +1,8 @@
+module cam_holes(cam) {
+    pcb = camera_pcb(cam);
+    lens_y = camera_lens_offset(cam).y;
+    two_holes = !!len([for (h = pcb_holes(pcb)) if(abs(pcb_coord(pcb, h).y - lens_y) < 1) true]);
+    pcb_screw_positions(pcb)                                                    // screw holes
+        if($i > 1 || !two_holes)
+            children();
+}

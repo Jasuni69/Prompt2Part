@@ -1,0 +1,1 @@
+function smd_250V_fuse_base(type) = type[4]; //! Base length

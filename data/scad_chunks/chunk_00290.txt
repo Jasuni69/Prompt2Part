@@ -1,0 +1,1 @@
+function  d_flange_thickness(type) = type[8];   //! Thickness of the flange

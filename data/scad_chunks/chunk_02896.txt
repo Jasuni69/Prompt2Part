@@ -1,0 +1,37 @@
+module sanityCheckList(theList, theListName, minCount, shapeParam=undef, validShapes = []) 
+  {    
+    if (printMessages) echo("Sanity Checking ", theListName, theList);
+      
+    if (is_list(theList))
+    {
+      if (len(theList)>0)
+      {
+        //-- Go throught the vector checking each one
+        for(pos = [0 : len(theList)-1])
+        {
+          item = theList[pos];
+          //-- Check that there are at least the minimun elements
+          //-- Cutouts require 9 elements
+          assert((len(item) >= minCount), str(theListName, " item ", pos, " require ", minCount, " parameters at a minimum.") );
+            
+          if (shapeParam!=undef)
+          {
+            theShape = item[shapeParam];
+            
+            assert((isTrue(theShape,validShapes)), str(theListName, " item ", pos, " Shape (param ",shapeParam,") required to be one of the following ", validShapes) );
+          }
+        }
+      }
+      else
+      {
+        if (printMessages) echo (str(theListName, " is empty"));
+      }
+    } 
+    else
+    {
+      if (printMessages) echo (theListName, " is not defined");
+    }
+  } //-- sanityCheckCutoutList()
+
+//===========================================================
+//-- Master module to process the 4 ridge extension for the box faces

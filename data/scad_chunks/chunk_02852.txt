@@ -1,0 +1,6 @@
+module HeartOutside(size)
+{
+  offset(r=0.5*wall+1)
+    offset(delta=-1)
+      heart2D(size=size,points=100);
+}

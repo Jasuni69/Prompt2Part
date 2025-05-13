@@ -1,0 +1,102 @@
+function _lofttri(p1, p2, i1offset, i2offset, n1, n2, reverse=false, trilist=[], i1=0, i2=0, tricount1=0, tricount2=0, trimax=INF) = n1!=n2 ?
+    // unequal row lengths
+    let(
+    t1 = i1 < n1 ? i1+1 : n1,   // test point 1
+    t2 = i2 < n2 ? i2+1 : n2,   // test point 2
+//dum=echo(str("i1=",i1,"  i2=",i2,"  t1=",t1,"  t2=",t2,"  n1=",n1,"  n2=",n2, "  p1[t1]=",p1[t1],"  p2[i2]=",p2[i2])),
+    d12 = t2>=n2 ? 9e+9 : norm(p2[t2]-p1[i1]), // distance from i1 to t2
+    d21 = t1>=n1 ? 9e+9 : norm(p1[t1]-p2[i2]), // distance from i2 to t1
+//dum2=echo(str("  d12=",d12,"  d21=",d21,"  tricounts=",tricount1,",",tricount2)),
+    userow = d12<d21 ? (tricount1<trimax ? 2 : 1) : (tricount2<trimax ? 1 : 2),
+    newt = userow==1 ? (t1<n1?t1:i1) : (t2<n2?t2:i2),
+    newofft = userow==2 ? i2offset+newt : i1offset+newt,
+    tc1 = d12<d21 && tricount1<trimax ? tricount1+1 : 0,
+    tc2 = d21<d12 && tricount2<trimax ? tricount2+1 : 0,
+    triangle = reverse ?
+        [i1offset+i1, i2offset+i2, newofft] :
+        [i2offset+i2, i1offset+i1, newofft]
+) t1>=n1 && t2>=n2 ? trilist :
+    _lofttri(p1, p2, i1offset, i2offset, n1, n2, reverse, concat(trilist, [triangle]),
+        userow==1 ? (t1>=n1?i1:t1) : i1, userow==2 ? (t2>=n2?i2:t2) : i2, tc1, tc2, trimax)
+
+    : // equal row lengths
+    let(n=n1, i=i1,
+    t = i < n ? i+1 : n,   // test point
+    d12 = t>=n ? 9e+9 : norm(p2[t]-p1[i]), // distance from p1 to new p2
+    d21 = t>=n ? 9e+9 : norm(p1[t]-p2[i]), // distance from p2 to new p1
+    triangle1 = reverse ?
+        [i1offset+i, i2offset+i, d12<d21 ? i2offset+t : i1offset+t] :
+        [i2offset+i, i1offset+i, d12<d21 ? i2offset+t : i1offset+t],
+    triangle2 = reverse ?
+        [i2offset+t, i1offset+t, d12<d21 ? i1offset+i : i2offset+i] :
+        [i1offset+t, i2offset+t, d12<d21 ? i1offset+i : i2offset+i]
+) t>=n ? trilist :
+    _lofttri(p1, p2, i1offset, i2offset, n, n, reverse, concat(trilist, [triangle1, triangle2]), t, t, 0,0,trimax);
+
+
+
+// Function: vnf_join()
+// Synopsis: Returns a single VNF structure from a list of VNF structures.
+// SynTags: VNF
+// Topics: VNF Generators, Lists
+// See Also: vnf_tri_array(), vnf_vertex_array(), vnf_from_polygons(), vnf_from_region()
+// Usage:
+//   vnf = vnf_join([VNF, VNF, VNF, ...]);
+// Description:
+//   Given a list of VNF structures, merges them all into a single VNF structure.
+//   Combines all the points of the input VNFs and labels the faces appropriately.
+//   All the points in the input VNFs appear in the output, even if they are
+//   duplicated. It is valid to repeat points in a VNF, but if you
+//   with to remove the duplicates that occur along joined edges, use {{vnf_merge_points()}}.
+//   .
+//   This is a tool for manipulating polyhedron data. It is for
+//   building up a full polyhedron from partial polyhedra.
+//   It is *not* a union operator for VNFs. The VNFs to be joined must not intersect each other,
+//   except at edges, otherwise the result is an invalid polyhedron. Also, the
+//   result must not have any other illegal polyhedron characteristics, such as creating
+//   more than two faces sharing the same edge.
+//   If you want a valid result it is your responsibility to ensure that the polyhedron
+//   has no holes, no intersecting faces or edges, and obeys all the requirements
+//   that CGAL expects.
+//   .
+//   For example, if you combine two pyramids to try to make an octahedron, the result is
+//   invalid because of the two internal faces created by the pyramid bases.  A valid
+//   use would be to build a cube missing one face and a pyramid missing its base and
+//   then join them into a cube with a point.
+// Arguments:
+//   vnfs = a list of the VNFs to joint into one VNF.
+// Example(3D,VPR=[60,0,26],VPD=55,VPT=[5.6,-5.3,9.8]): Here is a VNF where the top face is missing.  It is not a valid polyhedron like this, but we can use it as a building block to make a polyhedron.
+//   bottom = vnf_vertex_array([path3d(rect(8)), path3d(rect(5),4)],col_wrap=true,cap1=true);
+//   vnf_polyhedron(bottom);
+// Example(3D,VPR=[60,0,26],VPD=55,VPT=[5.6,-5.3,9.8]): Here is a VNF that also has a missing face.
+//   triangle = yrot(-90,path3d(regular_ngon(n=3,side=5,anchor=LEFT)));
+//   top = up(4,vnf_vertex_array([list_set(right(2.5,triangle),0,[0,0,7]),
+//                               right(6,triangle)
+//                               ], col_wrap=true, cap2=true));
+//   vnf_polyhedron(zrot(90,top));
+// Example(3D,VPR=[60,0,26],VPD=55,VPT=[5.6,-5.3,9.8]): Using vnf_join combines the two VNFs into a single VNF.  Note that they share an edge.  But the result still isn't closed, so it is not yet a valid polyhedron.
+//   bottom = vnf_vertex_array([path3d(rect(8)), path3d(rect(5),4)],col_wrap=true,cap1=true);
+//   triangle = yrot(-90,path3d(regular_ngon(n=3,side=5,anchor=LEFT)));
+//   top = up(4,vnf_vertex_array([list_set(right(2.5,triangle),0,[0,0,7]),
+//                                right(6,triangle)
+//                               ], col_wrap=true, cap2=true));
+//   full = vnf_join([bottom,zrot(90,top)]);
+//   vnf_polyhedron(full);
+// Example(3D,VPR=[60,0,26],VPD=55,VPT=[5.6,-5.3,9.8]): If we add enough pieces, and the pieces are all consistent with each other, then we can arrive at a valid polyhedron like this one.  To be valid you need to meet all the CGAL requirements: every edge has exactly two faces, all faces are in clockwise order, no intersections of edges.
+//   bottom = vnf_vertex_array([path3d(rect(8)), path3d(rect(5),4)],col_wrap=true,cap1=true);
+//   triangle = yrot(-90,path3d(regular_ngon(n=3,side=5,anchor=LEFT)));
+//   top = up(4,vnf_vertex_array([list_set(right(2.5,triangle),0,[0,0,7]),
+//                                right(6,triangle)
+//                               ], col_wrap=true, cap2=true));
+//   full = vnf_join([bottom,
+//                     for(theta=[0:90:359]) zrot(theta,top)
+//                    ]);
+//   vnf_polyhedron(full);
+// Example(3D): The vnf_join function is not a union operator for polyhedra.  If any faces intersect, like they do in this example where we combine the faces of two cubes, the result is invalid and results in CGAL errors when you add more objects into the model.
+//   cube1 = cube(5);
+//   cube2 = move([2,2,2],cube1);
+//   badvnf = vnf_join([cube1,cube2]);
+//   vnf_polyhedron(badvnf);
+//   right(2.5)up(3)color("red")
+//         text3d("Invalid",size=1,anchor=CENTER,
+//         orient=FRONT,h=.1);

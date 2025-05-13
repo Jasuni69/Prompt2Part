@@ -1,0 +1,8 @@
+module test_downcase() {
+    assert(downcase("") == "");
+    assert(downcase("ABCDEFGHIJKLMNOPQRSTUVWXYZ") == "abcdefghijklmnopqrstuvwxyz");
+    assert(downcase("abcdefghijklmnopqrstuvwxyz") == "abcdefghijklmnopqrstuvwxyz");
+    assert(downcase("1234567890!@#$%^&*()") == "1234567890!@#$%^&*()");
+    assert(downcase("_+-=[]\\{}|;':\",./<>?`~") == "_+-=[]\\{}|;':\",./<>?`~");
+}
+test_downcase();

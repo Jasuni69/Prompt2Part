@@ -1,0 +1,5 @@
+function is_boolean(v) = (version_num() > 20190100)? is_bool(v) : (!is_str(v) && (str(v) == "true" || str(v) == "false"));
+
+
+// Function: is_scalar()
+// Description: Given a value, returns true if it is a scalar number.

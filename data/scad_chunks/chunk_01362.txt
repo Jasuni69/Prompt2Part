@@ -1,0 +1,115 @@
+module panel_USBA() { //! Draw a panel mount USBA connector
+    vitamin("panel_USBA(): Socket USB A panel mount");
+
+    width = 12;
+    length = 40;
+    length2 = 22;
+    thickness = 5.5;
+    height = 33;
+    height2 = 27;
+    lead_dia = 10;
+    r1 = 1.5;
+    r2 = 5;
+    height3 = 9.5;
+    length3 = 17.5;
+
+    l = 17;
+    w = 13.3;
+    h = 5.7;
+    flange_t = 0.4;
+    h_flange_h = 0.8;
+    h_flange_l = 11.2;
+
+    v_flange_h = 0.8;
+    v_flange_l = 3.8;
+    tongue_w = 10;
+    tongue_t = 1.3;
+
+    $fa = fa; $fs = fs;
+
+    vflip() {
+        color("dimgrey")  {
+            linear_extrude(thickness)
+                difference() {
+                    hull()
+                        for(side = [-1, 1])
+                            translate([side * (length / 2 - width / 2), 0])
+                                circle(d = width);
+
+                    square([length3, width + 1], center = true);
+
+                    panel_USBA_hole_positions()
+                        circle(M3_clearance_radius);
+                }
+
+            translate_z(height2)
+                cylinder(d = lead_dia, h = height - height2);
+
+            hull() {
+                dx = (length2 / 2 - r2);
+                dy = (width / 2 - r1);
+                translate_z(l)
+                    rounded_rectangle([length2, width, 1], r = r1);
+
+                translate([-dx, -dy, height2 - r2])
+                    rotate([90, 0, 0])
+                        rounded_cylinder(r = r2, r2 = r1, h = r1);
+
+                translate([dx, -dy, height2 - r2])
+                    rotate([90, 0, 0])
+                        rounded_cylinder(r = r2, r2 = r1, h = r1);
+
+                translate([-dx, dy, height2 - r2])
+                    rotate([-90, 0, 0])
+                        rounded_cylinder(r = r2, r2 = r1, h = r1);
+
+                translate([dx, dy, height2 - r2])
+                    rotate([-90, 0, 0])
+                        rounded_cylinder(r = r2, r2 = r1, h = r1);
+            }
+
+            translate_z(height3)
+                linear_extrude(l - height3)
+                    difference() {
+                        rounded_square([length2, width], r = r1);
+
+                        square([w - flange_t, h - flange_t], center = true);
+                    }
+
+            linear_extrude(height3)
+                difference() {
+                    rounded_square([length2, width], r = r1);
+
+                    square([length3, width + 1], center = true);
+                }
+        }
+
+        *cube([12, 4.5, 32], center = true);
+
+        color("silver") {
+            linear_extrude(l)
+                difference() {
+                    square([w, h], center = true);
+
+                    square([w - 2 * flange_t, h - 2 * flange_t], center = true);
+                }
+
+            translate_z(l - flange_t / 2)
+                cube([w, h, flange_t], center = true);
+
+            linear_extrude(flange_t)
+                difference() {
+                    union() {
+                        square([h_flange_l, h + 2 * h_flange_h], center = true);
+
+                        square([w + 2 * v_flange_h, v_flange_l], center = true);
+                    }
+                    square([w - 2 * flange_t, h - 2 * flange_t], center = true);
+                }
+         }
+
+         color("white")
+            translate([0, h / 2 - 1 - tongue_t / 2, l / 2])
+                cube([tongue_w, tongue_t, l], center = true);
+    }
+}

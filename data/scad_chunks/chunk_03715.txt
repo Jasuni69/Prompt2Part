@@ -1,0 +1,1 @@
+function rot_trace(m) = m[0][0] + m[1][1] + m[2][2];

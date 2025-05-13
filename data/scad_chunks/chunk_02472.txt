@@ -1,0 +1,10 @@
+function teardrop_plus_x(r, y, h) = //! Calculate the ordinate of a compensated teardrop given y and layer height.
+    let(fr = h / 2,
+        hpot = r + fr,
+        x2 = sqr(hpot) - sqr(y),
+        x = x2 > 0 ? sqrt(x2) : 0
+    )
+    max(0,
+        y < hpot / sqrt(2) ? x - fr :
+        y < hpot           ? hpot * sqrt(2) - y - fr :
+        0);

@@ -1,0 +1,33 @@
+module trace_bezier(bez, N=3, size=1) {
+	trace_polyline(bez, N=N, showpts=true, size=size/2, color="green");
+	trace_polyline(bezier_polyline(bez, N=N), size=size, color="cyan");
+}
+
+
+
+// Section: Patch Functions
+
+
+// Function: bezier_patch_point()
+// Usage:
+//   bezier_patch_point(patch, u, v)
+// Description:
+//   Given a square 2-dimensional array of (N+1) by (N+1) points size,
+//   that represents a Bezier Patch of degree N, returns a point on that
+//   surface, at positions `u`, and `v`.  A cubic bezier patch will be 4x4
+//   points in size.  If given a non-square array, each direction will have
+//   its own degree.
+// Arguments:
+//   patch = The 2D array of endpoints and control points for this bezier patch.
+//   u = The proportion of the way along the first dimension of the patch to find the point of.  0<=`u`<=1
+//   v = The proportion of the way along the second dimension of the patch to find the point of.  0<=`v`<=1
+// Example(3D):
+//   patch = [
+//       [[-50, 50,  0], [-16, 50,  20], [ 16, 50,  20], [50, 50,  0]],
+//       [[-50, 16, 20], [-16, 16,  40], [ 16, 16,  40], [50, 16, 20]],
+//       [[-50,-16, 20], [-16,-16,  40], [ 16,-16,  40], [50,-16, 20]],
+//       [[-50,-50,  0], [-16,-50,  20], [ 16,-50,  20], [50,-50,  0]]
+//   ];
+//   trace_bezier_patches(patches=[patch], size=1, showcps=true);
+//   pt = bezier_patch_point(patch, 0.6, 0.75);
+//   translate(pt) color("magenta") sphere(d=3, $fn=12);

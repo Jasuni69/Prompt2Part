@@ -1,0 +1,24 @@
+module CGear(z=20,h=5,modul=3,deg=45,d=0,f=3,r,chamfer=.25,deg2=90,spiel=0.05,lap=.001,base=1,fn=$preview?6:36,fnd,fs=0.075,help){
+
+iH=is_list(h)?h:[h/8*3,h/4,h/8*3];
+opt=len(iH); // 1 helical 2 fishbone 3 fishbone with center
+iZ=z/f;
+r=is_num(r)?r:iZ*modul/2;
+$r=r;
+chamfer=is_list(chamfer)?chamfer:[chamfer,chamfer];
+Echo("d unavailable for deg2!= 90",color="warning",condition=deg2!=90&&d);
+id=deg2==90?d:0;
+
+//bottom
+iScale0=scaleGrad(r=r,grad=deg2,h=iH[0]-(opt==1?vSum(chamfer):chamfer[0]));
+//center
+iScale1=opt==3?scaleGrad(r=r*iScale0,grad=deg2,h=iH[1]-(opt==2?chamfer[1]:0)):1;
+//top
+iScale2=opt==3?scaleGrad(r=r*iScale0*iScale1,grad=deg2,h=iH[2]-chamfer[1])
+:opt==2?scaleGrad(r=r*iScale0,grad=deg2,h=iH[1]-chamfer[1]):1;
+
+iScale=[iScale0,iScale1,iScale2];
+
+baseScale=scaleGrad(r=r,grad=deg2,h=base);
+stretch=deg2==90?1:1+1/tan(deg2);
+//echo(iScale);

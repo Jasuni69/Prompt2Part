@@ -1,0 +1,12 @@
+module box1_feet_positions() {
+    clearance = 2;
+    foot_r = foot_diameter(foot) / 2;
+    x_inset = inner_rad + foot_r - pbox_ridges(box1).y;
+    z_inset = foot_r + clearance;
+    h = height + base_thickness;
+
+    for(p = [[-1, -1], [1, -1], [0, 1]])
+        translate([p.x * (width / 2 - x_inset), depth / 2 + wall + pbox_ridges(box1).y, top_thickness + h / 2 + p.y * (h / 2 - z_inset)])
+            rotate([90, 0, 0])
+                children();
+}

@@ -1,0 +1,20 @@
+module fan_assembly(type, thickness, include_fan = true, screw = false, full_depth = false) { //! Fan with its fasteners
+    translate_z(-fan_depth(type) / 2) {
+        if(include_fan)
+            fan(type);
+
+        Screw = screw ? screw : fan_screw(type);
+        nut = screw_nut(Screw);
+        fan_hole_positions(type) {
+            translate_z(thickness)
+                screw_and_washer(Screw, fan_screw_length(type, thickness, full_depth));
+
+            translate_z(include_fan ? -fan_screw_depth(type, full_depth) : 0)
+                vflip()
+                    if(fan_screw_depth(type, full_depth) == fan_depth(type))
+                        nut_and_washer(nut, true);
+                    else
+                        nut(nut, true);
+        }
+     }
+}

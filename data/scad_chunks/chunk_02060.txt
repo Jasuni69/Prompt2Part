@@ -1,0 +1,7 @@
+module printed_pulley_GT2_teeth(type) {
+    tooth_count = pulley_teeth(type);
+    if (tooth_count == 0)
+        circle(r = pulley_od(type) / 2);
+    else
+        printed_pulley_teeth_from_profile(tooth_count, 0.764, 1.494, printed_pulley_GT2_profile);
+}

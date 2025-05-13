@@ -1,0 +1,31 @@
+module zrot(a=0, cp=undef)
+{
+	if (a==0) {
+		children();  // May be slightly faster?
+	} else if (is_def(cp)) {
+		translate(cp) rotate(a) translate(-cp) children();
+	} else {
+		rotate(a) children();
+	}
+}
+
+
+
+//////////////////////////////////////////////////////////////////////
+// Section: Scaling and Mirroring
+//////////////////////////////////////////////////////////////////////
+
+
+// Module: xscale()
+//
+// Description:
+//   Scales children by the given factor on the X axis.
+//
+// Usage:
+//   xscale(x) ...
+//
+// Arguments:
+//   x = Factor to scale by along the X axis.
+//
+// Example:
+//   xscale(3) sphere(r=10);

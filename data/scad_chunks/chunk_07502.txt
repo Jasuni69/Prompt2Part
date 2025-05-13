@@ -1,0 +1,9 @@
+function RotLang(rot=0,l=10,l2,z,e,lz)=let(
+rot=is_undef(rot)?0:rot%360,
+l=is_undef(l)?0:l,
+l2=is_undef(l2)?l:l2,
+lz=is_undef(lz)?l:lz
+)
+is_undef(z)?is_undef(e)?[sin(rot)*l,cos(rot)*l2]:
+                        [sin(rot)*cos(e%360)*l,cos(rot)*cos(e%360)*l2,sin(e%360)*lz]:
+            [sin(rot)*l,cos(rot)*l,z];

@@ -1,0 +1,1 @@
+function drag_chain_clearance(type)   = type[6]; //! Clearance around joints

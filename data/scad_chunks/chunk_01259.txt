@@ -1,0 +1,6 @@
+module extrusion_corner_bracket_hole_positions(type) { //! Place children at hole positions
+    for(angle = [ [0, 90, 0], [-90, -90, 0] ])
+        rotate(angle)
+            translate([0, extrusion_corner_bracket_hole_offset(type), extrusion_corner_bracket_base_thickness(type)])
+                children();
+}

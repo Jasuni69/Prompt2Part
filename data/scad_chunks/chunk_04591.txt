@@ -1,0 +1,4 @@
+module gang() { children( [0:1:$children-1] ); } // why this is not a builtin i do not know
+
+// these two are inextricably tied together
+// =========================

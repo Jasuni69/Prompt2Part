@@ -1,0 +1,17 @@
+module down(z=0) translate([0,0,-z]) children();
+
+
+// Module: up()
+//
+// Description:
+//   Moves children up (in the Z+ direction) by the given amount.
+//
+// Usage:
+//   up(z) ...
+//
+// Arguments:
+//   z = Scalar amount to move up.
+//
+// Example:
+//   #sphere(d=10);
+//   up(20) sphere(d=10);

@@ -1,0 +1,5 @@
+function calculate_twist(A, B) = let(D = transpose3(B) * A) atan2(D[1][0], D[0][0]);
+//
+// Compute a 4x3 matrix to orientate a frame of the sweep given the position and a 3x3 rotation matrix.
+// Note that the rotation matrix is transposed to allow post multiplication.
+//

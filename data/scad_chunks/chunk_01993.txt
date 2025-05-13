@@ -1,0 +1,21 @@
+module ssr_shroud_fastened_assembly(type, cable_d, thickness, name) //! Assembly with screws in place
+{
+    screw_length = screw_length(screw, thickness + counter_bore, 2, true);
+
+    ssr_shroud_assembly(type, cable_d, name);
+
+    translate_z(-thickness)
+        ssr_shroud_hole_positions(type)
+            screw_and_washer(screw, screw_length, true);
+
+    for(side = [-1, 1])
+        translate([ssr_shroud_cable_x(type, cable_d), side * (ssr_width(type) / 2 - 2 * boss_r)]) {
+            rotate(-90)
+                cable_tie(cable_d / 2, thickness);
+
+            *translate_z(cable_d / 2)
+                rotate([90, 0, 0])
+                    stl_colour(grey(20))
+                        cylinder(d = cable_d, h = 20, center = true);
+        }
+}

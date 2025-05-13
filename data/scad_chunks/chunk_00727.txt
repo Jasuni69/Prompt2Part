@@ -1,0 +1,1 @@
+function pi_stem_width(type)    = type[5]; //! Width of the stems

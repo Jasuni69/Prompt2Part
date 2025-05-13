@@ -1,0 +1,1 @@
+function box_section_fillet(type)    = type[4]; //! Fillet

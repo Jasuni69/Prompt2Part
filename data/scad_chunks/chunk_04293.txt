@@ -1,0 +1,2 @@
+function matrix_power(m,n)= n==0? (len(m)==3?identity3():identity4()) :
+        n==1 ? m : (n%2==1) ? matrix_power(m*m,floor(n/2))*m : matrix_power(m*m,n/2);

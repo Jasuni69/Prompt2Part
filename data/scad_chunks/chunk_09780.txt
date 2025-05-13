@@ -1,0 +1,26 @@
+module yskew(xa=0, za=0) multmatrix(m = matrix4_skew_xz(xa, za)) children();
+
+
+
+//////////////////////////////////////////////////////////////////////
+// Section: Translational Distributors
+//////////////////////////////////////////////////////////////////////
+
+
+// Module: place_copies()
+//
+// Description:
+//   Makes copies of the given children at each of the given offsets.
+//
+// Usage:
+//   place_copies(a) ...
+//
+// Arguments:
+//   a = array of XYZ offset vectors. Default [[0,0,0]]
+//
+// Side Effects:
+//   `$pos` is set to the relative centerpoint of each child copy, and can be used to modify each child individually.
+//
+// Example:
+//   #sphere(r=10);
+//   place_copies([[-25,-25,0], [25,-25,0], [0,0,50], [0,25,0]]) sphere(r=10);

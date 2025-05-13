@@ -1,0 +1,1 @@
+function spiral_angle(spiral) = spiral[4];

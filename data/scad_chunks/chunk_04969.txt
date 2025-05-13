@@ -1,0 +1,11 @@
+function stroke(
+    path, width=1, closed,
+    endcaps,       endcap1,        endcap2,        joints,       dots,
+    endcap_width,  endcap_width1,  endcap_width2,  joint_width,  dots_width,
+    endcap_length, endcap_length1, endcap_length2, joint_length, dots_length,
+    endcap_extent, endcap_extent1, endcap_extent2, joint_extent, dots_extent,
+    endcap_angle,  endcap_angle1,  endcap_angle2,  joint_angle,  dots_angle,
+    endcap_color,  endcap_color1,  endcap_color2,  joint_color,  dots_color, color,
+    trim, trim1, trim2, singleton_scale=2,
+    convexity=10
+) = no_function("stroke");

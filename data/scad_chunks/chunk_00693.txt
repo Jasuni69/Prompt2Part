@@ -1,0 +1,95 @@
+module panel_meter(type) { //! Draw panel mounted LCD meter module
+    vitamin(str("panel_meter(", type[0], "): ", type[1]));
+    size = pmeter_size(type);
+    bezel = pmeter_bezel(type);
+    bevel = pmeter_bevel(type);
+    t = pmeter_thickness(type);
+    r = pmeter_bezel_r(type);
+    h = size.z - bezel.z;
+    ap = pmeter_aperture(type);
+    tab = pmeter_tab(type);
+    tab_z = pmeter_tab_z(type);
+    pcb = pmeter_pcb(type);
+    ap2 = pmeter_inner_ap(type);
+    buttons = pmeter_buttons(type);
+
+    color("#94A7AB")
+        cube([ap.x, ap.y, 3 * eps], center = true);
+
+    module corner(x, y)
+        translate([x * (bezel.x / 2 - bevel), y * (bezel.y / 2 - bevel)])
+            rounded_cylinder(r = r, r2 = bevel, h = bezel.z);
+
+    color(grey(30)) union() {
+        //
+        // Bezel and aperture
+        //
+        difference() {
+            if(is_list(bevel))
+                hull() {
+                    rounded_rectangle([bezel.x - 2 * bevel.x, bezel.y - 2 * bevel.x, bezel.z], r - bevel.x);
+                    rounded_rectangle([bezel.x, bezel.y, bevel[1]], r);
+                }
+            else
+                hull() {
+                    corner(-1, -1);
+                    corner(-1,  1);
+                    corner( 1, -1);
+                    corner( 1,  1);
+                }
+
+            hull() {
+                r = max(0, -ap.z);
+                if(ap.z > 0)
+                    translate_z(bezel.z + eps)
+                        cube([ap.x + ap.z, ap.y + ap.z, eps], center = true);
+
+                translate_z(bezel.z + eps)
+                    rounded_rectangle([ap.x, ap.y, bezel.z * 2], r, true);
+            }
+        }
+        //
+        // Body
+        //
+        translate_z(-h)
+            linear_extrude(h)
+                difference() {
+                    square([size.x, size.y], center = true);
+
+                    if(t)
+                        square([size.x - 2 * t, size.y - 2 * t], center = true);
+                }
+        //
+        // tabs
+        //
+        if(tab)
+            for(end = [-1, 1])
+                translate([end * (size.x / 2 + tab.x / 2), 0, -size.z + tab_z])
+                    rotate([0, end * 10, 0])
+                        translate_z(tab.z / 2)
+                            cube([tab.x, tab.y, tab.z], center = true);
+
+    }
+    if(ap2)
+        color("grey")
+            linear_extrude(ap2.z)
+                difference() {
+                    square([ap.x, ap.y], center = true);
+
+                    translate(pmeter_inner_ap_o(type))
+                        square([ap2.x, ap2.y], center = true);
+                }
+    if(pcb) {
+        vflip()
+            translate_z(h - pcb_thickness(pcb) - pmeter_pcb_z(type))
+                pcb(pcb);
+
+        pcb_h = pmeter_pcb_h(type) - bezel.z;
+        if(pcb_h > 0)
+            %translate_z(-pcb_h / 2 - eps)
+                cube([size.x - 2 * t - eps, size.y - 2 * t - eps, pcb_h], center = true);
+    }
+    if(buttons)
+        for(b = buttons)
+            panel_meter_button(b);
+}

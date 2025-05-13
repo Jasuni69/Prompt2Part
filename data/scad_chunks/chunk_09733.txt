@@ -1,0 +1,13 @@
+function nema_motor_width(size) = lookup(size, [
+		[11.0, 28.2],
+		[14.0, 35.2],
+		[17.0, 42.3],
+		[23.0, 57.0],
+		[34.0, 86.0],
+	]);
+
+
+// Function: nema_motor_plinth_height()
+// Description: Gets plinth height of NEMA motor of given standard size.
+// Arguments:
+//   size = The standard NEMA motor size.

@@ -1,0 +1,6 @@
+module test_affine3d_zrot() {
+    for(a = [-360:2/3:360]) {
+        assert(approx(affine3d_zrot(a), [[cos(a),-sin(a),0,0],[sin(a),cos(a),0,0],[0,0,1,0],[0,0,0,1]]));
+    }
+}
+test_affine3d_zrot();

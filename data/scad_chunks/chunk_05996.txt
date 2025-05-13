@@ -1,0 +1,16 @@
+module _pin_shaft(r, lStraight, nub, nubscale, stretch, d, pointed)
+{
+   extra = 0.02;         // This sets the extra extension below the socket bottom
+                         // so that difference() works without issues
+   rPoint = r / sqrt(2);
+   down(extra) cylinder(r = r, h = lStraight + extra);
+   up(lStraight) {
+      zscale(stretch) {
+         hull() {
+            sphere(r = r);
+            if (pointed) up(rPoint) cylinder(r1 = rPoint, r2 = 0, h = rPoint/stretch);
+         }
+      }
+   }
+   up(d) yscale(nubscale) _pin_nub(r = r, nub = nub, h = lStraight - d);
+}

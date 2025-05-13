@@ -1,0 +1,7 @@
+function scale(v) = let(s = is_list(v) ? v : [v, v, v]) //!  Generate a 4x4 matrix that scales by `v`, which can be a vector of xyz factors or a scalar to scale all axes equally
+                        [
+                          [s.x, 0,   0,   0],
+                          [0,   s.y, 0,   0],
+                          [0,   0,   s.z, 0],
+                          [0,   0,   0,   1]
+                        ];

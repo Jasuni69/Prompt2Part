@@ -1,0 +1,4 @@
+module box_right(type) //! Default right side, can be overridden to customise
+    render_2D_sheet(box_sheets(type))
+        dxf(str(box_name(type), "_right"))
+            box_right_blank(type);

@@ -1,0 +1,3 @@
+function translate(v, poly) = is_poly_vector(poly) ?
+  [for (p=poly) _translate(v=v, poly=p)] :
+  _translate(v=v, poly=poly);

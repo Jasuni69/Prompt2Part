@@ -1,0 +1,7 @@
+module jack_hole() {
+    intersection() {
+        teardrop_plus(r = jack_4mm_shielded_hole_radius(), h = 50);
+
+        cube([11, 100, 100], center = true);
+    }
+}

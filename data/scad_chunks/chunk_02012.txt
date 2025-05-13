@@ -1,0 +1,14 @@
+module drag_chain_screw_positions(type, end) { //! Place children at the screw positions, end = 0 for the start, 1 for the end
+    r = screw_lug_radius(drag_chain_screw(type));
+    s = drag_chain_size(type);
+    os = drag_chain_outer_size(type);
+    clearance = drag_chain_clearance(type);
+    R = os.z / 2;
+    x0 = end ? R + norm([drag_chain_cam_x(type), R - drag_chain_twall(type)]) + clearance + r : r;
+    x1 = end ? os.x - r : os.x - 2 * R - clearance - r;
+    for(i = [0 : 3], x = [x0, x1, x0, x1][i], y = [-1, -1, 1, 1][i])
+        if(drag_chain_screw_lists(type)[bool2int(end)][i])
+            translate([x, y * (s.y / 2 + r)])
+                let($a = [180, 0, 180, 0][i])
+                    children();
+}

@@ -1,0 +1,14 @@
+module addOffset(rOuter=1,rInner=0)
+{
+difference()
+{
+	offset(rOuter)children();
+	offset(rInner)children();
+}
+
+}
+
+
+//stacks children objects on to or next to each other, can also enlarge them
+//them slightly in size and merge them into each other to
+//make absolutely sure the resulting body is connected to one volume

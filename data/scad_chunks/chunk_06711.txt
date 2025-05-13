@@ -1,0 +1,9 @@
+module test_reduce() {
+    l = [7,3,9,1,6,1,3,2];
+    add = function (a,b) a+b;
+    mul = function (a,b) a*b;
+    assert_equal(reduce(add,l), 32);
+    assert_equal(reduce(mul,l), 0);
+    assert_equal(reduce(mul,l,init=1), 6804);
+}
+test_reduce();

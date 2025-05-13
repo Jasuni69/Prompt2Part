@@ -1,0 +1,4 @@
+module test_c_ident(){
+  assert_equal(c_ident(3), [[[1, 0], [0, 0], [0, 0]], [[0, 0], [1, 0], [0, 0]], [[0, 0], [0, 0], [1, 0]]]);
+}
+test_c_ident();

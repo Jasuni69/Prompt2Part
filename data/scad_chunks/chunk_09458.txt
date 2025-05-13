@@ -1,0 +1,16 @@
+function triangle_area2d(a,b,c) =
+	(
+		a.x * (b.y - c.y) + 
+		b.x * (c.y - a.y) + 
+		c.x * (a.y - b.y)
+	) / 2;
+
+
+// Function: right_of_line2d()
+// Usage:
+//   right_of_line2d(line, pt)
+// Description:
+//   Returns true if the given point is to the left of the given line.
+// Arguments:
+//   line = A list of two points.
+//   pt = The point to test.

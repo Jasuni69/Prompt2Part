@@ -1,0 +1,35 @@
+function _root_radius_basic(circ_pitch, teeth, clearance, internal=false, helical=0, profile_shift=0, diam_pitch, mod, pitch) =
+    let( circ_pitch = circular_pitch(pitch, mod, circ_pitch, diam_pitch) )
+    pitch_radius(circ_pitch, teeth, helical) - (
+        internal
+          ? _adendum(circ_pitch, profile_shift=-profile_shift)
+          : _dedendum(circ_pitch, clearance, profile_shift=profile_shift)
+    );
+
+
+/// Function: _base_radius()
+/// Usage:
+///   br = _base_radius(circ_pitch, teeth, [pressure_angle], [helical]);
+///   br = _base_radius(diam_pitch=, teeth=, [pressure_angle=], [helical=]);
+///   br = _base_radius(mod=, teeth=, [pressure_angle=], [helical=]);
+/// Topics: Gears
+/// Description:
+///   Get the base circle for involute teeth, at the base of the teeth.
+/// Arguments:
+///   pitch = The circular pitch, the distance between teeth centers around the pitch circle.
+///   teeth = The number of teeth on the gear.
+///   pressure_angle = Pressure angle in degrees.  Controls how straight or bulged the tooth sides are.
+///   helical = The helical angle (from vertical) of the teeth on the gear.  Default: 0
+///   ---
+///   mod = The module of the gear (pitch diameter / teeth)
+///   diam_pitch = The diametral pitch, or number of teeth per inch of pitch diameter.  The diametral pitch is a completely different thing than the pitch diameter.
+/// Example:
+///   br = _base_radius(circ_pitch=5, teeth=20, pressure_angle=20);
+///   br = _base_radius(circ_pitch=5, teeth=20, pressure_angle=20, helical=30);
+///   br = _base_radius(diam_pitch=10, teeth=20, pressure_angle=20);
+///   br = _base_radius(mod=2, teeth=18, pressure_angle=20);
+/// Example(2D):
+///   pr = _base_radius(circ_pitch=5, teeth=11);
+///   #spur_gear2d(circ_pitch=5, teeth=11);
+///   color("black")
+///       stroke(circle(r=pr),width=0.1,closed=true);

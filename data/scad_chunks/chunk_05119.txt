@@ -1,0 +1,35 @@
+function list_rotate(list,n=1) =
+    assert(is_list(list)||is_string(list), "Invalid list or string.")
+    assert(is_int(n), "The rotation number should be integer")
+    let (
+        ll = len(list),
+        n = ((n % ll) + ll) % ll,
+        elems = [
+            for (i=[n:1:ll-1]) list[i],
+            for (i=[0:1:n-1]) list[i]
+        ]
+    )
+    is_string(list)? str_join(elems) : elems;
+
+    
+
+// Function: shuffle()
+// Synopsis: Randomizes the order of a list.
+// Topics: List Handling
+// See Also: sort(), sortidx(), unique(), unique_count()
+// Usage:
+//   shuffled = shuffle(list, [seed]);
+// Description:
+//   Shuffles the input list into random order.
+//   If given a string, shuffles the characters within the string.
+//   If you give a numeric seed value then the permutation
+//   will be repeatable.
+// Arguments:
+//   list = The list to shuffle.
+//   seed = Optional random number seed for the shuffling.
+// Example:
+//   //        Spades   Hearts    Diamonds  Clubs
+//   suits = ["\u2660", "\u2661", "\u2662", "\u2663"];
+//   ranks = [2,3,4,5,6,7,8,9,10,"J","Q","K","A"];
+//   cards = [for (suit=suits, rank=ranks) str(rank,suit)];
+//   deck = shuffle(cards);

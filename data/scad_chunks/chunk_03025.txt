@@ -1,0 +1,50 @@
+ ,[50, 40, 20, 20, undef, yappPolygon, undef, $t*360, shapeIsoTriangle2, yappCenter]
+ ,[75, 40, 20, 20, undef, yappPolygon, undef, $t*360, shapeHexagon, yappCenter]
+ ,[100, 40, 20, 20, undef, yappPolygon, undef, $t*360, shape6ptStar, yappCenter]
+ ,[125, 40, 20, 20, undef, yappPolygon, undef, $t*360, shapeTriangle, yappCenter]
+ ,[150, 40, 20, 20, undef, yappPolygon, undef, $t*360, shapeTriangle2, yappCenter]
+ ,[175, 40, 20, 20, undef, yappPolygon, undef, $t*360, shapeArrow, yappCenter]
+ //,[200, 40, 20, 20, undef, yappPolygon, undef, $t*360, shapeArrow2, yappCenter]
+ 
+ // Mask Demo
+//   ,[ 160, 55, 50, 50, 10, yappRectangle, 1, shapeHexagon, [maskHoneycomb,0,0,0], yappCenter, yappFromInside]
+//   ,[ 160, 55, 50, 50, 10, yappRectangle, 1, shapeHexagon, [maskHoneycomb,0,0,0], yappCenter, yappFromInside]
+];
+
+cutoutsFront = 
+[
+];  
+
+
+cutoutsBack = 
+[
+];
+
+
+cutoutsLeft = 
+[
+ //--  0,  1,  2,  3, 4, 5,6,7,n
+//    [ 30,  3, 25, 15, 3, yappRoundedRect, 1]
+ //  ,[ 60, 3, 25, 15, 3, yappRoundedRect, 1, yappFromInside] 
+ //  ,[ 20, 1, 5, 5, 1, yappRoundedRect, 5, yappFromInside, yappCoordBox] // Cuts out into mounting tab
+];
+
+cutoutsRight = 
+[
+];
+
+
+//===================================================================
+//  *** Box Mounts ***
+//  Mounting tabs on the outside of the box
+//-------------------------------------------------------------------
+//  Default origin = yappCoordBox: box[0,0,0]
+//
+//  Parameters:
+//   Required:
+//    p(0) = pos : position along the wall : [pos,offset] : vector for position and offset X.
+//                    Position is to center of mounting screw in leftmost position in slot
+//    p(1) = screwDiameter
+//    p(2) = width of opening in addition to screw diameter 
+//                    (0=Circular hole screwWidth = hole twice as wide as it is tall)
+//    p(3) = height

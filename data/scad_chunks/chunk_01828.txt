@@ -1,0 +1,1 @@
+function tubing_od(type)       = type[2]; //! Outside diameter

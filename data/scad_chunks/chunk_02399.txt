@@ -1,0 +1,3 @@
+module ribbon_clamp_7_2_stl() ribbon_clamp(8, M2_dome_screw);
+
+//! * Place inserts into the holes and press home with a soldering iron with a conical bit heated to 200&deg;C.

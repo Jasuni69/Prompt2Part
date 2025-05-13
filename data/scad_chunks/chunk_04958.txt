@@ -1,0 +1,21 @@
+function _swap_matrix(n,i,j) =
+  assert(i<n && j<n && i>=0 && j>=0, "Swap indices out of bounds")
+  [for(y=[0:n-1]) [for (x=[0:n-1])
+     x==i ? (y==j ? 1 : 0)
+   : x==j ? (y==i ? 1 : 0)
+   : x==y ? 1 : 0]];
+
+
+
+// Function: back_substitute()
+// Synopsis: Solve an upper triangular system, Rx=b.  
+// Topics: Matrices, Linear Algebra
+// See Also: linear_solve(), linear_solve3(), matrix_inverse(), rot_inverse(), back_substitute(), cholesky()
+// Usage:
+//   x = back_substitute(R, b, [transpose]);
+// Description:
+//   Solves the problem Rx=b where R is an upper triangular square matrix.  The lower triangular entries of R are
+//   ignored.  If transpose==true then instead solve transpose(R)*x=b.
+//   You can supply a compatible matrix b and it will produce the solution for every column of b.  Note that if you want to
+//   solve Rx=b1 and Rx=b2 you must set b to transpose([b1,b2]) and then take the transpose of the result.  If the matrix
+//   is singular (e.g. has a zero on the diagonal) then it returns [].

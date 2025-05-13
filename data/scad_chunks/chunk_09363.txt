@@ -1,0 +1,9 @@
+function lerp(a,b,u) = (1-u)*a + u*b;
+
+
+// Function: hypot()
+// Description: Calculate hypotenuse length of a 2D or 3D triangle.
+// Arguments:
+//   x = Length on the X axis.
+//   y = Length on the Y axis.
+//   z = Length on the Z axis.

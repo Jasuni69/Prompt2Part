@@ -1,0 +1,22 @@
+module washers()
+    layout([for(w = washers) penny_diameter(w)], 2) let(w = washers[$i]) {
+        star_washer(w);
+
+        if(spring_washer_thickness(w))
+            translate([0, 20])
+                let($explode = 1)
+                    spring_washer(w);
+
+        translate([0, 40])
+            washer(w);
+
+        if(penny_washer(w))
+            translate([0, 65])
+                penny_washer(w);
+
+        translate([0, 90])
+            printed_washer(w);
+    }
+
+if($preview)
+    washers();

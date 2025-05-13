@@ -1,0 +1,3 @@
+function hashset_has(set, elem, eq = undef, hash = _str_hash) =
+    let(bucket = set[hash(elem) % len(set)])
+    bucket != [] && _find_eq(bucket, elem, eq) != -1;

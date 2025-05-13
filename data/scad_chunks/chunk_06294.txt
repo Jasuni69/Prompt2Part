@@ -1,0 +1,24 @@
+module torx_mask(size, l=5, center, anchor, spin=0, orient=UP) {
+    od = torx_diam(size);
+    anchor = get_anchor(anchor, center, BOT, BOT);
+    attachable(anchor,spin,orient, d=od, l=l) {
+        linear_extrude(height=l, convexity=4, center=true) {
+            torx_mask2d(size);
+        }
+        children();
+    }
+}
+
+
+// Module: torx_mask2d()
+// Synopsis: Creates the 2D cross section for a torx drive recess.
+// SynTags: Geom
+// Topics: Screws, Masks
+// See Also: phillips_mask(), hex_drive_mask(), torx_mask(),  phillips_depth(), phillips_diam(), torx_info(), robertson_mask()
+// Usage:
+//   torx_mask2d(size);
+// Description: Creates a torx bit 2D profile.  The anchors are located on the circumscribing circle.   See {{torx_info()}} for allowed sizes.
+// Arguments:
+//   size = Torx size.
+// Example(2D):
+//   torx_mask2d(size=30, $fa=1, $fs=1);

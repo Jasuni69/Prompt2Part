@@ -1,0 +1,111 @@
+module test_rot() {
+    pts2d = 50 * [for (x=[-1,0,1],y=[-1,0,1]) [x,y]];
+    pts3d = 50 * [for (x=[-1,0,1],y=[-1,0,1],z=[-1,0,1]) [x,y,z]];
+    vecs2d = [
+        for (x=[-1,0,1], y=[-1,0,1]) if(x!=0||y!=0) [x,y],
+        polar_to_xy(1, -75),
+        polar_to_xy(1,  75)
+    ];
+    vecs3d = [
+        LEFT, RIGHT, FRONT, BACK, DOWN, UP,
+        spherical_to_xyz(1, -30,  45),
+        spherical_to_xyz(1,   0,  45),
+        spherical_to_xyz(1,  30,  45),
+        spherical_to_xyz(2, -30, 135),
+        spherical_to_xyz(1,  30, 135),
+        spherical_to_xyz(1, -30,  75),
+        spherical_to_xyz(1,  45,  45),
+    ];
+    angs = [-180, -90, 0, 30, 45, 90];
+    for (a = [-360*3:360:360*3]) {
+        assert_approx(rot(a), affine3d_identity(), info=str("rot(",a,") != identity"));
+        assert_approx(rot(a,p=pts2d), pts2d, info=str("rot(",a,",p=...), 2D"));
+        assert_approx(rot(a,p=pts3d), pts3d, info=str("rot(",a,",p=...), 3D"));
+    }
+    assert_approx(rot(90), [[0,-1,0,0],[1,0,0,0],[0,0,1,0],[0,0,0,1]]);
+    for (a=angs) {
+        assert_approx(rot(a), affine3d_zrot(a), info=str("Z angle (only) = ",a));
+        assert_approx(rot([a,0,0]), affine3d_xrot(a), info=str("X angle = ",a));
+        assert_approx(rot([0,a,0]), affine3d_yrot(a), info=str("Y angle = ",a));
+        assert_approx(rot([0,0,a]), affine3d_zrot(a), info=str("Z angle = ",a));
+
+        assert_approx(rot(a,p=pts2d), apply(affine3d_zrot(a),pts2d), info=str("Z angle (only) = ",a, ", p=..., 2D"));
+        assert_approx(rot([0,0,a],p=pts2d), apply(affine3d_zrot(a),pts2d), info=str("Z angle = ",a, ", p=..., 2D"));
+
+        assert_approx(rot(a,p=pts3d), apply(affine3d_zrot(a),pts3d), info=str("Z angle (only) = ",a, ", p=..., 3D"));
+        assert_approx(rot([a,0,0],p=pts3d), apply(affine3d_xrot(a),pts3d), info=str("X angle = ",a, ", p=..., 3D"));
+        assert_approx(rot([0,a,0],p=pts3d), apply(affine3d_yrot(a),pts3d), info=str("Y angle = ",a, ", p=..., 3D"));
+        assert_approx(rot([0,0,a],p=pts3d), apply(affine3d_zrot(a),pts3d), info=str("Z angle = ",a, ", p=..., 3D"));
+    }
+    for (xa=angs, ya=angs, za=angs) {
+        assert_approx(
+            rot([xa,ya,za]),
+            affine3d_zrot(za) * affine3d_yrot(ya) * affine3d_xrot(xa),
+            info=str("[X,Y,Z] = ",[xa,ya,za])
+        );
+        assert_approx(
+            rot([xa,ya,za],p=pts3d),
+            apply(
+                affine3d_zrot(za) * affine3d_yrot(ya) * affine3d_xrot(xa),
+                pts3d
+            ),
+            info=str("[X,Y,Z] = ",[xa,ya,za], ", p=...")
+        );
+    }
+    for (vec1 = vecs3d) {
+        for (ang = angs) {
+            assert_approx(
+                rot(a=ang, v=vec1),
+                affine3d_rot_by_axis(vec1,ang),
+                info=str("a = ",ang,", v = ", vec1)
+            );
+            assert_approx(
+                rot(a=ang, v=vec1, p=pts3d),
+                apply(affine3d_rot_by_axis(vec1,ang), pts3d),
+                info=str("a = ",ang,", v = ", vec1, ", p=...")
+            );
+        }
+    }
+    for (vec1 = vecs2d) {
+        for (vec2 = vecs2d) {
+            assert_approx(
+                rot(from=vec1, to=vec2, p=pts2d),
+                apply(affine2d_zrot(v_theta(vec2)-v_theta(vec1)), pts2d),
+                info=str(
+                    "from = ", vec1, ", ",
+                    "to = ", vec2, ", ",
+                    "p=..., 2D"
+                )
+            );
+        }
+    }
+    for (vec1 = vecs3d) {
+        for (vec2 = vecs3d) {
+            for (a = angs) {
+                assert_approx(
+                    rot(from=vec1, to=vec2, a=a),
+                    affine3d_rot_from_to(vec1,vec2) * affine3d_rot_by_axis(vec1,a),
+                    info=str(
+                        "from = ", vec1, ", ",
+                        "to = ", vec2, ", ",
+                        "a = ", a
+                    )
+                );
+                assert_approx(
+                    rot(from=vec1, to=vec2, a=a, p=pts3d),
+                    apply(
+                        affine3d_rot_from_to(vec1,vec2) * affine3d_rot_by_axis(vec1,a),
+                        pts3d
+                    ),
+                    info=str(
+                        "from = ", vec1, ", ",
+                        "to = ", vec2, ", ",
+                        "a = ", a, ", ",
+                        "p=..., 3D"
+                    )
+                );
+            }
+        }
+    }
+}
+test_rot();

@@ -1,0 +1,1 @@
+function gm_depth(type) = gm_screw_boss(type)[1] + gm_box(type).z - gm_motor_pos(type).z + gm_motor(type).z + gm_tags(type).z;  //! Motor total depth

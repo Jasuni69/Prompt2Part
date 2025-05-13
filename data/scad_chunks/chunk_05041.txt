@@ -1,0 +1,41 @@
+function mb_cyl(h,r,rounding=0,r1,r2,l,height,length,d1,d2,d, cutoff=INF, influence=1, negative=false, hide_debug=false) =
+    let(
+         r1 = get_radius(r1=r1,r=r, d1=d1, d=d),
+         r2 = get_radius(r1=r2,r=r, d1=d2, d=d),
+         h = first_defined([h,l,height,length],"h,l,height,length")
+    )
+    assert(all_positive([influence]), "influence must be a positive number")
+    assert(is_finite(rounding) && rounding>=0, "rounding must be a nonnegative number")
+    assert(is_finite(r1) && r1>0, "r/r1/d/d1 must be a positive number")
+    assert(is_finite(r2) && r2>0, "r/r2/d/d2 must be a positive number")
+    assert(is_num(cutoff) && cutoff>0, "cutoff must be a positive number")
+    let(
+        vang = atan2(r1-r2,h),
+        facelen = adj_ang_to_hyp(h, abs(vang)),
+        roundlen1 = rounding/tan(45-vang/2),
+        roundlen2 = rounding/tan(45+vang/2),
+        sides = [[0,h/2], [r2,h/2], [r1,-h/2], [0,-h/2]],
+        neg = negative ? -1 : 1
+    )
+    assert(roundlen1 <= r1, "size of rounding is larger than the r1 radius of the cylinder/cone")
+    assert(roundlen2 <= r2, "size of rounding is larger than the r2 radius of the cylinder/cone")
+    assert(roundlen1+roundlen2 < facelen, "Roundings don't fit on the edge length of the cylinder/cone")
+    let(
+        shifted = offset(sides, delta=-rounding, closed=false, check_valid=false),
+        bisect1 = [shifted[1],unit(shifted[0]-shifted[1])+unit(shifted[2]-shifted[1])+shifted[1]],
+        bisect2 = [shifted[2],unit(shifted[3]-shifted[2])+unit(shifted[1]-shifted[2])+shifted[2]],
+        side_isect = line_intersection(bisect1,bisect2),
+        top_isect = line_intersection(bisect1,[[0,0],[0,1]]),
+        bot_isect = line_intersection(bisect2,[[0,0],[0,1]]),
+        maxdist = side_isect.x>0 ?point_line_distance(side_isect, select(shifted,1,2))
+                : max(point_line_distance(top_isect, select(shifted,1,2)),
+                      point_line_distance(bot_isect, select(shifted,1,2))),
+        vnf = [neg, hide_debug ? debug_tetra(0.02) : cyl(h,r1=r1,r2=r2,rounding=rounding,$fn=20)]
+    )
+       !is_finite(cutoff) && influence==1 ? [function(point) _revsurf_basic(point, shifted, maxdist+rounding, neg, maxdist), vnf]
+     : !is_finite(cutoff) ? [function(point) _revsurf_influence(point, shifted, maxdist+rounding, 1/influence, neg, maxdist), vnf]
+     : influence==1 ? [function(point) _revsurf_cutoff(point, shifted, maxdist+rounding, cutoff, neg, maxdist), vnf]
+     : [function (point) _revsurf_full(point, shifted, maxdist+rounding, cutoff, 1/influence, neg, maxdist), vnf];
+
+
+/// metaball disk with rounded edge

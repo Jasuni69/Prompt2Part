@@ -1,0 +1,54 @@
+function rotate_extrude(angle=360, offsetAngle=0, center=false, i_offset=0, poly) =
+  let(
+    points = get_points(poly),
+    a = ((angle != angle/*nan check*/ || angle==undef || angle > 360) ? 360 :
+      (angle <= -360 ? 360 : angle)
+    ),
+    full_rev = a==360 ? 1 : 0,
+    l = len(points),
+    xs = [for (p = points) p.x],
+    min_x = min(xs),
+    max_x = max(xs),
+    fragments = ceil((abs(a) / 360) * fragments(max_x)),
+    steps = fragments - full_rev,
+    step = a / fragments,
+    a1 = offsetAngle-(center ? a/2 : 0),
+    ps = signed_area(points) < 0 ? reverse(points) : points,
+    out_points = flatten([
+      for (i = [0:steps] )
+        let(a2=i*step+a1)
+        rotate([90,0,a2], poly=ps)
+    ]),
+    lp = len(out_points),
+    out_paths = [
+      for (i = [0:fragments-1], j = [0:l-1])
+        let(
+          il = i*l,
+          il1 = (i == steps) ? 0 : (i+1)*l,
+          j1 = (j == l-1) ? 0 : j+1,
+          a=il+j,
+          b=il+j1,
+          c=il1+j,
+          d=il1+j1,
+          ax=ps[j].x,
+          bx=ps[j1].x
+        )
+        if (ax != 0 || bx != 0) // filter zero area tri
+          (ax == 0) ?           // ax == cx == 0
+            [c,b,d] :           // triangle fan
+          (bx == 0 ?            // bx == dx == 0
+            [a,b,c] :           // triangle fan
+            [a,b,d,c]           // full quad
+          )
+    ],
+    faces = full_rev ?
+      out_paths :
+      concat(out_paths, [irange(l-1,0),irange(lp-l,lp-1)]) // include end caps
+  )
+  //assert(min_x >= 0)
+  [out_points, faces];
+
+
+// **Transform**
+
+// scale

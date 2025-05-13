@@ -1,0 +1,7 @@
+module test_f_atan() {
+    _test_fn1arg(
+        function (a) f_atan(a),
+        [[-1,-45],[0,0],[1,45]]
+    );
+}
+test_f_atan();

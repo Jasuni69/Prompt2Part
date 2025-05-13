@@ -1,0 +1,6 @@
+function hypot3(x,y,z) = norm([x,y,z]);
+
+
+// Function: distance()
+// Status: DEPRECATED, use `norm(p2-p1)` instead.  It's shorter.
+// Description: Returns the distance between a pair of 2D or 3D points.

@@ -1,0 +1,19 @@
+module molex_254_housing(ways) { //! Draw a Molex KK housing
+    vitamin(str("molex_254_housing(", ways, "): Molex KK housing ", ways, " way"));
+    pitch = 2.54;
+    width = ways * pitch + 0.6;
+    depth = 4.9;
+    height = 12.8;
+    header_depth = 6.35;
+    tab = [1.73, 0.96, 2.15];
+
+    color("white")
+        translate([(header_depth - depth) / 2, 0]) {
+            linear_extrude(height)
+                square([depth, width], center = true);
+
+            for(side = [-1, 1])
+                translate([-depth / 2 - tab.x / 2, side * (pitch / 2 - tab.y / 4) * ways, tab.z / 2])
+                    cube(tab, center = true);
+        }
+}

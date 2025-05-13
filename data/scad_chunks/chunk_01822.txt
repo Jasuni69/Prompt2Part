@@ -1,0 +1,1 @@
+function contact_tab_length(type) = type[5]; //! Length of the tab

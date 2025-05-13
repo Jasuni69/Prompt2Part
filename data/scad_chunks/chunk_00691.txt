@@ -1,0 +1,1 @@
+function pmeter_depth(type) = pmeter_size(type).z - pmeter_bezel(type).z; //! Depth below bezel

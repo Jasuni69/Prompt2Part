@@ -1,0 +1,1 @@
+function maxWidth(v, i = 0, r = 0) = i < len(v) ? maxWidth(v, i + 1, max(r, v[i][2] + v[i][4])) : r;

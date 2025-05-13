@@ -1,0 +1,61 @@
+module folding_hinge_mask(l, thick, layerheight=0.2, foldangle=90, hingegap=undef, anchor=CENTER, spin=0, orient=UP)
+{
+    deprecate("living_hinge_mask");
+    living_hinge_mask(l, thick, layerheight, foldangle, hingegap, anchor, spin, orient);
+}
+
+
+
+// Section: Snap Locks
+
+
+// Module: apply_folding_hinges_and_snaps()
+// Synopsis: Adds snap shapes and removes living hinges from a child shape.
+// SynTags: Geom
+// Topics: Hinges, Parts
+// See Also: knuckle_hinge(), living_hinge_mask(), snap_lock(), snap_socket()
+// Usage:
+//   apply_folding_hinges_and_snaps(thick, [foldangle=], [hinges=], [snaps=], [sockets=], [snaplen=], [snapdiam=], [hingegap=], [layerheight=], [$slop=]) CHILDREN;
+// Description:
+//   Adds snaplocks and create hinges in children at the given positions.
+// Arguments:
+//   thick = Thickness in mm of the material to make the hinge in.
+//   foldangle = The interior angle in degrees of the joint to be created with the hinge.  Default: 90
+//   hinges = List of [LENGTH, POSITION, SPIN] for each hinge to difference from the children.
+//   snaps = List of [POSITION, SPIN] for each central snaplock to add to the children.
+//   sockets = List of [POSITION, SPIN] for each outer snaplock sockets to add to the children.
+//   snaplen = Length of locking snaps.
+//   snapdiam = Diameter/width of locking snaps.
+//   hingegap = Size in mm of the gap at the bottom of the hinge, to make room for folding.
+//   layerheight = The expected printing layer height in mm.
+//   ---
+//   $slop = increase hinge gap by twice this amount
+// Example(Med):
+//   size=100;
+//   apply_folding_hinges_and_snaps(
+//       thick=3, foldangle=acos(1/3),
+//       hinges=[
+//           for (a=[0,120,240], b=[-size/2,size/4]) each [
+//               [200, polar_to_xy(b,a), a+90]
+//           ]
+//       ],
+//       snaps=[
+//           for (a=[0,120,240]) each [
+//               [rot(a,p=[ size/4, 0        ]), a+90],
+//               [rot(a,p=[-size/2,-size/2.33]), a-90]
+//           ]
+//       ],
+//       sockets=[
+//           for (a=[0,120,240]) each [
+//               [rot(a,p=[ size/4, 0        ]), a+90],
+//               [rot(a,p=[-size/2, size/2.33]), a+90]
+//           ]
+//       ]
+//   ) {
+//       $fn=3;
+//       difference() {
+//           cylinder(r=size-1, h=3);
+//           down(0.01) cylinder(r=size/4.5, h=3.1, spin=180);
+//           down(0.01) for (a=[0:120:359.9]) zrot(a) right(size/2) cylinder(r=size/4.5, h=3.1);
+//       }
+//   }

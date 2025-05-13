@@ -1,0 +1,13 @@
+function nema_motor_screw_spacing(size) = lookup(size, [
+		[11.0, 23.11],
+		[14.0, 26.0],
+		[17.0, 30.99],
+		[23.0, 47.14],
+		[34.0, 69.6],
+	]);
+
+
+// Function: nema_motor_screw_size()
+// Description: Gets mount screw size of NEMA motor of given standard size.
+// Arguments:
+//   size = The standard NEMA motor size.

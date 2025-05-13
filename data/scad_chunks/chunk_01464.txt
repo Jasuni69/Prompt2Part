@@ -1,0 +1,2 @@
+function rail_holes(type, length) = //! Number of holes in a rail given its `length`
+    floor((length - 2 * rail_end(type)) / rail_pitch(type)) + 1;

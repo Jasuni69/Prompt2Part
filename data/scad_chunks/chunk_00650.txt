@@ -1,0 +1,1 @@
+function nut_pitch(type)      = type[7];        //! Pitch if not standard metric course thread

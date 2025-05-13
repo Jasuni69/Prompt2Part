@@ -1,0 +1,28 @@
+module sleeved_resistor(type, sleeving, bare = 5, heatshrink = false) { //! Draw a resistor with sleeved leads and option heatshrink
+    resistor(type);
+    sleeving_length = resistor_wire_length(type) - bare;
+
+    $fa = fa; $fs = fs;
+
+    for(side= [-1,1])
+        if(resistor_radial(type)) {
+            translate([side *  resistor_diameter(type) / 6, 0, 0])
+                rotate([0, splay_angle * side, 0]) {
+                    if(!resistor_sleeved(type))
+                        translate_z(sleeving_length / 2 + resistor_length(type) / 2 + 20 * exploded())
+                            tubing(sleeving, sleeving_length);
+
+                    if(heatshrink)
+                        translate_z(sleeving_length + resistor_length(type) / 2 + bare / 2 + 30 * exploded())
+                            tubing(heatshrink);
+                }
+        }
+        else {
+            translate_z(side * (resistor_length(type) + sleeving_length + 40 * exploded()) / 2)
+                tubing(sleeving, sleeving_length);
+
+            if(heatshrink)
+                translate_z(side * (resistor_length(type) /2  + sleeving_length + 30 * exploded()))
+                    tubing(heatshrink);
+        }
+}

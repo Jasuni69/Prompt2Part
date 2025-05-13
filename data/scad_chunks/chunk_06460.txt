@@ -1,0 +1,118 @@
+function bottle_adapter_neck_to_neck(
+    d, neck_od1, neck_id1, thread_od1, height1,
+    support_od1, thread_pitch1, neck_od2, neck_id2,
+    thread_od2, height2, support_od2,
+    pitch2, taper_lead_in, wall
+) = no_fuction("bottle_adapter_neck_to_neck");
+
+
+
+// Section: SPI Bottle Threading
+
+
+// Module: sp_neck()
+// Synopsis: Creates an SPI threaded bottle neck.
+// SynTags: Geom
+// Topics: Bottles, Threading
+// See Also: sp_cap()
+// Usage:
+//   sp_neck(diam, type, wall|id=, [style=], [bead=]) [ATTACHMENTS];
+// Description:
+//   Make a SPI (Society of Plastics Industry) threaded bottle neck.  You must
+//   supply the nominal outer diameter of the threads and the thread type, one of
+//   400, 410 and 415.  The 400 type neck has 360 degrees of thread, the 410
+//   neck has 540 degrees of thread, and the 415 neck has 720 degrees of thread.
+//   You can also choose between the L style thread, which is symmetric and
+//   the M style thread, which is an asymmetric buttress thread.  The M style
+//   may be good for 3d printing if printed with the flat face up.  
+//   You can specify the wall thickness (measured from the base of the threads) or
+//   the inner diameter, and you can specify an optional bead at the base of the threads.
+// Arguments:
+//   diam = nominal outer diameter of threads
+//   type = thread type, one of 400, 410 and 415
+//   wall = wall thickness
+//   ---
+//   id = inner diameter
+//   style = Either "L" or "M" to specify the thread style.  Default: "L"
+//   bead = if true apply a bad to the neck.  Default: false
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+// Examples:
+//   sp_neck(48,400,2);
+//   sp_neck(48,400,2,bead=true);
+//   sp_neck(22,410,2);
+//   sp_neck(22,410,2,bead=true);
+//   sp_neck(28,415,id=20,style="M");
+//   sp_neck(13,415,wall=1,style="M",bead=true);
+
+
+// Thread specs from https://www.isbt.com/threadspecs-downloads.asp
+
+//  T = peak to peak diameter (outer diameter)
+//  I = Inner diameter
+//  S = space above top thread
+//  H = total height of neck
+
+_sp_specs = [
+  [400, //diam     T      I      H     S    tpi
+        [[ 18, [ 17.68,  8.26,  9.42, 0.94, 8]],
+         [ 20, [ 19.69, 10.26,  9.42, 0.94, 8]],
+         [ 22, [ 21.69, 12.27,  9.42, 0.94, 8]],
+         [ 24, [ 23.67, 13.11, 10.16, 1.17, 8]],
+         [ 28, [ 27.38, 15.60, 10.16, 1.17, 6]],
+         [ 30, [ 28.37, 16.59, 10.24, 1.17, 6]],
+         [ 33, [ 31.83, 20.09, 10.24, 1.17, 6]],
+         [ 35, [ 34.34, 22.23, 10.24, 1.17, 6]],
+         [ 38, [ 37.19, 25.07, 10.24, 1.17, 6]],
+         [ 40, [ 39.75, 27.71, 10.24, 1.17, 6]],
+         [ 43, [ 41.63, 29.59, 10.24, 1.17, 6]],
+         [ 45, [ 43.82, 31.78, 10.24, 1.17, 6]],
+         [ 48, [ 47.12, 35.08, 10.24, 1.17, 6]],
+         [ 51, [ 49.56, 37.57, 10.36, 1.17, 6]],
+         [ 53, [ 52.07, 40.08, 10.36, 1.17, 6]],
+         [ 58, [ 56.06, 44.07, 10.36, 1.17, 6]],
+         [ 60, [ 59.06, 47.07, 10.36, 1.17, 6]],
+         [ 63, [ 62.08, 50.09, 10.36, 1.17, 6]],
+         [ 66, [ 65.07, 53.09, 10.36, 1.17, 6]],
+         [ 70, [ 69.06, 57.07, 10.36, 1.17, 6]],
+         [ 75, [ 73.56, 61.57, 10.36, 1.17, 6]],
+         [ 77, [ 76.66, 64.67, 12.37, 1.52, 6]],
+         [ 83, [ 82.58, 69.93, 12.37, 1.52, 5]],
+         [ 89, [ 88.75, 74.12, 13.59, 1.52, 5]],
+         [100, [ 99.57, 84.94, 15.16, 1.52, 5]],
+         [110, [109.58, 94.92, 15.16, 1.52, 5]],
+         [120, [119.56,104.93, 17.40, 1.52, 5]],
+        ]],
+  [410, //diam     T      I      H     S    tpi  L      W
+        [[ 18, [ 17.68,  8.26, 13.28, 0.94, 8,  9.17, 2.13]],
+         [ 20, [ 19.59, 10.26, 14.07, 0.94, 8,  9.17, 2.13]],
+         [ 22, [ 21.69, 12.27, 14.86, 0.94, 8,  9.55, 2.13]],
+         [ 24, [ 23.67, 13.11, 16.41, 1.17, 8, 11.10, 2.13]],
+         [ 28, [ 27.38, 15.60, 17.98, 1.17, 6, 11.76, 2.39]],
+         ]],
+  [415, //diam     T      I      H     S    tpi  L      W
+        [[ 13, [ 12.90,  5.54, 11.48, 0.94,12,  7.77, 1.14]],
+         [ 15, [ 14.61,  6.55, 14.15, 0.94,12,  8.84, 1.14]],
+         [ 18, [ 17.68,  8.26, 15.67, 0.94, 8, 10.90, 2.13]],
+         [ 20, [ 19.69, 10.26, 18.85, 0.94, 8, 11.58, 2.13]],
+         [ 22, [ 21.69, 12.27, 21.26, 0.94, 8, 13.87, 2.13]],
+         [ 24, [ 23.67, 13.11, 24.31, 1.17, 8, 14.25, 2.13]],
+         [ 28, [ 27.38, 15.60, 27.48, 1.17, 6, 16.64, 2.39]],
+         [ 33, [ 31.83, 20.09, 32.36, 1.17, 6, 19.61, 2.39]],
+         ]]
+];
+
+_sp_twist = [ [400, 360],
+              [410, 540],
+              [415, 720]
+            ];
+
+
+// profile data: tpi, total width, depth, 
+_sp_thread_width= [
+                [5, 3.05],
+                [6, 2.39],
+                [8, 2.13],
+                [12, 1.14],  // But note style M is different
+               ];

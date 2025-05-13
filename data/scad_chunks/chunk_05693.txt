@@ -1,0 +1,122 @@
+function teardrop2d(r, ang=45, cap_h, d, circum=false, realign=false, anchor=CENTER, spin=0, bot_corner=0, _extrapt=false) =
+    let(
+        r = get_radius(r=r, d=d, dflt=1)
+    )  
+    bot_corner!=0 ?
+       assert(all_nonnegative([bot_corner]),"bot_corner must be nonnegative")
+       let(
+           path = teardrop2d(r=r,ang=ang, cap_h=cap_h, circum=circum, realign=realign),
+           corner = -r-bot_corner,
+           alpha = acos(r/corner),
+           joint = r*[sin(alpha),cos(alpha)],
+           table = [[0,corner],joint],
+           halfpath = [for(pt=path) if (pt.x>=0)
+                          let(proj=lookup(pt.x,table))
+                          pt.x>joint.x || pt.y>0 || pt.y<=proj ? pt : [pt.x,proj]],
+           fullpath = deduplicate(
+                                   [
+                                     each halfpath,
+                                     if (last(halfpath).x>0) [0,corner],
+                                     each reverse(xflip(halfpath))
+                                   ], closed=!_extrapt
+                                 )
+       )
+       reorient(anchor,spin,two_d=true, path=fullpath, p=fullpath, extent=false)
+  :
+    let(
+        minheight = r*sin(ang),
+        maxheight = r/sin(ang), //cos(90-ang),
+        pointycap = is_undef(cap_h) || cap_h>=maxheight
+    )
+    assert(is_undef(cap_h) || cap_h>=minheight, str("cap_h cannot be less than ",minheight," but it is ",cap_h))
+    let(
+        cap = [
+                pointycap? [0,maxheight] : [(maxheight-cap_h)*tan(ang), cap_h],
+                r*[cos(ang),sin(ang)]
+              ],
+        fullcircle = ellipse(r=r, realign=realign, circum=circum,spin=90),        
+        
+        // Chose the point on the circle that is lower than the cap but also creates a segment bigger than
+        // seglen/skipfactor so we don't have a teeny tiny segment at the end of the cap, except for the hexagoin
+        // case which is treated specially
+        skipfactor = len(fullcircle)==6 ? 15 : 3,
+        path = !circum ?
+                  let(seglen = norm(fullcircle[0]-fullcircle[1]))
+                  [
+                   each cap,
+                   for (p=fullcircle)
+                          if (
+                               p.y<last(cap).y-EPSILON
+                                 && norm([abs(p.x)-last(cap).x,p.y-last(cap.y)])>seglen/skipfactor
+                             ) p,
+                   xflip(cap[1]),
+                   if (_extrapt || !pointycap) xflip(cap[0])
+                  ]
+             : let(
+                   isect = [for(i=[0:1:len(fullcircle)/4])
+                               let(p = line_intersection(cap, select(fullcircle,[i,i+1]), bounded1=RAY, bounded2=SEGMENT))
+                               if (p) [i,p]
+                           ],
+                   i = last(isect)[0],
+                   p = last(isect)[1]
+               )
+               [
+                 cap[0],
+                 p,
+                 each select(fullcircle,i+1,-i-1-(realign?1:0)),
+                 xflip(p),
+                 if(_extrapt || !pointycap) xflip(cap[0])
+               ]
+    )
+    reorient(anchor,spin, two_d=true, path=path, p=path, extent=false);
+
+
+
+// Function&Module: egg()
+// Synopsis: Creates an egg-shaped 2d object.
+// SynTags: Geom, Path
+// Topics: Shapes (2D), Paths (2D), Path Generators, Attachable
+// See Also: circle(), ellipse(), glued_circles(), keyhole()
+// Usage: As Module
+//   egg(length, r1|d1=, r2|d2=, R|D=) [ATTACHMENTS];
+// Usage: As Function
+//   path = egg(length, r1|d1=, r2|d2=, R|D=);
+// Description:
+//   When called as a module, constructs an egg-shaped object by connecting two circles with convex arcs that are tangent to the circles.
+//   You specify the length of the egg, the radii of the two circles, and the desired arc radius.
+//   Note that because the side radius, R, is often much larger than the end radii, you may get better
+//   results using `$fs` and `$fa` to control the number of semgments rather than using `$fn`.
+//   This shape may be useful for creating a cam. 
+//   When called as a function, returns a 2D path for an egg-shaped object. 
+// Arguments:
+//   length = length of the egg
+//   r1 = radius of the left-hand circle
+//   r2 = radius of the right-hand circle
+//   R = radius of the joining arcs
+//   ---
+//   d1 = diameter of the left-hand circle
+//   d2 = diameter of the right-hand circle
+//   D = diameter of the joining arcs
+// Named Anchors:
+//   "left" = center of the left circle
+//   "right" = center of the right circle
+// Example(2D,NoAxes): This first example shows how the egg is constructed from two circles and two joining arcs.
+//   $fn=100;
+//   color("red") stroke(egg(78,25,12, 60),closed=true);
+//   stroke([left(14,circle(25)),
+//           right(27,circle(12))]);
+// Example(2D,Anim,VPD=250,VPR=[0,0,0]): Varying length between circles
+//   r1 = 25; r2 = 12; R = 65;
+//   length = floor(lookup($t, [[0,55], [0.5,90], [1,55]]));
+//   egg(length,r1,r2,R,$fn=180);
+//   color("black") text(str("length=",length), size=8, halign="center", valign="center");
+// Example(2D,Anim,VPD=250,VPR=[0,0,0]): Varying tangent arc radius R
+//   length = 78; r1 = 25; r2 = 12;
+//   R = floor(lookup($t, [[0,45], [0.5,150], [1,45]]));
+//   egg(length,r1,r2,R,$fn=180);
+//   color("black") text(str("R=",R), size=8, halign="center", valign="center");
+// Example(2D,Anim,VPD=250,VPR=[0,0,0]): Varying circle radius r2
+//   length = 78; r1 = 25; R = 65;
+//   r2 = floor(lookup($t, [[0,5], [0.5,30], [1,5]]));
+//   egg(length,r1,r2,R,$fn=180);
+//   color("black") text(str("r2=",r2), size=8, halign="center", valign="center");

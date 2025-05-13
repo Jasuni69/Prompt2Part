@@ -1,0 +1,17 @@
+module rounded_corner(r, h, r2, ir = 0) { //! 2D version
+    assert(ir <= r - r2);
+
+    translate([ir , 0])
+        hull() {
+            square([eps, h]);
+
+            square([r - ir, eps]);
+
+            translate([r - r2 - ir, h - r2])
+                intersection() {
+                    circle4n(r2);
+
+                    square(r2);
+                }
+        }
+}

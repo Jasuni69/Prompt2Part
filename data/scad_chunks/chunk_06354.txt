@@ -1,0 +1,15 @@
+function _degenerate_tri(tri,eps) =
+    max(norm(tri[0]-tri[1]), norm(tri[1]-tri[2]), norm(tri[2]-tri[0])) < eps ;
+    
+
+/// Internal Function: _tri_class()
+/// Usage:
+///   class = _tri_class(triangle);
+/// Topics: Geometry, Triangles
+/// Description:
+///   Return  1 if the triangle `tri` is CW.
+///   Return  0 if the triangle `tri` has colinear vertices.
+///   Return -1 if the triangle `tri` is CCW.
+/// Arguments:
+///   tri = A list of the three 2d vertices of a triangle.
+///   eps = Tolerance in the geometrical tests.

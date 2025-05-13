@@ -1,0 +1,12 @@
+function path_cut(path,cutdist,closed) =
+  is_num(cutdist) ? path_cut(path,[cutdist],closed) :
+  is_1region(path) ? path_cut(path[0], cutdist, default(closed,true)):
+  let(closed=default(closed,false))
+  assert(is_bool(closed))
+  assert(is_vector(cutdist))
+  assert(last(cutdist)<path_length(path,closed=closed)-EPSILON,"Cut distances must be smaller than the path length")
+  assert(cutdist[0]>EPSILON, "Cut distances must be strictly positive")
+  let(
+      cutlist = path_cut_points(path,cutdist,closed=closed)
+  )
+  _path_cut_getpaths(path, cutlist, closed);

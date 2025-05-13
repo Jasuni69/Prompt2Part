@@ -1,0 +1,3 @@
+module render_manifold()                            //! Render if manifold to work around convexity bug in manifold
+    render_if(manifold)
+        children();

@@ -1,0 +1,9 @@
+module test_parse_float() {
+    assert(parse_float("3.1416") == 3.1416);
+    assert(parse_float("-3.1416") == -3.1416);
+    assert(parse_float("3.000") == 3.0);
+    assert(parse_float("-3.000") == -3.0);
+    assert(parse_float("3") == 3.0);
+    assert(parse_float("0") == 0.0);
+}
+test_parse_float();

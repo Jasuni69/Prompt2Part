@@ -1,0 +1,13 @@
+function f_is_range(a) = f_1arg(function (a) is_range(a))(a);
+
+
+// Function: f_is_function()
+// Synopsis: Returns a function to determine if a value is a function literal.
+// Topics: Function Literals, Type Queries
+// See Also: f_is_undef(), f_is_bool(), f_is_num(), f_is_int(), f_is_string(), f_is_list()
+// Usage:
+//   fn = f_is_function();
+// Description:
+//   A factory that returns function literals equivalent to `is_function(a)`.
+// Arguments:
+//   a = If given, replaces the argument.

@@ -1,0 +1,13 @@
+module screwHeadHole(conn)
+{
+  if (isTrue(yappCountersink, conn))
+    {
+      cylinder(h=countersinkHeight(conn), d1=conn[4], d2=0);
+      cylinder(h=basePlaneThickness+0.04, d=conn[3]);
+    }
+  else
+    linear_extrude(basePlaneThickness+0.04)
+      circle(d = conn[4]);  //-- screwHeadDiam
+} //-- screwHeadHole()
+
+//===========================================================

@@ -1,0 +1,61 @@
+module CR_cube(size=[100,100,100], r=10, splinesteps=8, cheat=false)
+{
+	s = size-2*[r,r,r];
+	h = size/2;
+	corners = [
+		CR_corner([r,r,r], orient=ORIENT_Z,     trans=[-size.x/2, -size.y/2, -size.z/2]),
+		CR_corner([r,r,r], orient=ORIENT_Z_90,  trans=[ size.x/2, -size.y/2, -size.z/2]),
+		CR_corner([r,r,r], orient=ORIENT_Z_180, trans=[ size.x/2,  size.y/2, -size.z/2]),
+		CR_corner([r,r,r], orient=ORIENT_Z_270, trans=[-size.x/2,  size.y/2, -size.z/2]),
+
+		CR_corner([r,r,r], orient=ORIENT_ZNEG,     trans=[ size.x/2, -size.y/2,  size.z/2]),
+		CR_corner([r,r,r], orient=ORIENT_ZNEG_90,  trans=[-size.x/2, -size.y/2,  size.z/2]),
+		CR_corner([r,r,r], orient=ORIENT_ZNEG_180, trans=[-size.x/2,  size.y/2,  size.z/2]),
+		CR_corner([r,r,r], orient=ORIENT_ZNEG_270, trans=[ size.x/2,  size.y/2,  size.z/2])
+	];
+	edges = [
+		CR_edge([r, r, s.x], orient=ORIENT_X,     trans=[   0, -h.y, -h.z]),
+		CR_edge([r, r, s.x], orient=ORIENT_X_90,  trans=[   0,  h.y, -h.z]),
+		CR_edge([r, r, s.x], orient=ORIENT_X_180, trans=[   0,  h.y,  h.z]),
+		CR_edge([r, r, s.x], orient=ORIENT_X_270, trans=[   0, -h.y,  h.z]),
+
+		CR_edge([r, r, s.y], orient=ORIENT_Y,     trans=[ h.x,    0, -h.z]),
+		CR_edge([r, r, s.y], orient=ORIENT_Y_90,  trans=[-h.x,    0, -h.z]),
+		CR_edge([r, r, s.y], orient=ORIENT_Y_180, trans=[-h.x,    0,  h.z]),
+		CR_edge([r, r, s.y], orient=ORIENT_Y_270, trans=[ h.x,    0,  h.z]),
+
+		CR_edge([r, r, s.z], orient=ORIENT_Z,     trans=[-h.x, -h.y,    0]),
+		CR_edge([r, r, s.z], orient=ORIENT_Z_90,  trans=[ h.x, -h.y,    0]),
+		CR_edge([r, r, s.z], orient=ORIENT_Z_180, trans=[ h.x,  h.y,    0]),
+		CR_edge([r, r, s.z], orient=ORIENT_Z_270, trans=[-h.x,  h.y,    0])
+	];
+	faces = [
+		// Yes, these are degree 1 bezier patches.  That means just the four corner points.
+		// Since these are flat, it doesn't matter what degree they are, and this will reduce calculation overhead.
+		bezier_patch_flat([s.y, s.z], N=1, orient=ORIENT_X,    trans=[ h.x,    0,    0]),
+		bezier_patch_flat([s.y, s.z], N=1, orient=ORIENT_XNEG, trans=[-h.x,    0,    0]),
+
+		bezier_patch_flat([s.x, s.z], N=1, orient=ORIENT_Y,    trans=[   0,  h.y,    0]),
+		bezier_patch_flat([s.x, s.z], N=1, orient=ORIENT_YNEG, trans=[   0, -h.y,    0]),
+
+		bezier_patch_flat([s.x, s.y], N=1, orient=ORIENT_Z,    trans=[   0,    0,  h.z]),
+		bezier_patch_flat([s.x, s.y], N=1, orient=ORIENT_ZNEG, trans=[   0,    0, -h.z])
+	];
+	// Generating all the patches above took about 0.05 secs.
+
+	if (cheat) {
+		// Hulling just the corners takes less than a second.
+		hull() bezier_polyhedron(tris=corners, splinesteps=splinesteps);
+	} else {
+		// Generating the polyhedron fully from bezier patches takes 3 seconds on my laptop.
+		bezier_polyhedron(patches=concat(edges, faces), tris=corners, splinesteps=splinesteps);
+	}
+}
+
+
+CR_cube(size=[100,100,100], r=20, splinesteps=9, cheat=false);
+cube(1);
+
+
+
+// vim: noexpandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

@@ -1,0 +1,7 @@
+module geared_stepper_screw_positions(type) //! Place children at the screw positions
+    for(side = [-1, 1])
+        translate([side * gs_pitch(type) / 2, -gs_offset(type)])
+            children();
+
+motor_colour = "#9BA2AC";
+gearbox_colour = "#FFF7EE";

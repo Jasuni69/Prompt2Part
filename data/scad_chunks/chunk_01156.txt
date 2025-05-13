@@ -1,0 +1,1 @@
+function BLDC_base_open(type)                   = type[12]; //! Base open

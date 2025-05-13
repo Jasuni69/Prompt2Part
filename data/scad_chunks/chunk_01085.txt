@@ -1,0 +1,1 @@
+function toggle_pin_w(type)    = type[21][1];   //! Pin width

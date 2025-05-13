@@ -1,0 +1,1 @@
+function sheet_colour2(type)   = type[7]; //! Second colour for a woven sheet

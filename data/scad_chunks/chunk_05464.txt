@@ -1,0 +1,19 @@
+function _smooth_bez_fill(points,k) = [
+        points[0],
+        lerp(points[1],points[0],k),
+        points[1],
+        lerp(points[1],points[2],k),
+        points[2],
+];
+
+// Computes the points of a continuous curvature roundover given as input
+// the list of 3 points defining the corner and a parameter specification
+//
+// If parm is a scalar then it is treated as the curvature and the control
+// points are calculated using _smooth_bez_fill.  Otherwise, parm is assumed
+// to be a pair [d,k] where d is the length of the curve.  The length is
+// calculated from the input point list and the control point list does not
+// necessarily include points[0] or points[2] on its output.
+//
+// The number of points output is $fn if it is set.  Otherwise $fs is used
+// to calculate the point count.

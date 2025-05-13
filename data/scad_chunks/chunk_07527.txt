@@ -1,0 +1,12 @@
+function clampToX0(points,interval=minVal)=is_list(points[0])?[for(e=points)[abs(e[0])>interval?e[0]:0,e[1]]]:
+    [abs(points[0])>interval?points[0]:0,points[1]];
+  
+// angle between two points used for e.g. Bezier
+  vektorWinkel= function(p1=[0,0,0],p2=[0,0,0])
+  let(p1=v3(p1),p2=v3(p2))
+  
+     p1==p2?[0,0,0]:[ 
+            -acos((p2.z-p1.z)/norm(p2-p1))+90,
+            0,
+            atan2(p2.y-p1.y,p2.x-p1.x)-90
+            ];

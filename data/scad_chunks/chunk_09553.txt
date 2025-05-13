@@ -1,0 +1,11 @@
+function patch_translate(patch, v=[0,0,0]) = [for(row=patch) translate_points(row, v)];
+
+
+// Function: patch_scale()
+// Usage:
+//   patch_scale(patch, v, [cp])
+// Description: Scales all coordinates in a rectangular or triangular patch by a given amount.
+// Arguments:
+//   patch = The patch to scale.
+//   v = [X,Y,Z] scaling factors.
+//   cp = Centerpoint to scale around.

@@ -1,0 +1,1 @@
+function ribbon_ways(ways) = is_list(ways) ? ways : [ways, 1]; //! Allows ribbon clamps to accept multiple cables

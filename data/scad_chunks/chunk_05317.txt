@@ -1,0 +1,7 @@
+function _signed_pascals_triangle(N,tri=[[-1]]) =
+    len(tri)==N+1 ? tri :
+    let(last=tri[len(tri)-1])
+    _signed_pascals_triangle(N,concat(tri,[[-1, for(i=[0:1:len(tri)-2]) (i%2==1?-1:1)*(abs(last[i])+abs(last[i+1])),len(last)%2==0? -1:1]]));
+
+
+// Not public.

@@ -1,0 +1,28 @@
+function _sp_thread_profile(tpi, a, S, style, flip=false) = 
+    let(
+        pitch = 1/tpi*INCH,
+        cL = a*(1-1/sqrt(3)),
+        cM = (1-tan(10))*a/2,
+        // SP specified roundings for the thread profile have special case for tpi=12
+        roundings = style=="L" && tpi < 12 ? 0.5 
+                  : style=="M" && tpi < 12 ? [0.25, 0.25, 0.75, 0.75]
+                  : style=="L" ? [0.38, 0.13, 0.13, 0.38]
+                  : /* style=="M" */  [0.25, 0.25, 0.2, 0.5],
+        path1 = style=="L"
+                  ? round_corners([[-1/2*pitch,-a/2],
+                                   [-a/2,-a/2],
+                                   [-cL/2,0],
+                                   [cL/2,0],
+                                   [a/2,-a/2],
+                                   [1/2*pitch,-a/2]], radius=roundings, closed=false,$fn=24)
+                  : round_corners(
+                       [[-1/2*pitch,-a/2],
+                                   [-a/2, -a/2],
+                                   [-cM, 0],
+                                   [0,0],
+                                   [a/2,-a/2],
+                                   [1/2*pitch,-a/2]], radius=roundings, closed=false, $fn=24),
+        path2 = flip ? reverse(xflip(path1)) : path1
+   )
+   // Shift so that the profile is S mm from the right end to create proper length S top gap
+   select(right(-a/2+1/2-S,p=path2),1,-2)/pitch;

@@ -1,0 +1,1 @@
+function box_insert_r(type) = insert_hole_radius(box_insert(type));

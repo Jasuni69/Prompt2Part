@@ -1,0 +1,1 @@
+function _knots(n, degree) = [each [0:n + degree]];

@@ -1,0 +1,4 @@
+function coreXY_toothed_idler_offset(type)  = //! offset of y-carriage toothed idler
+    [ 0, -pulley_pr(coreXY_toothed_idler(type)), 0 ];
+
+// helper functions for positioning idlers when the stepper motor drive pulley is offset

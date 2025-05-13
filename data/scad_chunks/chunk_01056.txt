@@ -1,0 +1,209 @@
+module screw(type, length, hob_point = 0, nylon = false) { //! Draw specified screw, optionally hobbed or nylon
+    description = str("Screw ", nylon ? "Nylon " : "", type[1], length < 10 ? " x  " : " x ", length, "mm", hob_point ? str(", hobbed at ", hob_point) : "");
+    vitamin(str("screw(", type[0], "_screw, ", length, arg(hob_point, 0, "hob_point"), arg(nylon, false, "nylon"), "): ", description));
+
+    head_type   = screw_head_type(type);
+    shaft_rad   = screw_radius(type) - eps;
+    head_rad    = screw_head_radius(type);
+    head_height = screw_head_height(type);
+    socket_af   = screw_socket_af(type);
+    socket_depth= screw_socket_depth(type);
+    socket_rad  = socket_af / cos(30) / 2;
+    max_thread  = screw_max_thread(type);
+    has_shoulder = !is_undef(screw_thread_diameter(type));
+    thread_rad = screw_thread_radius(type);
+    thread = max_thread ? length >= max_thread + 5 ? max_thread
+                                                   : length
+                        : length;
+    thread_offset = has_shoulder ? thread : 0;
+    thread_d = 2 * thread_rad;
+    pitch = metric_coarse_pitch(thread_d);
+    colour = nylon || head_type == hs_grub ? grey(40) : grey(80);
+
+    $fs = fs; $fa = fa;
+
+    module shaft(socket = 0, headless = false) {
+        point = screw_nut(type) ? 0 : 3 * shaft_rad;
+        shank  = length - socket - (has_shoulder ? 0 : thread);
+
+        if(show_threads && !point && pitch)
+            translate_z(-length - thread_offset)
+                male_metric_thread(thread_d, pitch, thread - (shank > 0 || headless ? 0 : socket), false, top = headless ? -1 : 0, solid = !headless, colour = colour);
+        else
+            color(colour * 0.9)
+                rotate_extrude() {
+                    translate([0, -length + point - thread_offset])
+                        square([thread_rad - eps, length - socket - point]);
+
+                    if(point)
+                        polygon([
+                            [0.4, -length], [0, point - length], [shaft_rad, point - length]
+                        ]);
+                }
+
+        if(shank > 0)
+            color(colour)
+                translate_z(-shank - socket)
+                    cylinder(r = shaft_rad + eps, h = shank);
+    }
+
+    module cs_head(socket_rad, socket_depth) {
+        head_t = shaft_rad / 5;
+        head_height = head_rad + head_t;
+
+        color(colour) {
+            rotate_extrude()
+                difference() {
+                    polygon([[0, 0], [head_rad, 0], [head_rad, -head_t], [0, -head_height]]);
+
+                    translate([0, -socket_depth + eps])
+                        square([socket_rad, 10]);
+                }
+
+            translate_z(-socket_depth)
+                linear_extrude(socket_depth)
+                    difference() {
+                        circle(socket_rad + 0.1);
+
+                        children();
+                    }
+        }
+        color(colour * 0.9)
+            translate_z(-socket_depth)
+                cylinder(h=2 * eps, r=socket_rad, $fn = 6);
+    }
+
+    explode(length + 10) {
+        if(head_type == hs_cap) {
+            color(colour) {
+                cylinder(r = head_rad, h = head_height - socket_depth);
+
+                translate_z(head_height - socket_depth)
+                    linear_extrude(socket_depth)
+                        difference() {
+                            circle(head_rad);
+
+                            circle(socket_rad, $fn = 6);
+                        }
+
+            }
+            color(colour * 0.9)
+                translate_z(head_height - socket_depth)
+                    cylinder(h=2 * eps, r=socket_rad, $fn = 6);
+            shaft();
+        }
+        if(head_type == hs_grub) {
+            color(colour) {
+                r = show_threads ? shaft_rad - pitch / 2 : shaft_rad;
+                translate_z(-socket_depth)
+                    linear_extrude(socket_depth)
+                        difference() {
+                            circle(r);
+
+                            circle(socket_rad, $fn = 6);
+                        }
+
+                shaft(socket_depth, true);
+
+                if(show_threads)
+                    translate_z(-length)
+                        cylinder(r = r, h = length - socket_depth);
+            }
+            color(colour * 0.8)
+                translate_z(head_height - socket_depth)
+                    cylinder(h=2 * eps, r=socket_rad, $fn = 6);
+        }
+        if(head_type == hs_hex) {
+            draw_nut(head_rad * 2, 0, head_height, 0, colour, false);
+
+            shaft();
+        }
+        if(head_type == hs_pan) {
+            socket_rad = 0.6 * head_rad;
+            socket_depth = 0.5 * head_height;
+            socket_width = 1;
+            color(colour) {
+                rotate_extrude()
+                    difference() {
+                        rounded_corner(r = head_rad, h = head_height, r2 = head_height / 2);
+
+                        translate([0, head_height - socket_depth])
+                            square([socket_rad, 10]);
+                    }
+
+                linear_extrude(head_height)
+                    difference() {
+                        circle(socket_rad + eps);
+
+                        square([2 * socket_rad, socket_width], center = true);
+                        square([socket_width, 2 * socket_rad], center = true);
+                    }
+            }
+            color(colour * 0.9)
+                translate_z(head_height - socket_depth)
+                    cylinder(h=2 * eps, r=socket_rad + eps);
+            shaft();
+        }
+        if(head_type == hs_dome) {
+            edge_height = head_rad / 7.5;
+            head_chamfer_angle= 15; // degrees
+            head_chamfer_x=edge_height*tan(head_chamfer_angle);
+            head_fillet_radius= 0.3;
+            p0 = [head_rad, edge_height];                   // Lowest point on the arc
+            p1 = [1.3 * socket_rad / cos(30), head_height]; // Highest point on the arc
+            p = (p0 + p1) / 2;                              // Start of bisector
+            gradient = (p0.x - p1.x) / (p1.y - p0.y);       // Gradient of perpendicular bisector = -1 / gradient of the line between p10 and p1
+            c = p.y - gradient * p.x;                       // Y ordinate of the centre of the dome
+            r = norm(p1 - [0, c]);                          // Dome radius is distance from centre
+            color(colour) {
+                rotate_extrude() {
+                    difference() {
+                        intersection() {
+                            translate([0, c])
+                                circle(r);
+
+                            // offset(head_fillet_radius) offset(-head_fillet_radius)
+                            polygon(points = [
+                                [0,0],
+                                [head_rad-head_chamfer_x,0],
+                                [head_rad, edge_height],
+                                [head_rad,head_height],
+                                [0,head_height],
+                                ]);
+                        }
+                        translate([0, head_height - socket_depth])
+                            square([socket_rad, 10]);
+                    }
+                }
+                linear_extrude(head_height)
+                    difference() {
+                        circle(socket_rad + eps);
+                        circle(socket_rad, $fn = 6);
+                    }
+            }
+            color(colour * 0.9)
+                translate_z(head_height - socket_depth)
+                    cylinder(h=2 * eps, r=socket_rad, $fn = 6);
+            shaft();
+        }
+
+        if(head_type == hs_cs) {
+            socket_rad = 0.6 * head_rad;
+            socket_depth = 0.3 * head_rad;
+            socket_width = 1;
+            cs_head(socket_rad, socket_depth) {
+                square([2 * socket_rad, socket_width], center = true);
+                square([socket_width, 2 * socket_rad], center = true);
+            }
+
+            shaft(socket_depth);
+        }
+
+        if(head_type == hs_cs_cap) {
+            cs_head(socket_rad, socket_depth)
+                circle(socket_rad, $fn = 6);
+
+            shaft(socket_depth);
+        }
+    }
+}

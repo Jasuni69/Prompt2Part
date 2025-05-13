@@ -1,0 +1,8 @@
+module test_point3d() {
+    assert(point3d([1,2,3,4,5])==[1,2,3]);
+    assert(point3d([1,2,3,4])==[1,2,3]);
+    assert(point3d([1,2,3])==[1,2,3]);
+    assert(point3d([2,3])==[2,3,0]);
+    assert(point3d([1])==[1,0,0]);
+}
+test_point3d();

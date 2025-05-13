@@ -1,0 +1,1 @@
+function ribbon_clamp_slot(ways) = let(w = ribbon_ways(ways)) w[0] * inch(0.05) + 1; //! Width of the slot to accept a ribbon cable

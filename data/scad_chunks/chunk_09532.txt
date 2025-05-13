@@ -1,0 +1,30 @@
+function bezier_path_length(path, N=3, max_deflect=0.001) =
+	sum([
+		for (seg=[0:(len(path)-1)/N-1]) (
+			bezier_segment_length(
+				select(path, seg*N, (seg+1)*N),
+				max_deflect=max_deflect
+			)
+		)
+	]);
+
+
+
+// Function: bezier_polyline()
+// Usage:
+//   bezier_polyline(bezier, [splinesteps], [N])
+// Description:
+//   Takes a bezier path and converts it into a polyline.
+// Arguments:
+//   bezier = A bezier path to approximate.
+//   splinesteps = Number of straight lines to split each bezier segment into. default=16
+//   N = The degree of the bezier curves.  Cubic beziers have N=3.  Default: 3
+// Example(2D):
+//   bez = [
+//       [0,0], [-5,30],
+//       [20,60], [50,50], [110,30],
+//       [60,25], [70,0], [80,-25],
+//       [80,-50], [50,-50]
+//   ];
+//   trace_polyline(bez, size=1, N=3, showpts=true);
+//   trace_polyline(bezier_polyline(bez, N=3), size=3);

@@ -1,0 +1,163 @@
+module Gewinde(
+dn=6,
+p=1,
+kern,
+breite,
+rad1,
+rad2,
+winkel=60,
+wand=+1,
+mantel,
+h,
+gb,
+innen=false,
+grad=180*7,
+start=fn/3,// Einfädelstrecke
+end,
+korrektur=true,// verbreiterung durch gangwinkel
+profil=false,
+fn2=4,
+fn=fn,
+cyl=true,
+tz=0,
+konisch=0,
+center=true,
+rund=false,
+ratio,
+spiel=.1,
+name,
+help,
+
+s,w=0,g=1,rot2=0,r1=0,detail=fn,name,preset=0,translate=[0,0,0],rotate=[0,0,0],d=0,gd=0,r=0,help,endMod=true,new
+){
+  $info=is_undef($info)?false:$info;
+ iso_Gewinde=[ //name,pSteigung,dn
+  ["M1",0.25,1],
+  ["M1.2",0.25,1.2],
+  ["M1.6",0.35,1.5],
+  ["M2",0.4,2],
+  ["M2.5",0.45,2.5],
+  ["M3",0.5,3],
+  ["M3.5",0.6,3.5],
+  ["M4",0.7,4],
+  ["M4.5",0.75,4.5],
+  ["M5",0.8,5],
+  ["M6",1,6],
+  ["M7",1,7],
+  ["M8",1.25,8],
+  ["M9",1.25,9],
+  ["M10",1.5,10],
+  ["M12",1.75,12],
+  ["M14",2,14],
+  ["M16",2,16],
+  ["M20",2.5,20],
+  ["M24",3,24],
+  ["M30",3.5,30]
+] ;
+
+
+other_Gewinde=[//search0, pSteigung,dn,winkel,name
+["search","p-Steigung[1]","dn[2]","kern[3]","breite[4]","rad1[5]","rad2[6]","winkel[7]","name[8]","grad[9]"], // Spalten
+["BSW1",1.814,20.955,20.955-0.640327*1.814*2,undef,0.13732908*1.814,0.13732908*1.814,55,"½-Zoll"],//halb Zoll
+["BSW2",1.814,26.441,26.441-0.640327*1.814*2,undef,0.13732908*1.814,0.13732908*1.814,55,"¾-Zoll"],// 3/4 Zoll
+["Flasche"    ,3.18, 27.43,24.95, 1, 0.4, 0.4, 45,"PCO-28",810],// Flasche 28mmHalsring
+["Flasche2"   ,4.00, 27.43,24.95, 1, 0.4, 0.4, 45,"PCO-28 P4"],// Flasche Badeschaum
+];
+
+
+ // Zeilennr für Suchbegriff [preset]   
+ zeile=preset[0]=="M"?search([preset],iso_Gewinde)[0]:
+        search([preset],other_Gewinde)[0];
+  
+    
+   if(is_num(useVersion) && useVersion<19.88 && is_undef(new) || new==false){// old Version
+       Echo(str("Using GewindeV2,useVersion=",useVersion),color="warning");
+       if($children)GewindeV2(dn=dn,s=s,w=w,g=g,winkel=winkel,rot2=rot2,r1=r1,kern=kern,fn=fn<20?fn:1,detail=detail,spiel=spiel,name=name,tz=tz,preset=preset,h=is_undef(h)?grad/360*p:h,translate=translate,rotate=rotate,d=d,gd=gd,r=r,center=center,help=help,p=p,endMod=endMod)children();
+       else  GewindeV2(dn=dn,s=s,w=w,g=g,winkel=winkel,rot2=rot2,r1=r1,kern=kern,fn=fn<20?fn:1,detail=detail,spiel=spiel,name=name,tz=tz,preset=preset,h=is_undef(h)?grad/360*p:h,translate=translate,rotate=rotate,d=d,gd=gd,r=r,center=center,help=help,p=p,endMod=endMod);
+    }
+  else if(is_num(zeile)){ // presets
+      
+      //metric
+    if(preset[0]=="M"){
+      GewindeV4(
+        p=iso_Gewinde [zeile][1],
+        dn=iso_Gewinde[zeile][2]+(innen?spiel*2:0),
+        grad=grad,h=h,winkel=60,name=iso_Gewinde[zeile][0],
+        innen=innen,wand=wand,mantel=mantel,cyl=cyl,tz=tz,start=start,
+        end=end,fn=fn,fn2=fn2,center=center,rund=rund,ratio=ratio,spiel=spiel,profil=profil,help=help);
+    if($children)difference(){
+      children();
+        if(innen)Tz(center?tz-iso_Gewinde[zeile][1]/2:
+                           tz)cylinder(is_undef(h)?(grad+360)*iso_Gewinde[zeile][1]/360:
+                                                   h,d=iso_Gewinde[zeile][2]+spiel*4,$fn=fn);
+    }
+     // other
+    }else if(preset){
+        if(preset=="search")echo(zeile=zeile,Txt=other_Gewinde[zeile]);
+        else {
+            GewindeV4(
+            p=other_Gewinde [zeile][1],
+            dn=other_Gewinde[zeile][2]+(innen?spiel*2:0),
+            kern=is_undef(other_Gewinde[zeile][3])?undef:other_Gewinde[zeile][3]+(innen?spiel*2:0),
+            breite=is_undef(breite)?other_Gewinde [zeile][4]:breite,
+            rad1=is_undef(rad1)?other_Gewinde [zeile][5]:rad1,
+            rad2=is_undef(rad1)?other_Gewinde [zeile][6]:rad2,
+            winkel=other_Gewinde [zeile][7],
+            wand=wand,mantel=mantel,innen=innen,
+            grad=is_undef(grad)?other_Gewinde [zeile][9]:grad,
+            h=h,
+            start=start,end=end,center=center,profil=profil,fn2=fn2,
+            fn=fn,cyl=cyl,tz=tz,rund=rund,ratio=ratio,spiel=spiel,
+            name=other_Gewinde[zeile][8],
+            help=help);
+            
+        }
+    }
+    
+  
+    
+  }
+  
+      else{ info=$info;
+        Polar(g,r=innen?g%2?0:180/g:0,name=false){
+        $tab=$tab-1;
+        $info=info;
+        GewindeV4(p=p,
+                dn=dn,
+                kern=kern,
+                breite=breite,
+                rad1=rad1,
+                rad2=rad2,
+                winkel=winkel,
+                wand=wand,
+                mantel=mantel,
+                h=h,
+                gb=gb,
+                innen=innen,
+                grad=grad,
+                start=start,// Einfädelstrecke
+                end=end,
+                korrektur=korrektur,// verbreiterung durch gangwinkel
+                profil=profil,
+                fn2=fn2,
+                fn=fn,
+                cyl=cyl,
+                tz=tz,
+                konisch=konisch,
+                center=center,
+                rund=rund,
+                ratio=ratio,
+                spiel=spiel,
+                name=name,
+                g=g,
+                help=help); 
+       }
+               Echo(str("Gewinde preset=",preset," Not found!"),color="red",condition=preset);
+               if($children)difference(){
+                  children();
+                    if(innen)Tz(center?tz-p/2:tz-0)cylinder(is_undef(h)?grad*p/360+p:h,d=dn+spiel*2,fn=fn);
+                }      
+               
+            }
+    
+}

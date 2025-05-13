@@ -1,0 +1,23 @@
+module pcb_mount_assembly(pcb, thickness, height = 5) { //! A PCB mount assembly with fasteners
+    translate_z(height)
+        pcb(pcb);
+
+    stl_colour(pp1_colour) pcb_mount(pcb, washers = false);
+
+    nut = screw_nut(screw);
+    t = pcb_thickness(pcb);
+    screw_length = screw_length(screw, height + t + washer_thickness + thickness, 1, nyloc = true);
+
+    pcb_mount_screw_positions(pcb) {
+        translate_z(height + t) {
+            stl_colour(pp2_colour) pcb_mount_washer_stl();
+
+            translate_z(washer_thickness)
+                screw(screw, screw_length);
+        }
+
+        translate_z(-thickness)
+            vflip()
+                nut_and_washer(nut, true);
+    }
+}

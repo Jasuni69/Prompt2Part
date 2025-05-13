@@ -1,0 +1,2 @@
+function _segment_extension(s1,s2) =
+    norm(s1[1]-s2[0])<1e-6 ? s1[1] : line_intersection(s1,s2,LINE,LINE);

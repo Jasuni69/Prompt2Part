@@ -1,0 +1,1 @@
+function aluProCore_keyW(coreType) = coreType[1];

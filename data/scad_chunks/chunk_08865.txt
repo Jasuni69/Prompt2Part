@@ -1,0 +1,6 @@
+function _sub_acute(a, b, c) =
+	let(
+		PHI = 1.618033988749895,
+		p = a + (b - a) / PHI
+	)
+	[["ACUTE", c, p, b], ["OBTUSE", p, c, a]];

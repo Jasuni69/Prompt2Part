@@ -1,0 +1,1 @@
+function hot_end_duct_height_nozzle(type) = type[12];   //! Duct height at nozzle end

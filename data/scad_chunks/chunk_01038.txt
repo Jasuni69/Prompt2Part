@@ -1,0 +1,1 @@
+function screw_socket_depth(type)     = type[6];     //! Socket or slot depth

@@ -1,0 +1,7 @@
+module enviro_plus_case_base_stl()
+    pbox_base(box) {
+        base_additions();
+        base_holes();
+    }
+
+//! * Solder a right angle connector to the Raspberry Pi Zero.

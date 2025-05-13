@@ -1,0 +1,47 @@
+module processRidgeExtList_Face(face, ridgeExtList, casePart, swapXY, swapWH, invertZ, rot_X, rot_Y, rot_Z, offset_x, offset_y, offset_z, wallDepth, subtract)
+{
+  for ( ridgeExt = ridgeExtList )
+  {
+    //-- Calculate based on the Coordinate system (test for Box override) thus defaulting to PCB
+    theCoordSystem = getCoordSystem(ridgeExt, yappCoordPCB);
+    thePCBName = getPCBName(yappPCBName, ridgeExt);
+
+    useCenterCoordinates = isTrue(yappCenter, ridgeExt); 
+    
+    //-- Convert x pos if needed
+    theX = translate2Box_X (ridgeExt[0], face, theCoordSystem);  
+    theY =  baseWallHeight+basePlaneThickness;// RidgePos
+    theWidth = ridgeExt[1];
+    theLength = translate2Box_Y (ridgeExt[2], face, theCoordSystem); //ridgeExt[2];
+    
+    originLLOpt = isTrue(yappAltOrigin, ridgeExt);
+    
+    //-- Calc H&W if only Radius is given
+    //-- add slack for the part connected to the lid
+    tempWidth = (subtract) ? theWidth : theWidth - ridgeSlack*2;
+    
+    //-- Shift so that 0 aligns with the original seam
+    tempLength = theY - theLength;
+    
+    base_width  = (swapWH) ? tempLength : tempWidth;
+    base_height = (swapWH) ? tempWidth : tempLength;
+    
+    base_pos_H  = ((!swapXY) ? theY : theX);
+    base_pos_V  = ((!swapXY) ? theX : theY);
+
+    base_depth  = wallDepth;
+    base_angle  = 0;
+
+    //-- Only adjust the H Pos for centering
+    pos_X = base_pos_H;
+    pos_Y = (useCenterCoordinates) ? base_pos_V - (base_height/2) : base_pos_V + ((subtract) ? 0 : ridgeSlack);
+
+    adjustedHeight = (base_width > 0) ? base_width : base_width-ridgeHeight;
+    
+    processRidgeExtList(subtract, ridgeExt, casePart, rot_X, rot_Y, rot_Z, offset_x, offset_y, offset_z, wallDepth, base_pos_H, base_pos_V, adjustedHeight, base_height, base_depth, base_angle, pos_X, pos_Y, invertZ);
+  } //for ( ridgeExt = ridgeExtList )
+} //-- processRidgeExtList_Face()
+
+
+//===========================================================
+//-- Process the list passeed in

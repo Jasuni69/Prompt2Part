@@ -1,0 +1,7 @@
+function nut_width_across_corners (options) =
+  let (h = nut_data(options))
+    is_undef(h) ? h : hex_inscribed_circle_d(h.width);
+
+// Get maximum width of a nut.
+// Aliased to `nut_width_across_corners` for now, but may change when, for example,
+// flanged nuts are introduced.

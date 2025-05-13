@@ -1,0 +1,6 @@
+function find_curve(tangents, i = 1) =
+    i >= len(tangents) - 1 || norm(cross(tangents[0], tangents[i] - tangents[0])) > tiny ? i
+                                                                                         : find_curve(tangents, i + 1);
+//
+// Frenet-Serret frame
+//

@@ -1,0 +1,11 @@
+module box_shelf_blank(type, sheet = false, wall = undef) { //! Generates a 2D template for a shelf sheet
+    difference() {
+        sheet_2D(subst_sheet(type, sheet), box_width(type) - bezel_clearance, box_depth(type) - bezel_clearance, 1);
+
+        offset(bezel_clearance / 2)
+            box_corner_quadrants(type, box_width(type), box_depth(type));
+
+        box_shelf_screw_positions(type, [], 0, wall)
+            drill(screw_clearance_radius(box_shelf_screw(type)), 0);
+    }
+}

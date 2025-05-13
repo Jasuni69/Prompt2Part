@@ -1,0 +1,21 @@
+function bez_end(pt,a,r,p) =
+    assert(is_finite(r) || is_vector(a))
+    assert(len(pt)==3 || is_undef(p))
+    is_vector(a)? [pt+(is_undef(r)? a : r*unit(a)), pt] :
+    is_finite(a)? [pt+spherical_to_xyz(r,a,default(p,90)), pt] :
+    assert(false, "\nBad arguments.");
+
+
+
+// Section: Bezier Surfaces
+
+
+// Function: is_bezier_patch()
+// Synopsis: Returns true if the given item is a bezier patch.
+// Topics: Bezier Patches, Type Checking
+// Usage:
+//   bool = is_bezier_patch(x);
+// Description:
+//   Returns true if the given item is a bezier patch. (a 2D array of 3D points.)
+// Arguments:
+//   x = The value to check the type of.

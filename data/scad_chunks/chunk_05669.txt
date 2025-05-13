@@ -1,0 +1,34 @@
+function circle(r, d, points, corner, anchor=CENTER, spin=0) =
+    assert(is_undef(corner) || (is_path(corner,[2]) && len(corner) == 3))
+    assert(is_undef(points) || is_undef(corner), "Cannot specify both points and corner.")
+    let(
+        data = is_def(points)?
+                assert(is_path(points,[2]) && len(points) == 3)
+                assert(is_undef(corner), "Cannot specify corner= when points= is given.")
+                assert(is_undef(r) && is_undef(d), "Cannot specify r= or d= when points= is given.")
+                let( c = circle_3points(points) )
+                assert(!is_undef(c[0]), "Points cannot be collinear.")
+                let( cp = c[0], r = c[1]  )
+                [cp, r] :
+            is_def(corner)?
+                assert(is_path(corner,[2]) && len(corner) == 3)
+                assert(is_undef(points), "Cannot specify points= when corner= is given.")
+                let(
+                    r = get_radius(r=r, d=d, dflt=1),
+                    c = circle_2tangents(r=r, pt1=corner[0], pt2=corner[1], pt3=corner[2])
+                )
+                assert(c!=undef, "Corner path cannot be collinear.")
+                let( cp = c[0] )
+                [cp, r] :
+            let(
+                cp = [0, 0],
+                r = get_radius(r=r, d=d, dflt=1)
+            ) [cp, r],
+        cp = data[0],
+        r = data[1]
+    )
+    assert(r>0, "Radius/diameter must be positive")
+    let(
+        sides = segs(r),
+        path = [for (i=[0:1:sides-1]) let(a=360-i*360/sides) r*[cos(a),sin(a)]+cp]
+    ) reorient(anchor,spin, two_d=true, r=r, p=path);

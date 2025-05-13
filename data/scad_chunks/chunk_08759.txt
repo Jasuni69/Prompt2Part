@@ -1,0 +1,2 @@
+function hashset_add(set, elem, eq = undef, hash = _str_hash) =
+    _hashset_add(set, len(set), elem, eq, hash);

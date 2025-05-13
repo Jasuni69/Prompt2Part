@@ -1,0 +1,121 @@
+module VarioFill(
+l=15,
+exp=+2,
+dia,
+h,
+chamfer=1,
+deg=45,
+extrude=0,
+grad=90,//[0,90]
+spiel=spiel,
+fn=fn,
+name,
+help
+){
+
+grad=is_list(grad)?grad:[+0,grad];
+  
+padding=is_undef(spiel)?[0,0]:
+                        is_list(spiel)?[spiel.x,spiel.y]:
+                                       [spiel,spiel]; 
+  
+spiel=is_undef(spiel)?[0,0]:is_list(spiel)?
+  [spiel.x*max(1,(1/(sin(grad.y)*cos(grad.x)))),spiel.y*max(1,(1/(cos(grad.x)*sin(grad.y))))]:
+  [spiel*max(1,(1/(sin(grad.y)*cos(grad.x)))),spiel*max(1,(1/(cos(grad.x)*sin(grad.y))))];
+  //[spiel*(1/sin(grad.y)),spiel*(1/cos(grad.x))];   
+
+l=is_list(l)?l:deg?[l,tan(deg)*l]:[l,l]; 
+
+fn=is_undef(fn)?$fn==0?fs2fn(r=norm(l),grad=90,fs=$fs):$fn:fn;
+
+diaw=dia; // if undef ⇒ 2D
+
+dia=is_num(dia)?dia:0;
+  
+extrude=extrude*sign(l.x);
+rot=-180;
+p1=[
+[-spiel.y*sign(l.x) +dia/2, -spiel.x*sign(l.y)],
+[-spiel.y*sign(l.x) +dia/2, l.y+sin(grad.x)*spiel.y*sign(l.y)],
+[+extrude+dia/2,l.y],
+for(i=[fn-1:-1:0])let(seg=90/fn*i)
+  !chamfer?([sin(seg+rot)*l.x+extrude+l.x+dia/2, cos(seg+rot)*l.y+l.y]):
+         [pow(((fn-1)-i)/(fn-1),abs(exp))*l.x+extrude+dia/2,pow(i/(fn-1),abs(exp))*l.y],
+
+[extrude+l.x+dia/2,0],
+[extrude+l.x-cos(grad.y)*spiel.x*sign(l.x) +dia/2,-spiel.x*sign(l.y)],
+];
+
+
+m=[
+[cos(grad.x),sin(grad.y-90),0,0],// scale x, skew x, trans x
+[sin(grad.x),cos(grad.y-90),0,0],       // skew y, scale y, trans y
+[0,0,1,0],
+];
+
+points=grad==[0,90]?p1:
+                   [for(i=[0:len(p1)-1])let(p=m*concat(p1[i],[1,0]))[p.x,p.y]];
+
+gK=sin(grad.y)*l.y-sin(grad.x)*l.x;
+aK=cos(grad.x)*l.x+cos(grad.y)*l.y;
+
+// color("red")square([aK,gK]);
+//polygon(points,convexity=5);
+//p2=[for(i=[0:len(points)-1])let(p=m*concat(points[i],[1,0]))[p.x,p.y]];
+
+InfoTxt("VarioFill",["sekantenWinkel",atan(gK/aK)],name);
+
+
+cut=spiel.x>abs(dia/2) || 
+    sign(dia)*sign(l.x)==1?false :  // both pos or neg
+                           sign(dia)*l.x<sign(l.x)*dia/2;
+
+
+if(is_num(diaw) && !is_parent(needs2D)) RotEx(cut=cut) polygon(points);
+  else if(h && !is_parent(needs2D)) linear_extrude(h,convexity=2,$fn=fn)polygon(points); 
+    else if( l.x>0?grad.y>90:grad.y<90 || (l.y>0?grad.x<0:grad.x>0) )
+      intersection(){
+        polygon(points);
+        mirror([sign(l.x)==1?0:1,sign(l.y)==1?0:1])translate([-padding.y+dia/2-(extrude*sign(l.x)<0?-extrude*sign(l.x):0),grad.x<0?-l.y:-padding.x])
+          square([abs(extrude)+abs(l.x)+padding.y,grad.x<0?2*l.y:abs(l.y)+padding.x]);
+      }
+      else polygon(points);
+    
+//%multmatrix(m)translate([-spiel.y,-spiel.x])square([l.x+spiel.y,l.y+spiel.x]);
+HelpTxt("VarioFill",[
+  "l",l,
+  "exp",exp,
+  "dia",dia,
+  "h",h,
+  "chamfer",chamfer,
+  "deg",deg,
+  "extrude",extrude,
+  "grad",grad,//[0,90]
+  "spiel",spiel,
+  "fn",fn,
+  "name",name
+  ],help);
+
+}
+
+/** \page Polygon
+Kreis() creates a circle polygon
+\name Kreis
+\param r radius
+\param rand rim
+\param grad angle
+\param grad2 optional rim angle
+\param fn fragments
+\param center center (angle <360)
+\param sek  secant or center point (angle <360)
+\param r2  y radius for oval
+\param rcenter rim center
+\param rot rotate circle
+\param t   translate circle
+\param name name for circle
+\param help help
+\param d diameter optional to r = d↦r
+\param b optional to grad, L of the circular arc
+\param fs fragment size optional to fn fs↦fn
+
+*/

@@ -1,0 +1,27 @@
+module sphere_copies(n=100, r=undef, d=undef, cone_ang=90, scale=[1,1,1], perp=true)
+{
+    req_children($children);  
+    r = get_radius(r=r, d=d, dflt=50);
+    cnt = ceil(n / (cone_ang/180));
+
+    // Calculate an array of [theta,phi] angles for `n` number of
+    // points, almost evenly spaced across the surface of a sphere.
+    // This approximation is based on the golden spiral method.
+    theta_phis = [for (x=[0:1:n-1]) [180*(1+sqrt(5))*(x+0.5)%360, acos(1-2*(x+0.5)/cnt)]];
+
+    for ($idx = idx(theta_phis)) {
+        tp = theta_phis[$idx];
+        xyz = spherical_to_xyz(r, tp[0], tp[1]);
+        $pos = v_mul(xyz,point3d(scale,1));
+        $theta = tp[0];
+        $phi = tp[1];
+        $rad = r;
+        translate($pos) {
+            if (perp) {
+                rot(from=UP, to=xyz) children();
+            } else {
+                children();
+            }
+        }
+    }
+}

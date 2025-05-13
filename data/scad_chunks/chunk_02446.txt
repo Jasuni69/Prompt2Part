@@ -1,0 +1,5 @@
+module holes() {
+    for(i = [0 : len(discs) - 1]) let($d = discs[i])
+        translate([0, box_mm.y / 2 - gap - (i ? discs[0].z + gap : 0) - $d.z / 2])
+            children();
+}

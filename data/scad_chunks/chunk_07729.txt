@@ -1,0 +1,1 @@
+function h(i)=Kathete(r2+rad,cos(i*360/fn)*(r1+rad))-rad;

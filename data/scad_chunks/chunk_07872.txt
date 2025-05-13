@@ -1,0 +1,21 @@
+module tree(t, trunk_leng, branch_scale, branch_angle, width) {
+    if(trunk_leng > width * 2) {
+        t2 = t3d(t, "forward", leng = trunk_leng * rand(0.6, 1));
+        
+        color("NavajoWhite")
+        line(t, t2, trunk_leng / 3, trunk_leng / 3 * branch_scale);
+
+        rolled = t3d(t2, "roll", angle = 120 * rand(0.6, 1));
+        branch_leng = trunk_leng * branch_scale;
+        
+        t3 = t3d(rolled, "turn", angle = branch_angle * rand(0.6, 1));
+        tree(t3, branch_leng, branch_scale, branch_angle, width);
+
+        t4 = t3d(rolled, "turn", angle = -branch_angle * rand(0.6, 1));        
+        tree(t4, branch_leng, branch_scale, branch_angle, width);
+    }
+    else {
+        branch_leng = trunk_leng * branch_scale;
+        shoot(t, branch_leng, branch_scale, branch_angle, width);
+    }
+}

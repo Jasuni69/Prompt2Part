@@ -1,0 +1,13 @@
+module _show_corners(corners="ALL", size=20, text, txtsize=3,toplabel) {
+    corner_set = _corners(corners);
+    text = !is_undef(text) ? text : _corners_text(corners);
+    for (i=[0:7]) if (corner_set[i]>0)
+        translate(CORNER_OFFSETS[i]*size/2)
+            color("red") sphere(d=2, $fn=16);
+    fwd(size/2) _edges_text3d(text, size=txtsize);
+    color("yellow",0.7) cuboid(size=size);
+    vpr = [55,0,25];
+    color("black")
+    if (is_def(toplabel))
+      for(h=idx(toplabel)) up(21+6*h)rot(vpr) text3d(select(toplabel,-h-1),size=3.3,h=.1,orient=UP,anchor=FRONT);
+}

@@ -1,0 +1,29 @@
+  }
+}
+
+// Creases.
+// The function "Crease2D()" creates one crease in 2D.
+translate([250,50])
+{
+  difference()
+  {
+    cylinder(h=5,d=90);
+    
+    translate([0,0,5.01])
+      mirror([0,0,1])
+        roof_router()
+          for(i=[0:6])
+            Crease2D();
+  }
+}
+
+// Granules
+translate([50,-50])
+{
+  intersection()
+  {
+    cylinder(h=5,d=90);
+    translate([-45,-45,0])
+      Granules([90,90,5]);
+  }
+}

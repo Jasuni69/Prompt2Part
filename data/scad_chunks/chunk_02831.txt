@@ -1,0 +1,16 @@
+function vector_add_2D(v,index=0,sum=[0,0]) =
+  let(new_sum = sum + v[index]) 
+  index < len(v) -1 ? 
+    [new_sum, each vector_add_2D(v,index+1,new_sum)] :
+    [new_sum];
+    
+
+// ShuffleList
+// -----------
+// Shuffle the items of any list.
+// Method:
+//   A random item is selected. That is removed from
+//   the input list.
+//   The item is removed by combining what is on 
+//   the left and on the right of that item. 
+//   This is done recursively until the input list is empty.

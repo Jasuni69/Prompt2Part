@@ -1,0 +1,1 @@
+function skinIf(condition,size=0, skinThick=$skinThick , walls=2, margin=$margin) = (!condition? margin(size,margin=$margin) : skin(size,skinThick,walls));

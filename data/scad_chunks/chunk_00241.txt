@@ -1,0 +1,11 @@
+module strap_handles()
+    if($preview)
+        strap_assembly(length);
+    else {
+        strap(length);
+
+        translate([0, 30])
+            strap_end();
+    }
+
+strap_handles();

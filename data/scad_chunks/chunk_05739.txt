@@ -1,0 +1,8 @@
+function vnf_drop_unused_points(vnf) =
+    let(
+        flat = flatten(vnf[1]),
+        ind  = _link_indicator(flat,0,len(vnf[0])-1),
+        verts = [for(i=idx(vnf[0])) if(ind[i]==1) vnf[0][i] ],
+        map   = cumsum(ind)
+    )
+    [ verts, [for(face=vnf[1]) [for(v=face) map[v]-1 ] ] ];

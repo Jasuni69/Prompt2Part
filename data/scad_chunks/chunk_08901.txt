@@ -1,0 +1,16 @@
+function spiral_step(spiral, angle_step) = 
+    let(    
+        c = spiral_center(spiral),
+        r = spiral_r(spiral),
+        sa = spiral_startAngle(spiral),
+        as = spiral_angleSign(spiral),
+        a = spiral_angle(spiral) + angle_step
+    )
+    spiral(
+        c,
+        r,
+        sa,
+        as,
+        a,
+        [each spiral_path(spiral), vt(c, r, sa, as, a)]
+    );

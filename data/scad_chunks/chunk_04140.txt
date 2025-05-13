@@ -1,0 +1,12 @@
+function enclosesOneOf(where,commaSeparatedListOfWhat) =
+    (len([for(el=split(commaSeparatedListOfWhat,","))
+            if(encloses(where,el))1])!=0)?true:false;
+
+
+//---------------------------------------------------
+// List helpers
+
+/*!
+  Creates a list from a range:
+  range([0:2:6]) => [0,2,4,6]
+*/

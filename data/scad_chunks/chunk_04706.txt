@@ -1,0 +1,6 @@
+function getLawCosC(a,b,c) = acos((a*a + b*b - c*c) / (2*a*b));
+
+// draw the webbing shape once all radii are known
+// r1 center is at origin
+// r2 center is at c2
+// r3 center is at c3 (deduced from other data, knowing that it must be tangent to r1 and r2)

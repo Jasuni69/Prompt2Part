@@ -1,0 +1,4 @@
+YAPPgenerate();
+translate([48,(shellWidth + shiftLid*2)+47,0])
+rotate([0,0,90])
+import("C:/Users/rosen/OneDrive/Documents/3d Models/OLED mount-hook.stl", convexity=3);

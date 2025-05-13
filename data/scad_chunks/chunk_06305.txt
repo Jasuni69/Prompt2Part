@@ -1,0 +1,7 @@
+module mask2d_cove(r, inset=0, mask_angle=90, excess=0.01, flat_top, bulge, d, h, height, quarter_round=false, anchor=CENTER, spin=0) {
+    path = mask2d_cove(r=r, d=d, h=h, height=height, bulge=bulge, flat_top=flat_top, quarter_round=quarter_round, inset=inset, mask_angle=mask_angle, excess=excess);
+    attachable(anchor,spin, two_d=true, path=path) {
+        polygon(path);
+        children();
+    }
+}

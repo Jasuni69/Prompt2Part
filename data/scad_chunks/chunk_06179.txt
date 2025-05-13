@@ -1,0 +1,5 @@
+function _struct_reset(s, keyval, grow=true) =
+  let(
+      good = [for(kv=keyval) (grow || is_def(struct_val(s,kv[0]))) && is_def(kv[1])]
+  )
+  struct_set(s,flatten(bselect(keyval,good)));

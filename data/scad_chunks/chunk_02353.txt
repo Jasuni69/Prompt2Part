@@ -1,0 +1,1 @@
+module fixing_block_M20_stl() fixing_block(M2_cap_screw);

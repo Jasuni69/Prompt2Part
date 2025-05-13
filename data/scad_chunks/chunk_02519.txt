@@ -1,0 +1,15 @@
+function fs_frame(tangents) =
+    let(tangent = tangents[0],
+        i = find_curve(tangents),
+        normal = tangents[i] - tangents[0],
+        binormal = cross(tangent, normal),
+        z = unit(tangent),
+        x = assert(norm(binormal) > tiny, "all points are colinear") unit(binormal),
+        y = unit(cross(z, x))
+       ) [[x.x, y.x, z.x],
+          [x.y, y.y, z.y],
+          [x.z, y.z, z.z]];
+//
+// Computes the rotation with minimum angle that brings UNIT vectors a to b.
+// The code fails if a and b are opposed to each other.
+//

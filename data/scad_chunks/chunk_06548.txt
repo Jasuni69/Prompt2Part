@@ -1,0 +1,22 @@
+function num_defined(v) =
+    len([for(vi=v) if(!is_undef(vi)) 1]);
+
+
+// Function: any_defined()
+// Synopsis: Returns true if any item in the argument list is not `undef`.
+// Topics: Undef Handling
+// See Also: default(), first_defined(), one_defined(), num_defined(), all_defined()
+// Usage:
+//   bool = any_defined(v, [recursive]);
+// Description:
+//   Returns true if any item in the given array is not `undef`.
+// Arguments:
+//   v = The list whose items are being checked.
+//   recursive = If true, any sublists are evaluated recursively.  Default: false
+// Example:
+//   bool = any_defined([undef,undef,undef]);    // Returns: false
+//   bool = any_defined([undef,42,undef]);       // Returns: true
+//   bool = any_defined([34,42,87]);             // Returns: true
+//   bool = any_defined([undef,undef,[undef]]);  // Returns: true
+//   bool = any_defined([undef,undef,[undef]],recursive=true);  // Returns: false
+//   bool = any_defined([undef,undef,[42]],recursive=true);     // Returns: true

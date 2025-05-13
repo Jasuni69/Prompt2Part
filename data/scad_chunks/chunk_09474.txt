@@ -1,0 +1,15 @@
+function is_array(v) = (version_num() > 20190100)? is_list(v) : (v==[] || (is_def(v[0]) && !is_str(v) ));
+
+
+// Function: get_radius()
+// Description:
+//   Given various radii and diameters, returns the most specific radius.
+//   If a diameter is most specific, returns half its value, giving the radius.
+//   If no radii or diameters are defined, returns the value of dflt.
+//   Value specificity order is r1, d1, r, d, then dflt
+// Arguments:
+//   r1 = Most specific radius.
+//   d1 = Most specific Diameter.
+//   r = Most general radius.
+//   d = Most general diameter.
+//   dflt = Value to return if all other values given are `undef`.

@@ -1,0 +1,1 @@
+function pocket_handle_panel_t(type)   = type[3]; //! Thickness of the panel it is mounted in

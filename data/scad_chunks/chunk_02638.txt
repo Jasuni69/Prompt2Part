@@ -1,0 +1,1 @@
+function in(list, x) = !!len([for(v = list) if(v == x) true]);                      //! Returns true if `x` is an element in the `list`

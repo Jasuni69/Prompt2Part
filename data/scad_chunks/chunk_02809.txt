@@ -1,0 +1,65 @@
+module chamfer_extrude(height=1,chamfer,chamfer_top,chamfer_bottom,angle,angle_top,angle_bottom)
+{
+  bothchamf   = is_undef(chamfer)        ? 0 : chamfer;
+  topchamf    = is_undef(chamfer_top)    ? bothchamf : chamfer_top;
+  bottomchamf = is_undef(chamfer_bottom) ? bothchamf : chamfer_bottom;
+
+  bothang     = is_undef(angle)          ? 45 : angle;
+  topang      = is_undef(angle_top)      ? bothang : angle_top;
+  bottomang   = is_undef(angle_bottom)   ? bothang : angle_bottom;
+
+  // The roof() has a 45 degree angle.
+  // That makes it easy to set the angle,
+  // because the tangens of 45 is 1.
+  topscale    = tan(topang);
+  bottomscale = tan(bottomang);
+
+  intersection()
+  {
+    union()
+    {
+      // The bottom chamfer.
+      // Since the roof() function is only upward,
+      // a mirror() is used.
+      // It is raised a tiny amount to be sure
+      // that it connects to the middle part.
+      if(bottomchamf > 0)
+        color("#4DB58D")
+          translate([0,0,bottomchamf+0.001])
+            mirror([0,0,1])
+              scale([1,1,bottomscale])
+                roof_router(convexity=3)
+                  children();
+
+      // The middle part.
+      color("#26E49C")
+        translate([0,0,bottomchamf])
+          linear_extrude(height-bottomchamf-topchamf)
+            children();
+
+      // The top chamfer.
+      // It is lowered a tiny amount to be sure
+      // that it connects to the middle part.
+      if(topchamf > 0)
+        color("#4CA986")
+          translate([0,0,height-topchamf-0.001])
+            scale([1,1,topscale])
+              roof_router(convexity=3)
+                children();
+    }
+
+    // To make it look better in the preview,
+    // the box for the intersection is made bigger for
+    // x and y and is made bigger for z when there is
+    // no chamfer on that surface.
+    zlower = bottomchamf == 0 ? 1 : 0;
+    zupper = topchamf    == 0 ? height + zlower + 1 : height + zlower;
+    color("#A4D3C1")
+      translate([0,0,-zlower])
+        linear_extrude(height=zupper,convexity=3)
+          offset(2)        // 1.0001 or 2 or any value above 1.
+            children();
+  }  
+}
+
+// ==============================================================

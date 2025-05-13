@@ -1,0 +1,2 @@
+module filleted_cylinder(h=1, r, d, r1, r2, d1, d2, fillet=0.25, center=false)
+    cyl(l=h, r=r, d=d, r1=r1, r2=r2, d1=d1, d2=d2, rounding=fillet, anchor=center?CENTER:BOT);

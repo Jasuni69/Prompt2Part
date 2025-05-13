@@ -1,0 +1,1 @@
+function cable_clip_extent(screw, cable, insert = false, nut = false) = cable_clip_width(screw, insert, nut) / 2 + cable_width(cable) + wall; //! How far it extends from the screw.

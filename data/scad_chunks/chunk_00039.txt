@@ -1,0 +1,11 @@
+function CallAxialFunc(z, ang, n) = 
+  (n == 1) ? AxialFunc1(z, ang) :
+  (n == 2) ? AxialFunc2(z, ang) :
+  (n == 3) ? AxialFunc3(z, ang) :
+  (n == 4) ? AxialFunc4(z, ang) :
+  (n == 5) ? AxialFunc5(z, ang) :
+  (n == 6) ? AxialFunc6(z, ang) :
+  (n == 7) ? AxialFunc7(z, ang) :
+  (n == 8) ? AxialFunc8(z, ang) :
+  (n == 9) ? AxialFunc9(z, ang) :
+  AxialFunctionNumberOutOfRange;

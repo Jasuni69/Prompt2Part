@@ -1,0 +1,6 @@
+function _belt_length(info, open) = let(
+    len = len(info[0]),
+    d = open ? 1 : 0,
+    tangents = slice(info[3], 0, len - d) ,
+    arcs = slice(info[4], d, len - d)
+) sumv( map( concat(tangents, arcs), function(e) e[2] ));

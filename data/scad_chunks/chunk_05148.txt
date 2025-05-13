@@ -1,0 +1,6 @@
+function gcd(a,b) =
+    assert(is_int(a) && is_int(b),"\nArguments to gcd must be integers.")
+    b==0 ? abs(a) : gcd(b,a % b);
+
+
+// Computes lcm for two integers

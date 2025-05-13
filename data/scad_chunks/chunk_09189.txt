@@ -1,0 +1,20 @@
+function _vx_circle_impl(radius, filled) =
+    let(
+        f = 1 - radius,
+        ddf_x = 1,
+        ddf_y = -2 * radius,
+        x = 0,
+        y = radius
+    )
+    concat(
+        filled ? 
+            [[0, radius], [0, -radius], each [for(xi = -radius; xi <= radius; xi = xi + 1) [xi, 0]]]
+            : 
+            [
+                [0, -radius],                
+                [-radius, 0], 
+                [radius, 0],
+                [0, radius]
+            ],
+        _vx_circle(f, ddf_x, ddf_y, x, y, filled)
+    );

@@ -1,0 +1,1 @@
+function ldr_pitch(type)       = type[5]; //! Pitch between the leads

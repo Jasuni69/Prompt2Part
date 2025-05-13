@@ -1,0 +1,4 @@
+function cylinder_height(main_height, hole_diameter) = main_height - hole_diameter;
+
+// Modul pre výrezový valec so zaoblenými koncami
+// Module for a cutout cylinder with rounded ends

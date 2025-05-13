@@ -1,0 +1,53 @@
+function regular_ngon(n=6, r, d, or, od, ir, id, side, rounding=0, realign=false, align_tip, align_side, anchor=CENTER, spin=0, _mat, _anchs) =
+    assert(is_int(n) && n>=3)
+    assert(is_undef(align_tip) || is_vector(align_tip))
+    assert(is_undef(align_side) || is_vector(align_side))
+    assert(is_undef(align_tip) || is_undef(align_side), "Can only specify one of align_tip and align_side")
+    let(
+        sc = 1/cos(180/n),
+        ir = is_finite(ir)? ir*sc : undef,
+        id = is_finite(id)? id*sc : undef,
+        side = is_finite(side)? side/2/sin(180/n) : undef,
+        r = get_radius(r1=ir, r2=or, r=r, d1=id, d2=od, d=d, dflt=side)
+    )
+    assert(!is_undef(r), "regular_ngon(): need to specify one of r, d, or, od, ir, id, side.")
+    assert(all_positive([r]), "polygon size must be a positive value")
+    let(
+        inset = opp_ang_to_hyp(rounding, (180-360/n)/2),
+        mat = !is_undef(_mat) ? _mat :
+            ( realign? zrot(-180/n) : ident(4)) * (
+                !is_undef(align_tip)? rot(from=RIGHT, to=point2d(align_tip)) :
+                !is_undef(align_side)? rot(from=RIGHT, to=point2d(align_side)) * zrot(180/n) :
+                1
+            ),
+        path4 = rounding==0? ellipse(r=r, $fn=n) : (
+            let(
+                steps = floor(segs(r)/n),
+                step = 360/n/steps,
+                path2 = [
+                    for (i = [0:1:n-1]) let(
+                        a = 360 - i*360/n,
+                        p = polar_to_xy(r-inset, a)
+                    )
+                    each arc(n=steps, cp=p, r=rounding, start=a+180/n, angle=-360/n)
+                ],
+                maxx_idx = max_index(column(path2,0)),
+                path3 = list_rotate(path2,maxx_idx)
+            ) path3
+        ),
+        path = apply(mat, path4),
+        anchors = !is_undef(_anchs) ? _anchs :
+            !is_string(anchor)? [] : [
+            for (i = [0:1:n-1]) let(
+                a1 = 360 - i*360/n,
+                a2 = a1 - 360/n,
+                p1 = apply(mat, polar_to_xy(r,a1)),
+                p2 = apply(mat, polar_to_xy(r,a2)),
+                tipp = apply(mat, polar_to_xy(r-inset+rounding,a1)),
+                pos = (p1+p2)/2
+            ) each [
+                named_anchor(str("tip",i), tipp, unit(tipp,BACK), 0),
+                named_anchor(str("side",i), pos, unit(pos,BACK), 0),
+            ]
+        ]
+    ) reorient(anchor,spin, two_d=true, path=path, extent=false, p=path, anchors=anchors);

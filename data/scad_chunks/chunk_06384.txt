@@ -1,0 +1,9 @@
+function point_plane_distance(plane, point) =
+    assert( _valid_plane(plane), "\nInvalid input plane." )
+    assert( is_vector(point,3), "\nThe point should be a 3D point." )
+    let( plane = _normalize_plane(plane) )
+    point3d(plane)* point - plane[3];
+
+
+
+// the maximum distance from points to the plane

@@ -1,0 +1,20 @@
+function _prism_line_isect(poly_pairs, line, ref) =
+   let(
+
+       line2d = path2d(line),
+       ref=point2d(ref),
+       ilist = [for(j=idx(poly_pairs)) 
+                 let(segisect = _general_line_intersection(poly_pairs[j],line2d))
+                 if (segisect && segisect[1]>=-EPSILON && segisect[1]<=1+EPSILON)
+                    [segisect[0],j,segisect[1],segisect[0]*ref]]
+   )
+   len(ilist)==0 ? [] :
+   let (
+       ind = max_index(column(ilist,3)),
+       isect2d = ilist[ind][0],
+       isect_ind = ilist[ind][1],
+       isect_u = ilist[ind][2],
+       slope = (line[1].z-line[0].z)/norm(line2d[1]-line2d[0]),
+       z = slope * norm(line2d[0]-isect2d) + line[0].z
+   )
+   [point3d(isect2d,z),isect_ind, isect_u];

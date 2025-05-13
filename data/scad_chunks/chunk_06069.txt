@@ -1,0 +1,13 @@
+function _clockwise_region(r) = [for(p=r) clockwise_polygon(p)];
+
+// Function: are_regions_equal()
+// Synopsis: Returns true if given regions are the same polygons.
+// Topics: Regions, Polygons, Comparison
+// Usage:
+//    b = are_regions_equal(region1, region2, [either_winding])
+// Description:
+//    Returns true if the components of region1 and region2 are the same polygons (in any order). 
+// Arguments:
+//    region1 = first region
+//    region2 = second region
+//    either_winding = if true then two shapes test equal if they wind in opposite directions.  Default: false

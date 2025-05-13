@@ -1,0 +1,18 @@
+function _sort_vectors(arr, _i=0) =
+    len(arr)<=1 || _i>=len(arr[0]) ? arr :
+    let(
+        pivot   = arr[floor(len(arr)/2)][_i],
+        lesser  = [ for (entry=arr) if (entry[_i]  < pivot ) entry ],
+        equal   = [ for (entry=arr) if (entry[_i] == pivot ) entry ],
+        greater = [ for (entry=arr) if (entry[_i]  > pivot ) entry ]
+    )
+    concat(
+        _sort_vectors(lesser,  _i   ), 
+        _sort_vectors(equal,   _i+1 ), 
+        _sort_vectors(greater, _i ) );
+        
+
+// lexical sort of a homogeneous list of vectors by the vector components with indices in idxlist
+// all idxlist indices should be in the range of the vector dimensions
+// idxlist must be undef or a simple list of numbers
+// uses native comparison operator

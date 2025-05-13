@@ -1,0 +1,1 @@
+function tile(type, x, y, angle, size) = [type, x, y, angle, size];

@@ -1,0 +1,1 @@
+function profile_shift(z, pa) = z ? max(1 - z * sqr(sin(pa)) / 2, 0) : 0; //! Calculate profile shift for small gears

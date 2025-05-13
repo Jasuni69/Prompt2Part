@@ -1,0 +1,1 @@
+function _convex_hull_impl_dir(o, a, b) = cross(a - o, b - o);

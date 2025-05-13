@@ -1,0 +1,8 @@
+function _corners(pts, round_d, t_step, leng, angle_threshold) =
+    let(end_i = leng - 2)
+    [
+        for(i = 0; i < end_i; i = i + 1) 
+        let(pi = pts[i], pi1 = pts[i + 1], pi2 = pts[i + 2])
+        each angle_between(pi - pi1, pi1 - pi2) > angle_threshold ? 
+                _corner(round_d, t_step, pi, pi1, pi2) : [pi1]
+    ];

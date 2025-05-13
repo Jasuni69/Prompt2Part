@@ -1,0 +1,22 @@
+module snap_socket(thick, snaplen=5, snapdiam=5, layerheight=0.2, foldangle=90, hingegap=undef, anchor=CENTER, spin=0, orient=UP)
+{
+    hingegap = default(hingegap, layerheight)+2*get_slop();
+    snap_x = (snapdiam/2) / tan(foldangle/2) + (thick-2*layerheight)/tan(foldangle/2) + hingegap/2;
+    size = [snaplen, snapdiam, 2*thick];
+    attachable(anchor,spin,orient, size=size) {
+        fwd(snap_x) {
+            zrot_copies([0,180], r=snaplen+get_slop()) {
+                diff("divot")
+                cube([snaplen, snapdiam, snapdiam/2+thick], anchor=BOT) {
+                    attach(TOP) xcyl(l=snaplen, d=snapdiam, $fn=max(16,quant(segs(snapdiam/2),4)));
+                    tag("divot") attach(TOP) left((snaplen+snapdiam/4/3)/2) xscale(0.333) sphere(d=snapdiam*0.8, $fn = max(12,quant(segs(snapdiam/2),4)));
+                }
+            }
+        }
+        children();
+    }
+}
+
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

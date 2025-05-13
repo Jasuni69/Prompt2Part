@@ -1,0 +1,19 @@
+function unique(arr) =
+	len(arr)<=1? arr : let(
+		sorted = sort(arr)
+	) [
+		for (i=[0:len(sorted)-1])
+			if (i==0 || (sorted[i] != sorted[i-1]))
+				sorted[i]
+	];
+
+
+
+// Function: list_remove()
+// Usage:
+//   list_remove(list, elements)
+// Description:
+//   Remove all items from `list` whose indexes are in `elements`.
+// Arguments:
+//   list = The list to remove items from.
+//   elements = The list of indexes of items to remove.

@@ -1,0 +1,16 @@
+module l(x, y){
+    args = is_list(x)? x : [x,y];
+    data = _pb_line($pb_pts, true, args, $pb_angle, false);
+    $pb_pts = concat($pb_pts, data[0]);
+    $pb_angle = data[2];
+    $pb_ctrl_pts = data[3];
+    if (pb_do_render($children, parent_module(0))) pb_draw();
+    children();    
+}
+
+//  module L
+//
+//  Adds one or multiple points. Values are absolute coordinates.
+//  x       (list)    Flat list of numbers. Numbers are x,y value pairs. Should have 1 .. n value pairs or...
+//  x       (number)  x value for the next point.
+//  y       (number)  y value for the next point.

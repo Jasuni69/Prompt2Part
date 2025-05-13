@@ -1,0 +1,1 @@
+function gt_pitch(type)        = type[1];   //! Pitch between terminals

@@ -1,0 +1,22 @@
+function RandomNonOverlap(n,area,dist,list=[]) =
+  let(x = rands(dist/2,area.x-dist/2,1)[0])
+  let(y = rands(dist/2,area.y-dist/2,1)[0])
+  let(d = ShortestDistance([x,y],list)) 
+  n > 0 ?
+    d > dist ?
+      RandomNonOverlap(n-1,area,dist,concat(list,[[x,y]])) : 
+      RandomNonOverlap(n-1,area,dist,list) : 
+    list;
+
+
+// ShortestDistance
+// ----------------
+// Calculate the shortest distance from
+// a point to other points in a list.
+// The OpenSCAD function "norm()" calculates
+// the distance between two points.
+// The OpenSCAD function "min()" returns
+// the lowest number in a list.
+// Parameters:
+//   point: The [x,y] coordinates to test.
+//   list : A list of coordinates [[x1,y1],[x2,y2],...

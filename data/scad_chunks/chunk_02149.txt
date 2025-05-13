@@ -1,0 +1,4 @@
+module pbox_inserts(type) //! Place the inserts for the base screws
+    translate_z(pbox_height(type) + pbox_top(type))
+        pbox_screw_positions(type)
+            insert(pbox_insert(type));

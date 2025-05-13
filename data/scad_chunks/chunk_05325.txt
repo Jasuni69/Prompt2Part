@@ -1,0 +1,34 @@
+function bezier_length(bezier, start_u=0, end_u=1, max_deflect=0.01) =
+    let(
+        segs = len(bezier) * 2,
+        uvals = lerpn(start_u, end_u, segs+1),
+        path = bezier_points(bezier,uvals),
+        defl = max([
+            for (i=idx(path,e=-3)) let(
+                mp = (path[i] + path[i+2]) / 2
+            ) norm(path[i+1] - mp)
+        ]),
+        mid_u = lerp(start_u, end_u, 0.5)
+    )
+    defl <= max_deflect? path_length(path) :
+    sum([
+        for (i=[0:1:segs-1]) let(
+            su = lerp(start_u, end_u, i/segs),
+            eu = lerp(start_u, end_u, (i+1)/segs)
+        ) bezier_length(bezier, su, eu, max_deflect)
+    ]);
+
+
+
+// Function: bezier_line_intersection()
+// Synopsis: Calculates where a bezier curve intersects a line.
+// Topics: Bezier Curves, Geometry, Intersection
+// See Also: bezier_points(), bezier_length(), bezier_closest_point()
+// Usage: 
+//   u = bezier_line_intersection(bezier, line);
+// Description:
+//   Finds the intersection points of the 2D Bezier curve with control points `bezier` and the given line, specified as a pair of points.  
+//   Returns the intersection as a list of `u` values for the Bezier.  
+// Arguments:
+//   bezier = The list of control points that define a 2D Bezier curve. 
+//   line = a list of two distinct 2d points defining a line

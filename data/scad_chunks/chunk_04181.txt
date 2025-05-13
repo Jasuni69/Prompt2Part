@@ -1,0 +1,4 @@
+module invert($removing=$removing?false:true,$beforeRemoving=$beforeRemoving?false:true)
+{
+	children();
+}

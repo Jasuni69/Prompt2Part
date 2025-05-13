@@ -1,0 +1,1 @@
+function foot_thickness(type = foot)= type[2]; //! Thickness under the screw

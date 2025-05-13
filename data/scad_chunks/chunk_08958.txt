@@ -1,0 +1,4 @@
+function _coord_entropy_weights(coord_entropy_weights_lt, leng, m, i = 1) = 
+    i == leng ? m :
+	let(cm = coord_entropy_weights_lt[i])
+	_coord_entropy_weights(coord_entropy_weights_lt, leng, m[2][0] <= cm[2][0] ? m : cm, i + 1);

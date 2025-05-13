@@ -1,0 +1,1 @@
+function tx_bobbin_offset(type)     = type[13]; //! Vertical offset of the bobbin from the centre of the laminations

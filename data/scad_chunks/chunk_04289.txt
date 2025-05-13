@@ -1,0 +1,1 @@
+function rotation_part(m) = [take3(m[0]),take3(m[1]),take3(m[2])];

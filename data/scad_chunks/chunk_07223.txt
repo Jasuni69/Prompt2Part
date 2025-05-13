@@ -1,0 +1,26 @@
+function octa   (s=1) =
+let(
+s=is_list(s)?s:
+            [s,-s,s,-s,s,-s]
+)
+[
+  [ s[1%len(s)],  0,  0], 
+  [ s[0%len(s)],  0,  0], 
+  [  0, s[2%len(s)],  0], 
+  [  0, s[3%len(s)],  0], 
+  [  0,  0, s[4%len(s)]], 
+  [  0,  0, s[5%len(s)]]
+];
+
+//hull() polyhedron(octa(),[[for(i=[0:len(octa())-1])i]]);
+
+/** \name quad \page Functions
+quad() creates points for a square with rounded edges
+\param x  size x or [x,y]
+\param y  size y
+\param r  radius optional list
+\param t  translate points
+\param z  add z ↦ vector3
+\param center center quad points
+\param fn fragment number optional list
+*/

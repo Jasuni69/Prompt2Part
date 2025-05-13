@@ -1,0 +1,18 @@
+function _tri_class(tri, eps=EPSILON) =
+    let( crx = cross(tri[1]-tri[2],tri[0]-tri[2]) )
+    abs( crx ) <= eps*norm(tri[1]-tri[2])*norm(tri[0]-tri[2]) ? 0 : sign( crx );
+    
+    
+/// Internal Function: _pt_in_tri()
+/// Usage:
+///   class = _pt_in_tri(point, tri);
+/// Topics: Geometry, Points, Triangles
+/// Description:
+//   For CW triangles `tri` :
+///    return  1 if point is inside the triangle interior.
+///    return =0 if point is on the triangle border.
+///    return -1 if point is outside the triangle.
+/// Arguments:
+///   point = The point to check position of.
+///   tri  =  A list of the three 2d vertices of a triangle.
+///   eps = Tolerance in the geometrical tests.

@@ -1,0 +1,112 @@
+function plot_revolution(f,angle,z,arclength, path, rclip, rspan, horiz=false,r1,r2,r,d1,d2,d,
+                         anchor="origin", orient=UP, spin=0, atype="hull", cp="centroid", style="min_edge", reverse=false) =
+   assert(num_defined([angle,arclength])==1, "must define exactly one of angle and arclength")
+   assert(is_undef(z) || is_vector(z) || valid_range(z), "z must be a vector or nonempty range")
+   assert(is_undef(path) || num_defined([r1,r2,d1,d2,r,d,z])==0, "Cannot define the z parameter or any radius or diameter parameters in combination with path")
+   assert(num_defined([rclip,rspan])<2, "Cannot give both rclip and rspan")
+   assert(is_undef(rclip) || (is_list(rclip) && len(rclip)==2 && is_finite(rclip[0]) && rclip[0]>0 && is_num(rclip[1])),
+          "rclip must be a list of two values (r[1] may be infinite)")
+   assert(is_undef(rspan) || (is_vector(rspan,2) && rspan[0]>0 && rspan[0]<rspan[1]) ,"rspan must be a 2-vector whose first entry is smaller than the second")
+   let(
+       r1 = get_radius(r1=r1, r=r, d1=d1, d=d),
+       r2 = get_radius(r1=r2, r=r, d1=d2, d=d),
+       dummy3=assert(is_def(path) || all_defined([r1,r2,z]), "\nMust give either path or both the 'z' and radius parameters."),
+       rmin=0.01,
+       z = list(z),
+       thetarange = list(first_defined([angle,arclength])),
+       dummy = assert(is_vector(thetarange) && len(thetarange)>1 && is_increasing(thetarange,strict=true),
+                      "angle/arclength must be a strictly increasing array or range with at least 2 elements")
+               assert(is_def(path)|| (len(z)>1 && is_increasing(z, strict=true)),"z must be a strictly increasing array or range with at least 2 elements")
+               assert(is_def(arclength) || (last(thetarange)-thetarange[0])<=360, "angle span exceeds 360 degrees"),
+       path = is_def(path) ? path
+            : let(
+                   rvals = add_scalar(add_scalar(z,-z[0]) / (last(z)-z[0]) * (r2-r1) ,r1)
+              )
+              hstack([rvals,z]),
+       normals = horiz ? repeat([1,0], len(path))
+               : path_normals(path),
+       rclip = default(rclip, [-INF,INF]),
+       rdata = [for(pt=path)
+                  [for(theta=thetarange) min(max(f(theta,pt.y),rclip[0]),rclip[1])]],
+       dummy2=assert(len(rdata[0])>1 && len(rdata)>1, "xrange and yrange must both provide at least 2 points"),
+       minval = min(flatten(rdata)),
+       maxval = max(flatten(rdata)),
+       sdata = is_undef(rspan) ? rdata
+             : let(
+                    scale = (rspan[1]-rspan[0])/(maxval-minval)
+               )
+               [for(row=rdata) [for (entry=row) scale*(entry.z-minval)+rspan[0]]],
+       closed = is_def(angle) && last(thetarange)-thetarange[0]==360,
+       final = [for(i=idx(path))
+                  let(
+                      angscale = is_def(angle) ? 1
+                               : 360/2/PI/path[i].x
+                  )
+                  assert(angscale*(last(thetarange)-thetarange[0])<=360, str("arclength span is more than 360 degrees at profile index ",i," with radius ",path[i].x))
+                  [
+                   if (!closed) [0,0,path[i].y],
+                   for(j=idx(sdata[0]))
+                       cylindrical_to_xyz(max(rmin,path[i].x+sdata[i][j]*normals[i].x), angscale*thetarange[j], path[i].y+sdata[i][j]*normals[i].y)
+                   ]
+               ]
+   )
+   vnf_vertex_array(final, col_wrap=true, caps=true,reverse=!reverse, style=style);
+
+
+
+
+/// Function&Module: heightfield()
+/// Synopsis: Generates a 3D surface from a 2D grid of values.
+/// SynTags: Geom, VNF
+/// Topics: Textures, Heightfield
+/// See Also: cylindrical_heightfield()
+/// Usage: As Module
+///   heightfield(data, [size], [bottom], [maxz], [xrange], [yrange], [style], [convexity], ...) [ATTACHMENTS];
+/// Usage: As Function
+///   vnf = heightfield(data, [size], [bottom], [maxz], [xrange], [yrange], [style], ...);
+/// Description:
+///   Given a regular rectangular 2D grid of scalar values, or a function literal, generates a 3D
+///   surface where the height at any given point is the scalar value for that position.
+///   One script to convert a grayscale image to a heightfield array in a .scad file can be found at:
+///   https://raw.githubusercontent.com/BelfrySCAD/BOSL2/master/scripts/img2scad.py
+///   The bottom value defines a planar base for the resulting shape and it must be strictly less than
+///   the model data to produce valid geometry, so data which is too small is set to 0.1 units above the bottom value. 
+/// Arguments:
+///   data = This is either the 2D rectangular array of heights, or a function literal that takes X and Y arguments.
+///   size = The [X,Y] size of the surface to create.  If given as a scalar, use it for both X and Y sizes. Default: `[100,100]`
+///   bottom = The Z coordinate for the bottom of the heightfield object to create.  Any heights lower than this will be truncated to very slightly (0.1) above this height.  Default: -20
+///   maxz = The maximum height to model.  Truncates anything taller to this height.  Set to INF for no truncation.  Default: 100
+///   xrange = A range of values to iterate X over when calculating a surface from a function literal.  Default: [-1 : 0.01 : 1]
+///   yrange = A range of values to iterate Y over when calculating a surface from a function literal.  Default: [-1 : 0.01 : 1]
+///   style = The style of subdividing the quads into faces.  Valid options are "default", "alt", and "quincunx".  Default: "default"
+///   ---
+///   convexity = Max number of times a line could intersect a wall of the surface being formed. Module only.  Default: 10
+///   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+///   spin = Rotate this many degrees around the Z axis.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+///   orient = Vector to rotate top towards.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+/// Example:
+///   heightfield(size=[100,100], bottom=-20, data=[
+///       for (y=[-180:4:180]) [
+///           for(x=[-180:4:180])
+///           10*cos(3*norm([x,y]))
+///       ]
+///   ]);
+/// Example:
+///   intersection() {
+///       heightfield(size=[100,100], data=[
+///           for (y=[-180:5:180]) [
+///               for(x=[-180:5:180])
+///               10+5*cos(3*x)*sin(3*y)
+///           ]
+///       ]);
+///       cylinder(h=50,d=100);
+///   }
+/// Example: Heightfield by Function
+///   fn = function (x,y) 10*sin(x*360)*cos(y*360);
+///   heightfield(size=[100,100], data=fn);
+/// Example: Heightfield by Function, with Specific Ranges
+///   fn = function (x,y) 2*cos(5*norm([x,y]));
+///   heightfield(
+///       size=[100,100], bottom=-20, data=fn,
+///       xrange=[-180:2:180], yrange=[-180:2:180]
+///   );

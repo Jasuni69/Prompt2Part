@@ -1,0 +1,4 @@
+module poly_circle(r, sides = undef) { //! Make a circle adjusted to print the correct size
+    n = sides(r, sides);
+    circle(r = corrected_radius(r, n), $fn = n);
+}

@@ -1,0 +1,1 @@
+function r2sides(r) = $fn ? $fn : ceil(max(min(360/ $fa, r * 2 * PI / $fs), 5));    //! Replicates the OpenSCAD logic to calculate the number of sides from the radius

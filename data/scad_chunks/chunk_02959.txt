@@ -1,0 +1,2 @@
+function pcbY(pcbName="Main") = (getVectorBase(pcbName, pcb))[4]; 
+//-- Change to allow for negative to reference the distance above the PCB

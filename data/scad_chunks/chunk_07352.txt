@@ -1,0 +1,19 @@
+module Trapez (h=2.5,x1=6,x2=3.0,d=1,x2d=0,fn=36,rad,name,help){
+  d=is_undef(rad)?d:rad*2;
+    
+  punkte=[
+    [-x2/2+d/2+x2d,h-d/2],
+    [x2/2-d/2+x2d,h-d/2],
+    [x1/2-d/2,d/2],
+    [-x1/2+d/2,d/2],    
+  ];  
+  if(d) minkowski(){
+       polygon(punkte);
+      circle(d=d,$fn=fn);
+   }
+  if(!d)polygon(punkte);
+      //v=((x1+d)-(x2-d))/2/h;
+      v=((x1+d)-(x2+d))/2/(h-d);
+   if(name)echo(str(name," Trapez Steigung= ",v*100,"%-",atan(v),"°")); 
+   HelpTxt("Trapez",["h",h,"x1",x1,"x2",x2,"d",d,"x2d",x2d,"fn",fn,"rad",rad],help);    
+}

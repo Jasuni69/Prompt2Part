@@ -1,0 +1,53 @@
+function circle_2tangents(r, pt1, pt2, pt3, tangents=false, d) =
+    let(r = get_radius(r=r, d=d, dflt=undef))
+    assert(r!=undef, "\nMust specify either r or d.")
+    assert( ( is_path(pt1) && len(pt1)==3 && is_undef(pt2) && is_undef(pt3))
+            || (is_matrix([pt1,pt2,pt3]) && (len(pt1)==2 || len(pt1)==3) ),
+            str("\nInvalid input points. pt1=",pt1,", pt2=",pt2,", pt3=",pt3))
+    is_undef(pt2)
+    ? circle_2tangents(r, pt1[0], pt1[1], pt1[2], tangents=tangents)
+    : is_collinear(pt1, pt2, pt3)? undef :
+        let(
+            v1 = unit(pt1 - pt2),
+            v2 = unit(pt3 - pt2),
+            vmid = unit(mean([v1, v2])),
+            n = vector_axis(v1, v2),
+            a = vector_angle(v1, v2),
+            hyp = r / sin(a/2),
+            cp = pt2 + hyp * vmid
+        )
+        !tangents ? [cp, n] :
+        let(
+            x = hyp * cos(a/2),
+            tp1 = pt2 + x * v1,
+            tp2 = pt2 + x * v2
+        )
+        [cp, n, tp1, tp2];
+
+
+// Function: circle_3points()
+// Synopsis: Find a circle passing through three 2d or 3d points. 
+// Topics: Geometry, Circles
+// See Also: circle_line_intersection(), circle_circle_intersection(), circle_2tangents(), circle_3points(), circle_point_tangents(), circle_circle_tangents()
+// Usage:
+//   circ = circle_3points(pt1, pt2, pt3);
+//   circ = circle_3points([PT1, PT2, PT3]);
+// Description:
+//   Returns the [CENTERPOINT, RADIUS, NORMAL] of the circle that passes through three non-collinear
+//   points where NORMAL is the normal vector of the plane that the circle is on (UP or DOWN if the points are 2D).
+//   The centerpoint is a 2D or 3D vector, depending on the points input.  If all three
+//   points are 2D, then the resulting centerpoint will be 2D, and the normal is UP ([0,0,1]).
+//   If any of the points are 3D, then the resulting centerpoint will be 3D.  If the three points are
+//   collinear, then `[undef,undef,undef]` is returned.  The normal is a normalized 3D
+//   vector with a non-negative Z axis.  Instead of 3 arguments, it is acceptable to input the 3 points
+//   as a list given in `pt1`, leaving `pt2`and `pt3` as undef.
+// Arguments:
+//   pt1 = The first point.
+//   pt2 = The second point.
+//   pt3 = The third point.
+// Example(2D):
+//   pts = [[60,40], [10,10], [65,5]];
+//   circ = circle_3points(pts[0], pts[1], pts[2]);
+//   translate(circ[0]) color("green") stroke(circle(r=circ[1]),closed=true,$fn=72);
+//   translate(circ[0]) color("red") circle(d=3, $fn=12);
+//   move_copies(pts) color("blue") circle(d=3, $fn=12);

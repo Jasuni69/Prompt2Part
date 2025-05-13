@@ -1,0 +1,14 @@
+function pb_processCommandLists(cmds_list) = [for (cmds=cmds_list) pb_processCommands(cmds)];
+
+//  function pb_processCommands(cmds)
+//
+//  Processes all the commands in the command list and generates a preliminary 2D point list and a post process command list
+//  When finished, the point list contains all points except fillet, chamfer and z. Those are applied in a seprate pb_postProcessPath command.
+//  cmds    (list)  List of path commands
+//  return  (list)  Intermediate 2D points list and post processing list
+//      return[0]   (list)   List with 2D points.
+//      return[1]   (list)   List with post process commands such as fillet and chamfer which are applied at the end.
+//      return[2]   (number) current angle in degrees
+//      return[3]   (list)   List containing 2 bezier spline control points. However, only one can be set at a time and the other should be empty.
+//          return[3][0]    (list)  2D point representing the control point of the last command which must have been a quadratic spline type. Otherwise empty ([])
+//          return[3][1]    (list)  2D point representing the control point of the last command which must have been a cubic spline type. Otherwise empty ([])

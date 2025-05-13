@@ -1,0 +1,83 @@
+function line_intersection(line1, line2, bounded1, bounded2, bounded, eps=EPSILON) =
+    assert( is_finite(eps) && (eps>=0), "\nThe tolerance should be a non-negative value." )
+    assert( _valid_line(line1,dim=2,eps=eps), "\nFirst line invalid.")
+    assert( _valid_line(line2,dim=2,eps=eps), "\nSecond line invalid.")
+    assert( is_undef(bounded) || is_bool(bounded) || is_bool_list(bounded,2), "\nInvalid value for \"bounded\".")
+    assert( is_undef(bounded1) || is_bool(bounded1) || is_bool_list(bounded1,2), "\nInvalid value for \"bounded1\".")
+    assert( is_undef(bounded2) || is_bool(bounded2) || is_bool_list(bounded2,2), "\nInvalid value for \"bounded2\".")
+    let(isect = _general_line_intersection(line1,line2,eps=eps))
+    is_undef(isect) ? undef :
+    let(
+        bounded1 = force_list(first_defined([bounded1,bounded,false]),2),
+        bounded2 = force_list(first_defined([bounded2,bounded,false]),2),
+        good =  (!bounded1[0] || isect[1]>=0-eps)
+             && (!bounded1[1] || isect[1]<=1+eps)
+             && (!bounded2[0] || isect[2]>=0-eps)
+             && (!bounded2[1] || isect[2]<=1+eps)
+    )
+    good ? isect[0] : undef;
+    
+
+// Function: line_closest_point()
+// Synopsis: Find point on given line, segment or ray that is closest to a given point. 
+// Topics: Geometry, Lines, Distance
+// See Also: line_normal(), point_line_distance()
+// Usage:
+//   pt = line_closest_point(line, pt, [bounded]);
+// Description:
+//   Returns the point on the given line, segment or ray that is closest to the given point `pt`.
+//   The inputs `line` and `pt` args should be of the same dimension.  The parameter bounded indicates
+//   whether the points of `line` should be treated as endpoints. 
+// Arguments:
+//   line = A list of two points that are on the unbounded line.
+//   pt = The point to find the closest point on the line to.
+//   bounded = boolean or list of two booleans indicating that the line is bounded at that end.  Default: [false,false]
+// Example(2D):
+//   line = [[-30,0],[30,30]];
+//   pt = [-32,-10];
+//   p2 = line_closest_point(line,pt);
+//   stroke(line, endcaps="arrow2");
+//   color("blue") translate(pt) circle(r=1,$fn=12);
+//   color("red") translate(p2) circle(r=1,$fn=12);
+// Example(2D):  If the line is bounded on the left you get the endpoint instead
+//   line = [[-30,0],[30,30]];
+//   pt = [-32,-10];
+//   p2 = line_closest_point(line,pt,bounded=[true,false]);
+//   stroke(line, endcap2="arrow2");
+//   color("blue") translate(pt) circle(r=1,$fn=12);
+//   color("red") translate(p2) circle(r=1,$fn=12);
+// Example(2D):  In this case it doesn't matter how bounded is set.  Using SEGMENT is the most restrictive option. 
+//   line = [[-30,0],[30,30]];
+//   pt = [-5,0];
+//   p2 = line_closest_point(line,pt,SEGMENT);
+//   stroke(line);
+//   color("blue") translate(pt) circle(r=1,$fn=12);
+//   color("red") translate(p2) circle(r=1,$fn=12);
+// Example(2D):  The result here is the same for a line or a ray. 
+//   line = [[-30,0],[30,30]];
+//   pt = [40,25];
+//   p2 = line_closest_point(line,pt,RAY);
+//   stroke(line, endcap2="arrow2");
+//   color("blue") translate(pt) circle(r=1,$fn=12);
+//   color("red") translate(p2) circle(r=1,$fn=12);
+// Example(2D):  But with a segment we get a different result
+//   line = [[-30,0],[30,30]];
+//   pt = [40,25];
+//   p2 = line_closest_point(line,pt,SEGMENT);
+//   stroke(line);
+//   color("blue") translate(pt) circle(r=1,$fn=12);
+//   color("red") translate(p2) circle(r=1,$fn=12);
+// Example(2D): The shorthand RAY uses the first point as the base of the ray.  But you can specify a reversed ray directly, and in this case the result is the same as the result above for the segment.
+//   line = [[-30,0],[30,30]];
+//   pt = [40,25];
+//   p2 = line_closest_point(line,pt,[false,true]);
+//   stroke(line,endcap1="arrow2");
+//   color("blue") translate(pt) circle(r=1,$fn=12);
+//   color("red") translate(p2) circle(r=1,$fn=12);
+// Example(FlatSpin,VPD=200,VPT=[0,0,15]): A 3D example
+//   line = [[-30,-15,0],[30,15,30]];
+//   pt = [5,5,5];
+//   p2 = line_closest_point(line,pt);
+//   stroke(line, endcaps="arrow2");
+//   color("blue") translate(pt) sphere(r=1,$fn=12);
+//   color("red") translate(p2) sphere(r=1,$fn=12);

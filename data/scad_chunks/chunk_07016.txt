@@ -1,0 +1,12 @@
+module test__normalize_corners() {
+    assert_equal(_normalize_corners([-2,-2,-2,-2,-2,-2,-2,-2]), [0,0,0,0,0,0,0,0]);
+    assert_equal(_normalize_corners([-1,-1,-1,-1,-1,-1,-1,-1]), [0,0,0,0,0,0,0,0]);
+    assert_equal(_normalize_corners([0,0,0,0,0,0,0,0]), [0,0,0,0,0,0,0,0]);
+    assert_equal(_normalize_corners([1,1,1,1,1,1,1,1]), [1,1,1,1,1,1,1,1]);
+    assert_equal(_normalize_corners([2,2,2,2,2,2,2,2]), [1,1,1,1,1,1,1,1]);
+}
+test__normalize_corners();
+
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

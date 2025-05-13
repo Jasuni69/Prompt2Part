@@ -1,0 +1,29 @@
+function bselect(list,index) =
+    assert(is_list(list)||is_string(list), "First argument must be a list or string." )
+    assert(is_list(index) && len(index)==len(list) , "Second argument must have same length as the first." )
+    is_string(list)? str_join(bselect( [for (x=list) x], index)) :
+    [for(i=idx(list)) if (index[i]) list[i]];
+
+
+// Section: List Construction
+
+
+// Function: repeat()
+// Synopsis: Returns a list of repeated copies of a value.
+// Topics: List Handling
+// See Also: count(), lerpn()
+// Usage:
+//   list = repeat(val, n);
+// Description:
+//   Generates a list of `n` copies of the given value `val`.
+//   If the count `n` is given as a list of counts, then this creates a
+//   multi-dimensional array, filled with `val`.  If `n` is negative, returns the empty list. 
+// Arguments:
+//   val = The value to repeat to make the list or array.
+//   n = The number of copies to make of `val`.  Can be a list to make an array of copies.
+// Example:
+//   a = repeat(1, 4);        // Returns [1,1,1,1]
+//   b = repeat(8, [2,3]);    // Returns [[8,8,8], [8,8,8]]
+//   c = repeat(0, [2,2,3]);  // Returns [[[0,0,0],[0,0,0]], [[0,0,0],[0,0,0]]]
+//   d = repeat([1,2,3],3);   // Returns [[1,2,3], [1,2,3], [1,2,3]]
+//   e = repeat(4, -1);       // Returns []

@@ -1,0 +1,17 @@
+function _dp_distance_row(small, big, small_ind, tdist) =
+                    // Top left corner is zero because it gets counted at the end in bottom right corner
+   small_ind == 0 ? [cumsum([0,for(i=[1:len(big)]) norm(big[i%len(big)]-small[0])]), repeat(_MAP_LEFT,len(big)+1)] :
+   [for(big_ind=1,
+       newrow=[ norm(big[0] - small[small_ind%len(small)]) + tdist[small_ind-1][0] ],
+       newmap = [_MAP_UP]
+         ;
+       big_ind<=len(big)+1
+         ;
+       costs = big_ind == len(big)+1 ? [0] :    // handle extra iteration
+                             [tdist[small_ind-1][big_ind-1],  // diag
+                              newrow[big_ind-1],              // left
+                              tdist[small_ind-1][big_ind]],   // up
+       newrow = concat(newrow, [min(costs)+norm(big[big_ind%len(big)]-small[small_ind%len(small)])]),
+       newmap = concat(newmap, [min_index(costs)]),
+       big_ind = big_ind+1
+   ) if (big_ind==len(big)+1) each [newrow,newmap]];

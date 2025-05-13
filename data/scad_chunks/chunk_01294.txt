@@ -1,0 +1,1 @@
+function gm_screw(type)        = type[5]; //! Screw type

@@ -1,0 +1,9 @@
+module test_polar_to_xy() {
+    assert(approx(polar_to_xy(20,45), [20/sqrt(2), 20/sqrt(2)]));
+    assert(approx(polar_to_xy(20,135), [-20/sqrt(2), 20/sqrt(2)]));
+    assert(approx(polar_to_xy(20,-135), [-20/sqrt(2), -20/sqrt(2)]));
+    assert(approx(polar_to_xy(20,-45), [20/sqrt(2), -20/sqrt(2)]));
+    assert(approx(polar_to_xy(40,30), [40*sqrt(3)/2, 40/2]));
+    assert(approx(polar_to_xy([40,30]), [40*sqrt(3)/2, 40/2]));
+}
+test_polar_to_xy();

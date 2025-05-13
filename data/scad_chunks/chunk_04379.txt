@@ -1,0 +1,5 @@
+module noHull(bodySet=currentPart())
+{
+  if(!$hulling
+     || ($hulling && (bodySet!="" && !currentPartIn(bodySet,currentPart()))))children();
+}

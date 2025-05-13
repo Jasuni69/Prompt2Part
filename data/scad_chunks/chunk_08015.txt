@@ -1,0 +1,9 @@
+function sierpinski_triangle(n = 5, angle = 120, leng = 1, heading = 0, start = [0, 0]) = 
+    let(
+        axiom = "F-G-G",
+        rules = [
+            ["F", "F-G+F+G-F"],
+            ["G", "GG"]
+        ]
+    )
+    lsystem2(axiom, rules, n, angle, leng, heading, start, "G");

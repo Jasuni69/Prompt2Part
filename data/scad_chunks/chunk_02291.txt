@@ -1,0 +1,1 @@
+function 2screw_block_v_hole(screw = def_screw, short_insert = false) = translate([0, corner_block_hole_offset(screw, short_insert)]) * rotate([180, 0, 0]); //! Transform to bottom hole

@@ -1,0 +1,49 @@
+function transition(i=0,fn=fn)= 0.5 + cos(min(abs(i),fn)*180/fn)/2;
+//for(i=[0:9])echo(transition(i,fn=9));
+//for(i=[0:fn])T(i)cube([1,1,1+transition(i)*19]);
+
+
+
+
+
+}//fold // ΔΔ END functions ΔΔ
+
+{ // Help –––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+//$fn=fn;
+$fs=fs;
+$fa=fa;
+help=$preview?anima?false:helpsw:false;
+
+helpHelper= helpsw==1||helpsw==true?true:false;    //Helper
+helpMod=  helpsw==2||helpsw==true?true:false;     // Objektmodifikatoren
+help2D=   helpsw==3||helpsw==true?true:false;    // 2D Objekte
+helpB=    helpsw==4||helpsw==true?true:false;   //Basis help
+helpP=    helpsw==5||helpsw==true?true:false;  //Produkte help
+helpFunc= helpsw==6||helpsw==true?true:false; //Funktionen
+helpGen=  helpsw==7||helpsw==true?true:false;//Generator
+
+
+
+//helpM=help;//module help old
+$helpM=help;//module help
+
+$t=$preview?anima?$t:tset:tset;
+t=$t;
+t0=$t*360%360;
+t1=sin($t*360);
+t2=sin($t*180);
+
+$vpr=vp?is_num(vpr)?[0,0,vpr]:vpr:$vpr;    
+$vpt=vp?vpt:$vpt;
+$vpd=vp?vpd:$vpd;
+$vpf=vp?vpf:$vpf;
+
+
+messpunkt=$preview?$info:false;//1 für aktiv
+$messpunkt=messpunkt;
+//n=0;
+
+} // END Help
+
+if(menu)Menu(); // creates Menu

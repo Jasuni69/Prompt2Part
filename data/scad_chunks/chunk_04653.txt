@@ -1,0 +1,39 @@
+module testingInternals(){
+  //example of rounding random points, this has no current use but is a good demonstration
+  random=[for(i=[0:20])[rnd(0,50),rnd(0,50),/*rnd(0,30)*/1000]];
+  R =polyRound(random,7);
+  translate([-25,25,0]){
+    polyline(R);
+  }
+  
+  //example of different modes of the CentreN2PointsArc() function 0=shortest arc, 1=longest arc, 2=CW, 3=CCW
+  p1=[0,5];p2=[10,5];centre=[5,0];
+  translate([60,0,0]){
+    color("green"){
+      polygon(CentreN2PointsArc(p1,p2,centre,0,20));//draws the shortest arc
+    }
+    color("cyan"){
+      polygon(CentreN2PointsArc(p1,p2,centre,1,20));//draws the longest arc
+    }
+  }
+  translate([75,0,0]){
+    color("purple"){
+      polygon(CentreN2PointsArc(p1,p2,centre,2,20));//draws the arc CW (which happens to be the short arc)
+    }
+    color("red"){
+      polygon(CentreN2PointsArc(p2,p1,centre,2,20));//draws the arc CW but p1 and p2 swapped order resulting in the long arc being drawn
+    }
+  }
+  
+  radius=6;
+  radiipoints=[[0,0,0],[10,20,radius],[20,0,0]];
+  tangentsNcen=round3points(radiipoints);
+  translate([10,0,0]){
+    for(i=[0:2]){
+      color("red")translate(getpoints(radiipoints)[i])circle(1);//plots the 3 input points
+      color("cyan")translate(tangentsNcen[i])circle(1);//plots the two tangent poins and the circle centre
+    }
+    translate([tangentsNcen[2][0],tangentsNcen[2][1],-0.2])circle(r=radius,$fn=25);//draws the cirle
+    %polygon(getpoints(radiipoints));//draws a polygon
+  }
+}

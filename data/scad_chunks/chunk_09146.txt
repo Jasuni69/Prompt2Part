@@ -1,0 +1,1 @@
+function cell(x, y, z, type, visited) = [x, y, z, type, visited];

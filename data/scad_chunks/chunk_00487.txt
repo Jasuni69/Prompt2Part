@@ -1,0 +1,1 @@
+function iec_flange_h(type) = type[13]; //! Flange height

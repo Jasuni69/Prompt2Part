@@ -1,0 +1,7 @@
+function Q_Norm(q) = norm(q);
+
+
+// Function: Q_Normalize()
+// Usage:
+//   Q_Normalize(q)
+// Description: Normalizes quaternion `q`, so that norm([W,X,Y,Z]) == 1.

@@ -1,0 +1,20 @@
+module fillet_mask_x(l=1.0, r=1.0, align=V_CENTER) fillet_mask(l=l, r=r, orient=ORIENT_X, align=align);
+
+
+// Module: fillet_mask_y()
+// Usage:
+//   fillet_mask_y(l, r, [align], [center])
+// Description:
+//   Creates a shape that can be used to fillet a 90 degree edge oriented
+//   along the Y axis.  Difference it from the object to be filletted.
+//   The center of the mask object should align exactly with the edge to
+//   be filletted.
+// Arguments:
+//   l = Length of mask.
+//   r = Radius of the fillet.
+//   align = Alignment of the mask.  Use the `V_` constants from `constants.h`.  Default: centered.
+// Example:
+//   difference() {
+//       cube(size=100, center=false);
+//       right(100) #fillet_mask_y(l=100, r=25, align=V_BACK);
+//   }

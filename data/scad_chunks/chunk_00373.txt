@@ -1,0 +1,1 @@
+function circlip_d5(type)        = type[7];     //! Plier hole diameter

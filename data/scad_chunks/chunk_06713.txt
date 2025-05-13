@@ -1,0 +1,9 @@
+module test_while() {
+    fibs = while(
+        init = [1,1],
+        cond = function (i,x) select(x,-1)<25,
+        func = function (i,x) concat(x, [sum(select(x,-2,-1))])
+    );
+    assert_equal(fibs, [1,1,2,3,5,8,13,21,34]);
+}
+test_while();

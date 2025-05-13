@@ -1,0 +1,45 @@
+
+
+             
+//===================================================================
+//  *** Labels ***
+//-------------------------------------------------------------------
+//  Default origin = yappCoordBox: box[0,0,0]
+//
+//  Parameters:
+//   p(0) = posx
+//   p(1) = posy/z
+//   p(2) = rotation degrees CCW
+//   p(3) = depth : positive values go into case (Remove) negative values are raised (Add)
+//   p(4) = { yappLeft, yappRight, yappFront, yappBack, yappLid, yappBase } : plane
+//   p(5) = font
+//   p(6) = size
+//   p(7) = "label text"
+//  Optional:
+//   p(8) = Expand : Default = 0 : mm to expand text by (making it bolder) 
+//   p(9) = Direction : { <yappTextLeftToRight>, yappTextRightToLeft, yappTextTopToBottom, yappTextBottomToTop }
+//   p(10) = Horizontal alignment : { <yappTextHAlignLeft>, yappTextHAlignCenter, yappTextHAlignRight }
+//   p(11) = Vertical alignment : {  yappTextVAlignTop, yappTextVAlignCenter, yappTextVAlignBaseLine, <yappTextVAlignBottom> } 
+//   p(12) = Character Spacing multiplier (1.0 = normal)
+//-------------------------------------------------------------------
+labelsPlane =
+[
+   [50, shellWidth-20, 0, 1, yappLid, "Liberation Mono", 5, "Normal/Left"],
+   [50, shellWidth-30, 0, 1, yappLid, "Liberation Mono", 5, "Center" ,undef, undef, yappTextHAlignCenter ],
+   [50, shellWidth-40, 0, 1, yappLid, "Liberation Mono", 5, "Right" ,undef, undef, yappTextHAlignRight],
+   
+   [10, shellWidth-50, 0, 1, yappLid, "Liberation Mono", 5, "Normal/Bottom (|)"], // (|) added to text to get full height with ascenders/descenders
+   [50, shellWidth-50, 0, 1, yappLid, "Liberation Mono", 5, "Top(|)" ,undef, undef,undef, yappTextVAlignTop],
+   [80, shellWidth-50, 0, 1, yappLid, "Liberation Mono", 5, "Center (|)" ,undef, undef,undef,yappTextVAlignCenter ],
+   [120, shellWidth-50, 0, 1, yappLid, "Liberation Mono", 5, "Baseline (|)" ,undef, undef,undef,yappTextVAlignBottom],
+ 
+ 
+   [20, shellWidth-60, 0, 1, yappLid, "Liberation Mono", 5, "Verticle Text" ,0.15, yappTextTopToBottom, undef, undef, 1.1],
+   [25, shellWidth-60, 0, 1, yappLid, "Liberation Mono", 5, "Verticle Text" ,0.15, yappTextTopToBottom, undef, undef, 1.0],
+   [30, shellWidth-60, 90, 1, yappLid, "Liberation Mono", 5, "Vert Rotated" ,0.15, yappTextTopToBottom, undef, undef, 1.1],
+
+];
+
+
+//---- This is where the magic happens ----
+YAPPgenerate();

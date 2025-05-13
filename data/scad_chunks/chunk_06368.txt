@@ -1,0 +1,27 @@
+function plane3pt(p1, p2, p3) =
+    is_undef(p2) && is_undef(p3) && is_path(p1,dim=3) ? plane3pt(p1[0],p1[1],p1[2])
+  : assert( is_path([p1,p2,p3],dim=3) && len(p1)==3,
+            "\nInvalid points or incompatible dimensions." )
+    let(
+        crx = cross(p3-p1, p2-p1),
+        nrm = norm(crx)
+    ) approx(nrm,0) ? undef :
+    concat(crx, crx*p1)/nrm;
+
+
+// Function: plane3pt_indexed()
+// Synopsis: Given list of 3d points and 3 indices, return the plane they define.  
+// Topics: Geometry, Planes
+// See Also: plane3pt(), plane3pt_indexed(), plane_from_normal(), plane_from_points(), plane_from_polygon()
+// Usage:
+//   plane = plane3pt_indexed(points, i1, i2, i3);
+// Description:
+//   Given a list of 3d points, and the indices of three of those points,
+//   generates the normalized cartesian equation of a plane that those points all
+//   lie on. If the points are not collinear, returns [A,B,C,D] where Ax+By+Cz=D is the equation of a plane.
+//   If they are collinear, returns [].
+// Arguments:
+//   points = A list of points.
+//   i1 = The index into `points` of the first point on the plane.
+//   i2 = The index into `points` of the second point on the plane.
+//   i3 = The index into `points` of the third point on the plane.

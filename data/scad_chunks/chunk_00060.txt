@@ -1,0 +1,1 @@
+function spacing(p) = let(w = pcb_width(p)) w < 22 ? w + 3 : w + 7;

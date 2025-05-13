@@ -1,0 +1,6 @@
+function pipeConn(l,location) =
+	(location == "front-in")  ? [[0,0,-l/2],[[0,0,1],[1,0,0]]] :
+	(location == "front-out") ? [[0,0,-l/2],[[0,0,-1],[-1,0,0]]] :
+	(location == "back-in")   ? [[0,0,+l/2],[[0,0,-1],[-1,0,0]]] :
+	(location == "back-out")  ? [[0,0,+l/2],[[0,0,1],[1,0,0]]] :
+	"Error";

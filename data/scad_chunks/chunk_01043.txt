@@ -1,0 +1,1 @@
+function screw_pilot_hole(type)       = type[11];    //! Pilot hole radius for wood screws, tap radius for machine screws

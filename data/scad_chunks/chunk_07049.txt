@@ -1,0 +1,7 @@
+module test_path_curvature(){
+    c8 = path3d(circle(r=8, $fn=100));
+    c28 = path3d(circle(r=28, $fn=100));
+    assert(approx(path_curvature(c8,closed=true), repeat(1/8, 100), 4e-4));
+    assert(approx(path_curvature(c28,closed=true), repeat(1/28, 100), 4e-4));
+}
+test_path_curvature();

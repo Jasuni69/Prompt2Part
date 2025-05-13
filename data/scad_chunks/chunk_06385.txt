@@ -1,0 +1,20 @@
+function _pointlist_greatest_distance(points,plane) =
+    let(
+        normal = [plane[0],plane[1],plane[2]],
+        pt_nrm = points*normal
+    )
+    max( max(pt_nrm) - plane[3], -min(pt_nrm) + plane[3]) / norm(normal);
+
+
+// Function: are_points_on_plane()
+// Synopsis: Determine if all of the listed points are on a plane. 
+// Topics: Geometry, Planes, Points
+// See Also: plane3pt(), line_closest_point(), plane_closest_point(), is_coplanar()
+// Usage:
+//   bool = are_points_on_plane(points, plane, [eps]);
+// Description:
+//   Returns true if the given 3D points are on the given plane.
+// Arguments:
+//   plane = The plane to test the points on.
+//   points = The list of 3D points to test.
+//   eps = Tolerance in geometric comparisons.  Default: `EPSILON` (1e-9)

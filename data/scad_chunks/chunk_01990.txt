@@ -1,0 +1,9 @@
+module ssr_shroud_holes(type, cable_d) { //! Drill the screw and ziptie holes
+    ssr_shroud_hole_positions(type)
+        drill(screw_clearance_radius(screw), 0);
+
+    for(side = [-1, 1])
+        translate([ssr_shroud_cable_x(type, cable_d), side * (ssr_width(type) / 2 - 2 * boss_r)])
+            rotate(-90)
+                cable_tie_holes(cable_d / 2, h = 0);
+}

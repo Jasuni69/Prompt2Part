@@ -1,0 +1,19 @@
+module 123_block_stand_stl()
+    gridfinity_bin(box) union() {
+        holes() {
+            translate_z(gridfinity_base_z() + bwall + $b.z / 2 + eps)
+                cube([$b.x + clearance, $b.y + clearance, $b.z + 2 * eps], true);
+
+            chamfer = 1;
+            translate_z(box_mm.z)
+                chamfer_hole(chamfer)
+                    square([$b.x + clearance, $b.y + clearance], true);
+        }
+        translate_z(gridfinity_base_z() + bwall)
+            difference() {
+                rounded_rectangle([box_mm.x - 2 * wall, box_mm.y - 2 * wall, box_mm.z - gridfinity_base_z() - bwall - wall], gridfinity_corner_r() - wall);
+
+                holes()
+                    rounded_rectangle([$b.x + clearance + 2 * wall, $b.y + clearance + 2 * wall, 100], wall, center = true);
+            }
+    }

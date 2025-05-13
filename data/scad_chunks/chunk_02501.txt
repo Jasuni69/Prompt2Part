@@ -1,0 +1,2 @@
+function coreXY_drive_plain_idler_offset(type) = //! Offset of plain drive idler pulley
+    [ coreXY_plain_idler_offset(type).x, -(pulley_od(coreXY_plain_idler(type)) + pulley_od(coreXY_drive_pulley(type))) / 2, 0 ];

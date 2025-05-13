@@ -1,0 +1,6 @@
+function seperationFrom(node, other) =
+    let(
+        v = position_of(node) - position_of(other),
+        dist = norm(v)
+    )
+    dist < separationDistance_of(node) ? v / dist : ZERO_VTS[len(v)];

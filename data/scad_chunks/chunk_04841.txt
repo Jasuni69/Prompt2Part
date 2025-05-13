@@ -1,0 +1,14 @@
+module L(x, y){
+    args = is_list(x)? x : [x,y];
+    data = _pb_line($pb_pts, false, args, $pb_angle, false);
+    $pb_pts = concat($pb_pts, data[0]);
+    $pb_angle = data[2];
+    $pb_ctrl_pts = data[3];
+    if (pb_do_render($children, parent_module(0))) pb_draw();
+    children();   
+}
+
+//  function _pb_cubic(last, args, rel, angle)
+//
+//  Generates multiple points forming line segments approximating one or multiple discrete cubic Bezier curves.
+//

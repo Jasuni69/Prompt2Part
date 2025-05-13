@@ -1,0 +1,1 @@
+function pi_pcb(type)           = type[9]; //! Parameter for the support PCB, created with pi_pcb

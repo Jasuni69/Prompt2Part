@@ -1,0 +1,15 @@
+module test_f_is_bool() {
+    testfn = f_is_bool();
+    for (test = [
+        [undef,   false],
+        [false,   true],
+        [true,    true],
+        [0,       false],
+        [3,       false],
+        ["foo",   false],
+        [[4,5,6], false]
+    ]) {
+        assert(testfn(test[0]) == test[1]);
+    }
+}
+test_f_is_bool();

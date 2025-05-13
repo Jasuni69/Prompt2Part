@@ -1,0 +1,15 @@
+module test_is_def() {
+    assert(!is_def(undef));
+    assert(is_def(true));
+    assert(is_def(false));
+    assert(is_def(-123));
+    assert(is_def(0));
+    assert(is_def(123));
+    assert(is_def(""));
+    assert(is_def("foo"));
+    assert(is_def([]));
+    assert(is_def([3,4,5]));
+    assert(is_def(["foo","bar","baz"]));
+    assert(is_def([0:5]));
+}
+test_is_def();

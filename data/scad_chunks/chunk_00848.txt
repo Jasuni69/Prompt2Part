@@ -1,0 +1,1 @@
+function bb_flange_diameter(type) = type[7]; //! Flange diameter

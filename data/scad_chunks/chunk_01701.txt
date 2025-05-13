@@ -1,0 +1,1 @@
+function pcb_colour(type)       = type[8];  //! Colour of the substrate

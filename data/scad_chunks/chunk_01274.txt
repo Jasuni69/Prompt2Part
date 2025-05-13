@@ -1,0 +1,1 @@
+function sbr_side_height(type)          = type[3]; //! Height of side above *rail*

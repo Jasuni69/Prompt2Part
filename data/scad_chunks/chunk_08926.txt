@@ -1,0 +1,9 @@
+function grow(nodes, leng) =
+    [
+        for(i = 0; i < leng; i = i + 1)
+        let(
+            node = nodes[i],
+            nxNode = nodes[(i + 1) % leng]
+        )
+        each [node, if(suitableForGrowth(node, nxNode)) growNode(node, nxNode)]
+    ];

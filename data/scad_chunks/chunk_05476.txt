@@ -1,0 +1,8 @@
+function os_pointed(dist,loc=0) =
+        assert(is_def(dist), "Must specify `dist`")
+        [
+                "for", "offset_stroke",
+                "type", "shifted_point",
+                "loc",loc,
+                "dist",dist
+        ];

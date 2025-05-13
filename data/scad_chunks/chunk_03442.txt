@@ -1,0 +1,1 @@
+function Y(Y=0,X=0,Z=0,x=0,y=0,z=0)= XYZ(X+x,Y+y,Z+z);

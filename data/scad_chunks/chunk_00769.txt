@@ -1,0 +1,1 @@
+function smd_led_lens(type) = type[2]; //! Lens length width and height

@@ -1,0 +1,5 @@
+function solve(m, i = 0, j = 0) = // Solve each row ensuring diagonal is not zero
+    i < len(m) ?
+        assert(i + j < len(m), "matrix is singular")
+         solve(!nearly_zero(m[i + j][i]) ? solve_row(j ? rowswap(m, i, i + j) : m, i) : solve(m, i, j + 1), i + 1)
+        : m;

@@ -1,0 +1,11 @@
+module test_binsearch() {
+    l = [3,6,7,9,10,11,13,17,18,19,22,47,53,68,72,79,81,84,85,88,97];
+    assert_equal(binsearch(1,l), undef);
+    assert_equal(binsearch(43,l), undef);
+    assert_equal(binsearch(93,l), undef);
+    assert_equal(binsearch(99,l), undef);
+    for (i=idx(l)) {
+        assert_equal(binsearch(l[i],l), i);
+    }
+}
+test_binsearch();

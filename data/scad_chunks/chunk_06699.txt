@@ -1,0 +1,16 @@
+module test_all_nonpositive() {
+    assert(all_nonpositive(-2));
+    assert(all_nonpositive(0));
+    assert(!all_nonpositive(2));
+    assert(all_nonpositive([0,0,0]));
+    assert(!all_nonpositive([0,1,2]));
+    assert(all_nonpositive([0,-1,-2]));
+    assert(!all_nonpositive([3,1,2]));
+    assert(!all_nonpositive([3,-1,2]));
+    assert(!all_nonpositive([]));
+    assert(!all_nonpositive(true));
+    assert(!all_nonpositive(false));
+    assert(!all_nonpositive("foo"));
+    assert(!all_nonpositive([0:1:2]));
+}
+test_all_nonpositive();

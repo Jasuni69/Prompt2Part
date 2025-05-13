@@ -1,0 +1,45 @@
+function bezier_segment_closest_point(curve, pt, max_err=0.01, u=0, end_u=1) = 
+	let(
+		steps = len(curve)*3,
+		path = [for (i=[0:1:steps]) let(v=(end_u-u)*(i/steps)+u) [v, bez_point(curve, v)]],
+		bracketed = concat([path[0]], path, [path[len(path)-1]]),
+		minima_ranges = [
+			for (i = [1:1:len(bracketed)-1]) let(
+				d1=norm(bracketed[i  ][1]-pt),
+				d2=norm(bracketed[i+1][1]-pt),
+				d3=norm(bracketed[i+2][1]-pt)
+			) if(d2<=d1 && d2<=d3) [
+				bracketed[i][0], bracketed[i+2][0]
+			]
+		]
+	) len(minima_ranges)>1? (
+		let(
+			min_us = [
+				for (minima = minima_ranges)
+					bezier_segment_closest_point(curve, pt, max_err=max_err, u=minima.x, end_u=minima.y)
+			],
+			dists = [for (v=min_us) norm(bez_point(curve,v)-pt)],
+			min_i = min_index(dists)
+		) min_us[min_i]
+	) : let(
+		minima = minima_ranges[0],
+		p1 = bez_point(curve, minima.x),
+		p2 = bez_point(curve, minima.y)
+	) norm(p1-p2)<max_err? mean(minima) :
+	bezier_segment_closest_point(curve, pt, max_err=max_err, u=minima.x, end_u=minima.y);
+
+
+
+// Function: bezier_segment_length()
+// Usage:
+//   bezier_segment_length(curve, [start_u], [end_u], [max_deflect]);
+// Description:
+//   Approximates the length of the bezier segment between start_u and end_u.
+// Arguments:
+//   curve = The list of endpoints and control points for this bezier segment.
+//   start_u = The proportion of the way along the curve to start measuring from.  Between 0 and 1.
+//   end_u = The proportion of the way along the curve to end measuring at.  Between 0 and 1.  Greater than start_u.
+//   max_deflect = The largest amount of deflection from the true curve to allow for approximation.
+// Example:
+//   bez = [[0,0], [5,35], [60,-25], [80,0]];
+//   echo(bezier_segment_length(bez));

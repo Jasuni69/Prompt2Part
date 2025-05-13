@@ -1,0 +1,12 @@
+function _find_center_anchor(desc1, desc2, anchor2, flip) =
+  let(
+       pt2 = desc_point(desc2, anchor=anchor2),
+       line = [CTR,desc_attach(desc1,CTR,p=pt2,reverse=true)],
+       geom = desc1[1]
+  )
+    geom[0]=="prismoid" ? _prismoid_isect(geom, line, RAY, flip)
+  : geom[0]=="conoid" ? _cone_isect(geom,line,RAY,flip)
+  : geom[0]=="spheroid" ? [unit(line[1]-line[0]), [0,0,0]]
+  : starts_with(geom[0],"extrusion") ? _extrusion_isect(geom,line,RAY,flip)
+  : geom[0]=="vnf_isect" ? [unit(line[1]-line[0]), [0,0,0]]
+  : assert(false,str("Center anchor not supported with geometry type ",geom[0]));

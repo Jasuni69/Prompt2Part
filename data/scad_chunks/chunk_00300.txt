@@ -1,0 +1,2 @@
+module d_socket(connector, pcb = false, idc = false) //! Draw specified D socket, which can be IDC, PCB or plain solder bucket
+    d_plug(connector, true, pcb = pcb, idc = idc);

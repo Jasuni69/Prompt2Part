@@ -1,0 +1,36 @@
+function ymove(y=0,p=_NO_ARG) =
+    assert(is_finite(y), "Invalid number")
+    move([0,y,0],p=p);
+
+
+// Function&Module: down()
+//
+// Synopsis: Translates children downwards (Z-).
+// SynTags: Trans, Path, VNF, Mat
+// Topics: Affine, Matrices, Transforms, Translation
+// See Also: move(), left(), right(), fwd(), back(), up()
+//
+// Usage: As Module
+//   down(z) CHILDREN;
+// Usage: Translate Points
+//   pts = down(z, p);
+// Usage: Get Translation Matrix
+//   mat = down(z);
+//
+// Description:
+//   If called as a module, moves/translates all children down (in the Z- direction) by the given amount.
+//   If called as a function with the `p` argument, returns the translated VNF, point or list of points.
+//   If called as a function without the `p` argument, returns an affine3d translation matrix.
+//
+// Arguments:
+//   z = Scalar amount to move down.
+//   p = Either a point, or a list of points to be translated when used as a function.
+//
+// Example:
+//   #sphere(d=10);
+//   down(20) sphere(d=10);
+//
+// Example(NORENDER):
+//   pt1 = down(20, p=[15,23,42]);        // Returns: [15,23,22]
+//   pt2 = down(3, p=[[1,2,3],[4,5,6]]);  // Returns: [[1,2,0], [4,5,3]]
+//   mat3d = down(4);  // Returns: [[1,0,0,0],[0,1,0,0],[0,0,1,-4],[0,0,0,1]]

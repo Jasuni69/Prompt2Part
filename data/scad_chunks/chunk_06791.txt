@@ -1,0 +1,28 @@
+module test_f_is_path() {
+    testfn = f_is_path();
+    for (test = [
+        [undef,   false],
+        [false,   false],
+        [true,    false],
+        [-4,      false],
+        [0,       false],
+        [1.5,     false],
+        [3,       false],
+        [INF,     false],
+        [-INF,    false],
+        [NAN,     false],
+        ["",      false],
+        ["foo",   false],
+        [[4,5,6], false],
+        [[4:1:6], false],
+        [square(100), true],
+        [circle(100), true]
+    ]) {
+        assert(testfn(test[0]) == test[1], str(test[0]," should be ",test[1]));
+    }
+}
+test_f_is_path();
+
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

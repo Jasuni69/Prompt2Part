@@ -1,0 +1,5 @@
+function sinh(x) = (exp(x)-exp(-x))/2;
+
+
+// Function: cosh()
+// Description: Takes a value `x`, and returns the hyperbolic cosine of it.

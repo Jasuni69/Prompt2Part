@@ -1,0 +1,10 @@
+module line(p1, p2 ,width=0.3) { // single line plotter
+  hull() {
+    translate(p1){
+      circle(width);
+    }
+    translate(p2){
+      circle(width);
+    }
+  }
+}

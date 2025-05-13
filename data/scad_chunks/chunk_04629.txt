@@ -1,0 +1,6 @@
+module polyLineExample() {
+  radiiPoints=[[-4,0,1],[5,3,1.5],[0,7,0.1],[8,7,10],[20,20,0.8],[10,0,10]];
+  polyline(polyRound(radiiPoints,3), 0.05);
+  translate([0,10,0])
+  polyline(radiiPoints, 0.05);
+}

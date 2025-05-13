@@ -1,0 +1,147 @@
+function _cut_interp(pathcut, path, data) =
+  [for(entry=pathcut)
+    let(
+       a = path[entry[1]-1],
+        b = path[entry[1]],
+        c = entry[0],
+        i = max_index(v_abs(b-a)),
+        factor = (c[i]-a[i])/(b[i]-a[i])
+    )
+    (1-factor)*data[entry[1]-1]+ factor * data[entry[1]]
+  ];
+
+
+// Module: path_text()
+// Synopsis: Creates 2d or 3d text placed along a path.
+// SynTags: Geom
+// Topics: Text, Paths, Paths (2D), Paths (3D), Path Generators, Path Generators (2D)
+// See Also, text(), text2d()
+// Usage:
+//   path_text(path, text, [size], [thickness], [font], [lettersize=], [offset=], [reverse=], [normal=], [top=], [textmetrics=], [kern=])
+// Description:
+//   Place the text letter by letter onto the specified path using textmetrics (if available and requested)
+//   or user specified letter spacing.  The path can be 2D or 3D.  In 2D the text appears along the path with letters upright
+//   as determined by the path direction.  In 3D by default letters are positioned on the tangent line to the path with the path normal
+//   pointing toward the reader.  The path normal points away from the center of curvature (the opposite of the normal produced
+//   by path_normals()).  Note that this means that if the center of curvature switches sides the text will flip upside down.
+//   If you want text on such a path you must supply your own normal or top vector.
+//   .
+//   Text appears starting at the beginning of the path, so if the 3D path moves right to left
+//   then a left-to-right reading language will display in the wrong order. (For a 2D path text will appear upside down.)
+//   The text for a 3D path appears positioned to be read from "outside" of the curve (from a point on the other side of the
+//   curve from the center of curvature).  If you need the text to read properly from the inside, you can set reverse to
+//   true to flip the text, or supply your own normal.
+//   .
+//   If you do not have the experimental textmetrics feature enabled then you must specify the space for the letters
+//   using lettersize, which can be a scalar or array.  You will have the easiest time getting good results by using
+//   a monospace font such as "Liberation Mono".  Note that even with text metrics, spacing may be different because path_text()
+//   doesn't do kerning to adjust positions of individual glyphs.  Also if your font has ligatures they won't be used.
+//   .
+//   By default letters appear centered on the path.  The offset can be specified to shift letters toward the reader (in
+//   the direction of the normal).
+//   .
+//   You can specify your own normal by setting `normal` to a direction or a list of directions.  Your normal vector should
+//   point toward the reader.  You can also specify
+//   top, which directs the top of the letters in a desired direction.  If you specify your own directions and they
+//   are not perpendicular to the path then the direction you specify will take priority and the
+//   letters will not rest on the tangent line of the path.  Note that the normal or top directions that you
+//   specify must not be parallel to the path.
+//   .
+//   Historically fonts were specified by their "body size", the height of the metal body
+//   on which the glyphs were cast.  This means the size was an upper bound on the size
+//   of the font glyphs, not a direct measurement of their size.  In digital typesetting,
+//   the metal body is replaced by an invisible box, the em square, whose side length is
+//   defined to be the font's size.  The glyphs can be contained in that square, or they
+//   can extend beyond it, depending on the choices made by the font designer.  As a
+//   result, the meaning of font size varies between fonts: two fonts at the "same" size
+//   can differ significantly in the actual size of their characters.  Typographers
+//   customarily specify the size in the units of "points".  A point is 1/72 inch.  In
+//   OpenSCAD, you specify the size in OpenSCAD units (often treated as millimeters for 3d
+//   printing), so if you want points you will need to perform a suitable unit conversion.
+//   In addition, the OpenSCAD font system has a bug: if you specify size=s you will
+//   instead get a font whose size is s/0.72.  For many fonts this means the size of
+//   capital letters will be approximately equal to s, because it is common for fonts to
+//   use about 70% of their height for the ascenders in the font.  To get the customary
+//   font size, you should multiply your desired size by 0.72.
+//   .
+//   To find the fonts that you have available in your OpenSCAD installation,
+//   go to the Help menu and select "Font List".
+// Arguments:
+//   path = path to place the text on
+//   text = text to create
+//   size = The font will be created at this size divided by 0.72.   
+//   thickness / h / height = thickness of letters (not allowed for 2D path)
+//   font = Font to use.  Default: "Liberation Sans" (standard OpenSCAD default)
+//   ---
+//   lettersize = scalar or array giving size of letters
+//   center = center text on the path instead of starting at the first point.  Default: false
+//   offset = distance to shift letters "up" (towards the reader).  Not allowed for 2D path.  Default: 0
+//   normal = direction or list of directions pointing towards the reader of the text.  Not allowed for 2D path.
+//   top = direction or list of directions pointing toward the top of the text
+//   reverse = reverse the letters if true.  Not allowed for 2D path.  Default: false
+//   textmetrics = if set to true and lettersize is not given then use the experimental textmetrics feature.  You must be running a dev snapshot that includes this feature and have the feature turned on in your preferences.  Default: false
+//   valign = align text to the path using "top", "bottom", "center" or "baseline".  You can also adjust position with a numerical offset as in "top-5" or "bottom+2".  This only works with textmetrics enabled.  You can give a simple numerical offset, which will be relative to the baseline and works even without textmetrics.  Default: "baseline"
+//   kern = scalar or array giving spacing adjusments between each letter.  If it's an array it should have one less entry than the text string.  Default: 0
+//   language = text language, passed to OpenSCAD `text()`.  Default: "en"
+//   script = text script, passed to OpenSCAD `text()`.  Default: "latin" 
+// Example(3D,NoScales):  The examples use Liberation Mono, a monospaced font.  The width is 1/1.2 times the specified size for this font.  This text could wrap around a cylinder.
+//   path = path3d(arc(100, r=25, angle=[245, 370]));
+//   color("red")stroke(path, width=.3);
+//   path_text(path, "Example text", font="Liberation Mono", size=5, lettersize = 5/1.2);
+// Example(3D,NoScales): By setting the normal to UP we can get text that lies flat, for writing around the edge of a disk:
+//   path = path3d(arc(100, r=25, angle=[245, 370]));
+//   color("red")stroke(path, width=.3);
+//   path_text(path, "Example text", font="Liberation Mono", size=5, lettersize = 5/1.2, normal=UP);
+// Example(3D,NoScales):  If we want text that reads from the other side we can use reverse.  Note we have to reverse the direction of the path and also set the reverse option.
+//   path = reverse(path3d(arc(100, r=25, angle=[65, 190])));
+//   color("red")stroke(path, width=.3);
+//   path_text(path, "Example text", font="Liberation Mono", size=5, lettersize = 5/1.2, reverse=true);
+// Example(3D,Med,NoScales): text debossed onto a cylinder in a spiral.  The text is 1 unit deep because it is half in, half out.
+//   text = ("A long text example to wrap around a cylinder, possibly for a few times.");
+//   L = 5*len(text);
+//   maxang = 360*L/(PI*50);
+//   spiral = [for(a=[0:1:maxang]) [25*cos(a), 25*sin(a), 10-30/maxang*a]];
+//   difference(){
+//     cyl(d=50, l=50, $fn=120);
+//     path_text(spiral, text, size=5, lettersize=5/1.2, font="Liberation Mono", thickness=2);
+//   }
+// Example(3D,Med,NoScales): Same example but text embossed.  Make sure you have enough depth for the letters to fully overlap the object.
+//   text = ("A long text example to wrap around a cylinder, possibly for a few times.");
+//   L = 5*len(text);
+//   maxang = 360*L/(PI*50);
+//   spiral = [for(a=[0:1:maxang]) [25*cos(a), 25*sin(a), 10-30/maxang*a]];
+//   cyl(d=50, l=50, $fn=120);
+//   path_text(spiral, text, size=5, lettersize=5/1.2, font="Liberation Mono", thickness=2);
+// Example(3D,NoScales): Here the text baseline sits on the path.  (Note the default orientation makes text readable from below, so we specify the normal.)
+//   path = arc(100, points = [[-20, 0, 20], [0,0,5], [20,0,20]]);
+//   color("red")stroke(path,width=.2);
+//   path_text(path, "Example Text", size=5, lettersize=5/1.2, font="Liberation Mono", normal=FRONT);
+// Example(3D,NoScales): If we use top to orient the text upward, the text baseline is no longer aligned with the path.
+//   path = arc(100, points = [[-20, 0, 20], [0,0,5], [20,0,20]]);
+//   color("red")stroke(path,width=.2);
+//   path_text(path, "Example Text", size=5, lettersize=5/1.2, font="Liberation Mono", top=UP);
+// Example(3D,Med,NoScales): This sine wave wrapped around the cylinder has a twisting normal that produces wild letter layout.  We fix it with a custom normal which is different at every path point.
+//   path = [for(theta = [0:360]) [25*cos(theta), 25*sin(theta), 4*cos(theta*4)]];
+//   normal = [for(theta = [0:360]) [cos(theta), sin(theta),0]];
+//   zrot(-120)
+//   difference(){
+//     cyl(r=25, h=20, $fn=120);
+//     path_text(path, "A sine wave wiggles", font="Liberation Mono", lettersize=5/1.2, size=5, normal=normal);
+//   }
+// Example(3D,Med,NoScales): The path center of curvature changes, and the text flips.
+//   path =  zrot(-120,p=path3d( concat(arc(100, r=25, angle=[0,90]), back(50,p=arc(100, r=25, angle=[268, 180])))));
+//   color("red")stroke(path,width=.2);
+//   path_text(path, "A shorter example",  size=5, lettersize=5/1.2, font="Liberation Mono", thickness=2);
+// Example(3D,Med,NoScales): We can fix it with top:
+//   path =  zrot(-120,p=path3d( concat(arc(100, r=25, angle=[0,90]), back(50,p=arc(100, r=25, angle=[268, 180])))));
+//   color("red")stroke(path,width=.2);
+//   path_text(path, "A shorter example",  size=5, lettersize=5/1.2, font="Liberation Mono", thickness=2, top=UP);
+// Example(2D,NoScales): With a 2D path instead of 3D there's no ambiguity about direction and it works by default:
+//   path =  zrot(-120,p=concat(arc(100, r=25, angle=[0,90]), back(50,p=arc(100, r=25, angle=[268, 180]))));
+//   color("red")stroke(path,width=.2);
+//   path_text(path, "A shorter example",  size=5, lettersize=5/1.2, font="Liberation Mono");
+// Example(3D,NoScales): The kern parameter lets you adjust the letter spacing either with a uniform value for each letter, or with an array to make adjustments throughout the text.  Here we show a case where adding some extra space gives a better look in a tight circle.  When textmetrics are off, `lettersize` can do this job, but with textmetrics, you'll need to use `kern` to make adjustments relative to the text metric sizes.
+//   path = path3d(arc(100, r=12, angle=[150, 450]));
+//   color("red")stroke(path, width=.3);
+//   kern = [1,1.2,1,1,.3,-.2,1,0,.8,1,1.1];
+//   path_text(path, "Example text", font="Liberation Mono", size=5, lettersize = 5/1.2, kern=kern, normal=UP);

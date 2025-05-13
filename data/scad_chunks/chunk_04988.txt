@@ -1,0 +1,19 @@
+module _debug_poly_verts(points, size)
+{
+     labels=is_vector(points[0]) ? [for(i=idx(points)) str(i)]
+           :[for(j=idx(points), i=idx(points[j])) str(chr(97+j),i)];
+     points = is_vector(points[0]) ? points : flatten(points);
+     dups = vector_search(points, EPSILON, points);
+     color("red") {
+        for (ind=dups){
+            numstr = str_join(select(labels,ind),",");
+            up(0.2) {
+                translate(points[ind[0]]) {
+                    linear_extrude(height=0.1, convexity=10, center=true) {
+                        text(text=numstr, size=size, halign="center", valign="center");
+                    }
+                }
+            }
+        }
+    }
+}

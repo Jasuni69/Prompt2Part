@@ -1,0 +1,3 @@
+function encloses(where,what) =
+      (len([for(el=split(where,","))
+          if(str(what)==el)1])!=0)?true:false;

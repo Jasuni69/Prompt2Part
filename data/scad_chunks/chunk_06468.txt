@@ -1,0 +1,35 @@
+function translate(v=[0,0,0], p=_NO_ARG) = move(v=v, p=p);
+
+
+// Function&Module: left()
+//
+// Synopsis: Translates children leftwards (X-).
+// SynTags: Trans, Path, VNF, Mat
+// Topics: Affine, Matrices, Transforms, Translation
+// See Also: move(), right(), fwd(), back(), down(), up()
+//
+// Usage: As Module
+//   left(x) CHILDREN;
+// Usage: Translate Points
+//   pts = left(x, p);
+// Usage: Get Translation Matrix
+//   mat = left(x);
+//
+// Description:
+//   If called as a module, moves/translates all children left (in the X- direction) by the given amount.
+//   If called as a function with the `p` argument, returns the translated VNF, point or list of points.
+//   If called as a function without the `p` argument, returns an affine3d translation matrix.
+//
+// Arguments:
+//   x = Scalar amount to move left.
+//   p = Either a point, or a list of points to be translated when used as a function.
+//
+// Example:
+//   #sphere(d=10);
+//   left(20) sphere(d=10);
+//
+// Example(NORENDER):
+//   pt1 = left(20, p=[23,42]);           // Returns: [3,42]
+//   pt2 = left(20, p=[15,23,42]);        // Returns: [-5,23,42]
+//   pt3 = left(3, p=[[1,2,3],[4,5,6]]);  // Returns: [[-2,2,3], [1,5,6]]
+//   mat3d = left(4);  // Returns: [[1,0,0,-4],[0,1,0,0],[0,0,1,0],[0,0,0,1]]

@@ -1,0 +1,2 @@
+function _alpha(i, l, t, degree, knots) = 
+    (t - knots[i]) / (knots[i + degree + 1 - l] - knots[i]);

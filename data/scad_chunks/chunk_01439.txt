@@ -1,0 +1,20 @@
+module ring_terminal_assembly(type, thickness, top = false) { //! Earthing assembly for DiBond twin skins
+    screw = ringterm_screw(type);
+    washer = screw_washer(screw);
+    nut = screw_nut(screw);
+    screw_length = screw_length(screw, thickness + ringterm_thickness(type), 2, nyloc = true);
+
+    explode(10, true) star_washer(washer)
+        if(top)
+            ring_terminal(type) screw(screw, screw_length);
+        else
+            screw(screw, screw_length);
+
+    vflip()
+        translate_z(thickness)
+            explode(10, true) star_washer(washer)
+                if(!top)
+                    explode(10,true) ring_terminal(type) nut(nut, true);
+                else
+                    nut(nut, true);
+}

@@ -1,0 +1,56 @@
+function split_region_at_region_crossings(region1, region2, closed1=true, closed2=true, eps=EPSILON) = 
+    let(
+        region1=force_region(region1),
+        region2=force_region(region2)
+    )
+    assert(is_region(region1) && is_region(region2),"\nOne of the inputs is not a region.")
+    let(
+        xings = _region_region_intersections(region1, region2, closed1, closed2, eps),
+        regions = [region1,region2],
+        closed = [closed1,closed2]
+    )
+    [for(i=[0:1])
+      [for(p=idx(xings[i]))
+        let(
+            crossings = deduplicate([
+                                     [p,0,0],
+                                     each xings[i][p],
+                                     [p,len(regions[i][p])-(closed[i]?1:2), 1],
+                                    ],eps=eps),
+            subpaths = [
+                for (frag = pair(crossings)) 
+                    deduplicate(
+                        _path_select(regions[i][p], frag[0][1], frag[0][2], frag[1][1], frag[1][2], closed=closed[i]),
+                        eps=eps
+                    )
+            ]
+        )
+        [for(s=subpaths) if (len(s)>1) s]
+       ]
+    ];
+                
+                
+
+// Function: region_parts()
+// Synopsis: Splits a {{region}} into a list of connected regions.
+// SynTags: RegList
+// Topics: Regions, List Handling
+// See Also: split_region_at_region_crossings()
+// Usage:
+//   rgns = region_parts(region);
+// Description:
+//   Divides a {{region}} into a list of connected regions.  Each connected region has exactly one clockwise outside boundary
+//   and zero or more counter-clockwise outlines defining internal holes. Behavior is undefined on invalid regions whose
+//   components cross each other.
+// Example(2D,NoAxes):
+//   R = [for(i=[1:7]) square(i,center=true)];
+//   region_list = region_parts(R);
+//   rainbow(region_list) region($item);
+// Example(2D,NoAxes):
+//   R = [back(7,square(3,center=true)),
+//        square([20,10],center=true),
+//        left(5,square(8,center=true)),
+//        for(i=[4:2:8])
+//          right(5,square(i,center=true))];
+//   region_list = region_parts(R);
+//   rainbow(region_list) region($item);

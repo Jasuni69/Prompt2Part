@@ -1,0 +1,7 @@
+function visitable(x, y, z, cells, layers, rows, columns) = 
+    z >= 0 && z < layers &&    // z bound
+    y >= 0 && y < rows &&      // y bound
+    x >= 0 && x < columns &&   // x bound
+    !visited(x, y, z, cells);  // unvisited
+
+// setting (x, y) as being visited

@@ -1,0 +1,1 @@
+function fan_bore(type)           = type[2];    //! Diameter of the hole for the blades

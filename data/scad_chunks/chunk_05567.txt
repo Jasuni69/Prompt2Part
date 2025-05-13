@@ -1,0 +1,15 @@
+function f_min(a) = f_1arg(function(a) min(a))(a);
+
+
+// Function: f_max()
+// Synopsis: Returns a function to calculate the maximum value of a list.
+// Topics: Function Literals, Math Operators
+// See Also: f_min(), f_max(), f_min2(), f_max2(), f_min3(), f_max3()
+// Usage:
+//   fn = f_max();
+//   fn = f_max(a);
+// Description:
+//   A factory that generates function literals based on `max(a)`, where the `a`
+//   argument can optionally be replaced with a constant.
+// Arguments:
+//   a = If given, replaces the argument.

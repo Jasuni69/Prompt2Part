@@ -1,0 +1,33 @@
+function RotEx(rot=0,points=points,verschieb=tan(konisch),steigung=p,detail=fn,start=start,end=end)=
+[for(rotation=[0:detail*rot/360])for(i=innen?[0:len(points[0])-1]:[len(points[0])-1:-1:0])
+[ // Punkt
+if(rotation<detail*rot/360-end)(points[min(rotation,max(start,end))][i][0]+verschieb*rotation/detail*steigung)*sin(rotation*360/detail) //⇐ normal
+    else (points[detail*rot/360-rotation][i][0]+verschieb*rotation/detail*steigung)*sin(rotation*360/detail),
+if(rotation<detail*rot/360-end)profilkorrekturY*points[min(rotation,max(start,end))][i][1]+rotation/detail*steigung //⇐ normal
+    else profilkorrekturY*points[detail*rot/360-rotation][i][1]+rotation/detail*steigung,
+if(rotation<detail*rot/360-end)(points[min(rotation,max(start,end))][i][0]+verschieb*rotation/detail*steigung)*cos(rotation*360/detail) //⇐ normal
+    else (points[detail*rot/360-rotation][i][0]+verschieb*rotation/detail*steigung)*cos(rotation*360/detail) 
+] // Punkt end
+];
+
+facesALL=concat(
+faces0(points=RotEx(+0))//floor endcap
+,faces1(points=RotEx(0),start=len(RotEx(grad))-len(RotEx(0)))//top endcap
+
+,[if(innen)for(level=[0:detail-1])each faces31(points=RotEx(0),start=(len(RotEx(0)))*level)
+    else for(level=[0:detail-1])each faces3(points=RotEx(0),start=(len(RotEx(0)))*level)]//Outer wall
+,[if(innen)for(level=[0:detail-1])each faces41(points=RotEx(0),start=(len(RotEx(0)))*level)
+   else for(level=[0:detail-1])each faces4(points=RotEx(0),start=(len(RotEx(0)))*level)]//inner wall
+,[for(level=[0:(fn*min(1,grad/360))- 1])each faces5(points=RotEx(0),start=(len(RotEx(0)))*level)]// bottom     
+,[for(level=[detail-(fn*min(1,grad/360)):detail- 1])each faces6(points=RotEx(0),start=(len(RotEx(0)))*(level-(innen?1:+0)))]//top wall     
+);
+
+pointsALL=RotEx(grad);//3D
+if(profil)!Linear(x=0,y=1,es=p)polygon(points=pointskorr); 
+else Tz(center?center<0?-p/2+tz:tz:tz+p/2)color(innen?"slategrey":"gold"){
+       R(90,0,90) polyhedron(points=pointsALL,faces=facesALL,convexity=5);
+    if(cyl)Tz(-p/2)linear_extrude(h,convexity=5,scale=1+h*tan(konisch)/(d2/2))Kreis(r=d2/2-.000001,rand=innen?max(wand,+0.0001):mantel<0.01?0:wand,fn=fn,name=0);//Ring(h=h,rand=wand,d=abs(d2),cd=innen?-1:1);
+    }
+}
+
+//Coil(h=20,scale=.5,center=-1);

@@ -1,0 +1,5 @@
+module translate(v)
+{
+  $transform = $transform * (is_vector(v) && (len(v)==2 || len(v)==3) ? affine3d_translate(point3d(v)) : IDENT);
+  _translate(v) children();                   
+}

@@ -1,0 +1,1 @@
+function TO220_thickness() = 1.5; //! Thickness of the tab of a TO220

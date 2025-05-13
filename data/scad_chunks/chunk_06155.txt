@@ -1,0 +1,53 @@
+module partition_mask(l=100, w=100, h=100, cutsize=10, cutpath="jigsaw", gap=0, inverse=false, anchor=CENTER, spin=0, orient=UP)
+{
+    cutsize = is_vector(cutsize)? point2d(cutsize) : [cutsize*2, cutsize];
+    path = _partition_cutpath(l, h, cutsize, cutpath, gap);
+    midpath = select(path,1,-2);
+    sizepath = concat([path[0]+[-get_slop(),0]], midpath, [last(path)+[get_slop(),0]], [[+(l/2+get_slop()), (w+get_slop())*(inverse?-1:1)], [-(l/2+get_slop()), (w+get_slop())*(inverse?-1:1)]]);
+    bnds = pointlist_bounds(sizepath);
+    fullpath = concat(path, [[last(path).x, w*(inverse?-1:1)], [path[0].x, w*(inverse?-1:1)]]);
+    attachable(anchor,spin,orient, size=point3d(bnds[1]-bnds[0],h)) {
+        linear_extrude(height=h, center=true, convexity=10) {
+            intersection() {
+                offset(delta=-get_slop()) polygon(fullpath);
+                square([l, w*2], center=true);
+            }
+        }
+        children();
+    }
+}
+
+
+// Module: partition_cut_mask()
+// Synopsis: Creates a mask to cut an object into two subparts that can be reassembled.
+// SynTags: Geom
+// Topics: Partitions, Masking, Paths
+// See Also: partition_mask(), partition(), dovetail()
+// Usage:
+//   partition_cut_mask(l, [cutsize], [cutpath], [gap], [inverse], [$slop=], [anchor=], [spin=], [orient=]) [ATTACHMENTS];
+// Description:
+//   Creates a mask that you can use to difference with an object to cut it into two sub-parts that can be assembled.
+//   The `$slop` value is important to get the proper fit and should probably be smaller than 0.2.  The examples below
+//   use larger values to make the mask easier to see.  
+// Arguments:
+//   l = The length of the cut axis.
+//   h = The height of the part to be masked.
+//   cutsize = The width of the cut pattern to be used.  Default: 10
+//   cutpath = The cutpath to use.  Standard named paths are "flat", "sawtooth", "sinewave", "comb", "finger", "dovetail", "hammerhead", and "jigsaw".  Alternatively, you can give a cutpath as a 2D path, where X is between 0 and 1, and Y is between -0.5 and 0.5.  Default: "jigsaw"
+//   gap = Empty gaps between cutpath iterations.  Default: 0
+//   spin = Rotate this many degrees around the Z axis.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//   $slop = The width of the cut mask, to correct for printer-specific fitting. 
+// Examples:
+//   partition_cut_mask(gap=0, cutpath="dovetail");
+//   partition_cut_mask(gap=30, cutpath="dovetail");
+//   partition_cut_mask(gap=30, cutsize=15, cutpath="dovetail");
+//   partition_cut_mask(gap=30, cutsize=[20,20], cutpath="dovetail");
+// Examples(2DMed):
+//   partition_cut_mask(cutpath="sawtooth",$slop=0.5);
+//   partition_cut_mask(cutpath="sinewave",$slop=0.5);
+//   partition_cut_mask(cutpath="comb",$slop=0.5);
+//   partition_cut_mask(cutpath="finger",$slop=0.5);
+//   partition_cut_mask(cutpath="dovetail",$slop=1);
+//   partition_cut_mask(cutpath="hammerhead",$slop=1);
+//   partition_cut_mask(cutpath="jigsaw",$slop=0.5);

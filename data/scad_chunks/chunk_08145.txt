@@ -1,0 +1,39 @@
+module gyro_maze(ccells, wall_thickness, spacing) {
+    // Don't change these variables. They require more math.
+    radius = 15;
+    wall_height = 1;
+    levels = 4;
+    h = radius / 3;
+
+    module maze() {
+        translate([0, 0, radius / 3 - wall_height])
+        linear_extrude(wall_height) 
+        scale(1.029) {
+            difference() {
+                regular_polygon_maze(radius - wall_thickness, ccells, levels - 1, wall_thickness, $fn); 
+                circle(radius / 3.5);
+            }
+            circle(radius / 3.5 - wall_thickness / 1.45);
+        }
+    }
+
+    intersection() {
+        gyro(radius, levels, spacing);
+        union() {
+            maze();
+            mirror([0, 0, 1]) maze();
+        }
+    }
+
+    difference() {
+        gyro(radius, levels, spacing);
+        
+        translate([0, 0, h - wall_height])
+        linear_extrude(wall_height) 
+            square(radius * 2, center = true);
+
+        translate([0, 0, -h])
+        linear_extrude(wall_height) 
+            square(radius * 2, center = true);        
+    }
+}

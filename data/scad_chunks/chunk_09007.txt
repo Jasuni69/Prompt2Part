@@ -1,0 +1,6 @@
+function delaunayAddCoords(d, p) = 
+    [
+		[each delaunay_coords(d), p], 
+		delaunay_triangles(d), 
+		delaunay_circles(d)
+	];

@@ -1,0 +1,25 @@
+module Tdrop(r=1,d,grad,cut=true,name,help){
+
+kgrad=is_undef(grad)?atan(layer/(nozzle/1.75)):90-grad;
+delta=is_bool(cut)?nozzle-layer:cut; // added cut
+
+r=is_num(d)?d/2:r;
+h=cos(kgrad)*r;
+x=sin(kgrad)*r;
+h2=cut==false?h+tan(kgrad)*x:min(r+delta,h+tan(kgrad)*x);
+x2=cut==false? 0:x - (h2-h)/tan(kgrad);
+
+
+points=[
+//[-x,h],
+//[ x,h],
+each kreis(rand=0,r=r,grad=360-kgrad*2,center=true,rot=-90),
+if(x2>minVal)[- x2,h2],
+clampToX0([ x2,h2])
+];
+
+if(messpunkt)%Tz(.1)color("green",.25)circle(r=r,$fn=fn);
+polygon(points);
+InfoTxt("Tdrop",["grad",90-kgrad,"cut",cut],name);
+HelpTxt("Tdrop",["r",r,"d",d,"grad",grad,"cut",cut,"name",name],help);
+}

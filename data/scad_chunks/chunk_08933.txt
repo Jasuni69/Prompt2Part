@@ -1,0 +1,13 @@
+function _gyroid_point(n, x, y, z1, f1, z2, f2)=
+	let(
+		z3 = (z1 + z2) / 2,								    // find the middle between both limits z1, z2	
+		f3 = gyroid(x, y, z3)                               // calculate zthe gyroid function of the middle
+	)					
+	n < 0 ?	z3 :						                    // decide, whre the zero crossing of the gyroid function is
+	sign(f1) == sign(f3) ?								    // next step of iteration
+			_gyroid_point(n - 1, x, y, z3, f3, z2, f2) :	// zero crossing is between z2 and z3
+	        _gyroid_point(n - 1, x, y, z1, f1, z3, f3);	    // zero crossing is between z1 and z3
+
+// Calculates the gradient of the gyroid function. This is a vector perpendicularly pointing to the surface.
+// The point x, y, z must be a point of the gyroid surface.
+// x, y, z=coordinates of point

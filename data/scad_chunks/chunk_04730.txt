@@ -1,0 +1,6 @@
+function fragments(r=1) = ($fn > 0) ?
+  ($fn >= 3 ? $fn : 3) :
+  ceil(max(min(360.0 / $fa, r*2*PI / $fs), 5));
+
+// Calculate fragments for a linear dimension.
+// (don't factor in radius-based calculations)

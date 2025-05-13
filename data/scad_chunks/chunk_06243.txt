@@ -1,0 +1,129 @@
+module zcyl(
+    h, r, d, r1, r2, d1, d2, l,
+    chamfer, chamfer1, chamfer2,
+    chamfang, chamfang1, chamfang2,
+    rounding, rounding1, rounding2,
+    circum=false, realign=false, from_end=false, length, height,
+    anchor=CENTER, spin=0, orient=UP
+) {
+    r1 = get_radius(r1=r1, r=r, d1=d1, d=d, dflt=1);
+    r2 = get_radius(r1=r2, r=r, d1=d2, d=d, dflt=1);
+    l = one_defined([l,h,length,height],"l,h,length,height",1);
+    attachable(anchor,spin,orient, r1=r1, r2=r2, l=l) {
+        cyl(
+            l=l, r1=r1, r2=r2,
+            chamfer=chamfer, chamfer1=chamfer1, chamfer2=chamfer2,
+            chamfang=chamfang, chamfang1=chamfang1, chamfang2=chamfang2,
+            rounding=rounding, rounding1=rounding1, rounding2=rounding2,
+            circum=circum, realign=realign, from_end=from_end,
+            anchor=CENTER
+        );
+        children();
+    }
+}
+
+
+// Module: tube()
+// Synopsis: Creates a cylindrical or conical tube.
+// SynTags: Geom
+// Topics: Shapes (3D), Attachable, VNF Generators
+// See Also: rect_tube()
+// Description:
+//   Makes a hollow tube that can be cylindrical or conical by specifying inner and outer dimensions or by giving one dimension and
+//   wall thickness. 
+// Usage: Basic cylindrical tube, specifying inner and outer radius or diameter
+//   tube(h|l, or, ir, [center], [realign=], [anchor=], [spin=],[orient=]) [ATTACHMENTS];
+//   tube(h|l, od=, id=, ...)  [ATTACHMENTS];
+// Usage: Specify wall thickness
+//   tube(h|l, or|od=|ir=|id=, wall=, ...) [ATTACHMENTS];
+// Usage: Conical tubes
+//   tube(h|l, ir1=|id1=, ir2=|id2=, or1=|od1=, or2=|od2=, ...) [ATTACHMENTS];
+//   tube(h|l, or1=|od1=, or2=|od2=, wall=, ...) [ATTACHMENTS];
+// Usage: Rounded and chamfered tubes
+//   tube(..., [rounding=], [irounding=], [orounding=], [rounding1=], [rounding2=], [irounding1=], [irounding2=], [orounding1=], [orounding2=], [teardrop=], [clip_angle=]);
+//   tube(..., [chamfer=], [ichamfer=], [ochamfer=], [chamfer1=], [chamfer2=], [ichamfer1=], [ichamfer2=], [ochamfer1=], [ochamfer2=]);
+// Arguments:
+//   h / l / height / length = height of tube. Default: 1
+//   or = Outer radius of tube. Default: 1
+//   ir = Inner radius of tube.
+//   center = If given, overrides `anchor`.  A true value sets `anchor=CENTER`, false sets `anchor=DOWN`.
+//   ---
+//   od = Outer diameter of tube.
+//   id = Inner diameter of tube.
+//   wall = horizontal thickness of tube wall. Default 1
+//   or1 = Outer radius of bottom of tube.  Default: value of r)
+//   or2 = Outer radius of top of tube.  Default: value of r)
+//   od1 = Outer diameter of bottom of tube.
+//   od2 = Outer diameter of top of tube.
+//   ir1 = Inner radius of bottom of tube.
+//   ir2 = Inner radius of top of tube.
+//   id1 = Inner diameter of bottom of tube.
+//   id2 = Inner diameter of top of tube.
+//   ifn = Set the number of facets on the inside of the tube.
+//   circum = If true, the tube hole will circumscribe the circle of the given size.  Otherwise inscribes.  Default: `false`
+//   shift = [X,Y] amount to shift the center of the top end with respect to the center of the bottom end.
+//   rounding = The radius of the rounding on the ends of the tube.  Default: none.
+//   rounding1 = The radius of the rounding on the bottom end of the tube.
+//   rounding2 = The radius of the rounding on the top end of the tube.
+//   irounding = The radius of the rounding on the inside of the ends of the tube.  
+//   irounding1 = The radius of the rounding on the bottom inside end of the tube.
+//   irounding2 = The radius of the rounding on the top inside end of the tube.
+//   orounding = The radius of the rounding on the outside of the ends of the tube.
+//   orounding1 = The radius of the rounding on the bottom outside end of the tube.
+//   orounding2 = The radius of the rounding on the top outside end of the tube.
+//   rounding_fn = Set `$fn` for roundings.  
+//   chamfer = The size of the chamfer on the ends of the tube.  Default: none.
+//   chamfer1 = The size of the chamfer on the bottom end of the tube.
+//   chamfer2 = The size of the chamfer on the top end of the tube.
+//   ichamfer = The size of the chamfer on the inside of the ends of the tube.  
+//   ichamfer1 = The size of the chamfer on the bottom inside end of the tube.
+//   ichamfer2 = The size of the chamfer on the top inside end of the tube.
+//   ochamfer = The size of the chamfer on the outside of the ends of the tube. 
+//   ochamfer1 = The size of the chamfer on the bottom outside end of the tube.
+//   ochamfer2 = The size of the chamfer on the top outside end of the tube.
+//   teardrop = If given as a number, rounding around the bottom edges won't exceed this many degrees from the endcap, altering to a chamfer at that angle.  If true, the limit angle is 45 degrees.  Default: `false`
+//   clip_angle = If given as a number, rounding around the bottom edges won't exceed this many degrees from the endcap, with the rounding stopping at the bottom of the shape.  Default: (no clipping)
+//   realign = If true, rotate the inner and outer parts tube by half the angle of one face so that a face is aligned at the X+ axis.  Default: False
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+//   orient = Vector to rotate top towards, after spin.  See [orient](attachments.scad#subsection-orient).  Default: `UP`
+//
+// Example: These all Produce the Same Tube
+//   tube(h=30, or=40, wall=5);
+//   tube(h=30, ir=35, wall=5);
+//   tube(h=30, or=40, ir=35);
+//   tube(h=30, od=80, id=70);
+// Example: These all Produce the Same Conical Tube
+//   tube(h=30, or1=40, or2=25, wall=5);
+//   tube(h=30, ir1=35, ir2=20, wall=5);
+//   tube(h=30, or1=40, or2=25, ir1=35, ir2=20);
+// Example: Circular Wedge
+//   tube(h=30, or1=40, or2=30, ir1=20, ir2=30);
+// Example: Standard Connectors
+//   tube(h=30, or=40, wall=5) show_anchors();
+// Example: Chamfered tube
+//   back_half()
+//     tube(ir=10,or=20, h=30, chamfer=2);
+// Example: Rounded tube
+//   back_half()
+//     tube(ir=10,or=20,or2=5,ir2=2, h=30,
+//         rounding1=5, rounding2=1.5);
+// Example: Rounded conical tube, with negative rounding at base
+//   back_half()
+//     tube(ir=10,or=20,or2=5,ir2=2, h=30, rounding1=-5,rounding2=1.5);
+// Example: Teardrop bottom rounding
+//   back_half()
+//     tube(ir=10,or=20,or2=5,ir2=2, h=30,
+//         rounding1=5, rounding2=1.5, teardrop=true);
+// Example: Clipped bottom rounding
+//   back_half()
+//     tube(ir=10,or=20,or2=5,ir2=2, h=30,
+//         rounding1=5, rounding2=1.5, clip_angle=40);
+// Example: Mixing chamfers and roundings
+//   back_half()
+//     tube(ir=10,or=20,h=30, ochamfer1=-5,irounding1=-3, orounding2=6, ichamfer2=2);
+// Example: Tube with a square hole circumscribing its diameter
+//   tube(od=22, id=9, h=10, $fn=48, ifn=4, circum=true);
+//   half_of(v=[-1,1]) color("lightblue") cyl(d=9, h=12, $fn=32);
+// Example: Round ended hexagonal tube using `rounding_fn` to get sufficient facets on the roundings
+//   tube(or=10, ir=7, h=10, $fn=6, rounding_fn=64, rounding=1.3, teardrop=true);

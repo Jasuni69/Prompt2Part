@@ -1,0 +1,102 @@
+module worm_gear(
+    circ_pitch,
+    teeth,
+    worm_diam,
+    worm_starts = 1,
+    worm_arc = 45,
+    crowning = 0.1,
+    left_handed = false,
+    pressure_angle,
+    backlash = 0,
+    clearance,
+    profile_shift="auto",
+    slices = 10,
+    shaft_diam = 0,
+    gear_spin=0,
+    pitch,
+    diam_pitch,
+    mod,
+    anchor = CENTER,
+    spin = 0,
+    orient = UP
+) {
+    circ_pitch = _inherit_gear_pitch("worm_gear()", pitch, circ_pitch, diam_pitch, mod);
+    PA = _inherit_gear_pa(pressure_angle);
+    profile_shift = auto_profile_shift(teeth,PA,profile_shift=profile_shift);
+    checks =
+        assert(is_integer(teeth) && teeth>10)
+        assert(is_finite(worm_diam) && worm_diam>0)
+        assert(is_integer(worm_starts) && worm_starts>0)
+        assert(is_finite(worm_arc) && worm_arc>0 && worm_arc<90)
+        assert(is_finite(crowning) && crowning>=0)
+        assert(is_bool(left_handed))
+        assert(is_finite(PA) && PA>=0 && PA<90, "Bad pressure_angle value.")
+        assert(clearance==undef || (is_finite(clearance) && clearance>=0))
+        assert(is_finite(backlash) && backlash>=0)
+        assert(is_finite(shaft_diam) && shaft_diam>=0)
+        assert(slices==undef || (is_integer(slices) && slices>0))
+        assert(is_finite(profile_shift) && abs(profile_shift)<1)
+        assert(is_finite(gear_spin));
+    helical = asin(worm_starts * circ_pitch / PI / worm_diam);
+    pr = pitch_radius(circ_pitch, teeth, helical);
+    vnf = worm_gear(
+        circ_pitch = circ_pitch,
+        teeth = teeth,
+        worm_diam = worm_diam,
+        worm_starts = worm_starts,
+        worm_arc = worm_arc,
+        crowning = crowning,
+        left_handed = left_handed,
+        pressure_angle = PA,
+        backlash = backlash,
+        clearance = clearance,
+        profile_shift = profile_shift,
+        slices = slices
+    );
+    thickness = pointlist_bounds(vnf[0])[1].z;
+    attachable(anchor,spin,orient, r=pr, l=thickness) {
+        zrot(gear_spin)
+        difference() {
+            vnf_polyhedron(vnf, convexity=teeth/2);
+            if (shaft_diam > 0) {
+                cylinder(h=2*thickness+1, r=shaft_diam/2, center=true, $fn=max(12,segs(shaft_diam/2)));
+            }
+        }
+        children();
+    }
+}
+
+
+
+
+/// Function: _gear_tooth_profile()
+/// Usage: As Function
+///   path = _gear_tooth_profile(pitch, teeth, [pressure_angle], [clearance], [backlash], [internal]);
+/// Topics: Gears
+/// See Also: spur_gear2d()
+/// Description:
+///   When called as a function, returns the 2D profile path for an individual gear tooth.
+///   When called as a module, creates the 2D profile shape for an individual gear tooth.
+/// Arguments:
+///   circ_pitch = The circular pitch, the distance between teeth centers around the pitch circle.
+///   teeth = Total number of teeth on the spur gear that this is a tooth for.
+///   pressure_angle = Pressure Angle.  Controls how straight or bulged the tooth sides are. In degrees.
+///   clearance = Gap between top of a tooth on one gear and bottom of valley on a meshing gear (in millimeters)
+///   backlash = Gap between two meshing teeth, in the direction along the circumference of the pitch circle
+///   internal = If true, create a mask for difference()ing from something else.
+///   center = If true, centers the pitch circle of the tooth profile at the origin.  Default: false.
+///   diam_pitch = The diametral pitch, or number of teeth per inch of pitch diameter.  The diametral pitch is a completely different thing than the pitch diameter.
+///   mod = The module of the gear (pitch diameter / teeth)
+/// Example(2D):
+///   _gear_tooth_profile(circ_pitch=5, teeth=20, pressure_angle=20);
+/// Example(2D): Metric Gear Tooth
+///   _gear_tooth_profile(mod=2, teeth=20, pressure_angle=20);
+/// Example(2D):
+///   _gear_tooth_profile(
+///       circ_pitch=5, teeth=20, pressure_angle=20
+///   );
+/// Example(2D): As a function
+///   path = _gear_tooth_profile(
+///       circ_pitch=5, teeth=20, pressure_angle=20
+///   );
+///   stroke(path, width=0.1);

@@ -1,0 +1,1 @@
+function fan_blades(type)         = type[8];    //! The number of blades

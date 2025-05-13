@@ -1,0 +1,11 @@
+module heater_block(type, naked = false, resistor_wire_rotate = [0,0,0]) {
+    translate_z(-hot_end_length(type))  {
+        translate_z(nozzle_h)
+            color("lightgrey")
+                translate([-heater_x, -heater_y, 0])
+                    cube([heater_length, heater_width, heater_height]);
+
+        e3d_resistor(type, naked, resistor_wire_rotate);
+        e3d_nozzle(type);
+    }
+}

@@ -1,0 +1,45 @@
+function xscale(x=1, p=_NO_ARG, cp=0) =
+    assert(is_finite(x))
+    assert(p==_NO_ARG || is_list(p))
+    assert(is_finite(cp) || is_vector(cp))
+    let( cp = is_num(cp)? [cp,0,0] : cp )
+    scale([x,1,1], cp=cp, p=p);
+
+
+// Function&Module: yscale()
+//
+// Synopsis: Scales children along the Y axis.
+// SynTags: Trans, Path, VNF, Mat
+// Topics: Affine, Matrices, Transforms, Scaling
+// See Also: scale(), xscale(), zscale()
+//
+// Usage: As Module
+//   yscale(y, [cp=]) CHILDREN;
+// Usage: Scale Points
+//   scaled = yscale(y, p, [cp=]);
+// Usage: Get Affine Matrix
+//   mat = yscale(y, [cp=]);
+//
+// Description:
+//   Scales along the Y axis by the scaling factor `y`.
+//   * Called as the built-in module, scales all children.
+//   * Called as a function with a point in the `p` argument, returns the scaled point.
+//   * Called as a function with a list of points in the `p` argument, returns the list of scaled points.
+//   * Called as a function with a [bezier patch](beziers.scad) in the `p` argument, returns the scaled patch.
+//   * Called as a function with a [VNF structure](vnf.scad) in the `p` argument, returns the scaled VNF.
+//   * Called as a function without a `p` argument, and a 2D list of scaling factors in `v`, returns an affine2d scaling matrix.
+//   * Called as a function without a `p` argument, and a 3D list of scaling factors in `v`, returns an affine3d scaling matrix.
+//
+// Arguments:
+//   y = Factor to scale by, along the Y axis.
+//   p = A point, path, bezier patch, or VNF to scale, when called as a function.
+//   ---
+//   cp = If given as a point, centers the scaling on the point `cp`.  If given as a scalar, centers scaling on the point `[0,cp,0]`
+//
+// Example: As Module
+//   yscale(3) sphere(r=10);
+//
+// Example(2D): Scaling Points
+//   path = circle(d=50,$fn=12);
+//   #stroke(path,closed=true);
+//   stroke(yscale(2,p=path),closed=true);

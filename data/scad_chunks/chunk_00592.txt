@@ -1,0 +1,1 @@
+function light_strip_clip_width(light) = light_strip_depth(light) + 2 * wall;       //! Outside width of clip

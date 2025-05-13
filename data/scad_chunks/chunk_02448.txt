@@ -1,0 +1,8 @@
+module holes()
+    for(x = [0 : cols - 1], y = [0 : rows - 1])
+        translate([x - (cols -1) / 2, y - (rows - 1) / 2] * tool_pitch)
+            children();
+
+box_mm = gridfinity_bin_size_mm(box);
+wall = 1.75;
+bwall = 1;

@@ -1,0 +1,4 @@
+function vx_union(points1, points2) = 
+    hashset_elems(
+        hashset(concat(points1, points2), hash = _pt3_hash)
+    );

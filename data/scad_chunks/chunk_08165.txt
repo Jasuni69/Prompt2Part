@@ -1,0 +1,10 @@
+module test_ellipse_extrude() {
+    echo("==== test_ellipse_extrude ====");
+    
+    semi_minor_axis = 5;
+    
+    ellipse_extrude(semi_minor_axis) 
+        circle(semi_minor_axis * 2);
+}
+
+test_ellipse_extrude();

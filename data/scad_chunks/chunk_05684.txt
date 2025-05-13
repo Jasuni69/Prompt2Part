@@ -1,0 +1,81 @@
+module right_triangle(size=[1,1], center, anchor, spin=0) {
+    size = is_num(size)? [size,size] : size;
+    anchor = get_anchor(anchor, center, [-1,-1], [-1,-1]);
+    check = assert(is_vector(size,2), "Size must be a scalar or 2-vector");
+    path = right_triangle(size, anchor="origin");
+    anchors = [
+        named_anchor("hypot", CTR, unit([size.y,size.x])),
+    ];
+    attachable(anchor,spin, two_d=true, size=[size.x,size.y], anchors=anchors) {
+        polygon(path);
+        children();
+    }
+}
+
+
+// Function&Module: trapezoid()
+// Synopsis: Creates a trapezoid with parallel top and bottom sides.
+// SynTags: Geom, Path
+// Topics: Shapes (2D), Paths (2D), Path Generators, Attachable
+// See Also: rect(), square()
+// Usage: As Module
+//   trapezoid(h, w1, w2, [shift=], [rounding=], [chamfer=], [flip=], ...) [ATTACHMENTS];
+//   trapezoid(h, w1, ang=, [rounding=], [chamfer=], [flip=], ...) [ATTACHMENTS];
+//   trapezoid(h, w2=, ang=, [rounding=], [chamfer=], [flip=], ...) [ATTACHMENTS];
+//   trapezoid(w1=, w2=, ang=, [rounding=], [chamfer=], [flip=], ...) [ATTACHMENTS];
+// Usage: As Function
+//   path = trapezoid(...);
+// Description:
+//   When called as a function, returns a 2D path for a trapezoid with parallel front and back (top and bottom) sides. 
+//   When called as a module, creates a 2D trapezoid.  You can specify the trapezoid by giving its height and the lengths
+//   of its two bases.  Alternatively, you can omit one of those parameters and specify the lower angle(s).
+//   The shift parameter, which cannot be combined with ang, shifts the back (top) of the trapezoid to the right.  
+// Arguments:
+//   h = The Y axis height of the trapezoid.
+//   w1 = The X axis width of the front end of the trapezoid.
+//   w2 = The X axis width of the back end of the trapezoid.
+//   ---
+//   ang = Specify the bottom angle(s) of the trapezoid.  Can give a scalar for an isosceles trapezoid or a list of two angles, the left angle and right angle.  You must omit one of `h`, `w1`, or `w2` to allow the freedom to control the angles. 
+//   shift = Scalar value to shift the back of the trapezoid along the X axis by.  Cannot be combined with ang.  Default: 0
+//   rounding = The rounding radius for the corners.  If given as a list of four numbers, gives individual radii for each corner, in the order [X+Y+,X-Y+,X-Y-,X+Y-]. Default: 0 (no rounding)
+//   chamfer = The Length of the chamfer faces at the corners.  If given as a list of four numbers, gives individual chamfers for each corner, in the order [X+Y+,X-Y+,X-Y-,X+Y-].  Default: 0 (no chamfer)
+//   flip = If true, negative roundings and chamfers will point forward and back instead of left and right.  Default: `false`.
+//   atype = The type of anchoring to use with `anchor=`.  Valid opptions are "box" and "perim".  This lets you choose between putting anchors on the rounded or chamfered perimeter, or on the square bounding box of the shape. Default: "box"
+//   anchor = Translate so anchor point is at origin (0,0,0).  See [anchor](attachments.scad#subsection-anchor).  Default: `CENTER`
+//   spin = Rotate this many degrees around the Z axis after anchor.  See [spin](attachments.scad#subsection-spin).  Default: `0`
+// Anchor Types:
+//   box = Anchor is with respect to the rectangular bounding box of the shape.
+//   perim = Anchors are placed along the rounded or chamfered perimeter of the shape.
+// Examples(2D):
+//   trapezoid(h=30, w1=40, w2=20);
+//   trapezoid(h=25, w1=20, w2=35);
+//   trapezoid(h=20, w1=40, w2=0);
+//   trapezoid(h=20, w1=30, ang=60);
+//   trapezoid(h=20, w1=20, ang=120);
+//   trapezoid(h=20, w2=10, ang=60);
+//   trapezoid(h=20, w1=50, ang=[40,60]);
+//   trapezoid(w1=30, w2=10, ang=[30,90]);
+// Example(2D): Chamfered Trapezoid
+//   trapezoid(h=30, w1=60, w2=40, chamfer=5);
+// Example(2D): Negative Chamfered Trapezoid
+//   trapezoid(h=30, w1=60, w2=40, chamfer=-5);
+// Example(2D): Flipped Negative Chamfered Trapezoid
+//   trapezoid(h=30, w1=60, w2=40, chamfer=-5, flip=true);
+// Example(2D): Rounded Trapezoid
+//   trapezoid(h=30, w1=60, w2=40, rounding=5);
+// Example(2D): Negative Rounded Trapezoid
+//   trapezoid(h=30, w1=60, w2=40, rounding=-5);
+// Example(2D): Flipped Negative Rounded Trapezoid
+//   trapezoid(h=30, w1=60, w2=40, rounding=-5, flip=true);
+// Example(2D): Mixed Chamfering and Rounding
+//   trapezoid(h=30, w1=60, w2=40, rounding=[5,0,-10,0],chamfer=[0,8,0,-15],$fa=1,$fs=1);
+// Example(2D): default anchors for roundings
+//   trapezoid(h=30, w1=100, ang=[66,44],rounding=5) show_anchors();
+// Example(2D): default anchors for negative roundings are still at the trapezoid corners
+//   trapezoid(h=30, w1=100, ang=[66,44],rounding=-5) show_anchors();
+// Example(2D): "perim" anchors are at the tips of negative roundings
+//   trapezoid(h=30, w1=100, ang=[66,44],rounding=-5, atype="perim") show_anchors();
+// Example(2D): They point the other direction if you flip them
+//   trapezoid(h=30, w1=100, ang=[66,44],rounding=-5, atype="perim",flip=true) show_anchors();
+// Example(2D): Called as Function
+//   stroke(closed=true, trapezoid(h=30, w1=40, w2=20));

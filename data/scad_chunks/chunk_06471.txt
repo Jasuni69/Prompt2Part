@@ -1,0 +1,6 @@
+module right(x=0, p) {
+    req_children($children);    
+    assert(is_undef(p), "Module form `right()` does not accept p= argument.");
+    assert(is_finite(x), "Invalid number")
+    translate([x,0,0]) children();
+}

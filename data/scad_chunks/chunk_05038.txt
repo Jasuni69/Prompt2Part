@@ -1,0 +1,18 @@
+function _revsurf_influence(point, path, coef, exp, neg, maxdist) =
+    let(
+         pt = [norm([point.x,point.y]), point.z],
+         segs = pair(path),
+         dist = min([for(seg=segs)
+                       let(
+                           c=seg[1]-seg[0],
+                           s0 = seg[0]-pt,
+                           t = -s0*c/(c*c)
+                        )
+                        t<0 ? norm(s0)
+                      : t>1 ? norm(seg[1]-pt)
+                      : norm(s0+t*c)]),
+         inside = [] == [for(seg=segs)
+                          if (cross(seg[1]-seg[0], pt-seg[0]) > EPSILON) 1]
+                  ? -1 : 1
+    )
+    neg * (coef / (max(0,inside*dist+maxdist)))^exp;

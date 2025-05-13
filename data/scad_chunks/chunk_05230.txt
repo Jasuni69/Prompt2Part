@@ -1,0 +1,33 @@
+module recolor(c="default")
+{
+    req_children($children);  
+    $color=c;
+    children();
+}
+
+
+// Module: color_this()
+// Synopsis: Sets the color for children at the current level only.
+// SynTags: Trans
+// Topics: Attachments
+// See Also: recolor(), hsl(), hsv()
+// Usage:
+//   color_this([c]) CHILDREN;
+// Description:
+//   Sets the color for children at one level, reverting to the previous color for further descendants.
+//   This works only with attachables and you cannot have any color() modules above it in any parents,
+//   only recolor() or other color_this() modules.  This works using the `$color` and `$save_color` variables,
+//   which attachable objects make use of to set the color. 
+// Arguments:
+//   c = Color name or RGBA vector.  Default: the default color in your color scheme
+// Side Effects:
+//   Changes the value of `$color` and `$save_color`.
+//   Sets the color of child attachments.
+// Example:
+//   cuboid([10,10,5])
+//     color_this("green")attach(TOP,BOT) cuboid([9,9,4.5])
+//       attach(TOP,BOT) cuboid([8,8,4])
+//         color_this("purple") attach(TOP,BOT) cuboid([7,7,3.5])
+//           attach(TOP,BOT) cuboid([6,6,3])
+//             color_this("cyan")attach(TOP,BOT) cuboid([5,5,2.5])
+//               attach(TOP,BOT) cuboid([4,4,2]);

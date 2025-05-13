@@ -1,0 +1,11 @@
+function _nz_worley3(p, seed, grid_w, dist) = 
+    let(
+        fcord = [floor(p.x / grid_w), floor(p.y / grid_w), floor(p.z / grid_w)],
+        gwv = [1, grid_w, grid_w ^ 2],
+        nbrs = _neighbors(fcord, seed, grid_w, gwv)
+    )
+    dist == "euclidean" ? _nz_worley_euclidean(p, nbrs) :
+    dist == "manhattan" ? _nz_worley_manhattan(p, nbrs) :
+    dist == "chebyshev" ? _nz_worley_chebyshev(p, nbrs) : 
+    dist == "border"    ? _nz_worley_border(p, nbrs) :
+    assert("Unknown distance option");

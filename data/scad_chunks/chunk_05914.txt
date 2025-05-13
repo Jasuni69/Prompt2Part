@@ -1,0 +1,30 @@
+function lmXuu_info(size) =
+    let(
+        data = [
+            // size, diam, length
+            [  4,   8,  12],
+            [  5,  10,  15],
+            [  6,  12,  19],
+            [  8,  15,  24],
+            [ 10,  19,  29],
+            [ 12,  21,  30],
+            [ 13,  23,  32],
+            [ 16,  28,  37],
+            [ 20,  32,  42],
+            [ 25,  40,  59],
+            [ 30,  45,  64],
+            [ 35,  52,  70],
+            [ 40,  60,  80],
+            [ 50,  80, 100],
+            [ 60,  90, 110],
+            [ 80, 120, 140],
+            [100, 150, 175],
+        ],
+        found = search([size], data, 1)[0]
+    )
+    assert(found!=[], str("Unsupported lmXuu linear bearing size: ", size))
+    select(data[found], 1, -1);
+
+
+
+// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

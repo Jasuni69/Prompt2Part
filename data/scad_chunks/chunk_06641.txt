@@ -1,0 +1,8 @@
+module test_upcase() {
+    assert(upcase("") == "");
+    assert(upcase("ABCDEFGHIJKLMNOPQRSTUVWXYZ") == "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    assert(upcase("abcdefghijklmnopqrstuvwxyz") == "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    assert(upcase("1234567890!@#$%^&*()") == "1234567890!@#$%^&*()");
+    assert(upcase("_+-=[]\\{}|;':\",./<>?`~") == "_+-=[]\\{}|;':\",./<>?`~");
+}
+test_upcase();

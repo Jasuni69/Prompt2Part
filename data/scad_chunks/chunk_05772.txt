@@ -1,0 +1,5 @@
+function _pts_not_reported(pts, varr, reports) =
+    [
+        for (i = pts, report = reports, pt = report[3])
+        if (varr[i] == pt) 1
+    ] == [];

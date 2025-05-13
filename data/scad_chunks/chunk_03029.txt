@@ -1,0 +1,50 @@
+//---------------------------------------------------------
+// This design is parameterized based on the size of a PCB.
+//
+//  Script to creates a box for a Wemos D1 mini
+//
+//  Version 1.2 (12-12-2023)
+//
+//---------------------------------------------------------
+include <../YAPPgenerator_v3.scad>
+
+// Note: length/lengte refers to X axis, 
+//       width/breedte to Y, 
+//       height/hoogte to Z
+
+/*
+      padding-back|<------pcb length --->|<padding-front
+                            RIGHT
+        0    X-as ---> 
+        +----------------------------------------+   ---
+        |                                        |    ^
+        |                                        |   padding-right 
+        |                                        |    v
+        |    -5,y +----------------------+       |   ---              
+ B    Y |         | 0,y              x,y |       |     ^              F
+ A    - |         |                      |       |     |              R
+ C    a |         |                      |       |     | pcb width    O
+ K    s |         |                      |       |     |              N
+        |         | 0,0              x,0 |       |     v              T
+      ^ |    -5,0 +----------------------+       |   ---
+      | |                                        |    padding-left
+      0 +----------------------------------------+   ---
+        0    X-as --->
+                          LEFT
+*/
+
+printLidShell       = true;
+printBaseShell      = true;
+
+// Edit these parameters for your own board dimensions
+wallThickness       = 1.5;
+basePlaneThickness  = 1.0;
+lidPlaneThickness   = 1.0;
+
+baseWallHeight      = 5;
+lidWallHeight       = 3;
+
+//-- D E B U G -------------------
+showSideBySide      = true;
+onLidGap            = 3;
+shiftLid            = 0;

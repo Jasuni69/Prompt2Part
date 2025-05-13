@@ -1,0 +1,1 @@
+function paul_bourke_triangle(levels=6,  step=1) = lsystem_turtle(levels=levels, step=step, angle=120, "F+F+F",     [["F","F-F+F"]]);

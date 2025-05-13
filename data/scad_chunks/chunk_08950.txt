@@ -1,0 +1,1 @@
+function get_state_weight(weights, state) = weights[search([state], weights)[0]][1];

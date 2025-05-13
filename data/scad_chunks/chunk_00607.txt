@@ -1,0 +1,1 @@
+function 7_segment_digits(type) = let(d = 7_segment_digit_size(type)) floor(7_segment_size(type).x / (d.x + d.y * tan(d[3])));

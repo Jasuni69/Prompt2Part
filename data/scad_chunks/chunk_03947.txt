@@ -1,0 +1,1 @@
+function solidInfo() = $geomInfo[getTypeIndex($type_geomInfoSolid) ][0];

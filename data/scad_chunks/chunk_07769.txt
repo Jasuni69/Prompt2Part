@@ -1,0 +1,6 @@
+module Aussenkreis(h=5,d=5.5,eck=6,kreis=0,fn=150,n=1)//misleading depreciated
+{
+    echo("!!!!!!!!!!!!!!!!!! Renamed Inkreis");
+    Inkreis(h=h,d=d,eck=eck,kreis=kreis,fn=fn,n=n);
+    echo("!!!!!!!!!!!!!!!!!! Renamed USE Inkreis");
+}

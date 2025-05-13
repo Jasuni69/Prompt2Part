@@ -1,0 +1,78 @@
+module cutoutsForScrewHoles(type)
+{      
+  for(conn = connectors)
+  {
+    //-- Add yappThroughLid option
+    invertPart = isTrue(yappThroughLid, conn);
+
+    if ((!invertPart && type==yappPartBase) || (invertPart && type==yappPartLid)) 
+    {     
+      allCorners = (isTrue(yappAllCorners, conn)) ? true : false;
+      primeOrigin = (!isTrue(yappBackLeft, conn) && !isTrue(yappFrontLeft, conn) && !isTrue(yappFrontRight, conn) && !isTrue(yappBackRight, conn) && !isTrue(yappAllCorners, conn) ) ? true : false;
+          
+      // Get the desired coordinate system    
+      theCoordSystem = getCoordSystem(conn, yappCoordPCB);    
+      face = (type==yappPartBase) ? yappBase : yappLid ;
+   
+      theLength = getLength(theCoordSystem);
+      theWidth = getWidth(theCoordSystem);
+      theHeight = shellHeight; //getHeight(theCoordSystem);
+     
+      posX = translate2Box_X (conn[0], face, theCoordSystem);
+      posY = translate2Box_Y (conn[1], face, theCoordSystem);
+
+      posX2 = translate2Box_X (theLength - conn[0], face, theCoordSystem);
+      posY2 = translate2Box_Y (theWidth - conn[1], face, theCoordSystem);
+
+      posZ = (invertPart) ? -lidPlaneThickness : 0;
+      
+      if ((primeOrigin) || (allCorners) || isTrue(yappBackLeft, conn))
+      {
+        translate([posX, posY, posZ-0.02])
+          screwHeadHole(conn);
+      }
+      if ((allCorners) || isTrue(yappFrontLeft, conn))
+      {
+        translate([posX2, posY, posZ-0.02])
+          screwHeadHole (conn);
+      }
+      if ((allCorners) || isTrue(yappFrontRight, conn))
+      {
+        translate([posX2, posY2, posZ-0.02])
+          screwHeadHole (conn);
+      }
+      if ((allCorners) || isTrue(yappBackRight, conn))
+      {
+        translate([posX, posY2, posZ-0.02])
+          screwHeadHole (conn);
+      }     
+    } // for conn ..  
+  }//if
+} //-- cutoutsForScrewHoles()
+
+
+//===========================================================
+//--
+//--        -->|             |<-- tubeLength and tubeWidth-->
+//--    --------             ----------------------------------------------------
+//--                                         # lidPlaneThickness             Leave .5mm is not yappThroughLid 
+//--    ----+--+             +--+---------------------------------------      
+//--        |  |             |  |   ^                    
+//--        |  |             |  |   |
+//--        |  |             |  |   #Tube Height
+//--        |  |             |  |   |
+//--        |  |             |  |   |
+//--        |  |             |  |   |
+//--        |  |             |  |   v
+//--        +--+             +--+   
+//--
+//--       #tAbvPcb
+//--        
+//--   +------------------------------------ topPcb 
+//--   |  # pcb_Thickness
+//--   +-+--+-------------------------------
+//--     |  | # standoff_Height
+//-- ----+  +-------------------------------------
+//--              # basePlaneThickness
+//-- ---------------------------------------------
+//--

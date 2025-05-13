@@ -1,0 +1,44 @@
+module Involute(r=10,s=1,h=5,r2,grad,end=+1,delta=0,delta2,center=true,oppose=false,centerP=false,fn,fs=fs,name,help){
+
+//fn=ceil(grad/360)*fn;
+h=max(0,is_undef(r2)?h:r2-r);
+grad=grad?grad:360/(PI*2*r) * sqrt( 2*r*h+h^2);
+deltaList=delta;
+delta=is_list(delta)?delta[0]:delta;
+deltai =is_undef(delta2)&&is_num(deltaList)? delta/2:delta ;
+delta2=is_undef(delta2)&&is_num(deltaList)?-delta:is_list(deltaList)?deltaList[1]:delta2;
+grads=gradS(s=s,r=r);
+
+
+p1=involute(r=r,grad=grad,rot=0,rev=true,delta=delta,fn=1);
+pOpp=involute(r=r,grad=grad+(end>0?grads:0),rot=0,rev=true,delta=deltai,fn=1);
+ih=oppose?norm(p1[0]):norm(pOpp[0]);
+
+winkel=(atan2(p1[0].x,p1[0].y));
+rot=winkel+gradS(r=ih,s=s)/2;
+
+
+points=oppose?concat(
+  centerP?[[0,0]]:[],
+  involute(r=r,grad=grad,rot=center?-rot:0,delta=delta,fn=fn,fs=fs),
+  involute(r=r,grad=-grad,rot=center?rot:rot*2,rev=true,delta=-delta,fn=fn,fs=fs)
+):
+  concat(
+    centerP?[[0,0]]:[],
+    involute(r=r,grad=grad+(end>0? end>1?grads/2 : grads:0),rot=center?-grads/2:0,delta=deltai,fn=fn,fs=fs),
+    involute(r=r,grad=grad+(end<0?-grads:end>1?-grads/2 : 0),rot=center?grads/2:grads,rev=true,delta=delta2,fn=fn,fs=fs)
+  )
+;
+
+
+polygon(points);
+
+InfoTxt("Involute",["h",ih],name);
+
+HelpTxt("Involute",["r",r,"s",s,"h",h,"grad",grad,"end",end,"delta",delta,"delta2",delta2,"center",center,"oppose",oppose,"centerP",centerP,"fn",fn,"fs",fs,"name",name],help);
+}
+
+
+
+
+//NACA(); // 2D NACA airfoil profil

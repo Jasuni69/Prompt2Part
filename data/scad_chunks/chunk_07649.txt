@@ -1,0 +1,74 @@
+module Torus(trx=+6,d=4,a=360,fn=fn,fn2=38,r=0,grad=0,dia=0,center=true,end=0,gradEnd=90,trxEnd=0,endRot=0,endspiel=+0,lap=0,name,help)
+    rotate(grad?0:-a/2){
+
+    end=is_undef(spheres)?is_bool(end)?end?-1:0:end:spheres;//compatibility
+    $d=d;
+    $r=d/2;   
+    endRot=is_list(endRot)?endRot:[endRot,endRot];
+    trx=dia?dia/2-d/2:trx;
+    grad=grad?grad:a;
+    a=end==-1&&!trxEnd? grad-(asin($r/trx)*2)*sign(grad):
+                                 grad;
+         //   end==-1&&!$children? a-(asin($r/trx)*2)*sign(a):
+         //                        a;
+      
+    
+    $idxON=false;
+    
+    InfoTxt("Torus",["Innen∅",2*trx-d,"Mitten∅",2*trx,"Aussen∅",2*trx+d],info=name);
+    HelpTxt("Torus",["trx",trx,"d",d,"a",a,"fn",fn,"fn2",fn2,",r",r,", grad",grad,"dia",dia,"center",center,"end",end,"gradEnd",gradEnd,"trxEnd",trxEnd,"endRot",endRot,"endspiel",endspiel,"name",name,"$d",$d,"lap",lap],help);
+    
+        
+  rotate(end==-1? (asin($r/trx))*sign(grad):
+                  0){
+     $idx=true;
+     $info=is_undef(name)?is_undef($info)?false:$info:name;
+      translate([0,0,center?0:d/2])rotate(end?-lap:0) RotEx(grad=end?a+lap*2:a,fn=fn,cut=1,help=false,center=0){
+        $idx=0;
+        $tab=is_undef($tab)?1:b($tab,false)+1;
+        if($children)T(x=trx)R(0,0,r)children();
+        else T(x=trx)R(0,0,r)circle(d=d,$fn=fn2);
+      }
+
+      if(end&&a!=360&&!trxEnd){
+          if($children){
+              rotate(a+endspiel*sign(grad))translate([trx,0,center?0:d/2])scale([1,abs(end),1])R(0,endRot[1])RotEx(cut=sign(end*grad),grad=180*sign(end),fn=fn/2,help=false)rotate(endRot[1])children();
+              rotate(+0)translate([trx,0,center?0:d/2])rotate(180)scale([1,abs(end),1])R(0,-endRot[0])RotEx(cut=sign(end*grad),grad=180*sign(end),fn=fn/2,help=false)rotate(endRot[0])children();  
+          }
+          else{
+          rotate(a-sign(grad)*minVal)translate([trx,0,center?0:d/2])scale([1,abs(end),1])R(90)Halb(sign(grad)>0?1:0)sphere(d=d,$fn=fn2);
+          rotate(sign(grad)*minVal)translate([trx,0,center?0:d/2])scale([1,abs(end),1])R(90)Halb(sign(grad)>0?0:1)sphere(d=d,$fn=fn2);
+          }
+      }
+      
+      if(trxEnd)translate([0,0,center?0:d/2]){ // End Ringstück
+          if($children){
+          T(trx-trxEnd)rotate(gradEnd*sign(-trxEnd)){
+              RotEx(grad=(gradEnd+lap)*sign(trxEnd),cut=+0,fn=fn/360*gradEnd)T(trxEnd)children();
+              if(end)translate([trxEnd,0,0])rotate(180)scale([1,abs(end),1])R(0,-endRot[0])RotEx(cut=sign(end*gradEnd),grad=180*sign(gradEnd*end),fn=fn/4,help=false)rotate(endRot[0])children();
+              }
+         rotate(180+grad-lap*0)T(-trx+trxEnd)rotate(180-lap){
+              RotEx(grad=(gradEnd+lap)*sign(trxEnd),cut=+0,fn=fn/360*gradEnd)T(trxEnd)children();
+              if(end)rotate((gradEnd+lap)*sign(trxEnd))translate([trxEnd,0,0])scale([1,abs(end),1])R(0,endRot[1])RotEx(cut=sign(end*gradEnd),grad=180*sign(gradEnd*end),fn=fn/4,help=false)rotate(endRot[1])children();
+              } 
+          }
+          else{
+              T(trx-trxEnd)rotate(gradEnd*sign(-trxEnd)){
+              RotEx(grad=(gradEnd+lap)*sign(trxEnd),fn=fn/360*gradEnd,cut=+0)T(trxEnd)circle(d=d,$fn=fn2);
+              if(end)translate([trxEnd,0,0])rotate(180)scale([1,abs(end),1])RotEx(cut=sign(end*gradEnd),grad=180*sign(gradEnd*end),fn=fn/8,help=false)circle(d=d,$fn=fn2);
+              }
+         rotate(180+grad)T(-trx+trxEnd)rotate(180-lap){
+              RotEx(grad=(gradEnd+lap)*sign(trxEnd),cut=+0,fn=fn/360*gradEnd)T(trxEnd)circle(d=d,$fn=fn2);
+              if(end)rotate((gradEnd+lap)*sign(trxEnd))translate([trxEnd,0,0])scale([1,abs(end),1])RotEx(cut=sign(end*gradEnd),grad=180*sign(gradEnd*end),fn=fn/8,help=false)circle(d=d,$fn=fn2);
+              }  
+          }    
+      }
+  }
+}
+
+
+/* Roof
+opt = straight / voronoi
+
+*/
+//Roof(10,h=1,base=5,floor=true,twist=50,scale=[0.3,1])circle(5,$fn=3);

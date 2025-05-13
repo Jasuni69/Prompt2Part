@@ -1,0 +1,2 @@
+function _corner(round_d, t_step, p1, p2, p3) =
+    bezier_curve(t_step, _corner_ctrl_pts(round_d, p1, p2, p3));

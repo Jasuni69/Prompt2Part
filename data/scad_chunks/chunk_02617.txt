@@ -1,0 +1,6 @@
+module rounded_square(size, r, center = true) //! Like `square()` but with with rounded corners
+{
+    assert(r < min(size.x, size.y) / 2);
+    $fn = r2sides4n(r);
+    offset(r) offset(-r) square(size, center = center);
+}

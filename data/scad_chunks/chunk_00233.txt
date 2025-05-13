@@ -1,0 +1,6 @@
+module shape()
+    difference() {
+        square(40, center = true);
+
+        square([20, 20], center = true);
+    }

@@ -1,0 +1,1 @@
+function psu_face_grill(type)        = type[3];     //! Is this face a grill

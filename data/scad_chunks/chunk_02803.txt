@@ -1,0 +1,124 @@
+module FontDesigner(font="Subdivision Font",weight=1,slant=0,method="1path",smooth=2,fontdefinition)
+{
+  // Check if the user has a own font definition.
+  // If so, add it to the end of the internal list of fonts.
+  _fontlist = is_undef(fontdefinition) ? font_list : concat(font_list,fontdefinition);
+
+  // Find the font of the name.
+  // To do: make assert() when font name is not found.
+  for(i=[0:len(_fontlist)-1])
+  {
+    if(_fontlist[i][0][0] == font)
+    {
+      // Point to the definitions of the characters.
+      font_definition = _fontlist[i][1];
+
+      // Title and settings
+      color("Teal")
+      {
+        y_offset = 8.5;
+        t_size = 5;
+        translate([0,5*y_offset])
+          text(font,size=1.5*t_size);
+        translate([0,4*y_offset])
+          text(str("By: ", _fontlist[i][0][1]),size=t_size);
+        translate([0,3*y_offset])
+          text(str("License: ", _fontlist[i][0][2]),size=t_size);
+        translate([0,2*y_offset])
+          text(str("method = \"", method, "\""),size=t_size);
+        translate([0,1*y_offset])
+          text(str("divisions = ", smooth),size=t_size);
+      }
+
+      // x-axis with columns
+      color("Navy")
+      {
+        square([138,0.5]);
+
+        for(i=[0:9])
+          translate([8+i*14,2])
+            text(str(i),size=3.5,halign="center");
+      }
+
+      for(i=[0:len(font_definition)-1])
+      {
+        column = (i) % 10;
+        row = floor((i) / 10);
+
+        // Show a part of the y-axis with rows.
+        if(column==0)
+        {
+          color("Navy")
+          {
+            translate([-0.5,-14.5-row*14])
+              square([0.5,15]);
+
+            translate([-5,-10-row*14])
+              text(str(row),size=3.5,halign="center");
+          }
+        }
+
+        // A gray square below the character.
+        translate([4+column*14,-13-row*14])
+        {
+          // show the size as a faint rectangle.
+          if($preview)
+          {
+            xpos = -weight/2;
+            ypos = -weight/2;
+            xsize = font_definition[i][1] + weight;
+            ysize = 10 + weight;
+            translate([0,0,-1.1])
+              color("Gray",0.1)
+                translate([xpos,ypos])
+                  square([xsize,ysize]);
+          }
+
+          if(len(font_definition[i][2]) > 0)  // are there any points?
+          {
+            for(j=[0:len(font_definition[i][2])-1])
+            {
+              // show the controlpoints in Red
+              if($preview)
+                color("Red")
+                  for(k=[0:len(font_definition[i][2][j])-1])
+                    translate(font_definition[i][2][j][k])
+                      circle(0.3);
+
+              path = Subdivision(font_definition[i][2][j],smooth,method=method);
+
+              color("Blue",0.25)
+              {
+                if(len(path) == 1)
+                {
+                  y = path[0].y;
+                  x = path[0].x + slant * y;
+                  translate([x,y])
+                    circle(d=weight,$fn=12);
+                }
+                else
+                {
+                  for(k=[0:len(path)-2])
+                  {
+                    y1 = path[k].y;
+                    x1 = path[k].x + slant * y1;
+                    y2 = path[k+1].y;
+                    x2 = path[k+1].x + slant * y2;
+
+                    hull()
+                    {
+                      translate([x1,y1])
+                        circle(d=weight,$fn=12);
+                      translate([x2,y2])
+                        circle(d=weight,$fn=12);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

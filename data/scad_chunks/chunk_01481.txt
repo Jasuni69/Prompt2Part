@@ -1,0 +1,15 @@
+module module_assembly(type, thickness) { //! Module with its fasteners in place
+    screw = mod_screw(type);
+    screw_length = screw_length(screw, thickness + mod_screw_z(type), 2, nyloc = true);
+
+    mod(type);
+
+    mod_screw_positions(type) {
+        translate_z(mod_screw_z(type))
+            nut_and_washer(screw_nut(screw), true);
+
+        translate_z(-thickness)
+            vflip()
+                screw_and_washer(screw, screw_length);
+    }
+}

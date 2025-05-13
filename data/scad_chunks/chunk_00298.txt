@@ -1,0 +1,6 @@
+module d_hole(type, h = 0, center = true, clearance = 0.2) { //! Make a hole to clear the back of d-connector
+    dwall = 0.5 + clearance;
+
+    extrude_if(h, center)
+        d_plug_D(d_lengths(type)[0] + 2 * dwall, d_widths(type)[0] + 2 * dwall, 2.5 + dwall);
+}

@@ -1,0 +1,1 @@
+function ldr_width(type)       = type[3]; //! Across the flats

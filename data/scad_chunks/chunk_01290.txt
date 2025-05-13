@@ -1,0 +1,1 @@
+function gm_shaft(type)        = type[1]; //! Shaft diameter, flat width, length, flat length.

@@ -1,0 +1,14 @@
+module Freiwinkel(w=60,h=1)
+ T(0,+1.0){
+  R(z=w/2-90) T(-6,+0,2.0)minkowski()
+            {
+                cube([20,5,h],false);
+                sphere(0.8,$fn=fn);
+            }    
+   R(z=-w/2+90) T(-14,+0,2.0)minkowski()
+            {
+                cube([20,5,h],false);
+                sphere(0.8,$fn=fn);
+            }      
+
+ }

@@ -1,0 +1,6 @@
+module spades()
+    layout([for(s = spades) spade_w(s)], 5)
+        spade(spades[$i], 10);
+
+if($preview)
+    spades();

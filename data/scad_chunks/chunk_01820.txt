@@ -1,0 +1,1 @@
+function contact_thickness(type)  = type[3]; //! Thickness of the metal

@@ -1,0 +1,12 @@
+module ribbon_clamps()
+    for(i = [0 : len(screws) - 1])
+        translate([ribbon_clamp_length(ways[i]) / 2, i * 30])
+            if($preview) {
+                ribbon_clamp_fastened_assembly(ways[i], 3, screws[i]);
+
+                ribbon_cable(ways[i], 100);
+            }
+            else
+                ribbon_clamp(ways[i], screws[i]);
+
+ribbon_clamps();

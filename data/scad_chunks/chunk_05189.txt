@@ -1,0 +1,32 @@
+function _deriv_nonuniform(data, h, closed) =
+    let( L = len(data) )
+    closed
+    ? [for(i=[0:1:L-1])
+          _dnu_calc(data[(L+i-1)%L], data[i], data[(i+1)%L], select(h,i-1), h[i]) ]
+    : [
+        (data[1]-data[0])/h[0],
+        for(i=[1:1:L-2]) _dnu_calc(data[i-1],data[i],data[i+1], h[i-1],h[i]),
+        (data[L-1]-data[L-2])/h[L-2]                            
+      ];
+
+
+// Function: deriv2()
+// Synopsis: Returns the second derivative estimate of a list of data.
+// Topics: Math, Calculus
+// See Also: deriv(), deriv2(), deriv3()
+// Usage:
+//   x = deriv2(data, [h], [closed])
+// Description:
+//   Computes a numerical estimate of the second derivative of the data, which may be scalar or vector valued.
+//   The `h` parameter gives the step size of your sampling so the derivative can be scaled correctly. 
+//   If the `closed` parameter is true the data is assumed to be defined on a loop with data[0] adjacent to
+//   data[len(data)-1].  For internal points this function uses the approximation 
+//   f''(t) = (f(t-h)-2*f(t)+f(t+h))/h^2.  For the endpoints (when closed=false),
+//   when sufficient points are available, the method is either the four point expression
+//   f''(t) = (2*f(t) - 5*f(t+h) + 4*f(t+2*h) - f(t+3*h))/h^2 or 
+//   f''(t) = (35*f(t) - 104*f(t+h) + 114*f(t+2*h) - 56*f(t+3*h) + 11*f(t+4*h)) / 12h^2
+//   if five points are available.
+// Arguments:
+//   data = the list of the elements to compute the derivative of.
+//   h = the constant parametric sampling of the data.
+//   closed = boolean to indicate if the data set should be wrapped around from the end to the start.

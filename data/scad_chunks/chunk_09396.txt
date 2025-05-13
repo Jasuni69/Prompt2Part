@@ -1,0 +1,33 @@
+function enumerate(l,idx=undef) =
+	(l==[])? [] :
+	(idx==undef)?
+		[for (i=[0:len(l)-1]) [i,l[i]]] :
+		[for (i=[0:len(l)-1]) concat([i], [for (j=idx) l[i][j]])];
+
+
+// Function: array_zip()
+// Usage:
+//   array_zip(v1, v2, v3, [fit], [fill]);
+//   array_zip(vecs, [fit], [fill]);
+// Description:
+//   Zips together corresponding items from two or more lists.
+//   Returns a list of lists, where each sublist contains corresponding
+//   items from each of the input lists.  `[[A1, B1, C1], [A2, B2, C2], ...]`
+// Arguments:
+//   vecs = A list of two or more lists to zipper together.
+//   fit = If `fit=="short"`, the zips together up to the length of the shortest list in vecs.  If `fit=="long"`, then pads all lists to the length of the longest, using the value in `fill`.  If `fit==false`, then requires all lists to be the same length.  Default: false.
+//   fill = The default value to fill in with if one or more lists if short.  Default: undef
+// Example:
+//   v1 = [1,2,3,4];
+//   v2 = [5,6,7];
+//   v3 = [8,9,10,11];
+//   array_zip(v1,v3);                       // returns [[1,8], [2,9], [3,10], [4,11]]
+//   array_zip([v1,v3]);                     // returns [[1,8], [2,9], [3,10], [4,11]]
+//   array_zip([v1,v2], fit="short");        // returns [[1,5], [2,6], [3,7]]
+//   array_zip([v1,v2], fit="long");         // returns [[1,5], [2,6], [3,7], [4,undef]]
+//   array_zip([v1,v2], fit="long, fill=0);  // returns [[1,5], [2,6], [3,7], [4,0]]
+//   array_zip([v1,v2,v3], fit="long");      // returns [[1,5,8], [2,6,9], [3,7,10], [4,undef,11]]
+// Example:
+//   v1 = [[1,2,3], [4,5,6], [7,8,9]];
+//   v2 = [[20,19,18], [17,16,15], [14,13,12]];
+//   array_zip(v1,v2);    // Returns [[1,2,3,20,19,18], [4,5,6,17,16,15], [7,8,9,14,13,12]]

@@ -1,0 +1,50 @@
+pcbLength           = 250; // Front to back
+pcbWidth            = 100; // Side to side
+pcbThickness        = 1.6;
+                            
+//-- padding between pcb and inside wall
+paddingFront        = 1;
+paddingBack         = 1;
+paddingRight        = 1;
+paddingLeft         = 1;
+
+//-- Edit these parameters for your own box dimensions
+wallThickness       = 2.0;
+basePlaneThickness  = 2.0;
+lidPlaneThickness   = 2.0;
+
+//-- Total height of box = lidPlaneThickness 
+//                       + lidWallHeight 
+//--                     + baseWallHeight 
+//                       + basePlaneThickness
+//-- space between pcb and lidPlane :=
+//--      (bottonWallHeight+lidWallHeight) - (standoffHeight+pcbThickness)
+baseWallHeight      = 25;
+lidWallHeight       = 25;
+
+//-- ridge where base and lid off box can overlap
+//-- Make sure this isn't less than lidWallHeight
+ridgeHeight         = 5.0;
+ridgeSlack          = 0.2;
+roundRadius         = 2.0;
+
+//-- How much the PCB needs to be raised from the base
+//-- to leave room for solderings and whatnot
+standoffHeight      = 1.0;  //-- used only for pushButton and showPCB
+standoffPinDiameter = 2.4;
+standoffHoleSlack   = 0.4;
+standoffDiameter    = 8;
+
+
+
+//-- C O N T R O L -------------//-> Default ---------
+showSideBySide      = false;     //-> true
+previewQuality      = 5;        //-> from 1 to 32, Default = 5
+renderQuality       = 6;        //-> from 1 to 32, Default = 8
+onLidGap            = 2;
+shiftLid            = 5;
+colorLid            = "gray";   
+alphaLid            = 1;//0.2;   
+colorBase           = "gray";
+alphaBase           = 1;//0.2;
+hideLidWalls        = false;    //-> false

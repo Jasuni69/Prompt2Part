@@ -1,0 +1,1 @@
+function NEMA_shaft_length2(type)= type[14]; //! Rear shaft length if non-zero

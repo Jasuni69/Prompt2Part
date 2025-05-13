@@ -1,0 +1,11 @@
+function _stellate_faces(scalefactor,stellate,vertices,faces_normals) =
+    (stellate == false || stellate == 0)? concat(faces_normals,[vertices]) :
+    let(
+        faces = [for(face=faces_normals[0]) select(face,hull(select(vertices,face)))],
+        direction = [for(i=[0:1:len(faces)-1]) _facenormal(vertices, faces[i])*faces_normals[1][i]>0 ? 1 : -1],
+        maxvertex = len(vertices),
+        newpts = [for(i=[0:1:len(faces)-1]) mean(select(vertices,faces[i]))+stellate*scalefactor*faces_normals[1][i]],
+        newfaces = [for(i=[0:1:len(faces)-1], j=[0:len(faces[i])-1]) concat([i+maxvertex],select(faces[i], [j, j+direction[i]]))],
+        allpts = concat(vertices, newpts),
+        normals = [for(face=newfaces) _facenormal(allpts,face)]
+    ) [newfaces, normals, allpts];

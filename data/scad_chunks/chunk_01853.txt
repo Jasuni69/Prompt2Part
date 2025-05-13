@@ -1,0 +1,1 @@
+function sbr_rail_base_width(type)      = type[3]; //! Width of the rail base

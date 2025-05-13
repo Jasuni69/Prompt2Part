@@ -1,0 +1,1 @@
+function extrusion_fillet(type)                 = type[10]; //! Radius of corner fillet

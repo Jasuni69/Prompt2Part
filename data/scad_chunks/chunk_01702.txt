@@ -1,0 +1,1 @@
+function pcb_parts_on_bom(type) = type[9];  //! True if the parts should be separate BOM items

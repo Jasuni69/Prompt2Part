@@ -1,0 +1,93 @@
+module bottle_adapter_neck_to_neck(
+    d = 0,
+    neck_od1 = 25,
+    neck_id1 = 21.4,
+    thread_od1 = 27.2,
+    height1 = 17,
+    support_od1 = 33.0,
+    thread_pitch1 = 3.2,
+    neck_od2, neck_id2,
+    thread_od2, height2,
+    support_od2,  pitch2,
+    taper_lead_in = 0, wall, anchor, spin, orient
+) {
+    neck_od2 = (neck_od2 == undef) ? neck_od1 : neck_od2;
+    neck_id2 = (neck_id2 == undef) ? neck_id1 : neck_id2;
+    thread_od2 = (thread_od2 == undef) ? thread_od1 : thread_od2;
+    height2 = (height2 == undef) ? height1 : height2;
+    support_od2 = (support_od2 == undef) ? support_od1 : support_od2;
+    pitch2 = (pitch2 == undef) ? thread_pitch1 : pitch2;
+    wall = (wall == undef) ? support_od1 + support_od2 + neck_id1 + neck_id2 : wall;
+
+    supprtOD2 = (d == 0 && support_od2 != 0) ? max(neck_od1, support_od2) : support_od2;
+    supprtOD1 = (d == 0 && support_od1 != 0) ? max(neck_od2, support_od1) : support_od1;
+
+    $fn = segs(33 / 2);
+    wallt1 = min(wall, (max(supprtOD1, neck_od1) - neck_id1) / 2);
+    wallt2 = min(wall, (max(supprtOD2, neck_od2) - neck_id2) / 2);
+
+    taper_lead_in = (d >= taper_lead_in * 2) ? taper_lead_in : d / 2;
+
+    top_h = height1 + max(1,height1/17)*sign(support_od1);
+    bot_h = height2 + max(1,height2/17)*sign(support_od2);
+    
+    attachable(anchor=anchor,orient=orient,spin=spin, h=top_h+bot_h+d, d=max(neck_od1,neck_od2)){
+      zmove((bot_h-top_h)/2)
+      difference(){
+          union(){
+              up(d / 2){
+                  generic_bottle_neck(orient = UP,
+                      neck_d = neck_od1,
+                      id = neck_id1,
+                      thread_od = thread_od1,
+                      height = height1,
+                      support_d = supprtOD1,
+                      pitch = thread_pitch1,
+                      round_supp = ((wallt1 < (supprtOD1 - neck_id1) / 2) || (support_od1 > max(neck_od2, support_od2) && d == 0)),
+                      wall = (d > 0) ? wallt1 : min(wallt1, ((max(neck_od2, support_od2)) - neck_id1) / 2)
+                  );
+              }
+              if (d != 0) {
+                  rotate_extrude() {
+                      polygon(points = [
+                          [0, d / 2],
+                          [neck_id1 / 2 + wallt1, d / 2],
+                          [neck_id1 / 2 + wallt1, d / 2 - taper_lead_in],
+                          [neck_id2 / 2 + wallt2, taper_lead_in - d / 2],
+                          [neck_id2 / 2 + wallt2, -d / 2],
+                          [0, -d / 2]
+                      ]);
+                  }
+              }
+              down(d / 2){
+                  generic_bottle_neck(orient = DOWN,
+                      neck_d = neck_od2,
+                      id = neck_id2,
+                      thread_od = thread_od2,
+                      height = height2,
+                      support_d = supprtOD2,
+                      pitch = pitch2,
+                      round_supp = ((wallt2 < (supprtOD2 - neck_id2) / 2) || (support_od2 > max(neck_od1, support_od1) && d == 0)),
+                      wall = (d > 0) ? wallt2 : min(wallt2, ((max(neck_od1, support_od1)) - neck_id2) / 2)
+                  );
+              }
+          }
+          if (neck_id1 != undef || neck_id2 != undef) {
+              neck_id1 = (neck_id1 == undef) ? neck_id2 : neck_id1;
+              neck_id2 = (neck_id2 == undef) ? neck_id1 : neck_id2;
+
+              rotate_extrude() {
+                  polygon(points = [
+                      [0, d / 2],
+                      [neck_id1 / 2, d / 2],
+                      [neck_id1 / 2, d / 2 - taper_lead_in],
+                      [neck_id2 / 2, taper_lead_in - d / 2],
+                      [neck_id2 / 2, -d / 2],
+                      [0, -d / 2]
+                  ]);
+              }
+          }
+      }
+      children();
+    }
+}

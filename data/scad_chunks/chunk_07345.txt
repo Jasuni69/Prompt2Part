@@ -1,0 +1,23 @@
+module Flower(e=8,n=15,r=10,r2=0,min=5,fn=720,name,help){
+points=[for(f=[+0:fn])let(i=f*360/fn)RotLang(i,r2+max(min-r2,(r-r2)*pow(abs(sin(e*.5*i)),2/n)))];
+
+polygon(points,convexity=5);
+
+HelpTxt("Flower",["e",e,"n",n,"r",r,"r2",r2,"min",min,"fn",fn,"name",name],help);
+}
+
+
+/** \name Superellipse \page polygons
+Superellipse() creates a Superellipsoid 2D or 3D
+\param n exponent for rounding - can be list[4]
+\param r radius [x,y] or [x,y,z] or [[x,x],[y,y],[z,z]] (z for 3D)
+\param r1 radius x optional [-x,x]
+\param r2 radius Y optional [-y,y]
+\param r3 radius z optional [-z,+z] makes 3D
+\param n2,
+/parma n3,n31,n32 exponents for rounding z [-z,z],n31=x [-z,+z] ,n32=y
+\param fn fnz facetts
+\param name, help  name help
+*/
+
+//Superellipse(r=10,r3=10,n=3);

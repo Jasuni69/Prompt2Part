@@ -1,0 +1,51 @@
+module Bevel(z=0,r=.5,on=!$preview,grad=45,fillet=0,fn=12,messpunkt=messpunkt,help){
+  
+    diff=fillet?sin(grad)*r:tan(grad)*r;
+ 
+
+    if(on)difference(){
+    children(index=0);
+    minkowski(convexity=5){
+        difference(){
+          $info=false;
+          $idx=1;
+            Tz(z>0?500+z-diff:-500+z+diff) cube(1000,true);
+            children(index=0);
+        }
+        if($children==2) Tz(z>0?diff:-diff)R(z>0?180:0)children (1);
+        else if(!fillet)R(z>0?0:180)Kegel(d1=0,d2=r*2,fn=fn,grad=grad,name=false);
+        else Tz(z>0?r:-r)R(z>0?180:0)RotEx(cut=1,fn=fn)Kehle(2D=true,rad=r,fn2=fn);    
+    }
+}else
+children(index=0);
+
+if (messpunkt&&$children<2){       
+%Grid(e=[2,2,1],es=is_bool(messpunkt)?10:messpunkt,name=false)Tz(z)if(!fillet)color("orange",alpha=.75){
+    R(z>0?180:0)Kegel(d2=0,d1=r*2,fn=fn,grad=grad,name=false);
+    R(z>0?0:180)cylinder(.5,r=r*1,$fn=fn);
+}
+        else color("green",alpha=.75)R(z>0?180:0)Tz(-r+diff)RotEx(cut=1,fn=fn)Kehle(2D=true,rad=r,fn2=fn,spiel=.5);
+
+%Tz(z)if(!fillet)color("orange",alpha=.75){
+    R(z>0?180:0)Kegel(d2=0,d1=r*2,fn=fn,grad=grad,name=false);
+    R(z>0?0:180)cylinder(.5,r=r*1,$fn=fn);
+}
+        else color("green",alpha=.75)R(z>0?180:0)Tz(-r+diff)RotEx(cut=1,fn=fn)Kehle(2D=true,rad=r,fn2=fn,spiel=0.5);             
+}
+if($children==2)%Tz(z){Grid(e=[2,2,1],es=is_bool(messpunkt)?10:messpunkt,name=false)
+  R(z>0?180:0)color("chartreuse",alpha=.75)children(index=1);
+  R(z>0?180:0)color("chartreuse",alpha=.75)children(index=1);
+  
+  }
+  
+HelpTxt("Bevel",[     
+     "z",z, 
+     "r",r,
+     "on",on,
+     "grad",grad,
+     "fillet",fillet,
+     "fn",fn,
+     "messpunkt",messpunkt]
+    ,help); 
+ 
+}

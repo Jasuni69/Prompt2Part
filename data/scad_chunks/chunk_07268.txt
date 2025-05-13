@@ -1,0 +1,40 @@
+module Halb(i=0,x=0,y=0,z=0, use2D=0,size=max(400,viewportSize*4),t=[0,0,0],help=false)
+{
+t=v3(t);
+xChange=-x;
+x=(is_num(useVersion)&&useVersion<22.250&&!use2D)?y:x;
+y=(is_num(useVersion)&&useVersion<22.250&&!use2D)?xChange:y;
+
+    if(!use2D){
+       if(i||z<0)difference()
+       {
+           union()children();
+           translate(t)R(-90*sign(y),90*sign(x))  cylinder(size,d=size,$fn=6);
+          
+       }
+      else intersection()
+      {
+          union()children();
+          translate(t)R(-90*sign(y),90*sign(x))  cylinder(size,d=size,$fn=6);
+      }
+  }
+  if(use2D){
+      if(i)difference()
+      {
+          union()children();
+           if(x)translate([x?size/2*sign(x):0,0]+t) square(size,true);
+           if(y)translate([0,y?size/2*sign(y):0]+t) square(size,true);
+      }
+      if(!i) intersection()
+      {
+          union()children();
+          translate([x?size/2*sign(x):0,y?size/2*sign(y):0]+t) square(size,true);
+      }
+  } 
+ MO(!$children); 
+ HelpTxt("Halb",["i",i,"x",x,"y",y,"z",z,"use2D", use2D,"size",size,"t",t],help);
+}
+
+
+
+//short for rotate_extrude(angle,convexity=5) with options

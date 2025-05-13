@@ -1,0 +1,17 @@
+function _isolines_of(cell_pts, threshold) =
+    let(cv = _isolines_corner_value(cell_pts))
+    cv == 0 || cv == 15  ? [] :
+    cv == 1  ? _case1_isolines(cell_pts, threshold) :
+    cv == 8  ? _case2_isolines(cell_pts, threshold) :
+    cv == 9  ? _case3_isolines(cell_pts, threshold) :
+    cv == 4  ? _case4_isolines(cell_pts, threshold) :
+    cv == 5  ? _case5_isolines(cell_pts, threshold) :
+    cv == 12 ? _case6_isolines(cell_pts, threshold) :
+    cv == 13 ? _case7_isolines(cell_pts, threshold) :
+    cv == 2  ? _case8_isolines(cell_pts, threshold) :
+    cv == 3  ? _case9_isolines(cell_pts, threshold) :
+    cv == 10 ? _case10_isolines(cell_pts, threshold) :
+    cv == 11 ? _case11_isolines(cell_pts, threshold) :
+    cv == 6  ? _case12_isolines(cell_pts, threshold) :
+    cv == 7  ? _case13_isolines(cell_pts, threshold) :
+               _case14_isolines(cell_pts, threshold);

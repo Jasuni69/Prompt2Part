@@ -1,0 +1,20 @@
+module test_mirror() {
+    vals = [LEFT,RIGHT,FWD,BACK,DOWN,UP,BACK+UP+RIGHT,FWD+LEFT];
+    for (val=vals) {
+        v = unit(val);
+        a = v.x;
+        b = v.y;
+        c = v.z;
+        m = [
+            [1-2*a*a,  -2*b*a,  -2*c*a, 0],
+            [ -2*a*b, 1-2*b*b,  -2*c*b, 0],
+            [ -2*a*c,  -2*b*c, 1-2*c*c, 0],
+            [      0,       0,       0, 1]
+        ];
+        assert_approx(mirror(val), m, str("mirror(",val,")"));
+        assert_approx(mirror(val, p=[1,2,3]), apply(m, [1,2,3]), str("mirror(",val,",p=...)"));
+        // Verify that module at least doesn't crash.
+        mirror(val) union(){};
+    }
+}
+test_mirror();

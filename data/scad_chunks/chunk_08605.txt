@@ -1,0 +1,9 @@
+function _ts(ot, degree, knots) = 
+    let(
+        domain = [degree, len(knots) - 1 - degree],
+        low  = knots[domain[0]],
+        high = knots[domain[1]],
+        t = ot * (high - low) + low,
+        s = _s(domain[0], domain[1], t, knots)
+    )
+    [t, s];

@@ -1,0 +1,21 @@
+function gyroid_faces(pp)=
+	let(zs = (pp + 1) * (pp + 1))								// starting index of down wall points
+	  		     										// calculate face index vetros for triangles of polyhedron
+	[	
+		for(i=[0:pp-1])									// for every row
+		let(
+			jm = i*(i+1),                                  // middle point index for current j vector
+			jfm = (i+1)*(i+2),                             // middle point index for succeeding j vector
+			ii = min(i,pp-2)                               // don't use the outer points in the last row
+		)							
+		for(j = [0:ii], k = [-1,1], l = [0,1], m = [0,1])	// for every point
+		let(
+			dm=(m==0) ? 0 : zs,
+			p1=jm+j*k+dm,                        // first point of triangle
+			p2=(l==0) ? jfm+j*k+dm : jfm+(j+1)*k+dm,
+			p3=(l==0) ? jfm+(j+1)*k+dm : jm+(j+1)*k+dm
+		)
+		if(j < i || l == 0) ((k==1 && m==0) || (k==-1 && m==1)) ? [p2, p1, p3] : [p1, p2, p3]
+	];
+
+// Swaps x and y coordinate of all members in matrix m. Applied on a faces matrix for polyhedron creation, it swaps inside out.

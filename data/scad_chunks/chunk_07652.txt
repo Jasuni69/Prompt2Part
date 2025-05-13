@@ -1,0 +1,15 @@
+module PolyH() creates a polyhedron
+\name PolyH
+\brief creates a polyhedron
+ ## Example
+points=[[0,0,-2],for(i=[0:35])[sin(i*10),cos(i*10),0],for(i=[0:35])[sin(i*10),cos(i*10),5],[0,0,7]];
+PolyH(points,loop=36,pointEnd=true,end=true);
+ * \param points points for polyhedron
+ \param loop number of points per loop (hull if undef)
+ \param end top bottom faces
+ \param pointEnd if single point start, end or both (1,2,true)
+ \param convexity convexity
+ \param faceOpt  Quad or Tri faces
+ \param flip  flip normals
+
+*/

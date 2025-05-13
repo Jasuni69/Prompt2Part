@@ -1,0 +1,18 @@
+function f_min2(a,b) = f_2arg(function(a,b) min(a,b))(a,b);
+
+
+// Function: f_max2()
+// Synopsis: Returns a function to calculate the maximum of two values.
+// Topics: Function Literals, Math Operators
+// See Also: f_min(), f_max(), f_min2(), f_max2(), f_min3(), f_max3()
+// Usage:
+//   fn = f_max2();
+//   fn = f_max2(a=);
+//   fn = f_max2(b);
+//   fn = f_max2(a=,b=);
+// Description:
+//   A factory that generates function literals based on `max(a,b)`, where either
+//   or both of the `a` or `b` arguments can be replaced with constants.
+// Arguments:
+//   a = If given, replaces the first argument.
+//   b = If given, replaces the second argument.

@@ -1,0 +1,32 @@
+module bezier_polygon(bezier, splinesteps=16, N=3) {
+	polypoints=bezier_polyline(bezier, splinesteps, N);
+	polygon(points=slice(polypoints, 0, -1));
+}
+
+
+// Module: linear_extrude_bezier()
+// Usage:
+//   linear_extrude_bezier(bezier, height, [splinesteps], [N], [center], [convexity], [twist], [slices], [scale], [orient], [align]);
+// Description:
+//   Takes a closed 2D bezier path, centered on the XY plane, and
+//   extrudes it linearly upwards, forming a solid.
+// Arguments:
+//   bezier = Array of 2D points of a bezier path, to be extruded.
+//   splinesteps = Number of steps to divide each bezier segment into. default=16
+//   N = The degree of the bezier curves.  Cubic beziers have N=3.  Default: 3
+//   convexity = max number of walls a line could pass through, for preview.  default=10
+//   twist = Angle in degrees to twist over the length of extrusion.  default=0
+//   scale = Relative size of top of extrusion to the bottom.  default=1.0
+//   slices = Number of vertical slices to use for twisted extrusion.  default=20
+//   center = If true, the extruded solid is centered vertically at z=0.
+//   orient = Orientation of the extrusion.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Z`.
+//   align = Alignment of the extrusion.  Use the `V_` constants from `constants.scad`.  Default: `ALIGN_POS`.
+// Example:
+//   bez = [
+//       [-10,   0],  [-15,  -5],
+//       [ -5, -10],  [  0, -10],  [ 5, -10],
+//       [ 10,  -5],  [ 15,   0],  [10,   5],
+//       [  5,  10],  [  0,  10],  [-5,  10],
+//       [ 25, -15],  [-10,   0]
+//   ];
+//   linear_extrude_bezier(bez, height=20, splinesteps=32);

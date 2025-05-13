@@ -1,0 +1,21 @@
+function log2(x) = 
+    assert( is_finite(x), "\nInput is not a number.")
+    ln(x)/ln(2);
+
+// this may return NAN or INF; should it check x>0 ?
+
+// Function: hypot()
+// Synopsis: Returns the hypotenuse length of a 2D or 3D triangle.
+// Topics: Math
+// See Also: hypot(), sqr(), log2()
+// Usage:
+//   l = hypot(x, y, [z]);
+// Description:
+//   Calculate hypotenuse length of a 2D or 3D triangle.
+// Arguments:
+//   x = Length on the X axis.
+//   y = Length on the Y axis.
+//   z = Length on the Z axis.  Optional.
+// Example:
+//   l = hypot(3,4);  // Returns: 5
+//   l = hypot(3,4,5);  // Returns: ~7.0710678119

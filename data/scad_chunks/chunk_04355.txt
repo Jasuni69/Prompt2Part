@@ -1,0 +1,39 @@
+module showColors()
+	pieces(len($colorNames)/2)///2)
+		g(X(every(30)),TOFRONT())
+	{	
+	opaq(detailColor($valPtr))
+		box(5);	
+	clear(shellColor($valPtr))
+		box(20);
+}
+*/
+			
+//ASSEMBLE.SCAD
+//This is a part of:
+//CONSTRUCTIVE LIBRARY by PPROJ (version from 05.06.2021)
+//released under dual-licensed under GPL 2.0  or CERN-OHL-W.*You can choose between one of them if you use this work..
+
+//you only need a single file: constructive-compiled.scad which
+//contains all the partial files you find. you can ignore everything else..
+//just include it in your code by:
+//include <constructive-compiled.scad>
+
+//if you wish to improve the library or make changes to it,
+// it might be handier to use:
+//include <constructive-all.scad> instead. so you do not have to recreate constructive-compiled.scad from the parts
+//every time you make a change to a part of the library
+
+ALL="ALL"; 
+
+//allows to use confinementOf() which assembles a confinement from Parts which are marked whith confines() marker 
+//function to mark which operations constitute aconfinement,
+//like in add(confines("part1"))box():
+//or in in remove(confines("part2"))tube(d=2,h=10);
+//then you can use
+//intersection()
+//	{
+//		confinement()moduleWithParts();
+//		assemble()moduleWithParts();
+//	}
+//to confine the PArts inside the confinement

@@ -1,0 +1,1 @@
+function screw_knob_flange_t(type) = type[3]; //! The thickness of the flange

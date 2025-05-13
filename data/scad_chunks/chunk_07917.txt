@@ -1,0 +1,9 @@
+function _px_spiral_go_turn(from, leng, max_leng, clockwise, dir) = 
+    let(
+        range = [1:leng],
+        pts = [for(i = range) _px_spiral_forward(from, i, dir % 4, clockwise)],
+        ps = pts[len(pts) - 1],
+        pts2 = [for(i = range) _px_spiral_forward(ps, i, (dir + 1) % 4, clockwise)],
+        pd = pts2[len(pts2) - 1]
+    )
+    concat(pts, pts2, _px_spiral(pd, leng + 1, max_leng, clockwise, dir + 2));

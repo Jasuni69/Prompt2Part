@@ -1,0 +1,69 @@
+function worm(
+    circ_pitch,
+    d=30, l=100,
+    starts=1,
+    left_handed=false,
+    pressure_angle,
+    backlash=0,
+    clearance,
+    diam_pitch,
+    mod,
+    pitch,
+    gear_spin=0,
+    anchor=CENTER,
+    spin=0,
+    orient=UP
+) =
+    let(
+        circ_pitch = _inherit_gear_pitch("worm()", pitch, circ_pitch, diam_pitch, mod),
+        PA = _inherit_gear_pa(pressure_angle)
+    )
+    assert(is_integer(starts) && starts>0)
+    assert(is_finite(l) && l>0)
+    //assert(is_finite(shaft_diam) && shaft_diam>=0)
+    assert(is_finite(PA) && PA>=0 && PA<90, "Bad pressure_angle value.")
+    assert(clearance==undef || (is_finite(clearance) && clearance>=0))
+    assert(is_finite(backlash) && backlash>=0)
+    assert(is_bool(left_handed))
+    assert(is_finite(gear_spin))
+    let(
+        helical = asin(starts * circ_pitch / PI / d),
+        trans_pitch = circ_pitch / cos(helical),
+        tooth = xflip(
+            p=select(rack2d(
+                pitch=circ_pitch,
+                teeth=1,
+                pressure_angle=PA,
+                clearance=clearance,
+                backlash=backlash,
+                helical=helical,
+                profile_shift=0
+            ), 1, -2)
+        ),
+        rack_profile = [
+            for (t = xcopies(trans_pitch, n=2*ceil(l/trans_pitch)+1))
+                each apply(t, tooth)
+        ],
+        steps = max(36, segs(d/2)),
+        step = 360 / steps,
+        zsteps = ceil(l / trans_pitch / starts * steps),
+        zstep = l / zsteps,
+        profiles = [
+            for (j = [0:1:zsteps]) [
+                for (i = [0:1:steps-1]) let(
+                    u = i / steps - 0.5,
+                    ang = 360 * (1 - u) + 90,
+                    z = j*zstep - l/2,
+                    zoff = trans_pitch * starts * u,
+                    h = lookup(z+zoff, rack_profile)
+                )
+                cylindrical_to_xyz(d/2+h, ang, z)
+            ]
+        ],
+        vnf1 = vnf_vertex_array(profiles, caps=true, col_wrap=true, style="alt"),
+        m = product([
+            zrot(gear_spin),
+            if (left_handed) xflip(),
+        ]),
+        vnf = apply(m, vnf1)
+    ) reorient(anchor,spin,orient, d=d, l=l, p=vnf);

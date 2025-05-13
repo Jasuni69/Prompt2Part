@@ -1,0 +1,23 @@
+module wedge(size=[1, 1, 1], center, anchor, spin=0, orient=UP)
+{
+    size = force_list(size,3);
+    check=assert(is_vector(size,3) && all_positive(size), "\nsize must be a positive scalar or 3-vector");
+    anchor = get_anchor(anchor, center, -[1,1,1], -[1,1,1]);
+    vnf = wedge(size, anchor="origin");
+    spindir = unit([0,-size.y,size.z]);
+    hypot_dir = unit([0,size.z,size.y],UP);
+    left_dir = unit(hypot_dir+LEFT);
+    right_dir = unit(hypot_dir+RIGHT);
+    hedge_spin=vector_angle(spindir,rot(from=UP,to=left_dir, p=BACK));
+    anchors = [
+        named_anchor("hypot", CTR, hypot_dir, 180),
+        named_anchor("hypot_left", [-size.x/2,0,0], left_dir,-hedge_spin),
+        named_anchor("hypot_right", [size.x/2,0,0], right_dir,hedge_spin),
+    ];
+    attachable(anchor,spin,orient, size=size, anchors=anchors) {
+        if (size.z > 0) {
+            vnf_polyhedron(vnf);
+        }
+        children();
+    }
+}

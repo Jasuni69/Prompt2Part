@@ -1,0 +1,1 @@
+function pcb_size(type) = [pcb_length(type), pcb_width(type), pcb_thickness(type)]; //! Length, width and thickness in a vector

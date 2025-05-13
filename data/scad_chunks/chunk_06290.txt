@@ -1,0 +1,25 @@
+function phillips_depth(size, d) =
+    assert(in_list(size,["#0","#1","#2","#3","#4",0,1,2,3,4]))
+    let(
+        num = is_num(size) ? size : ord(size[1]) - ord("0"),
+        shaft = [3,4.5,6,8,10][num],
+        g =     [0.81, 1.27, 2.29, 3.81, 5.08][num],
+        h1 = adj_ang_to_opp(g/2, _ph_bot_angle()),   // height of the small conical tip
+        h2 = adj_ang_to_opp((shaft-g)/2, 90-_ph_side_angle())   // height of larger cone
+    )
+    d>=shaft || d<g ? undef :
+    (d-g) / 2 / tan(_ph_side_angle()) + h1;
+
+
+// Function: phillips_diam()
+// Synopsis: Returns the diameter of a phillips recess of a given depth.
+// Topics: Screws, Masks
+// See Also: phillips_mask(), hex_drive_mask(), phillips_depth(), phillips_diam(), torx_mask()
+// Usage:
+//   diam = phillips_diam(size, depth);
+// Description:
+//   Returns the diameter at the top of the Phillips recess when constructed at the specified depth,
+//   or undef if that depth is not valid.  
+// Arguments:
+//   size = size as number or text string like "#2"
+//   depth = depth of recess to find the diameter of

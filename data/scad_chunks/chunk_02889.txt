@@ -1,0 +1,198 @@
+module printBoxMounts()
+{ 
+      //-------------------------------------------------------------------
+      module roundedRect(size, radius)
+      {
+        x1 = size[0];
+        x2 = size[1];
+        y  = size[2];
+        l  = size[3];
+        h  = size[4];
+      
+        linear_extrude(h)
+        {
+          hull()
+          {
+            // place 4 circles in the corners, with the given radius
+            translate([(x1+radius), (y+radius), 0])
+              circle(r=radius);
+          
+            translate([(x1+radius), (y+l)+radius, 0])
+              circle(r=radius);
+          
+            translate([(x2+radius), (y+l)+radius, 0])
+              circle(r=radius);
+          
+            translate([(x2+radius), (y+radius), 0])
+              circle(r=radius);
+          }
+        } // linear_extrude
+      } //-- roundRect()
+      //-------------------------------------------------------------------
+  
+      module oneMount(bm, maxLength, originLLOpt, invertX)
+      {
+        isCenter = isTrue(yappCenter, bm);
+        mountPosRaw1 = is_list(bm[0]) ? bm[0][0] : bm[0]; //-- = posx
+        mountOpeningDiameter = bm[1];                     //-- = screwDiameter
+        mountWidthRaw = bm[2];                            //-- = width
+        mountHeight = bm[3];                              //-- = Height
+        filletRad = getParamWithDefault(bm[4],0);         //-- fillet radius
+        bmYpos    = is_list(bm[0]) 
+                  ? (mountOpeningDiameter*-2) - bm[0][1] 
+                  : (mountOpeningDiameter*-2);   
+        
+        slotOrientation = mountWidthRaw<0 ? false : true;
+        mountWidth = slotOrientation ? mountWidthRaw : 0;
+        mountLength = slotOrientation ? 0 : mountWidthRaw;
+        
+        //-- Adjust for centered mounts
+        mountPosRaw2 = (isCenter) ? mountPosRaw1 - (mountWidth/2) : mountPosRaw1;
+        //-- Adjust for inverted axis
+        mountPosRaw = invertX ? mountPosRaw2 : -mountPosRaw2;
+        //-- Adjust for LowerLeft Origin
+        mountPos = originLLOpt ? maxLength - mountPosRaw - mountWidth : mountPosRaw;
+     
+        totalmountWidth = mountWidth+mountOpeningDiameter*2;
+            
+        newWidth  = maxWidth(mountWidth, mountOpeningDiameter, maxLength);
+        scrwX1pos = mountPos;
+        scrwX2pos = scrwX1pos + newWidth;
+
+        newLength  = maxWidth(mountLength, mountOpeningDiameter, maxLength);
+        scrwY1pos = 0;
+        scrwY2pos = scrwY1pos + newLength;
+    
+        filletRadius = (filletRad==0) ? mountHeight/4 : filletRad;
+        
+        outRadius = mountOpeningDiameter;
+        bmX1pos   = scrwX1pos-mountOpeningDiameter;
+        bmX2pos   = scrwX2pos-outRadius;
+            
+        bmYpos1   = (slotOrientation) ? bmYpos : bmYpos + newLength;
+        bmLen     = -bmYpos1+roundRadius;
+            
+        //-- Get where to connect the mount defaulting to base
+        mountToPart = (isTrue(yappLid, bm)) ? yappLid : yappBase; 
+        
+        mountOffsetZ = (mountToPart==yappBase) ? 0 : -shellHeight + (mountHeight*2);
+        mountFlipZ = (mountToPart==yappBase) ? 0 : 1;
+        
+        translate([0,0,mountOffsetZ])
+        {
+          mirror([0,0,mountFlipZ])
+          {
+            difference()
+            {
+              //-- Mounting tab
+              color("red")
+              roundedRect([bmX1pos,bmX2pos,bmYpos1,bmLen,mountHeight], outRadius);
+              translate([0, (bmYpos + mountOpeningDiameter), -1])
+              {
+                //-- Slot
+                color("blue")
+                hull() 
+                {
+                  linear_extrude(mountHeight*2)
+                  {
+                  // translate([scrwX1pos - mountPos,0, 0]) 
+                    translate([scrwX1pos,scrwY1pos, 0]) 
+                      color("blue")
+                      {
+                        circle(mountOpeningDiameter/2);
+                      }
+                  // translate([scrwX2pos - mountPos, 0, 0]) 
+                    translate([scrwX2pos, scrwY2pos, 0]) 
+                      color("blue")
+                        circle(mountOpeningDiameter/2);
+                  } // extrude
+                } // hull
+              } // translate
+            
+            } // difference..
+            
+            //-- add fillet
+            if (!isTrue(yappNoFillet, bm))
+            {
+              filletRad = min(filletRadius, -bmYpos/4);
+              color ("red")
+              union()
+              {
+              translate([scrwX1pos -mountOpeningDiameter,0,0])  // x, Y, Z
+              {
+                linearFillet((scrwX2pos-scrwX1pos)+(mountOpeningDiameter*2), filletRad, 180);
+              }
+              translate([scrwX1pos -mountOpeningDiameter,0,-(roundRadius-mountHeight+filletRadius)])  // x, Y, Z
+              {
+                cube([(scrwX2pos-scrwX1pos)+(mountOpeningDiameter*2), roundRadius,roundRadius-mountHeight+filletRadius]);
+              }
+            }
+            } // Fillet
+          } // difference
+        } //mirror
+      } //-- oneMount()
+      
+    //--------------------------------------------------------------------
+    function maxWidth(w, r, l) = (w>(l-(r*4)))        ? l-(r*4)      : w;
+    //--------------------------------------------------------------------
+
+    //--------------------------------------------------------
+    //-- position is: [(shellLength/2), 
+    //--               shellWidth/2, 
+    //--               (baseWallHeight+basePlaneThickness)]
+    //--------------------------------------------------------
+    //-- back to [0,0,0]
+    translate([(shellLength/2)*-1,
+                (shellWidth/2)*-1,
+                (baseWallHeight+basePlaneThickness)*-1])
+    {
+      for (bm = boxMounts)
+      {    
+        mountPos = is_list(bm[0]) ? bm[0][0] : bm[0]; // = posx
+        mountHeight = bm[3];
+        mountLength = bm[2]<0 ? 0 : bm[2];
+        
+        
+        originLLOpt = isTrue(yappAltOrigin, bm);
+
+        if (isTrue(yappLeft, bm))
+        {
+          translate([mountLength,0, mountHeight])
+          rotate([0,180,0])
+          {
+            oneMount(bm, shellLength, false, false);
+          }
+        } //  if yappLeft
+        
+        if (isTrue(yappRight, bm))
+        {
+          translate([0,shellWidth, mountHeight])
+          rotate([0,180,180])
+          {
+            oneMount(bm, shellLength, originLLOpt, true);
+          }
+        } //  if yappRight
+        
+        if (isTrue(yappFront, bm))
+        {
+          translate([shellLength,mountLength, mountHeight])
+          rotate([0,180,90])
+          {
+            oneMount(bm, shellWidth, false, false);
+          }
+        } //  if yappFront
+        
+        if (isTrue(yappBack, bm))
+        {
+          translate([0,0, mountHeight])
+          rotate([0,180,-90])
+          {
+            oneMount(bm, shellWidth, originLLOpt, true);
+          }
+        } //  if yappBack
+      } // for ..
+  } //  translate to [0,0,0]
+} //-- printBoxMounts()
+
+
+//===========================================================

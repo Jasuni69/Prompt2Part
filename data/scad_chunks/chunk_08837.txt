@@ -1,0 +1,22 @@
+function tri_arc_path(shape_pts) = 
+    tri_is_ccw(shape_pts) ? 
+	    _tri_arc_ct_clk(shape_pts) : 
+		reverse(_tri_arc_ct_clk(reverse(shape_pts)));
+
+/*
+use <experimental/tri_arc_path.scad>
+
+use <util/zip.scad>
+use <hull_polyline2d.scad>
+
+$fn = 24;
+pts = zip([rands(0, 20, 3), rands(0, 20, 3)]);
+
+hull_polyline2d(tri_arc_path(pts));
+#for(i = [0:len(pts) - 1]) {
+    translate(pts[i])
+	    sphere(1);
+    translate(pts[i])
+	    text(str(i), 2);
+}
+*/

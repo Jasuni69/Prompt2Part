@@ -1,0 +1,20 @@
+function get_metric_jis_thread_pitch(size) = lookup(size, [
+		[ 2.0, 0.40],
+		[ 2.5, 0.45],
+		[ 3.0, 0.50],
+		[ 4.0, 0.70],
+		[ 5.0, 0.80],
+		[ 6.0, 1.00],
+		[ 7.0, 1.00],
+		[ 8.0, 1.25],
+		[10.0, 1.25],
+		[12.0, 1.25],
+		[14.0, 1.50],
+		[16.0, 1.50],
+		[18.0, 1.50],
+		[20.0, 1.50]
+	]);
+
+
+// Function: get_metric_nut_size()
+// Description: Returns the typical metric nut flat-to-flat diameter for a given bolt `size`.

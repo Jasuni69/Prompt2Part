@@ -1,0 +1,1 @@
+function spade_l(type)     = type[0]; //! Length of the narrow part

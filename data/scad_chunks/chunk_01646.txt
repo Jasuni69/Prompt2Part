@@ -1,0 +1,1 @@
+function blower_depth(type)       = type[4]; //! Height

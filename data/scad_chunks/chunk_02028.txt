@@ -1,0 +1,7 @@
+module psu_shroud_holes(type, cable_d, cables = 1) {                            //! Drill the screw and ziptie holes
+    psu_shroud_hole_positions(type)
+        drill(screw_clearance_radius(screw), 0);
+
+    psu_shroud_cable_positions(type, cable_d, cables)
+        cable_tie_holes(cable_d / 2, h = 0);
+}

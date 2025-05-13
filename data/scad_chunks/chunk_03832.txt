@@ -1,0 +1,1 @@
+function chamferInfo() = $geomInfo[getTypeIndex($type_geomInfoChamfer) ];

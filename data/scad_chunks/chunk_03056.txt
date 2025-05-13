@@ -1,0 +1,50 @@
+//  *** Light Tubes ***
+//-------------------------------------------------------------------
+//  Default origin = yappCoordPCB: PCB[0,0,0]
+//
+//  Parameters:
+//   Required:
+//    (0) = posx
+//    (1) = posy
+//    (2) = tubeLength
+//    (3) = tubeWidth
+//    (4) = tubeWall
+//    (5) = gapAbovePcb
+//    (6) = tubeType    {yappCircle|yappRectangle}
+//   Optional:
+//    (7) = lensThickness (how much to leave on the top of the lid for the light to shine through 0 for open hole : Default = 0/Open
+//    (8) = Height to top of PCB : Default = standoffHeight+pcbThickness
+//    (9) = filletRadius : Default = 0/Auto 
+//    (n) = { yappCoordBox, <yappCoordPCB> }
+//    (n) = { yappNoFillet }
+//-------------------------------------------------------------------
+
+lightTubes =
+[
+  
+  [pcbLength-(8.820),(pcbWidth/2)-3.810, // Pos
+    6, 6,                 // W,L
+    1.0,                      // wall thickness
+    2,                      // Gap above PCB
+    yappCircle,          // tubeType (Shape)
+    undef,undef,1
+  ]
+ ,[pcbLength-(8.820+(2.54*3)),(pcbWidth/2)-1.27 - (2.54*1), // Pos
+    6, 6,                 // W,L
+    1.0,                      // wall thickness
+    2,                      // Gap above PCB
+    yappCircle,          // tubeType (Shape)
+    undef,undef,1
+  ]
+ ,[pcbLength-(8.820+(2.54*6)),(pcbWidth/2)-3.810, // Pos
+    6, 6,                 // W,L
+    1.0,                      // wall thickness
+    2,                      // Gap above PCB
+    yappCircle,          // tubeType (Shape)
+    undef,undef,1
+  ]
+ ,[pcbLength-(8.820+(2.54*9)),(pcbWidth/2)-3.810, // Pos
+    6, 6,                 // W,L
+    1.0,                      // wall thickness
+    2,                      // Gap above PCB
+    yappCircle,          // tubeType (Shape)

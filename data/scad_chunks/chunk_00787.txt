@@ -1,0 +1,1 @@
+function smd_sot_tab_width(type)  = type[7];    //! The wide lead at the top

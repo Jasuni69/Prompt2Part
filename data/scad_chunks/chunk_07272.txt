@@ -1,0 +1,69 @@
+module Scale(v=[+1.5,+0.8,+0.8,0.6,0.7,1.3],//  scaling factors for quadrants [x-,x+,y-,y+,z-,z+]
+ use2D,size=viewportSize/2,help){
+   use2D= is_undef(use2D)?is_undef(v[4])?true:false:use2D;
+  makeV =function(v=v) [for(i=[0:5])is_undef(v[i])?1:v[i]]; 
+ v=makeV();
+ size=is_undef(size)?bed?printBed:100:size;
+  
+    
+if($children)if(use2D){
+    scale([v[1],v[3]])intersection(){
+    children();
+    rotate(0)square(size);
+    }
+    
+    scale([v[0],v[3]])intersection(){
+    children();
+    rotate(90)square(size);
+    }
+    scale([v[0],v[2]])intersection(){
+    children();
+    rotate(180)square(size);
+    }
+    
+    scale([v[1],v[2]])intersection(){
+    children();
+    rotate(-90)square(size);
+    }
+}else{
+    
+    scale([v[0],v[2],v[5]])intersection(){
+    children();
+    rotate(-180)cube(size);
+    }  
+    scale([v[0],v[3],v[5]])intersection(){
+    children();
+    rotate(+90)cube(size);
+    }   
+    scale([v[1],v[3],v[5]])intersection(){
+    children();
+    rotate(0)cube(size);
+    }     
+    scale([v[1],v[2],v[5]])intersection(){
+    children();
+    rotate(-90)cube(size);
+    } 
+    
+    scale([v[0],v[2],v[4]])intersection(){
+    children();
+    rotate([-90,0,-180])cube(size);
+    }  
+    scale([v[0],v[3],v[4]])intersection(){
+    children();
+    rotate([-90,0,90])cube(size);
+    }   
+    scale([v[1],v[3],v[4]])intersection(){
+    children();
+    rotate([-90,0,0])cube(size);
+    }     
+  
+    scale([v[1],v[2],v[4]])intersection(){
+    children();
+    rotate([-90,0,-90])cube(size);
+    }       
+
+}
+HelpTxt("Scale",["v",v,
+"use2D", use2D,"size",size],help);
+MO(!$children);
+}

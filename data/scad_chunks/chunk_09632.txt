@@ -1,0 +1,79 @@
+module screw(
+	screwsize=3,
+	screwlen=10,
+	headsize=6,
+	headlen=3,
+	pitch=undef,
+	countersunk=false,
+	orient=ORIENT_Z,
+	align="base"
+) {
+	sides = max(12, segs(screwsize/2));
+	algn = countersunk? ALIGN_NEG : align;
+	alignments = [
+		["base",   [0,0,-headlen/2+screwlen/2]],
+		["sunken", [0,0,(headlen+screwlen)/2-0.01]]
+	];
+	orient_and_align([headsize, headsize, headlen+screwlen], orient, algn, alignments=alignments) {
+		down(headlen/2-screwlen/2) {
+			down(screwlen/2) {
+				if (pitch == undef) {
+					cylinder(r=screwsize/2, h=screwlen+0.05, center=true, $fn=sides);
+				} else {
+					threaded_rod(d=screwsize, l=screwlen+0.05, pitch=pitch, $fn=sides);
+				}
+			}
+			up(headlen/2) cylinder(r=headsize/2, h=headlen, center=true, $fn=sides*2);
+		}
+	}
+}
+
+
+// Module: metric_bolt()
+// Description:
+//   Makes a standard metric screw model.
+// Arguments:
+//   size = Diameter of threaded part of screw.
+//   headtype = One of `"hex"`, `"pan"`, `"button"`, `"round"`, `"countersunk"`, `"oval"`, `"socket`".  Default: `"socket"`
+//   l = Length of screw, except for the head.
+//   shank = Length of unthreaded portion of the shaft.
+//   pitch = If given, render threads of the given pitch.  If 0, then no threads.  Overrides coarse argument.
+//   details = If true model should be rendered with extra details.  (Default: false)
+//   coarse = If true, make coarse threads instead of fine threads.  Default = true
+//   flange = Radius of flange beyond the head.  Default = 0 (no flange)
+//   phillips = If given, the size of the phillips drive hole to add.  (ie: "#1", "#2", or "#3")
+//   torx = If given, the size of the torx drive hole to add.  (ie: 10, 20, 30, etc.)
+//   orient = Orientation of the bolt.  Use the `ORIENT_` constants from `constants.scad`.  Default: `ORIENT_Z`.
+//   align = Alignment of the bolt.  Use the `V_` constants from `constants.scad` or `"sunken"`, `"base"`, or `"shank"`.  Default: `"base"`.
+// Example: Bolt Head Types
+//   ydistribute(40) {
+//       xdistribute(30) {
+//           // Front Row, Left to Right
+//           metric_bolt(headtype="pan", size=10, l=15, details=true, phillips="#2");
+//           metric_bolt(headtype="button", size=10, l=15, details=true, phillips="#2");
+//           metric_bolt(headtype="round", size=10, l=15, details=true, phillips="#2");
+//       }
+//       xdistribute(30) {
+//           // Back Row, Left to Right
+//           metric_bolt(headtype="socket", size=10, l=15, details=true);
+//           metric_bolt(headtype="hex", size=10, l=15, details=true, phillips="#2");
+//           metric_bolt(headtype="countersunk", size=10, l=15, details=true, phillips="#2");
+//           metric_bolt(headtype="oval", size=10, l=15, details=true, phillips="#2");
+//       }
+//   }
+// Example: Details
+//   metric_bolt(size=10, l=15, details=true, $fn=32);
+// Example: No Details Except Threads
+//   metric_bolt(size=10, l=15);
+// Example: No Details, No Threads
+//   metric_bolt(size=10, l=15, pitch=0);
+// Example: Fine Threads
+//   metric_bolt(size=10, l=15, coarse=false);
+// Example: Flange
+//   metric_bolt(size=10, l=15, flange=5);
+// Example: Shank
+//   metric_bolt(size=10, l=25, shank=10);
+// Example: Hex Head with Phillips
+//   metric_bolt(headtype="hex", size=10, l=15, phillips="#2");
+// Example: Hex Head with Torx
+//   metric_bolt(headtype="hex", size=10, l=15, torx=50);

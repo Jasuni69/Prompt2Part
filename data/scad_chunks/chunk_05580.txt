@@ -1,0 +1,15 @@
+function f_len(a) = f_1arg(function(a) len(a))(a);
+
+
+// Function: f_chr()
+// Synopsis: Returns a function to get a string character from its ordinal number.
+// Topics: Function Literals, String Operators
+// See Also: f_len(), f_chr(), f_ord(), f_str(), f_str2(), f_str3()
+// Usage:
+//   fn = f_chr();
+//   fn = f_chr(a);
+// Description:
+//   A factory that generates function literals based on `chr(a)`, where the `a`
+//   argument can optionally be replaced with a constant.
+// Arguments:
+//   a = If given, replaces the argument.

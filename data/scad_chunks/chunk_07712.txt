@@ -1,0 +1,23 @@
+module Knurl(r=10,h=20,size=[5,5,.7],depth,e,scale=1,scaleZ=1,twist=0,grad=360,delta=[0,0],alt=0,convexity,name,help){
+con=0;
+size=is_num(size)?[size,size,is_undef(depth)?size/2:depth]:concat(size.xy,is_undef(depth)?[size.z]:[depth]);
+
+
+e=is_undef(e)?[
+    max(3,round( grad/(asin( (max(0.1,size.x/2))/r  )*2) ) ),
+    max(1,round(h/size.y))
+  ]:
+             e;
+
+convexity=is_undef(convexity)?round(map(e.x,[1,500],[5:30])):convexity;
+             
+realSize=[sin(grad/(e.x)/2)*r*2,h/e.y,size.z];
+depthCord=r-Kathete(r,realSize.x/2);// height over cord⇔radius
+
+lenZ=is_list(size.z)?len(size.z):1;
+Echo(str("Irregular Knurl! e.x=",e.x," but len size.z=",lenZ,"↦  ↦",floor(e.x/lenZ)*lenZ,"⇐e.x⇒",ceil(e.x/lenZ)*lenZ),color="warning",condition=e.x%lenZ&&is_list(size.z));
+
+loopX=grad==360?e.x-1:e.x;
+
+
+InfoTxt("Knurl",["knurls",e,"size",realSize,"deg",[for (i=size.z)str("\n",atan2(-i,realSize.x/2+delta.x),"° | ",atan2(-i,(realSize.y/2+delta.y)),"°")],"edge",str((180-360/e.x),"°"),"CordDist",depthCord],name);

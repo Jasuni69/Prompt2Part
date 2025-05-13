@@ -1,0 +1,1 @@
+function pdip_pin_s(type) = type[1]; //! Height above seating plane

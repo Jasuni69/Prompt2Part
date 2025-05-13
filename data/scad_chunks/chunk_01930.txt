@@ -1,0 +1,8 @@
+module box_corner_profile_sections(type, section, sections) { //! Generate four copies of a corner profile section
+    stl(str(box_name(type), "_corner_profile"));
+    offset = box_boss_r(type) + 1;
+    for(i = [0 : 3])
+        rotate(i * 90)
+            translate([offset, offset])
+                box_corner_profile_section(type, section, sections);
+}

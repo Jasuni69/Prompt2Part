@@ -1,0 +1,38 @@
+function plane_line_angle(plane, line) =
+    assert( _valid_plane(plane), "\nInvalid plane." )
+    assert( _valid_line(line,dim=3), "\nInvalid 3d line." )
+    let(
+        linedir   = unit(line[1]-line[0]),
+        normal    = plane_normal(plane),
+        sin_angle = linedir*normal,
+        cos_angle = norm(cross(linedir,normal))
+    ) atan2(sin_angle,cos_angle);
+
+
+
+// Function: plane_closest_point()
+// Synopsis: Returns the orthogonal projection of points onto a plane. 
+// Topics: Geometry, Planes, Projection
+// See Also: plane3pt(), line_closest_point(), point_plane_distance()
+// Usage:
+//   pts = plane_closest_point(plane, points);
+// Description:
+//   Given a plane definition `[A,B,C,D]`, where `Ax+By+Cz=D`, and a list of 2d or
+//   3d points, return the closest 3D orthogonal projection of the points on the plane.
+//   In other words, for every point given, returns the closest point to it on the plane.
+//   If points is a single point then returns a single point result.  
+// Arguments:
+//   plane = The `[A,B,C,D]` plane definition where `Ax+By+Cz=D` is the formula of the plane.
+//   points = List of points to project
+// Example(FlatSpin,VPD=500,VPT=[2,20,10]):
+//   points = move([10,20,30], p=yrot(25, p=path3d(circle(d=100, $fn=36))));
+//   plane = plane_from_normal([1,0,1]);
+//   proj = plane_closest_point(plane,points);
+//   color("red") move_copies(points) sphere(d=4,$fn=12);
+//   color("blue") move_copies(proj) sphere(d=4,$fn=12);
+//   move(centroid(proj)) {
+//       rot(from=UP,to=plane_normal(plane)) {
+//           anchor_arrow(50);
+//           %cube([120,150,0.1],center=true);
+//       }
+//   }

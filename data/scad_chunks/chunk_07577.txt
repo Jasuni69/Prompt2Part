@@ -1,0 +1,17 @@
+module RotEx(grad=360,fn=fn,center=false,cut=false,convexity=5,help=false){
+  fnrotex=$fn;
+    rotate(center?sign(grad)*-min(abs(grad)/2,180):grad>=360?180:0)
+  rotate_extrude(angle=grad,convexity=convexity, $fa =fn?abs(grad/fn):$fa,$fs=.05,$fn=0)intersection(){
+    $fn=fnrotex;
+    $fa=fa;
+    $fs=fs;
+           children();
+           if(cut)translate([cut==-1?-1000:0,-500])square(1000);
+    }
+
+    MO(!$children);   
+    HelpTxt("RotEx",["grad",grad,"fn",fn,"center",center,"cut",cut,"convexity",convexity],help);
+}
+
+
+// multiply children in a given matrix (e= number es =distance)

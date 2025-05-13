@@ -1,0 +1,1 @@
+function light_strip_pcb_thickness(type) = type[9]; //! PCB thickness

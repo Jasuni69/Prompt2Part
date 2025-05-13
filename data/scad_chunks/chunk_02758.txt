@@ -1,0 +1,10 @@
+module cylRing(d1, d2, h) {
+	if (d2 > 0) {
+		difference() {
+			cylinder(h = h, d = d1);
+			cylinder(h = h, d = d2);
+		}
+	} else {
+		cylinder(h = h, d = d1);
+	}
+}

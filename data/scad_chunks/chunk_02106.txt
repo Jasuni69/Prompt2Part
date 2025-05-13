@@ -1,0 +1,1 @@
+function fan_guard_wall() = extrusion_width - layer_height / 2 + nozzle / 2 + extrusion_width / 2;

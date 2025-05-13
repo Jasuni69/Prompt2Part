@@ -1,0 +1,5 @@
+function use_nut(i)    = in([4],    i);
+
+clip_lengths = [for(i = [0 : len(clips) - 1])
+    let(c = clips[i], c1 = c.x, c2 = c.y, ins = use_insert(i), nut = use_nut(i))
+        cable_clip_extent(screw, c1, insert = ins, nut = nut) + (c2 ? cable_clip_extent(screw, c2, insert = ins, nut = nut) : cable_clip_width(screw, insert = ins, nut = nut) / 2)];

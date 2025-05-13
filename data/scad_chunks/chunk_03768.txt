@@ -1,0 +1,3 @@
+function geomsOnly(p,geom=undef) =
+        let(geomList=[for(e=p)if(isOfGeomType(e))e])
+          (!geom&&len(geomList)>0)?setFromList(geomList):set(geom);

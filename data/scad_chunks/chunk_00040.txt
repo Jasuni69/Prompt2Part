@@ -1,0 +1,17 @@
+function isfinite(x) = (!(x!=x)) && (x<(1/0)) && (x>(-1/0));
+
+
+// This generates a closed polyhedron from an array of arrays of points,
+// with each inner array tracing out one loop outlining the polyhedron.
+// pointarrays should contain an array of N arrays each of size P outlining a
+// closed manifold.  The points must obey the right-hand rule.  For example,
+// looking down, the P points in the inner arrays are counter-clockwise in a
+// loop, while the N point arrays increase in height.  Points in each inner
+// array do not need to be equal height, but they usually should not meet or
+// cross the line segments from the adjacent points in the other arrays.
+// (N>=2, P>=3)
+// Core triangles:
+//   [j][i], [j+1][i], [j+1][(i+1)%P]
+//   [j][i], [j+1][(i+1)%P], [j][(i+1)%P]
+//   Then triangles are formed in a loop with the middle point of the first
+//   and last array.

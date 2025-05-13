@@ -1,0 +1,9 @@
+module ht_pipe(type) { //! Draw specified pipe
+    vitamin(str("ht_pipe(", type[0], "): PVC Waterpipe - ", type[1]));
+    tube_id = pipe_od(type) - pipe_wall(type) * 2;
+
+    tube(h = pipe_length(type), or = tube_id/2 + pipe_wall(type), ir = tube_id/2, center = false);
+
+    translate_z(pipe_length(type))
+        HTpipeFitting(pipe_od(type), tube_id);
+}

@@ -1,0 +1,1 @@
+function camera_fov(type)           = type[7]; //! The field of view of the camera lens

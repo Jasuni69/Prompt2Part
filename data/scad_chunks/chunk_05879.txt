@@ -1,0 +1,22 @@
+function _type_num(x) =
+    is_undef(x)?  0 :
+    is_bool(x)?   1 :
+    is_num(x)?    2 :
+    is_nan(x)?    3 :
+    is_string(x)? 4 :
+    is_list(x)?   5 : 6;
+
+
+// Function: compare_vals()
+// Synopsis: Compares two values, possibly of different type.
+// Topics: Comparisons, List Handling
+// See Also: approx(), is_increasing(), is_decreasing()
+// Usage:
+//   test = compare_vals(a, b);
+// Description:
+//   Compares two values.  Lists are compared recursively.
+//   Returns a negative value if a<b.  Returns a positive value if a>b.  Returns 0 if a==b.
+//   If types are not the same, then undef < bool < nan < num < str < list < range.
+// Arguments:
+//   a = First value to compare.
+//   b = Second value to compare.

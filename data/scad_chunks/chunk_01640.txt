@@ -1,0 +1,1 @@
+function faston_insul_crimp_o(type) = type[14]; //! Offset of insulation crimp

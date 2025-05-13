@@ -1,0 +1,3 @@
+function PathMatrix(t) = AffMerge([RotZt(t), Hills(t), ShiftX(t), RotXZ(t)]);
+
+// Defines the cross section of the track.

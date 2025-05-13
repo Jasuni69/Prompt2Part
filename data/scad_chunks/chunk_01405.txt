@@ -1,0 +1,1 @@
+function meter_shunt(type)       = type[8];     //! Ammeter shunt wire

@@ -1,0 +1,20 @@
+module pbox_base(type) { //! Generate the STL for the base
+    t = pbox_base(type);
+
+    stl(str(pbox_name(type),"_base"))
+        difference() {
+            union() {
+                linear_extrude(t)
+                    offset(base_outset - 0.2)
+                        pbox_inner_shape(type);
+
+                if($children > 0)
+                    children(0);
+            }
+            pbox_screw_positions(type)
+                poly_cylinder(r = screw_clearance_radius(pbox_screw(type)), h = 2 * t + eps, center = true);
+
+            if($children > 1)
+                children(1);
+        }
+}

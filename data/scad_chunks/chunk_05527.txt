@@ -1,0 +1,40 @@
+function filter(func, list) =
+    assert(is_function(func))
+    assert(is_list(list))
+    [for (x=list) if (func(x)) x];
+
+
+// Function: reduce()
+// Synopsis: Applies a 2-arg function cumulatively to the items of a list, returning the final result.
+// Topics: Function Literals, Looping
+// See Also: map(), filter(), accumulate(), while(), for_n()
+// Usage:
+//   res = reduce(func, list, [init]);
+//   res = reduce(function (a,b) a+b, list, <init=);
+// Description:
+//   First the accumulator is set to the value in `init`.  Then, for each item in `list`, the function
+//   in `func` is called with the accumulator and that list item, and the result is stored in the
+//   acumulator for the next iteration.  Once all list items have been processed, the value in the
+//   accumulator is returned.  Ie: `reduce(function (a,b) a+b, list)` is the equivalent of `sum(list)`.
+//   In pseduo-code, this is effectively:
+//   ```
+//   function reduce(func, list, init=0):
+//       x = init;
+//       foreach item in list:
+//           x = func(x, item);
+//       return x;
+//   ```
+// Arguments:
+//   func = The function of signature `function (x)` to evaluate for each item in `list`.
+//   list = The input list.
+//   init = The starting value for the accumulator.  Default: 0
+// Example: Re-Implement sum()
+//   x = reduce(f_add(),[3,4,5]);  // Returns: 12
+// Example: Re-Implement product()
+//   x = reduce(f_mul(),[3,4,5]);  // Returns: 60
+// Example: Re-Implement all()
+//   x = reduce(f_and(),[true,true,true]);   // Returns: true
+//   y = reduce(f_and(),[true,false,true]);  // Returns: false
+// Example: Re-Implement any()
+//   x = reduce(f_or(),[false,false,false]); // Returns: false
+//   y = reduce(f_or(),[true,false,true]);   // Returns: true

@@ -1,0 +1,7 @@
+module test_f_sign() {
+    _test_fn1arg(
+        function (a) f_sign(a),
+        [[-99,-1],[-1,-1],[0,0],[1,1],[99,1]]
+    );
+}
+test_f_sign();

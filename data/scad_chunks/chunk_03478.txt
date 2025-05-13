@@ -1,0 +1,14 @@
+module autoColor(shells=	$shellPartsForAutoColor
+ 										,details=$detailPartsForAutoColor,colorFor=$currentBody,custom=[])
+{
+  color =pickColorWithOpacity(shells,details,colorFor);
+  mapped =is_undef(colorFor)?[]:mapByStringKey(colorFor,custom);
+  custom= (len(mapped)>0)?mapped[0]:[];
+  isCustom = len(custom)>0;
+  drawColor=isCustom?custom[1]:color[0];
+  remColor=$removing?0.3:(isCustom? custom[2]:color[1]);
+  
+  *echo("autoColor() Debug Data:",custom,shells,details,drawColor,remColor,colorFor);
+
+  color(drawColor,remColor)children();
+}

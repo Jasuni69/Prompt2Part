@@ -1,0 +1,36 @@
+function _base_radius(circ_pitch, teeth, pressure_angle=20, helical=0, diam_pitch, mod, pitch) =
+    let(
+        circ_pitch = circular_pitch(pitch, mod, circ_pitch, diam_pitch),
+        trans_pa = atan(tan(pressure_angle)/cos(helical))
+    )
+    pitch_radius(circ_pitch, teeth, helical) * cos(trans_pa);
+
+
+// Function: bevel_pitch_angle()
+// Synopsis: Returns the pitch cone angle for a bevel gear.
+// Topics: Gears, Parts
+// See Also: bevel_gear(), pitch_radius(), outer_radius()
+// Usage:
+//   ang = bevel_pitch_angle(teeth, mate_teeth, [drive_angle=]);
+// Description:
+//   Returns the correct pitch cone angle for a bevel gear with a given number of teeth, that is
+//   matched to another bevel gear with a (possibly different) number of teeth.
+// Arguments:
+//   teeth = Number of teeth that this gear has.
+//   mate_teeth = Number of teeth that the matching gear has.
+//   drive_angle = Angle between the drive shafts of each gear.  Default: 90º.
+// Example:
+//   ang = bevel_pitch_angle(teeth=18, mate_teeth=30);
+// Example(2D):
+//   t1 = 13; t2 = 19; pitch=5;
+//   pang = bevel_pitch_angle(teeth=t1, mate_teeth=t2, drive_angle=90);
+//   color("black") {
+//       zrot_copies([0,pang])
+//           stroke([[0,0,0], [0,-20,0]],width=0.2);
+//       stroke(arc(r=3, angle=[270,270+pang]),width=0.2);
+//   }
+//   #bevel_gear(
+//       pitch=5, teeth=t1, mate_teeth=t2,
+//       spiral=0, cutter_radius=1000,
+//       slices=12, anchor="apex", orient=BACK
+//   );

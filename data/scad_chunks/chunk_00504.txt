@@ -1,0 +1,1 @@
+function washer_thickness(type)       = type[3]; //! Thickness

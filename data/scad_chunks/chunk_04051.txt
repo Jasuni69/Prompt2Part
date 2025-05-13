@@ -1,0 +1,1 @@
+function vec4(p) = let (v3=vec3(p)) len(v3) < 4 ? concat(v3,1) : v3;

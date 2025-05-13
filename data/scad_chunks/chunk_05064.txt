@@ -1,0 +1,26 @@
+function _debug_octahedron(size, squareness) = 
+    squareness > 0.998 ? octahedron(size)
+    : let(
+        hw = is_num(size) ? [size,size,size]*0.5 : 0.5*size,
+        isq3 = 1/sqrt(3),
+        r = hw*(isq3+squareness*(1-isq3)), // 3-vector radius to tips
+        ra = hw - r, // distance from axis tip face corner
+        rx = r.x, ry=r.y, rz=r.z, ax=ra.x, ay=ra.y, az=ra.z,
+        pts = [
+            [ax,0,-rz], [0,ay,-rz], [-ax,0,-rz], [0,-ay,-rz], // 0,1,2,3  botttom
+            [rx,0,-az], [0,ry,-az], [-rx,0,-az], [0,-ry,-az], // 4,5,6,7  below waist
+            [rx,ay,0], [ax,ry,0], [-ax,ry,0], [-rx,ay,0],         // 8,9,10,11 waist
+                [-rx,-ay,0], [-ax,-ry,0], [ax,-ry,0], [rx,-ay,0], // 12,13,14,15 waist
+            [rx,0,az], [0,ry,az], [-rx,0,az], [0,-ry,az], // 16,17,18,19  above waist
+            [ax,0,rz], [0,ay,rz], [-ax,0,rz], [0,-ay,rz]  // 20,21,22,23  botttom
+        ],
+        faces = [
+            [0,1,2,3], // bottom
+            [1,0,4,8,9,5], [2,1,5,10,11,6], [3,2,6,12,13,7], [0,3,7,14,15,4], // bottom angle faces
+            [4,15,16,8], [5,9,17,10], [6,11,18,12], [7,13,19,14], // corner faces
+            [9,8,16,20,21,17], [11,10,17,21,22,18], [13,12,18,22,23,19], [15,14,19,23,20,16], // top angle faces
+            [23,22,21,20] // top
+        ]
+    ) [pts, faces]; // vnf structure
+
+/// simplest and smallest possible VNF, to display for hide_debug or undefined metaballs; r=corner radius

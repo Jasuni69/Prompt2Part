@@ -1,0 +1,1 @@
+function strap_screw(type = strap)     = type[2]; //! Screw type
