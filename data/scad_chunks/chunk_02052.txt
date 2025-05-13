@@ -1,8 +1,0 @@
-module double_cable_clip(screw, cable1, cable2, insert = false, nut = false) {
-    h = max(cable_clip_height(cable1, screw, insert, nut), cable_clip_height(cable2, screw, insert, nut));
-    union() {
-        single_cable_clip(screw, cable1, h, insert, nut);
-
-        mirror([1,0,0]) single_cable_clip(screw, cable2, h, insert, nut);
-    }
-}

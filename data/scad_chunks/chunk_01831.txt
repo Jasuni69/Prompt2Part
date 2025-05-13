@@ -1,1 +1,0 @@
-function tubing_or(type)        = tubing_od(type) / 2; //! Outside radius

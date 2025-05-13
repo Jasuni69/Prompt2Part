@@ -1,1 +1,0 @@
-function sbr_bearing(type)              = type[12]; //! Linear bearing used

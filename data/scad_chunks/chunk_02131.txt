@@ -1,1 +1,0 @@
-function pbox_ridges(type)     = type[8]; //! Ridge wavelength and amplitude

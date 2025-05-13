@@ -1,7 +1,0 @@
-module angle(a){
-    data =_pb_angle([a], true, $pb_angle);
-    $pb_angle = data[2];
-    $pb_ctrl_pts = data[3];
-    if (pb_do_render($children, parent_module(0))) pb_draw();
-    children();  
-}

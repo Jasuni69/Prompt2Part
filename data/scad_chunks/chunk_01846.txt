@@ -1,7 +1,0 @@
-module fan_hole_positions(type, z = undef) { //! Position children at the screw hole positions
-    hole_pitch = fan_hole_pitch(type);
-    for(x = [-hole_pitch, hole_pitch])
-        for(y = [-hole_pitch, hole_pitch])
-            translate([x, y, is_undef(z) ? fan_depth(type) / 2 : z])
-                children();
-}

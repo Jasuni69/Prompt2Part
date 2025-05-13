@@ -1,1 +1,0 @@
-function map(v, func) = [ for (e = v) func(e) ]; //! make a new vector where the func function argument is applied to each element of the vector v

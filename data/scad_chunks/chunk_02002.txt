@@ -1,1 +1,0 @@
-function drag_chain_screw(type)       = type[8]; //! Mounting screw for the ends

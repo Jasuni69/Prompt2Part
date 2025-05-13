@@ -1,1 +1,0 @@
-function pos2(i) = [clearance2 + i * gap2 + (i + 0.5) * d2 - box_mm.x / 2, -box_mm.y / 2 + clearance2 + d2 / 2, box_mm.z];

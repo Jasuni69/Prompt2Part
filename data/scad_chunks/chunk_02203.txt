@@ -1,1 +1,0 @@
-function hinge_knuckle_dia(type) = type[5]; //! The knuckle diameter

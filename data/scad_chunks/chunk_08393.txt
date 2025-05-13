@@ -1,2 +1,0 @@
-function _nz_worley_manhattan(p, cells) =
-    min([for(cell = cells) _manhattan(cell - p)]);

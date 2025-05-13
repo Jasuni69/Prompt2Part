@@ -1,7 +1,0 @@
-module octahedron(size=1, anchor=CENTER, spin=0, orient=UP) {
-    vnf = octahedron(size=size);
-    attachable(anchor,spin,orient, vnf=vnf, extent=true) {
-        vnf_polyhedron(vnf, convexity=2);
-        children();
-    }
-}

@@ -1,8 +1,0 @@
-function backtracker(maze, current_idx, rows, seed) =
-    let(
-	    rdirs = rand_dirs(current_idx[0] * rows + current_idx[1], seed),
-		vdirs = visitable_dirs(maze, rdirs, cell_from(maze, current_idx)),
-		vdirs_leng = len(vdirs)
-	)
-	vdirs_leng == 0 ? maze :
-	                  visit_dirs(maze, current_idx, vdirs, vdirs_leng, rows, seed); // go maze

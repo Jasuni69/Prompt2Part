@@ -1,1 +1,0 @@
-function psu_shroud_screw(type)  = screw;                                       //! Screw used to fasten

@@ -1,1 +1,0 @@
-function inch(inch=1)=inch*25.4;

@@ -1,4 +1,0 @@
-
-batteries = [AAACELL, AACELL, CCELL, DCELL, LUMINTOP, S25R18650, A23CELL, LI4680, LI32700, LI16340];
-
-use <battery.scad>

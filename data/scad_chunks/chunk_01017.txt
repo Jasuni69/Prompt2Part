@@ -1,1 +1,0 @@
-function gt_box_setback(type)  = type[13];  //! How far the contact box is set back from the front

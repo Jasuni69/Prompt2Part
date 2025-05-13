@@ -1,1 +1,0 @@
-function mains_socket_insert_boss(type) = 2 * (insert_hole_radius(screw_insert(mains_socket_screw(type))) + insert_wall);

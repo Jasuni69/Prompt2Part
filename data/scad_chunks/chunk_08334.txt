@@ -1,3 +1,0 @@
-module test_archimedean_spiral_extrude(sections) {
-
-}

@@ -1,3 +1,0 @@
-module test_convex_hull3(vts_faces) {
-
-}

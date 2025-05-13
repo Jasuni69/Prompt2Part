@@ -1,3 +1,0 @@
-function signed_volume(poly) = is_poly_vector(poly) ?
-  sum([for (p=poly) _signed_volume(p)]) :
-  _signed_volume(poly);

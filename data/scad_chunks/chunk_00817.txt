@@ -1,1 +1,0 @@
-function smd_pot_cross(type)    = type[4]; //! Cross head slot for screwdriver

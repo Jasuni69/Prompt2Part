@@ -1,1 +1,0 @@
-function sampling_hasActive(s) = len(sampling_active(s)) > 0;

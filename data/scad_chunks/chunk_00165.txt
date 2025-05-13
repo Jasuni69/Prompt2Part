@@ -1,7 +1,0 @@
-module box1_case_stl() {
-     pbox(box1) {
-        box1_internal_additions();
-        box1_holes();
-        box1_external_additions();
-     }
-}

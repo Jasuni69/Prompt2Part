@@ -1,1 +1,0 @@
-function pmeter_thickness(type)   = type[9];  //! Wall thickness if not closed

@@ -1,6 +1,0 @@
-function PathMatrix(t) = AffMerge([Ellipse(t), GearRotXY(t), GearRotXZ(t)]);
-
-// Defines the cross section of the "gear thing".  The ternary operator
-// is used to increase the radius of the cross-section for two sets of
-// angle values around the cross-section to establish the protruding
-// ridges.

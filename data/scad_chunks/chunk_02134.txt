@@ -1,5 +1,0 @@
-function pbox_height(type)     = type[11]; //! Internal height
-
-base_outset = 1;    // How much the base overlaps the inner dimensions
-base_overlap = 2;   // The width of ledge the base sits on
-height_overlap = 1; // How far the edges sit below the base

@@ -1,4 +1,0 @@
-module dogbone_rectangle_y(size, r = cnc_bit_r, center = true, xy_center = true) //! Rectangle with cylinders at the corners, offset in the y direction
-{
-    dogbone_rectangle(size = size, r = r, center = center, x_offset = r, y_offset = 0);
-}

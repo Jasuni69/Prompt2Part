@@ -1,1 +1,0 @@
-module spread(p1=[0,0,0], p2=[10,0,0], spacing, l, n=2) line_copies(p1=p1, p2=p2, spacing=spacing, l=l, n=n) children();

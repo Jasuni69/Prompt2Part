@@ -1,6 +1,0 @@
-function _lower_half_curve(curve_pts, leng) =
-    [
-        for(i = 0; i < leng; i = i + 1)
-        let(p = curve_pts[leng - 1 - i])
-        if(p.x >= 0) p
-    ];

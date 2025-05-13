@@ -1,1 +1,0 @@
-function TORIGHT(align2=NOCHANGE,align3=NOCHANGE) = align(TORIGHT,align2,align3);

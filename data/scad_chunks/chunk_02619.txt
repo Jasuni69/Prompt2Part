@@ -1,5 +1,0 @@
-module rounded_cube_xy(size, r = 0, xy_center = false, z_center = false) //! Like `cube()` but corners rounded in XY plane and separate centre options for xy and z.
-{
-    extrude_if(size.z, center = z_center)
-        rounded_square([size.x, size.y], r, xy_center);
-}

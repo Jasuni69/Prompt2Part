@@ -1,8 +1,0 @@
-module test__corner_edges() {
-    edges = _edges([TOP,FRONT+RIGHT]);
-    assert_equal(_corner_edges(edges,TOP+FRONT+RIGHT), [1,1,1]);
-    assert_equal(_corner_edges(edges,TOP+FRONT+LEFT), [1,1,0]);
-    assert_equal(_corner_edges(edges,BOTTOM+FRONT+RIGHT), [0,0,1]);
-    assert_equal(_corner_edges(edges,BOTTOM+FRONT+LEFT), [0,0,0]);
-}
-test__corner_edges();

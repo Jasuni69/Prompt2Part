@@ -1,2 +1,0 @@
-function unit(v) = norm(v)>0 ? v/norm(v) : undef; 
-// Find the transpose of a rectangular matrix

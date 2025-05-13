@@ -1,3 +1,0 @@
-function rotate(a=0, v, poly) = is_poly_vector(poly) ?
-  [for (p=poly) _rotate(a=a,v=v,poly=p)] :
-  _rotate(a=a,v=v,poly=poly);

@@ -1,4 +1,0 @@
-module ring_heart(radius, thickness) {
-    hollow_out(thickness) 
-        heart(radius + thickness / 2, 5);
-}

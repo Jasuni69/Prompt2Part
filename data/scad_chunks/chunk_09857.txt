@@ -1,6 +1,0 @@
-module test_enumerate() {
-	assert(enumerate(["a","b","c"]) == [[0,"a"], [1,"b"], [2,"c"]]);
-	assert(enumerate([[88,"a"],[76,"b"],[21,"c"]], idx=1) == [[0,"a"], [1,"b"], [2,"c"]]);
-	assert(enumerate([["cat","a",12],["dog","b",10],["log","c",14]], idx=[1:2]) == [[0,"a",12], [1,"b",10], [2,"c",14]]);
-}
-test_enumerate();

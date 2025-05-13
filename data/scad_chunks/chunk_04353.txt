@@ -1,2 +1,0 @@
-function shellColor(ind)=$colorNames[ind*2];
-//picks one color for details inside shell (oddindex)

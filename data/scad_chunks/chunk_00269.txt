@@ -1,5 +1,0 @@
-module o_rings()
-    O_ring(2.5, 1.6, 3);
-
-if($preview)
-    o_rings();

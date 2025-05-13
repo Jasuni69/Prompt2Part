@@ -1,4 +1,0 @@
-module terminals()
-    terminal_block(mw_terminals, 10);
-
-terminals();

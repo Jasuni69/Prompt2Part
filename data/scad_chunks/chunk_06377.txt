@@ -1,9 +1,0 @@
-function plane_offset(plane) =
-    assert( _valid_plane(plane), "\nInvalid input plane." )
-    plane[3]/norm([plane.x, plane.y, plane.z]);
-
-
-
-// Returns [POINT, U] if line intersects plane at one point, where U is zero at line[0] and 1 at line[1]
-// Returns [LINE, undef] if the line is on the plane.
-// Returns undef if line is parallel to, but not on the given plane.

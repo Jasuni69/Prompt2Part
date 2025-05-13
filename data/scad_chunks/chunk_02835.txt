@@ -1,8 +1,0 @@
-function ShortestDistance(point,list) =
-  let(distances = len(list) > 0 ?
-    [for(i=[0:len(list)-1]) 
-      norm(list[i] - point)] : [])
-  len(distances) > 0 ? min(distances) : 10000;
-
-
-// Rotate a list (a 2D shape) around (0,0)

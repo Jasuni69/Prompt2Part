@@ -1,2 +1,0 @@
-function ribbon_clamp_hole_pitch(ways, screw = screw) =
-    ribbon_clamp_slot(ways) + 2 * min_wall + 2 * corrected_radius(insert_hole_radius(screw_insert(screw))); //! Hole pitch

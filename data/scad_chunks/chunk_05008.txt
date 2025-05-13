@@ -1,4 +1,0 @@
-function opp_ang_to_hyp(opp,ang) =
-    assert(is_finite(opp) && opp>=0, "Triangle side length should be a positive number." )
-    assert(is_finite(ang) && ang>-90 && ang<90, "The angle should be an acute angle." )
-    opp/sin(ang);

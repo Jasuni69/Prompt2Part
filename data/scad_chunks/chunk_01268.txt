@@ -1,1 +1,0 @@
-function scs_screw_separation_z(type)   = type[9];  //! Screw separation in Z direction

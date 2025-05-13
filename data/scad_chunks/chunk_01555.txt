@@ -1,1 +1,0 @@
-function rd_boxc_z(type)       = type[2]; //! Height of inner base above PCB.

@@ -1,1 +1,0 @@
-function zeroIfUndef(what) = (what==undef)?0:what;

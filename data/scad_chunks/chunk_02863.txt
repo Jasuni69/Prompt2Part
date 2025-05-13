@@ -1,7 +1,0 @@
-          cylinder(h=12,d=1.2);
-          translate([0,0,4])
-            cube([8,1,1],center=true);
-        }
-        cube([5,3,3],center=true);
-      }
-    }

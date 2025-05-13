@@ -1,6 +1,0 @@
-module buttons()
-    layout([for(b = buttons) square_button_width(b)], 5)
-        square_button(buttons[$i]);
-
-if($preview)
-    buttons();

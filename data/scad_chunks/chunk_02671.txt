@@ -1,6 +1,0 @@
-module clip(xmin = -big, ymin = -big, zmin = -big, xmax = big, ymax = big, zmax = big, convexity = 1) //! Clip child to specified boundaries
-    render(convexity = convexity) intersection() {
-        children();
-
-        box(xmin, ymin, zmin, xmax, ymax, zmax);
-    }

@@ -1,1 +1,0 @@
-function arm_angle(type, open) = asin((sclip_height(type) - 2 * sclip_thickness(type) - open) / sclip_arm_length(type));

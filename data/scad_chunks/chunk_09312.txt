@@ -1,8 +1,0 @@
-function _sampling_minDistSample(s, pos, samples, min_s, min_dist, i = 1) = 
-    i == len(samples) ? min_s : 
-    let(
-        sample = samples[i],
-        d = norm(pos - sample),
-        params = min_dist > d ? [sample, d] : [min_s, min_dist]
-    )
-    _sampling_minDistSample(s, pos, samples, params[0], params[1], i + 1);

@@ -1,1 +1,0 @@
-function blower_top(type)         = type[14]; //! Thickness of the top

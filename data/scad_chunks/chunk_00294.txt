@@ -1,1 +1,0 @@
-function  d_slot_length(type) = d_lengths(type)[0] + 3;  //! Slot to clear the back

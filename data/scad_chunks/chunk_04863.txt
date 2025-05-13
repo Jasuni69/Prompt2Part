@@ -1,8 +1,0 @@
-function _pb_segment(last=[], args=[], rel=false, _i=0, _r=[]) = let(
-    groups = pb_groupsOf(2,args,0,1,true),
-    r = groups[2][0],
-    $fn = len(groups[2])>1? groups[2][1] : $fn,
-    pt2 = rel? last+groups[1][_i] : groups[1][_i],
-    data = pb_curveBetweenPoints(last, pt2, r),
-    _r = concat(_r, pb_subList(data[0], 1))
-    ) _i==len(groups[1])-1? [_r,[],data[1],[[],[]]] : _pb_segment(last=pt2, args=args, rel, _i=_i+1, _r=_r);

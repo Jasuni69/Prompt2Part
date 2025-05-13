@@ -1,1 +1,0 @@
-function cesaro_curve        (levels=4,  step=1) = lsystem_turtle(levels=levels, step=step, angle=85,  "F",         [["F","F+F--F+F"]]);

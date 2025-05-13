@@ -1,1 +1,0 @@
-function spring_washer_thickness(type)= type[7]; //! Spring washer thickness

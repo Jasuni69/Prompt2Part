@@ -1,1 +1,0 @@
-function servo_motor_faceplate(type) = type[5]; //! Face plate type

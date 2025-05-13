@@ -1,3 +1,0 @@
-module vero_mounting_holes(type, h = 100) //! Drill mounting holes in a panel
-    vero_mounting_hole_positions(type)
-        drill(screw_clearance_radius(vero_screw(type)), h);

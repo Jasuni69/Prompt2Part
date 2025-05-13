@@ -1,1 +1,0 @@
-function gt_depth(type)        = type[2];   //! Total front to back depth

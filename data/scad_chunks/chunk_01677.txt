@@ -1,1 +1,0 @@
-function pot_thread_h(type) = type[7];  //! Height of threaded part

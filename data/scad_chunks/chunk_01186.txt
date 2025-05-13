@@ -1,1 +1,0 @@
-function leadnut_height(type)        = type[4];     //! Total height

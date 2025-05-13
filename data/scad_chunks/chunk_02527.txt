@@ -1,8 +1,0 @@
-function skin_points(profile, path, loop, twist = 0) =
-    let(profile4 = [for(p = profile) [p.x, p.y, p.z, 1]],
-
-        transforms = sweep_transforms(path, loop, twist)
-    )
-    [for(t = transforms)
-        each profile4 * t
-    ];

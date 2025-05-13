@@ -1,1 +1,0 @@
-function antenna_straight(type) = type[6];  //! Length of the straight part

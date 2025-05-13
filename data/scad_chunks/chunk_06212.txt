@@ -1,1 +1,0 @@
-function rail(l=30, w=10, h=10, chamfer=1.0, ang=30, anchor=BOTTOM, spin=0, orient=UP) = no_function("rail");

@@ -1,1 +1,0 @@
-function leadnut_hole_dia(type)      = type[9];     //! The diameter of the screw holes

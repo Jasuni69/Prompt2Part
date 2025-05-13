@@ -1,1 +1,0 @@
-function led_rim_dia(type)  = type[2]; //! Rim diameter

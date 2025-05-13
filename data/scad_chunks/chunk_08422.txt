@@ -1,8 +1,0 @@
-function _rotx(pt, a) = 
-    a == 0 ? pt :
-    let(cosa = cos(a), sina = sin(a))
-    [
-        pt.x, 
-        pt.y * cosa - pt.z * sina,
-        pt.y * sina + pt.z * cosa
-    ];

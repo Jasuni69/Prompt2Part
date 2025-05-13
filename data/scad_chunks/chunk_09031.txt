@@ -1,8 +1,0 @@
-function __m_rotation_zRotation(a) = 
-    let(c = cos(a), s = sin(a))
-    [
-        [c, -s, 0, 0],
-        [s, c, 0, 0],
-        [0, 0, 1, 0],
-        FINAL_ROW
-    ];

@@ -1,1 +1,0 @@
-function spiral_startAngle(spiral) = spiral[2];

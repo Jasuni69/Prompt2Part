@@ -1,1 +1,0 @@
-module rrect(size=[1,1,1], r=0.25, center=false) cuboid(size,rounding=r,edges="Z",anchor=center?CENTER:BOT);

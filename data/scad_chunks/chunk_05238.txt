@@ -1,1 +1,0 @@
-function ghost(ghost) = no_function("ghost");

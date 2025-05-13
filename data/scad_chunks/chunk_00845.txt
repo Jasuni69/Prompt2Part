@@ -1,1 +1,0 @@
-function bb_colour(type)          = type[4]; //! Shield colour, "silver" for metal

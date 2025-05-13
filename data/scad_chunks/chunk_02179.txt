@@ -1,5 +1,0 @@
-module bbox_shelf_blank(type) { //! 2D template for a shelf
-    dxf(str(bbox_name(type), "_shelf"));
-
-    sheet_2D(bbox_sheets(type), bbox_width(type), bbox_depth(type), 1);
-}

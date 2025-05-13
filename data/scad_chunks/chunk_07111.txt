@@ -1,1 +1,0 @@
-function koch_snowflake      (levels=4,  step=1) = lsystem_turtle(levels=levels, step=step, angle=60,  "F++F++F",   [["F","F-F++F-F"]]);

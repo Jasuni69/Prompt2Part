@@ -1,1 +1,0 @@
-function fan_screw(type)          = type[4];    //! Screw type

@@ -1,1 +1,0 @@
-function box_height(type)      = type[10];//! Internal height

@@ -1,7 +1,0 @@
-function _case2221_isobands(cell_pts, threshold) = [
-    [
-        [cell_pts[0].x, cell_pts[0].y, cell_pts[0].z],
-        interpolated_pt(cell_pts[0], cell_pts[3], threshold),
-        interpolated_pt(cell_pts[0], cell_pts[1], threshold)
-    ]
-];

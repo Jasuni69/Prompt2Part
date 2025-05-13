@@ -1,7 +1,0 @@
-module torii_symbol() {
-    // design your own symbol
-    linear_extrude(.1, center = true) 
-    scale(1.25) 
-    translate([-0.0125, 0.075])
-        text("⛩", font = "Segoe UI Emoji", size = 0.5 * 0.7, halign = "center");
-}

@@ -1,1 +1,0 @@
-function nut_weld_base_t(type) = type[8];       //! Weld nut base thickness

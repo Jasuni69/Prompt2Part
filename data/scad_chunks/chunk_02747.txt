@@ -1,7 +1,0 @@
-module BR20x20WGBP(p1,p2,roll=0,startGussets=[0,0,0,0], endGussets=[0,0,0,0], screws=true) {
-	v = subv(p2,p1);
-	l = mod(v);
-	translate(p1) orientate(v,roll=roll) BR20x20WG(l, startGussets, endGussets, screws);
-}
-
-// for 20x40...  gusset numbering is from y+ anticlockwise

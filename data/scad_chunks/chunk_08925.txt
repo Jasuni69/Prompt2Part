@@ -1,6 +1,0 @@
-function cohesion(nodes, leng, i) =
-    let(
-        node = nodes[i],
-        middlePt = (position_of(nodes[(leng + i - 1) % leng]) + position_of(nodes[(i + 1) % leng])) / 2
-    )
-    cohesionWith(node, middlePt);

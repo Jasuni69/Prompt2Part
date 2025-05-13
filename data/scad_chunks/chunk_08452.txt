@@ -1,6 +1,0 @@
-function rhombi(i, j, n, theta) = [
-	vertex(i, j, n, theta),
-	vertex(i + 1, j, n, theta),
-    vertex(i + 1, -1 + j, n, theta),
-	vertex(i, -1 + j, n, theta)
-];

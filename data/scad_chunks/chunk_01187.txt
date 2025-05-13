@@ -1,1 +1,0 @@
-function leadnut_flange_dia(type)    = type[5];     //! Flange diameter

@@ -1,8 +1,0 @@
-function _facenormal(pts, face) = unit(cross(pts[face[2]]-pts[face[0]], pts[face[1]]-pts[face[0]]));
-
-// hull() function returns triangulated faces.    This function identifies the vertices that belong to each face
-// by grouping together the face triangles that share normal vectors.    The output gives the face polygon
-// point indices in arbitrary order (not usable as input to a polygon call) and a normal vector.  Finally
-// the faces are ordered based on angle with their center (will always give a valid order for convex polygons).
-// Final return is [ordered_faces, facenormals] where the first is a list of indices into the point list
-// and the second is a list of vectors.

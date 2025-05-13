@@ -1,1 +1,0 @@
-function door_hinge_stat_length() = stat_length;            //! Length of the stationary part

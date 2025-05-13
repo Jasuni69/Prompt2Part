@@ -1,6 +1,0 @@
-function _travel(pts, p, fst) = 
-    let(
-        dir_i = _dir(_corner_value(pts, p.x, p.y)),
-        nxt_p = p + _nxt_offset[dir_i]
-    )
-    nxt_p == fst ? [p] : [p, each _travel(pts, nxt_p, fst)];

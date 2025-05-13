@@ -1,1 +1,0 @@
-function meter_lug_offset(type)  = type[5];     //! Lug position, 0 = center, +1 = top

@@ -1,1 +1,0 @@
-function microswitch_holes(type)     = type[7];     //! Hole positions

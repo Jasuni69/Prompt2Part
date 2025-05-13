@@ -1,1 +1,0 @@
-function toggle_washer(type)   = type[19];      //! Washer type

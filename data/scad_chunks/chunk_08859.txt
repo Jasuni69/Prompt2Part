@@ -1,3 +1,0 @@
-function _penrose2(tiles, n, i = 0) = 
-	i == n ? tiles :
-			_penrose2(dedup(subdivide(tiles), eq = tile_eq, hash = tile_hash), n, i + 1);

@@ -1,9 +1,0 @@
-module a(rx, ry, angle, long, sweep, x, y){
-    args = is_num(rx)? [rx, ry, angle, long, sweep, x, y] : rx;
-    data = _pb_arc(pb_last($pb_pts), args, true, 0, 0, undef, []);
-    $pb_pts = concat($pb_pts, data[0]);
-    $pb_angle = data[2];
-    $pb_ctrl_pts = data[3];
-    if (pb_do_render($children, parent_module(0))) pb_draw();
-    children();    
-}

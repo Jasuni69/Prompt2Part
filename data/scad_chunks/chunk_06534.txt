@@ -1,8 +1,0 @@
-function is_consistent(list, pattern) =
-    is_list(list) 
-    && (len(list)==0 
-       || (let(pattern = is_undef(pattern) ? _list_pattern(list[0]): _list_pattern(pattern) )
-          []==[for(entry=0*list) if (entry != pattern) entry]));
-
-//Internal function
-//Creates a list with the same structure of `list` with each of its elements replaced by 0.

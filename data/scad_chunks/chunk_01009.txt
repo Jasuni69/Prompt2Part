@@ -1,1 +1,0 @@
-function gt_front_height(type) = type[5];   //! Height at the front

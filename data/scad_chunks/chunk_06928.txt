@@ -1,7 +1,0 @@
-module test_deltas() {
-    assert_equal(deltas([2,5,9,17]), [3,4,8]);
-    assert_equal(deltas([2,5,9,17],wrap=true), [3,4,8,-15]);
-    assert_equal(deltas([[1,2,3], [3,6,8], [4,8,11]]), [[2,4,5], [1,2,3]]);
-    assert_equal(deltas([[1,2,3], [3,6,8], [4,8,11]],wrap=true), [[2,4,5], [1,2,3], [-3,-6,-8]]);
-}
-test_deltas();

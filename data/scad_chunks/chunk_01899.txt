@@ -1,1 +1,0 @@
-function box_depth(type)       = type[9]; //! Internal depth

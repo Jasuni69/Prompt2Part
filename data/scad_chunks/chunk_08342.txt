@@ -1,2 +1,0 @@
-module test_line2d_line(length, width, frags) {
-}

@@ -1,1 +1,0 @@
-function meter_bezel_wall(type) = (meter_lug_size(type).x - meter_size(type).x) / 2;              //! Printed bezel wall thickness

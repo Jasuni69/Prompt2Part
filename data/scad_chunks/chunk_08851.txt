@@ -1,1 +1,0 @@
-function tile_y(t) = t[2];

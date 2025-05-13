@@ -1,1 +1,0 @@
-function hot_end_inset(type)              = type[4];    //! The length that goes into the mounting

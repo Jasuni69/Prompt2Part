@@ -1,1 +1,0 @@
-function pot_wafer(type)    = type[3];  //! Width, diameter and thickness of the track wafer plus true if curved

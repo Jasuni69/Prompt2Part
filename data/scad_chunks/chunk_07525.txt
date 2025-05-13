@@ -1,1 +1,0 @@
-function kreisbogen(r,grad=360)=PI*r*2/360*grad;

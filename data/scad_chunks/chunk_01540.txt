@@ -1,1 +1,0 @@
-function rd_disc_colours(type) = type[5]; //! Colours of body and text

@@ -1,3 +1,0 @@
-module test_hull_polyline3d_line_segment(index, point1, point2, radius) {
-
-}

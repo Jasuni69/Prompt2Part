@@ -1,1 +1,0 @@
-function ringterm_length(type)       = type[3];    //! Length of the tail including the ring

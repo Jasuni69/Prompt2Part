@@ -1,7 +1,0 @@
-module test_list_unwrap() {
-    assert(list_unwrap([[1,2,3],[4,5,6],[1,8,9]]) == [[1,2,3],[4,5,6],[1,8,9]]);
-    assert(list_unwrap([[1,2,3],[4,5,6],[1,8,9],[1,2,3]]) == [[1,2,3],[4,5,6],[1,8,9]]);
-    assert(list_unwrap([])==[]);
-    assert(list_unwrap([3])==[3]);
-}
-test_list_unwrap();

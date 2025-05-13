@@ -1,1 +1,0 @@
-function gs_height(type)       = type[3]; //! Can height

@@ -1,6 +1,0 @@
-function _xu_move(turtle, leng) = _create(
-    _pt(turtle) + _unit_vts(turtle).x * leng,
-    _unit_vts(turtle)
-);
-
-// forward the turtle in the y' direction

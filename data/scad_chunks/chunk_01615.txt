@@ -1,1 +1,0 @@
-function sheet_is_woven(type)  = !is_undef(type[5]); //! Is a woven sheet, eg carbon fiber

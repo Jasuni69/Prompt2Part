@@ -1,1 +1,0 @@
-function rd_cm_choke_seam(type) = type[2]; //! Overlapping semicircular seams to join the two halves of the core width and thickness

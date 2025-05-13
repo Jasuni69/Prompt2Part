@@ -1,1 +1,0 @@
-function faceplate_thickness(type)      = type[2]; //! Thickness of the faceplate

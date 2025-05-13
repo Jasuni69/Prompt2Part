@@ -1,1 +1,0 @@
-function ZigZag(e=5,x=50,y=5,mod=2,delta=+0,base=2,shift=0)=zigZag(e,x,y,mod,delta,base,shift);

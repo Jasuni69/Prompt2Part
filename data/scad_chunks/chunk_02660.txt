@@ -1,1 +1,0 @@
-function sides(r, n = undef) = is_undef(n) ? max(round(4 * r), 3) : n ? max(n, 3) : r2sides(r); //! Optimum number of sides for specified radius

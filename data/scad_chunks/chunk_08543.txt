@@ -1,9 +1,0 @@
-function _case1002_isobands(cell_pts, lower, upper) = [
-    [
-        interpolated_pt(cell_pts[0], cell_pts[3], upper),
-        interpolated_pt(cell_pts[0], cell_pts[3], lower),
-        interpolated_pt(cell_pts[1], cell_pts[2], lower),
-        [cell_pts[1].x, cell_pts[1].y, cell_pts[1].z],
-        interpolated_pt(cell_pts[0], cell_pts[1], upper)
-    ]
-];

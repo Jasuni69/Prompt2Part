@@ -1,8 +1,0 @@
-module mask2d_roundover(r, inset=0, mask_angle=90, excess=0.01, flat_top, d, h, height, cut, quarter_round=false, joint, anchor=CENTER,spin=0, clip_angle) {
-    path = mask2d_roundover(r=r, d=d, h=h, height=height, cut=cut, joint=joint, inset=inset, clip_angle=clip_angle, 
-                            flat_top=flat_top, mask_angle=mask_angle, excess=excess, quarter_round=quarter_round);
-    attachable(anchor,spin, two_d=true, path=path) {
-        polygon(path);
-        children();
-    }
-}

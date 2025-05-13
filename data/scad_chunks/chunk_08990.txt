@@ -1,1 +1,0 @@
-function _zero_or_value(num_of_vertices, value) = num_of_vertices <= value ? 0 : value;

@@ -1,1 +1,0 @@
-function vero_size(type) = [vero_length(type), vero_width(type), vero_thickness(type)]; //! Board size

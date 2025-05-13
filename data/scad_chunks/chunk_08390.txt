@@ -1,1 +1,0 @@
-function _manhattan(v) = sum([for(d = v) abs(d)]);

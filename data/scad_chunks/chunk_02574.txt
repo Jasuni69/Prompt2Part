@@ -1,1 +1,0 @@
-function argtanh(x) = ln((1 + x) / (1 - x)) / 2;//! inverse hyperbolic tangent

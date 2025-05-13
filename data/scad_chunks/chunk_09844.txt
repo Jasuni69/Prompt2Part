@@ -1,7 +1,0 @@
-module test_cdr() {
-	assert(cdr([]) == []);
-	assert(cdr([88]) == []);
-	assert(cdr([1,2,3]) == [2,3]);
-	assert(cdr(["a","b","c"]) == ["b","c"]);
-}
-test_cdr();

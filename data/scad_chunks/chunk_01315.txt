@@ -1,1 +1,0 @@
-function fuseholder_diameter() = 18.8; //! Outside diameter of flange

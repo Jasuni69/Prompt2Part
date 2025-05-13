@@ -1,1 +1,0 @@
-function psu_face_holes(type)        = type[0];     //! List of screw hole positions

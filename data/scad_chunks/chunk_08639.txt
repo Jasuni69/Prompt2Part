@@ -1,5 +1,0 @@
-function _create(pt, unit_vts) = 
-    [
-        is_undef(pt) ? [0, 0, 0] : pt, 
-        is_undef(unit_vts) ? [[1, 0, 0], [0, 1, 0], [0, 0, 1]] : unit_vts
-    ];

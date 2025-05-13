@@ -1,1 +1,0 @@
-function screw_boss_diameter(type) = max(washer_diameter(screw_washer(type)) + 1, 2 * (screw_nut_radius(type) + 3 * extrusion_width)); //! Boss big enough for nut trap and washer

@@ -1,1 +1,0 @@
-function faston_d_top(type)         = type[3];  //! Radius of the clips

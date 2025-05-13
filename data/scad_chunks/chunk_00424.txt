@@ -1,3 +1,0 @@
-function pulley_pr(type, belt = undef) = let(belt = is_undef(belt) ? pulley_belt(type) : belt)      //! Pitch radius, `belt` only needed for non-standard belt over smooth pulleys
-                                 pulley_teeth(type) ? pulley_teeth(type) * belt_pitch(belt) / 2 / PI
-                                                    : pulley_ir(type) + belt_thickness(belt) - belt_pitch_height(belt);

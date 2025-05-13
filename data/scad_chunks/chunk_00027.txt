@@ -1,4 +1,0 @@
-function AxialFunc2(z, ang) = AxialFunc1(z, ang) - 2;
-
-// 5 --
-// Plane wave

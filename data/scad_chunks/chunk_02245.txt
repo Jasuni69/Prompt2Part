@@ -1,3 +1,0 @@
-module camera_bracket_position(cam) //! Position children at the bracket position
-    translate([0,  cam_front_size(cam).y / 2 + hinge_offset])
-        children();

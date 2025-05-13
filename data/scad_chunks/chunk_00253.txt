@@ -1,8 +1,0 @@
-module antennas()
-    layout([for(a = antennas) cos(10) * antenna_length(a) ], 5, true) {
-        antenna(antennas[$i], 3, 10);
-
-    }
-
-if($preview)
-    antennas();

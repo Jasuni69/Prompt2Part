@@ -1,8 +1,0 @@
-function distanceBetween(pt1, pt2) = sqrt(pow(pt2[0] - pt1[0], 2) + pow(pt2[1] - pt1[1], 2) + pow(pt2[2]==undef? 0 : pt2[2] - pt1[2]==undef? 0 : pt1[2], 2));
-
-//  function lengthPoints(pts=[])
-//
-//  Calculates the length of a point list by adding up the distances between all points.
-//  this can be 2D or 3D points.
-//  pts       (list)   2D or 3D point list
-//  return    (number) Total length of the path.

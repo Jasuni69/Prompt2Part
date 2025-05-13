@@ -1,1 +1,0 @@
-function coreXY_upper_tooth_colour(type)    = type[6]; //! Colour of the upper belt's teeth

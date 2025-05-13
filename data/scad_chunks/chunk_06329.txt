@@ -1,1 +1,0 @@
-function rounding_cylinder_mask(r, rounding, d, anchor, spin, orient) = no_function("rounding_cylinder_mask");

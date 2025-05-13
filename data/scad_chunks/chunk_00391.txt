@@ -1,1 +1,0 @@
-function variac_height(type)         = type[3];     //! Body height

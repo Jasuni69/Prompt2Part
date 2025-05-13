@@ -1,7 +1,0 @@
-function pb_removeAdjacentDuplicates(pts=[], testLastToFirst=true, _i=0, _r=[]) = let(
-    l = len(pts), _n = testLastToFirst? (_i==l-1? 0: _i+1) : _i+1
-) _i<l? pb_removeAdjacentDuplicates(pts, testLastToFirst, _i+1, pts[_i] == pts[_n]? _r : concat(_r,[pts[_i]])) : _r;
-
-
-//  string handling code from rColyer on Github
-//  https://github.com/thehans/funcutils/blob/master/string.scad

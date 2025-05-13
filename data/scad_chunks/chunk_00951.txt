@@ -1,1 +1,0 @@
-function shaft_key_size(type)   = type[3]; //! Keyway [length, width, depth]

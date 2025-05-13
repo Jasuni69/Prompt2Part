@@ -1,3 +1,0 @@
-function _to_translation_vect(v) = is_num(v) ? [v, 0, 0] : _to_3_elems_translation_vect(v);
-
-FINAL_ROW = [0, 0, 0, 1];

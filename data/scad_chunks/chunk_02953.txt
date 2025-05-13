@@ -1,1 +1,0 @@
-function getPCB_Y(pcbName="Main") = pcbY(pcbName) + wallThickness + paddingLeft;

@@ -1,1 +1,0 @@
-function terminal_block_pitch(type)   = type[0];    //! Pitch between screws

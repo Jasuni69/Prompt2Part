@@ -1,1 +1,0 @@
-function _grad2(hashvalue, x, y) = _signs[hashvalue % 8] * [x, y];

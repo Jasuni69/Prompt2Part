@@ -1,8 +1,0 @@
-module test_asinh() {
-	assert(abs(asinh(sinh(-2))+2) < eps);
-	assert(abs(asinh(sinh(-1))+1) < eps);
-	assert(abs(asinh(sinh(0))) < eps);
-	assert(abs(asinh(sinh(1))-1) < eps);
-	assert(abs(asinh(sinh(2))-2) < eps);
-}
-test_asinh();

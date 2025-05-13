@@ -1,1 +1,0 @@
-function cable_is_ribbon(cable) = len(cable) > 2 && cable[2]; //! Is a ribbon cable?

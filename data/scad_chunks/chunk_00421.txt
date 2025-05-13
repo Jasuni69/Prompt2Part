@@ -1,1 +1,0 @@
-function pulley_screw(type)            = type[13]; //! Grub screw type

@@ -1,1 +1,0 @@
-function gt_y_offset(type)     = type[14];  //! Offset of the pins from centre of the depth

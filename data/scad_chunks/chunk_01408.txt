@@ -1,4 +1,0 @@
-module meter_hole_positions(type) //! Position children over the holes
-    for(side = [-1, 1])
-        translate([side * meter_hole_pitch(type) / 2, meter_lug_pos(type)])
-            children();

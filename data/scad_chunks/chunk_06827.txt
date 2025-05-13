@@ -1,6 +1,0 @@
-module test_bosl_version_num() {
-    assert(is_num(bosl_version_num()));
-    v = bosl_version();
-    assert(bosl_version_num() == v[0]+v[1]/100+v[2]/1000000);
-}
-test_bosl_version_num();

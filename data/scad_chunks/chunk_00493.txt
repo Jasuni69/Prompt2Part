@@ -1,1 +1,0 @@
-function iec_male(type)     = type[19]; //! True for an outlet

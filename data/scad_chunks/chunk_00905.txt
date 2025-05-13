@@ -1,1 +1,0 @@
-function insert_ring1_h(type)        = type[6];     //! Height of the top and middle rings

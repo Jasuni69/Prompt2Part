@@ -1,3 +1,0 @@
-function set_outwards(cell, outwards) = [
-    cell[0], cell[1], cell[2], cell[3], cell[4], outwards, cell[6], cell[7]
-];

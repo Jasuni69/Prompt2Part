@@ -1,7 +1,0 @@
-function remove(list, i) = [for (i_=[0:1:len(list)-2]) list[i_ < i ? i_ : i_ + 1]];
-
-
-/*!
-  Flattens a list one level:
-  flatten([[0,1],[2,3]]) => [0,1,2,3]
-*/

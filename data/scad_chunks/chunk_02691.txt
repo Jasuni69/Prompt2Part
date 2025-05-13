@@ -1,4 +1,0 @@
-function arg(value, default, name = "") =   //! Create string for arg if not default, helper for `vitamin()`
-    value == default ? ""
-                     : name ? str(", ", name, " = ", value_string(value))
-                            : str(", ", value_string(value));

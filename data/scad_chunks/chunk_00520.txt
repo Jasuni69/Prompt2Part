@@ -1,1 +1,0 @@
-function pillar_name(type)       = type[1];     //! Name of part

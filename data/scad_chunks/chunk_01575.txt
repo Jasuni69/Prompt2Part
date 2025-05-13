@@ -1,1 +1,0 @@
-function ax_res_end_d(type)   = type[4]; //! End cap diameter

@@ -1,1 +1,0 @@
-function pmeter_bezel(type)       = type[3];  //! Bezel size

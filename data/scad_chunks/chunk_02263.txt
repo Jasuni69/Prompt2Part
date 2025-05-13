@@ -1,3 +1,0 @@
-function corner_block_hole_offset(screw = def_screw, short_insert = false) = //! Hole offset from the edge
-    let(insert = screw_insert(screw, short_insert))
-        insert_length(insert) + max(overshoot + screw_clearance_radius(screw), insert_hole_radius(insert)) + 1;

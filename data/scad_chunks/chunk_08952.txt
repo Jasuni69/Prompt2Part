@@ -1,9 +1,0 @@
-function _wf_collapse(wf, x, y, states, weights, leng, threshold, i = 0) =
-    threshold < 0 || i == leng ? wf :
-	let(weight = weights[i]) 
-	_wf_collapse(
-		threshold < weight ? _replaceStatesAt(wf, x, y, [states[i]]) : wf, 
-		x, y, states, weights, leng, threshold - weight, i + 1
-	);
-
-// Shannon entropy

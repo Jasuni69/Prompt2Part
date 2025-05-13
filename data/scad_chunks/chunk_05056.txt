@@ -1,3 +1,0 @@
-function _mb_torus_full(point, rmaj, rmin, cutoff, ex, neg) =
-    let(dist = norm([norm([point.x,point.y])-rmaj, point.z]))
-        neg * mb_cutoff(dist, cutoff) * (rmin/dist)^ex;

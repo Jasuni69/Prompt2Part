@@ -1,2 +1,0 @@
-function _dir(cr_value) = 
-    lookup(cr_value, _dir_table);

@@ -1,5 +1,0 @@
-function cable_clip_width(screw, insert = false, nut = false) = //! Width given the `screw` and possibly insert or nut.
-    let(insert = cable_clip_insert(screw, insert))
-        insert ? 2 * (insert_hole_radius(insert) + wall) :
-            nut ? 2 * (nut_radius(screw_nut(screw)) + wall) :
-                max(wall + 2 * screw_clearance_radius(screw) + wall, washer_diameter(screw_washer(screw)));

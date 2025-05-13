@@ -1,1 +1,0 @@
-function tubing_ir(type)        = tubing_id(type) / 2; //! Inside radius

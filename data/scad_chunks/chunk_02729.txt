@@ -1,1 +1,0 @@
-function aluProBore_r(boreType) = boreType[0]/2;

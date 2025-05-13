@@ -1,3 +1,0 @@
-module BOLTS_warning(msg){
-	echo(str("BOLTS Warning: ",msg));
-}

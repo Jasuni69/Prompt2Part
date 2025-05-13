@@ -1,5 +1,0 @@
-function pcb_grid_pos(type, x, y, z = 0, i = 0) = //! Returns a pcb grid position
-    let(grid = pcb_grid(type))
-        [-pcb_size(type).x / 2 + grid[i]     + x * (is_undef(grid[i + 5]) ? 2.54 : grid[i + 5]),
-         -pcb_size(type).y / 2 + grid[i + 1] + y * (is_undef(grid[i + 6]) ? 2.54 : grid[i + 6]),
-          pcb_size(type).z + z];

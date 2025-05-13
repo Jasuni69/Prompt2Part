@@ -1,1 +1,0 @@
-function rd_disc_kind(type)    = type[1]; //! Capacitor, etc

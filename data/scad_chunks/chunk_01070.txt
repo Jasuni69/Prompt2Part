@@ -1,1 +1,0 @@
-function toggle_colour(type)   = type[7];       //! Body colour

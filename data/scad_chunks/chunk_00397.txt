@@ -1,1 +1,0 @@
-function variac_screw_pitch(type)    = type[9];     //! Pitch of screws

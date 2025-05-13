@@ -1,7 +1,0 @@
-module test_f_gte() {
-    _test_fn2arg_simple(
-        function (a,b) f_gte(a,b),
-        [[4,3,true],[3,3,true],[3,4,false]]
-    );
-}
-test_f_gte();

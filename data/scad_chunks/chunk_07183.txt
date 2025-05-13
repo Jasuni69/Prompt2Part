@@ -1,1 +1,0 @@
-function t3(wert=1,grad=360,delta=0)=sin(($preview?anima?$t:tset:tset)*grad+delta)*wert;

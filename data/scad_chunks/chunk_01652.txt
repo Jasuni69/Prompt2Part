@@ -1,1 +1,0 @@
-function blower_screw_hole(type)  = type[9]; //! Screw hole diameter

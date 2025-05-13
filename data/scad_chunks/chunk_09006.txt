@@ -1,9 +1,0 @@
-function updateNbrs(d, delaunayTri, neighbors, _indices_hash) =
-	[
-		delaunay_coords(d), 
-		hashmap_put(
-			hashmap_del(delaunay_triangles(d), delaunayTri, hash = _indices_hash), 
-			delaunayTri, neighbors, hash = _indices_hash
-		), 
-		delaunay_circles(d)
-	];

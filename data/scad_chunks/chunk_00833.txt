@@ -1,1 +1,0 @@
-function smd_qfp_gullwing(type)  = type[6]; //! Gullwing S, L, R1, R2

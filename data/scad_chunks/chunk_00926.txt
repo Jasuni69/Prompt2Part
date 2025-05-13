@@ -1,1 +1,0 @@
-function open_bearing_theta(type)       = 2 * asin(open_bearing_width(type) / bearing_rod_dia(type)); //! For open bearings, the angle of the opening

@@ -1,5 +1,0 @@
-module press_fit_socket(w = 5, h = 50, horizontal = false) { //! Make a square hole to accept a peg
-    h = horizontal ? h : h + bridge_droop;
-
-    cube([w, w, 2 * h], center = true);
-}

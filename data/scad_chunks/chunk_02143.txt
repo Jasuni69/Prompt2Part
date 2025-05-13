@@ -1,8 +1,0 @@
-module pbox_screw_positions(type) { //! Place children at base screw positions
-    foot = pbox_foot(type);
-    inset = pbox_screw_inset(type);
-    for(x = [-1, 1], y = [-1, 1])
-         translate([x * (pbox_width(type) / 2 - inset), y * (pbox_depth(type) / 2 - inset)])
-            rotate((y > 0 ? -x * 45 : -x * 135) + 90)
-                children();
-}

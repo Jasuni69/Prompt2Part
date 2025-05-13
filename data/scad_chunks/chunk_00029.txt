@@ -1,4 +1,0 @@
-function Func5(x, y) = 1.25*(1+cos(sqrt(y*y+(x-slit_pos)*(x-slit_pos))*36)) +
-  1.25*(1+cos(sqrt(y*y+(x+slit_pos)*(x+slit_pos))*36))+2;
-
-// One-slit

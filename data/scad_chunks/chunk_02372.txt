@@ -1,1 +1,0 @@
-module ribbon_grommet_20_3_stl() ribbon_grommet(20, 3);

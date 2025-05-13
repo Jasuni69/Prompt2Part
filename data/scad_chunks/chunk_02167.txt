@@ -1,1 +1,0 @@
-function bbox_span(type)       = type[4]; //! Maximum span between fixing blocks

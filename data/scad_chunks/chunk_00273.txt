@@ -1,7 +1,0 @@
-module pillars()
-    layout([for(p = pillars) pillar_od(p)], 5)
-        pillar(pillars[$i]);
-
-if($preview)
-    let($show_threads = true)
-        pillars();

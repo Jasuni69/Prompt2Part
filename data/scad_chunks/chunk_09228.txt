@@ -1,4 +1,0 @@
-function _fst_v3(pts, leng, n, d, p, i) =
-    i == leng ? [i, d] :
-    let(nd = n * (pts[i] - p))
-    nd != 0 ? [i, nd] : _fst_v3(pts, leng, n, nd, p, i + 1);

@@ -1,1 +1,0 @@
-function currentBodyIn(bodySet) = currentPartIn(bodySet);

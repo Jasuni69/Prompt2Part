@@ -1,1 +1,0 @@
-function maxSpeed_of(node) = node[2][1];

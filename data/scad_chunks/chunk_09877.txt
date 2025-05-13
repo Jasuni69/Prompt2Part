@@ -1,8 +1,0 @@
-module test_rotate_points2d() {
-	pts = [[0,1], [1,0], [0,-1], [-1,0]];
-	s = sin(45);
-	assert(rotate_points2d(pts,45) == [[-s,s],[s,s],[s,-s],[-s,-s]]);
-	assert(rotate_points2d(pts,90) == [[-1,0],[0,1],[1,0],[0,-1]]);
-	assert(rotate_points2d(pts,90,cp=[1,0]) == [[0,-1],[1,0],[2,-1],[1,-2]]);
-}
-test_rotate_points2d();

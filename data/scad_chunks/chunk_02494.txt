@@ -1,1 +1,0 @@
-function coreXY_lower_belt_colour(type)     = type[7]; //! Colour of the lower belt

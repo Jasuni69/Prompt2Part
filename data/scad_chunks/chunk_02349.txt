@@ -1,3 +1,0 @@
-module fixing_block_h_hole_2D(screw = def_screw) //! Position 2D child on the horizontal hole
-    translate([0, fixing_block_depth(screw) / 2])
-        children();

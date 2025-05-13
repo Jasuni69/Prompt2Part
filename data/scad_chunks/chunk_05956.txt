@@ -1,1 +1,0 @@
-module grid_of(xa=[0],ya=[0],za=[0],count,spacing) grid3d(xa=xa, ya=ya, za=za, n=count, spacing=spacing) children();

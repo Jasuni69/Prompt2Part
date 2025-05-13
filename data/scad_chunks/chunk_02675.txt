@@ -1,2 +1,0 @@
-module no_explode()                                                 //! Prevent children being exploded
-    let($exploded_parent = true) children();

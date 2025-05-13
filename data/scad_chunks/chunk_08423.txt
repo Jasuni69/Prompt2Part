@@ -1,8 +1,0 @@
-function _roty(pt, a) = 
-    a == 0 ? pt :
-    let(cosa = cos(a), sina = sin(a))
-    [
-        pt.x * cosa + pt.z * sina, 
-        pt.y,
-        -pt.x * sina + pt.z * cosa, 
-    ];

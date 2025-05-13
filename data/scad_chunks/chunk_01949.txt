@@ -1,4 +1,0 @@
-module box_front(type)  //! Default front, can be overridden to customise
-    render_2D_sheet(box_sheets(type))
-        dxf(str(box_name(type), "_front"))
-            box_front_blank(type);

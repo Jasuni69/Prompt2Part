@@ -1,1 +1,0 @@
-function resistor_wire_length(type)   = type[5]; //! Wire length from body

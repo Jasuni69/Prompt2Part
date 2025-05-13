@@ -1,2 +1,0 @@
-function _parse_positive_int(t, value = 0, i = 0) =
-    i == len(t) ? value : _parse_positive_int(t, value * 10 ^ i + _str_to_int(t[i]), i + 1);

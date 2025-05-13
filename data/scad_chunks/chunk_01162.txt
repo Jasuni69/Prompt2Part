@@ -1,1 +1,0 @@
-function BLDC_bell_hole_diameter(type)          = type[18]; //! Bell hole diameter

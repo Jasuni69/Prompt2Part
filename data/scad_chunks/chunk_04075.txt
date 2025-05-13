@@ -1,4 +1,0 @@
-function turnPlace(xy=0,xz=0,yz=0) =[ [cos(xy)*cos(xz), -sin(xy), -sin(xz), 0],
-      					[sin(xy),  cos(xy)*cos(yz), -sin(yz), 0],
-       					[sin(xz),        sin(yz), cos(xz)*cos(yz), 0],
-       						[0,0,0,1]];

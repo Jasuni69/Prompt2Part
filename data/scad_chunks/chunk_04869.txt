@@ -1,1 +1,0 @@
-function _pb_fillet(pts, args=[], angle) = [[],args[0]==0? [] : [[2, len(pts)-1, args[0], args[1]? args[1] : $fn]],angle];

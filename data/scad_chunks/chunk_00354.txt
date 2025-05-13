@@ -1,1 +1,0 @@
-function opengrab_pcb_z() = depth - pillar - pcb_thickness(pcb); //! PCB offset from the front

@@ -1,3 +1,0 @@
-function cable_clip_height(cable, screw = false, insert = false, nut = false) = //! Height given the `cable`.
-    let(insert = cable_clip_insert(screw, insert))
-        max(cable_height(cable) + wall, insert ? insert_hole_length(insert) + 1 : 0, nut ? nut_trap_depth(screw_nut(screw)) + wall : 0);

@@ -1,6 +1,0 @@
-function pbox_total_height(type) =  //! Total height including base overlap
-    let(base = pbox_base(type),
-        foot = pbox_foot(type),
-        washer = pbox_washer(type),
-        screw = pbox_screw(type))
-        pbox_height(type) + pbox_top(type) + base + (base ? height_overlap : 0) + (foot || !base ? 0 : washer_thickness(washer) + screw_head_height(screw));

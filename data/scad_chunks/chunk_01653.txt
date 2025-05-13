@@ -1,1 +1,0 @@
-function blower_screw_holes(type) = type[10]; //! List of XY coordinates of the screw holes

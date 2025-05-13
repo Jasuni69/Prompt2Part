@@ -1,4 +1,0 @@
-function _case2201_isobands(cell_pts, lower, upper) = 
-    _case0021_isobands(cell_pts, upper, lower);        
-    
-// Saddles

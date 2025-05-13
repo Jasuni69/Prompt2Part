@@ -1,1 +1,0 @@
-function door_hinge_pin_y() = -dia / 2 - stat_clearance;    //! Y offset of the hinge pin

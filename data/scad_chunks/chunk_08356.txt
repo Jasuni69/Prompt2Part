@@ -1,3 +1,0 @@
-module pie(radius, angle) {
-    polygon(shape_pie(radius, angle));
-}

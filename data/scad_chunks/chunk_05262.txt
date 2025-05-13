@@ -1,3 +1,0 @@
-function _str_count_leading(s,c,_i=0) =
-    (_i>=len(s)||!in_list(s[_i],[each c]))? _i :
-    _str_count_leading(s,c,_i=_i+1);

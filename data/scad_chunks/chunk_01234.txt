@@ -1,4 +1,0 @@
-function vero_grid_pos(type, x, y) = //! Convert grid position to offset from the centre
-    let(holes = vero_holes(type), strips = vero_strips(type))
-        [((x + holes) % holes)    - holes / 2 + 0.5,
-         ((y + strips) % strips) - strips / 2 + 0.5] * vero_pitch(type);

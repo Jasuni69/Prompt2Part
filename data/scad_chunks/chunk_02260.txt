@@ -1,1 +1,0 @@
-module camera_rpi_camera_v2_assembly() camera_assembly(rpi_camera_v2);

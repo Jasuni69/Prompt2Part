@@ -1,1 +1,0 @@
-function sheet_weft(type)      = type[6]; //! Woven sheet weft

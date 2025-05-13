@@ -1,4 +1,0 @@
-function subdivide(tiles) = [
-    for(tile = tiles)
-	each (tile_type(tile) == DART ? sub_dart(tile) : sub_kite(tile))
-];

@@ -1,1 +1,0 @@
-function foot_rad(type = foot)      = type[3]; //! Rounded corner radius

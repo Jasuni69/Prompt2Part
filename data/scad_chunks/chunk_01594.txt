@@ -1,1 +1,0 @@
-function spool_hub_taper(type)     = type[8]; //! Diameter at which it tapers down to rim thickness

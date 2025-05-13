@@ -1,4 +1,0 @@
-module mains_socket_hole_positions(type) //! Position children at the screw holes
-    for(side = [-1, 1])
-        translate([side *  mains_socket_pitch(type) / 2, 0])
-            children();

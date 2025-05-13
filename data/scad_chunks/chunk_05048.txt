@@ -1,4 +1,0 @@
-function _mb_capsule_influence(dv, hl, r, ex, neg) = let(
-    dist = dv.z<-hl ? norm(dv-[0,0,-hl])
-      : dv.z<=hl ? norm([dv.x,dv.y]) : norm(dv-[0,0,hl])
-) neg * (r/dist)^ex;

@@ -1,1 +1,0 @@
-function rd_module_pin_posns(type) = type[6]; //! list of pin positions

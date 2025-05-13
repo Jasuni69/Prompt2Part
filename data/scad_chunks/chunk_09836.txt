@@ -1,6 +1,0 @@
-module test_sum_of_squares() {
-	assert(sum_of_squares([1,2,3]) == 14);
-	assert(sum_of_squares([1,2,4]) == 21);
-	assert(sum_of_squares([-3,-2,-1]) == 14);
-}
-test_sum_of_squares();

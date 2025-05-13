@@ -1,1 +1,0 @@
-function bbox_top_sheet(type)  = type[3]; //! Sheet type for the top

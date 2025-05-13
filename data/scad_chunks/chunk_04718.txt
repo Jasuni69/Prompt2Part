@@ -1,2 +1,0 @@
-function to_internal(r_in, r_max) = r_in / cos (180 / fragments(r_max == undef ? r_in : r_max));
-// angle between two vectors (2D or 3D)

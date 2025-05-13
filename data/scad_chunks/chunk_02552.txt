@@ -1,1 +1,0 @@
-function tj(ti, pi, pj, alpha = 0.5) = ti + pow(norm(pi - pj), alpha);

@@ -1,1 +1,0 @@
-function toggle_width(type)    = type[2];       //! Body width

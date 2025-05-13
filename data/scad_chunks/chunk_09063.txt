@@ -1,5 +1,0 @@
-function next_z(z, dir, layers, wrapping) = 
-    let(nz = z + _next_z_table[dir])
-    wrapping ? (nz + layers) % layers : nz;
-    
-// go right and carve the right wall

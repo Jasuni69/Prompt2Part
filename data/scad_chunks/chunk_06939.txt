@@ -1,7 +1,0 @@
-module test_lcm() {
-    assert_equal(lcm(15,25), 75);
-    assert_equal(lcm(15,27), 135);
-    assert_equal(lcm(270,405), 810);
-    assert_equal(lcm([3,5,15,25,35]),525);
-}
-test_lcm();

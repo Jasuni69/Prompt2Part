@@ -1,1 +1,0 @@
-function rocker_part(type)     = type[1];   //! Part description

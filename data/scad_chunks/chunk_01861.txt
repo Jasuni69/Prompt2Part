@@ -1,1 +1,0 @@
-function bulldog_depth(type)     = type[2];     //! Depth from the back to the front of the tubes

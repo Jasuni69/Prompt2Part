@@ -1,1 +1,0 @@
-function sclip_width(type)         = type[3]; //! Width

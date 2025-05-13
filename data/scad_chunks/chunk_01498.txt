@@ -1,1 +1,0 @@
-function antenna_hole_r(type)   = 6.4 / 2;  //! Panel hole radius

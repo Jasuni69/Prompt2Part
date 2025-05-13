@@ -1,7 +1,0 @@
-function in_polyline(line_pts, pt, epsilon = 0.0001) = 
-    let(
-        leng = len(line_pts),
-        iend = leng - 1,
-        maybe_last = [for(i = 0; i < iend && !__in_line([line_pts[i], line_pts[i + 1]], pt, epsilon); i = i + 1) i][leng - 2]
-    )
-    is_undef(maybe_last);

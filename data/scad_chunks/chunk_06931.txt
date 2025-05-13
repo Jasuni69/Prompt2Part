@@ -1,5 +1,0 @@
-module test_median() {
-    assert_equal(median([2,3,7]), 3);
-    assert_equal(median([2,4,5,8]), 4.5);
-}
-test_median();

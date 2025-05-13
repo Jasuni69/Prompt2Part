@@ -1,1 +1,0 @@
-function door_hinge_screw() = screw;                        //! Screw type used for hinge pin

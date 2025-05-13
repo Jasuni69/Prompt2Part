@@ -1,4 +1,0 @@
-function _vx_cylinder_impl(r, h, filled, thickness) =
-    is_num(r) ? 
-        _same_r(r, h, filled, thickness) :
-        _diff_r(r, h, filled, thickness);

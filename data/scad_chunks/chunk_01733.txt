@@ -1,1 +1,0 @@
-function hdmi_height(type)    = type[7]; //! Outside height above the PCB

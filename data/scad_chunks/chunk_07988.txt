@@ -1,8 +1,0 @@
-function spring(n = 8, angle = 12, leng = 1, heading = 0, start = [0, 0, 0]) = 
-    let(
-        axiom = "F",
-        rules = [
-            ["F", "F-^F"]
-        ]
-    )
-    lsystem3(axiom, rules, n, angle, leng, heading, start);

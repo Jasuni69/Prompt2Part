@@ -1,8 +1,0 @@
-function _top_right(x, y) =
-    let(
-        nx = x * 2,
-        ny = y * 2,
-        nx_2 = nx + 2,
-        ny_2 = ny + 2
-    )
-    [[nx, ny_2], [nx + 1, ny_2], [nx_2, ny_2], [nx_2, ny + 1], [nx_2, ny]];

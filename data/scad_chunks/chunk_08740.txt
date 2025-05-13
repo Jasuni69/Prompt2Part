@@ -1,6 +1,0 @@
-function shuffle(lt, seed) = 
-    let(
-        leng = len(lt),
-        indices = [for(i = is_undef(seed) ? rands(0, leng, leng) : rands(0, leng, leng, seed)) floor(i)]
-    )
-    _shuffle(lt, indices, leng);

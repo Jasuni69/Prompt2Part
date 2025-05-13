@@ -1,1 +1,0 @@
-function weights_of_tiles(sample) = count_items(sorted([for(row = sample) each row]));

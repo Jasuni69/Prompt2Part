@@ -1,3 +1,0 @@
-function _differential_line_growth(nodes) = 
-    let(leng = len(nodes))
-    grow(differentiate(nodes, leng), leng);

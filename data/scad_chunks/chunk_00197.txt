@@ -1,1 +1,0 @@
-function rail_carriages(rail) = [for(c = carriages) if(carriage_rail(c) == rail) c];

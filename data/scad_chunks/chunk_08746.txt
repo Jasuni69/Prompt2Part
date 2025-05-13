@@ -1,1 +1,0 @@
-function hashmap_values(map) = [for(bucket = map, kv = bucket) kv[1]];

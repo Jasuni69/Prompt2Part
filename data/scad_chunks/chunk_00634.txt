@@ -1,1 +1,0 @@
-function tx_foot_depth(type)        = type[10]; //! Depth of the foot

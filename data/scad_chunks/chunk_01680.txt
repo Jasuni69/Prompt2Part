@@ -1,1 +1,0 @@
-function pot_spigot(type)   = type[10]; //! Spigot width, length and height above the boss

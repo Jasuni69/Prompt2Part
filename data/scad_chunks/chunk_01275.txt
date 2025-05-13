@@ -1,1 +1,0 @@
-function sbr_screw(type)                = type[10]; //! Screw type

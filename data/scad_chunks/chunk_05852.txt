@@ -1,7 +1,0 @@
-function _insert_sorted(list, k, new) =
-    (len(list)==k && new[1]>= last(list)[1]) ? list
-    : [
-        for(entry=list) if (entry[1]<=new[1]) entry,
-        new,
-        for(i=[0:1:min(k-1,len(list))-1]) if (list[i][1]>new[1]) list[i]
-      ];

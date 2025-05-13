@@ -1,4 +1,0 @@
-function _case1210_isobands(cell_pts, lower, upper) = 
-    _case1012_isobands(cell_pts, upper, lower);   
-
-// single pentagon

@@ -1,6 +1,0 @@
-function first_defined(v) = remove_undefs(v)[0];
-
-
-// Function: any_defined()
-// Description:
-//   Returns true if any item in the given array is not `undef`.

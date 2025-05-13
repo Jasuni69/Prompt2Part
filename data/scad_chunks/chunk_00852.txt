@@ -1,1 +1,0 @@
-function hdr_pitch(type)        = type[1];  //! Header pitch

@@ -1,5 +1,0 @@
-function __tr_corner(frags, b_ang, L01, h, round_r) = 
-    let(t_leng = L01[1] - round_r * tan(b_ang / 2))
-    t_leng >= 0 ? 
-        __tr_corner_t_leng_gt_or_eq_zero(frags, b_ang, t_leng, h, round_r) : 
-        __tr__corner_t_leng_lt_zero(frags, b_ang, L01[0], h, round_r);

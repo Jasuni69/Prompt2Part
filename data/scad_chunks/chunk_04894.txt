@@ -1,8 +1,0 @@
-function translatePoints(pts=[], translate=[0,0]) = [for(p=pts)[ for(j=[0:len(p)-1]) translate[j]!=undef? p[j]+translate[j] : p[j]]];
-
-//  scalePoints(pts=[], scale=[])
-//
-//  Scales points in point list. You can use 2D points on 3D scale vectors and vice versa.
-//  pts       (list)  List of 2D or 3D points.
-//  scale     (list)  List of two or three numbers representing the vector to scale the points with
-//  return    (list)  List of scales points.

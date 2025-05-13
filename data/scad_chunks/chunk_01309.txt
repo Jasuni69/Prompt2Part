@@ -1,1 +1,0 @@
-function gm_shaft_pos(type) = let(o = gm_shaft_offset(type)) [o.x, o.y, -gm_screw_boss(type)[1] + gm_boss(type).z]; //! Shaft position

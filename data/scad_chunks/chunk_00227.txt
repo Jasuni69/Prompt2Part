@@ -1,5 +1,0 @@
-module photo_interrupters()
-    layout([for(l = photo_interrupters) pi_base_length(l)], 5, true)
-        photo_interrupter(photo_interrupters[$i]);
-
-photo_interrupters();

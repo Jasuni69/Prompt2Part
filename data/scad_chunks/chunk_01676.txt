@@ -1,1 +1,0 @@
-function pot_thread_p(type) = type[6];  //! Thread pitch

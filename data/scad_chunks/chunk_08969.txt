@@ -1,2 +1,0 @@
-function stack_len(stack) = 
-    is_undef(stack[0]) ? 0 : 1 + stack_len(stack[1]);

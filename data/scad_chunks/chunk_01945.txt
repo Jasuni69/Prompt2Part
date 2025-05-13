@@ -1,2 +1,0 @@
-module box_back_blank(type, sheet = false) //! Generates a 2D template for the back sheet, `sheet` can be set to override the type
-    sheet_2D(subst_sheet(type, sheet), box_width(type) - sheet_reduction(type), box_height(type) - sheet_reduction(type), 1);

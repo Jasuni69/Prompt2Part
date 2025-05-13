@@ -1,1 +1,0 @@
-function microswitch_op_tol(type)    = type[11];    //! Operating position +/- tolerance

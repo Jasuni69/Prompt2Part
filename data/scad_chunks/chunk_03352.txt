@@ -1,9 +1,0 @@
-function splitSimple(str, sep=" ", i=0, word="", v=[]) =
-  str ==undef ? undef :
-	i == len(str) ? concat(v, word) :
-	str[i] == sep ? split(str, sep, i+1, "", concat(v, word)) :
-	split(str, sep, i+1, str(word, str[i]), v);
-
-
-
-// some general utility functions

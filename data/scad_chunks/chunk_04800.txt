@@ -1,8 +1,0 @@
-function pb_subList(list, start=0, end) = let(l = len(list), s = start<0? l+start: start, e = end==undef? l-1 : end<0? l+end: end, sp=e<s? -1 : 1) [for(i=[s:sp:e]) list[i]];
-
-//  function pb_valuesToString(s)
-//
-//  Converts list into a continuous string adding the seperator in between each item.
-//  list        (list)   List of values.
-//  separator   (string) Separator string that will be inserted between each item in the list.
-//  return      (string) String containing all items from the list.

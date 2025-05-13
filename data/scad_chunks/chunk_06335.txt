@@ -1,1 +1,0 @@
-function teardrop_corner_mask(r, angle=45, excess=0.1, d, anchor, spin, orient) = no_function("teardrop_corner_mask");

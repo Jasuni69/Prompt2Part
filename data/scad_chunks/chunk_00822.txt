@@ -1,1 +1,0 @@
-function smd_coax_tube(type)      = type[3]; //! OD, ID, height

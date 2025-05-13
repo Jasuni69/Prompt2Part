@@ -1,1 +1,0 @@
-function tc_body_width(type)   = type[7];   //! Plastic body width

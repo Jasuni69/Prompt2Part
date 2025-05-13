@@ -1,1 +1,0 @@
-function gt_front_depth(type)  = type[6];   //! Front ledge depth

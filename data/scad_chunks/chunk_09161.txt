@@ -1,4 +1,0 @@
-function carve_right(x, y, cells) = 
-    m_replace(cells, y, x, top_right_wall(cells[y][x]) ? [x, y, TOP_WALL, VISITED] : [x, y, NO_WALL, VISITED]);
-
-// go up and carve the top wall

@@ -1,6 +1,0 @@
-module fwd(y=0, p) {
-    req_children($children);    
-    assert(is_undef(p), "Module form `fwd()` does not accept p= argument.");
-    assert(is_finite(y), "Invalid number")
-    translate([0,-y,0]) children();
-}

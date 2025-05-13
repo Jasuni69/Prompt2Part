@@ -1,6 +1,0 @@
-module extrude_if(h, center = true)                 //! Extrudes 2D object to 3D when `h` is nonzero, otherwise leaves it 2D
-    if(h)
-        linear_extrude(h, center = center, convexity = 5) // 3D
-            children();
-    else
-        children();                                 // 2D

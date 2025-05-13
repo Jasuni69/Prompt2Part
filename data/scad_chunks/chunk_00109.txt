@@ -1,5 +1,0 @@
-module geared_steppers()
-    layout([for(g = geared_steppers) max(gs_diameter(g), gs_pitch(g) + gs_lug_w(g) / 2)], 5)
-        geared_stepper(geared_steppers[$i]);
-
-geared_steppers();

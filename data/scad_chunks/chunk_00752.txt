@@ -1,1 +1,0 @@
-function psu_size(type)              = [psu_length(type), psu_width(type), psu_height(type)]; //! Size

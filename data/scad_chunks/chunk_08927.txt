@@ -1,3 +1,0 @@
-function allSeperationFrom(nodes, leng, node, n) = [
-    for(j = n; j < leng; j = j + 1) seperationFrom(node, nodes[j])
-];

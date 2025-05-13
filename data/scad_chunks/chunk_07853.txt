@@ -1,5 +1,0 @@
-module triangle_pattern(points, line_width) {
-    polyline2d(points, line_width);
-    rotate([0, 0, 120]) polyline2d(points, line_width);
-    rotate([0, 0, 240]) polyline2d(points, line_width);
-}

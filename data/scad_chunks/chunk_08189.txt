@@ -1,8 +1,0 @@
-module test_line2d_cap(point, style) {
-    p1 = [0, 0];
-    p2 = [5, 0];
-    assert(
-        (point == p1 && style == "CAP_SQUARE") ||
-        (point == p2 && style == "CAP_SQUARE")
-    );
-}

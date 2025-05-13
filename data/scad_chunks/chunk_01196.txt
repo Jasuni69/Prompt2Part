@@ -1,1 +1,0 @@
-function leadnut_flat(type)          = type[14];    //! Flat section width

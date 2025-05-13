@@ -1,3 +1,0 @@
-module corner_block_v_hole(screw = def_screw, short_insert = false) //! Place children at the bottom screw hole
-    multmatrix(corner_block_v_hole(screw, short_insert))
-        children();

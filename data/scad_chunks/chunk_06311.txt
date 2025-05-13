@@ -1,7 +1,0 @@
-module mask2d_dovetail(edge, angle, shelf=0, inset=0, mask_angle=90, excess=0.01, flat_top=true, w,h,width,height, slope, anchor=CENTER, spin=0,x,y) {
-    path = mask2d_dovetail(w=w,width=width,h=h,height=height, edge=edge, angle=angle, inset=inset, shelf=shelf, excess=excess, slope=slope, flat_top=flat_top, mask_angle=mask_angle,x=x,y=y);
-    attachable(anchor,spin, two_d=true, path=path) {
-        polygon(path);
-        children();
-    }
-}

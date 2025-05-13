@@ -1,1 +1,0 @@
-function sclip_hook(type)          = type[8]; //! hook, length, width

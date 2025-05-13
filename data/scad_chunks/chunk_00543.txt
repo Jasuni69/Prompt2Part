@@ -1,1 +1,0 @@
-function tbolt_description(type)    = type[1];   //! Description of this t-track bolt

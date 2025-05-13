@@ -1,3 +1,0 @@
-function _next_stack(t, code, stack) = 
-    code == "["                ? [t, stack] :
-    code == "]" && stack != [] ? stack[1] : stack;

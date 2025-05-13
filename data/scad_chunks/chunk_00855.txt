@@ -1,1 +1,0 @@
-function hdr_pin_width(type)    = type[4];  //! Header pin size

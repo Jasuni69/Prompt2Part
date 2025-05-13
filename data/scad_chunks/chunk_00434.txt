@@ -1,1 +1,0 @@
-function NEMA_body_radius(type)  = type[4]; //! Body radius

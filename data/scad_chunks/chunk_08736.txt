@@ -1,1 +1,0 @@
-function fibseq(from, to) = _fibseq_impl(from, to);

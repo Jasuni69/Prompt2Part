@@ -1,1 +1,0 @@
-function gs_shaft_flat(type)   = type[14]; //! Shaft width across the flats

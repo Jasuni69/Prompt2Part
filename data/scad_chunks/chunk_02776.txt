@@ -1,7 +1,0 @@
-module washer1(d1,d2,s){
-	difference(){
-		cylinder(r=d2/2,h=s);
-		translate([0,0,-0.1*s])
-			cylinder(r=d1/2,h=1.2*s);
-	}
-}

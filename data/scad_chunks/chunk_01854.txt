@@ -1,1 +1,0 @@
-function sbr_rail_carriage(type)        = type[5]; //! Carriage to use with this rail

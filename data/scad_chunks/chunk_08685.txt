@@ -1,1 +1,0 @@
-function _set_x(t, x) = [[x, _get_y(t)], _get_angle(t)];

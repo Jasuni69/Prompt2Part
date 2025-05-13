@@ -1,1 +1,0 @@
-function ringterm_id(type)           = type[2];    //! Inside diameter

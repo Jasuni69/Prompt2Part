@@ -1,1 +1,0 @@
-function hinge_clearance(type)   = type[9]; //! Clearance between knuckles

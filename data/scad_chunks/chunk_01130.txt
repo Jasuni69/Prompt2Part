@@ -1,1 +1,0 @@
-function gs_lug_t(type)        = type[8]; //! Screw lug thickness

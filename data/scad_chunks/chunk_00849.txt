@@ -1,1 +1,0 @@
-function bb_flange_width(type)    = type[8]; //! Flange width

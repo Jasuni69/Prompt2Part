@@ -1,1 +1,0 @@
-function _ydominant_zd(zd, ay, az) = (zd >= 0 ? zd - ay : zd) + az;

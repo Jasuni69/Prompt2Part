@@ -1,1 +1,0 @@
-function smd_250V_fuse_step(type) = type[3]; //! End cutout length, width and height

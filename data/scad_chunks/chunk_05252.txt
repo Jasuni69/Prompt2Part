@@ -1,4 +1,0 @@
-function _str_find_last(str,pattern,sindex) =
-    sindex>=0 && !substr_match(str,sindex, pattern)?
-        _str_find_last(str,pattern,sindex-1) :
-        (sindex >=0 ? sindex : undef);

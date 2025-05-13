@@ -1,3 +1,0 @@
-function fixing_block_v_holes(screw = def_screw) = //! Returns a list of transforms to position the vertical screws
-    let(pitch =  2 * insert_outer_d(screw_insert(screw)) + 2 * wall, offset = fixing_block_depth(screw) / 2)
-        [for(end = [-1, 1]) translate([end * pitch / 2, offset]) * rotate([180, 0, 0])];

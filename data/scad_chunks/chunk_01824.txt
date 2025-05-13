@@ -1,1 +1,0 @@
-function contact_neg(type)        = type[7]; //! Negative spring height above the plate when compressed and the spring type

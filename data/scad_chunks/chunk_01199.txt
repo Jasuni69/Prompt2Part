@@ -1,1 +1,0 @@
-function leadnuthousing_length(type)            = type[2];  //! Length of housing

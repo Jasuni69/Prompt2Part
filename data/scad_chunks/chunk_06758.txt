@@ -1,7 +1,0 @@
-module test_f_ln() {
-    _test_fn1arg(
-        function (a) f_ln(a),
-        [[1,0],[1,ln(1)],[10,ln(10)]]
-    );
-}
-test_f_ln();

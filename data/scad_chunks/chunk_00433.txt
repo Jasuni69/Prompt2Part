@@ -1,1 +1,0 @@
-function NEMA_radius(type)       = type[3]; //! End cap radius

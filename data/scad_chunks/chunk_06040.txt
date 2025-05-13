@@ -1,5 +1,0 @@
-module ovoid_spread(n=100, r=undef, d=undef, cone_ang=90, scale=[1,1,1], perp=true)
-{
-  deprecate("sphere_copies");
-  sphere_copies(n,r,d,cone_ang,scale,perp) children();
-}

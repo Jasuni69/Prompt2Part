@@ -1,7 +1,0 @@
-module test_array_group() {
-	v = [1,2,3,4,5,6];
-	assert(array_group(v,2) == [[1,2], [3,4], [5,6]]);
-	assert(array_group(v,3) == [[1,2,3], [4,5,6]]);
-	assert(array_group(v,4,0) == [[1,2,3,4], [5,6,0,0]]);
-}
-test_array_group();

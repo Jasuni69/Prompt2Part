@@ -1,1 +1,0 @@
-function sampling_grid(s) = s[4];

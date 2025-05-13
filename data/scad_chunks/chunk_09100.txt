@@ -1,3 +1,0 @@
-function update_maze_row(row, cell) =
-    let(leng = len(row))
-    [for(i = 0; i < leng; i = i + 1) i == cell[1] ? cell : row[i]];

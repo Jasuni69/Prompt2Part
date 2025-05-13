@@ -1,7 +1,0 @@
-module skin(profiles, slices, refine=1, method="direct", sampling, caps, closed=false, z, style="min_edge", convexity=10,
-            anchor="origin",cp="centroid",spin=0, orient=UP, atype="hull")
-{
-    vnf = skin(profiles, slices, refine, method, sampling, caps, closed, z, style=style);
-    vnf_polyhedron(vnf,convexity=convexity,spin=spin,anchor=anchor,orient=orient,atype=atype,cp=cp)
-        children();
-}

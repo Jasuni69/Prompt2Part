@@ -1,8 +1,0 @@
-function tree1(n = 4, angle = 22.5, leng = 1, heading = 0, start = [0, 0, 0]) = 
-    let(
-        axiom = "FFFA",
-        rules = [
-            ["A", "[&FFFA]////[&FFFA]////[&FFFA]"]
-        ]
-    )
-    lsystem3(axiom, rules, n, angle, leng, heading, start);

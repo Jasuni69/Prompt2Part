@@ -1,5 +1,0 @@
-function new_cs(origin=[0,0,0],axes=[[1,0,0],[0,1,0],[0,0,1]]) = (len(axes) == 2) ?
-	[origin,calculate_axes(axes[0],axes[1])] :
-	is_orthonormal([origin,axes]) ?
-		[origin,axes] :
-		"Error: Axes are not orthonormal";

@@ -1,1 +1,0 @@
-function  d_pcb_offset(type)       = d_height(type) - d_front_height(type) + 2; //! Height of the back of the flange above the PCB

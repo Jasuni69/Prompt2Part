@@ -1,1 +1,0 @@
-function _sorted_default(lt, reverse) = _sorted(lt, reverse ? function(a, b) a > b : function(a, b) a < b);

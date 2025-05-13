@@ -1,1 +1,0 @@
-function ziptie_tail(type)      = type[5]; //! The length without teeth

@@ -1,4 +1,0 @@
-module test_hypot() {
-	assert(hypot(20,30) == norm([20,30]));
-}
-test_hypot();

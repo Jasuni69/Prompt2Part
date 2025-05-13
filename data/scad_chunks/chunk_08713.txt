@@ -1,5 +1,0 @@
-function _one_arg_command(cmd, arg) =
-    cmd == "x" ? _get_x(arg) : 
-    cmd == "y" ? _get_y(arg) : 
-    cmd == "angle" ? _get_angle(arg) : 
-    cmd == "pt" ? _get_pt(arg) : undef;

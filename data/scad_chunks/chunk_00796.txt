@@ -1,1 +1,0 @@
-function smd_diode_size(type)   = type[1]; //! Body length, width and height

@@ -1,1 +1,0 @@
-function meter_lug_size(type)    = type[4];     //! Lug length and width

@@ -1,4 +1,0 @@
-module 2screw_block_holes(screw = def_screw, short_insert = false) //! Place children at both screw holes
-    for(p = 2screw_block_holes(screw, short_insert))
-        multmatrix(p)
-            children();

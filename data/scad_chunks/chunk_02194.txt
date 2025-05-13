@@ -1,4 +1,0 @@
-module bbox_back(type)  //! Default back, can be overridden to customise
-    render_2D_sheet(bbox_sheets(type))
-        dxf(str(bbox_name(type), "_back"))
-            bbox_back_blank(type);

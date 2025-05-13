@@ -1,1 +1,0 @@
-function m_determinant(m) = _m_determinant(m);

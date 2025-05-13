@@ -1,1 +1,0 @@
-function knob_nut_trap_depth(screw) = round_to_layer(screw_head_height(screw));

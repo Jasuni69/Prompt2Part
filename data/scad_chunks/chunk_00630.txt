@@ -1,1 +1,0 @@
-function tx_y_pitch(type)           = type[6];  //! Screw hole y pitch when four screws

@@ -1,6 +1,0 @@
-function _dnu_calc(f1,fc,f2,h1,h2) =
-    let(
-        f1 = h2<h1 ? lerp(fc,f1,h2/h1) : f1 , 
-        f2 = h1<h2 ? lerp(fc,f2,h1/h2) : f2
-       )
-    (f2-f1) / 2 / min(h1,h2);

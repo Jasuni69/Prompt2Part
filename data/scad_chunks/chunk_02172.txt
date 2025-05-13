@@ -1,1 +1,0 @@
-function bbox_skip_blocks(type)= type[9]; //! List of fixing blocks to skip, used to allow a hinged panel for example

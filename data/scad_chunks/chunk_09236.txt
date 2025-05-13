@@ -1,6 +1,0 @@
-function __tr_corner_t_leng_gt_or_eq_zero(frags, t_sector_angle, t_leng, h, round_r) = 
-    let(off = [t_leng, h / 2 - round_r])
-    [
-        for(pt = __pie_for_rounding(round_r, 90 - t_sector_angle, 90, frags * t_sector_angle / 360))
-        pt + off
-    ];

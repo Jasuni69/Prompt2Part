@@ -1,1 +1,0 @@
-function extrusion_width(type)                  = type[1];  //! Width of extrusion

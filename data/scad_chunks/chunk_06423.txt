@@ -1,5 +1,0 @@
-function _backtracking(i,points,h,t,m,all) =
-    m<t || _is_cw(points[i], points[h[m-1]], points[h[m-2]],all) ? m :
-    _backtracking(i,points,h,t,m-1,all) ;
-
-// clockwise check (2d)

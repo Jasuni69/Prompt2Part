@@ -1,1 +1,0 @@
-module fixing_block_M30_stl() fixing_block(M3_cap_screw);

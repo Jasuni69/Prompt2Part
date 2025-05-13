@@ -1,6 +1,0 @@
-function _pb_horz(last=[], args=[], rel=false, angle) = let(x=rel? last[0] + args[0] : args[0]) x==last[0]? [[[]],[],angle,[[],[]]] : [[[x, last[1]]], [], x > last[0]? 90 : 270,[[],[]]];
-
-//  module h(last, rel, args)
-//
-//  Adds a point with the same y value as the last point but a new x value relative from the last known point.
-//  x       (number)  x value for new 2D point relative from the last known 2D point.

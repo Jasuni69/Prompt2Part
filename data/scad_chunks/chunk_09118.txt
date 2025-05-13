@@ -1,1 +1,0 @@
-function top_wall(cell) = get_type(cell) == TOP_WALL;

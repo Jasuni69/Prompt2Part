@@ -1,1 +1,0 @@
-function foot(x) = x * 25.4 * 12;                                                   //! Foot to mm conversion

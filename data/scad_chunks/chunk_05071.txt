@@ -1,5 +1,0 @@
-function _mb_squircle_full(point, inv_size, xp, ex, cutoff, neg) = let(
-    point = inv_size * point,
-    dist = xp >= 1100 ? max(v_abs(point))
-                      :(abs(point.x)^xp + abs(point.y)^xp) ^ (1/xp)
-) neg * mb_cutoff(dist, cutoff) / dist^ex;

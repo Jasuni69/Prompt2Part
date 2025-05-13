@@ -1,4 +1,0 @@
-module test_affine3d_identity() {
-    assert(affine3d_identity() == [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]);
-}
-test_affine3d_identity();

@@ -1,3 +1,0 @@
-function maximum(a,componentIndex, i = 0) = (i < len(a) - 1)
-        ? max(a[i][componentIndex], maximum(a,componentIndex, i +1)) : a[i][componentIndex];
-//just like mximum above but the minimum

@@ -1,1 +1,0 @@
-function variac_radius(type) = variac_diameter(type) / 2;   //! Body radius

@@ -1,1 +1,0 @@
-function calculate_axes(x,y) = [unit_vector(x),unit_vector(y), unit_vector(cross_product(x,y))];

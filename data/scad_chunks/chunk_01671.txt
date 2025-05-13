@@ -1,1 +1,0 @@
-function pot_body(type)     = type[1];  //! Body diameter or width & depth, height and corner radius

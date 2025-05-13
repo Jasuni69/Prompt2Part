@@ -1,6 +1,0 @@
-module do_screw_knob(knob) {
-    if($preview)
-        screw_knob_assembly(knob, 16);
-    else
-        screw_knob(knob);
-}

@@ -1,1 +1,0 @@
-function psu_face_fan(type)          = type[4];     //! Fan x,y position and type

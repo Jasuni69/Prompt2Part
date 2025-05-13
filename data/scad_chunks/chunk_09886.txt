@@ -1,1 +1,0 @@
-module dottedline(l, d) for(y = [0:d*3:l]) up(y) sphere(d=d);

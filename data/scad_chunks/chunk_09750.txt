@@ -1,8 +1,0 @@
-module nema34_mount_holes(depth=5, l=5, slop=PRINTER_SLOP, orient=ORIENT_Z, align=V_CENTER)
-{
-	nema_mount_holes(size=34, depth=depth, l=l, slop=slop, orient=orient, align=align);
-}
-
-
-
-// vim: noexpandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

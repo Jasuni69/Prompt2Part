@@ -1,5 +1,0 @@
-function is_str(v) = (version_num() > 20190100)? is_string(v) : (v=="" || (is_def(v) && is_def(v[0]) && (len(str(v,v)) == len(v)*2)));
-
-
-// Function: is_boolean()
-// Description: Given a value, returns true if it is a boolean.

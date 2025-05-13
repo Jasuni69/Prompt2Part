@@ -1,6 +1,0 @@
-module fuseholders()
-    fuseholder(thickness);
-
-if($preview)
-    let($show_threads = 1)
-        fuseholders();

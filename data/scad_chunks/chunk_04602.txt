@@ -1,3 +1,0 @@
-module insert_bottom( d ) { diecut(d){ 
-    dividers(d, [], [0.6], d.z*0.7);
-}}

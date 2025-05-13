@@ -1,1 +1,0 @@
-function gridfinity_bin(name, grid_x, grid_y, grid_z) = [name, [grid_x, grid_y, grid_z], lower_chamfer]; //! Constructor

@@ -1,3 +1,0 @@
-function runden(x,dec=2)=round(x*pow(10,dec))/pow(10,dec);//auf komastelle runden
-
-//convert angle ↦ gradC

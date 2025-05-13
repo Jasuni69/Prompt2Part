@@ -1,1 +1,0 @@
-function mains_socket_t(type)           = type[7];   //! Plastic thickness

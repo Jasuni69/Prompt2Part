@@ -1,1 +1,0 @@
-function resistor_radial(type)        = type[8]; //! Radial gives bead thermistor style body

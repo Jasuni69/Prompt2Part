@@ -1,2 +1,0 @@
-function _mb_torus_basic(point, rmaj, rmin, neg) =
-    let(dist = norm([norm([point.x,point.y])-rmaj, point.z])) neg*rmin/dist;

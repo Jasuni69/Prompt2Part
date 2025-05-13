@@ -1,4 +1,0 @@
-module test_echo_struct() {
-    // Can't yet test echo output
-}
-test_echo_struct();

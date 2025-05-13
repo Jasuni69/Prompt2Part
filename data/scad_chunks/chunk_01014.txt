@@ -1,1 +1,0 @@
-function gt_front_t(type)      = type[10];  //! Thickness of frame around the front aperture

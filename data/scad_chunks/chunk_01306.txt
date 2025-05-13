@@ -1,1 +1,0 @@
-function gm_motor_pos(type) = gm_motor(type)[0]; //! Motor position relative to centre of the gearbox

@@ -1,1 +1,0 @@
-function screw_radius(type)           = type[3] / 2; //! Nominal radius

@@ -1,1 +1,0 @@
-function box_hole_inset(type) = washer_radius(box_washer(type)) + 1; //! Screw inset from the corner of the internal dimensions

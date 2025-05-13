@@ -1,2 +1,0 @@
-function _fst_v1(pts, leng, p, i) =
-    i == leng || (pts[i] - p) != org ? i : _fst_v1(pts, leng, p, i + 1);

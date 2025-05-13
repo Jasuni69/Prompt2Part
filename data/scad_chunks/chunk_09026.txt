@@ -1,8 +1,0 @@
-function _m_scaling_impl(s) = 
-    let(v = __m_scaling_to_scaling_vect(s))
-    [
-        [v.x, 0, 0, 0],
-        [0, v.y, 0, 0],
-        [0, 0, v.z, 0],
-        FINAL_ROW
-    ];

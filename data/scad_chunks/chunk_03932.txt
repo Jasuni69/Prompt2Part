@@ -1,6 +1,0 @@
-module pieces(n)
-{
-	$totalPieces=n;
-	for($valPtr=[0:1:n-1])
-		children();
-}

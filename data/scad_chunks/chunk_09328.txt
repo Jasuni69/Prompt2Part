@@ -1,3 +1,0 @@
-function ShiftX(t) = Translate([60, 0, 0]);
-
-// Combine all of the above operations, with the rightmost applied first.

@@ -1,1 +1,0 @@
-function light_strip_length(type)        = type[2]; //! Un-cut length

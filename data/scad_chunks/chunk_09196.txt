@@ -1,4 +1,0 @@
-function _vx_bezier3(p1, p2, p3, p4, pts) =
-    let(v = p1 - p4)
-    abs(v.x) < 0.5 && abs(v.y) < 0.5 && abs(v.z) < 0.5 ? 
-        pts : _pt3(p1, p2, p3, p4, pts);

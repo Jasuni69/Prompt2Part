@@ -1,7 +1,0 @@
-module rim( d ) {
-    difference () {
-        base_box( d, corner_radius - wt );
-        translate( [wt,wt,0-CS]) base_box( [d.x-wt2, d.y-wt2, d.z+CS2] );
-    }
-}
-// =========================

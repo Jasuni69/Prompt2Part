@@ -1,1 +1,0 @@
-function t_insert_top_width(type)     = type[2];   //! Top Width of t-track insert

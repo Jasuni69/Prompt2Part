@@ -1,9 +1,0 @@
-module annotations() {
-    arrow();
-
-    translate_z(21)
-        label("Text", halign = "center", valign = "bottom");
-}
-
-if($preview)
-    annotations();

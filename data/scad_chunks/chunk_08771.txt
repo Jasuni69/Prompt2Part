@@ -1,7 +1,0 @@
-function _fibseq_impl(from, to) =
-    let(f = __fast_fibonacci(from))
-    from == to ? [f] : 
-    _fibonacci_sequence(
-        [f, __fast_fibonacci(from - 1) + f], 
-        to - from
-    );

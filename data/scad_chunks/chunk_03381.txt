@@ -1,6 +1,0 @@
-function isPlace(what)= has3ElemsOrMore(what)
-              && has3ElemsOrMore(what[0])
-              && has3ElemsOrMore(what[1])
-              && has3ElemsOrMore(what[2])
-              && has3ElemsOrMore(top(what))
-              && top(what)[3]==1;

@@ -1,5 +1,0 @@
-function Func1(x, y) =
-  let ( z = 50 - 50/sqrt(x*x+y*y) )
-  z < 1 ? 1 : z;
-
-// 2 -- A bowl

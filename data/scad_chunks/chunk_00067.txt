@@ -1,3 +1,0 @@
-function find_min_z(path, i = 1, best_i = 0) =
-    i >= len(path) ? best_i
-                   : find_min_z(path, i + 1, path[i].z < path[best_i].z ? i : best_i);

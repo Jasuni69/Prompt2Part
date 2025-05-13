@@ -1,6 +1,0 @@
-function _is_geom_an_edge(geom,anchor) = 
-   (geom[0]=="prismoid" || geom[0]=="vnf_extent")
-   && (
-        let(anch = _find_anchor(anchor, geom))
-        is_def(struct_val(anch[4], "edge_angle"))
-      );

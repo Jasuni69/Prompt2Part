@@ -1,4 +1,0 @@
-module test_array_longest() {
-	assert(array_longest(["foobar", "bazquxx", "abcd"]) == 7);
-}
-test_array_longest();

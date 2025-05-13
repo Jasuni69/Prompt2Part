@@ -1,1 +1,0 @@
-function vec4(v) = [v.x, v.y, v.z, 1]; //! Return a 4 vector with the first three elements of `v`

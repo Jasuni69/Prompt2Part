@@ -1,1 +1,0 @@
-function unit(v) = v/norm(v);

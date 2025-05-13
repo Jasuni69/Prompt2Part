@@ -1,1 +1,0 @@
-function chamfer_edge_mask(l, chamfer=1, excess=0.1, h, length, height, anchor=CENTER, spin=0, orient=UP) = no_function("chamfer_edge_mask");

@@ -1,8 +1,0 @@
-module box1_internal_additions() {
-    d = washer_diameter(screw_washer(foot_screw(foot))) + 1;
-    h = pbox_ridges(box1).y;
-    box1_feet_positions()
-        translate_z(wall - eps)
-            cylinder(d2 = d, d1 = d + 2 * h, h = h);
-
-}

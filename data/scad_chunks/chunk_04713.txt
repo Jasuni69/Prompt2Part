@@ -1,3 +1,0 @@
-function irange(a,b) = let (step = a > b ? -1 : 1) [ for (i = [a:step:b]) i ];
-
-// sum a vector of numbers.  sum([]) == 0

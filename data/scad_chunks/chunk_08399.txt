@@ -1,2 +1,0 @@
-function _nz_worley_manhattan(p, nbrs) =
-    _nz_worley_from(nbrs, [for(nbr = nbrs) _manhattan(nbr - p)]);

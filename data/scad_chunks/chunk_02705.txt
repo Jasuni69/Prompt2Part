@@ -1,8 +1,0 @@
-module BOLTS_hex_head(k,s){
-	a = s/tan(60);
-	translate([0,0,-k/2]) union(){
-		rotate([0,0, 30]) cube([a,s,k],true);
-		rotate([0,0,150]) cube([a,s,k],true);
-		rotate([0,0,270]) cube([a,s,k],true);
-	}
-}

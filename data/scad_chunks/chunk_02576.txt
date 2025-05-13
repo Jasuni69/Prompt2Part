@@ -1,7 +1,0 @@
-function translate(v) = let(u = is_list(v) ? len(v) == 2 ? [v.x, v.y, 0] //! Generate a 4x4 translation matrix, `v` can be `[x, y]`, `[x, y, z]` or `z`
-                                                         : v
-                                           : [0, 0, v])
-                          [ [1, 0, 0, u.x],
-                            [0, 1, 0, u.y],
-                            [0, 0, 1, u.z],
-                            [0, 0, 0,   1] ];

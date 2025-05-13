@@ -1,8 +1,0 @@
-function max_length(list) =
-    assert(is_list(list), "Invalid input." )
-    max([for (v = list) len(v)]);
-
-
-
-
-// Internal.  Not exposed.

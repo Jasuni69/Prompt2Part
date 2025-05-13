@@ -1,1 +1,0 @@
-function elems(lt, elem) = [for(e = lt) elem(e)];

@@ -1,1 +1,0 @@
-function circlip_d2(type)        = type[2];     //! Groove diameter, i.e. OD when installed

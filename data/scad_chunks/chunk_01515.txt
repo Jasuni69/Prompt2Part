@@ -1,6 +1,0 @@
-function post_4mm_diameter() = 13; //! Outer diameter of 4mm binding post
-
-post_4mm_hole_radius = 7 / 2;
-post_4mm_spigot_w = 1.1;
-post_4mm_spigot_l = 1.2;
-post_4mm_spigot_h = 2.5;

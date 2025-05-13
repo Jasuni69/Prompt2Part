@@ -1,1 +1,0 @@
-function tubing_id(type)       = type[3]; //! Inside diameter

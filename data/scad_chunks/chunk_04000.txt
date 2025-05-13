@@ -1,1 +1,0 @@
-module TORIGHT(shift=0) g(TORIGHT(),right(shift))children();

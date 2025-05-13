@@ -1,2 +1,0 @@
-function _set_unit_vectors(t, unit_vectors) =
-    _create(_pt(t), unit_vectors);

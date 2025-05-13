@@ -1,3 +1,0 @@
-function nz_perlin2s(points, seed) = 
-    let(sd = is_undef(seed) ? rand() * 1000 : seed)
-    [for(p = points) _pnoise2(p.x, p.y, sd)];

@@ -1,6 +1,0 @@
-module test_point_plane_distance() {
-    plane1 = plane3pt([-10,0,0], [0,10,0], [10,0,0]);
-    assert(point_plane_distance(plane1, [0,0,5]) == 5);
-    assert(point_plane_distance(plane1, [5,5,8]) == 8);
-}
-*test_point_plane_distance();

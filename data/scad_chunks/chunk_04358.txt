@@ -1,1 +1,0 @@
-function confines(otherparts=currentPart()) = str(otherparts,",",confinementPartName() );

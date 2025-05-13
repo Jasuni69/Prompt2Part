@@ -1,2 +1,0 @@
-function partIsExact(bodySet, ifTrue=true, ifFalse=false) = currentPartExactIn(bodySet)
-						? ifTrue : ifFalse;

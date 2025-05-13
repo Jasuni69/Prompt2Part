@@ -1,2 +1,0 @@
-function led_bezel_hole_r(type)   =     //! Panel hole radius
-    led_bezel_r(type) + 0.1;

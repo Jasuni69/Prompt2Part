@@ -1,1 +1,0 @@
-module test_hyp_adj_to_opp() nil();  // Covered in test_tri_functions()

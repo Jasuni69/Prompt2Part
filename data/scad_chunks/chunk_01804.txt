@@ -1,6 +1,0 @@
-module sk_bracket_hole_positions(type) { //! Place children at hole positions
-    for (x = [-sk_screw_separation(type), sk_screw_separation(type)])
-        translate([x / 2, sk_base_height(type) - sk_hole_offset(type), 0])
-            rotate([-90, 0, 0])
-                children();
-}

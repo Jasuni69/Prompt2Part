@@ -1,5 +1,0 @@
-function screw_hole(spec, head, thread, oversize, hole_oversize, head_oversize, 
-             length, l, thread_len, tolerance=undef, counterbore, teardrop=false,
-             bevel, bevel1, bevel2, blunt_start, blunt_start1, blunt_start2, 
-             atype="screw",anchor=CENTER,spin=0, orient=UP)
-    = no_function("screw_hole");

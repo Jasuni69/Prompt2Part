@@ -1,5 +1,0 @@
-module stack(direction=TOUP,spaceBy=0,mergeBy=0)
-  g(stack(direction=direction,spaceBy=spaceBy
-                             ,mergeBy=mergeBy
-                            ,geom=$geomInfo))
-		children();

@@ -1,1 +1,0 @@
-function pot_spigot_x(type) = type[11]; //! Spigot offset from the shaft centre

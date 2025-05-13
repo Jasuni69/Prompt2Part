@@ -1,4 +1,0 @@
-module for_each(v, f, first=0, last) {
-  let(l=end(v,last))
-    for(i=[first:1:l-1]) let($each=f(v[i])) children();
-}

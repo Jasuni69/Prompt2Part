@@ -1,8 +1,0 @@
-function carve_bottom(x, y, cells, rows) = 
-    let(
-        y_minus_one = y - 1,
-        ny = y_minus_one < 0 ? y_minus_one + rows : y_minus_one
-    )
-    m_replace(cells, ny, x, [x, ny, RIGHT_WALL, UNVISITED]);
-
-// 0(right), 1(top), 2(left), 3(bottom)

@@ -1,1 +1,0 @@
-function pcbWidth(pcbName="Main") = (getVectorBase(pcbName, pcb))[2];

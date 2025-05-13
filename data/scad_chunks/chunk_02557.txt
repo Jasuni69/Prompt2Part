@@ -1,8 +1,0 @@
-function rounded_polygon_tangents(points) = //! Compute the straight sections between a point and the next point, for each section [start_point, end_point, length]
-    let(len = len(points))
-    [ for(i = [0 : len - 1])
-        let(ends = circle_tangent(points[i], points[(i + 1) % len]))
-            [ends[0], ends[1], norm(ends[0] - ends[1])]
-    ];
-
-// the cross product of 2D vectors is the area of the parallelogram between them. We use the sign of this to decide if the angle is bigger than 180.

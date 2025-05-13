@@ -1,1 +1,0 @@
-module camera_front_rpi_camera_v1_stl() camera_front(rpi_camera_v1);

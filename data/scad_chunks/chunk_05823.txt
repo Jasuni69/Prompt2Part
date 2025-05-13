@@ -1,3 +1,0 @@
-function _extend_knot_vector(knots,next,len) =
-    len(knots)==len ? knots
-  : _extend_knot_vector([each knots, last(knots)+knots[next+1]-knots[next]], next+1, len);

@@ -1,1 +1,0 @@
-function no_wall(cell) = get_type(cell) == NO_WALL;

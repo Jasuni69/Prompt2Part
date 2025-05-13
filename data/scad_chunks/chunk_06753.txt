@@ -1,7 +1,0 @@
-module test_f_asin() {
-    _test_fn1arg(
-        function (a) f_asin(a),
-        [[-1,-90],[0,0],[1,90]]
-    );
-}
-test_f_asin();

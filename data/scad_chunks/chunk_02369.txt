@@ -1,1 +1,0 @@
-function mouse_grommet_length(r) = 2 * r + 2 * wall + 2 * overlap; //! Length of grommet given r

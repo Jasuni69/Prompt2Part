@@ -1,1 +1,0 @@
-function rocker_slot_h(type)   = type[3];   //! Panel slot height

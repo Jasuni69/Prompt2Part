@@ -1,2 +1,0 @@
-function matrix_invert(m) = let(r=[for(i=[0:len(m)-1]) i]) [for(i=r) [for(j=r)
-    ((i+j)%2==0 ? 1:-1) * matrix_minor(m,0,remove(r,j),remove(r,i))]] / det(m);

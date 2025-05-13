@@ -1,1 +1,0 @@
-function screw_knob_fluted(type)   = type[8]; //! Fluted instead of sine wave

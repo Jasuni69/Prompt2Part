@@ -1,8 +1,0 @@
-module hookLidInsidePre()
-{
-  //if (printMessages) echo("hookLidInsidePre() ..");
-  
-} //-- hookLidInsidePre()
-
-//===========================================================
-//-- origin = box(0,0,0)

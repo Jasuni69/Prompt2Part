@@ -1,1 +1,0 @@
-function bb_rim(type)             = type[5]; //! Outer rim thickness guesstimate

@@ -1,1 +1,0 @@
-function bb_width(type)           = type[3]; //! Width

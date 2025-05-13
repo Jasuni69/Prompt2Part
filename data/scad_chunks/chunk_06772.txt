@@ -1,7 +1,0 @@
-module test_f_len() {
-    _test_fn1arg(
-        function (a) f_len(a),
-        [["A",1],["abc",3],["foobar",6],["freeb",5],["",0],["9",1]]
-    );
-}
-test_f_len();

@@ -1,6 +1,0 @@
-module DGlied(sym,l=12,l1,l2,la=+0.0,d=3,h=5,spiel=0.4,spielZ=nozzle/2,rand=n(1.5),freiwinkel=20,fn=36,help){
-if (sym) DGlied1(l=l,l1=l1,l2=l2,la=la,spiel=spiel,d=d,h=h,rand=rand,spielZ=spielZ,freiwinkel=freiwinkel,fn=fn);
-else DGlied0(l=l,l1=l1,l2=l2,la=la,spiel=spiel,d=d,h=h,rand=rand,spielZ=spielZ,freiwinkel=freiwinkel,fn=fn);
-
-HelpTxt("DGlied",["sym",sym,"l",l,"l1",l1,"l2",l2,"spiel",spiel,"spielZ",spielZ,"la",la,"fn",fn,"d",d,"h",h,"rand",rand,"freiwinkel",freiwinkel],help);
-}

@@ -1,6 +1,0 @@
-module test_affine2d_translate() {
-    assert(affine2d_translate([0,0]) == [[1,0,0],[0,1,0],[0,0,1]]);
-    assert(affine2d_translate([10,20]) == [[1,0,10],[0,1,20],[0,0,1]]);
-    assert(affine2d_translate([20,10]) == [[1,0,20],[0,1,10],[0,0,1]]);
-}
-test_affine2d_translate();

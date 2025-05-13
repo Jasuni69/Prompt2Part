@@ -1,5 +1,0 @@
-function HexAcrossCorners(diameter) =
-  HexAcrossFlats(diameter) / cos(30);
-
-
-// Provides standard metric hex (Allen) drive widths across the flats.

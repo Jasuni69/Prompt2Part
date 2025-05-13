@@ -1,1 +1,0 @@
-function space_filling_tree  (levels=4,  step=1) = lsystem_turtle(levels=levels, step=step, angle=90,  "X",         [["X","FX++F-FX++F-FX++F-FX++F-"],["F", "FF"]], startang=45);

@@ -1,1 +1,0 @@
-function _pb_chamfer(pts, args=[], angle) = [[],args[0]==0? [] : [[3,len(pts)-1, args[0]]],angle,[[],[]]];

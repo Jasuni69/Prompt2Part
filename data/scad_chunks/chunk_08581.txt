@@ -1,3 +1,0 @@
-function _component(t, points, n, i) = 
-    let(one_t = 1 - t)
-    sum([for(j = [0:n]) _combi(n, j) * points[j][i] * one_t ^ (n - j) * t ^ j]);

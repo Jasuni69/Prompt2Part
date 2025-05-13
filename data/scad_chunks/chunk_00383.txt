@@ -1,1 +1,0 @@
-function terminal_block_height2(type) = type[4];    //! Height under the contacts

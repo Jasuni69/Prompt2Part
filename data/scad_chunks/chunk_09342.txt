@@ -1,4 +1,0 @@
-function Affine(M, v) = M * [v[0], v[1], v[2], 1];
-
-
-// Combine a list of affine transformation matrices into one.

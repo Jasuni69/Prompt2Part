@@ -1,5 +1,0 @@
-function getWidth(sourceSystem) =
-  (sourceSystem[0] == yappCoordPCB) ? pcbWidth(sourceSystem[2]): //? pcb_Width :
-  (sourceSystem[0] == yappCoordBoxInside) ? shellInsideWidth :
-  (sourceSystem[0] == yappCoordBox) ? shellWidth :
-  undef;

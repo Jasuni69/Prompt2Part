@@ -1,3 +1,0 @@
-function find_approx(val, list, start=0, all=false, eps=EPSILON) =
-    all ? [for (i=[start:1:len(list)-1]) if (approx(val, list[i], eps=eps)) i]
-        :  __find_approx(val, list, eps=eps, i=start);

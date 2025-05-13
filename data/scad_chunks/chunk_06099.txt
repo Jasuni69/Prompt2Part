@@ -1,3 +1,0 @@
-function _ss_polygon_r(N,theta) =
-        let( alpha = 360/N )
-        cos(alpha/2)/(cos(posmod(theta,alpha)-alpha/2));

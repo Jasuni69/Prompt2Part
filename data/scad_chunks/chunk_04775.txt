@@ -1,9 +1,0 @@
-function filter_nan(v) = [for (x = v) if (x==x) x];
-
-
-
-// *** INCORRECT IMPLEMENTATION, NEEDS DEBUGGING ***
-// Atttempted port of OpenJSCAD / csg.js "splitPolygonByPlane" function
-// returns [front, coplanarFront, coplanarBack, back]
-// each containing a list of points, or nan
-// *** INCORRECT IMPLEMENTATION, NEEDS DEBUGGING ***

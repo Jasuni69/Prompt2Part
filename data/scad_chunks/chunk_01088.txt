@@ -1,1 +1,0 @@
-function toggle_pin_hp(type)   = type[21][4];   //! Pin x pitch

@@ -1,9 +1,0 @@
-module camera_bracket_screw_positions(cam) { //! Position children at the bracket screw positions
-    r = washer_radius(screw_washer(bracket_screw)) + 0.5;
-    wide = bracket_thickness(cam) == wall;
-    pitch = wide ? cam_front_size(cam).x / 2 - r : hinge_h + 1 + r;
-
-    for(side = [-1, 1])
-        translate([side * pitch, 0])
-            children();
-}

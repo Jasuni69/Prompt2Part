@@ -1,1 +1,0 @@
-function 2screw_block_holes(screw, short_insert = false) = concat([2screw_block_v_hole(screw, short_insert)], [2screw_block_h_hole(screw, short_insert)]); //! List of transforms to both holes

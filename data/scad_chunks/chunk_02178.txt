@@ -1,2 +1,0 @@
-function bbox_area(type) = let(w =  bbox_width(type), d = bbox_depth(type), h = bbox_height(type)) //! Internal surface area in m^2
-    2 * (w * d + w * h + d * h) / 1000000;

@@ -1,4 +1,0 @@
-module test_adj_opp_to_ang() nil();  // Covered in test_tri_functions()
-
-
-// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

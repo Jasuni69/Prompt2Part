@@ -1,3 +1,0 @@
-function _transpart(T) = [for(row=[0:2]) T[row][3]];
-
-// The non-translation part of a matrix

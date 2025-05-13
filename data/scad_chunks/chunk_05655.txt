@@ -1,1 +1,0 @@
-function _invol(a) = tan(a) - a*PI/180;

@@ -1,1 +1,0 @@
-function corrected_radius(r, n = undef)   = r / cos(180 / sides(r, n));                         //! Adjusted radius to make flats lie on the circle

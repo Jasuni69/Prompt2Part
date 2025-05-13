@@ -1,1 +1,0 @@
-function variac_bulge_width(type)    = type[5];     //! Width of the bulge

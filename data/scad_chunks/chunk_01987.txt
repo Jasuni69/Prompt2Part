@@ -1,1 +1,0 @@
-function ssr_shroud_height(type) = ssr_height(type) + top + clearance;      //! Outside height

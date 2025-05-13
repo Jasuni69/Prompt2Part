@@ -1,1 +1,0 @@
-function gridfinity_base_z() = foot_h + lower_chamfer + upper_chamfer; //! height of base

@@ -1,3 +1,0 @@
-function _any_func(l, func, i=0, out=false) =
-    i >= len(l) || out? out :
-    _any_func(l, func, i=i+1, out=out || func(l[i]));

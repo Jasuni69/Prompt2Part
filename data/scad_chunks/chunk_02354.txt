@@ -1,1 +1,0 @@
-module fixing_block_M25_stl() fixing_block(M2p5_cap_screw);

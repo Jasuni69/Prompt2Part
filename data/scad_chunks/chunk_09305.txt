@@ -1,1 +1,0 @@
-function sampling_inRow(s, y) = y > -1 && y < sampling_rows(s);

@@ -1,3 +1,0 @@
-module tslot_20x20_1s_base(l,detailed){
-	aluProExtrusion(BR_20x20_1S, l=l, detailed=detailed);
-}

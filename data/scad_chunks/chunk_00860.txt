@@ -1,1 +1,0 @@
-function hdr_box_wall(type)     = type[9];  //! Box header wall thickness

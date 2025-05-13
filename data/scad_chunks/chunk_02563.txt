@@ -1,8 +1,0 @@
-module round(r, ir = undef, or = undef) { //! Round a 2D child, single radius or separate inside and outside radii
-    IR = is_undef(ir) ? r : ir;
-    OR = is_undef(or) ? r : or;
-    offset(OR)
-        offset(-OR -IR)
-            offset(IR)
-                children();
-}

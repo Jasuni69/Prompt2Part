@@ -1,1 +1,0 @@
-function terminal_block_depth2(type)  = type[5];    //! Depth of contact well

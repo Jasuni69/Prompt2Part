@@ -1,3 +1,0 @@
-function _v(v, s, t, degree, knots, d, l = 1) = 
-    l > degree + 1 ? v : 
-      _v(_nvl(v, l, s, t, degree, knots, d, s), s, t, degree, knots, d, l + 1);

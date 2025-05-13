@@ -1,1 +1,0 @@
-function tc_length(type)       = type[1];   //! Across the lugs

@@ -1,6 +1,0 @@
-module ttrack_insert_hole_positions(type, length, num_holes) {
-    P = length / (num_holes + 1);
-    for (x = [P:P:length-P])
-        translate([length/2 - x,0,0])
-            children();
-}

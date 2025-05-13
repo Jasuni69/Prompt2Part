@@ -1,1 +1,0 @@
-function stackingInfo() = $geomInfo[getTypeIndex($type_geomInfoStacking)];

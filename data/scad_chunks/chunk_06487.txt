@@ -1,6 +1,0 @@
-module rot(a=0, v, cp, from, to, reverse=false)
-{
-    req_children($children);        
-    m = rot(a=a, v=v, cp=cp, from=from, to=to, reverse=reverse);
-    multmatrix(m) children();
-}

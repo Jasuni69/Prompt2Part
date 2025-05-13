@@ -1,1 +1,0 @@
-function box_inset(type) = box_wall(type) + sheet_slot_clearance / 2; //! How much the bezel intrudes on the specified width and length, away from the corners

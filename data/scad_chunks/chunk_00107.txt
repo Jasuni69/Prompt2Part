@@ -1,7 +1,0 @@
-module toggles()
-    layout([for(t = toggles) toggle_width(t)], 16)
-         toggle(toggles[$i], 3);
-
-if($preview)
-    let($show_threads = true)
-        toggles();

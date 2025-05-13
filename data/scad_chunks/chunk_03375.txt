@@ -1,7 +1,0 @@
-function splitBodies(bodyListCommaSeparated)= flatten(concat(
-    [for( body=split(bodyListCommaSeparated,","))
-              if(len(body)>0) [for(i=[0:1: len(split(body,"."))-1])
-                            let(substep = split(body,".")[i])(i==0 //&& len(split(body,"."))>2
-                              ?substep:
-                            str(split(body,".")[0],".",substep))]])) ;
-//str(split(body,".")[0],".",substep)]

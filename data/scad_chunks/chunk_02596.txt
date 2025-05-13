@@ -1,1 +1,0 @@
-function nearly_zero(x) = abs(x) < 1e-5; //! True if x is close to zero

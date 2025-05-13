@@ -1,9 +1,0 @@
-function orientate(p, r) =
-    let(x = r[0], y = r[1], z = r[2])
-        [[x.x, y.x, z.x],
-         [x.y, y.y, z.y],
-         [x.z, y.z, z.z],
-         [p.x, p.y, p.z]];
-//
-// Rotate around z
-//

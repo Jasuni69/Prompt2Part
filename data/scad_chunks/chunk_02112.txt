@@ -1,1 +1,0 @@
-function pocket_handle_slant(type)     = type[1]; //! Upward slant of the hand hole

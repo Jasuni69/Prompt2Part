@@ -1,8 +1,0 @@
-function _pb_cubic(last=[], args=[], rel=false, angle, _i=0, _g, _r=[]) = let(
-    _g = _g==undef? pb_groupsOf(6, args)[1] : _g,
-    b = _g[_i],
-    p0 = last,
-    c0 = rel? last + [b[0],b[1]] : [b[0],b[1]],
-    c1 = rel? last + [b[2],b[3]] : [b[2],b[3]],
-    p1 = rel? last + [b[4],b[5]] : [b[4],b[5]],
-    _r = concat(_r, pb_bezier_cubic_curve(p0, c0, c1, p1, skip_first=true))) _i==len(_g)-1? [_r,[],pb_calcExitAngle(_r),[[],pb_reflectPntOn(c1, p1)]] : _pb_cubic(p1, args, rel, angle, _i+1, _g, _r);

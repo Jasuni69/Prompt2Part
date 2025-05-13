@@ -1,1 +1,0 @@
-function coreXY_plain_idler(type)           = type[4]; //! Plain idler type

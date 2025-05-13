@@ -1,3 +1,0 @@
-function det(m) = let(r=[for(i=[0:1:len(m)-1]) i]) det_help(m, 0, r);
-// Construction indices list is inefficient, but currently there is no way to imperatively
-// assign to a list element

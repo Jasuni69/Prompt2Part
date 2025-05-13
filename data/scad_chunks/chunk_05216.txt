@@ -1,1 +1,0 @@
-function modular_hose(size, type, clearance=0, waist_len, anchor=BOTTOM, spin=0,orient=UP) = no_function("modular_hose");

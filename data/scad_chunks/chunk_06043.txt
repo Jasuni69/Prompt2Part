@@ -1,4 +1,0 @@
-module path_spread(path, n, spacing, sp=undef, rotate_children=true, dist, closed){
-  deprecate("path_copes");
-  path_copies(path,n,spacing,sp,dist,rotate_children,dist, closed) children();
-}

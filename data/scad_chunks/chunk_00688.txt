@@ -1,1 +1,0 @@
-function pmeter_button_size(type)   = type[1]; //! Button size

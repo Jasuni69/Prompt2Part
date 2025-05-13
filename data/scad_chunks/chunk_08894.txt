@@ -1,9 +1,0 @@
-function spiral(center, r, startAngle, angleSign = 1, angle = 0, path) = 
-[
-    center, 
-    r, 
-    startAngle,
-    angleSign,
-    angle,
-    is_undef(path) ? [vt(center, r, startAngle, angleSign, angle)] :  path
-];

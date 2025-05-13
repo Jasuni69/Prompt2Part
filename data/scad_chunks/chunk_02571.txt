@@ -1,1 +1,0 @@
-function coth(x) = cosh(x) / sinh(x);           //! hyperbolic cotangent

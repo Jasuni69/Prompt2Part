@@ -1,1 +1,0 @@
-function to3d(p) = let(l = len(p)) (l>2 ? [p.x,p.y,p.z] : (l>1 ? [p.x,p.y,0]:(l>0 ? [p.x,0,0] : [0,0,0])));

@@ -1,5 +1,0 @@
-function is_struct(x) =
-    is_list(x) && [for (xx=x) if(!(is_list(xx) && len(xx)==2)) 1] == [];
-
-
-// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

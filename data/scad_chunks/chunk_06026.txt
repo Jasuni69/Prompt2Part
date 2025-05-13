@@ -1,5 +1,0 @@
-module grid2d(spacing, n, size, stagger=false, inside=undef, nonzero)
-{
-   deprecate("grid_copies");
-   grid_copies(spacing, n, size, stagger, inside, nonzero) children();
-}

@@ -1,2 +1,0 @@
-function bbox(screw, sheets, base_sheet, top_sheet, span, size, name = "bbox", skip_blocks = [], star_washers = true, thin_blocks = false, short_inserts = false) = //! Construct the property list for a butt_box
- [ screw, sheets, base_sheet, top_sheet, span, size.x, size.y, size.z, name, skip_blocks, star_washers, thin_blocks, short_inserts ];

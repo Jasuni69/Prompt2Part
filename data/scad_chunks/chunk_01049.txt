@@ -1,2 +1,0 @@
-function screw_thread_radius(type)  = //! Thread radius
-    let(d = screw_thread_diameter(type)) is_undef(d) ? screw_radius(type) : d / 2;

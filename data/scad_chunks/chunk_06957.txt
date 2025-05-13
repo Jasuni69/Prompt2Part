@@ -1,9 +1,0 @@
-module test_poly_mult(){
-  assert_equal(poly_mult([3,2,1],[4,5,6,7]),[12,23,32,38,20,7]);
-  assert_equal(poly_mult([[1,2],[3,4],[5,6]]), [15,68,100,48]);
-  assert_equal(poly_mult([3,2,1],[0]),[0]);
-  assert_equal(poly_mult([[1,2],[0],[5,6]]), [0]);
-  assert_equal(poly_mult([[3,4,5],[0,0,0]]), [0]);
-  assert_equal(poly_mult([[0],[0,0,0]]),[0]);
-}
-test_poly_mult();

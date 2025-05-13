@@ -1,8 +1,0 @@
-//   [40, 40, 20, 15,  5, yappRoundedRect, 15],
-//   [15, 40, 20, 15, 10, yappCircle, 15],
-];
-
-
-
-//---- This is where the magic happens ----
-YAPPgenerate();

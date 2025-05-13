@@ -1,1 +1,0 @@
-function washer_radius(type)          = washer_diameter(type) / 2; //! Outside radius

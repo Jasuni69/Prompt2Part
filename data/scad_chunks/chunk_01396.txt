@@ -1,4 +1,0 @@
-function find_screw(type, size, i = 0) =
-    i >= len(screws) ? undef
-                     : screw_head_type(screws[i]) == type && screw_radius(screws[i]) == size / 2 ? screws[i]
-                                                                                                 : find_screw(type, size, i + 1);

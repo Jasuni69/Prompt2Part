@@ -1,8 +1,0 @@
-module test_format_int() {
-    assert(format_int(0,6) == "000000");
-    assert(format_int(3,6) == "000003");
-    assert(format_int(98765,6) == "098765");
-    assert(format_int(-3,6) == "-000003");
-    assert(format_int(-98765,6) == "-098765");
-}
-test_format_int();

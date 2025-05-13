@@ -1,1 +1,0 @@
-function ldr_active(type)      = type[6]; //! The active width

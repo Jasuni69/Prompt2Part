@@ -1,9 +1,0 @@
-function wStern(f=5,r=1.65,a=.25,r2,fn=fn,rot=0,z)=
-let(step=360/fn,
-    a=is_undef(r2)?a:(r2-r)/2,
-    r=is_undef(r2)?r:r+a)
-[for(i=[0:fn])let(i=i%fn)is_undef(z)?
-          [(r+a*cos(f*i*step+rot))*sin(i*step),(r+a*cos(f*i*step+rot))*cos(i*step)]:
-          [(r+a*cos(f*i*step+rot))*sin(i*step),(r+a*cos(f*i*step+rot))*cos(i*step),z]];
-
-// polygon (wStern(f=5,r=1.65,a=.25,rot=180));

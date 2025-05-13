@@ -1,2 +1,0 @@
-function _row_wall(cell_radius, x_cell, y_cell) =
-    x_cell % 2 != 0 ? [_build_top_right(cell_radius), _build_top_left(cell_radius)] : [_build_bottom_right(cell_radius)];

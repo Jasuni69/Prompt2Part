@@ -1,2 +1,0 @@
-function _turtle2d_impl(cmd, arg1, arg2, arg3) = 
-    _three_args_command(cmd, arg1, arg2, arg3);

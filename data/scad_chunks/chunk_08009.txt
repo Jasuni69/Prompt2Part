@@ -1,9 +1,0 @@
-function moore_curve(n = 4, angle = 90, leng = 1, heading = 0, start = [0, 0]) = 
-    let(
-        axiom = "LFL+F+LFL",
-        rules = [
-            ["L", "-RF+LFL+FR-"],
-            ["R", "+LF-RFR-FL+"]
-        ]
-    )
-    lsystem2(axiom, rules, n, angle, leng, heading, start);

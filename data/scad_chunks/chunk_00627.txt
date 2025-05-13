@@ -1,1 +1,0 @@
-function tx_depth(type)             = type[3];  //! Bounding depth of the bobbin

@@ -1,8 +1,0 @@
-function pb_replacechar(string, findchar=" ", repchar="", _s=0) = _s < len(string) ?
-str(string[_s]==findchar? repchar : string[_s], pb_replacechar(string, findchar, repchar, _s + 1)) : "";
-
-//  function pb_substring(s)
-//  string      (string)  Source string
-//  start       (number)  Index to start character in string
-//  end         (number)  Max number of character to return
-//  Returns sub string of string.

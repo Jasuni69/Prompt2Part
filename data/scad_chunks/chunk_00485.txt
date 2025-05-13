@@ -1,1 +1,0 @@
-function iec_bezel_t(type)  = type[11]; //! Bezel thickness

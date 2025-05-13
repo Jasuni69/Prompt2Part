@@ -1,1 +1,0 @@
-function light_strip_width(type)         = type[5]; //! Outside width

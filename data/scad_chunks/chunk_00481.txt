@@ -1,1 +1,0 @@
-function iec_body_r(type)   = type[7];  //! Body corner radius

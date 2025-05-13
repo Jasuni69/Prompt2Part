@@ -1,6 +1,0 @@
-module two()
-{
-	$totalPieces=2;
-	for($valPtr=[0:1])
-		children();
-}

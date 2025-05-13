@@ -1,1 +1,0 @@
-function vero_solid_tracks(type)   = type[12];  //! List of solid copper tracks (at the edges of some boards)

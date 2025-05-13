@@ -1,1 +1,0 @@
-function circlip_a(type)         = type[5];     //! Size of the lugs

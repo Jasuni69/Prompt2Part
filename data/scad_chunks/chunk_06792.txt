@@ -1,7 +1,0 @@
-module test_square() {
-    assert(square(100, center=true) == [[50,-50],[-50,-50],[-50,50],[50,50]]);
-    assert(square(100, center=false) == [[100,0],[0,0],[0,100],[100,100]]);
-    assert(square(100, anchor=FWD+LEFT) == [[100,0],[0,0],[0,100],[100,100]]);
-    assert(square(100, anchor=BACK+RIGHT) == [[0,-100],[-100,-100],[-100,0],[0,0]]);
-}
-test_square();

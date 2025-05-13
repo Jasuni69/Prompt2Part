@@ -1,8 +1,0 @@
-function stringChunk(txt,start=0,length,string="")=
-  let(
-    start=abs(start),
-    length=is_undef(length)?len(str(txt))-start:length
-  )
-  len(string)<length&&start<len(txt)?stringChunk(txt=txt,length=length,start=start+1,string=str(string,str(txt)[start])):string;
-
-//echo(stringChunk(1234,start=0));

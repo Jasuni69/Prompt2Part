@@ -1,1 +1,0 @@
-function tx_lamination_height(type) = type[12]; //! Lamination height

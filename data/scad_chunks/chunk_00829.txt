@@ -1,1 +1,0 @@
-function smd_qfp_slant(type)     = type[2]; //! Angle of the slope

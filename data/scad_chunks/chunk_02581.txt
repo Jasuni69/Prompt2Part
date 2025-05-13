@@ -1,1 +1,0 @@
-function vec2(v) = [v.x, v.y]; //! Return a 2 vector with the first two elements of `v`

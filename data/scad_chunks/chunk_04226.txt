@@ -1,1 +1,0 @@
-function addToV(vector,scalar=0) = [for (i = [ 0 : len(vector) - 1 ]) vector[i]+scalar];

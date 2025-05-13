@@ -1,1 +1,0 @@
-function kp_diameter(type)        = type[1]; //! Rod hole diameter

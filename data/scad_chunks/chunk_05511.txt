@@ -1,7 +1,0 @@
-function _prism_fillet(name, base, R, bot, top, d, k, N, overlap,uniform,smooth_normals, debug) =
-    base=="none" ? [bot] 
-  : base=="plane" ? _prism_fillet_plane(name,bot, top, d, k, N, overlap,debug)
-  : base=="cyl" || base=="cylinder" ? _prism_fillet_cyl(name, R, bot, top, d, k, N, overlap,uniform,debug)
-  : base=="sphere" ? _prism_fillet_sphere(name, R, bot, top, d, k, N, overlap,uniform,debug)
-  : is_path(base,2) ? _prism_fillet_prism(name, base, bot, top, d, k, N, overlap,uniform,smooth_normals, R, debug)
-  : assert(false,"Unknown base type");

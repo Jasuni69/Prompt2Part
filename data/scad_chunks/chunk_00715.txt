@@ -1,1 +1,0 @@
-function belt_pitch_height(type) = type[5] + belt_tooth_height(type); //! Offset of the pitch radius from the tips of the teeth

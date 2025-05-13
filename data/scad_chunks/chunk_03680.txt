@@ -1,1 +1,0 @@
-function lastOf(list)= list[len(list)-1];

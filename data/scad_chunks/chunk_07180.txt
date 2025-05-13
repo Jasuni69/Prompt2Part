@@ -1,9 +1,0 @@
-function vAdd(v=[0],add=0)=[for(i=v) add + i ];
-
-
-/** \page Functions
-sehne() gives you the length of a chord
-\param n n-gon
-\param r radius
-\param a,deg  degree optional to n
-*/

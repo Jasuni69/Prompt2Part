@@ -1,1 +1,0 @@
-function smd_soic_lead_span(type)  = type[5];    //! Total span of leads

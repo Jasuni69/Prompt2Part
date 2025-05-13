@@ -1,2 +1,0 @@
-function _tex_height(scale, inset, z) =  scale<0 ? -(1-z - inset) * scale
-                                                 :  (z - inset) * scale;

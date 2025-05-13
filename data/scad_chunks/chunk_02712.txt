@@ -1,5 +1,0 @@
-function _rotation_angle(a,b) = (a*b > 0) ? 
-	asin(clamp(norm(cross_product(b,a))/norm(a)/norm(b),-1,1)) :
-	180 - asin(clamp(norm(cross_product(b,a))/norm(a)/norm(b),-1,1));
-
-//The (non-unit) rotation axis and angle around which a has to be rotated to be colinear to b

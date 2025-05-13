@@ -1,1 +1,0 @@
-function sampling_inLayer(s, z) = z > -1 && z < sampling_layers(s);

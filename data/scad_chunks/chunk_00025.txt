@@ -1,3 +1,0 @@
-function PolarFunc3(r, a) = (15+5*sin(r*10))*exp(-pow(r*cos(a)*cos(r*8)+r*sin(a)*sin(r*35),2)/300) + 1;
-
-// 4 -- A simple chalice

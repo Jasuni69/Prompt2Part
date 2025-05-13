@@ -1,7 +1,0 @@
-function kathete(hyp,kat)=assert(hyp>=kat,"hypotenuse first kathete(hyp,kat))")sqrt(hyp^2-kat^2);
-
-/** \page Functions \name vMax
-vMax gives you the max of a number and a list 
-\param v vector or list
-\param max max limiting value
-*/

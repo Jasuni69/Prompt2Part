@@ -1,7 +1,0 @@
-module pbox_inner_shape(type) {
-    rad = pbox_radius(type);
-    w = pbox_width(type);
-    d = pbox_depth(type);
-
-    rounded_square([w, d], rad, center = true);
-}

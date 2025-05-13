@@ -1,3 +1,0 @@
-module test_golden_spiral_extrude(sections, triangles) {
-
-}

@@ -1,3 +1,0 @@
-function back(y=0,p=_NO_ARG) =
-    assert(is_finite(y), "Invalid number")
-    move([0,y,0],p=p);

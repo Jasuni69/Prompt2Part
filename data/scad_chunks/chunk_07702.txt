@@ -1,3 +1,0 @@
-function faces31(points,start=+0)=[for(i=[len(points)-2])       //outer Wall (Innengew)
-    [start+i,1+start+i,start+len(points)+1+i,start+len(points)+i]//skin quad
-];

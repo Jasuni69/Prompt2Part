@@ -1,9 +1,0 @@
-module hookLidInside()
-{
-  //if (printMessages) echo("hookLidInside() ..");
-  
-} // hookLidInside()
-  
-
-//===========================================================
-// origin = box(0,0,shellHeight)

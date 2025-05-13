@@ -1,1 +1,0 @@
-function pbox_top(type)        = type[2]; //! Top thickness

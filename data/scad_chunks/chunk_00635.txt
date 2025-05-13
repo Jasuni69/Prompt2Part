@@ -1,1 +1,0 @@
-function tx_lamination_depth(type)  = type[11]; //! Lamination depth

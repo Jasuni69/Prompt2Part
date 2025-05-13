@@ -1,3 +1,0 @@
-function set_visited(x, y, z, cells) = update(cells, [x, y, z, get_type(cells[z][y][x]), VISITED]);
-
-// 0(right), 1(top), 2(left), 3(bottom), 4(up), 5(down)

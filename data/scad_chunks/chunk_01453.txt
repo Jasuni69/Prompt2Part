@@ -1,1 +1,0 @@
-function carriage_block_length(type) = type[2]; //! Length of the metal part

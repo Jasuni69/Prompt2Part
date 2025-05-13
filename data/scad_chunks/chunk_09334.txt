@@ -1,3 +1,0 @@
-function GearRotXZ(t) = RotY(8*360*t);
-// Establishes the dimensions of the ellipse, setting the distance away
-// from the origin.

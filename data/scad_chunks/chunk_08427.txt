@@ -1,6 +1,0 @@
-function _q_rotate_p(p, a, v) =
-    len(p) == 3 ? 
-        _q_rotate_p_3d(p, a, v) :
-        __to2d(
-            _q_rotate_p_3d(__to3d(p), a, v)
-        );

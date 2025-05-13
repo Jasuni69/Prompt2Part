@@ -1,9 +1,0 @@
-function go_maze(x, y, cells, rows, columns, x_wrapping, y_wrapping, seed, directions) = 
-    let(
-        r_dirs = directions(x, y, cells, seed),
-        nxcells0 = set_visited(x, y, cells),
-        nxcells1 = next_cells(x, y, r_dirs[0], nxcells0, rows, columns, x_wrapping, y_wrapping, seed, directions),
-        nxcells2 = next_cells(x, y, r_dirs[1], nxcells1, rows, columns, x_wrapping, y_wrapping, seed, directions),
-        nxcells3 = next_cells(x, y, r_dirs[2], nxcells2, rows, columns, x_wrapping, y_wrapping, seed, directions)
-    )
-    next_cells(x, y, r_dirs[3], nxcells3, rows, columns, x_wrapping, y_wrapping, seed, directions);

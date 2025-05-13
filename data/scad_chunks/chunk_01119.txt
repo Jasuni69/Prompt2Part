@@ -1,1 +1,0 @@
-function rocker_slot(type)     = [rocker_slot_w(type), rocker_slot_h(type)]; //! Rocker slot in a vector

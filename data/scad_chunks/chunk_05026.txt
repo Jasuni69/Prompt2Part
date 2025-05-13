@@ -1,4 +1,0 @@
-function mb_cutoff(dist, cutoff) = dist>=cutoff ? 0 : 0.5*(cos(180*(dist/cutoff)^4)+1);
-
-
-/// metaball sphere

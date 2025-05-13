@@ -1,2 +1,0 @@
-function screw_angle(type, length, nut_distance) = //! How much to rotate the screw to align it with a nut at the specified `distance` from the head
-    -360 * (length - nut_distance) /  metric_coarse_pitch(screw_thread_radius(type) * 2);

@@ -1,1 +1,0 @@
-function gm_motor_d(type) = gm_motor(type)[1]; //! Motor diameter

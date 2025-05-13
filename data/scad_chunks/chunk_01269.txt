@@ -1,1 +1,0 @@
-function scs_bearing(type)              = type[14]; //! Linear bearing used

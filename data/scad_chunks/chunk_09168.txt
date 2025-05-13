@@ -1,4 +1,0 @@
-function vx_circle(radius, filled = false) = 
-    hashset_elems(
-        hashset(_vx_circle_impl(radius, filled), hash = _pt2_hash)
-    );

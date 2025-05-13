@@ -1,1 +1,0 @@
-function nut_thread_depth(type) = let(d = nut_dome(type)) d ? d[1] : nut_thickness(type); //! Max thread depth in domed version

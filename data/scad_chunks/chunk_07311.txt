@@ -1,7 +1,0 @@
-function offsetvert(fn=12)= [for(i=[0:fn])[ofs*sin(-45+i*90/fn),ofs*cos(-45+i*90/fn)+inkreis(4,s)]];
-
-linse=concat(k1+versch+offset,-offsetvert(),-k1-versch-offset,offsetvert());
-polygon(linse);
-
-if(name)echo(str(name," VQ Size=",adjusted?size-tangentenP(grad=90,rad=ofs)*2:size," ,Radius=",s,"mm - Verschoben um",inkreis(4,s)-ofs,"mm")); 
-HelpTxt("VorterantQ",["size",size,"ofs",ofs,"adjusted",adjusted,"fn",fn,"fs",fs,"name",name],help);

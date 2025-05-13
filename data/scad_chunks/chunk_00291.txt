@@ -1,1 +1,0 @@
-function  d_ways(type)             = type[9];   //! Number of ways

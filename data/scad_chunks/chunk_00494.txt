@@ -1,3 +1,0 @@
-function iec_can(type)      = type[20]; //! If it has a can then the width, height, thickness and total width of the metal flange
-
-insert_screw_length = 10;

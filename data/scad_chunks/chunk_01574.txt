@@ -1,1 +1,0 @@
-function ax_res_diameter(type)= type[3]; //! Body diameter

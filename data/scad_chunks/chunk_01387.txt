@@ -1,1 +1,0 @@
-function led_radius(type) = led_diameter(type) / 2; //! Radius

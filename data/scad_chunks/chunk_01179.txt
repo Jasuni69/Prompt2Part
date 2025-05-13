@@ -1,1 +1,0 @@
-function camera_connector_size(type)= type[6]; //! The flex connector block for the camera itself's size

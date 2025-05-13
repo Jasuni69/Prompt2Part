@@ -1,1 +1,0 @@
-function distS(s,r,n,a)=kathete(radiusS(s,n,a,r),s/2);//cos(gradS(s,r)/2)*r;

@@ -1,5 +1,0 @@
-module down(z=0, p) {
-    req_children($children);    
-    assert(is_undef(p), "Module form `down()` does not accept p= argument.");
-    translate([0,0,-z]) children();
-}

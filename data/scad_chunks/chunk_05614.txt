@@ -1,9 +1,0 @@
-function _inherit_gear_param(name, val, pval, dflt, invert=false) =
-    is_undef(val)
-      ? is_undef(pval)
-        ? dflt
-        : (invert?-1:1)*pval
-      : is_undef(pval)
-        ? assert(is_finite(val), str("Invalid ",name," value: ",val))
-          val
-        : (invert?-1:1)*val;

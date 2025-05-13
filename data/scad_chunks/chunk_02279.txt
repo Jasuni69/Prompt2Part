@@ -1,1 +1,0 @@
-module corner_block_M25_s_stl() corner_block(M2p5_cap_screw, short_insert = true);

@@ -1,6 +1,0 @@
-function _iterative_remove_edges(p, dist) =
-  let (cleaned = _remove_edges(p, dist))
-  len(cleaned) == len(p) ? p : _iterative_remove_edges(cleaned, dist);
-
-// given a polygon, offset each vertex using the corner offset method above
-// note: this can produce self-intersections depending on the 'curvature' and offset

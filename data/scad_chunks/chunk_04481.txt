@@ -1,7 +1,0 @@
-function _priv_tube_d(d,dInner,dOuter,wall,d1) = ((dInner!=undef)
-		?dInner+wall*2:
-		(dOuter!=undef
-			?dOuter
-			:((d==undef)
-				?d1
-				:d)));

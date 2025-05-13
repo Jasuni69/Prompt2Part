@@ -1,5 +1,0 @@
-module blocks(points) {
-    for(pt = points) {
-        translate(pt) square(1);
-    };
-}

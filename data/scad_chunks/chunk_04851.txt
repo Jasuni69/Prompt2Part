@@ -1,8 +1,0 @@
-function _pb_smooth_quadratic(last=[], args=[], rel=false, angle, ctrl_pts, _i=0, _g, _r=[]) = let(
-    _g = _g==undef? pb_groupsOf(2, args)[1] : _g,
-    b = _g[_i],
-    p0 = last,
-    c = len(ctrl_pts[0])==2? ctrl_pts[0] : p0,
-    p1 = rel? last + [b[0],b[1]] : [b[0],b[1]],
-    cn = pb_reflectPntOn(c, p1),
-    _r = concat(_r, pb_bezier_quadratic_curve(p0, c, p1, skip_first=true))) _i==len(_g)-1? [_r,[],pb_calcExitAngle(_r),[cn,[]]] : _pb_smooth_quadratic(p1, args, rel, angle, [cn,[]], _i+1, _g, _r);

@@ -1,1 +1,0 @@
-function unit(v) = let(n = norm(v)) n ? v / n : v; //! Convert `v` to a unit vector

@@ -1,6 +1,0 @@
-function rot3_z(a) = //! Generate a 3x3 matrix to rotate around z
-    let(c = cos(a),
-        s = sin(a))
-        [ [ c, -s,  0],
-          [ s,  c,  0],
-          [ 0,  0,  1] ];

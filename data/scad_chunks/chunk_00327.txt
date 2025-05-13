@@ -1,1 +1,0 @@
-function microswitch_size(type) = [microswitch_length(type), microswitch_width(type), microswitch_thickness(type)]; //! Body size

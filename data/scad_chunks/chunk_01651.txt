@@ -1,1 +1,0 @@
-function blower_axis(type)        = type[8]; //! XY coordinates of the axle

@@ -1,2 +1,0 @@
-module pbox_outer_shape(type) //! 2D outer shape of the box
-    offset(pbox_wall(type) / 2) pbox_mid_shape(type);

@@ -1,5 +1,0 @@
-function circle_packing3(points, density = 1, min_r = 1) =
-    [
-        for(t = tri_delaunay(points, ret = "TRI_SHAPES"))
-        each circle_packing_triangle3(t, density, min_r)
-    ];

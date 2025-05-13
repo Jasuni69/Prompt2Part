@@ -1,1 +1,0 @@
-function toggle_nut(type)      = type[18];      //! Nut type

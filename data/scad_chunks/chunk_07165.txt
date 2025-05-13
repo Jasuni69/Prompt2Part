@@ -1,2 +1,0 @@
-function n(x=1,nozzle=nozzle)=sign(x)*(abs(x)*nozzle + 0.05*nozzle); /*(x==1?0.05*nozzle:
-                                                          - layer*(1-PI/4) * (x-1)*0)); 0.05*nozzle padding for slicer */

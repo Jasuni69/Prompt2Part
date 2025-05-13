@@ -1,5 +1,0 @@
-function standardize(v) = 
-    v==[]? [] :
-    let( i = max_index([for(vi=v) abs(vi) ]),
-         s = sign(v[i]) )
-    v*s;

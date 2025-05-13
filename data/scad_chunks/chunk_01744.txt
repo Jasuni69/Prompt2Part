@@ -1,1 +1,0 @@
-function ff_latch(type) = type[1]; //! Flat flex latch size

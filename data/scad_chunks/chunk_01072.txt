@@ -1,1 +1,0 @@
-function toggle_id(type)       = type[9];       //! Barrel inside diameter

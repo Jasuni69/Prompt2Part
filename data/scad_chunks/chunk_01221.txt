@@ -1,1 +1,0 @@
-function vero_mounting_holes(type) = type[7];   //! Positions of the mounting holes

@@ -1,8 +1,0 @@
-function vnf_vertices(vnf) = vnf[0];
-
-
-// Function: vnf_faces()
-// Synopsis: Returns the list of faces from a VNF.
-// Topics: VNF Manipulation
-// See Also: is_vnf(), is_vnf_list(), vnf_vertices()
-// Description: Given a VNF structure, returns the list of faces, where each face is a list of indices into the VNF vertex list.

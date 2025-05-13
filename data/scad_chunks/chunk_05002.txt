@@ -1,4 +1,0 @@
-function adj_ang_to_opp(adj,ang) =
-    assert(is_finite(adj)&&adj>=0, "Triangle side length should be a positive number." )
-    assert(is_finite(ang) && ang>-90 && ang<90, "The angle should be an acute angle." )
-    adj*tan(ang);

@@ -1,1 +1,0 @@
-function BLDC_bell_height_1(type)               = type[16]; //! Bell height 1

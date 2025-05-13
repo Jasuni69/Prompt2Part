@@ -1,1 +1,0 @@
-function box_corner_rad(type) = box_sheet_slot(type) - sheet_slot_clearance / 2 + box_corner_gap(type) + box_corner_overlap(type);

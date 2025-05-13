@@ -1,1 +1,0 @@
-function ttrack_slot_height(type)   = type[5];   //! Height of the slot

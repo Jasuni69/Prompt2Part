@@ -1,1 +1,0 @@
-function degrees(radians) = radians * 57.29577951308233;

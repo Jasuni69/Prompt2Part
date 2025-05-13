@@ -1,1 +1,0 @@
-function spiral_path(spiral) = spiral[5];

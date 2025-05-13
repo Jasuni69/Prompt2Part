@@ -1,9 +1,0 @@
-function gosper_curve(n = 4, angle = 60, leng = 1, heading = 0, start = [0, 0]) = 
-    let(
-        axiom = "A",
-        rules = [
-            ["A", "A-B--B+A++AA+B-"],
-            ["B", "+A-BB--B-A++A+B"]
-        ]
-    )
-    lsystem2(axiom, rules, n, angle, leng, heading, start, "AB");

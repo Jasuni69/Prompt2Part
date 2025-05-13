@@ -1,1 +1,0 @@
-function spiral_center(spiral) = spiral[0];

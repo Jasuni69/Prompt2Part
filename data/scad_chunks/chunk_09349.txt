@@ -1,7 +1,0 @@
-function Scale(v) =
-  [[v[0],    0,    0, 0],
-   [   0, v[1],    0, 0],
-   [   0,    0, v[2], 0]];
-
-// Find the bounding box of pointarrays.
-// Returns [[min_x, min_y, min_z], [max_x, max_y, max_z]]

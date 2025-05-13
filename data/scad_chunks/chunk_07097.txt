@@ -1,5 +1,0 @@
-module text3d(text, h=0.01, size=3) {
-    linear_extrude(height=h, convexity=10) {
-        text(text=text, size=size, valign="center", halign="center");
-    }
-}

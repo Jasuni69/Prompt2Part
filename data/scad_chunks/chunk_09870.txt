@@ -1,9 +1,0 @@
-module test_vector_axis() {
-	assert(norm(vector_axis([10,0,0],[10,10,0]) - [0,0,1]) < eps);
-	assert(norm(vector_axis([10,0,0],[0,10,0]) - [0,0,1]) < eps);
-	assert(norm(vector_axis([0,10,0],[10,0,0]) - [0,0,-1]) < eps);
-	assert(norm(vector_axis([0,0,10],[10,0,0]) - [0,1,0]) < eps);
-	assert(norm(vector_axis([10,0,0],[0,0,10]) - [0,-1,0]) < eps);
-	assert(norm(vector_axis([10,0,10],[0,-10,0]) - [sin(45),0,-sin(45)]) < eps);
-}
-test_vector_axis();

@@ -1,3 +1,0 @@
-function arcPoints(r,angle=90,deltaA=1,noCenter=false)=
-[for(a=[-deltaA:deltaA:angle])
-			(!noCenter && a<0 && angle < 360)?[0,0]:[r*cos(a),r*sin(a)]];

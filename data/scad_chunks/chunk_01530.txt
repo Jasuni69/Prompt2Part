@@ -1,1 +1,0 @@
-function rd_module_size(type)      = type[2]; //! Size

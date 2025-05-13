@@ -1,2 +1,0 @@
-module Cring(id=20,grad=230,h=15,rand=3,rad=1,end=1,txt=undef,spacing=1,tSize=5,tPos=[0,0],tDepth=.35,center=true,fn=fn,fn2=36,help)
-CRing(id,grad,h,rand,rad,end,txt,spacing,tSize,tPos,tDepth,center,fn,fn2,help);

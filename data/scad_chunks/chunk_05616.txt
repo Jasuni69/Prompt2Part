@@ -1,2 +1,0 @@
-function _inherit_gear_pa(pressure_angle) =
-    _inherit_gear_param("pressure_angle", pressure_angle, $parent_gear_pa, dflt=20);

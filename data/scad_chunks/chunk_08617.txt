@@ -1,5 +1,0 @@
-function __outer_points_shape_starburst(r1, r2, n) = 
-    let(
-        a = 360 / n
-    )
-    [for(i = 0; i < n; i = i + 1) [r1 * cos(a * i), r1 * sin(a * i)]];

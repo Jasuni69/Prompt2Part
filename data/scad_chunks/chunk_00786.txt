@@ -1,1 +1,0 @@
-function smd_sot_lead_size(type)  = type[6];    //! Lead width, foot depth, lead thickness

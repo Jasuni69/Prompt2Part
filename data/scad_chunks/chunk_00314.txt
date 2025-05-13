@@ -1,1 +1,0 @@
-function microswitch_hole_d(type)    = type[6];     //! Screw hole diameter

@@ -1,1 +1,0 @@
-function faston_fillet_d(type)      = type[9];  //! Fillets at the transition

@@ -1,3 +1,0 @@
-module pcb_mount_holes(pcb, h = 0)          //! Drill holes for PCB mount
-    pcb_mount_screw_positions(pcb)
-        drill(screw_clearance_radius(screw), h);

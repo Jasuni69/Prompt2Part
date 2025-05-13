@@ -1,7 +1,0 @@
-module rpi_holes()
-    for(i = rpi_holes) {
-        hole = pcb_coord(rpi, pcb_holes(rpi)[i]);
-        translate([hole.x, rpi_offset.y, -hole.y + rpi_offset.z + top_thickness])
-            rotate([90, 0, 0])
-                children();
-    }

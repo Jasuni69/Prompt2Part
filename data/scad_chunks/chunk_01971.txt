@@ -1,1 +1,0 @@
-function gridfinity_bin_name(type)          = type[0]; //! Name for the STL file

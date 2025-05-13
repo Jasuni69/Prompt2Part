@@ -1,1 +1,0 @@
-module corner_block_M30_stl() corner_block(M3_cap_screw);

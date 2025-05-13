@@ -1,6 +1,0 @@
-function tri2tile(type, tri) =
-    let(
-		v = tri[1] - tri[0],
-		a = atan2(v[1], v[0]) + 36
-	)
-	tile(type, tri[0][0], tri[0][1], a, 1);

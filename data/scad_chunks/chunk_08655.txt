@@ -1,7 +1,0 @@
-function _cmds(t, cmds, i = 0) = 
-    i == len(cmds) ? t :
-    let(
-        cmd = cmds[i][0],
-        arg = cmds[i][1]
-    )
-    _cmds(_cmdline(cmd, t, arg), cmds, i + 1);

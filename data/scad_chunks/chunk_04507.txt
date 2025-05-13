@@ -1,3 +1,0 @@
-function bolt_diameter (options) = 
-  let (h = bolt_data(options))
-    is_undef(h) ? h : h.diameter;

@@ -1,1 +1,0 @@
-function al_clad_clearance(type)   = type[8];   //! Clearance from screw hole centre to the body

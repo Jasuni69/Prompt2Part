@@ -1,1 +1,0 @@
-function gm_motor(type)        = type[8]; //! Motor position, diameter, height, corner rad and colour

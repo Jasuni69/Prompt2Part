@@ -1,1 +1,0 @@
-function is90or270(ang)=ang==90?1:ang==270?1:0;

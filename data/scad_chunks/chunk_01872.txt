@@ -1,1 +1,0 @@
-function cable_wire_size(cable) = cable[1]; //! Size of each wire in a bundle

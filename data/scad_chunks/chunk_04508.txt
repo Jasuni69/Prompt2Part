@@ -1,3 +1,0 @@
-function bolt_head_length (options, kind = DEFAULT_BOLT_KIND) =
-  let (h = bolt_data(options, kind))
-    is_undef(h) ? h : is_undef(h.head_length) ? 0 : h.head_length;

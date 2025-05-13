@@ -1,1 +1,0 @@
-function iec_insert_screw_length() = insert_screw_length; //! Screw length used for inserts

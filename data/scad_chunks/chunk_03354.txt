@@ -1,1 +1,0 @@
-function multV(what,byWhat=[1]) = [for (i = [ 0 : min(len(what),len(byWhat)) - 1 ]) what[i]*byWhat[i]];

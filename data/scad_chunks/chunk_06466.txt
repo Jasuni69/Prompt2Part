@@ -1,7 +1,0 @@
-module move(v=[0,0,0], p) {
-    req_children($children);  
-    assert(!is_string(v),"Module form of `move()` does not accept string `v` arguments");
-    assert(is_undef(p), "Module form `move()` does not accept p= argument.");
-    assert(is_vector(v) && (len(v)==3 || len(v)==2), "Invalid value for `v`")
-    translate(point3d(v)) children();
-}

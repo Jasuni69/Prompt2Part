@@ -1,7 +1,0 @@
-function _all_perms(v) = [v, [v[2], v[0], v[1]], [v[1],v[2],v[0]], [v[1],v[0],v[2]],[v[2],v[1],v[0]],[v[0],v[2],v[1]]];
-//
-// Point reflections across all planes.    In the unconstrained case, this means one point becomes 8 points.
-//
-// sign=="even" means an even number of minus signs (odd number of plus signs)
-// sign=="odd" means an odd number of minus signs (even number of plus signs)
-//

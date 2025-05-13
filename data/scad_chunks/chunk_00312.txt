@@ -1,1 +1,0 @@
-function microswitch_length(type)    = type[4];     //! Body length

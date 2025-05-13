@@ -1,9 +1,0 @@
-module strap_boss_shape(type)
-    hull() {
-        r = strap_boss_r(type);
-
-        circle4n(r);
-
-        translate([r / 2, 0])
-            rounded_square([r, 2 * r], r = 1);
-    }

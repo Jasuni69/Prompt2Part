@@ -1,1 +1,0 @@
-function alignInfo() = $geomInfo[getTypeIndex($type_geomInfoAlign) ][0];

@@ -1,4 +1,0 @@
-function hyp_adj_to_opp(hyp,adj) =
-    assert(is_finite(hyp) && hyp>=0 && is_finite(adj) && adj>=0,
-           "Triangle side lengths should be a positive numbers." )
-    sqrt(hyp*hyp-adj*adj);

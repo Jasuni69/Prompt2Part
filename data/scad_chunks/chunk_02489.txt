@@ -1,1 +1,0 @@
-function coreXY_drive_pulley(type)          = type[2]; //! Drive pulley type

@@ -1,1 +1,0 @@
-function gs_wire_d(type)       = type[19]; //! Wire diameter

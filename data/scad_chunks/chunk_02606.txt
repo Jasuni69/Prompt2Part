@@ -1,9 +1,0 @@
-function quadratic_real_roots(a, b, c) =        //! Returns real roots of a quadratic equation, biggest first. Returns empty list if no real roots
-    let(ax2 = 2 * a,
-        cx2 = 2 * c,
-        det = b^2 - ax2 * cx2
-    ) det < 0 ? [] :
-        let(r = sqrt(det),
-            x1 = b < 0 ? cx2 / (-b + r) : (-b - r) / ax2,
-            x2 = b < 0 ? (-b + r) / ax2 : cx2 / (-b - r)
-        ) [x2, x1];

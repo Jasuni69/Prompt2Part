@@ -1,1 +1,0 @@
-function variac_diameter(type)       = type[2];     //! Body diameter

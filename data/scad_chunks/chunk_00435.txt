@@ -1,1 +1,0 @@
-function NEMA_boss_radius(type)  = type[5]; //! Boss around the spindle radius

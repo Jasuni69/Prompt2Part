@@ -1,1 +1,0 @@
-function pipe_length(type) = type[4]; //! Pipe length

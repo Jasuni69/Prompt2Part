@@ -1,1 +1,0 @@
-function pillar_ofn(type)        = type[6];     //! Outer number of sides, 6 for hex, 0 for smooth cylinder

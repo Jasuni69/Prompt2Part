@@ -1,5 +1,0 @@
-module sweep(path, profile, loop = false, twist = 0, convexity = 1) { //! Draw a polyhedron that is the swept volume
-    mesh = sweep(path, profile, loop, twist);
-
-    polyhedron(points = mesh[0], faces = mesh[1], convexity = convexity);
-}

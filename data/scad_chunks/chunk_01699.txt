@@ -1,1 +1,0 @@
-function pcb_hole_d(type)       = type[6];  //! Mounting hole diameter

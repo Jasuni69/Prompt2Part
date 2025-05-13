@@ -1,1 +1,0 @@
-function light_strip_clip_depth(light) = 10;                                        //! Depth of the clip

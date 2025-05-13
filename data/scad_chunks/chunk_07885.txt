@@ -1,5 +1,0 @@
-module tile00(tile_width, line_width) {
-    // nope
-}
-
-// _

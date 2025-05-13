@@ -1,1 +1,0 @@
-function fan_screw_depth(type, full_depth = false) = fan_boss_d(type) || full_depth ? fan_depth(type) : fan_thickness(type);

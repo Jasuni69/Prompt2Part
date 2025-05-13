@@ -1,1 +1,0 @@
-function scs_spacer(type)               = type[16]; //! Spacer used in long bearings

@@ -1,1 +1,0 @@
-function ax_res_wattage(type) = type[1]; //! Power rating

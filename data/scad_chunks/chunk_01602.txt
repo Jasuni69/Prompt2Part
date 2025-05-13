@@ -1,6 +1,0 @@
-function cable_strip_thickness() = cable_strip_thickness;
-
-use <../utils/bezier.scad>
-use <../utils/sweep.scad>
-
-cable_strip_colour = "green";

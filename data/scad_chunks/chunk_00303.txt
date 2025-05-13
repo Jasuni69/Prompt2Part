@@ -1,1 +1,0 @@
-function box_section_thickness(type) = type[3]; //! Wall thickness

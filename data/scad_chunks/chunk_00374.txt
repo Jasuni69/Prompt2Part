@@ -1,3 +1,0 @@
-function circlip_closed_angle(type)    = is_undef(type[8]) ? 25 : type[8];     //! Closed angle
-
-circlip_colour = grey(20);

@@ -1,1 +1,0 @@
-function blower_exit(type)        = type[11]; //! The width of the exit port

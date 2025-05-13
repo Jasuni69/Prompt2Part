@@ -1,7 +1,0 @@
-module test_f_div() {
-    _test_fn2arg(
-        function (a,b) f_div(a,b),
-        [[21,3,7],[21,7,3],[16,4,4],[-16,4,-4],[-16,-4,4]]
-    );
-}
-test_f_div();

@@ -1,1 +1,0 @@
-function ttrack_width(type)         = type[1];   //! Width of track section

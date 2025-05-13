@@ -1,1 +1,0 @@
-function hdr_y_offset(type)     = type[10]; //! Y offset of pins from center of the box

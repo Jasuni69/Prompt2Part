@@ -1,1 +1,0 @@
-function gs_radius(type)       = type[4]; //! Top - or bottom + corner radius

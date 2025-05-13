@@ -1,6 +1,0 @@
-function _cell_position(cell_radius, x_cell, y_cell) =
-    let(
-        grid_h = 2 * cell_radius * sin(60),
-        grid_w = cell_radius + cell_radius * cos(60)
-    )
-    [grid_w * x_cell, grid_h * y_cell + (x_cell % 2 == 0 ? 0 : grid_h / 2), 0];

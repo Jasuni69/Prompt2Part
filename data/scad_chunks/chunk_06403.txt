@@ -1,5 +1,0 @@
-function _point_above_below_segment(point, edge) =
-    let( edge = edge - [point, point] )
-    edge[0].y <= 0
-      ? (edge[1].y >  0 && cross(edge[0], edge[1]-edge[0]) > 0) ?  1 : 0
-      : (edge[1].y <= 0 && cross(edge[0], edge[1]-edge[0]) < 0) ? -1 : 0;

@@ -1,1 +1,0 @@
-function sbr_circlip(type)              = type[13]; //! Circlip used

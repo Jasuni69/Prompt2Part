@@ -1,8 +1,0 @@
-function _case2220_isobands(cell_pts, lower, upper) = [
-    [
-        interpolated_pt(cell_pts[0], cell_pts[1], lower),
-        interpolated_pt(cell_pts[0], cell_pts[3], lower),
-        interpolated_pt(cell_pts[0], cell_pts[3], upper),
-        interpolated_pt(cell_pts[0], cell_pts[1], upper)
-    ]
-];

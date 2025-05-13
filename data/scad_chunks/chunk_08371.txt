@@ -1,3 +1,0 @@
-module test_line3d_butt(p, r, frags, length, angles) {
-
-}

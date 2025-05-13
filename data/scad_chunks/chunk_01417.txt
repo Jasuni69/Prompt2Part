@@ -1,9 +1,0 @@
-module meter_assembly(type, colour = "red", value = "888", display_colour = false) { //! Meter assembled into the bezel
-    hflip()
-        translate_z(-flange_t) {
-            color("dimgrey") meter_bezel(type);
-
-            translate([0, -meter_pos(type)])
-                meter(type, colour, value, display_colour);
-        }
-}

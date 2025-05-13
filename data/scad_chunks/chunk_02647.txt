@@ -1,2 +1,0 @@
-module hflip(flip=true)                                                             //! Invert children by doing a 180&deg; flip around the Y axis
-    rotate([0, flip ? 180: 0, 0]) children();

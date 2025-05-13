@@ -1,1 +1,0 @@
-function _vt_sort(lt) = _sort(lt, function(a, b) lessThan(a, b), function(a, b) greaterThan(a, b) || a == b);

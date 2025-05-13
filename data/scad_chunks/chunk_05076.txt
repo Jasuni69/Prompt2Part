@@ -1,4 +1,0 @@
-function _mb_stadium_sideways_full(dv, hl, r, cutoff, ex, neg) = let(
-    dist = dv.x<-hl ? norm(dv-[-hl,0])
-      : dv.x<hl ? abs(dv.y) : norm(dv-[hl,0])
-) neg * mb_cutoff(dist, cutoff) * (r/dist)^ex;

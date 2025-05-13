@@ -1,4 +1,0 @@
-function _assoc_lookup(array, key) = 
-    array[search([key], array)[0]][1];
-
-// It doesn't use recursion to avoid recursion error.

@@ -1,1 +1,0 @@
-function get_dim(dims,pname) = dims[search([pname],dims,1)[0]][1];

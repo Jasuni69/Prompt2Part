@@ -1,8 +1,0 @@
-function Q_Axis(q) = let(d = sqrt(1-(q[3]*q[3]))) (d==0)? [0,0,1] : [q[0]/d, q[1]/d, q[2]/d];
-
-
-// Function: Q_Angle()
-// Usage:
-//   Q_Angle(q)
-// Description:
-// Returns the angle of rotation (in degrees) of a normalized quaternion `q`.

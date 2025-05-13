@@ -1,8 +1,0 @@
-module rounded_right_triangles() {
-    rounded_right_triangle(10, 20, 5, 0.5);
-
-    translate([20, 0])
-        rounded_right_triangle(10, 20, 5, 0.5, offset = true);
-}
-
-rounded_right_triangles();

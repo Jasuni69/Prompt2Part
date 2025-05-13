@@ -1,1 +1,0 @@
-function display_ts_thickness(type) = let(ts = display_touch_screen(type)) ts ? ts[1].z : 0; //! Touch screen thickness or 0

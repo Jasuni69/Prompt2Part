@@ -1,1 +1,0 @@
-function meter_pos(type) = (meter_pcb_size(type).y - meter_size(type).y) * meter_offset(type) / 2;

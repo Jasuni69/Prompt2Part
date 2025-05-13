@@ -1,7 +1,0 @@
-module test_f_str3() {
-    _test_fn3arg(
-        function (a,b,c) f_str3(a,b,c),
-        [[12,34,56,"123456"], [[3,4,5,true],"foo","bar","[3, 4, 5, true]foobar"], ["foo",88,"baz","foo88baz"]]
-    );
-}
-test_f_str3();

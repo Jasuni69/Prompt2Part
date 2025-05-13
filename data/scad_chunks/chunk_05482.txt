@@ -1,8 +1,0 @@
-function _path_line_intersection(path, line, ind=0) =
-        ind==len(path)-1 ? undef :
-        let(intersect=line_intersection(line, select(path,ind,ind+1),LINE,SEGMENT))
-        // If it intersects the segment excluding its final point, then we're done
-        // The final point is treated as part of the next segment
-        is_def(intersect) && intersect != path[ind+1]?
-                [intersect, ind+1] :
-                _path_line_intersection(path, line, ind+1);

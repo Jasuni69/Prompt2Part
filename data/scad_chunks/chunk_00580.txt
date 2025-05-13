@@ -1,1 +1,0 @@
-function light_strip_grouped(type)       = type[4]; //! Number of LEDs in each group

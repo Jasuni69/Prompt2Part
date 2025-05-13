@@ -1,8 +1,0 @@
- ,[45,  10, undef, undef, 4, 2, undef, undef, pcbThickness() +2 , yappTopPin] //  Hole in Base and Pin in Lid
- ,[55,  10, undef, undef, 4, 2, undef, undef, pcbThickness() +2 , yappNoFillet] // No Outer Fillet
- ,[65,  10, undef, undef, 4, 2, undef, undef, 4 ] // Custom Length of 4
- ,[75,  10, undef, undef, 4, 2, undef, undef, -0.0001 ] // Custom Length of Zero (have to use 0.0001 so it's not actually zero so the default isn't used
-];
-
-//---- This is where the magic happens ----
-YAPPgenerate();

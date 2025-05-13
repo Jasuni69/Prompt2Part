@@ -1,1 +1,0 @@
-function cm(x)   = x * 10.0;                                                        //! cm to mm conversion

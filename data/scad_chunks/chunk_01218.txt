@@ -1,1 +1,0 @@
-function vero_pitch(type)          = type[4];   //! Hole pitch

@@ -1,1 +1,0 @@
-function sampling_history(s) = s[8];

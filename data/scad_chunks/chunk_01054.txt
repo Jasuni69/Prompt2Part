@@ -1,1 +1,0 @@
-function screw_smaller_than(d) = d >= 2.5 && d < 3 ? 2.5 : floor(d); // Largest diameter screw less than or equal to specified diameter

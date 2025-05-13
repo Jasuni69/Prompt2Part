@@ -1,7 +1,0 @@
-module Abzweig(r1=5,r2=20,rad=2,inside=false,d1,d2,spiel=spiel,fn=fn,help){
-  
-  r1=is_undef(d1)?r1:d1/2;
-  r2=is_undef(d2)?r2:d2/2;
-  assert(r1<=r2,"r2>r1");
-  fn2=fn/2;
-  //$fn=fn;

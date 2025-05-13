@@ -1,1 +1,0 @@
-function square_button_rivit(type)        = type[4];  //! Size of the corner rivets

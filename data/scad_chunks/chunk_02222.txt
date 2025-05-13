@@ -1,3 +1,0 @@
-module handle_holes(h = 100) //! Drills holes for the screws
-    handle_screw_positions()
-        drill(screw_clearance_radius(screw), h);

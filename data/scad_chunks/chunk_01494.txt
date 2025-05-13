@@ -1,1 +1,0 @@
-function antenna_hinge(type)    = type[7];  //! Hinge post width, z value of the pin, pin diameter, width reduction and slot width

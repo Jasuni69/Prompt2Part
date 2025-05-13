@@ -1,7 +1,0 @@
-function transpose3(m) = [ [m[0].x, m[1].x, m[2].x],
-                           [m[0].y, m[1].y, m[2].y],
-                           [m[0].z, m[1].z, m[2].z] ];
-//
-// Find the first non-colinear point
-//
-tiny = 0.00001;

@@ -1,8 +1,0 @@
-function calculate_number(s,first,last) =
-  last > first ?
-    last > first + 1 ?
-      char_to_num(s[last-1]) + 10*calculate_number(s,first,last-1) :
-      char_to_num(s[first]):
-      [];   // add nothing
-
-// ==============================================================

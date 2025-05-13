@@ -1,1 +1,0 @@
-function toggle_pins(type)     = type[20];      //! Number of pins

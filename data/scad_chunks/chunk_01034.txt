@@ -1,1 +1,0 @@
-function screw_head_type(type)        = type[2];     //! Head style hs_cap, hs_pan, hs_cs, hs_hex, hs_grub, hs_cs_cap, hs_dome

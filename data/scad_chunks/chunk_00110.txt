@@ -1,6 +1,0 @@
-module fans()
-    layout([for(f = fans) fan_width(f)], 10)
-        fan_assembly(fans[$i], 3 + fan_guard_thickness(), true);
-
-if($preview)
-    fans();

@@ -1,1 +1,0 @@
-function rd_module_colour(type)    = type[4]; //! Colour

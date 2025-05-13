@@ -1,7 +1,0 @@
-module spheres()
-    for(i = [0: len(verts)-1], $fn =verts[i])
-        translate([i * 2 * r, 0])
-            sphere(r);
-
-
-spheres();

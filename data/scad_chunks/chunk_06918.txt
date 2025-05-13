@@ -1,4 +1,0 @@
-module test_hypot() {
-    assert_approx(hypot(20,30), norm([20,30]));
-}
-test_hypot();

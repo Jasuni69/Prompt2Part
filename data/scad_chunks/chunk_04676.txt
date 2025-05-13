@@ -1,7 +1,0 @@
-function cosineRuleAngle(p1,p2,p3)=
-  let(
-    p12=abs(pointDist(p1,p2)),
-    p13=abs(pointDist(p1,p3)),
-    p23=abs(pointDist(p2,p3))
-  )
-  acos((sq(p23)+sq(p12)-sq(p13))/(2*p23*p12));

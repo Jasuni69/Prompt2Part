@@ -1,1 +1,0 @@
-function knob_screw_z(type) = knob_shaft_len(type) - knob_flat_h(type) / 2;

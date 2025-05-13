@@ -1,4 +1,0 @@
-module test_affine3d_scale() {
-    assert(affine3d_scale([3,2,4]) == [[3,0,0,0],[0,2,0,0],[0,0,4,0],[0,0,0,1]]);
-}
-test_affine3d_scale();

@@ -1,5 +1,0 @@
-module ifFirst(n=1)
-{
-  if($valPtr<n)
-		children();
-}

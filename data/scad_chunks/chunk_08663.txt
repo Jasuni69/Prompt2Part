@@ -1,4 +1,0 @@
-function _zu_move(turtle, leng) = _create(
-    _pt(turtle) + _unit_vts(turtle).z * leng,
-    _unit_vts(turtle)
-);

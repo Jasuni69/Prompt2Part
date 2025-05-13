@@ -1,1 +1,0 @@
-function joiner_clear(l=40, w=10, ang=30, clearance=0, overlap=0.01, anchor=CENTER, spin=0, orient=UP) = no_function("joiner_clear");

@@ -1,4 +1,0 @@
-function currentPartExactIn(bodySet) = ( bodySet==ALL
-				|| (	  ($currentBody != undef)
-	  				   && (bodySet != undef)
-	  				   && enclosesOneOf($currentBody,bodySet) )) ? (true) : (false);

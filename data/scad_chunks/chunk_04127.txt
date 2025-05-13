@@ -1,1 +1,0 @@
-function absV(vector) = [for (i = [ 0 : len(vector) - 1 ]) abs(vector[i])];

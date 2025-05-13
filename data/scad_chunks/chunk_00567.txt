@@ -1,1 +1,0 @@
-function spring_closed(type) = type[5]; //! Are the ends closed

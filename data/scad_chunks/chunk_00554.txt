@@ -1,2 +1,0 @@
-function ttrack_holes(type, length) = //! Number of holes in a rail given its `length`
-    floor((length - 2 * ttrack_screw_end(type)) / ttrack_screw_pitch(type)) + 1;

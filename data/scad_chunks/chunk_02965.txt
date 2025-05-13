@@ -1,7 +1,0 @@
-function getShapeWithDefault (theParam, theDefault) =
-(
-  (theParam==undef) ? theDefault :
-  (is_list(theParam)) ? theDefault :
-  (theParam<= -30100) ? theDefault :
-    theParam
-);

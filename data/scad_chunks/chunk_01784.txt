@@ -1,4 +1,0 @@
-function hot_end_length(type) = hot_end_total_length(type) - hot_end_inset(type); //! The amount the hot end extends below its mounting
-
-use <jhead.scad>
-use <e3d.scad>

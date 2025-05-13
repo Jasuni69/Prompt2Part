@@ -1,6 +1,0 @@
-module magnets()
-    layout([for(m = magnets) magnet_od(m)], 5)
-        magnet(magnets[$i]);
-
-if($preview)
-    magnets();

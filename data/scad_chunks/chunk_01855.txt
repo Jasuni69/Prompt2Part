@@ -1,1 +1,0 @@
-function sbr_rail_screw(type)           = type[7]; //! Screw to fasten this rail

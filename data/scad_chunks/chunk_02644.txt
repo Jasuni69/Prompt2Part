@@ -1,1 +1,0 @@
-function grey(n) = [0.01, 0.01, 0.01] * n;                                          //! Generate a shade of grey to pass to color().

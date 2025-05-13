@@ -1,1 +1,0 @@
-function pillar_top_thread(type) = type[10];    //! Top thread length, + for male, - for female

@@ -1,8 +1,0 @@
-function _convex_hull2(points) = 
-    let(
-        sorted_pts = sorted(points),
-        leng = len(sorted_pts),
-        lwr_ch = _convex_hull_lower_chain(sorted_pts, leng, [], 0, 0),
-        leng_lwr_ch = len(lwr_ch)
-    )
-    _convex_hull_upper_chain(sorted_pts, lwr_ch, leng_lwr_ch, leng_lwr_ch + 1, leng - 2);

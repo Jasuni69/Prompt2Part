@@ -1,1 +1,0 @@
-function scs_size(type)                 = [type[4],type[6],type[5]]; //! Size of scs bracket bounding block

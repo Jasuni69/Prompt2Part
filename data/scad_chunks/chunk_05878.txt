@@ -1,4 +1,0 @@
-function is_decreasing(list,strict=false) =
-    assert(is_list(list)||is_string(list))
-    strict ? len([for (p=pair(list)) if(p.x<=p.y) true])==0
-           : len([for (p=pair(list)) if(p.x<p.y) true])==0;

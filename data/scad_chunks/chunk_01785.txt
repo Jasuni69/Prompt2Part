@@ -1,8 +1,0 @@
-module hot_end(type, filament, naked = false, resistor_wire_rotate = [0,0,0], bowden = false) { //! Draw specified hot end
-    if(hot_end_style(type) == "jhead")
-        jhead_hot_end_assembly(type, filament, naked);
-    else if(hot_end_style(type) == "e3d")
-        e3d_hot_end_assembly(type, filament, naked, resistor_wire_rotate, bowden);
-    else
-        assert(false, "Invalid hotend style");
-}

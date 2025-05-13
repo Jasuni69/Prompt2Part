@@ -1,8 +1,0 @@
-function _edge_not_reported(edge, varr, reports) =
-    let(
-        edge = sort([for (i=edge) varr[i]])
-    ) [
-        for (report = reports) let(
-            pts = sort(report[3])
-        ) if (len(pts)==2 && edge == pts) 1
-    ] == [];

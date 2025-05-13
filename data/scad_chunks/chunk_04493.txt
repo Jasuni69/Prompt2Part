@@ -1,6 +1,0 @@
-module clampScrews(hMargin=margin(0),screws=2)
-	pieces(screws)g(Z(-sides($screwDist/2-3/2)),turnXZ(-90),TOUP())
-	{
-			tubeFast(d=margin(2.2),h=5,solid=true,$fn=15);
-		Z(5-.01)tubeFast(d=margin(4),h=3+hMargin,solid=true,$fn=15);
-	}

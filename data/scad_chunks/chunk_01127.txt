@@ -1,1 +1,0 @@
-function gs_motor(type)        = type[5]; //! Motor diameter and height if separate from gearbox

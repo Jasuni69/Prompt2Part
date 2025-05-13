@@ -1,6 +1,0 @@
-function matrix_minor(m,k,ri, rj) = let(len_r=len(ri)) len_r == 0 ? 1 :
-    m[ri[0]][rj[k]]*matrix_minor(m,0,remove(ri,0),remove(rj,k)) - (k+1<len_r?matrix_minor(m,k+1,ri,rj) : 0);
-
-//---------------------------------------------------
-// matrix math derved from Oscar Lindes code end-----
-//---------------------------------------------------

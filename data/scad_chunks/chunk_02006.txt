@@ -1,2 +1,0 @@
-function drag_chain(name, size, travel, wall = 1.6, bwall = 1.5, twall = 1.5, clearance = 0.1, supports = true, screw = M2_cap_screw, screw_lists = [[1,0,0,1],[1,0,0,1]]) = //! Constructor
-    [name, size, travel, wall, bwall, twall, clearance, supports, screw, screw_lists];

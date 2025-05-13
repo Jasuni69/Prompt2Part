@@ -1,1 +1,0 @@
-function smd_coax_groove(type)    = type[4]; //! Groove id, width and z

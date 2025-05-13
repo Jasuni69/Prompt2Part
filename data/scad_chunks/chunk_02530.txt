@@ -1,8 +1,0 @@
-function skin_faces(points, npoints, facets, loop, offset = 0) = //! Create the mesh for the swept volume without end caps
-    [for(i = [0 : facets - 1], s = [0 : npoints - (loop ? 1 : 2)])
-       let(j = s + offset, k = loop ? (j + 1) % npoints : j + 1)
-       each quad(points,
-            j * facets + i,
-            j * facets + (i + 1) % facets,
-            k * facets + (i + 1) % facets,
-            k * facets + i)];

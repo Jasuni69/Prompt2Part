@@ -1,2 +1,0 @@
-module box2_internal_additions() {
-}

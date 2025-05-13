@@ -1,8 +1,0 @@
-module door_latches()
-     translate([door_latch_offset(), 0])
-        if($preview)
-            door_latch_assembly(3);
-        else
-            door_latch_stl();
-
-door_latches();

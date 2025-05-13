@@ -1,2 +1,0 @@
-function drag_chain_links(type) = //! Number of links in chain
-    ceil(drag_chain_travel(type) / drag_chain_size(type).x) + 4;

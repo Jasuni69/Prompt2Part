@@ -1,8 +1,0 @@
-module test_affine3d_rot_by_axis() {
-    for(a = [-360:2/3:360]) {
-        assert(approx(affine3d_rot_by_axis(RIGHT,a), [[1,0,0,0],[0,cos(a),-sin(a),0],[0,sin(a),cos(a),0],[0,0,0,1]]));
-        assert(approx(affine3d_rot_by_axis(BACK,a), [[cos(a),0,sin(a),0],[0,1,0,0],[-sin(a),0,cos(a),0],[0,0,0,1]]));
-        assert(approx(affine3d_rot_by_axis(UP,a), [[cos(a),-sin(a),0,0],[sin(a),cos(a),0,0],[0,0,1,0],[0,0,0,1]]));
-    }
-}
-test_affine3d_rot_by_axis();

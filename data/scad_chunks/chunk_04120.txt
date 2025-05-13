@@ -1,2 +1,0 @@
-function toIntList(str) =
-      let(inList=split(split(str,"[")[1],"]")[0]) len(inList)<1?[]:[for(s=split(inList,","))toInt(s)];

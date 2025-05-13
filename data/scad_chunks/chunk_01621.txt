@@ -1,3 +1,0 @@
-module sheet(type, w, d, corners = [0, 0, 0, 0]) //! Draw specified sheet
-    linear_extrude(sheet_thickness(type), center = true)
-        sheet_2D(type, w, d, corners);

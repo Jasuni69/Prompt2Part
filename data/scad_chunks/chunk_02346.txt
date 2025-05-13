@@ -1,3 +1,0 @@
-module fixing_block_h_hole(screw = def_screw) //! Position children on the horizontal hole
-    multmatrix(fixing_block_h_hole(screw))
-        children();

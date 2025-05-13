@@ -1,1 +1,0 @@
-function rd_electrolytic_pitch(type)   = type[5]; //! Lead pitch

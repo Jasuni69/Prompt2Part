@@ -1,1 +1,0 @@
-function TO247_size() = [15.7, 20.82, 4.82, 5.58, 2.5, 3.8]; //! Body dimensions of a T247, hole offset, lead height and lead wide length

@@ -1,1 +1,0 @@
-function ax_res_end_l(type)   = type[5]; //! End cap length

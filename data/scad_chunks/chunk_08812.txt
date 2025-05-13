@@ -1,6 +1,0 @@
-function _convex_intersection_for(shapes) = 
-    _convex_intersection_for_impl(
-        shapes, 
-        _convex_intersection(shapes[0], shapes[1]), 
-        len(shapes)
-    );

@@ -1,7 +1,0 @@
-module usb_vAx1(cutout = false) { //! Draw a vertical USB type A single socket
-    h = 5.8;
-    w = 13.8;
-    translate([0, h / 2, w / 2])
-        rotate([90, 0, 0])
-            usb_A(h = h, v_flange_l = 0, bar = 0, cutout = cutout, l = 14, h_flange_l = 0, flange_t = 0.3, w = w);
-}

@@ -1,1 +1,0 @@
-function contact_pos(type)        = type[6]; //! Positive contact dimple height and top and bottom internal diameter

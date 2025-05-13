@@ -1,1 +1,0 @@
-function spool_hub_thickness(type) = type[5]; //! Thickness at the hub

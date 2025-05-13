@@ -1,7 +1,0 @@
-module door_hinge_parts_stl() { //! Generates the STL for both parts of the hinge
-    translate([2, width / 2 + 1])
-        door_hinge_6_stl();
-
-    translate([0, -stat_width / 2 - 1])
-        door_hinge_stat_stl();
-}

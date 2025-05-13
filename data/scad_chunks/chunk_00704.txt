@@ -1,1 +1,0 @@
-function kp_hole_offset(type)     = type[2]; //! Rod hole offset

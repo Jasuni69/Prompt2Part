@@ -1,8 +1,0 @@
-module MetricNut(diameter, thickness=0, tolerance=0.4) {
-  thickness = (thickness==0) ? NutThickness(diameter) : thickness;
-  ScrewHole(diameter, thickness, tolerance=tolerance)
-    cylinder(h=thickness, r=HexAcrossCorners(diameter)/2-0.5*tolerance, $fn=6);
-}
-
-
-// Create a convenient washer size for a metric nominal thread diameter.

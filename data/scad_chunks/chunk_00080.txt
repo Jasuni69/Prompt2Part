@@ -1,6 +1,0 @@
-module bulldogs()
-    layout([for(b = bulldogs) bulldog_depth(b)], 5, true)
-        bulldog(bulldogs[$i]);
-
-if($preview)
-    bulldogs();

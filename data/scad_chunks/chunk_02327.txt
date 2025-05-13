@@ -1,1 +1,0 @@
-function strap_min_width(type) = (strap_width(type) - 2 * (strap_boss_r(type) + clearance)) / 2;

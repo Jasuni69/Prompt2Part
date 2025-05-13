@@ -1,3 +1,0 @@
-function _hashmap_dels(m, keys, leng, _indices_hash, i = 0) = 
-    i == leng ? m :
-	_hashmap_dels(hashmap_del(m, keys[i], hash = _indices_hash), keys, leng, _indices_hash, i + 1);

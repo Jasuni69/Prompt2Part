@@ -1,1 +1,0 @@
-function box_margin(type) = box_profile_overlap(type) + box_corner_gap(type); //! How much the bezel intrudes on the specified height

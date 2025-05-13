@@ -1,4 +1,0 @@
-module ssr_hole_positions(type) //! Place children at the screw positions
-    for(end = [-1, 1])
-        translate([end * ssr_hole_pitch(type) / 2, 0])
-            children();

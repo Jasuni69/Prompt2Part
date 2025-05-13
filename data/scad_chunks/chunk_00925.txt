@@ -1,1 +1,0 @@
-function open_bearing_width(type)       = type[7]; //! For open bearings, the width of the opening at the rod

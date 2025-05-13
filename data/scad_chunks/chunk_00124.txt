@@ -1,6 +1,0 @@
-module modules()
-    layout([for(m = modules) mod_length(m)], 5)
-        module_assembly(modules[$i], 3);
-
-if($preview)
-    modules();

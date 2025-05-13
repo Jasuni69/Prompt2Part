@@ -1,3 +1,0 @@
-function to2d(p) = let(l = len(p)) (l>1 ? [p.x,p.y]:(l>0 ? [p.x,0] : [0,0]));
-
-// shoelace formula, returns negative value for clockwise wound polygons

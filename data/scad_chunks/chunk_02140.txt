@@ -1,3 +1,0 @@
-function pbox_screw_length(type, panel_thickness = 0) =  //! Length of the base screw
-    let(foot = pbox_foot(type), screw = pbox_screw(type))
-        screw_length(screw, pbox_base(type) + (foot ? foot_thickness(foot) : panel_thickness), 1,  pbox_insert(type));

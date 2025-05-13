@@ -1,1 +1,0 @@
-function carriage_rail(type)         = type[9]; //! Rail type

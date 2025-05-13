@@ -1,9 +1,0 @@
-module round2d(OR=3,IR=1){
-  offset(OR,$fn=100){
-    offset(-IR-OR,$fn=100){
-      offset(IR,$fn=100){
-        children();
-      }
-    }
-  }
-}

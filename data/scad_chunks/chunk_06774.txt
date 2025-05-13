@@ -1,7 +1,0 @@
-module test_f_str2() {
-    _test_fn2arg(
-        function (a,b) f_str2(a,b),
-        [[12,34,"1234"], [[3,4,5,true],"foo","[3, 4, 5, true]foo"], ["foo","bar","foobar"]]
-    );
-}
-test_f_str2();

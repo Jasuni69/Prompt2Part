@@ -1,6 +1,0 @@
-function _pathpts_on_bbox(path, bbox, i=0, count=0) =
-    i==len(path) ? count
-    : _pathpts_on_bbox(path, bbox, i+1, count+(_is_pt_on_bbox(path[i], bbox)?1:0));
-
-
-/// internal function: get pixel size given a desired number of pixels in a bounding box

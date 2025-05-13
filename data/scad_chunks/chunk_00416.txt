@@ -1,1 +1,0 @@
-function pulley_bore(type)             = type[8];  //! Bore diameter for shaft

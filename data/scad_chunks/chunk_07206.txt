@@ -1,1 +1,0 @@
-function grad(grad=0,min=0,sec=0,h=0,prozent=0,gon=0,rad=0)=gradC(grad,min,sec,h,prozent,gon,rad);// compatibility as renamed gradC

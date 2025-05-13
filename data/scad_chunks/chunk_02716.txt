@@ -1,7 +1,0 @@
-function is_orthonormal(cs,tol=1e-3) =
-	(almost_equal(norm(cs[1][0]),1,tol)) &&
-	(almost_equal(norm(cs[1][1]),1,tol)) &&
-	(almost_equal(norm(cs[1][2]),1,tol)) &&
-	(almost_equal(cross_product(cs[1][0],cs[1][1]),cs[1][2],tol)) &&
-	(almost_equal(cross_product(cs[1][1],cs[1][2]),cs[1][0],tol)) &&
-	(almost_equal(cross_product(cs[1][2],cs[1][0]),cs[1][1],tol));

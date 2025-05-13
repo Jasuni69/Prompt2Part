@@ -1,1 +1,0 @@
-function hdr_ra_box_offset(type)= type[11]; //! Offset between back of the box and the pins

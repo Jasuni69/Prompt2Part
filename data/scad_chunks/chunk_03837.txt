@@ -1,9 +1,0 @@
-function chamferInfoUpdate(invert=false,prevInfo=chamferInfo())
-	=   invert
-        ?setType($type_geomInfoChamfer,
-		 [for(i=[0,1])
-				if(prevInfo[i]!=undef)
-					[prevInfo[i][0],prevInfo[i==0?1:0][1]
-					,prevInfo[i==0?1:0][1]]
-					,prevInfo[3]]
-			):prevInfo;

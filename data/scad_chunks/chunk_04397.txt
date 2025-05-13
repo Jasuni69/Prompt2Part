@@ -1,8 +1,0 @@
-module selectPieces(decisionList=[true],valPtr=$valPtr)
-{
-  if(valPtr<len(decisionList) && decisionList[valPtr])
-		children();
-}
-
-
-$totalPieces=1;

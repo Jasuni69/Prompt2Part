@@ -1,5 +1,0 @@
-function calcCenterLineStackTube(lx,ly,lz,stackingTranslation,centerLineStack=$centerLineStack)=
-            let( mlOld=centerLineStack[len(centerLineStack)-1])
-            push(push(centerLineStack,[mlOld[0],ly/2,lz/2,"m"])
-						,push([mlOld[0],ly/2,lz/2,"m"]
-              +stackingTranslation,"t-center"));

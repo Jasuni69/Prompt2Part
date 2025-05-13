@@ -1,1 +1,0 @@
-function tc_body_length(type)  = type[6];   //! Plastic body length

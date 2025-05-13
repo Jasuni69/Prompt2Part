@@ -1,1 +1,0 @@
-function spool_rim_thickness(type) = type[4]; //! Thickness at the outside rim

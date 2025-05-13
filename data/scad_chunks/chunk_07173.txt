@@ -1,1 +1,0 @@
-function umkreis(eck,rI,name)=let(r=assert(is_num(eck)&&is_num(rI),str("umkreis() input need to be numbers rI=",rI," eck=",eck))rI/cos(180/eck))is_undef(name)?r:echo(str(name," Umkreis=",r))r;

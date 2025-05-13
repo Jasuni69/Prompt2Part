@@ -1,7 +1,0 @@
-module test_f_acos() {
-    _test_fn1arg(
-        function (a) f_acos(a),
-        [[-1,180],[-0.5,120],[0,90],[0.5,60],[1,0]]
-    );
-}
-test_f_acos();

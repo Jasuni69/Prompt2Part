@@ -1,9 +1,0 @@
-function cubetruss_dist(cubes=0, gaps=0, size, strut) =
-    let(
-        size = is_undef(size)? $cubetruss_size : size,
-        strut = is_undef(strut)? $cubetruss_strut_size : strut
-    ) cubes*(size-strut)+gaps*strut;
-
-
-
-// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

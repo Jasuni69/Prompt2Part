@@ -1,6 +1,0 @@
-function visitable(x, y, cells, rows, columns) = 
-    y >= 0 && y < rows &&     // y bound
-    x >= 0 && x < columns &&  // x bound
-    !visited(x, y, cells);     // unvisited
-
-// setting (x, y) as being visited

@@ -1,3 +1,0 @@
-module bbox_drill_holes(type, t)
-    position_children(concat(corner_holes(type), side_holes(type)), t)
-        drill(screw_clearance_radius(bbox_screw(type)), 0);

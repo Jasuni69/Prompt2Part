@@ -1,1 +1,0 @@
-function rd_cm_choke_core(type) = type[1]; //! Core OD, ID, width, corner radius

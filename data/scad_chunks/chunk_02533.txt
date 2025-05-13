@@ -1,3 +1,0 @@
-function circle_points(r = 1, z = 0, dir = -1) = //! Generate the points of a circle, setting z makes a single turn spiral
-    let(sides = r2sides(r))
-        [for(i = [0 : sides - 1]) let(a = dir * i * 360 / sides) [r * cos(a), r * sin(a), z * i / sides]];

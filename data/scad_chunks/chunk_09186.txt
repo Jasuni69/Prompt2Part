@@ -1,1 +1,0 @@
-function _ddf_y(f, ddf_y) = f >= 0 ? ddf_y + 2 : ddf_y;

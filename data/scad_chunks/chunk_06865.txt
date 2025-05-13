@@ -1,7 +1,0 @@
-module test_yflip() {
-    assert_approx(yflip(), [[1,0,0,0],[0,-1,0,0],[0,0,1,0],[0,0,0,1]]);
-    assert_approx(yflip(p=[1,2,3]), [1,-2,3]);
-    // Verify that module at least doesn't crash.
-    yflip() union(){};
-}
-test_yflip();

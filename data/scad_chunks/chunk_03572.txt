@@ -1,1 +1,0 @@
-function YCENTER(align2=NOCHANGE,align3=NOCHANGE) = align(YCENTER,align2,align3);

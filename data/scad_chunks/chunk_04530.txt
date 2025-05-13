@@ -1,4 +1,0 @@
-function CountersunkDriveAcrossCorners(diameter) =
-  CountersunkDriveAcrossFlats(diameter) / cos(30);
-
-// Provides standard metric nut thickness.

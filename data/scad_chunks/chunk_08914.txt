@@ -1,1 +1,0 @@
-function option_of(node) = node[2];

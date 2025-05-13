@@ -1,1 +1,0 @@
-function leadnut_shank(type)         = leadnut_height(type) - leadnut_flange_t(type) - leadnut_flange_offset(type); //! The length of the shank below the flange

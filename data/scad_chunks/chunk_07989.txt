@@ -1,6 +1,0 @@
-module line(t1, t2, start_width, end_width) {
-    polyline_join([t3d(t1, "point"), t3d(t2, "point")]) {
-        sphere(start_width / 2);
-        sphere(end_width / 2);
-    }
-}

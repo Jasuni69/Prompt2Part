@@ -1,1 +1,0 @@
-function leadnuthousing_screw_dist_w(type)      = type[7];  //! Distance between mounting holes width

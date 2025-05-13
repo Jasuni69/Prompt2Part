@@ -1,1 +1,0 @@
-function belt_width(type)        = type[2]; //! Width in mm

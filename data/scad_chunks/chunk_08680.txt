@@ -1,5 +1,0 @@
-function _derive1(base, rules) = _join([
-    for(c = base) 
-    let(v = _assoc_lookup(rules, c))
-    is_undef(v) ? c : v
-]);

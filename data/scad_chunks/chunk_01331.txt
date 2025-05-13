@@ -1,1 +1,0 @@
-function resistor_wire_diameter(type) = type[4]; //! Wire diameter

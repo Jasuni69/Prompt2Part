@@ -1,1 +1,0 @@
-function opengrab_target_thickness() = target;                   //! Target sheet thickness

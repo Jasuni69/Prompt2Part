@@ -1,1 +1,0 @@
-function magnet_h(type)     = type[4]; //! Height

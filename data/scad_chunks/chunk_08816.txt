@@ -1,9 +1,0 @@
-function _in_convex(convex_pts, pt) = 
-    let(leng = len(convex_pts))
-    // all counter-clockwise?
-    cross(convex_pts[leng - 1] - pt, convex_pts[0] - pt) > 0 &&
-	_in_convex_r(
-        convex_pts, 
-        pt, 
-        leng
-    );

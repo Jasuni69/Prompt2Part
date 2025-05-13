@@ -1,4 +1,0 @@
-function sbr_spacer(type)               = type[14]; //! Spacer used in long bearings
-
-
-sks_bearing_block_colour = grey(90);

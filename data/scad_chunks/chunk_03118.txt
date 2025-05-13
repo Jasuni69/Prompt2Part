@@ -1,7 +1,0 @@
-module hookBaseOutsidePre()
-{
-  echo("hookBaseOutsidePre() ..");
-} // hookBaseOutsidePre()
-
-//===========================================================
-// origin = box(0,0,0)

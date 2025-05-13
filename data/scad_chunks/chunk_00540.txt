@@ -1,1 +1,0 @@
-function ttrack_screw_pitch(type)   = type[7];   //! Distance between screws

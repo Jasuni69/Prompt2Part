@@ -1,8 +1,0 @@
-function _signed_volume(poly) = let(points = poly[0])
-  sum([for(face = poly[1], i = [1:len(face)-2]) assert(len(face) > 2)
-    cross(points[face[i+1]], points[face[i]]) * points[face[0]]
-  ])/6;
-
-/* Visualizations */
-
-// visualize a vector of points

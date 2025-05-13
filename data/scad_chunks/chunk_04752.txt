@@ -1,3 +1,0 @@
-function mirror(normal, poly) = is_poly_vector(poly) ?
-  [for (p=poly) _mirror(normal=normal, poly=p)] :
-  _mirror(normal=normal, poly=poly);

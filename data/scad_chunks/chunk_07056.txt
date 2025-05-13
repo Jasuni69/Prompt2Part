@@ -1,5 +1,0 @@
-module test_segs() {
-    assert_equal(segs(50,$fn=8), 8);
-    assert_equal(segs(50,$fa=2,$fs=2), 158);
-}
-test_segs();

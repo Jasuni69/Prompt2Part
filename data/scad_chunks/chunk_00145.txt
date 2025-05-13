@@ -1,5 +1,0 @@
-module screw_knobs()
-    layout([for(k = knobs) 2 * screw_knob_flange_r(k)], 10)
-        do_screw_knob(knobs[$i]);
-
-screw_knobs();

@@ -1,1 +1,0 @@
-function drag_chain_twall(type)       = type[5]; //! Top wall

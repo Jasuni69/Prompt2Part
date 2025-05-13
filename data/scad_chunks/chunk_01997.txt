@@ -1,1 +1,0 @@
-function drag_chain_wall(type)        = type[3]; //! Side wall thickness

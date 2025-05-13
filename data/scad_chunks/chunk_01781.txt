@@ -1,1 +1,0 @@
-function hot_end_need_cooling(type)       = hot_end_style(type) != "e3d"; //! Has own fan so don't need cooling hole in the duct

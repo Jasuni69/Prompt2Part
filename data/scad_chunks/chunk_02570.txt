@@ -1,1 +1,0 @@
-function tanh(x) = sinh(x) / cosh(x);           //! hyperbolic tangent

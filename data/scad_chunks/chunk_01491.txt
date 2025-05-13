@@ -1,1 +1,0 @@
-function antenna_bot_d(type)    = type[4];  //! Diameter at the base

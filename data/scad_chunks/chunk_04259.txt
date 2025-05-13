@@ -1,1 +1,0 @@
-function isOfType(obj,typeMark) = (obj[typeMark[0]] == typeMark );

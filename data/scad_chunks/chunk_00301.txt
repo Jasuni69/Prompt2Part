@@ -1,1 +1,0 @@
-function box_section_material(type)  = type[1]; //! Material description

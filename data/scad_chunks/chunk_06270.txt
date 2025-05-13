@@ -1,9 +1,0 @@
-module heightfield(data, size=[100,100], bottom=-20, maxz=100, xrange=[-1:0.04:1], yrange=[-1:0.04:1], style="default", convexity=10, anchor=CENTER, spin=0, orient=UP)
-{
-    size = is_num(size)? [size,size] : point2d(size);
-    vnf = heightfield(data=data, size=size, xrange=xrange, yrange=yrange, bottom=bottom, maxz=maxz, style=style);
-    attachable(anchor,spin,orient, vnf=vnf) {
-        vnf_polyhedron(vnf, convexity=convexity);
-        children();
-    }
-}

@@ -1,8 +1,0 @@
-function round_star(n = 6, angle = 77, leng = 10, heading = 0, start = [0, 0]) = 
-    let(
-        axiom = "F",
-        rules = [
-            ["F", "F++F"]
-        ]
-    )
-    lsystem2(axiom, rules, n, angle, leng, heading, start);

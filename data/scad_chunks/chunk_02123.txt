@@ -1,1 +1,0 @@
-function pbox_name(type)       = type[0]; //! Name to allow more than one box in a project

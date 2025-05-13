@@ -1,3 +1,0 @@
-function _case6_isolines(cell_pts, threshold) = [
-    [interpolated_pt(cell_pts[1], cell_pts[2], threshold), interpolated_pt(cell_pts[0], cell_pts[3], threshold)]
-];

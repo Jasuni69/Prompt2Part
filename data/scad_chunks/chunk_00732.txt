@@ -1,6 +1,0 @@
-module pi_pcb_hole_locations(pcb) { //! Locations of the PCB holes
-    for (xy = pcb[7]) {
-        translate([xy[0], xy[1], 0])
-            children();
-    }
-}

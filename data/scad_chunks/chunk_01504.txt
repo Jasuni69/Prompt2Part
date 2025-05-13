@@ -1,1 +1,0 @@
-function sc_diameter2(type)    = type[4]; //! Diameter of larger shaft

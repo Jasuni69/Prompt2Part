@@ -1,6 +1,0 @@
-function count_items(lt) = 
-    let(leng_lt = len(lt))
-    [
-        for(i = 0, c = count_from(lt, 0, leng_lt); i < leng_lt; i = i + c, c = count_from(lt, i, leng_lt))
-        [lt[i], c]
-    ];

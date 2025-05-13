@@ -1,8 +1,0 @@
-function str_find(str,pattern,start=undef,last=false,all=false) =
-    assert(_is_liststr(str), "str must be a string or list")
-    assert(_is_liststr(pattern), "pattern must be a string or list")
-    all? _str_find_all(str,pattern) :
-    let( start = first_defined([start,last?len(str)-len(pattern):0]) )
-    pattern==""? start :
-    last? _str_find_last(str,pattern,start) :
-    _str_find_first(str,pattern,len(str)-len(pattern),start);

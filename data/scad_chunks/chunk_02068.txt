@@ -1,4 +1,0 @@
-module pcb_mount_screw_positions(pcb) //! Positions of the screws and pillars
-    for(x = [-1, 1], y = [-1, 1])
-        translate([x * pillar_x_pitch(pcb) / 2, y * pillar_y_pitch(pcb) / 2])
-            children();

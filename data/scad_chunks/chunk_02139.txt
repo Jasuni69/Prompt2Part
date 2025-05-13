@@ -1,1 +1,0 @@
-function pbox_washer(type) = screw_washer(pbox_screw(type)); //! The washer for the base screws

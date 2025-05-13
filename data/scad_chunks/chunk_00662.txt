@@ -1,9 +1,0 @@
-module nut_and_washer(type, nyloc) { //! Draw nut with corresponding washer
-    washer = nut_washer(type);
-
-    translate_z(exploded() ? 7 : 0)
-        washer(washer);
-
-    translate_z(washer_thickness(washer))
-        nut(type, nyloc);
-}

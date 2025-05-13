@@ -1,1 +1,0 @@
-function pi_color(type)         = type[8]; //! Color of photo interrupter

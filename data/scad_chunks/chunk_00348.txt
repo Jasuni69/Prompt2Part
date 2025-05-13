@@ -1,5 +1,0 @@
-module opengrab_hole_positions()    //! Position children at the screw positions
-    let($d = 3.2)
-        for($x = [-pitch, pitch], $y = [-pitch, pitch])
-            translate([$x, $y])
-                children();

@@ -1,1 +1,0 @@
-function NEMA_boss_height(type)  = type[6]; //! Boss height

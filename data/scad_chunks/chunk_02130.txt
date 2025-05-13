@@ -1,1 +1,0 @@
-function pbox_radius(type)     = type[7]; //! Internal corner radius

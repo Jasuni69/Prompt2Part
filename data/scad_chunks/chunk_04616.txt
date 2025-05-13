@@ -1,7 +1,0 @@
-module aslot( tl, sz=8 ) {
-    hull(){
-        #cylinder(d=sz, h=2);
-        translate([0,tl,2]) 
-        #cylinder(d=sz, h=2);
-    }
-}

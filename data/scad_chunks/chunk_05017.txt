@@ -1,7 +1,0 @@
-function _clipfacindex(f, isovalmin, isovalmax) =
-    (f[0] >= isovalmax ? 2 : f[0] >= isovalmin ? 1 : 0) +
-    (f[1] >= isovalmax ? 6 : f[1] >= isovalmin ? 3 : 0) +
-    (f[2] >= isovalmax ? 18 : f[2] >= isovalmin ? 9 : 0) +
-    (f[3] >= isovalmax ? 54 : f[3] >= isovalmin ? 27 : 0);
-
-/// return an array of face indices in _MCFaceVertexIndices if the voxel at coordinate v0 corresponds to the bounding box. voxsize is a 3-vector.

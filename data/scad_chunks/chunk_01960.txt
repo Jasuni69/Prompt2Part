@@ -1,1 +1,0 @@
-function knob_flat_h(type)   = type[8]; //! The length of the flat

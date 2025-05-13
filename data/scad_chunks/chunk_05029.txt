@@ -1,2 +1,0 @@
-function _mb_sphere_cutoff(point, r, cutoff, neg) = let(dist=norm(point))
-    neg * mb_cutoff(dist, cutoff) * r/dist;

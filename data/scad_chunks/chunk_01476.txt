@@ -1,1 +1,0 @@
-function mod_screw_z(type)= type[6];        //! Thickness of screw lug

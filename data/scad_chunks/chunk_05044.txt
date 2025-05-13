@@ -1,5 +1,0 @@
-function _mb_disk_cutoff(point, hl, r, cutoff, neg) =
-    let(
-        rdist=norm([point.x,point.y]), 
-        dist = rdist<r ? abs(point.z) : norm([rdist-r,point.z])
-    ) neg * mb_cutoff(dist, cutoff) * hl/dist;

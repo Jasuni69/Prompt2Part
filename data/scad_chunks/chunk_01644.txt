@@ -1,1 +1,0 @@
-function blower_length(type)      = type[2]; //! Length of enclosing rectangle

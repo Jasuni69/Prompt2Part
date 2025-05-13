@@ -1,1 +1,0 @@
-function rd_xtal_size(type)   = type[1]; //! Crystal length, width and height and optional corner radius

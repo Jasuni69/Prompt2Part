@@ -1,1 +1,0 @@
-function fan_outer_diameter(type) = type[7];    //! Outside diameter of the frame

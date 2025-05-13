@@ -1,4 +1,0 @@
-module test_norm_fro(){
-  assert_approx(norm_fro([[2,3,4],[4,5,6]]), 10.29563014098700);
-
-} test_norm_fro();

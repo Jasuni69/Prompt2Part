@@ -1,3 +1,0 @@
-function alternate_screw(type, screw) =
-    let(alt_screw = find_screw(type, screw_radius(screw) * 2))
-        alt_screw ? alt_screw :screw;

@@ -1,3 +1,0 @@
-function updateAllSeperation(allSeperation, allSeperationFromj) = 
-    let(leng = len(allSeperationFromj))
-    [for(k = 1; k <= leng; k = k + 1) allSeperation[k]] - allSeperationFromj;

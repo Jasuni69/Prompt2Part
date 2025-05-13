@@ -1,1 +1,0 @@
-function carriage_height(type)       = type[4]; //! Height of carriage

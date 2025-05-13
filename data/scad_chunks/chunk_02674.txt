@@ -1,1 +1,0 @@
-function show_supports() = !$preview || exploded();                 //! True if printed support material should be shown

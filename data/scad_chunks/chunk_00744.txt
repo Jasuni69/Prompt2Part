@@ -1,1 +1,0 @@
-function psu_face_iec(type)          = type[5];     //! IEC connector x,y, rotation and type

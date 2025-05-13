@@ -1,1 +1,0 @@
-function fillet(l, r, ang, r1, r2, d, d1, d2, excess=0.1, anchor=CENTER, spin=0, orient=UP, h,height,length) = no_function("fillet");

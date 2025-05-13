@@ -1,9 +1,0 @@
-function _sort(lt) = 
-    let(leng = len(lt))
-	leng == 0 ? [] :
-	leng == 1 ? [lt[0][1]] :
-	let(
-		pivot = lt[0],
-		b_a = before_after(lt, pivot, leng)
-	)
-	[each _sort(b_a[0]), pivot[1], each _sort(b_a[1])];

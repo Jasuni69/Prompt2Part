@@ -1,1 +1,0 @@
-function spring_turns(type)  = type[4]; //! Number of turns

@@ -1,1 +1,0 @@
-function circlip_d3(type)        = type[3];     //! Relaxed OD when not installed

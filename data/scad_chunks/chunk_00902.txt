@@ -1,1 +1,0 @@
-function insert_hole_radius(type)    = type[3] / 2; //! Radius of the required hole in the plastic

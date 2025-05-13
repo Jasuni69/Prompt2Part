@@ -1,1 +1,0 @@
-function mains_socket_height(type)      = type[6];   //! Height

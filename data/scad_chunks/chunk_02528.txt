@@ -1,3 +1,0 @@
-function cap(facets, segment = 0, end) = //! Create the mesh for an end cap
-    let(reverse = is_undef(end) ? segment : end)
-        [for(i = [0 : facets - 1]) facets * segment + (reverse ? i : facets - 1 - i)];

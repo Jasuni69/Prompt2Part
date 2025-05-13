@@ -1,9 +1,0 @@
-module meter_bezel_hole(type, h = 100) { //! Make a hole to fit the meter Bezel
-    wall = meter_bezel_wall(type) + clearance;
-    rad = meter_bezel_rad(type) + clearance;
-    l = meter_size(type).x;
-    w = meter_size(type).y;
-
-    extrude_if(h)
-        rounded_square([l + 2 * wall, w + 2 * wall], rad);
-}

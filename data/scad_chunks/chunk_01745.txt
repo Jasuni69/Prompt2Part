@@ -1,1 +1,0 @@
-function ff_mid(type)   = type[2]; //! Flat flex middle section size

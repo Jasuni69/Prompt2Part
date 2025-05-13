@@ -1,7 +1,0 @@
-function Q_Sub_S(q, s) = q-[0,0,0,s];
-
-
-// Function: Q_Mul_S()
-// Usage:
-//   Q_Mul_S(q, s)
-// Description: Multiplies each part of a quaternion `q` by a scalar value `s`.

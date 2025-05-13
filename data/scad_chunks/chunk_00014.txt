@@ -1,1 +1,0 @@
-function lstr(s) = is_string(s) ? str(s,"\"") : s;

@@ -1,2 +1,0 @@
-function faston_length(type) = //! Total length of crimp
-    faston_insul_crimp_p(type).z + faston_insul_crimp_l(type);

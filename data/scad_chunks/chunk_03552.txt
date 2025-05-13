@@ -1,1 +1,0 @@
-function skinParts(partList,size=0, skinThick=$skinThick , walls=2, margin=$margin) = (!partIs(partList)? margin(size,margin=$margin) : skin(size,skinThick,walls));

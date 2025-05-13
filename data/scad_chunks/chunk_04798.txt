@@ -1,7 +1,0 @@
-function pb_segmentsPerCircle(r=1) = $fn>0?($fn>=3?$fn:3):ceil(max(min(360/$fa,abs(r)*2*PI/$fs),5));
-
-//  function pb_last(pts)
-//  
-//  Returns last item from the list. If the list is empty it will return [0,0]
-//  pts    (list)  List of zero or more 2D points.
-//  return (list)  List of two numbers which is a 2D point.

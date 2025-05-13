@@ -1,2 +1,0 @@
-module nutM3(h=margin(3.8),d=margin(6.2),align=TOUP())
-  g(align)tubeFast(d=d,h=h,$fn=6);

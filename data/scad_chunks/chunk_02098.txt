@@ -1,3 +1,0 @@
-function knob_height(type) = //! Total height of the knob
-    let(type = !is_list(type[0]) ? screw_knob(type) : type)
-        screw_knob_stem_h(type) + screw_knob_flange_t(type);

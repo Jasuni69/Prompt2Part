@@ -1,1 +1,0 @@
-function hillf(t) = sin(-2*t*360-115)+sin(-3*t*360-57)+2;

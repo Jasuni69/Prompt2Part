@@ -1,6 +1,0 @@
-module hex_drive_mask(size,length,l,h,height,anchor,spin,orient)
-{
-   length = one_defined([length,height,l,h],"length,height,l,h");
-   realsize = 1.0072*size + 0.0341 + 2 * get_slop();  // Formula emperically determined from ISO standard
-   linear_sweep(height=length,hexagon(id=realsize),anchor=anchor,spin=spin,orient=orient) children();
-}

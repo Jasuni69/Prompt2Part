@@ -1,1 +1,0 @@
-function gs_shaft_d(type)      = type[13]; //! Shaft diameter

@@ -1,1 +1,0 @@
-function cable_tlen(cable)      = cable[4]; //! Twisted cable twist length

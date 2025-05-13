@@ -1,6 +1,0 @@
-function sampling_randomSample(s, pos, seed) = 
-    let(
-        r = sampling_r(s),
-        a = rands(0, 360, 1, seed)[0]
-    )
-    rands(r, 2 * r, 1, seed + 1)[0] * [cos(a), sin(a)] + pos;

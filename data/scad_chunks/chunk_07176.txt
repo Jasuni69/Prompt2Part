@@ -1,1 +1,0 @@
-function Kathete(hyp,kat)=sqrt(pow(hyp,2)-pow(kat,2));

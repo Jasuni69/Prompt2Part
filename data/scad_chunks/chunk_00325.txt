@@ -1,1 +1,0 @@
-function microswitch_lower_extent(type) = let(leg = microswitch_leg(type)) min([for(pos = microswitch_legs(type)) pos.y - leg.y / 2]); //! How far legs extend downwards

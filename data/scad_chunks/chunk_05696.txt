@@ -1,9 +1,0 @@
-module ring(n,ring_width,r,r1,r2,angle,d,d1,d2,cp,points,corner, width,thickness,start, long=false, full=true, cw=false,ccw=false, anchor=CENTER, spin=0)
-{
-  R = ring(n=n,r=r,ring_width=ring_width,r1=r1,r2=r2,angle=angle,d=d,d1=d1,d2=d2,cp=cp,points=points,corner=corner, width=width,thickness=thickness,start=start,
-           long=long, full=full, cw=cw, ccw=ccw);
-  attachable(anchor,spin,two_d=true,region=is_region(R)?R:undef,path=is_region(R)?undef:R,extent=false) {
-     region(R);
-     children();
-  }
-}

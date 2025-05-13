@@ -1,3 +1,0 @@
-function applyTo(partName="main",add=undef,remove=undef)
-            = setType($type_currentPartStack
-                  ,[partName,add,remove]);

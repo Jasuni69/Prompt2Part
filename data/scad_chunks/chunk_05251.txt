@@ -1,4 +1,0 @@
-function _str_find_first(str,pattern,max_sindex,sindex) =
-    sindex<=max_sindex && !substr_match(str,sindex, pattern)?
-        _str_find_first(str,pattern,max_sindex,sindex+1) :
-        (sindex <= max_sindex ? sindex : undef);

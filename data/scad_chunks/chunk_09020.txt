@@ -1,1 +1,0 @@
-function m_rotation(a, v) = _m_rotation_impl(a, v);

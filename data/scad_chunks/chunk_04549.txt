@@ -1,7 +1,0 @@
-module MetricBoltSet(diameter, length, quantity=1) {
-  for (i=[0:quantity-1]) {
-    translate([0, i*4*diameter, 0]) MetricBolt(diameter, length);
-    translate([4*diameter, i*4*diameter, 0]) MetricNut(diameter);
-    translate([8*diameter, i*4*diameter, 0]) MetricWasher(diameter);
-  }
-}

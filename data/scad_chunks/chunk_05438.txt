@@ -1,9 +1,0 @@
-function _force_anchor_2d(anchor) =
-  is_undef(anchor) || len(anchor)==2 || is_string(anchor) ? anchor :
-  assert(anchor.y==0 || anchor.z==0, "Anchor for a 2D shape cannot be fully 3D.  It must have either Y or Z component equal to zero.")
-  anchor.y==0 ? [anchor.x,anchor.z] : point2d(anchor);
-
-// Compute spin angle based on a anchor direction and desired spin direction
-// anchor_dir assumed to be a unit vector; no assumption on spin_dir
-// Takes the component of the spin direction perpendicular to the anchor
-// direction and gives the spin angle that achieves it.

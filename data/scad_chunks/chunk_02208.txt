@@ -1,1 +1,0 @@
-function hinge_margin(type)      = type[10]; //! How far to keep the screws from the knuckles

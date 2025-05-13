@@ -1,3 +1,0 @@
-function stripPartName(partNameWithArgs)=
-        let(rightPart=split(partNameWithArgs,"(")[1])
-          (rightPart==undef?undef:split(rightPart,")")[0]);

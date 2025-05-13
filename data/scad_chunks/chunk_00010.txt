@@ -1,5 +1,0 @@
-      undef
-  )
-  _f(s, 0, 0, 10, 1, 1, 0);
-
-csv_parse = function(s) [for (e=split(s, ",")) float(e)];

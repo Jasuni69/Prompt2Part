@@ -1,2 +1,0 @@
-module teardrop_plus(h, r, center = true, truncate = true, chamfer = 0, chamfer_both_ends = true) //! Slightly elongated teardrop to allow for the 3D printing staircase effect
-    teardrop(h, r, center, truncate, chamfer, chamfer_both_ends, plus = true);

@@ -1,1 +1,0 @@
-function camera_lens(type)          = type[4]; //! Stack of lens parts, can be round, rectangular or rounded rectangular, with optional tapered aperture

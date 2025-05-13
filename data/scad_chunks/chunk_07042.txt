@@ -1,8 +1,0 @@
-module test_path_segment_lengths(){
-    sq = square(10);
-    assert_equal(path_segment_lengths(sq), [10,10,10]);
-    assert_equal(path_segment_lengths(sq,true), [10,10,10,10]);
-    c = circle($fn=1000, r=1);
-    assert(approx(path_segment_lengths(c,closed=true), repeat(2*PI/1000,1000),eps=1e-7));
-}
-test_path_segment_lengths();

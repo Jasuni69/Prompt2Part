@@ -1,1 +1,0 @@
-function hdr_pin_below(type)    = type[3];  //! Header pin length underneath

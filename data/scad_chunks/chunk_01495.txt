@@ -1,1 +1,0 @@
-function antenna_grip(type)     = type[8];  //! Grip d, h, h2

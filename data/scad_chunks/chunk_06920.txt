@@ -1,8 +1,0 @@
-module test_cosh() {
-    assert_approx(cosh(-2), 3.7621956911);
-    assert_approx(cosh(-1), 1.5430806348);
-    assert_approx(cosh(0), 1);
-    assert_approx(cosh(1), 1.5430806348);
-    assert_approx(cosh(2), 3.7621956911);
-}
-test_cosh();

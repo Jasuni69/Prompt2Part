@@ -1,4 +1,0 @@
-module panel_USBA_hole_positions() //! Place children at hole positions
-    for(side = [-1, 1])
-        translate([side * panel_USBA_pitch / 2, 0])
-            children();

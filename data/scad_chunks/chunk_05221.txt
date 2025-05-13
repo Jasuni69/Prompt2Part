@@ -1,6 +1,0 @@
-module _text(text,size,font,halign,valign,spacing,direction,language,script)
-    text(text, size=size, font=font,
-        halign=halign, valign=valign,
-        spacing=spacing, direction=direction,
-        language=language, script=script
-    );

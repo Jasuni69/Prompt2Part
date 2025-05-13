@@ -1,1 +1,0 @@
-function limit(x, min, max) = max(min(x, max), min);                                //! Force x in range min <= x <= max

@@ -1,1 +1,0 @@
-function _gear_polar(r,theta)   = r*[sin(theta), cos(theta)];                      //convert polar to cartesian coordinates

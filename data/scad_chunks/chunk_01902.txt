@@ -1,1 +1,0 @@
-function box_bezel_clearance(type) = bezel_clearance;

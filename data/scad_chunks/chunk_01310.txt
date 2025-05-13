@@ -1,1 +1,0 @@
-function gm_box_width(type) = let(b = gm_box(type)) b.y ? b.y : b.x; //! Gearbox width if rectangular or diameter if round

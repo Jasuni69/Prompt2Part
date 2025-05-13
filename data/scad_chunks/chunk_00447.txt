@@ -1,4 +1,0 @@
-function NEMA_big_hole(type)    = NEMA_boss_radius(type) + 0.2; //! Clearance hole for the big boss
-stepper_body_colour = grey(20);
-stepper_cap_colour  = grey(50);
-stepper_machined_colour = grey(90);

@@ -1,6 +1,0 @@
-carriages = [MGN5C_carriage, MGN7C_carriage, MGN7H_carriage, MGN9C_carriage, MGN9H_carriage, 
-            MGN12C_carriage, MGN12H_carriage, MGN12H_carriage, MGN15C_carriage, SSR15_carriage,
-            HGH15CA_carriage, HGH20CA_carriage
-            ];
-
-use <rail.scad>

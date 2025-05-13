@@ -1,1 +1,0 @@
-function smd_led_size(type) = type[1]; //! Body length, width and height

@@ -1,9 +1,0 @@
-function tri2tile(type, tri) =
-    let(
-		tri1 = tri[1],
-		tri2 = tri[2],
-	    c = (tri1 + tri2) / 2,
-		v = c - tri[0],
-		m = c + v
-	)
-	[[type, each tri], [type, m, tri1, tri2]];

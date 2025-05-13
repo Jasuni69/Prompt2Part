@@ -1,1 +1,0 @@
-function magnet_od(type)    = type[2]; //! Outer diameter

@@ -1,1 +1,0 @@
-function BLDC_boss_height(type)                 = type[22]; //! Boss height

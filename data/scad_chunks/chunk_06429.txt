@@ -1,5 +1,0 @@
-function _remove_internal_edges(halfedges) = [
-    for (h = halfedges)  
-        if (!in_list(reverse(h), halfedges))
-            h
-];

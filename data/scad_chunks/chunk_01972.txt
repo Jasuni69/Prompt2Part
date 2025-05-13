@@ -1,1 +1,0 @@
-function gridfinity_bin_size(type)          = type[1]; //! Size in grid units

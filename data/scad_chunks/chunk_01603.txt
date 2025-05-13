@@ -1,4 +1,0 @@
-function cable_strip_control_points(depth, min_z, pos) = let(z = min(min_z, min_z + pos))
-[
-    [0, 0, 0], [0, 0, z], [0, depth, z], [0, depth, pos]
-];

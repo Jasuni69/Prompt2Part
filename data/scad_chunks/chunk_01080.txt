@@ -1,1 +1,0 @@
-function toggle_paddle_w(type) = type[17];      //! Width at the top for non-spherical end

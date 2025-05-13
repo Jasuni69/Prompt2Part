@@ -1,1 +1,0 @@
-function  d_front_height(type)     = type[7];   //! From the back of the flange to the front

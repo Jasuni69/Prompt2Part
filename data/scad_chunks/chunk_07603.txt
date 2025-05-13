@@ -1,4 +1,0 @@
-function identity(n) = [for(i=[0:n-1]) [for(j=[0:n-1]) i==j ? 1 : 0] ];
-
-// computes the rotation with minimum angle that brings a to b
-// the code fails if a and b are opposed to each other

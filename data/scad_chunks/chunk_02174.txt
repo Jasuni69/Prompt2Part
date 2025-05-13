@@ -1,1 +1,0 @@
-function bbox_thin_blocks(type) = type[11];//! Set for 2 screw blocks instead of three hole fixing blocks.

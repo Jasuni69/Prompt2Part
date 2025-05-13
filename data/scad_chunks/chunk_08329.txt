@@ -1,1 +1,0 @@
-function midpt_smooth(points, n, closed = false) = _midpt_smooth_impl(points, n, closed);

@@ -1,6 +1,0 @@
-function Translate(v) =
-  [[1, 0, 0, v[0]],
-   [0, 1, 0, v[1]],
-   [0, 0, 1, v[2]]];
-
-// Prepare a matrix to scale by vector v.

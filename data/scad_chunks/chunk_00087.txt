@@ -1,3 +1,0 @@
-module resistors()
-    layout([for(r = resistors) resistor_diameter(r)], 10)
-        resistor(resistors[$i]);

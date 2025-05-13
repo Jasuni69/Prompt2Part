@@ -1,7 +1,0 @@
-function getGenialogyIndexForPart(child,derivedParts=$derivedParts)=
-        [for(f=[0:1:len(derivedParts)-1])
-        let(family=derivedParts[f])
-        let(familySplit=split(family,","))
-        let( foundAt=max([for(i=[len(familySplit)-1:-1:1])
-          enclosesOneOf(child,split(familySplit[i],"(")[0])?i:-1]))
-          concat(foundAt,familySplit)];

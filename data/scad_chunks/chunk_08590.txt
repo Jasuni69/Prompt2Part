@@ -1,9 +1,0 @@
-function _shape_path_extend_impl(stroke_pts, path_pts, scale, closed) =
-    let(
-        leng_path_pts = len(path_pts),
-        scale_step = (scale - 1) / (leng_path_pts - 1),
-        strokes = _inner(stroke_pts, path_pts, leng_path_pts, scale_step)        
-    )
-    closed && path_pts[0] == path_pts[leng_path_pts - 1] ? 
-        __polytransversals([each strokes, strokes[0]]) : 
-        __polytransversals([_first_stroke(stroke_pts, path_pts), each strokes]);

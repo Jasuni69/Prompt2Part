@@ -1,1 +1,0 @@
-function insert_ring3_d(type)        = type[8];     //! Diameter of the bottom ring

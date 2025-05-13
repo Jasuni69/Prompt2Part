@@ -1,4 +1,0 @@
-function _mb_stadium_full(dv, hl, r, cutoff, ex, neg) = let(
-    dist = dv.y<-hl ? norm(dv-[0,-hl])
-      : dv.y<hl ? abs(dv.x) : norm(dv-[0,hl])
-) neg * mb_cutoff(dist, cutoff) * (r/dist)^ex;

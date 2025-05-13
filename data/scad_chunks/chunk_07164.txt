@@ -1,1 +1,0 @@
-function layer(x=1,layer=layer)=x*layer;

@@ -1,2 +1,0 @@
-function cable_clip_insert(screw, insert = true) = //! Insert type for clip, given screw.
-    is_list(insert) ? insert : insert ? screw_insert(screw, true) : false;

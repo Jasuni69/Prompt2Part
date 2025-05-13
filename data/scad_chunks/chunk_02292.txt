@@ -1,1 +1,0 @@
-function 2screw_block_h_hole(screw = def_screw, short_insert = false) = translate([0, 0, corner_block_hole_offset(screw, short_insert)]) * rotate([90, 0, 0]); //! Transform to front hole

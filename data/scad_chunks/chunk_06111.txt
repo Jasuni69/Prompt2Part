@@ -1,9 +1,0 @@
-function _force_int(x) = approx(round(x),x) ? round(x) : x;
-
-// This function finds the normal to a facet on the path sweep
-// prevind and nextind are the indices into the path, frac is the
-// interpolation value bewteen them.
-// anchor_pos and anchor_dir are the anchor data for the 2d shape
-// Return is [position, ydirection, zdirection], where zdirection
-// is normal to the facet.  Note that frac is needed because
-// of the possibility of twist.

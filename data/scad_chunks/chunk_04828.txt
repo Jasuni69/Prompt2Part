@@ -1,4 +1,0 @@
-function pb_bezier_cubic_curve(p0, c0, c1, p1, n = $pb_spline, skip_first=false) = [for(t = [skip_first? 1: 0 : n]) let(t0=t/n, t1=pow((1 - t0), 3),t2=pow((1 - t0), 2),t3=pow(t0, 2) * (1 - t0), t4=pow(t0, 3)) [ p0[0] * t1 + 3 * c0[0] * t0 * t2 + 3 * c1[0] * t3 + p1[0] * t4, p0[1] * t1 + 3 * c0[1] * t0 * t2 + 3 * c1[1] * t3 + p1[1] * t4]];
-
-
-//function pb_do_render($children, parent_module_name) = ($children == 0 || parent_module_name == "M" || parent_module_name == "m");

@@ -1,3 +1,0 @@
-module screw_knob_M30_16_assembly() screw_knob_assembly(M3_hex_screw, 16);
-
-//! * Press the M4 x 16 hex screw into the knob

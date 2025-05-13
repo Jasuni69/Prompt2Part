@@ -1,1 +1,0 @@
-function jack_4mm_flange_radius() = 10.6 / 2; //! 4mm jack socket flange radius

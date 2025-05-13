@@ -1,1 +1,0 @@
-function currentPartAdd() = currentPart(1);

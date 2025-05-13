@@ -1,6 +1,0 @@
-function isOfTypeOrElse(type,obj,elseObj) =
-      (obj!=undef && isOfType(obj,type))
-         ? obj//[999,id]
-         : elseObj;
-
-//--------typesystem end--------------------------

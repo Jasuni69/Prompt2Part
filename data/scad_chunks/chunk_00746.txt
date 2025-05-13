@@ -1,1 +1,0 @@
-function psu_face_vents(type)        = type[7];     //! Vents array position x,y, rotation, size and corner radius

@@ -1,1 +1,0 @@
-module leftcube(size) cube(size, anchor=RIGHT);

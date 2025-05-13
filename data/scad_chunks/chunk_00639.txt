@@ -1,1 +1,0 @@
-function tx_bobbin_height(type)     = type[15]; //! Bobbin height

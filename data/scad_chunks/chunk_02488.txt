@@ -1,1 +1,0 @@
-function coreXY_belt(type)                  = type[1]; //! Belt type

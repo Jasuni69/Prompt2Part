@@ -1,1 +1,0 @@
-function rd_module_pin_size(type)  = type[5]; //! Pin size

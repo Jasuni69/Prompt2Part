@@ -1,8 +1,0 @@
-module box_screw_hole_positions(type) {
-    inset = box_hole_inset(type);
-    w = box_width(type) / 2 - inset;
-    d = box_depth(type) / 2 - inset;
-    for(x = [-1, 1], y = [-1, 1])
-        translate([x * w, y * d])
-            children();
-}

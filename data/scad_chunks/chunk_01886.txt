@@ -1,8 +1,0 @@
-module cable(cable, paths) {                    //! Draw a cable, given a list of paths
-    wires = cable_wires(cable);
-    assert(len(paths) == wires);
-    r = cable_wire_size(cable) / 2;
-    for(i = [0 : wires - 1])
-        color(cable_wire_colours(cable)[i])
-            sweep(paths[i], circle_points(r), convexity = 5);
-}

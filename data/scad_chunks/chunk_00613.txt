@@ -1,1 +1,0 @@
-function display_height(type)       = type[3];  //! Depth of the metal part

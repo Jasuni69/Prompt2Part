@@ -1,5 +1,0 @@
-module sbr_bearing_blocks()
-    layout([for(s = sbr_bearing_blocks) sbr_size(s).x], 10) {
-        part_thickness = 5;
-        sbr_bearing_block_assembly(sbr_bearing_blocks[$i], part_thickness);
-    }

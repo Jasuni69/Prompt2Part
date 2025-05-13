@@ -1,1 +1,0 @@
-function rocker_flange_t(type) = type[6];   //! Flange thickness

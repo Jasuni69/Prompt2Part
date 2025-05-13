@@ -1,1 +1,0 @@
-function fan_aperture(type)       = type[10] ? type[10] : fan_bore(type); //! Optional diameter for the aperture, which can be bigger than the bore it has flared corners.

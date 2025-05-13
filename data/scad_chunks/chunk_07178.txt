@@ -1,7 +1,0 @@
-function vMax(v=[0],max=0)=is_list(max)?assert(len(v)==len(max))[for(i=[0:len(v)-1])max(v[i],max[i])]
-                                       :[for(i=v)max(max, i) ];
-/** \page Functions \name vMin
-vMin gives you the min of a number and a list 
-\param v vector or list
-\param min min limiting value
-*/

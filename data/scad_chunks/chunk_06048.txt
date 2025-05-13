@@ -1,5 +1,0 @@
-module yflip_copy(offset=0, y=0)
-{
-    req_children($children);
-    mirror_copy(v=[0,1,0], offset=offset, cp=[0,y,0]) children();
-}

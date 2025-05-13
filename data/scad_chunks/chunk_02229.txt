@@ -1,1 +1,0 @@
-module socket_box_MKLOGIC_stl() socket_box(MKLOGIC);

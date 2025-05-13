@@ -1,7 +1,0 @@
-module test_f_gt() {
-    _test_fn2arg_simple(
-        function (a,b) f_gt(a,b),
-        [[4,3,true],[3,3,false],[3,4,false]]
-    );
-}
-test_f_gt();

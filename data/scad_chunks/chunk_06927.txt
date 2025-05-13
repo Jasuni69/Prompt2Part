@@ -1,8 +1,0 @@
-module test_sum_of_sines() {
-    assert_equal(sum_of_sines(0, [[3,4,0],[2,2,0]]), 0);
-    assert_equal(sum_of_sines(45, [[3,4,0],[2,2,0]]), 2);
-    assert_equal(sum_of_sines(90, [[3,4,0],[2,2,0]]), 0);
-    assert_equal(sum_of_sines(135, [[3,4,0],[2,2,0]]), -2);
-    assert_equal(sum_of_sines(180, [[3,4,0],[2,2,0]]), 0);
-}
-test_sum_of_sines();

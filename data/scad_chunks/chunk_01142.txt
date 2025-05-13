@@ -1,1 +1,0 @@
-function gs_wires(type)        = type[20]; //! Wire colours and grouping

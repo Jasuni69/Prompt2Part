@@ -1,8 +1,0 @@
-module 2screw_block_M25_s_assembly() 2screw_block_assembly(M2p5_cap_screw, short_insert = true);
-
-//
-//! 1. Lay the blocks out and place an M3 insert in the forward facing hole.
-//! 1. Push them home with a soldering iron with a conical bit heated to 200&deg;C.
-//! When removing the iron it helps to twist it a little anti-clockwise to release it from the thread.
-//! 1. Lay the blocks on each of their other flat side and repeat.
-//

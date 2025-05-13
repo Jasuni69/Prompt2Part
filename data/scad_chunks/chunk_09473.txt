@@ -1,5 +1,0 @@
-function is_scalar(v) = (version_num() > 20190100)? is_num(v) : (!is_boolean(v) && is_def(v+0));
-
-
-// Function: is_array()
-// Description: Given a value, returns true if it is an array/list/vector.

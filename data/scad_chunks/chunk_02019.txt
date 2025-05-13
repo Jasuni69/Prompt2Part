@@ -1,2 +1,0 @@
-function psu_shroud_depth(type) =                                               //! Outside depth of the shroud
-    psu_left_bay(type) + overlap + psu_shroud_extent(type);

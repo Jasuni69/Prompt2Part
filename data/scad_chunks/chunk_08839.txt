@@ -1,6 +1,0 @@
-function circumcircle_rr(shape_pts) =
-   let(
-	  center = tri_circumcenter(shape_pts),
-	  v = shape_pts[0] - center
-   )
-   v * v;

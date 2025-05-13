@@ -1,1 +1,0 @@
-function ziptie_latch(type)     = type[3]; //! Latch dimensions

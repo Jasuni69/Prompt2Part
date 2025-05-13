@@ -1,7 +1,0 @@
-function zeroIf(boolVal)= (boolVal)?0:1;
-
-
-//returns the maximum elemnt of the i's component of a vector of vectors
-// for example of a[1][3], a[2][3], a[3][3], a[4][3]
-// the i parametere is only needed internally and can be ommitedin calls
-// like: maximum(a,3);

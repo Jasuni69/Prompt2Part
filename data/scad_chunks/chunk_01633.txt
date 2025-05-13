@@ -1,1 +1,0 @@
-function faston_wire_crimp_d(type)  = type[7];  //! Outside diameter of the wire crimp

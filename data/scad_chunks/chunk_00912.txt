@@ -1,7 +1,0 @@
-module insert(type) { //! Draw specified insert
-    length = insert_length(type);
-
-    vitamin(str("insert(", type[0], "): Heatfit insert M", insert_screw_diameter(type), " x ", length, "mm"));
-
-    base_insert(type);
-}

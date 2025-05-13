@@ -1,3 +1,0 @@
-module test_each_hexagon(hex_r, pts_all_lines) {
-
-}

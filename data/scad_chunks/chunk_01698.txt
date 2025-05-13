@@ -1,1 +1,0 @@
-function pcb_radius(type)       = type[5];  //! Corner radius

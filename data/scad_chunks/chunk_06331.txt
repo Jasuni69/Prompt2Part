@@ -1,1 +1,0 @@
-function rounding_hole_mask(r, rounding, excess=0.1, d, anchor=CENTER, spin=0, orient=UP) = no_function("rounding_hole_mask");

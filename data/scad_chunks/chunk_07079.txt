@@ -1,1 +1,0 @@
-module test_opp_ang_to_adj() nil();  // Covered in test_tri_functions()

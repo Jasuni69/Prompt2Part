@@ -1,3 +1,0 @@
-module Wall(){
-  SBogen(l1=25,r1=25,r2=5)SBogen(l1=30,l2=15,center=false,use2D=2.5);
-}

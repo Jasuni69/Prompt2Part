@@ -1,7 +1,0 @@
-function planeFromPoints(a, b, c) = 
-  let(
-    a3 = to3d(a), b3 = to3d(b), c3 = to3d(c),
-    n = unit(cross(b3 - a3, c3 - a3)),
-    w = n*a3
-  )
-  [n,w];

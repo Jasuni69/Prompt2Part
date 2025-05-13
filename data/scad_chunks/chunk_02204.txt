@@ -1,1 +1,0 @@
-function hinge_knuckles(type)    = type[6]; //! How many knuckles

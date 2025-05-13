@@ -1,6 +1,0 @@
-module atx_psu_cutout(type, face = f_front) { //! Cut out for the rear of an ATX, which is actually f_front!
-    multmatrix(psu_face_transform(type, face))
-        linear_extrude(100, center = true)
-            round(5)
-                polygon(psu_face_cutout(psu_faces(type)[face]));
-}

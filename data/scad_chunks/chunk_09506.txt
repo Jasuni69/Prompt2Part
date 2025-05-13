@@ -1,1 +1,0 @@
-function _gear_q6(b,s,t,d)      = _gear_polar(d,s*(_gear_iang(b,d)+t));                        //point at radius d on the involute curve

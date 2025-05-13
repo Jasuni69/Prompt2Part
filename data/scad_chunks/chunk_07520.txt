@@ -1,1 +1,0 @@
-function radiusS(n,s,a)=(s/2)/(sin((is_undef(n)?a:360/n)/2));// Radius  zur Sehne

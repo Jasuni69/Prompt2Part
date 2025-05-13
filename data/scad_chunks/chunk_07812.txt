@@ -1,4 +1,0 @@
-module twisted_ring(shape, r, shape_turns) {
-	t = 360 * shape_turns;
-	ring_extrude(shape, radius = r, twist = t, angle = 720);
-}

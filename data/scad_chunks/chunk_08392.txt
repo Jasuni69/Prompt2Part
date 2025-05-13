@@ -1,2 +1,0 @@
-function _nz_worley_euclidean(p, cells) =
-    min([for(cell = cells) norm(cell - p)]);;

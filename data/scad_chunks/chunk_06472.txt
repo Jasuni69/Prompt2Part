@@ -1,3 +1,0 @@
-function right(x=0, p=_NO_ARG) =
-    assert(is_finite(x), "Invalid number")
-    move([x,0,0],p=p);

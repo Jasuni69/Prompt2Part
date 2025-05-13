@@ -1,1 +1,0 @@
-function knob_shaft_len(type)= type[6]; //! Shaft length

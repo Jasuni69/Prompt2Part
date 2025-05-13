@@ -1,1 +1,0 @@
-function get_inward(cell) = cell[4];

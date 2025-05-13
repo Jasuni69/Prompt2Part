@@ -1,2 +1,0 @@
-function screw_knob(screw, wall = 2, stem_h = 6, flange_t = 4, flange_r = 9, solid = true, waves = 5, wave_amp = 2, fluted = false) = //! Constructor
-    [screw, wall, stem_h, flange_t, flange_r, solid, waves, wave_amp, fluted];

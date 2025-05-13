@@ -1,6 +1,0 @@
-module arc(r,angle=90,deltaA=1,noCenter=false,wall=0)
-	difference()
-	{
-		polygon(arcPoints(r,angle,deltaA,noCenter));
-		polygon(arcPoints(r-wall,wall==0?0:angle,deltaA,noCenter));
-	}

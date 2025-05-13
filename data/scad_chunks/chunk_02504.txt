@@ -1,7 +1,0 @@
-module coreXY_belts(type, carriagePosition, coreXYPosBL, coreXYPosTR, separation, x_gap = 0, plain_idler_offset = [0, 0], upper_drive_pulley_offset = [0, 0], lower_drive_pulley_offset = [0, 0], show_pulleys = false, left_lower = false) { //! Draw the coreXY belts
-    assert(coreXYPosBL.z == coreXYPosTR.z);
-
-    coreXYSize = coreXYPosTR - coreXYPosBL;
-    translate(coreXYPosBL)
-        coreXY(type, coreXYSize, [carriagePosition.x - coreXYPosBL.x, carriagePosition.y - coreXYPosBL.y], separation, x_gap, plain_idler_offset, upper_drive_pulley_offset, lower_drive_pulley_offset, show_pulleys, left_lower);
-}

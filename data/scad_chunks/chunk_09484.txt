@@ -1,9 +1,0 @@
-module assertion(succ, msg) {
-	if (version_num() > 20190100) {
-		// assert() will echo the variable name, and `succ` looks confusing there.  So we store it in FAILED.
-		FAILED = succ;
-		assert(FAILED, msg);
-	} else if (!succ) {
-		echo_error(msg);
-	}
-}

@@ -1,5 +1,0 @@
-function _hex_seg(cell_radius, begin, end) = 
-    [
-        for(a = [begin:60:end]) 
-		[cell_radius * cos(a), cell_radius * sin(a)]
-    ];

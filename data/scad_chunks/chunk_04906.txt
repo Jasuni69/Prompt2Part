@@ -1,5 +1,0 @@
-function _os_offset_corner(pa, pb, pc, dist) = 
-  _os_solve2eq(_os_seg2eq(pa, pb, dist), _os_seg2eq(pb, pc, dist));
-
-// given a polygon, offset each vertex using the corner offset method above
-// note: this can produce self-intersections depending on the 'curvature' and offset

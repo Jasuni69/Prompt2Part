@@ -1,1 +1,0 @@
-function bearing_groove_spacing(type)   = type[6];   //! Spacing between grooves, outer to outer, ie includes the grooves themselves

@@ -1,1 +1,0 @@
-function square_button_cap_d(type)        = type[9];  //! Diameter of the body of the cap

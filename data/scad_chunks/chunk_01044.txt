@@ -1,1 +1,0 @@
-function screw_clearance_radius(type) = type[12];    //! Clearance hole radius

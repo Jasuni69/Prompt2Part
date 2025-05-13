@@ -1,1 +1,0 @@
-function display_width(type)        = type[2];  //! Width of the metal part

@@ -1,1 +1,0 @@
-function al_clad_wire_length(type) = type[10];  //! Total length including wires

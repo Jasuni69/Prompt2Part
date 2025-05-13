@@ -1,7 +1,0 @@
-module xflip(p, x=0) {
-    req_children($children);        
-    assert(is_undef(p), "Module form `zflip()` does not accept p= argument.");
-    translate([x,0,0])
-        mirror([1,0,0])
-            translate([-x,0,0]) children();
-}

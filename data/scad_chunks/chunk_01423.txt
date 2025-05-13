@@ -1,1 +1,0 @@
-function pipe_td(type)     = type[5]; //! T-Pipe diameter

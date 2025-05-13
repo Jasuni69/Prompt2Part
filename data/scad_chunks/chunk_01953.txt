@@ -1,1 +1,0 @@
-function knob_top_d(type)    = type[1]; //! Diameter at the top

@@ -1,1 +1,0 @@
-function pcb_mount_length(pcb) = pillar_x_pitch(pcb) + 2 * pillar_r; //! Outside length of the mount

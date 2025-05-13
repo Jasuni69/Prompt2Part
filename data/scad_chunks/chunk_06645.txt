@@ -1,9 +1,0 @@
-module test_ends_with() {
-    assert(!ends_with("", "abc"));
-    assert(!ends_with("", "123"));
-    assert(!ends_with("abcdef", "abc"));
-    assert(ends_with("defabc", "abc"));
-    assert(ends_with("abcabc", "abc"));
-    assert(ends_with("def123", "123"));
-}
-test_ends_with();

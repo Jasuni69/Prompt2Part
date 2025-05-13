@@ -1,8 +1,0 @@
-module arc(n, r, angle, d, cp, points, corner, width, thickness, start, wedge=false, rounding, anchor=CENTER, spin=0)
-{
-    path = arc(n=n, r=r, angle=angle, d=d, cp=cp, points=points, corner=corner, width=width, thickness=thickness, start=start, wedge=wedge, rounding=rounding);
-    attachable(anchor,spin, two_d=true, path=path, extent=false) {
-        polygon(path);
-        children();
-    }
-}

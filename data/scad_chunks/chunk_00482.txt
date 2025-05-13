@@ -1,1 +1,0 @@
-function iec_bezel_w(type)  = type[8];  //! Bezel width

@@ -1,1 +1,0 @@
-function vero_thickness(type)      = 1.6;       //! Thickness of the substrate

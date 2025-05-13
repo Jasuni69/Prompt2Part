@@ -1,1 +1,0 @@
-function sp_neck(diam,type,wall,id,style="L",bead=false, anchor, spin, orient) = no_function("sp_neck");

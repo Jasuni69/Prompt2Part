@@ -1,4 +1,0 @@
-    hull()
-      for(j=[i,i+1])
-        translate(path3D[j])
-          sphere(3);

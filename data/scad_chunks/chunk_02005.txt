@@ -1,3 +1,0 @@
-function drag_chain_z(type) = //! Outside dimension of a 180 bend
-    let(os = drag_chain_outer_size(type), s = drag_chain_size(type))
-        2 * drag_chain_radius(type) + os.z;

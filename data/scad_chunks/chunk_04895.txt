@@ -1,9 +1,0 @@
-function scalePoints(pts=[], scale=[0,0]) = [for(p=pts)[ for(j=[0:len(p)-1]) scale[j]!=undef? p[j]*scale[j] : p[j]]];
-
-//  BETA - maxXDist(pts=[], dist=1)
-//
-//  Inserts additional points when the X distance between two points is greater than the given distance.
-//  The space will then be deviced equally.
-//  pts       (list)    List of 2D or 3D points.
-//  dist      (number)  The maximum distance allowed before dividing starts
-//  return    (list)    Adjusted list of 2D or 3D points.

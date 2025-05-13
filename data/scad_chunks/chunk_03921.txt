@@ -1,7 +1,0 @@
-module nutM4(nutMargin=.4,dMargin=margin(0))
-clear(grey)
-{
-  g(Z(3.1),align(TODOWN,XCENTER,YCENTER),solid())
-      tubeFast(d=8.1+dMargin
-        ,h=margin(3.1,nutMargin),$fn=6);
-}

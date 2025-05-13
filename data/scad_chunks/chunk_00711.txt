@@ -1,1 +1,0 @@
-function belt_pitch(type)        = type[1]; //! Pitch in mm

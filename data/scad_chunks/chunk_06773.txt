@@ -1,7 +1,0 @@
-module test_f_str() {
-    _test_fn1arg(
-        function (a) f_str(a),
-        [[123,"123"],[true,"true"],[false,"false"],[undef,"undef"],[3.14159,"3.14159"],[[3,4,5,true],"[3, 4, 5, true]"]]
-    );
-}
-test_f_str();

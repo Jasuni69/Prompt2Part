@@ -1,7 +1,0 @@
-function __tr__corner_b_leng_lt_zero(frags, b_sector_a, L, h, round_r) = 
-    let(reversed = __tr__corner_t_leng_lt_zero(frags, b_sector_a, L, h, round_r))
-    [
-        for(i = len(reversed) - 1; i > -1; i = i - 1)
-        let(pt = reversed[i])
-        [pt.x, -pt.y]
-    ];

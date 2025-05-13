@@ -1,1 +1,0 @@
-function no_point(str) = chr([for(c = str(str)) if(c == ".") ord("p") else ord(c)]);//! Replace decimal point in string with 'p'

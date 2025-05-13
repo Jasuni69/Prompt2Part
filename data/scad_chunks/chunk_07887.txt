@@ -1,5 +1,0 @@
-module tile02(tile_width, line_width) {
-   line2d([0, 0], [0, tile_width], line_width);
-}
-
-// |

@@ -1,2 +1,0 @@
-function _px_spiral(from, leng, max_leng, clockwise, dir) = 
-    leng > max_leng ? [] : _px_spiral_go_turn(from, leng, max_leng, clockwise, dir);

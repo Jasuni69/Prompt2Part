@@ -1,1 +1,0 @@
-function bearing_groove_dia(type)       = type[5];   //! Groove diameter

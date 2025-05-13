@@ -1,3 +1,0 @@
-function list_wrap(list, eps=EPSILON) =
-    assert(is_list(list))
-    len(list)<2 || are_ends_equal(list,eps=eps)? list : [each list, list[0]];

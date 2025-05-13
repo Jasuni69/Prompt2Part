@@ -1,1 +1,0 @@
-function ttrack_fixture(type)         = type[9];  //! Fixture, such as T-bolt or Miter insert used with this track

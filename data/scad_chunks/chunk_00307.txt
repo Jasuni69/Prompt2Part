@@ -1,1 +1,0 @@
-function box_section_is_woven(type)  = !is_undef(type[6]); //! Box section is woven, eg carbon fiber

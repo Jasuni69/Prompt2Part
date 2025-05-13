@@ -1,6 +1,0 @@
-module tubings()
-    layout([for(t = tubings) tubing_od(t)], 5)
-        tubing(tubings[$i]);
-
-if($preview)
-    tubings();

@@ -1,1 +1,0 @@
-module socket_box_MKLOGIC_assembly() socket_box_assembly(MKLOGIC);

@@ -1,1 +1,0 @@
-function square_button_cap_stem(type)     = type[11]; //! Length of the cap stem

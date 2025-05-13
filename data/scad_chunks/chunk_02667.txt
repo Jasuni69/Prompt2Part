@@ -1,3 +1,0 @@
-module drill(r, h = 100, center = true) //! Make a cylinder for drilling holes suitable for CNC routing, set h = 0 for circle
-    extrude_if(h, center)
-        circle(r = corrected_radius(r, r2sides(r)));

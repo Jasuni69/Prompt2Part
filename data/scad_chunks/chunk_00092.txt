@@ -1,6 +1,0 @@
-module microswitches()
-    layout([for(i = microswitches) microswitch_length(i)], 5)
-        microswitch(microswitches[$i]);
-
-if($preview)
-    microswitches();

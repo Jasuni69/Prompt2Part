@@ -1,1 +1,0 @@
-function psu_shroud_wall(type) = wall;                                          //! The wall thickness

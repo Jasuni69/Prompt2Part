@@ -1,1 +1,0 @@
-function insert_barrel_d(type)       = type[5];     //! Diameter of the main barrel

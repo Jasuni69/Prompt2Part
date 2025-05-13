@@ -1,1 +1,0 @@
-function gridfinity_corner_r() = corner_r; //! Outside corner radius

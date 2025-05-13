@@ -1,1 +1,0 @@
-function falseIfUndef(what) = (what==undef)?false:what;

@@ -1,1 +1,0 @@
-function skin(size=0,skinThick=$skinThick , walls=2,    margin=$margin) = margin(size,margin=$margin)+ skinThick*walls-($removing? (skinThick*walls):0);

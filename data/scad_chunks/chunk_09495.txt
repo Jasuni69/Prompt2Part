@@ -1,7 +1,0 @@
-function diametral_pitch(mm_per_tooth=5) = PI / mm_per_tooth;
-
-
-// Function: module_value()
-// Description: Get tooth density expressed as "module" or "modulus" in millimeters
-// Arguments:
-//   mm_per_tooth = Distance between teeth around the pitch circle, in mm.

@@ -1,6 +1,0 @@
-module dil_pin_positions(rows, w, pitch)
-    for(i = [0 : rows - 1], $side = [-1, 1], $x = i * pitch - (rows - 1) * pitch / 2)
-        translate([0, $x])
-            rotate($side * 90)
-                translate([0, w / 2])
-                    children();

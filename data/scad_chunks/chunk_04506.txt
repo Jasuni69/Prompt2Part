@@ -1,2 +1,0 @@
-function nut_data (options = undef, kind = DEFAULT_NUT_KIND) =
-  is_undef(options) ? nuts : (is_string(options) ? nuts[options][kind] : options);

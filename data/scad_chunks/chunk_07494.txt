@@ -1,1 +1,0 @@
-function line(n=1,line=line)=sign(n)*(abs(n)*line + 0.05*nozzle);

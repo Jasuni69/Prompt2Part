@@ -1,8 +1,0 @@
-module socket_boxes()
-    layout([for(s = mains_sockets) mains_socket_width(s)], 20)
-        if($preview)
-            socket_box_fastened_assembly(mains_sockets[$i], 3);
-        else
-            socket_box_stl(mains_sockets[$i]);
-
-socket_boxes();

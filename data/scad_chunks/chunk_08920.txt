@@ -1,6 +1,0 @@
-function cohesionWith(node, other) =
-    let(pos = position_of(node))
-    limit(
-        other == pos ? -velocity_of(node) : setMagnitude(other - pos, maxSpeed_of(node)) - velocity_of(node),
-        maxForce_of(node)
-    );

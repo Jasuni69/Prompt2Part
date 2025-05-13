@@ -1,4 +1,0 @@
-module test_region_area(){
-  assert_equal(region_area([square(10), right(20,square(8))]), 164);
-}
-test_region_area();

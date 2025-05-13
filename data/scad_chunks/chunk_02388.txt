@@ -1,1 +1,0 @@
-function ribbon_clamp_length(ways, screw = screw) = ribbon_clamp_hole_pitch(ways, screw) + ribbon_clamp_width(screw); //! Length given ways

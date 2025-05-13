@@ -1,6 +1,0 @@
-function wf_not_collapsed_coords(wf, notCollaspedCoords) = 
-    let(eigenstates = wf_eigenstates(wf))
-    [
-		for(coord = notCollaspedCoords)
-		if(len(eigenstates[coord.y][coord.x]) != 1) coord
-	];

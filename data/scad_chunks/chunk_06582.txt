@@ -1,1 +1,0 @@
-module assert_std(vc,ve,info) { assert_approx(standardize(vc),standardize(ve),info); }

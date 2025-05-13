@@ -1,9 +1,0 @@
-module knee() {
-    $fn = 4;
-    scale([1,0.85, 1]) union() {
-        knee_scales(75, 2.5, 4.25, -4, 1.25);
-        knee_scales(100, 1.25, 4.5, -7, 1);
-        knee_scales(110, 1.25, 3, -9, 1);
-        knee_scales(120, 2.5, 2, -9, 1);   
-    }
-}

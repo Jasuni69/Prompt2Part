@@ -1,1 +1,0 @@
-function leadnut_hole_pitch(type)    = type[10];    //! The radial pitch of the screw holes

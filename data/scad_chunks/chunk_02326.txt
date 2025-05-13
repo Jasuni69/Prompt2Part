@@ -1,1 +1,0 @@
-function strap_boss_r(type) = wall + insert_hole_radius(strap_insert(type));

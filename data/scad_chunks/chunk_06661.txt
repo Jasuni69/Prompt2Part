@@ -1,8 +1,0 @@
-module test_substr() {
-    assert(substr("abcdefg",3,3) == "def");
-    assert(substr("abcdefg",2) == "cdefg");
-    assert(substr("abcdefg",len=3) == "abc");
-    assert(substr("abcdefg",[2,4]) == "cde");
-    assert(substr("abcdefg",len=-2) == "");
-}
-test_substr();

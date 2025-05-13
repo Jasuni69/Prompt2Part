@@ -1,1 +1,0 @@
-function led_height(type)   = type[4]; //! Body height

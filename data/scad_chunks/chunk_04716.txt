@@ -1,1 +1,0 @@
-function depth(a,n=0) = is_vec(a) ? depth(a[0],n+1) : n;

@@ -1,6 +1,0 @@
-module cutout_top(d) {
-    ndlx=70; ndly=d.y/5;
-    
-    translate([(d.x/1.95)-(ndlx/2),(d.y/2.5)-(ndly),0-CS]) cube([ndlx,ndly,d.z+CS2]);
-    
-}

@@ -1,1 +1,0 @@
-function toggle_paddle_l(type) = type[15];      //! Length of the paddle

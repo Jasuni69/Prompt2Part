@@ -1,6 +1,0 @@
-module hollow_out(shell_thickness) {
-    difference() {
-        children();
-        offset(delta = -shell_thickness) children();
-    }
-}

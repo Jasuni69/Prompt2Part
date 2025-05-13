@@ -1,1 +1,0 @@
-function penny_washer(type)           = type[8]; //! Corresponding penny washer

@@ -1,1 +1,0 @@
-function digits(s) = 7_segment_digits(s) < 2 ? 2 : 1;

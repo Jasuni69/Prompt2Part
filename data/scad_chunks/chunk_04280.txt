@@ -1,1 +1,0 @@
-function vec3(p) = len(p) < 3 ? concat(p,0) : p;

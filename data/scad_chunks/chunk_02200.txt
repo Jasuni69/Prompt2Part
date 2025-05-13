@@ -1,1 +1,0 @@
-function hinge_depth(type)       = type[2]; //! Depth of each leaf

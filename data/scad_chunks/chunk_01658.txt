@@ -1,1 +1,0 @@
-function blower_wall(type)        = type[15]; //! Side wall thickness

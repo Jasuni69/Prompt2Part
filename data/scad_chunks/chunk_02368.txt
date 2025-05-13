@@ -1,1 +1,0 @@
-function mouse_grommet_offset(r) = r + wall; //! Offset of the wire from the ground

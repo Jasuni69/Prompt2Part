@@ -1,3 +1,0 @@
-function _sorted_key(lt, key, reverse) =
-    let(key_elem_lt = [for(elem = lt) [key(elem), elem]])  
-    _sorted(key_elem_lt, reverse ? function(a, b) a[0] > b[0] : function(a, b) a[0] < b[0], function(elem) elem[1]);

@@ -1,6 +1,0 @@
-function _rz_matrix(p1, p2) = 
-    let(v = p2 - p1, a = -90 + atan2(v.y, v.x), c = cos(a), s = sin(a)) 
-    [
-        [c, -s],
-        [s,  c],
-    ];

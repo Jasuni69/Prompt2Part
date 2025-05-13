@@ -1,9 +1,0 @@
-module turnYZ(angle=90) g(turnYZ(angle))children();
-
-
-
-//similar to cube() but with better human readibly parameters
-//it also reacts on toRight(),toFront(), default valuse set by set() etc
-// and allows stacking and chamfering
-// h can be used instead of z and means the same,
-// added for better interchangeability with tube()

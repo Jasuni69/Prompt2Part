@@ -1,1 +1,0 @@
-function sheet_reduction(type) = 2 * box_corner_gap(type) + sheet_end_clearance;

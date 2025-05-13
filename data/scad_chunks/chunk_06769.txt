@@ -1,7 +1,0 @@
-module test_f_norm() {
-    _test_fn1arg(
-        function (a) f_norm(a),
-        [[UP,1], [BACK+RIGHT,sqrt(2)], [[3,4],5]]
-    );
-}
-test_f_norm();

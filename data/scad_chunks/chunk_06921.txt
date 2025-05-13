@@ -1,8 +1,0 @@
-module test_tanh() {
-    assert_approx(tanh(-2), -0.9640275801);
-    assert_approx(tanh(-1), -0.761594156);
-    assert_approx(tanh(0), 0);
-    assert_approx(tanh(1), 0.761594156);
-    assert_approx(tanh(2), 0.9640275801);
-}
-test_tanh();

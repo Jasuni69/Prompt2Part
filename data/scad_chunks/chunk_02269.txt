@@ -1,4 +1,0 @@
-module corner_block_h_holes(screw = def_screw, index = undef, short_insert = false) //! Place children at the side screw holes
-    for(p = !is_undef(index) ? [corner_block_h_holes(screw, short_insert)[index]] : corner_block_h_holes(screw, short_insert))
-        multmatrix(p)
-            children();

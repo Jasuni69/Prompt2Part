@@ -1,4 +1,0 @@
-function fan_screw_length(type, thickness, full_depth = false) =
-    let(depth = fan_screw_depth(type, full_depth),
-        washers = depth == fan_depth(type) ? 2 : 1)
-            screw_length(fan_screw(type), thickness + depth, washers, nyloc = true); //! Screw length required

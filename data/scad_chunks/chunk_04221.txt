@@ -1,6 +1,0 @@
-function split(str, sep=" ", i=0, word="", v=[], blockOpeners=[]) =
-  str ==undef ? undef
-	: i == len(str) ? concat(v, word)
-  : (len(blockOpeners)>0 || (str[i] != sep)) ? split(str, sep, i+1, str(word, str[i]), v
-      , checkInside(blockOpeners,str[i]))
-	: split(str, sep, i+1, "", concat(v, word),checkInside(blockOpeners,str[i])) ;

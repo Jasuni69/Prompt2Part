@@ -1,1 +1,0 @@
-function pmeter_inner_ap_o(type)  = type[11]; //! Inner aperture offset

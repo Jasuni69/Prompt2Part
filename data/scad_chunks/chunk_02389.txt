@@ -1,2 +1,0 @@
-function ribbon_clamp_height(screw = screw, ways = undef) = ribbon_clamp_screw_depth(screw) + 1 +  //! Height
-        (!is_undef(ways) && is_list(ways) ?  (ways[1] - 1) * inch(0.05) : 0);

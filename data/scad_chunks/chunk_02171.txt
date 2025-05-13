@@ -1,1 +1,0 @@
-function bbox_name(type)       = type[8]; //! Optional name if there is more than one box in a project

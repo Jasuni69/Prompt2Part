@@ -1,1 +1,0 @@
-function TOFRONT(align2=NOCHANGE,align3=NOCHANGE) = align(TOFRONT,align2,align3);

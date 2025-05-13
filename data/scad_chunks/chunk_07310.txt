@@ -1,8 +1,0 @@
-module VorterantQ(size=20,ofs=.5,adjusted,fs=fs,fa=fa,fn=0,name,help,h){
-adjusted=is_undef(adjusted)?useVersion&&useVersion>23||Version>23?true:false
-                           :adjusted;
-s=adjusted?Umkreis(4,size/2)-ofs*2  :  Umkreis(4,size/2-ofs);
-
-k1=kreis(s,rand=0,grad=90,rot=180,endPoint=0,fs=fs,fa=fa,fn=fn);
-versch=[for(i=[0:len(k1)-1])[-inkreis(4,s),0]]; 
-offset= [for(i=[0:len(k1)-1])[ofs*sin(45+i*90/len(k1)),ofs*cos(45+i*90/len(k1))]];

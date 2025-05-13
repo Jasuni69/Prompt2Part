@@ -1,2 +1,0 @@
-function wave_function(width, height, weights) = 
-    [width, height, weights, _initialEigenstates(width, height, weights)];

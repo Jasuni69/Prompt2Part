@@ -1,8 +1,0 @@
-function sampling_randomSample(s, pos, seed) = 
-    let(
-        r = sampling_r(s),
-        theta = rands(-180, 180, 1, seed)[0],
-        phi = rands(0, 180, 1, seed + 1)[0],
-        sin_phi = sin(phi)
-    )
-    rands(r, 2 * r, 1, seed + 2)[0] * [sin_phi * cos(theta), sin_phi * sin(theta), cos(phi)] + pos;

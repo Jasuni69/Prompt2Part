@@ -1,7 +1,0 @@
-module test_clockwise_polygon() {
-    path = circle(d=100);
-    rpath = concat([path[0]], reverse(select(path,1,-1)));
-    assert(clockwise_polygon(path) == path);
-    assert(clockwise_polygon(rpath) == path);
-}
-*test_clockwise_polygon();

@@ -1,3 +1,0 @@
-function windBack(until,i=$placementStackTop)=  $placementStack[i][1]
-  * ((i==1 || $placementStack[i][0]==until|| $placementStack[i-1][0]==until)
-   ?  UNITY : windBack(until,i-1));

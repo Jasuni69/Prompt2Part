@@ -1,1 +1,0 @@
-function hashmap_puts(m, kv_lt, _indices_hash) = _hashmap_puts(m, kv_lt, len(kv_lt), _indices_hash);

@@ -1,1 +1,0 @@
-function ssr_length(type)     = type[2]; //! Length

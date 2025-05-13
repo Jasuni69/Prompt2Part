@@ -1,1 +1,0 @@
-function iec_spades(type)   = type[18]; //! Spade type

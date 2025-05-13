@@ -1,7 +1,0 @@
-//  [ 8-pcbX(), 48, 4, 3, 5, 4, 7, 16, yappBackLeft], // Shifted so that they all aligh for inspection cut
-  [ 8, 68, 14, 3, 5, 4, 7, 6, yappBackLeft, yappCoordBox], // Shifted so that they all aligh for inspection cut
-  [ 8, 38, 14, 3, 5, 4, 7, 6, yappBackLeft, yappCoordBox, yappThroughLid], // Shifted so that they all aligh for inspection cut
-];
-
-//---- This is where the magic happens ----
-YAPPgenerate();

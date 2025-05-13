@@ -1,1 +1,0 @@
-function bracket_thickness(cam) = max(wall, min(3.5, hinge_z(cam) - hinge_r - 1));

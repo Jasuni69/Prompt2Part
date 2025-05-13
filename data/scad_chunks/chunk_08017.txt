@@ -1,9 +1,0 @@
-function sierpinski_square(n = 8, angle = 45, leng = 1, heading = 0, start = [0, 0]) = 
-    let(
-        axiom = "L--F--L--F",
-        rules = [
-            ["L", "+R-F-R+"],
-            ["R", "-L+F+L-"]
-        ]
-    )
-    lsystem2(axiom, rules, n, angle, leng, heading, start);

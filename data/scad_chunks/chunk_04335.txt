@@ -1,7 +1,0 @@
-module cscale(x=1,y=1,z=1,vector=[1,1,1,1])
-{
-  assert(x[0]==undef,str("you are using cscale() from the constructive library, not the standard scale() module. it dos the same uses a bit different syntax,to pass it a vector, use it like: scale(vector=[2,3,5.1]),otherwise just use normal scale(x,y,z) values without square braces,but you called it like the standard scale: using scale(",x,",.......)"));
-  g(scale(x,y,z,vector))children();
-}
-
-//mults all mattries in a list, but if list is not a list but amatrix itself returnsthe matrix itself

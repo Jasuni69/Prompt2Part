@@ -1,1 +1,0 @@
-function _grad3(hashvalue, x, y, z) = _signs[hashvalue % 16] * [x, y, z];

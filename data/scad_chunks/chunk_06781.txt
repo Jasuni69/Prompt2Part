@@ -1,7 +1,0 @@
-module test_f_max3() {
-    _test_fn3arg(
-        function (a,b,c) f_max3(a,b,c),
-        [[8,3,5,8], [-4,-5,4,4], [-3,7,4,7]]
-    );
-}
-test_f_max3();

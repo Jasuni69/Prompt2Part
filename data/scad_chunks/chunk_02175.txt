@@ -1,1 +1,0 @@
-function bbox_short_inserts(type)= type[12];//! Set to use short inserts in the blocks

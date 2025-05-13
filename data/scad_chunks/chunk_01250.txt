@@ -1,1 +1,0 @@
-function extrusion_inner_corner_bracket_screw_offsets(type)  = type[4]; //! Screw offsets from the ends

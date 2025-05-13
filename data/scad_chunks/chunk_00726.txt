@@ -1,1 +1,0 @@
-function pi_gap_width(type)     = type[6]; //! Width of the gap

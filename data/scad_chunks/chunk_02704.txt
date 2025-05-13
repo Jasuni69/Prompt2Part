@@ -1,4 +1,0 @@
-module BOLTS_thread_external(d1,l){
-	color(BOLTS_THREAD_COLOR)
-		cylinder(r=0.5*d1,h= l);
-}

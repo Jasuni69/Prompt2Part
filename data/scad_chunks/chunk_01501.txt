@@ -1,1 +1,0 @@
-function sc_length(type)       = type[1]; //! Coupling length

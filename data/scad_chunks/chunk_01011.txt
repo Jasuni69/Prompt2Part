@@ -1,1 +1,0 @@
-function gt_back_height(type)  = type[7];   //! Height at the back

@@ -1,5 +1,0 @@
-function side_holes(type) = let(
-    screw = bbox_screw(type),
-    short = bbox_short_inserts(type),
-    holes = bbox_thin_blocks(type) ? 2screw_block_holes(screw, short_insert = short) : fixing_block_holes(screw))
-        [for(p = fixing_block_positions(type), q = holes) p * q];

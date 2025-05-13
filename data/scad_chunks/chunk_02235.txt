@@ -1,9 +1,0 @@
-function cam_back_size(cam) = let(
-    pcb = camera_pcb(cam),
-    pcb_size = pcb_size(pcb),
-    nut = screw_nut(pcb_screw(pcb)),
-    holes = [for(h = pcb_holes(pcb)) pcb_coord(pcb, h).x],
-    pitch = max(holes) - min(holes),
-    length = pitch + 2 * (nut_radius(nut) + min_wall),
-    width = pcb_size.y + (length - pcb_size.x) * cos(30)
-    ) [length, width, wall + max(connector_size.z, cam_back_clearance + nut_trap_depth(nut))];

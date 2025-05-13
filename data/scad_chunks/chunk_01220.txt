@@ -1,1 +1,0 @@
-function vero_screw(type)          = type[6];   //! Mounting screw type

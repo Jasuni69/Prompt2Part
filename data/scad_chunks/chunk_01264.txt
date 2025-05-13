@@ -1,1 +1,0 @@
-function scs_block_center_height(type)  = type[6];  //! Height of the center of the block

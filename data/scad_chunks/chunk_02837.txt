@@ -1,3 +1,0 @@
-function TranslateList(list,point) =
-  [for(c=list) 
-   [point.x+c.x,point.y+c.y]];

@@ -1,1 +1,0 @@
-function tubing_colour(type)   = type[4]; //! Colour

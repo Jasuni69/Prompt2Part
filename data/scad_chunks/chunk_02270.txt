@@ -1,4 +1,0 @@
-module corner_block_holes(screw = def_screw, short_insert = false) //! Place children at all the holes
-    for(p = corner_block_holes(screw, short_insert))
-        multmatrix(p)
-            children();

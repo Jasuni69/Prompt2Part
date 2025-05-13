@@ -1,2 +1,0 @@
-function _pp_poisson(s, seed, count = 0) =
-    !sampling_hasActive(s) ? s : _pp_poisson(sampling_trySampleFromOneActive(s, seed + count), seed, count + 1);

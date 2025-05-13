@@ -1,5 +1,0 @@
-function mains_socket_screw(type) = M3_cs_cap_screw; //! Screw type
-
-earth = M3_ringterm;
-earth_screw = ringterm_screw(earth);
-insert_wall = 3;

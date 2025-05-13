@@ -1,1 +1,0 @@
-function catenary_s(d, a) = 2 * a * sinh(d / a); //! Length of a symmetric catenary with width `2d`.

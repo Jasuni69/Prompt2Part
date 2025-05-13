@@ -1,6 +1,0 @@
-module mains_socket_earth_position(type) {  //! Position of earth terminal for DiBond panel
-    inset = mains_socket_t(type) + washer_diameter(screw_washer(earth_screw)) / 2 + 1;
-
-    translate([-mains_socket_width(type) / 2 + inset, -mains_socket_depth(type) / 2 + inset])
-        children();
-}

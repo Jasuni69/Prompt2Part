@@ -1,7 +1,0 @@
-function planeFromFace(poly, iface, lasti=2) = 
-  let(
-    points = poly[0],
-    face = poly[1][iface],
-    plane = planeFromPoints(points[face[0]],points[face[1]],points[face[lasti]])
-  )
-  plane;

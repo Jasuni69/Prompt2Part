@@ -1,7 +1,0 @@
-module test_ccw_polygon() {
-    path = circle(d=100);
-    rpath = concat([path[0]], reverse(select(path,1,-1)));
-    assert(ccw_polygon(path) == rpath);
-    assert(ccw_polygon(rpath) == rpath);
-}
-*test_ccw_polygon();

@@ -1,2 +1,0 @@
-function coreXY_coincident_separation(type) = //! Value of x, y separation to make y-carriage pulleys coincident
-    [ -coreXY_plain_idler_offset(type).x, -(pulley_od(coreXY_plain_idler(type)) + pulley_od(coreXY_toothed_idler(type)))/2, 0 ];

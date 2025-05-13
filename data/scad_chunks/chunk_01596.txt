@@ -1,1 +1,0 @@
-function spool_pitch(type)         = spool_width(type) + spool_rim_thickness(type); //! Spacing of the rims

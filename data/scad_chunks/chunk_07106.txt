@@ -1,1 +1,0 @@
-function moore_curve         (levels=4,  step=1) = lsystem_turtle(levels=levels, step=step, angle=90,  "LFL+F+LFL", [["L", "-RF+LFL+FR-"], ["R", "+LF-RFR-FL+"]]);

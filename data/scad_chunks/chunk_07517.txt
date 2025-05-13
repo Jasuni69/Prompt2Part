@@ -1,1 +1,0 @@
-function negRed(num)=num<0?str("🔻",num):num==0?str("⚠",num):num; // display console text

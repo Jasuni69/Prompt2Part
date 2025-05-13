@@ -1,1 +1,0 @@
-function blower_size(type)        = [blower_length(type), blower_width(type), blower_depth(type)]; //! Size

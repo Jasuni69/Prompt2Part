@@ -1,1 +1,0 @@
-function toggle_collar_d(type) = type[11];      //! Collar diameter

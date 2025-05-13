@@ -1,6 +1,0 @@
-function squircle_radius_se(n, r, angle) =
-    let(
-        x = cos(angle),
-        y = sin(angle)
-    )
-    (abs(x)^n + abs(y)^n)^(1/n) / r;

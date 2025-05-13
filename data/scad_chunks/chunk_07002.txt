@@ -1,7 +1,0 @@
-module test_repeat_entries() {
-    list = [0,1,2,3];
-    assert(repeat_entries(list, 6) == [0,0,1,2,2,3]);
-    assert(repeat_entries(list, 6, exact=false) == [0,0,1,1,2,2,3,3]);
-    assert(repeat_entries(list, [1,1,2,1], exact=false) == [0,1,2,2,3]);
-}
-test_repeat_entries();

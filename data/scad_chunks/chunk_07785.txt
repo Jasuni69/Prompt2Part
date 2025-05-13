@@ -1,4 +1,0 @@
-module text_container(t, font_size, font_name, r_round_edge, container_height, thickness) {
-    box_extrude(height = container_height, shell_thickness = thickness) 
-        minkowski_text(t, font_size, font_name, r_round_edge);
-}

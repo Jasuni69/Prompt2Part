@@ -1,1 +1,0 @@
-function rd_boxc_skirt(type)   = type[3]; //! Skirt slot, thickness, height

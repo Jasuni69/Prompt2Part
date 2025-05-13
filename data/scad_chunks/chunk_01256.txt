@@ -1,1 +1,0 @@
-function extrusion_corner_bracket_tnut(type)             = type[5]; //! The sliding t-nut to use in the assembly

@@ -1,1 +1,0 @@
-function pmeter_tab_z(type)       = type[8];  //! Tab vertical position

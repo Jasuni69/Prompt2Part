@@ -1,5 +1,0 @@
-function _t3d_impl(t, cmd, point, unit_vectors, leng, angle) =
-    is_undef(t) ? _create(point, unit_vectors) :
-    is_undef(cmd) ? _set(t, point, unit_vectors) :
-    is_string(cmd) ? _cmd(t, cmd, point, unit_vectors, leng, angle) :
-                     _cmds(t, cmd);

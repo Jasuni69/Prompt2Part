@@ -1,1 +1,0 @@
-module bbox_assembly() _bbox_assembly(box);

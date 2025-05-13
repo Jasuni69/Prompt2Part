@@ -1,8 +1,0 @@
-function align(a1=NOCHANGE,a2=NOCHANGE,a3=NOCHANGE) =
-	setType($type_geomInfoAlign
-		, let(vals=a1+a2+a3)
-			let(changes=[vals[0+3],vals[1+3],vals[2+3]])
-      let(alignment=alignInfo())
-			[[ (changes[0])?vals[0]:alignment[0]
-			 ,(changes[1])?vals[1]:alignment[1]
-			 ,(changes[2])?vals[2]:alignment[2]]]);

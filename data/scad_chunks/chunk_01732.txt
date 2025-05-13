@@ -1,1 +1,0 @@
-function hdmi_height2(type)   = type[6]; //! Inside height in the middle

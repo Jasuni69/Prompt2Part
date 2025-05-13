@@ -1,7 +1,0 @@
-module variacs()
-    layout([for(v = variacs) 2 * (variac_bulge_dia(v) - variac_diameter(v) / 2)], 25)
-        rotate(-90)
-            variac(variacs[$i]);
-
-if($preview)
-    variacs();

@@ -1,5 +1,0 @@
-function squircle_radius_fg(squareness, r, angle) =
-    let(
-        s2a = abs(squareness*sin(2*angle))
-    )
-    s2a>0 ? r*sqrt(2)/s2a * sqrt(1 - sqrt(1 - s2a*s2a)) : r;

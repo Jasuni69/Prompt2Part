@@ -1,9 +1,0 @@
-function QuatX(a=0) = Quat([1,0,0],a);
-
-
-// Function: QuatY()
-// Usage:
-//   QuatY(a);
-// Description: Create a new Quaternion for rotating around the Y axis [0,1,0].
-// Arguments:
-//   a = Number of degrees to rotate around the axis counter-clockwise, when facing the origin.

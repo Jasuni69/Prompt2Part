@@ -1,1 +1,0 @@
-function KreisXY(r=5,grad=0)=kreisXY(r,grad);//depreciated use RotLang

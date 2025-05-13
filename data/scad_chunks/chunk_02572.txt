@@ -1,1 +1,0 @@
-function argsinh(x) = ln(x + sqrt(sqr(x) + 1)); //! inverse hyperbolic sine

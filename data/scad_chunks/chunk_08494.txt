@@ -1,4 +1,0 @@
-function _case1000_isobands(cell_pts, threshold) = 
-    _case1222_isobands(cell_pts, threshold);
-    
- // single trapezoid

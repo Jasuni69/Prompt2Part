@@ -1,1 +1,0 @@
-function vrn2_cells_from(points) = tri_delaunay(points, ret = "VORONOI_CELLS");

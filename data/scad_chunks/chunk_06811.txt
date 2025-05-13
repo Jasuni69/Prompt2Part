@@ -1,4 +1,0 @@
-module test_v_div() {
-    assert(v_div([24,28,30], [8,7,6]) == [3, 4, 5]);
-}
-test_v_div();

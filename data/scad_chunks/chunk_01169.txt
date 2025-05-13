@@ -1,1 +1,0 @@
-function BLDC_prop_shaft_thread_length(type)    = type[25]; //! Length of threaded section of prop shaft

@@ -1,1 +1,0 @@
-function gs_boss_d(type)       = type[11]; //! Boss around the shaft diameter

@@ -1,1 +1,0 @@
-function tc_spade_height(type) = type[10];  //! Terminal spade height measured from base

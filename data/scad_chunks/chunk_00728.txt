@@ -1,1 +1,0 @@
-function pi_hole_diameter(type) = type[7]; //! Diameter of the mounting holes

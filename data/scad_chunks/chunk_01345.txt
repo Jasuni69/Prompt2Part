@@ -1,1 +1,0 @@
-function al_clad_hole(type)        = type[7];   //! Hole diameter

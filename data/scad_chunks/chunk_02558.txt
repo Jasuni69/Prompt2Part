@@ -1,4 +1,0 @@
-function rounded_polygon_length(points, tangents) = //! Calculate the length given the point list and the list of tangents computed by `rounded_polygon_tangents`
-    let(
-        arcs = rounded_polygon_arcs(points, tangents)
-    ) sumv( map( concat(tangents, arcs), function(e) e[2] ) );

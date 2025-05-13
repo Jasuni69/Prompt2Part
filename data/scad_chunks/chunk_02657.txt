@@ -1,5 +1,0 @@
-module use_stl(name) {               //! Import an STL to make a build platter
-    stl(name);
-    path = is_undef($target) ? "../stls/" : str($cwd, "/", $target, "/stls/");
-    import(str(path, name, ".stl"));
-}

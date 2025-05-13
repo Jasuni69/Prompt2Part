@@ -1,1 +1,0 @@
-function corrected_diameter(d, n = undef) = 2 * corrected_radius(d / 2 , n);                    //! Adjusted diameter to make flats lie on the circle

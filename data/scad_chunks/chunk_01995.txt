@@ -1,1 +1,0 @@
-function drag_chain_size(type)        = type[1]; //! The internal size and link length

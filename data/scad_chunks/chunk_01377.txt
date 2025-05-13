@@ -1,4 +1,0 @@
-module fack2spm_hole_positions() //! Place children at the FACK2SPM mounting hole positions
-    for(end = [-1, 1])
-        translate([0, end * 28.96 / 2])
-            children();

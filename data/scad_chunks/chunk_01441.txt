@@ -1,1 +1,0 @@
-function rail_height(type)     = type[2];   //! Height of rail section

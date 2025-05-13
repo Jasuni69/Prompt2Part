@@ -1,1 +1,0 @@
-function mains_socket_offset(type)      = type[8];   //! Offset of the socket from the centre

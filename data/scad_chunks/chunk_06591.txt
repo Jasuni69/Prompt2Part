@@ -1,9 +1,0 @@
-module test_plane_line_angle() {
-    angs = rands(0,360,3);
-    displ = rands(-1,1,1)[0];
-    info = info_str([["angs = ",angs],["displ = ",displ]]);
-    assert_approx(plane_line_angle([each rot(angs,p=[0,0,1]),displ],[[0,0,0],rot(angs,p=[0,0,1])]),90,info);
-    assert_approx(plane_line_angle([each rot(angs,p=[0,0,1]),displ],[[0,0,0],rot(angs,p=[0,1,1])]),45,info);
-    assert_approx(plane_line_angle([each rot(angs,p=[0,0,1]),0],[[0,0,0],rot(angs,p=[1,1,1])]),35.2643896828);
-}
-*test_plane_line_angle();

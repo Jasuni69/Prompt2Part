@@ -1,1 +1,0 @@
-function rd_module_kind(type)      = type[1]; //! Relay, PSU, etc.

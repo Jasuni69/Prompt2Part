@@ -1,1 +1,0 @@
-function sumv(v) = reduce(v, function(a, b) a + b, 0); //! sum a vector of values that can be added with "+"

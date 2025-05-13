@@ -1,7 +1,0 @@
-module dips()
-    for(i = [0 : len(dips) - 1]) let(dip = dips[i])
-        translate([i * inch(0.5), 0])
-            pdip(dip[0], dip[1], dip[0] > 20);
-
-if($preview)
-    dips();

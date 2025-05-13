@@ -1,1 +1,0 @@
-function screw_head_radius(type)      = type[4] / 2; //! Head radius

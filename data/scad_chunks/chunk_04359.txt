@@ -1,3 +1,0 @@
-module confinementOf() assemble(confinementPartName())children();
-
-//---------

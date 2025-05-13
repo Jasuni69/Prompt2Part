@@ -1,7 +1,0 @@
-module hookBaseInsidePre()
-{
-  echo("hookBaseInsidePre() ..");
-} // hookBaseInsidePre()
-
-//===========================================================
-// origin = box(0,0,0)

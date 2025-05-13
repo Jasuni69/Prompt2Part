@@ -1,1 +1,0 @@
-function al_clad_hpitch(type)      = type[4];   //! Lengthways pitch between screw holes

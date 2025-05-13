@@ -1,1 +1,0 @@
-function placesOnly(p)= [for(e=p)if(isPlace(e) && !isOfGeomType(e))e];

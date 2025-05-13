@@ -1,8 +1,0 @@
-function before_after(lt, pivot, leng, before = [], after = [], j = 1) =
-    j == leng ? [before, after] :
-    let(is_less = lt[j][0] < pivot[0])
-    before_after(lt, pivot, leng,
-         is_less ? [each before, lt[j]] : before, 
-         is_less ? after : [each after, lt[j]], 
-         j + 1
-    );

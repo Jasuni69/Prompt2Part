@@ -1,1 +1,0 @@
-function spring_mesh(type)   = type[9]; //! Optional pre-computed mesh

@@ -1,2 +1,0 @@
-function _inherit_gear_helical(helical,invert=false) =
-    _inherit_gear_param("helical", helical, $parent_gear_helical, dflt=0, invert=invert);

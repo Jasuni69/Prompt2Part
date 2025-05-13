@@ -1,1 +1,0 @@
-function get_ccw(cell) = cell[7];

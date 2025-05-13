@@ -1,1 +1,0 @@
-function psu_width(type)             = type[3];     //! Width

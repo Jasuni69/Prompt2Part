@@ -1,8 +1,0 @@
-module test_repeat() {
-    assert(repeat(1, 4) == [1,1,1,1]);
-    assert(repeat(8, [2,3]) == [[8,8,8], [8,8,8]]);
-    assert(repeat(0, [2,2,3]) == [[[0,0,0],[0,0,0]], [[0,0,0],[0,0,0]]]);
-    assert(repeat([1,2,3],3) == [[1,2,3], [1,2,3], [1,2,3]]);
-    assert(repeat(4, [2,-1]) == [[], []]);
-}
-test_repeat();

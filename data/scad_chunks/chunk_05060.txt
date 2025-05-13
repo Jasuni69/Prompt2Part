@@ -1,5 +1,0 @@
-function _mb_octahedron_cutoff(point, invr, xp, cutoff, neg) =
-   let( p = point*invr,
-        dist = xp>1100 ? abs(p.x)+abs(p.y)+abs(p.z)
-        : (abs(p.x+p.y+p.z)^xp + abs(-p.x-p.y+p.z)^xp + abs(-p.x+p.y-p.z)^xp + abs(p.x-p.y-p.z)^xp) ^ (1/xp)
-    ) neg * mb_cutoff(dist, cutoff) / dist;

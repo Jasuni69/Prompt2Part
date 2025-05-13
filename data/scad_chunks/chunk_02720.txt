@@ -1,6 +1,0 @@
-function rotation_matrix3(n,angle) =
-	cos(angle)*unit_matrix3() +
-	sin(angle)*cross_product_matrix3(n) +
-	(1-cos(angle))*tensor_product_matrix3(n,n);
-
-//the modules are used directly by the user

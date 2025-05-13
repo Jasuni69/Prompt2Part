@@ -1,1 +1,0 @@
-function nz_perlin2(x, y, seed) = _pnoise2(x, y, seed);

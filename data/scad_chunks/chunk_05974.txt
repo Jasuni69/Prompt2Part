@@ -1,4 +1,0 @@
-module chamferred_cylinder(h,r,d,chamfer=0.25,chamfedge,angle=45,top=true,bottom=true,center=false) {
-    chamf = chamfedge!=undef? chamfedge*sin(angle) : chamfer;
-    cyl(h=h, r=r, d=d, chamfer1=(bottom?chamf:0), chamfer2=(top?chamf:0), chamfang=angle, anchor=center?CENTER:BOT);
-}

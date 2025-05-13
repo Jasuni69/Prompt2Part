@@ -1,5 +1,0 @@
-module boms() {
-    widget_assembly();
-}
-
-boms();

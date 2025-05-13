@@ -1,8 +1,0 @@
-function plane_from_normal(normal, pt=[0,0,0]) =
-    assert( is_matrix([normal,pt],2,3) && !approx(norm(normal),0),
-            "\nInputs `normal` and `pt` should be 3d vectors/points and `normal` cannot be zero." )
-    concat(normal, normal*pt) / norm(normal);
-
-
-// Eigenvalues for a 3×3 symmetrical matrix in decreasing order
-// Based on: https://en.wikipedia.org/wiki/Eigenvalue_algorithm

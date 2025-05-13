@@ -1,1 +1,0 @@
-function hinge_thickness(type)   = type[3]; //! Thickness of the leaves

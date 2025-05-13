@@ -1,9 +1,0 @@
-function vnf_slice(vnf,dir,cuts) =
-    let(
-        //  Code below seems to be unnecessary
-        //cuts = [for (cut=cuts) _shift_cut_plane(vnf,dir,cut)],
-        vert = vnf[0],
-        faces = [for(face=vnf[1]) select(vert,face)],
-        poly_list = _slice_3dpolygons(faces, dir, cuts)
-    )
-    vnf_merge_points(vnf_from_polygons(poly_list));

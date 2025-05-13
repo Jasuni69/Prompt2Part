@@ -1,5 +1,0 @@
-module box2_base_stl()
-    pbox_base(box2) {
-        box2_base_additions();
-        box2_base_holes();
-    }

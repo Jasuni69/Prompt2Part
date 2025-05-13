@@ -1,2 +1,0 @@
-function pcb(name, desc, size, corner_r = 0, hole_d = 0, land_d = 0, colour = "green", parts_on_bom = false, holes = [], components = [], accessories = [], grid = undef, polygon = undef, screw = undef) = //! Constructor
-             [name, desc, size.x, size.y, size.z, corner_r, hole_d, land_d, colour, parts_on_bom, holes, components, accessories, grid, polygon, screw ];

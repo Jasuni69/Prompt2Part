@@ -1,6 +1,0 @@
-module sectors() {
-    linear_extrude(eps)
-        sector(50, 45, 180);
-}
-
-rotate([70, 0, 315]) sectors();

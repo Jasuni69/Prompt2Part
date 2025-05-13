@@ -1,1 +1,0 @@
-function fan_guard_thickness() = 2; //! Default thickness

@@ -1,2 +1,0 @@
-function every(val=1,start=0,of=$totalPieces,totalPieces=$totalPieces)
-	=($valPtr*of/totalPieces)*val+start;

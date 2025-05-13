@@ -1,1 +1,0 @@
-function hot_end_duct_height_fan(type)    = type[13];   //! Duct height at fan end

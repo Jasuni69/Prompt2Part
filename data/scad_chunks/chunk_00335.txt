@@ -1,1 +1,0 @@
-function mains_socket_corner(type)      = type[5];   //! Corner radius

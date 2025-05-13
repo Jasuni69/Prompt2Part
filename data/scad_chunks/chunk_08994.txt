@@ -1,7 +1,0 @@
-function _tri_ear_clipping_impl(shape_pts,  epsilon) =
-    let(
-        num_of_vertices = len(shape_pts),
-        v = num_of_vertices - 1,
-        count = 2 * num_of_vertices        
-    )
-    num_of_vertices < 3 ? [] : _real_triangulate(shape_pts, [], [each [0:v]], v, num_of_vertices, count, epsilon);

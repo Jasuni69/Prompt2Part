@@ -1,1 +1,0 @@
-function extrusion_corner_bracket_side_thickness(type)   = type[3]; //! Thickness of side of bracket

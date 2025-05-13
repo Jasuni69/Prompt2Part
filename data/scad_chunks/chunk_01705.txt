@@ -1,1 +1,0 @@
-function pcb_accessories(type)  = type[12]; //! List of accessories to go on the BOM, SD cards, USB cables, etc.

@@ -1,5 +1,0 @@
-function count_from(lt, from, leng_lt) = 
-    len([
-        for(i = from; i < leng_lt && lt[i] == lt[from]; i = i + 1)
-        undef
-    ]);

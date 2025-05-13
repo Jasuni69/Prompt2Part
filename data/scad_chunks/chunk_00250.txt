@@ -1,6 +1,0 @@
-module quadrants() {
-    linear_extrude(eps)
-        quadrant(10, 4);
-}
-
-rotate([70, 0, 315]) quadrants();

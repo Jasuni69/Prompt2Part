@@ -1,9 +1,0 @@
-function screw(spec, head, drive, thread, drive_size, 
-             length, l, thread_len, tolerance, details=true, 
-             undersize, shaft_undersize, head_undersize,
-             atype="screw",anchor, spin=0, orient=UP,
-             _shoulder_diam=0, _shoulder_len=0,
-             bevel,bevel1,bevel2,bevelsize,
-             blunt_start,blunt_start1, blunt_start2,
-             _internal=false, _counterbore, _teardrop=false)
-   = no_function("screw");

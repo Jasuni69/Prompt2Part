@@ -1,1 +1,0 @@
-function pmeter_pcb(type)         = type[12]; //! Optional PCB for open types

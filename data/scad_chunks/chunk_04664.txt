@@ -1,8 +1,0 @@
-function translateRadiiPoints(radiiPoints,tran=[0,0],rot=0)=
-	[for(i=radiiPoints) 
-		let(
-      a=getAngle([0,0],[i.x,i.y]),//get the angle of the this point
-		  h=pointDist([0,0],[i.x,i.y]) //get the hypotenuse/radius
-    )
-		[h*cos(a+rot)+tran.x,h*sin(a+rot)+tran.y,i.z]//calculate the point's new position
-	];

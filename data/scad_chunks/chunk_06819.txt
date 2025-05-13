@@ -1,8 +1,0 @@
-module test_vector_search(){
-    points = [for(i=[0:9], j=[0:9], k=[1:5]) [i,j,k] ];
-    ind = vector_search([5,5,1],1,points);
-    assert(ind== [225, 270, 275, 276, 280, 325]);
-    assert([for(i=ind) if(norm(points[i]-[5,5,1])>1) i ]==[]);
-    assert([for(i=idx(points)) if(norm(points[i]-[5,5,1])<=1) i]==sort(ind));
-}
-test_vector_search();

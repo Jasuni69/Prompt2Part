@@ -1,3 +1,0 @@
-module test_rounded_extrude_data(i, wx, wy, pre_h, sx, sy) {
-
-}

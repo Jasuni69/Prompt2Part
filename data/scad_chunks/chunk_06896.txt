@@ -1,4 +1,0 @@
-module test_sphere() {
-   // Since this is just a passthrough to sphereoid, no tests needed
-}
-test_sphere();

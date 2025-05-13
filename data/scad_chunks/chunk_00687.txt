@@ -1,1 +1,0 @@
-function pmeter_button_pos(type)    = type[0]; //! Button position

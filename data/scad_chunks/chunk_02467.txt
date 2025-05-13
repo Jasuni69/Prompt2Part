@@ -1,5 +1,0 @@
-module dogbone_rectangle(size, r = cnc_bit_r, center = true, xy_center = true, x_offset, y_offset) //! Rectangle with cylinders at the corners
-{
-    extrude_if(h = size.z, center = center)
-        dogbone_square([size.x, size.y], r, xy_center, x_offset, y_offset);
-}

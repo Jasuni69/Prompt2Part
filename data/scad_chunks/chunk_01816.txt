@@ -1,6 +1,0 @@
-module battery_led_positions(type) { //! Position of the LEDs on a Lumintop
-    posns = battery_led_positions(type);
-    for($i = [0 : 1 : len(posns) - 1])
-        translate([posns[$i].x, posns[$i].y, battery_length(type) / 2 - battery_pos_height(type)])
-            children();
-}

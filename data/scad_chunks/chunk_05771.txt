@@ -1,4 +1,0 @@
-function _vnf_validate_err(name, extra) =
-    let(
-        info = [for (x = _vnf_validate_errs) if (x[0] == name) x][0]
-    ) concat(info, [extra]);

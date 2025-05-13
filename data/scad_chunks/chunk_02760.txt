@@ -1,7 +1,0 @@
-module createHoles(holeDiamiter = 8.5, holeCount = 8 * 2, holeTrDiameter = 130.3, flangeSize = 20) {
-	for (i = [0 : holeCount - 1]) {
-		rotate((i + 1 / 2) * 360 / holeCount, [0, 0, 1])
-			translate([0, holeTrDiameter / 2])
-				cylinder(d = holeDiamiter, h = flangeSize);
-	}
-}

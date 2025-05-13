@@ -1,7 +1,0 @@
-module MO(condition=true,warn=false){
-$idx=is_undef($idx)?false:$idx;
-Echo(str(parent_module(2)," has no children!"),color=warn?"warning":"red",condition=condition&&$parent_modules>1&&!$idx,help=false);    
-}
-
-
-/// echo color differtiations

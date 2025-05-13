@@ -1,6 +1,0 @@
-module fack2spm_holes(h = 0) { //! Cut the holes for a FACK2SPM
-    fack2spm_hole_positions()
-        drill(screw_clearance_radius(fack2spm_screw()), h);
-
-    dogbone_rectangle([17.15, 22.86, h]);
-}

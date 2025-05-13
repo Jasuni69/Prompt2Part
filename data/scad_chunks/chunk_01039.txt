@@ -1,1 +1,0 @@
-function screw_socket_af(type)        = type[7];     //! Socket across flats

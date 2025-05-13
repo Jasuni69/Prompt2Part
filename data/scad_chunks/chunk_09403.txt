@@ -1,7 +1,0 @@
-function list_remove(list, elements) = [
-	for (i = [0:len(list)-1]) if (!search(i, elements)) list[i]
-];
-
-
-
-// Internal.  Not exposed.

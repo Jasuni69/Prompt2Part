@@ -1,1 +1,0 @@
-module magwart_shape(d) { qwart(d); }

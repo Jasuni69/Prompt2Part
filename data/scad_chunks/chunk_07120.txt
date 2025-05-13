@@ -1,8 +1,0 @@
-function krishna_anklets     (levels=6,  step=1) = lsystem_turtle(levels=levels, step=step, angle=45,  "-X--X",     [["X","XFX--XFX"]]);
-
-
-points = hilbert_curve(levels=5, step=100/pow(2,5));
-stroke(points, width=1);
-
-
-// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

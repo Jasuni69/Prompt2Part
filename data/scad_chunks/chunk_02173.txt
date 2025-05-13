@@ -1,1 +1,0 @@
-function bbox_star_washers(type)= type[10];//! Set to false to remove star washers.

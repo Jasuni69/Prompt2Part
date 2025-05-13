@@ -1,9 +1,0 @@
-function array_pad(v, minlen, fill=undef) = let(l=len(v)) [for (i=[0:max(l,minlen)-1]) i<l? v[i] : fill];
-
-
-// Function: array_trim()
-// Description:
-//   If the list `v` is longer than `maxlen` length, truncates it to be `maxlen` items long.
-// Arguments:
-//   v = A list.
-//   minlen = The minimum length to pad the list to.

@@ -1,4 +1,0 @@
-function between_360(a) = 
-    a >= 360 ? a - 360 :
-	a < 0 ? a + 360 :
-	a;

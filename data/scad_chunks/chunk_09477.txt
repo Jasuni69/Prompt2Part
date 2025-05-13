@@ -1,7 +1,0 @@
-function remove_undefs(v) = [for (x = v) if (is_def(x)) x];
-
-
-// Function: first_defined()
-// Description:
-//   Returns the first item in the list that is not `undef`.
-//   If all items are `undef`, or list is empty, returns `undef`.

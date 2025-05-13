@@ -1,1 +1,0 @@
-function psu_name(type)              = type[1];     //! The part name

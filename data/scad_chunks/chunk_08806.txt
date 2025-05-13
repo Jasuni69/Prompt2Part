@@ -1,3 +1,0 @@
-function stereographic_proj_to_plane(point) =
-    let(n = 1 - point.z)
-    [point.x / n, point.y / n];

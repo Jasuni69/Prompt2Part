@@ -1,3 +1,0 @@
-function r2(sinv, leng_cv, pre_R) = sinv * (leng_cv - pre_R) / (1 + sinv);
-
-// the 3rd circle

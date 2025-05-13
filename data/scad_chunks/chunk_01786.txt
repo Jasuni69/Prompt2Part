@@ -1,1 +1,0 @@
-function pdip_pin_t(type) = type[0]; //! Pin thickness

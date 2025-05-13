@@ -1,2 +1,0 @@
-module toggle_hole(type, h = 100)           //! Drill the hole in a panel
-    drill(toggle_hole_radius(type), h);

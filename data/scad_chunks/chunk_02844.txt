@@ -1,4 +1,0 @@
-module Shape2D()
-{
-  text_subdivision("🐢",weight=0.5,method="weightedpath",smooth=4);
-}

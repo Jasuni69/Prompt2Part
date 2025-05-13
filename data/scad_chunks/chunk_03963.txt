@@ -1,4 +1,0 @@
-function alignSkin(direction = ZCENTER) = let(skinDist=margin(0,$skinThick-$margin/2)) 
-															XYZ(direction==TORIGHT? skinDist : direction==TOLEFT ?-skinDist :0
-															 ,direction==TOREAR? skinDist : direction==TOFRONT ?-skinDist :0
-															 ,direction==TOUP? skinDist : direction==TODOWN ?-skinDist :0);

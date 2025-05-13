@@ -1,1 +1,0 @@
-function thermistor_y(type)  = type[4];

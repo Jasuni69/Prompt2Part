@@ -1,8 +1,0 @@
-function _rfcheck(x,y,range,tol) =
-   assert(is_finite(y), str("Function not finite at ",x))
-   abs(y) < tol*(range[1]-range[0]);
-
-// xpts and ypts are arrays whose first two entries contain the
-// interval bracketing the root.  Extra entries are ignored.
-// yrange is the total observed range of y values (used for the
-// tolerance test).

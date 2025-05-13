@@ -1,4 +1,0 @@
-function _line_greatest_distance(points,line) = // internal function
-    is_undef(line) ? INF
-    : let(d = [ for(p=points) point_line_distance(p, line) ])
-        max(d);

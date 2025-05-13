@@ -1,1 +1,0 @@
-function variac_dial_big_hole(type)  = type[15] ? type[15] : variac_shaft_dia(type) + 2;                    //! Central dial hole diameter

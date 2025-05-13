@@ -1,1 +1,0 @@
-function ribbon_clamp_width(screw = screw) = 2 * (insert_hole_radius(screw_insert(screw)) + wall); //! Width

@@ -1,1 +1,0 @@
-function opengrab_width() = width;                               //! Module width

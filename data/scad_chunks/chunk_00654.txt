@@ -1,1 +1,0 @@
-function nut_square_width(type)     = type[2];  //! Width of the square nut

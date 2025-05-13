@@ -1,1 +1,0 @@
-function pdip_pin_W(type) = type[4]; //! Pin shoulder width

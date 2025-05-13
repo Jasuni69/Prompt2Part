@@ -1,1 +1,0 @@
-function ghost_this() = no_function("ghost_this");

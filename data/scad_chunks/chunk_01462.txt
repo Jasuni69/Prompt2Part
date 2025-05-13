@@ -1,1 +1,0 @@
-function carriage_travel(type, rail_length) = rail_length - carriage_length(type); //! How far the carriage can travel on a given length rail

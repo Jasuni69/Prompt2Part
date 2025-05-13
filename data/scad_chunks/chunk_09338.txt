@@ -1,4 +1,0 @@
-function PathMatrix(t) =
-  [[cos(t*360), -sin(t*360), 0, 50*cos(t*360)],
-   [sin(t*360),  cos(t*360), 0, 40*sin(t*360)],
-   [         0,           0, 1,             0]];

@@ -1,1 +1,0 @@
-function sampling_k(s) = s[1];

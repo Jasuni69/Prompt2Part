@@ -1,6 +1,0 @@
-function shape_trapezium(length, h, corner_r = 0) = 
-    __trapezium(
-        length = length, 
-        h = h, 
-        round_r = corner_r
-    );

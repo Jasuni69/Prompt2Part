@@ -1,1 +1,0 @@
-function hashmap_entries(map) = [for(bucket = map) each bucket];

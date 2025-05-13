@@ -1,1 +1,0 @@
-function pbox_insert(type) = screw_insert(pbox_screw(type), short = pbox_short_insert(type)); //! The insert for the base screws

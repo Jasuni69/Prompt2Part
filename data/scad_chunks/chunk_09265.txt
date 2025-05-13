@@ -1,2 +1,0 @@
-function _convex_hull_convex_hull_lower_m(chain, p, m) = 
-    (m < 2 || _convex_hull_impl_dir(chain[m - 2], chain[m - 1], p) > 0) ? m : _convex_hull_convex_hull_lower_m(chain, p, m - 1);

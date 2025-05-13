@@ -1,7 +1,0 @@
-module enviro_plus_case_stl() {
-     pbox(box) {
-        box_internal_additions();
-        box_holes();
-        box_external_additions();
-     }
-}

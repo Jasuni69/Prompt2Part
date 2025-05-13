@@ -1,7 +1,0 @@
-module hull_region(region)
-{
-  hull()region(region);
-}
-
-
-// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

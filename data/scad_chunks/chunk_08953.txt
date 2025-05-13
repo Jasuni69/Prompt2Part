@@ -1,8 +1,0 @@
-function wf_entropy_weights(wf, x, y) = 
-    let(
-		all_weights = wf_weights(wf),
-		weights = [for(state = wf_eigenstates(wf)[y][x]) get_state_weight(all_weights, state)],
-		sumOfWeights = sum(weights),
-		sumOfWeightLogWeights = sum([for(w = weights) w * ln(w)]) 
-	)
-	[ln(sumOfWeights) - (sumOfWeightLogWeights / sumOfWeights) - rand() / 1000, weights];

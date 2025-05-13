@@ -1,1 +1,0 @@
-function sk_screw_separation(type) = type[9]; //! Separation of screws in the base

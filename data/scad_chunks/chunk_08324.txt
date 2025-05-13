@@ -1,3 +1,0 @@
-module test_bend_tri_frag(points, angle) {
-
-}

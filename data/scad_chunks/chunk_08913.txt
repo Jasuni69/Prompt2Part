@@ -1,1 +1,0 @@
-function velocity_of(node) = node[1];

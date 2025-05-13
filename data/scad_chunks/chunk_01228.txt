@@ -1,1 +1,0 @@
-function vero_track_thickness(type)= 0.035;     //! Thickness of the tracks

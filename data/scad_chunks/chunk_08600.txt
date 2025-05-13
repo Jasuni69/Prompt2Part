@@ -1,6 +1,0 @@
-function _in_any_edges(edges, pt, epsilon) = 
-    let( 
-        leng = len(edges),
-        maybe_last = [for(i = 0; i < leng && !__in_line(edges[i], pt, epsilon); i = i + 1) i][leng - 1] 
-    )
-    is_undef(maybe_last);

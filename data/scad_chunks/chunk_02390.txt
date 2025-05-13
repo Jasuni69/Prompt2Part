@@ -1,4 +1,0 @@
-module ribbon_clamp_hole_positions(ways, screw = screw, side = undef) //! Place children at hole positions
-    for(x = is_undef(side) ? [-1, 1] : side)
-        translate([x * ribbon_clamp_hole_pitch(ways, screw) / 2, 0])
-            children();

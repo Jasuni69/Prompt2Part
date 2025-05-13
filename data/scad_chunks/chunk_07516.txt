@@ -1,1 +1,0 @@
-function RotPoints(grad,points)=[for(i=[0:len(points)-1])RotLang(rot=atan2(points[i][0],points[i][1])+grad,l=norm([points[i][0],points[i][1]]),z=points[i][2])];

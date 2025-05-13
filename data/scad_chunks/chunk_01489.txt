@@ -1,1 +1,0 @@
-function antenna_length(type)   = type[2];  //! Total length

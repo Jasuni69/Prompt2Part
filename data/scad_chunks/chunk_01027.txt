@@ -1,1 +1,0 @@
-function ssr_base_t(type)     = type[5]; //! Thickness of metal base

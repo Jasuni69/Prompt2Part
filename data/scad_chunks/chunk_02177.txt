@@ -1,1 +1,0 @@
-function bbox_volume(type) = bbox_width(type) * bbox_depth(type) * bbox_height(type) / 1000000; //! Internal volume in litres

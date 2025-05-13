@@ -1,8 +1,0 @@
-module test_asinh() {
-    assert_approx(asinh(sinh(-2)), -2);
-    assert_approx(asinh(sinh(-1)), -1);
-    assert_approx(asinh(sinh(0)), 0);
-    assert_approx(asinh(sinh(1)), 1);
-    assert_approx(asinh(sinh(2)), 2);
-}
-test_asinh();

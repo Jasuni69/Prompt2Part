@@ -1,9 +1,0 @@
-module test_reindex_polygon() {
-   pent = subdivide_path([for(i=[0:4])[sin(72*i),cos(72*i)]],5);
-   circ = circle($fn=5,r=2.2);
-   assert_approx(reindex_polygon(circ,pent), [[0.951056516295,0.309016994375],[0.587785252292,-0.809016994375],[-0.587785252292,-0.809016994375],[-0.951056516295,0.309016994375],[0,1]]);
-   poly = [[-1,1],[-1,-1],[1,-1],[1,1],[0,0]];
-   ref  = [for(i=[0:4])[sin(72*i),cos(72*i)]];
-   assert_approx(reindex_polygon(ref,poly),[[0,0],[1,1],[1,-1],[-1,-1],[-1,1]]);
-}
-*test_reindex_polygon();

@@ -1,9 +1,0 @@
-module test_str_split() {
-    assert(str_split("abc-def+ghi-jkl", "-") == ["abc","def+ghi","jkl"]);
-    assert(str_split("abc-def+ghi-jkl", "-+") == ["abc","def","ghi","jkl"]);
-    assert(str_split("abc--def-ghi", "-", true) == ["abc","","def","ghi"]);
-    assert(str_split("abc--def-ghi", "-", false) == ["abc","def","ghi"]);
-    assert(str_split("abc-+def-ghi", "-+", true) == ["abc","","def","ghi"]);
-    assert(str_split("abc-+def-ghi", "-+", false) == ["abc","def","ghi"]);
-}
-test_str_split();

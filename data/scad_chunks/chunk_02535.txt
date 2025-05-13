@@ -1,3 +1,0 @@
-function arc_points(r, a = [90, 0, 180], al = 90) = //! Generate the points of a circular arc
-   let(sides = ceil(r2sides(r) * al / 360), tf = rotate(a))
-    [for(i = [0 : sides]) let(t = i * al / sides) transform([r * sin(t), r * cos(t), 0], tf)];

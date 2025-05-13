@@ -1,8 +1,0 @@
-module nil() union() {}
-
-
-// Module: noop()
-//
-// Description:
-//   Passes through the children passed to it, with no action at all.
-//   Useful while debugging when you want to replace a command.

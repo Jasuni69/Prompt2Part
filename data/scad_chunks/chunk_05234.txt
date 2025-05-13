@@ -1,1 +1,0 @@
-function highlight(highlight) = no_function("highlight");

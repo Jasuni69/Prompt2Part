@@ -1,5 +1,0 @@
-module test_determinant() {
-    M = [ [6,4,-2,9], [1,-2,8,3], [1,5,7,6], [4,2,5,1] ];
-    assert_equal(determinant(M), 2267);
-}
-test_determinant();

@@ -1,7 +1,0 @@
-module test_is_polygon_clockwise() {
-    assert(is_polygon_clockwise([[-1,1],[1,1],[1,-1],[-1,-1]]));
-    assert(!is_polygon_clockwise([[1,1],[-1,1],[-1,-1],[1,-1]]));
-    assert(is_polygon_clockwise(circle(d=100)));
-    assert(is_polygon_clockwise(square(100)));
-}
-*test_is_polygon_clockwise();

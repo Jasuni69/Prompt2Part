@@ -1,7 +1,0 @@
-module green_terminals()
-    layout([for(t = green_terminals) gt_depth(t)], 15)
-        rotate(180)
-            green_terminal(green_terminals[$i], len(green_terminals) + 1 - $i);
-
-if($preview)
-    green_terminals();

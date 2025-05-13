@@ -1,1 +1,0 @@
-function carrier_height() = 3; //! Height of PCB carrier

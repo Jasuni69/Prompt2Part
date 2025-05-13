@@ -1,3 +1,0 @@
-function currentPart(forWhat=0) =
-    let(val = $geomInfo[getTypeIndex($type_currentPartStack)])
-    is_undef(val[forWhat])? val[0] : val[forWhat];

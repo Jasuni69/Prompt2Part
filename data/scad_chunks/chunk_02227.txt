@@ -1,1 +1,0 @@
-function socket_box_depth() = height; //! Outside depth of the backbox

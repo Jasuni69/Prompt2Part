@@ -1,1 +1,0 @@
-function pmeter_inner_ap(type)    = type[10]; //! Inner aperture

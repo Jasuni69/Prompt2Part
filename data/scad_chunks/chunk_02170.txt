@@ -1,1 +1,0 @@
-function bbox_height(type)     = type[7]; //! Internal height

@@ -1,1 +1,0 @@
-function tubing_material(type) = type[1]; //! Material description

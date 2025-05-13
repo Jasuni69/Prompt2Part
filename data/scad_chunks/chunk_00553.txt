@@ -1,1 +1,0 @@
-function t_insert_thread(type)        = type[6];   //! M thread for this the screw hole in this insert

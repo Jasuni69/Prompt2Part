@@ -1,2 +1,0 @@
-function collapsing(method) =
-    method == "length" ? wf_coord_weights_min_leng : wf_coord_weights_min_entropy;

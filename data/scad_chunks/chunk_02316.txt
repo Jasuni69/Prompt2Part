@@ -1,1 +1,0 @@
-function strap_width(type = strap)     = type[0]; //! Width of strap

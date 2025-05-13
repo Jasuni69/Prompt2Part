@@ -1,3 +1,0 @@
-function reverseList(list) = [ for(i=[len(list) - 1:-1:0]) list[i] ];
-
-// Apply `reverseList` to the array of vertex indices for an array of faces

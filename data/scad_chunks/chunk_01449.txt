@@ -1,1 +1,0 @@
-function rail_groove_offset(type)=type[10]; //! Offset of centre of groove from top of rail

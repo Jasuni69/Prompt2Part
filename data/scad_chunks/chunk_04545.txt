@@ -1,9 +1,0 @@
-module MetricWasher(diameter) {
-  difference() {
-    cylinder(h=diameter/5, r=1.15*diameter, $fn=24*diameter);
-    cylinder(h=2*diameter, r=0.575*diameter, $fn=12*diameter, center=true);
-  }
-}
-
-
-// Solid rod on the bottom, external threads on the top.

@@ -1,1 +1,0 @@
-function BLDC_shaft_offset(type)                = type[5]; //! shaft offset from base

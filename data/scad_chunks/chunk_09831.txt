@@ -1,8 +1,0 @@
-module test_tanh() {
-	assert(abs(tanh(-2)+0.9640275801) < eps);
-	assert(abs(tanh(-1)+0.761594156) < eps);
-	assert(abs(tanh(0)) < eps);
-	assert(abs(tanh(1)-0.761594156) < eps);
-	assert(abs(tanh(2)-0.9640275801) < eps);
-}
-test_tanh();

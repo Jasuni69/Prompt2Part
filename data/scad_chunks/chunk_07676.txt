@@ -1,6 +1,0 @@
-module VorterantQ(size=20,ofs=.5,name){
-s=Umkreis(4,size/2-ofs);
-
-k1=Kreis(s,rand=0,grad=90);   
-versch=[for(i=[0:len(k1)])[-Inkreis(4,s),0]]; 
-offset= [for(i=[0:len(k1)])[ofs*sin(45+i*90/len(k1)),ofs*cos(45+i*90/len(k1))]];

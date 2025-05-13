@@ -1,1 +1,0 @@
-function microswitch_leg(type)       = type[14];    //! Leg types

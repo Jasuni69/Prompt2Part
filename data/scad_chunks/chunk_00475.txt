@@ -1,1 +1,0 @@
-function iec_part(type)     = type[1];  //! Description

@@ -1,6 +1,0 @@
-function region_area(region) =
-  assert(is_region(region), "\nInput must be a region.")
-  let(
-      parts = region_parts(region)
-  )
-  -sum([for(R=parts, poly=R) polygon_area(poly,signed=true)]);

@@ -1,7 +1,0 @@
-function is_description(desc) =
-  is_list(desc) && len(desc)==2 && is_matrix(desc[0],4,4) && is_list(desc[1]) && is_string(desc[1][0]);
-
-
-
-
-// vim: expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap

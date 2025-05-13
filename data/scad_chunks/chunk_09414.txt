@@ -1,9 +1,0 @@
-function point2d(p) = [for (i=[0:1]) (p[i]==undef)? 0 : p[i]];
-
-
-// Function: path2d()
-// Description:
-//   Returns a list of 2D vectors/points from a list of 2D or 3D vectors/points.
-//   If given a 3D point list, removes the Z coordinates from each point.
-// Arguments:
-//   points = A list of 2D or 3D points/vectors.

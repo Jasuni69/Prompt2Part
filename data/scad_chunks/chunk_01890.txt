@@ -1,1 +1,0 @@
-function box_screw(type)       = type[0]; //! Screw type to be used at the corners

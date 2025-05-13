@@ -1,1 +1,0 @@
-function t_insert_height(type)        = type[4];   //! Height of t-track insert

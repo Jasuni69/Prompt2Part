@@ -1,2 +1,0 @@
-function delaunayBoundaries(d, badTriangles, _indices_hash) = 
-	_delaunayBoundaries(d, badTriangles, [], badTriangles[0], 0, _indices_hash);

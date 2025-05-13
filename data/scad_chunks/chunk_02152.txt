@@ -1,1 +1,0 @@
-function led_bezel_led(type)      = type[0]; //! The LED

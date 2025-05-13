@@ -1,5 +1,0 @@
-function substr(str, pos=0, len=undef) =
-    assert(is_string(str))
-    is_list(pos) ? _substr(str, pos[0], pos[1]-pos[0]+1) :
-    len == undef ? _substr(str, pos, len(str)-pos) :
-    _substr(str,pos,len);

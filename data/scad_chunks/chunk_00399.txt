@@ -1,1 +1,0 @@
-function variac_dial_dia(type)       = type[11];    //! Dial diameter

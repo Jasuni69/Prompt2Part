@@ -1,1 +1,0 @@
-function iec_flange_t(type) = type[15]; //! Flange thickness

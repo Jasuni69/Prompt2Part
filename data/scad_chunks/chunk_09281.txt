@@ -1,1 +1,0 @@
-function sampling_columns(s) = s[6];

@@ -1,2 +1,0 @@
-function compatible_nbr_tile(compatibilities, current_tiles, nbr_tile, dir) =
-    some(current_tiles, function(tile) contains(compatibilities, [tile, nbr_tile, dir]));

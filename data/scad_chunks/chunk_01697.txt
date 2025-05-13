@@ -1,1 +1,0 @@
-function pcb_thickness(type)    = type[4];  //! Thickness

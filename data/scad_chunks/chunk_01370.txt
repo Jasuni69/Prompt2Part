@@ -1,1 +1,0 @@
-function tc_body_height(type)  = type[8];   //! Plastic body height

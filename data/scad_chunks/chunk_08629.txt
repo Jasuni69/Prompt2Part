@@ -1,2 +1,0 @@
-function _collect_pts_from(lines, leng) = 
-    [each [for(line = lines) line[0]], lines[leng - 1][1]];

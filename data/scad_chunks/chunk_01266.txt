@@ -1,1 +1,0 @@
-function scs_screw(type)                = type[11]; //! Screw type

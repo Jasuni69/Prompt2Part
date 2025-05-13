@@ -1,1 +1,0 @@
-function _gear_q7(f,r,b,r2,t,s) = _gear_q6(b,s,t,(1-f)*max(b,r)+f*r2);                   //radius a fraction f up the curved side of the tooth

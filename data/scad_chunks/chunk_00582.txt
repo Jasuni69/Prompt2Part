@@ -1,1 +1,0 @@
-function light_strip_depth(type)         = type[6]; //! Outside depth

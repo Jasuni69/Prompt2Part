@@ -1,1 +1,0 @@
-function zeroIfNot(boolVal)= (boolVal)?1:0;

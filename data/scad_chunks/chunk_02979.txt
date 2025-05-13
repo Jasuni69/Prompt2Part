@@ -1,9 +1,0 @@
-module SampleMask(theMask)
-{
-//genMaskfromParam(params,  width, height, depth, hOffset, vOffset, addRot)
-  genMaskfromParam(theMask[1], 100,   100,    2,     0,       0,       0);
-}
-//SampleMask( maskHoneycomb);
-
-//===========================================================
-// Test module for making Polygons

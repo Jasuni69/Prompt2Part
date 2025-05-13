@@ -1,1 +1,0 @@
-function currentPartRemove() = currentPart(2);

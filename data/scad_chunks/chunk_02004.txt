@@ -1,3 +1,0 @@
-function drag_chain_radius(type) = //! The bend radius at the pivot centres
-    let(s = drag_chain_size(type))
-        s.x / 2 / sin(360 / 16);

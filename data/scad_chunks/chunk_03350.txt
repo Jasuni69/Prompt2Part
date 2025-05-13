@@ -1,9 +1,0 @@
-function checkInside(blockOpeners,chr) =
-                    ( len (blockOpeners) > 0
-                      && blockOpeners[0] == "[" && chr == "]")
-                   || (len(blockOpeners) > 0
-                      && blockOpeners[0] == "(" && chr == ")") ? [for(i=[1:1:len(blockOpeners)-1])blockOpeners[i]]
-                                              :  chr=="(" || chr=="[" ? concat([chr],blockOpeners)
-                                              :  blockOpeners;
-
-//------

@@ -1,1 +1,0 @@
-function box_base_sheet(type)  = type[5]; //! Sheet type for the bottom

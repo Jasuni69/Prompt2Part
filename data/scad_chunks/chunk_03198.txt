@@ -1,7 +1,0 @@
-labelsPlane =
-[
-];
-
-
-//---- This is where the magic happens ----
-YAPPgenerate();

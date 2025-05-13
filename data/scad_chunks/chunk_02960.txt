@@ -1,4 +1,0 @@
-function standoffHeight(pcbName="Main") = 
-  ((getVectorBase(pcbName, pcb))[6] < 0) 
-    ? shellInsideHeight - pcbThickness(pcbName) + (getVectorBase(pcbName, pcb))[6]
-    : (getVectorBase(pcbName, pcb))[6];

@@ -1,4 +1,0 @@
-function hyp_adj_to_ang(hyp,adj) =
-    assert(is_finite(hyp) && hyp>0 && is_finite(adj) && adj>=0,
-            "Triangle side lengths should be positive numbers." )
-    acos(adj/hyp);

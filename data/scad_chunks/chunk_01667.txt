@@ -1,4 +1,0 @@
-module blower_hole_positions(type) //! Translate children to screw hole positions
-    for(hole = blower_screw_holes(type))
-        translate(hole)
-            children();

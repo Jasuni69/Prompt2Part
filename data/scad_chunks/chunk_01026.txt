@@ -1,1 +1,0 @@
-function ssr_height(type)     = type[4]; //! Height

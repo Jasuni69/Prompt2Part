@@ -1,2 +1,0 @@
-function _s(s, end, t, knots) =
-    t >= knots[s] && t <= knots[s+1] ? s : _s(s + 1, end, t, knots);

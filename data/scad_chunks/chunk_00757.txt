@@ -1,1 +1,0 @@
-function psu_right_bay(type)         = type[9];     //! Bay for heatsink

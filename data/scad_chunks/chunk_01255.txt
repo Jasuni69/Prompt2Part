@@ -1,1 +1,0 @@
-function extrusion_corner_bracket_hole_offset(type)      = type[4]; //! Hole offset from corner

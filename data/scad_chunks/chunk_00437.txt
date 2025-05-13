@@ -1,1 +1,0 @@
-function NEMA_shaft_dia(type)    = type[7]; //! Shaft diameter

@@ -1,2 +1,0 @@
-function bezier_min_z(v, steps = 100, z = inf, i = 0) = //! Calculate the minimum z coordinate of a Bezier curve from control points `v`
-     i <= steps ? bezier_min_z(v, steps, min(z, bezier(i / steps, v).z), i + 1) : z;

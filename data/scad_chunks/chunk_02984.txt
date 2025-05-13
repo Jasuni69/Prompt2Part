@@ -1,4 +1,0 @@
-function hole_diameter(main_diameter) = sqrt((2 / 4.5) * main_diameter * main_diameter);
-
-// Funkcia na výpočet vzdialenosti výrezových valcov od stredu
-// Function to calculate the distance of the cutout cylinders from the center

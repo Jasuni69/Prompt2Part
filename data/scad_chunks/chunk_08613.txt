@@ -1,3 +1,0 @@
-function _outward_edge_normal(edge) =     
-    let(nv = unit_vector(edge[1] - edge[0]))
-    [nv.y, -nv.x];

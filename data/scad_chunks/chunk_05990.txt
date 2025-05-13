@@ -1,1 +1,0 @@
-function joiner(l=40, w=10, base=10, ang=30, screwsize, anchor=CENTER, spin=0, orient=UP) = no_function("joiner");

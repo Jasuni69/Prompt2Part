@@ -1,1 +1,0 @@
-function sbr_rail_center_height(type)   = type[2]; //! Height of the center above the bottom of the rail

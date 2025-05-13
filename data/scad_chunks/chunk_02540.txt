@@ -1,3 +1,0 @@
-function offset_paths(path, offsets, twists = 0) = let( //! Create new paths offset from the original, optionally spiralling around it
-        transforms = sweep_transforms(path, twist = 360 * twists, initial_rotation = 0)
-    ) [for(o = offsets) let(initial = [o.x, o.y, o.z, 1]) [for(t = transforms) initial * t]];

@@ -1,4 +1,0 @@
-function growNode(node, nxNode) = 
-    node((position_of(node) + position_of(nxNode)) / 2, option_of(node));
-
-// nodes

@@ -1,1 +1,0 @@
-function rod_end_sphere_radius(type)         = type[8];    //!radius of the rod end sphere

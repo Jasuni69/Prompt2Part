@@ -1,3 +1,0 @@
-module servo_screw_positions(type) //! Position children at screw positions
-    faceplate_screw_positions(servo_motor_faceplate(type))
-        children();

@@ -1,1 +1,0 @@
-function  d_lengths(type)          = type[2];   //! Lengths of the D for plug and socket

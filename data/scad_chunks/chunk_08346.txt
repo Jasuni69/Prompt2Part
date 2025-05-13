@@ -1,3 +1,0 @@
-module test_function_grapher_faces(points, faces) {
-
-}

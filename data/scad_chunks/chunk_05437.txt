@@ -1,4 +1,0 @@
-function _local_struct_val(struct, key)=
-    assert(is_def(key),"key is missing")
-    let(ind = search([key],struct)[0])
-    ind == [] ? undef : struct[ind][1];

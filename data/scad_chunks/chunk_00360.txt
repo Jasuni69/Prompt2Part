@@ -1,1 +1,0 @@
-function ldr_diameter(type)    = type[2]; //! The diameter of the round bit

@@ -1,7 +1,0 @@
-function _dual_vertices(vnf) =
-  let(vert=vnf[0])
-  [for(face=vnf[1])
-      let(planes = select(vert,face))
-      //linear_solve3(planes, [for(p=planes) p*p])
-      linear_solve3(select(planes,0,2), [for(i=[0:2]) planes[i]*planes[i]]) // Handle larger faces, maybe?
-  ];

@@ -1,8 +1,0 @@
-module test_plane_from_polygon(){
-    poly1 = [ rands(-1,1,3), rands(-1,1,3)+[2,0,0], rands(-1,1,3)+[0,2,2] ];
-    poly2 = concat(poly1, [sum(poly1)/3] );
-    info = info_str([["poly1 = ",poly1],["poly2 = ",poly2]]);
-    assert_approx(plane_from_polygon(poly1),plane3pt(poly1[0],poly1[1],poly1[2]),info);
-    assert_approx(plane_from_polygon(poly2),plane3pt(poly1[0],poly1[1],poly1[2]),info);
-}
-*test_plane_from_polygon();

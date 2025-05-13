@@ -1,5 +1,0 @@
-module use_svg(name) {               //! Import an SVG to make a build panel
-    svg(name);
-    path = is_undef($target) ? "../svgs/" : str($cwd, "/", $target, "/svgs/");
-    import(str(path, name, ".svg"));
-}

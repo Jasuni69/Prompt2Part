@@ -1,2 +1,0 @@
-function _set_point(t, point) = 
-    _create(point, _unit_vts(t));

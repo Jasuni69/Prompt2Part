@@ -1,1 +1,0 @@
-function _ydominant_x(x, xd, sx) = xd >= 0 ? x + sx : x;

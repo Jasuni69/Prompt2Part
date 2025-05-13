@@ -1,2 +1,0 @@
-function normal(pts, f) = 
-    let(p = pts[f[0]]) cross(pts[f[1]] - p, pts[f[2]] - p);

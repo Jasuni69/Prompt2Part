@@ -1,5 +1,0 @@
-function top_half(p,z=0) = half_of(p,UP,[0,0,z]);
-
-
-
-// Section: Partioning into Interlocking Pieces

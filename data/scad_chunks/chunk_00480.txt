@@ -1,1 +1,0 @@
-function iec_body_h(type)   = type[6];  //! Body height

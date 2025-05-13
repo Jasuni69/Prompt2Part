@@ -1,4 +1,0 @@
-module prism(n=3, h=1, l=1, r, d, circum=false, center=false) {
-    radius = get_radius(r=r, d=d, dflt=l/2/sin(180/n));
-    cyl(r=radius, l=h, circum=circum, $fn=n, realign=true, anchor=center?CENTER:BOT);
-}

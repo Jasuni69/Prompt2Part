@@ -1,8 +1,0 @@
-module hookLidInsidePre()
-{
-  echo("hookLidInsidePre() ..");
-  translate([shellInsideLength, shellInsideWidth, 0]) sphere(20);
-} // hookLidInsidePre()
-
-//===========================================================
-// origin = box(0,0,0)

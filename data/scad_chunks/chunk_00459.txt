@@ -1,1 +1,0 @@
-function extrusion_corner_hole_wd(type)         = type[4];  //! Diameter of corner hole if -ve or square side if +ve

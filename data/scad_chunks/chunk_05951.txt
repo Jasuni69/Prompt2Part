@@ -1,1 +1,0 @@
-module translate_copies(a=[[0,0,0]]) move_copies(a) children();

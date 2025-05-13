@@ -1,1 +1,0 @@
-function faston_wire_crimp_p(type)  = type[8];  //! Position of the tip of the wire crimp

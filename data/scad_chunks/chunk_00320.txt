@@ -1,1 +1,0 @@
-function microswitch_fp_max(type)    = type[12];    //! Free position maximum

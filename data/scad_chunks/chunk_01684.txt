@@ -1,1 +1,0 @@
-function pot_nut(type)      = type[14]; //! Across flat diameter and thickness of the nut

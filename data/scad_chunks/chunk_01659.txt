@@ -1,1 +1,0 @@
-function blower_lug(type)         = type[16]; //! Height of the lugs

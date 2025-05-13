@@ -1,5 +1,0 @@
-function scale(v=1, poly) = is_poly_vector(poly) ?
-  [for (p=poly) _scale(v=v,poly=p)] :
-  _scale(v=v,poly=poly);
-
-// scale for single poly, no vectors of polys

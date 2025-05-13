@@ -1,1 +1,0 @@
-function pcb_land_d(type)       = type[7];  //! Pad around mounting hole

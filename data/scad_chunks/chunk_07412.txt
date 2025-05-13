@@ -1,3 +1,0 @@
-function faces5(points,start=+0)=[for(i=innen?[len(points)-3]:[1])                   //floor 
-    [i+start,i+1+start,i+start+len(points)+1,i+start+len(points)]//skin quad
-];

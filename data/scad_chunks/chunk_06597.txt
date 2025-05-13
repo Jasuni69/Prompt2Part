@@ -1,6 +1,0 @@
-module test__point_left_of_line2d() {
-    assert(_point_left_of_line2d([ -3,  0], [[-10,-10], [10,10]]) > 0);
-    assert(_point_left_of_line2d([  0,  0], [[-10,-10], [10,10]]) == 0);
-    assert(_point_left_of_line2d([  3,  0], [[-10,-10], [10,10]]) < 0);
-}
-test__point_left_of_line2d();

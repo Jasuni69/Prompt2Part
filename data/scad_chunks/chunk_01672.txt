@@ -1,1 +1,0 @@
-function pot_face(type)     = type[2];  //! Faceplate rib width, plate depth and plate height

@@ -1,6 +1,0 @@
-module mydtnotch(d) {
-    cp = (box_def.y/2) - (dtblock[1]/2);
-    translate( [cp,0,0] )
-    translate( [dtblock[1],0,0]) rotate([0,0,90])
-     dovetail_block( dtblock, dtspec, dt_CLEAR );
-}

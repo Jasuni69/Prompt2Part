@@ -1,4 +1,0 @@
-function uniChamfer(botTop,side,fnCorner=7,sideDiff=($skinThick*2)) = 
-			$removing
-			?chamfer(-botTop,-botTop, side-sideDiff,fnCorner = fnCorner)
-			:chamfer( botTop, botTop, side               ,fnCorner = fnCorner);

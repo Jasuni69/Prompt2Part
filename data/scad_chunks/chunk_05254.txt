@@ -1,5 +1,0 @@
-function substr_match(str,start,pattern) =
-     assert(_is_liststr(str), "str must be a string or list")
-     assert(_is_liststr(pattern), "pattern must be a string or list")
-     len(str)-start <len(pattern)? false
-   : _substr_match_recurse(str,start,pattern,len(pattern));

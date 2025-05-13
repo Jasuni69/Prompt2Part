@@ -1,8 +1,0 @@
-function vabs(v) = [for (x=v) abs(x)];
-
-
-// Function: normalize()
-// Description:
-//   Returns unit length normalized version of vector v.
-// Arguments:
-//   v = The vector to normalize.

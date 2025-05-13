@@ -1,1 +1,0 @@
-function heightInfo() =	$geomInfo[getTypeIndex($type_geomInfoHeight) ][0];

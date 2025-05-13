@@ -1,6 +1,0 @@
-module microswitch_hole_positions(type) //! Place children at the hole positions
-{
-    for(hole = microswitch_holes(type))
-        translate(hole)
-            children();
-}

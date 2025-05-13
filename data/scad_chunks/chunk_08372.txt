@@ -1,3 +1,0 @@
-module test_line3d_cap(p, r, frags, cap_leng, angles) {
-    
-}

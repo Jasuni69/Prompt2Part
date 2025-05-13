@@ -1,2 +1,0 @@
-function _case1101_isobands(cell_pts, threshold) = 
-    _case1121_isobands(cell_pts, threshold);

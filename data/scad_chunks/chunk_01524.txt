@@ -1,1 +1,0 @@
-function rd_xtal_lead_d(type) = type[4]; //! Crystal lead diameter

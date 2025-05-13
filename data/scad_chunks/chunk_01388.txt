@@ -1,1 +1,0 @@
-function led_hole_radius(type) = led_radius(type); //! Radius of panel hole to accept LED

@@ -1,1 +1,0 @@
-function printed_pulley_inverted(type) = pulley_hub_dia(type) < pulley_flange_dia(type); //! Need to print upside down to prevent overhang

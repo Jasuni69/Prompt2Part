@@ -1,1 +1,0 @@
-function tc_hole_pitch(type)   = type[5];   //! Screw hole pitch

@@ -1,3 +1,0 @@
-module decorate_bottom( d ) {}
-
-// bottom

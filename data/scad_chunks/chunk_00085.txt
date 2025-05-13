@@ -1,4 +1,0 @@
-module gridfinity_test()
-    stl_colour(pp1_colour) chuck_stand_stl();
-
-gridfinity_test();

@@ -1,7 +1,0 @@
-function _rect_tube_rounding(factor,ir,r,alternative,size,isize) =
-    let(wall = min(size-isize)/2*factor)
-    [for(i=[0:3])
-      is_def(ir[i]) ? ir[i]
-    : is_undef(alternative[i]) ? max(0,r[i]-wall)
-    : 0
-    ];

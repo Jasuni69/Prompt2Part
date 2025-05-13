@@ -1,7 +1,0 @@
-module random_city(rows, columns, mask) {
-    tile_width = 30;
-    for(tile = tile_w2e([columns, rows], mask)) {
-        translate([tile.x, tile.y] * tile_width)
-            city_tile(tile[2], tile_width);
-    }
-}

@@ -1,1 +1,0 @@
-function coreXY_toothed_idler(type)         = type[3]; //! Toothed idler type

@@ -1,4 +1,0 @@
-module plot_revolution(f,angle,z,arclength, path, rclip, rspan, horiz=false,r1,r2,r,d1,d2,d,convexity=4,
-                         anchor="origin", orient=UP, spin=0, atype="hull", cp="centroid", style="min_edge", reverse=false)
-  vnf_polyhedron(plot_revolution(f=f,angle=angle,z=z,arclength=arclength,path=path, rclip=rclip, rspan=rspan, horiz=horiz, style=style, reverse=reverse,
-                                 r=r,d=d,r1=r1,d1=d1,r2=r2,d2=d2), anchor=anchor, orient=orient, spin=spin, atype=atype, cp=cp);

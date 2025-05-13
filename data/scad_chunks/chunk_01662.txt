@@ -1,1 +1,0 @@
-function blower_casing_is_square(type) = blower_depth(type) < 15; //! True for square radial fans, false for spiral shape radial blowers

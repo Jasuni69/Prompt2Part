@@ -1,2 +1,0 @@
-function flat_hinge(name, size, pin_d, knuckle_d, knuckles, screw, screws, clearance, margin) = //! Construct the property list for a flat hinge.
- [name, size.x, size.y, size.z, pin_d, knuckle_d, knuckles, screw, screws, clearance, margin];

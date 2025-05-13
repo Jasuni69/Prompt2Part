@@ -1,8 +1,0 @@
-module servo_motors()
-    layout([for(s = servo_motors) servo_motor_width(s)], 10) let(s = servo_motors[$i]) {
-        rotate(-90)             // Show the keyway
-            servo_motor(s);
-    }
-
-if($preview)
-    servo_motors();

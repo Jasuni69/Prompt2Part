@@ -1,7 +1,0 @@
-module DGlied0(l=12,l1,l2,la=+0.0,d=3,h=5,spiel=0.4,spielZ=nozzle/2,rand=n(1.5),freiwinkel=20,fn=36)
-{
-l1=is_undef(l1)?is_list(l)?l[0]:l:l1;
-l2=is_undef(l2)?is_list(l)?l[1]:l:l2;
-    Glied(l1,la=la,spiel=spiel,spielZ=spielZ,d=d,h=h,rand=rand,freiwinkel=freiwinkel,fn=fn);
-    rotate(180)Glied(l2,la=la,spiel=spiel,spielZ=spielZ,d=d,h=h,rand=rand,freiwinkel=freiwinkel,fn=fn);
-}

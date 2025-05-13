@@ -1,1 +1,0 @@
-function gt_box_h(type)        = type[12];  //! Height of the cable entry box

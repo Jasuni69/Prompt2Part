@@ -1,6 +1,0 @@
-module male_metric_thread(d, pitch, length, center = true, top = -1, bot = -1, solid = true, colour = undef) { //! Create male thread with metric profile
-    H = pitch * sqrt(3) / 2;
-    h = 5 * H / 8;
-    minor_d = d - 2 * h;
-    thread(minor_d, pitch, length, thread_profile(h, pitch / 8, 60), center, top, bot, solid = solid, colour = colour);
-}

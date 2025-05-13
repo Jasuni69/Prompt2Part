@@ -1,7 +1,0 @@
-function offsetvert(fn=12)= [for(i=[0:fn])[ofs*sin(-45+i*90/fn),ofs*cos(-45+i*90/fn)+Inkreis(4,s)]];    
-linse=concat(k1+versch+offset,-offsetvert(),-k1-versch-offset,offsetvert());
-polygon(linse);
-
-if(name)echo(str(name," VQ Radius=",s,"mm - Verschoben um",Inkreis(4,s)-ofs,"mm")); 
-
-}

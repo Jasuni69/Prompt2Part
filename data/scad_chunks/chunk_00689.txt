@@ -1,1 +1,0 @@
-function pmeter_button_r(type)      = type[2]; //! Button radius

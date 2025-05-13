@@ -1,1 +1,0 @@
-function pi_gap_height(type)    = type[4]; //! Height of the gap where the light can be interrupted

@@ -1,1 +1,0 @@
-function camera_connector_pos(type) = type[5]; //! The flex connector block for the camera itself's position

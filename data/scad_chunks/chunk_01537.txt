@@ -1,1 +1,0 @@
-function rd_disc_size(type)    = type[2]; //! Diameter, thickness and height

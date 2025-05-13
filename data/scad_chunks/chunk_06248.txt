@@ -1,7 +1,0 @@
-module sphere(r, d, anchor=CENTER, spin=0, orient=UP) {
-    r = get_radius(r=r, d=d, dflt=1);
-    attachable(anchor,spin,orient, r=r) {
-            _sphere(r=r);
-            children();
-    }
-}

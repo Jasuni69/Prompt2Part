@@ -1,1 +1,0 @@
-function mod_hole_r(type) = type[7] / 2;    //! Screw hole radius

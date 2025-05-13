@@ -1,7 +1,0 @@
-function _offset_corner(pa, pb, pc, dist) = 
-  _solve2eq(_seg2eq(pa, pb, dist), _seg2eq(pb, pc, dist));
-
-//echo(_ensurePathNotClosed([[1,2],[2,3],[3,4],[1,2]]));
-
-// given a polygon, offset each vertex using the corner offset method above
-// note: this can produce self-intersections depending on the 'curvature' and offset

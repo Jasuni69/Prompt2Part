@@ -1,1 +1,0 @@
-module offsetcube(size=[1,1,1],v=[0,0,0]) cuboid(size,anchor=-v);

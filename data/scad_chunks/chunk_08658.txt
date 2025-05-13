@@ -1,5 +1,0 @@
-function _create_default() = _create(
-    [0, 0, 0], 
-    // unit vectors from the turtle's viewpoint
-    [[1, 0, 0], [0, 1, 0], [0, 0, 1]] 
-);

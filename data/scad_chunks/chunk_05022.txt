@@ -1,8 +1,0 @@
-function _mctrindex(f, isoval) =
-    (f[0] >= isoval ? 1 : 0) +
-    (f[1] >= isoval ? 2 : 0) +
-    (f[2] >= isoval ? 4 : 0) +
-    (f[3] >= isoval ? 8 : 0) +
-    (is_def(f[4]) && f[4] >= isoval ? 16 : 0);
-
-/// return an array of edgee indices in _MTEdgeVertexIndices if the pixel at coordinate pc corresponds to the bounding box.

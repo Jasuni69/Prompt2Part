@@ -1,7 +1,0 @@
-function Q_Sub(a, b) = a-b;
-
-
-// Function: Q_Mul()
-// Usage:
-//   Q_Mul(a, b)
-// Description: Multiplies quaternion `a` by quaternion `b`.

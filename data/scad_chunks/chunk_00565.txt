@@ -1,1 +1,0 @@
-function spring_length(type) = type[3]; //! Uncompressed length

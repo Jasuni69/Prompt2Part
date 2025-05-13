@@ -1,1 +1,0 @@
-function value_string(value) = is_string(value) ? str("\"", value, "\"") : str(value); //! Convert `value` to a string or quote it if it is already a string

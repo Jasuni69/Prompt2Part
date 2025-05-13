@@ -1,6 +1,0 @@
-module kp_pillow_block_hole_positions(type) { //! Place children at hole positions
-    for(x = [-kp_screw_separation(type), kp_screw_separation(type)])
-        translate([x / 2, kp_base_height(type) - kp_hole_offset(type), 0])
-            rotate([-90,0,0])
-                children();
-}

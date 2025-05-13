@@ -1,8 +1,0 @@
-];
-
-
-//========= MAIN CALL's ===========================================================
-
-
-//---- This is where the magic happens ----
-YAPPgenerate();

@@ -1,7 +1,0 @@
-module iecs()
-    layout([for(i = iecs) iec_flange_h(i)], 10)
-        rotate(90)
-            iec_assembly(iecs[$i], 3);
-
-if($preview)
-    iecs();

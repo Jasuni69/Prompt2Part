@@ -1,9 +1,0 @@
-module semi_circle(r, d = undef)                    //! A semi circle in the positive Y domain
-    intersection() {
-        R = is_undef(d) ? r : d / 2;
-        circle4n(R);
-
-        sq = R + 1;
-        translate([-sq, 0])
-            square([2 * sq, sq]);
-    }

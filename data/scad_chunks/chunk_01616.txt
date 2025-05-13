@@ -1,1 +1,0 @@
-function sheet_warp(type)      = type[5]; //! Woven sheet warp

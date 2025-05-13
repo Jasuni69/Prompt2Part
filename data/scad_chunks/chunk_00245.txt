@@ -1,6 +1,0 @@
-module shape()
-    difference() {
-        cube(40, center = true);
-
-        cube([20, 20, 41], center = true);
-    }

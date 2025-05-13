@@ -1,1 +1,0 @@
-function rocker_width(type)    = type[7];   //! Body width

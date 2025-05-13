@@ -1,4 +1,0 @@
-module Test(test, result) {
-  echo(str(lstr(test), " == ", rstr(result)));
-  assert(test == result);
-}

@@ -1,1 +1,0 @@
-function cell_from(maze, cell_idx) = maze[cell_idx[0]][cell_idx[1]];

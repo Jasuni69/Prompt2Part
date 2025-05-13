@@ -1,7 +1,0 @@
-module test_set_difference() {
-    assert_equal(
-        set_difference([2,3,5,7,11], [1,2,3,5,8]),
-        [7,11]
-    );
-}
-test_set_difference();

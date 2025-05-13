@@ -1,5 +1,0 @@
-function str_split(str,sep,keep_nulls=true) =
-    !keep_nulls ? _remove_empty_strs(str_split(str,sep,keep_nulls=true)) :
-    is_list(sep) ? _str_split_recurse(str,sep,i=0,result=[]) :
-    let( cutpts = concat([-1],sort(flatten(search(sep, str,0))),[len(str)]))
-    [for(i=[0:len(cutpts)-2]) substr(str,cutpts[i]+1,cutpts[i+1]-cutpts[i]-1)];

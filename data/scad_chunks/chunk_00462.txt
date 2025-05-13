@@ -1,1 +1,0 @@
-function extrusion_channel_width_internal(type) = type[7];  //! Internal channel width

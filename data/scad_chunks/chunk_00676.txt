@@ -1,1 +1,0 @@
-function pmeter_bevel(type)       = type[5];  //! Bezel bevel inset and start height or a radius

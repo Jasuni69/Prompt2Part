@@ -1,1 +1,0 @@
-function extrusion_inner_corner_bracket_extrusion(type)      = type[3]; //! Default extrusion this bracket is for

@@ -1,1 +1,0 @@
-function drag_chain_travel(type)      = type[2]; //! X travel

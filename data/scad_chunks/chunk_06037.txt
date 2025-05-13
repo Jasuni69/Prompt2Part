@@ -1,4 +1,0 @@
-module arc_of(n=6,r,rx,ry,d,dx,dy,sa=0,ea=360,rot=true){
-    deprecate("arc_copies");
-    arc_copies(n,r,rx,ry,d,dx,dy,sa,ea,rot) children();
-}

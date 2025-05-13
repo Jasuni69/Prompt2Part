@@ -1,2 +1,0 @@
-function involute_gear_od(m, z, pa = 20) = //! involute gear outside diameter given modulus, tooth count and pressure angle
-    m * (z + 2 * profile_shift(z, pa) + 2);

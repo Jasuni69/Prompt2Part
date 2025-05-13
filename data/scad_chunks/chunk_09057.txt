@@ -1,3 +1,0 @@
-function visited(x, y, z, cells) = cells[z][y][x][4];
-
-// is (x, y) visitable?

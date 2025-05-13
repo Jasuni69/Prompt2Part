@@ -1,1 +1,0 @@
-function iec_width(type)    = type[16]; //! Widest part including the lugs

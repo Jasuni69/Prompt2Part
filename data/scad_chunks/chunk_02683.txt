@@ -1,3 +1,0 @@
-module pose_stl(a = [70, 0, 315], t = [0, 0, 0], d = 500) //! Pose an STL for its render, `a`, `t`, & `d` are camera parameters.
-    let($stl_camera = str(t.x, ",", t.y, ",", t.z, ",", a.x, ",", a.y, ",", a.z, ",", d))
-        children();

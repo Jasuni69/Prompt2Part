@@ -1,7 +1,0 @@
-module test_f_ord() {
-    _test_fn1arg(
-        function (a) f_ord(a),
-        [["A",65],["a",97],["F",70],["f",102],["0",48],["9",57]]
-    );
-}
-test_f_ord();

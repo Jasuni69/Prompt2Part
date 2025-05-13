@@ -1,3 +1,0 @@
-module usb_Ax1(cutout = false) { //! Draw USB type A single socket
-    usb_A(h = 6.5, v_flange_l = 4.5, bar = 0, cutout = cutout);
-}

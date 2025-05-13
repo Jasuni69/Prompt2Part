@@ -1,6 +1,0 @@
-module fillets() {
-    rotate(180)
-        fillet(3, 10);
-}
-
-fillets();

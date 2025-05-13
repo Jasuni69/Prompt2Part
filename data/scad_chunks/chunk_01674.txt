@@ -1,1 +1,0 @@
-function pot_gangs(type)    = type[4];  //! Number of gangs for mult-gang pot

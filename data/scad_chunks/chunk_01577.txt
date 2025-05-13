@@ -1,1 +1,0 @@
-function ax_res_wire(type)    = type[6]; //! Wire diameter

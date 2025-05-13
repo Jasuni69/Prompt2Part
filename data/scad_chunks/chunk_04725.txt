@@ -1,6 +1,0 @@
-function mod(a,m) = a - m*floor(a/m);
-
-// get/set point array from 3 possible input types:
-//    poly=[points, faces] (as used by polyhedron),
-//    poly=[points, paths] (as used by polygon),
-// or poly=points (used by polygon or for intermediate point data processing)

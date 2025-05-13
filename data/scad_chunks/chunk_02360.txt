@@ -1,1 +1,0 @@
-module fixing_block_M40_assembly() fixing_block_assembly(M4_cap_screw);

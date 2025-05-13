@@ -1,9 +1,0 @@
-function gosper_star(n = 2, angle = 60, leng = 1, heading = 0, start = [0, 0]) = 
-    let(
-        axiom = "X-X-X-X-X-X",
-        rules = [
-            ["X", "FX+YF++YF-FX--FXFX-YF+"],
-            ["Y", "-FX+YFYF++YF+FX--FX-FY"]
-        ]
-    )
-    lsystem2(axiom, rules, n, angle, leng, heading, start);

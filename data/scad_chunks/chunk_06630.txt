@@ -1,3 +1,0 @@
-function standard_faces(faces) =
-    sort([for(face=faces)
-            list_rotate(face, min_index(face))]);

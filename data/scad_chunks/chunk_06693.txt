@@ -1,5 +1,0 @@
-module test_deduplicate_indexed() {
-    assert(deduplicate_indexed([8,6,4,6,3], [1,4,3,1,2,2,0,1]) == [1,4,1,2,0,1]);
-    assert(deduplicate_indexed([8,6,4,6,3], [1,4,3,1,2,2,0,1], closed=true) == [1,4,1,2,0]);
-}
-test_deduplicate_indexed();

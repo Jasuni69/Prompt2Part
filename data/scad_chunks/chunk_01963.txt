@@ -1,1 +1,0 @@
-function knob_recess(type)   = type[11]; //! Recess diameter and thickness to clear nut and thread, diameter, nut height, thread height

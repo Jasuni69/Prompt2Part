@@ -1,5 +1,0 @@
-function visitNext(maze, next, currentCell, dir) = 
-    dir == IN ? visitIN(maze, next, currentCell) :
-	dir == OUT ? visitOUT(maze, next, currentCell) :
-	dir == CW ? visitCW(maze, next, currentCell) :
-	dir == CCW ? visitCCW(maze, next, currentCell) : maze;

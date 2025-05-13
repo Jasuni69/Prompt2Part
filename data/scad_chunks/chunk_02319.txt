@@ -1,1 +1,0 @@
-function strap_panel(type = strap)     = type[3]; //! Panel thickness

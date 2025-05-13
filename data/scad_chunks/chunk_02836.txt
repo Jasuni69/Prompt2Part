@@ -1,8 +1,0 @@
-function RotateList(list,angle) = 
-  [for(c=list) 
-   let(l=norm(c))
-   let(a=atan2(c.y,c.x))
-   [l*cos(a+angle),l*sin(a+angle)]];
-
-
-// Move a list (a 2D shape) to a location.

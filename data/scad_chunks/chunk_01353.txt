@@ -1,1 +1,0 @@
-function TO220_size() = [10.2, 15, 4.4]; //! Size of a TO220

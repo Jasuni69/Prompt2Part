@@ -1,1 +1,0 @@
-function pmeter_size(type)        = type[2];  //! Body size including bezel height

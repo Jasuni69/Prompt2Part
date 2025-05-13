@@ -1,2 +1,0 @@
-function reverse(v) = [ for (i = [0:len(v)-1])  v[len(v) -1 - i] ];
-// integer based range, inclusive

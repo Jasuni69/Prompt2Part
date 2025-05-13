@@ -1,2 +1,0 @@
-function corner_block_width(screw = def_screw, short_insert = false) = //! Block width, depth and height
-    corner_block_hole_offset(screw, short_insert) + insert_outer_d(screw_insert(screw, short_insert)) / 2 + wall;

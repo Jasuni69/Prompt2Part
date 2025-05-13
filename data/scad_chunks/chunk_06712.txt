@@ -1,9 +1,0 @@
-module test_accumulate() {
-    l = [2,3,9,1,6,1,3,2];
-    add = function (a,b) a+b;
-    mul = function (a,b) a*b;
-    assert_equal(accumulate(add,l), [2,5,14,15,21,22,25,27]);
-    assert_equal(accumulate(mul,l), [0,0,0,0,0,0,0,0]);
-    assert_equal(accumulate(mul,l,init=1), [2,6,54,54,324,324,972,1944]);
-}
-test_accumulate();

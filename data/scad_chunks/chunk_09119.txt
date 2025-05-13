@@ -1,1 +1,0 @@
-function right_wall(cell) = get_type(cell) == RIGHT_WALL;

@@ -1,4 +1,0 @@
-function cholesky(A) =
-  assert(is_matrix(A,square=true),"A must be a square matrix")
-  assert(is_matrix_symmetric(A),"Cholesky factorization requires a symmetric matrix")
-  _cholesky(A,ident(len(A)), len(A));

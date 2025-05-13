@@ -1,1 +1,0 @@
-function Inkreis(eck,rU)=cos(180/eck)*rU;

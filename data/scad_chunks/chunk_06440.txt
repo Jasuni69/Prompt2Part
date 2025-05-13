@@ -1,1 +1,0 @@
-function _tri_normal(tri) = cross(tri[1]-tri[0],tri[2]-tri[0]);

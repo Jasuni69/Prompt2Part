@@ -1,1 +1,0 @@
-function square_button_h(type)            = type[6];  //! Height of the button above the PCB

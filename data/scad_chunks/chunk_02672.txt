@@ -1,1 +1,0 @@
-function bom_mode(n = 1) = (is_undef($bom) ? 0 : $bom) >= n && (is_undef($on_bom) || $on_bom);  //! Current BOM mode, 0 = none, 1 = printed and routed parts and assemblies, 2 includes vitamins as well

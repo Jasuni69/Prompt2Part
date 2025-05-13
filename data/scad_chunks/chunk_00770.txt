@@ -1,2 +1,0 @@
-function smd_led_height(type) =        //! Total height
-    smd_led_size(type).z + smd_led_lens(type).z;

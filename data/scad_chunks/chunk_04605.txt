@@ -1,7 +1,0 @@
-module mydttng(d) {  
-    cp = (box_def.y/2) - (dtspec[1]/2);
-    translate( [cp,0,0] )
-    //translate( [dtspec[1],0,0]) rotate([0,0,90])  // taper up
-    translate( [0,dtlen,0]) rotate([0,0,270]) // taper down
-    dovetail_rail( dtlen, dtspec ); 
-}

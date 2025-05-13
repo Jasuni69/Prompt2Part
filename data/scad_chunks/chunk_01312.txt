@@ -1,7 +1,0 @@
-module gm_screw_positions(type, skip = []) {
-    holes = gm_holes(type);
-    for(i = [0 : len(holes) - 1])
-        if(!in(skip, i))
-            translate(holes[i])
-                children();
-}

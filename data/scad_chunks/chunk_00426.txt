@@ -1,1 +1,0 @@
-function pulley_height(type) = pulley_hub_length(type) + 2 * pulley_flange_thickness(type) + pulley_width(type); //! Total height of pulley

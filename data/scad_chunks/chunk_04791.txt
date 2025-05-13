@@ -1,9 +1,0 @@
-function svgPoints(path, z=undef) = let(
-    pointlists = pb_postProcessPathLists(pb_processCommands(pb_tokenizeSvgPath(path)))
-) z==undef? pointlists : [for (pts=pointlists) pb_translate_pts(pts,[0,0,z])];
-
-//  module svgShape(s)
-//
-//  Processes a SVG path string and returns a 2D polygon.
-//  path       (list) String compliant with SVG path syntax plus the extra commands introduced in pathBuilder.
-//  return  (polygon) polygon can be further handled by any openSCAD command.

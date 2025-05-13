@@ -1,2 +1,0 @@
-module use_dxf(name)                //! Import a DXF to make a build panel
-    assert(false);                  // Here for documentation only, real version in core.scad

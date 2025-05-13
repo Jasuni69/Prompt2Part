@@ -1,1 +1,0 @@
-function vero_fr4(type)            = type[5];   //! True if FR4 rather than SRBP

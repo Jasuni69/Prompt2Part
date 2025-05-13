@@ -1,1 +1,0 @@
-module camera_bracket_rpi_camera_stl()    camera_bracket(rpi_camera);

@@ -1,5 +1,0 @@
-function _extend_knot_mult(mult, next, len) =
-    let(total = sum(mult))
-    total == len ? mult
-  : total>len ? [ each select(mult,0,-2), last(mult)-(total-len) ]
-  : _extend_knot_mult([each mult,mult[next]], next+1, len);

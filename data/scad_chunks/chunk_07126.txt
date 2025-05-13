@@ -1,7 +1,0 @@
-module Auger(h=75){
-  
-  Gewinde(dn=20,h=h -9,p=20,kern=12.5,g=2,new=true,rad2=3,cyl=false,tz=10);
-  Pille(l=h,center=false,d=12.6,rad=[0,10]);
-  Tz(2.5)Pille(5,d=20,rad=1);
-  Tz(5)RotEx()VarioFill(dia=12.6,l=[2.5,10]);
-}

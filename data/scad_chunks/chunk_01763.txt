@@ -1,1 +1,0 @@
-function pcb_solder(type) = [1, 0, pcb_thickness(type) + plating];

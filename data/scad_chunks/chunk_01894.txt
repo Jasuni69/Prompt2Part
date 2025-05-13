@@ -1,1 +1,0 @@
-function box_top_sheet(type)   = type[4]; //! Sheet type for the top

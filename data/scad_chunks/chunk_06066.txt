@@ -1,5 +1,0 @@
-function point_in_region(point, region, eps=EPSILON) =
-    let(region=force_region(region))
-    assert(is_region(region), "\nRegion given to point_in_region is not a region.")
-    assert(is_vector(point,2), "\nPoint must be a 2D point in point_in_region.")
-    _point_in_region(point, region, eps);

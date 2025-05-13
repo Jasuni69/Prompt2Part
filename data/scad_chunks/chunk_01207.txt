@@ -1,1 +1,0 @@
-function leadnuthousing_nut(type)               = type[10]; //! Nut type this is suitable for

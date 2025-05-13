@@ -1,1 +1,0 @@
-module mouse_grommet_60_3_stl() mouse_grommet(3, 3);

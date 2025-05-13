@@ -1,1 +1,0 @@
-function cable_wire_colours(cable) = assert(len(cable[3]) >= cable_wires(cable)) cable[3]; //! Individual wire colours

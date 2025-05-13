@@ -1,6 +1,0 @@
-module iec_inserts(type) {              //! Place the inserts
-    insert = screw_insert(iec_screw(type));
-
-    iec_screw_positions(type)
-        insert(insert);
-}

@@ -1,1 +1,0 @@
-function rd_transistor_size(type)       = type[1]; //! Width / diameter, depth / flat and height

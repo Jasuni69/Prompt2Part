@@ -1,1 +1,0 @@
-function _build_bottom_right(cell_radius) = _hex_seg(cell_radius, 300, 360);

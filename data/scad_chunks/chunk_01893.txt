@@ -1,1 +1,0 @@
-function box_sheets(type)      = type[3]; //! Sheet type used for the sides

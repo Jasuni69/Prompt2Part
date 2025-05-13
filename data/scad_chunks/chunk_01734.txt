@@ -1,5 +1,0 @@
-function hdmi_thickness(type) = type[8]; //! Wall thickness of the metal
-
-hdmi_full = [ "hdmi_full", "HDMI socket",        12,   14,   10,  3,    4.5, 6.5, 0.5 ];
-hdmi_mini = [ "hdmi_mini", "Mini HDMI socket",    7.5, 10.5, 8.3, 1.28, 2.5, 3.2, 0.35 ];
-hdmi_micro = [ "hdmi_micro", "Micro HDMI socket", 8.5,  5.9, 4.43, 1.4, 2.3, 3,   0.3 ];

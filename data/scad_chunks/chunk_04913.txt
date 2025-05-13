@@ -1,5 +1,0 @@
-function rotateAroundZ(x, y, z, angle) = let (
-    c = cos(angle),
-    s = sin(angle),
-    nx = (c * x) + (s * y),
-    ny = (c * y) - (s * x)) [nx, ny, z];

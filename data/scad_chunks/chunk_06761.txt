@@ -1,7 +1,0 @@
-module test_f_sqrt() {
-    _test_fn1arg(
-        function (a) f_sqrt(a),
-        [[25,5],[16,4],[81,9]]
-    );
-}
-test_f_sqrt();

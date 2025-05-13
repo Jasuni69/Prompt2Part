@@ -1,8 +1,0 @@
-module test_path_length(){
-    sq = square(10);
-    assert_equal(path_length(sq),30);
-    assert_equal(path_length(sq,true),40);
-    c = circle($fn=1000, r=1);
-    assert(approx(path_length(c,closed=true), 2*PI,eps=.0001));
-}
-test_path_length();

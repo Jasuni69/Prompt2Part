@@ -1,1 +1,0 @@
-function top(vector)=vector[len(vector)-1];

@@ -1,7 +1,0 @@
-module fan_shape() {
-    w = fan_width(fan);
-    p = fan_hole_pitch(fan);
-    r = w / 2 - p;
-
-    rounded_square([w, w], r);
-}

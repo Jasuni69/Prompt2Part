@@ -1,1 +1,0 @@
-function vero_length(type) = vero_holes(type) * vero_pitch(type); //! Length of the board

@@ -1,1 +1,0 @@
-function variac_dial_thickness(type) = type[12];    //! Dial thickness

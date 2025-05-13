@@ -1,1 +1,0 @@
-function zCenter(align2=NOCHANGE,align3=NOCHANGE) = align(ZCENTER,align2,align3);

@@ -1,1 +1,0 @@
-function extrusion_inner_corner_bracket_size(type)           = type[1]; //! Size of inner bracket

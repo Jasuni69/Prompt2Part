@@ -1,5 +1,0 @@
-function default(v,dflt=undef) = v==undef? dflt : v;
-
-
-// Function: is_def()
-// Description: Returns true if given value is not `undef`.

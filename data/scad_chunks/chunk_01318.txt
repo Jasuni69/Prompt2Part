@@ -1,1 +1,0 @@
-function ziptie_width(type)     = type[1]; //! Width

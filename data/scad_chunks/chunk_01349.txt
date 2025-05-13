@@ -1,4 +1,0 @@
-module al_clad_resistor_hole_positions(type) //! Position children at the screw holes of an aluminium clad resistor
-    for(end = [-1, 1])
-        translate([end * al_clad_hpitch(type) / 2, end * al_clad_vpitch(type) / 2, al_clad_thickness(type)])
-            children();

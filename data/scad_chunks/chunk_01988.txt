@@ -1,1 +1,0 @@
-function ssr_shroud_cable_x(type, cable_d) =  -ssr_length(type) / 2 - 2 * boss_r - 1 - cable_d / 2; //! Position of cable entry holes

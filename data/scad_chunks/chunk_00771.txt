@@ -1,3 +1,0 @@
-function smd_100th(x) = //! Convert dimension to 1/100" notation
-    let(s = str(round(x / inch(0.01))))
-        len(s) < 2 ? str("0", s) : s;
