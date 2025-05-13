@@ -7,4 +7,11 @@ __pycache__/
 venv/
 output.scad
 output.stl
-scad_library/ 
+scad_library/*
+!scad_library/.gitkeep
+data/scad_raw/*
+!data/scad_raw/.gitkeep
+data/scad_chunks/*
+!data/scad_chunks/.gitkeep
+data/scad_metadata.jsonl
+data/scad_full_corpus.txt 
