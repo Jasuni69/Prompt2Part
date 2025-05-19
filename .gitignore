@@ -14,4 +14,4 @@ data/scad_raw/*
 data/scad_chunks/*
 !data/scad_chunks/.gitkeep
 data/scad_metadata.jsonl
-data/scad_full_corpus.txt 
+data/scad_full_corpus.txt .env
