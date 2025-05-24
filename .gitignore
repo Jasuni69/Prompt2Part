@@ -15,3 +15,6 @@ data/scad_chunks/*
 !data/scad_chunks/.gitkeep
 data/scad_metadata.jsonl
 data/scad_full_corpus.txt .env
+data/chroma_db/
+data/chroma_db_backup_*/
+data/scad_embeddings_openai.jsonl
