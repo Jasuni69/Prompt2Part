@@ -1,0 +1,57 @@
+// OpenSCAD Model
+// Generated with AI assistance
+// Complexity: 12.5 (moderate render)
+// Structure: 3 modules, 4 primitives, 2 boolean operations
+
+// Parameters for the phone stand
+$fn = 100; // Smoothness for curved surfaces
+base_width = 100; // mm, width of the base
+base_depth = 60; // mm, depth of the base
+base_height = 5; // mm, height of the base
+support_width = 10; // mm, width of the support
+support_height = 120; // mm, height of the support
+wall_thickness = 1.2; // mm, minimum wall thickness for 3D printing
+angle_min = 30; // Minimum angle of inclination in degrees
+angle_max = 75; // Maximum angle of inclination in degrees
+angle_step = 5; // Step for angle adjustment
+cable_hole_diameter = 6; // mm, diameter of the cable management hole
+fillet_radius = 0.5; // mm, radius for fillets
+
+// Base module
+module base() {
+    difference() {
+        // Main base shape
+        cube([base_width, base_depth, base_height], center=true);
+        // Slot for adjustable support insertion
+        translate([0, -base_depth/2 + wall_thickness, 0])
+            cube([support_width + wall_thickness, wall_thickness, base_height + 1], center=true);
+    }
+
+// Support module
+module support(angle) {
+    rotate([angle, 0, 0]) {
+        difference() {
+            // Main support shape
+            cube([support_width, wall_thickness, support_height], center=true);
+            // Cable management hole
+            translate([0, 0, support_height/2])
+                cylinder(h=wall_thickness + 1, d=cable_hole_diameter, center=true);
+        }
+
+// Assembly of the phone stand
+module phone_stand(angle) {
+    base();
+    translate([0, base_depth/2 - wall_thickness/2, base_height/2])
+        support(angle);
+}
+
+// Render the phone stand with an adjustable angle
+// Uncomment this to show multiple angles:
+// for (angle = [angle_min : angle_step : angle_max]) {
+//     translate([(angle - angle_min) * (base_width + 10), 0, 0])
+//         phone_stand(angle);
+// }
+
+// Default rendering - single angle
+phone_stand(45);
+}}}

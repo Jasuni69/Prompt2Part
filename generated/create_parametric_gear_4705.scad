@@ -25,7 +25,7 @@ module gear_with_hole(teeth, center_hole_size, thickness) {
         translate([0, 0, -1]) {
             cylinder(r = center_hole_size/2, h = thickness + 2, $fn = 30);
         }
-    }
-}
 
 gear_with_hole(teeth, center_hole_size, gear_thickness);
+}
+}

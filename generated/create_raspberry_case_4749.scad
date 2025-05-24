@@ -28,7 +28,6 @@ module raspberry_pi_case() {
         translate([2, 49, case_height-1]) cube([5, 5, 1]);
         translate([78, 49, case_height-1]) cube([5, 5, 1]);
     }
-}
 
 // Lid module
 module snap_fit_lid() {
@@ -42,10 +41,11 @@ module snap_fit_lid() {
         translate([2, 49, -tolerance]) cube([5, 5, wall_thickness+2*tolerance]);
         translate([78, 49, -tolerance]) cube([5, 5, wall_thickness+2*tolerance]);
     }
-}
 
 // Render the Raspberry Pi case
 raspberry_pi_case();
 
 // Render the lid offset upward for visualization
 translate([0, 0, case_height + 10]) snap_fit_lid();
+}
+}

@@ -14,14 +14,11 @@ module bolt(thread_diameter, length) {
             translate([0, 0, -length]) {
                 threads_ext(ISO_metric_thread_pitch(thread_diameter);, thread_diameter, length*2);
             }
-        }
         
         // Hexagonal head
         translate([0, 0, length]);{
             cylinder(thread_diameter*1.5, thread_diameter*1.5);
         }
-    }
-}
 
 // ISO metric thread pitch calculation function
 function ISO_metric_thread_pitch(diameter) = 0.6134 * diameter;
@@ -34,3 +31,5 @@ bolt(thread_diameter, length);
 
 // Render the bolt
 translate([0, 0, -5]);cube([10, 10, 60]); // Display cube for better visualization
+}}
+}

@@ -1,0 +1,59 @@
+// OpenSCAD Model
+// Generated with AI assistance
+// Complexity: 12.5 (moderate render)
+// Structure: 3 modules, 4 primitives, 2 boolean operations
+
+// Parameters for the phone stand
+$fn = 100; // Smoothness for curved surfaces
+base_width = 100; // mm, width of the base
+base_depth = 70; // mm, depth of the base
+base_height = 5; // mm, height of the base
+support_width = 20; // mm, width of the support
+support_height = 120; // mm, height of the support
+wall_thickness = 1.2; // mm, minimum wall thickness for 3D printing
+angle = 70; // degrees, initial angle of the support
+fillet_radius = 0.5; // mm, radius for fillets
+clearance = 0.3; // mm, clearance for moving parts
+
+// Base module
+module base() {
+} {
+    difference() {
+} {
+        // Main base shape
+        cube([base_width, base_depth, base_height], center=true);
+
+        // Slot for the support insertion
+        translate([0, -base_depth/2 + support_width/2 + clearance, base_height/2])
+         {
+}cube([support_width + 2*clearance, 3*wall_thickness, base_height + 1], center=true)
+}
+
+// Support module
+module support() {
+} {
+    rotate([angle, 0, 0]) {
+} {
+        difference() {
+} {
+            // Main support shape
+            cube([support_width, wall_thickness, support_height], center=true);
+
+            // Cable management hole
+            translate([0, 0, support_height*0.5])
+             {
+}cylinder(h=wall_thickness + 0.1, d=10, center=true)
+}
+
+// Assembly of the phone stand
+module phone_stand() {
+} {
+    base();
+    translate([0, base_depth/2 - support_width/2 - clearance, base_height])
+     {
+}support()
+}
+
+// Render the phone stand
+phone_stand()
+}}}

@@ -1,0 +1,1 @@
+Apologies for the confusion, but your prompt does not specify what 3D model you want to create. Could you please provide more details? For example, you could specify the shape (cube, sphere, cylinder, etc.), dimensions, and any other parameters or features you want the model to have.

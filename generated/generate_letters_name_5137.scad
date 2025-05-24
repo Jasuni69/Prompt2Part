@@ -15,7 +15,6 @@ module text3d(text_str, letter_height=height, letter_thickness=thickness, font_s
     linear_extrude(height=letter_height) {
         text(text_str, size=font_size, font="Arial:style=Bold", halign="center");
     }
-}
 
 // Module for creating a connected base for all letters
 module text_base(text_str, letter_size=letter_size, base_height=base_thickness, total_width=0) {
@@ -39,7 +38,8 @@ module name_jason() {
             color("lightblue")
                 text3d(letter);
     }
-}
 
 // Render the name
 name_jason();
+}
+}

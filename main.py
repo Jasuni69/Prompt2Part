@@ -1,11 +1,12 @@
 import sys
-from ui.cli import main_cli
-from ui.gui import main_gui
+import os
+from scripts.initialize_rag import initialize_rag
+from demo import main as run_demo
 
 if __name__ == "__main__":
-    # Check if user wants GUI mode
-    if len(sys.argv) > 1 and sys.argv[1] == "gui":
-        main_gui()
-    else:
-        # Default to CLI
-        main_cli() 
+    # Initialize the RAG system
+    print("Initializing RAG system...")
+    initialize_rag()
+    
+    # Run the demonstration
+    run_demo() 

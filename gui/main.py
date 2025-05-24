@@ -30,6 +30,10 @@ class Prompt2PartGUI(QWidget):
         self.generate_btn = QPushButton('Generate')
         self.generate_btn.clicked.connect(self.on_generate)
         btn_layout.addWidget(self.generate_btn)
+        # Export to STL button
+        self.export_btn = QPushButton('Export to STL')
+        self.export_btn.clicked.connect(self.on_export_stl)
+        btn_layout.addWidget(self.export_btn)
         layout.addLayout(btn_layout)
 
         # Code display
@@ -65,6 +69,11 @@ class Prompt2PartGUI(QWidget):
         # Remove triple backticks and any language tag
         code = re.sub(r'```[a-zA-Z]*\n?', '', code)
         code = code.replace('```', '')
+        # Remove all use/include lines for GUI display
+        code = '\n'.join(
+            line for line in code.splitlines()
+            if not line.strip().startswith('use <') and not line.strip().startswith('include <')
+        )
         return code.strip()
 
     def generate_code(self, prompt):
@@ -85,6 +94,34 @@ class Prompt2PartGUI(QWidget):
         if result == 0 and os.path.exists(png_path):
             return png_path
         return None
+
+    def get_full_code(self, prompt):
+        # Get the full code with use/include lines for export/render
+        return generate_openscad_code(prompt)
+
+    def on_export_stl(self):
+        prompt = self.prompt_edit.toPlainText().strip()
+        if not prompt:
+            QMessageBox.warning(self, 'No Prompt', 'Please enter a prompt.')
+            return
+        # Get the full code (with use/include lines)
+        code = self.get_full_code(prompt)
+        # Save .scad to temp file
+        os.makedirs('gui/assets', exist_ok=True)
+        scad_path = 'gui/assets/export_temp.scad'
+        with open(scad_path, 'w') as f:
+            f.write(code)
+        # Ask user for STL save location
+        stl_path, _ = QFileDialog.getSaveFileName(self, 'Export STL', '', 'STL Files (*.stl)')
+        if not stl_path:
+            return
+        # Call OpenSCAD CLI to export STL
+        cmd = f"openscad -o '{stl_path}' '{scad_path}'"
+        result = os.system(cmd)
+        if result == 0 and os.path.exists(stl_path):
+            QMessageBox.information(self, 'Export Successful', f'STL exported to:\n{stl_path}')
+        else:
+            QMessageBox.critical(self, 'Export Failed', 'Failed to export STL. Check your OpenSCAD installation and model code.')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

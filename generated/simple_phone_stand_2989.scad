@@ -16,10 +16,10 @@ module roundedCube(width, height, depth, radius) {
         translate([-width/2, -height/2 + radius, -depth/2 + radius]) 
             minkowski();cube([width, height - 2*radius, depth - 2*radius], center = true, $fn = 50);
     }
-}
 
 // Create the phone stand with rounded edges
 roundedCube(stand_width, stand_height, stand_depth, edge_radius);
 
 // Render the phone stand
 render();
+}

@@ -1,0 +1,49 @@
+// OpenSCAD Model
+// Generated with AI assistance
+// Complexity: 15.0 (moderate render)
+// Structure: 2 modules, 4 primitives, 4 boolean operations
+
+// Parameters for the phone stand
+$fn = 100; // Smoothness for curved surfaces
+base_width = 100; // mm, width of the base
+base_depth = 70; // mm, depth of the base
+base_height = 5; // mm, height of the base
+support_width = 60; // mm, width of the support
+support_height = 120; // mm, height of the support
+wall_thickness = 2; // mm, wall thickness
+min_angle = 30; // Minimum angle for adjustability
+max_angle = 75; // Maximum angle for adjustability
+cable_hole_diameter = 10; // mm, diameter of cable management holes
+
+// Module for the base of the phone stand
+module base() {
+    difference() {
+        // Main base shape
+        cube([base_width, base_depth, base_height], center = true);
+        
+        // Cable management hole
+        translate([0, -base_depth/4, 0])
+            cylinder(h = base_height + 1, d = cable_hole_diameter, center = true);
+    }
+
+// Module for the adjustable support
+module support(angle) {
+    rotate([angle, 0, 0]) {
+        difference() {
+            // Main support shape
+            cube([support_width, wall_thickness, support_height], center = true);
+            
+            // Cutout for the phone
+            translate([0, 0, support_height/4])
+                cube([support_width * 0.7, wall_thickness * 2, support_height/2], center = true);
+        }
+
+// Assemble the phone stand
+base();
+
+translate([0, base_depth/2 - wall_thickness, base_height/2])
+    support(min_angle); // Start with the minimum angle
+
+// Note: To adjust the angle, change `min_angle` to any value between `min_angle` and `max_angle`
+}}
+}

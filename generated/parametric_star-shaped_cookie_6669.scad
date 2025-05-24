@@ -55,9 +55,6 @@ module star_shape() {
             offset(r = -thickness) {
                 polygon(star_points(num_points, outer_radius, inner_radius));
             }
-        }
-    }
-}
 
 // Handle module
 module handle() {
@@ -66,7 +63,6 @@ module handle() {
         // Create a simple cylindrical handle for strength
         cylinder(h = handle_height, r = handle_width/2);
     }
-}
 
 // Assembly of the cookie cutter with handle
 module cookie_cutter() {
@@ -76,3 +72,5 @@ module cookie_cutter() {
 
 // Render the complete cookie cutter
 cookie_cutter();
+}}
+}}

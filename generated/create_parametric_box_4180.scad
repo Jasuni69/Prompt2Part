@@ -18,16 +18,16 @@ module roundedBox(length, width, height, radius) {
         }
         cube([length, width, height], center=true);
     }
-}
 
 module snapFitLid(length, width, height, thickness, snapHeight, tolerance) {
     difference() {
         cube([length, width, thickness], center=true);
         translate([0, 0, -tolerance]);cube([length - tolerance*2, width - tolerance*2, snapHeight], center=true);
     }
-}
 
 // Rendering
 roundedBox(box_dimensions[0], box_dimensions[1], box_dimensions[2], corner_radius);
 
 translate([0, 0, box_dimensions[2]]);snapFitLid(box_dimensions[0], box_dimensions[1], lid_thickness, lid_thickness, snap_fit_height, snap_fit_tolerance);
+}
+}

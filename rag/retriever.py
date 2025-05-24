@@ -5,6 +5,8 @@ from chromadb.config import Settings
 from dotenv import load_dotenv
 import re
 from openai import OpenAI
+import uuid
+import numpy as np
 
 load_dotenv()
 
@@ -14,11 +16,15 @@ COLLECTION_NAME = 'scad_chunks'
 METADATA_FILE = 'data/scad_metadata.jsonl'
 MAX_CHUNKS = 20
 MIN_RELEVANCE_SCORE = 0.75  # Higher = stricter matching
+EMBEDDINGS_FILE = 'data/scad_embeddings_openai.jsonl'
 
 # Get API key for embedding
 api_key = os.getenv('OPENAI_API_KEY')
 if not api_key:
     print("Warning: OPENAI_API_KEY not set. Using mock embeddings.")
+
+# Flag to track if memory vectors have been loaded
+MEMORY_LOADED = False
 
 # Load metadata for fast lookups
 metadata_lookup = {}
@@ -42,6 +48,99 @@ DOMAIN_LIBRARIES = {
     'enclosure': ['YAPP_Box', 'MarksEnclosureHelper'],
     'text': ['BOSL2', 'BOSL'],
 }
+
+# In-memory database workaround
+MEMORY_VECTORS = []
+MEMORY_DOCUMENTS = []
+MEMORY_METADATA = []
+MEMORY_IDS = []
+
+def load_memory_vectors():
+    """
+    Load vectors into memory as a workaround for Chroma persistence issues
+    """
+    global MEMORY_VECTORS, MEMORY_DOCUMENTS, MEMORY_METADATA, MEMORY_IDS, MEMORY_LOADED
+    
+    # Skip if already loaded
+    if MEMORY_LOADED:
+        return True
+        
+    # Load from embeddings file
+    if not os.path.exists(EMBEDDINGS_FILE):
+        print(f"WARNING: Embeddings file not found: {EMBEDDINGS_FILE}")
+        return False
+        
+    print(f"Loading vectors into memory from {EMBEDDINGS_FILE}...")
+    
+    try:
+        MEMORY_VECTORS = []
+        MEMORY_DOCUMENTS = []
+        MEMORY_METADATA = []
+        MEMORY_IDS = []
+        
+        with open(EMBEDDINGS_FILE, 'r') as f:
+            for line in f:
+                obj = json.loads(line)
+                MEMORY_VECTORS.append(obj['embedding'])
+                MEMORY_DOCUMENTS.append(obj['text'])
+                MEMORY_METADATA.append({
+                    "chunk_file": obj["chunk_file"],
+                    "sub_chunk_index": obj.get("sub_chunk_index", 0)
+                })
+                MEMORY_IDS.append(f"{obj['chunk_file']}__{obj.get('sub_chunk_index', 0)}")
+        
+        print(f"Successfully loaded {len(MEMORY_VECTORS)} vectors into memory")
+        MEMORY_LOADED = True
+        return True
+    except Exception as e:
+        print(f"Error loading vectors into memory: {e}")
+        return False
+
+def memory_semantic_search(query, n_results=MAX_CHUNKS):
+    """
+    Perform semantic search using in-memory vectors
+    """
+    global MEMORY_VECTORS, MEMORY_DOCUMENTS, MEMORY_METADATA, MEMORY_IDS
+    
+    # Load vectors if not already loaded
+    if not MEMORY_VECTORS:
+        load_memory_vectors()
+        if not MEMORY_VECTORS:
+            return {"documents": [[]], "metadatas": [[]], "distances": [[]]}
+    
+    # Get query embedding
+    query_embedding = get_embedding(query)
+    
+    # Compute cosine similarity
+    similarities = []
+    for vec in MEMORY_VECTORS:
+        # Normalize vectors
+        query_norm = np.linalg.norm(query_embedding)
+        vec_norm = np.linalg.norm(vec)
+        
+        # Compute dot product
+        if query_norm > 0 and vec_norm > 0:
+            dot_product = np.dot(query_embedding, vec)
+            similarity = dot_product / (query_norm * vec_norm)
+            # Convert similarity to distance (0-2 range like Chroma)
+            distance = 1 - similarity
+            similarities.append(distance)
+        else:
+            similarities.append(2.0)  # Maximum distance
+    
+    # Sort by similarity (lowest distance first)
+    sorted_indices = np.argsort(similarities)[:n_results]
+    
+    # Build result object like Chroma
+    result_docs = [MEMORY_DOCUMENTS[i] for i in sorted_indices]
+    result_metas = [MEMORY_METADATA[i] for i in sorted_indices]
+    result_distances = [similarities[i] for i in sorted_indices]
+    
+    return {
+        "documents": [result_docs],
+        "metadatas": [result_metas],
+        "distances": [result_distances]
+    }
 
 def extract_entities(prompt):
     """Extract key entities and requirements from the prompt."""
@@ -196,26 +295,63 @@ def filter_results_by_library(results, target_libraries):
     return results
 
 def semantic_search(query, n_results=MAX_CHUNKS, filter_libraries=None):
-    """Perform semantic search using Chroma DB."""
+    """Perform semantic search using Chroma DB with reliable fallback to in-memory search."""
+    # First try to preload memory vectors in case we need to fall back
+    load_memory_vectors()
+    
     try:
-        client = chromadb.Client(Settings(persist_directory=CHROMA_DIR))
-        collection = client.get_or_create_collection(COLLECTION_NAME)
-        
-        query_embedding = get_embedding(query)
-        
-        results = collection.query(
-            query_embeddings=[query_embedding],
-            n_results=n_results,
-            include=["documents", "metadatas", "distances"]
-        )
-        
-        # Apply library filtering if requested
-        if filter_libraries:
-            results = filter_results_by_library(results, filter_libraries)
+        # Try to use Chroma DB first
+        try:
+            # Create Chroma client with explicit persistence settings
+            client = chromadb.PersistentClient(path=CHROMA_DIR)
             
-        return results
+            # Check if collection exists and has data
+            collections = client.list_collections()
+            collection_exists = any(c.name == COLLECTION_NAME for c in collections)
+            
+            if not collection_exists:
+                print(f"Collection {COLLECTION_NAME} not found, falling back to in-memory search")
+                return memory_semantic_search(query, n_results)
+            
+            # Get the collection
+            collection = client.get_collection(COLLECTION_NAME)
+            
+            # Verify collection has data
+            count = collection.count()
+            if count == 0:
+                print(f"Collection {COLLECTION_NAME} is empty, falling back to in-memory search")
+                return memory_semantic_search(query, n_results)
+                
+            print(f"Using Chroma DB collection with {count} entries")
+            
+            # Get embedding for the query
+            query_embedding = get_embedding(query)
+            
+            # Perform the query
+            results = collection.query(
+                query_embeddings=[query_embedding],
+                n_results=n_results,
+                include=["documents", "metadatas", "distances"]
+            )
+            
+            # Check if we got results
+            if results and results["documents"] and results["documents"][0]:
+                # Apply library filtering if requested
+                if filter_libraries:
+                    results = filter_results_by_library(results, filter_libraries)
+                return results
+            else:
+                # Fall back to memory search if Chroma has no results
+                print("No results from Chroma DB, falling back to in-memory search")
+                return memory_semantic_search(query, n_results)
+                
+        except Exception as e:
+            print(f"Error in Chroma search: {e}")
+            # Fall back to memory search
+            return memory_semantic_search(query, n_results)
     except Exception as e:
         print(f"Error in semantic search: {e}")
+        # Final fallback - empty result
         return {"documents": [[]], "metadatas": [[]], "distances": [[]]}
 
 def filter_by_examples(results, prefer_examples=True):
@@ -341,15 +477,16 @@ def rerank_results(results, prompt, entities=None):
         # Normalize both scores to 0-1 range
         normalized_distance = 1 - (distances[i] / 2)  # Typical distances are 0-2
         combined_score = (normalized_distance * 0.6) + (content_scores[i] * 0.4)
-        scored_results.append((combined_score, docs[i], metas[i], distances[i]))
+        scored_results.append((combined_score, i))  # Store score and index
     
     # Sort by combined score (descending)
-    scored_results.sort(reverse=True)
+    scored_results.sort(reverse=True, key=lambda x: x[0])
     
-    # Extract sorted results
-    sorted_docs = [item[1] for item in scored_results]
-    sorted_metas = [item[2] for item in scored_results]
-    sorted_distances = [item[3] for item in scored_results]
+    # Extract sorted results based on indices
+    sorted_indices = [item[1] for item in scored_results]
+    sorted_docs = [docs[i] for i in sorted_indices]
+    sorted_metas = [metas[i] for i in sorted_indices]
+    sorted_distances = [distances[i] for i in sorted_indices]
     
     # Return reranked results
     return {
@@ -375,6 +512,19 @@ def retrieve_context(prompt, max_chunks=MAX_CHUNKS, selected_libraries=None):
         # Extract entities from the prompt
         entities = extract_entities(prompt)
         
+        # If the prompt specifies a library, filter to that library only
+        prompt_lower = prompt.lower()
+        if 'using bosl2' in prompt_lower:
+            selected_libraries = ['BOSL2']
+        elif 'using bolts' in prompt_lower:
+            selected_libraries = ['BOLTS_archive']
+        elif 'using mcad' in prompt_lower:
+            selected_libraries = ['MCAD']
+        # Smart default: if prompt is about a bolt and no library specified, prefer BOSL2
+        elif (not selected_libraries) and (('bolt' in prompt_lower) or ('thread' in prompt_lower)):
+            selected_libraries = ['BOSL2']
+        # (Add more smart defaults for other objects as needed)
+
         # If libraries were specified by the user, use those
         if selected_libraries:
             entities['target_libraries'] = selected_libraries
@@ -417,7 +567,8 @@ def retrieve_context(prompt, max_chunks=MAX_CHUNKS, selected_libraries=None):
         # Rerank the results
         combined_results = {
             "documents": [unique_results],
-            "metadatas": [unique_metas]
+            "metadatas": [unique_metas],
+            "distances": [[1.0] * len(unique_results)]  # Add default distances
         }
         
         reranked = rerank_results(combined_results, prompt, entities)
@@ -446,7 +597,7 @@ def retrieve_context(prompt, max_chunks=MAX_CHUNKS, selected_libraries=None):
             context_parts.append("// REFERENCE CODE EXAMPLES")
             
             for i, (doc, meta) in enumerate(zip(reranked["documents"][0][:max_chunks], 
-                                               reranked["metadatas"][0][:max_chunks])):
+                                              reranked["metadatas"][0][:max_chunks])):
                 # Extract useful metadata
                 chunk_id = meta.get("chunk_file", "")
                 library = ""
@@ -475,5 +626,7 @@ def retrieve_context(prompt, max_chunks=MAX_CHUNKS, selected_libraries=None):
         return None
         
     except Exception as e:
+        import traceback
         print(f"Error in retrieve_context: {e}")
+        traceback.print_exc()
         return None 

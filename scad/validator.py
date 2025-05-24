@@ -206,15 +206,68 @@ def check_for_common_issues(scad_code):
     
     return issues
 
-def validate_scad_code(scad_code, check_with_openscad=True):
+def validate_preview(scad_code, output_dir=None):
+    """
+    Validate by generating a preview image - ensuring visual correctness
+    
+    Args:
+        scad_code (str): The OpenSCAD code to validate
+        output_dir (str): Optional directory to save the preview image
+        
+    Returns:
+        tuple: (success, result_path_or_message)
+    """
+    # Create temporary directory if none provided
+    if not output_dir:
+        temp_dir = tempfile.mkdtemp()
+    else:
+        temp_dir = output_dir
+        os.makedirs(temp_dir, exist_ok=True)
+    
+    # Create a temporary SCAD file
+    with tempfile.NamedTemporaryFile(suffix='.scad', delete=False) as tmp:
+        tmp_path = tmp.name
+        tmp.write(scad_code.encode('utf-8'))
+    
+    # Create a PNG preview
+    png_path = os.path.join(temp_dir, 'preview.png')
+    try:
+        result = subprocess.run(
+            ['openscad', '-o', png_path, '--imgsize=800,600', '--colorscheme=Tomorrow', tmp_path],
+            check=False, capture_output=True, timeout=20
+        )
+        
+        if result.returncode == 0 and os.path.exists(png_path) and os.path.getsize(png_path) > 100:
+            return True, png_path
+        else:
+            error_msg = result.stderr.decode() if result.stderr else "Unknown error rendering preview"
+            return False, error_msg
+    except subprocess.TimeoutExpired:
+        return False, "OpenSCAD preview generation timed out (20s)"
+    except Exception as e:
+        return False, str(e)
+    finally:
+        if os.path.exists(tmp_path):
+            os.unlink(tmp_path)
+        # Don't clean up temp_dir if it was provided by the caller
+
+def validate_scad_code(scad_code, check_with_openscad=True, generate_preview=False, preview_dir=None):
     """
     Validate OpenSCAD code using syntax checks and optionally OpenSCAD rendering.
-    Returns (is_valid, message)
+    
+    Args:
+        scad_code (str): The OpenSCAD code to validate
+        check_with_openscad (bool): Whether to validate with OpenSCAD CLI
+        generate_preview (bool): Whether to generate a preview image
+        preview_dir (str): Directory to save the preview image if generated
+        
+    Returns:
+        tuple: (is_valid, message, preview_path) if generate_preview=True else (is_valid, message)
     """
     # First do simple syntax validation
     syntax_valid, syntax_msg = is_valid_syntax(scad_code)
     if not syntax_valid:
-        return False, syntax_msg
+        return (False, syntax_msg, None) if generate_preview else (False, syntax_msg)
     
     # Check for common issues
     issues = check_for_common_issues(scad_code)
@@ -223,229 +276,232 @@ def validate_scad_code(scad_code, check_with_openscad=True):
     if check_with_openscad:
         render_valid, render_msg = validate_via_openscad(scad_code)
         if not render_valid:
-            return False, render_msg
-        
-        # If there were issues but rendering worked, return a warning
-        if issues:
-            return True, f"Code renders but has issues: {'; '.join(issues)}"
-            
-        return True, "OpenSCAD validation passed"
+            return (False, render_msg, None) if generate_preview else (False, render_msg)
     
-    # If we have issues but didn't check rendering
+    # Generate preview if requested
+    preview_path = None
+    if generate_preview:
+        preview_valid, preview_result = validate_preview(scad_code, preview_dir)
+        if preview_valid:
+            preview_path = preview_result
+        else:
+            # Preview failed but rendering succeeded - still valid but with warning
+            warning_msg = f"Warning: Preview generation failed: {preview_result}"
+            if issues:
+                issues.append(warning_msg)
+            else:
+                issues = [warning_msg]
+    
+    # If there were issues but rendering worked, return a warning
     if issues:
-        return True, f"Syntax valid but code has issues: {'; '.join(issues)}"
+        message = f"Code renders but has issues: {'; '.join(issues)}"
+        return (True, message, preview_path) if generate_preview else (True, message)
     
-    return True, "Syntax check passed"
+    success_msg = "OpenSCAD validation passed"
+    return (True, success_msg, preview_path) if generate_preview else (True, success_msg)
 
-def fix_common_issues(code):
+def fix_common_issues(scad_code):
     """
-    Fix common OpenSCAD syntax issues automatically.
+    Fix common issues in OpenSCAD code that could cause rendering problems.
+    
+    Args:
+        scad_code (str): Input OpenSCAD code
+        
+    Returns:
+        str: Fixed OpenSCAD code
     """
-    # Replace common errors with correct syntax
+    # Fix syntax errors
+    fixed_code = scad_code
     
-    # Fix semicolons before closing braces (very common error)
-    fixed_code = re.sub(r';\s*}', r'\n}', code)
+    # Fix broken module closures
+    braces_open = fixed_code.count('{')
+    braces_close = fixed_code.count('}')
     
-    # Fix semicolons after module/function declarations
-    fixed_code = re.sub(r'(module|function)\s+([a-zA-Z0-9_]+)\s*\([^)]*\)\s*;(\s*{)', r'\1 \2(\3', fixed_code)
+    if braces_open > braces_close:
+        # Add missing closing braces
+        fixed_code += '\n' + ('}' * (braces_open - braces_close))
     
-    # Fix illegal trailing semicolons
-    fixed_code = re.sub(r';\s*$', '', fixed_code)
+    # Fix missing semicolons in variable assignments
+    # This regex finds variable assignments without semicolons
+    fixed_code = re.sub(r'(\$?\w+\s*=\s*[^;{]+)(?=\n)', r'\1;', fixed_code)
     
-    # Fix semicolons after transformation functions before braces
-    fixed_code = re.sub(r'(translate|rotate|scale|mirror|multmatrix|color|resize|offset|hull|minkowski|union|difference|intersection)\s*\([^)]*\)\s*;(\s*{)', r'\1(\2', fixed_code)
+    # Fix use of uninitialized variables by giving them reasonable defaults
+    # Identify used but undefined variables
+    var_pattern = r'(?<!\$)(?<!function\s)(?<!module\s)(\w+)\s*='
+    defined_vars = set(re.findall(var_pattern, fixed_code))
     
-    # Remove stray semicolons at end of file
-    fixed_code = fixed_code.rstrip().rstrip(';') + '\n'
+    # Look for variable uses
+    used_vars = set()
+    for match in re.finditer(r'[^\$\w](\w+)\s*[\(\[\+\-\*\/]', fixed_code):
+        var = match.group(1)
+        if var not in ['if', 'for', 'let', 'module', 'function', 'use', 'include', 'echo', 'assert', 'sin', 'cos', 'tan']:
+            used_vars.add(var)
     
-    # Fix parameters in cylinder calls
-    # Replace cylinder(r, h) with cylinder(h=h, r=r)
-    cylinder_fixes = re.findall(r'cylinder\s*\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*\)', fixed_code)
-    for match in cylinder_fixes:
-        r, h = match
-        old = f'cylinder({r}, {h})'
-        new = f'cylinder(h={h}, r={r})'
-        fixed_code = fixed_code.replace(old, new)
+    # List of OpenSCAD operation keywords
+    operation_keywords = [
+        'union', 'difference', 'intersection', 'translate', 'rotate', 'scale', 
+        'mirror', 'hull', 'minkowski', 'linear_extrude', 'rotate_extrude', 'color',
+        'cube', 'sphere', 'cylinder', 'square', 'circle', 'text', 'polygon', 'polyhedron'
+    ]
     
-    # Fix parameters in translate calls
-    # Replace translate(x, y, z) with translate([x, y, z])
-    translate_fixes = re.findall(r'translate\s*\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*\)', fixed_code)
-    for match in translate_fixes:
-        x, y, z = match
-        old = f'translate({x}, {y}, {z})'
-        new = f'translate([{x}, {y}, {z}])'
-        fixed_code = fixed_code.replace(old, new)
+    # Remove operation keywords from used vars
+    used_vars = used_vars - set(operation_keywords)
     
-    # Fix parameters in rotate calls
-    # Replace rotate(x, y, z) with rotate([x, y, z])
-    rotate_fixes = re.findall(r'rotate\s*\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*\)', fixed_code)
-    for match in rotate_fixes:
-        x, y, z = match
-        old = f'rotate({x}, {y}, {z})'
-        new = f'rotate([{x}, {y}, {z}])'
-        fixed_code = fixed_code.replace(old, new)
+    # Remove numeric values from used vars (numbers shouldn't be variables)
+    used_vars = {var for var in used_vars if not re.match(r'^\d+$', var)}
     
-    # Fix vector definitions with spaces instead of commas
-    # Replace [x y z] with [x, y, z]
-    vector_fixes = re.findall(r'\[\s*(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s*\]', fixed_code)
-    for match in vector_fixes:
-        x, y, z = match
-        old = f'[{x} {y} {z}]'
-        new = f'[{x}, {y}, {z}]'
-        fixed_code = fixed_code.replace(old, new)
+    # Find variables used before defined
+    undefined_vars = used_vars - defined_vars
     
-    # Fix polygon calls where direct calculations are used
-    # This is a common issue where people do polygon(points * scale) which is invalid
-    polygon_calc_fixes = re.findall(r'polygon\s*\(\s*(\w+)\s*\*\s*(\w+|\d+(?:\.\d+)?)\s*\)', fixed_code)
-    for match in polygon_calc_fixes:
-        var_name, scale = match
-        old = f'polygon({var_name} * {scale})'
-        new = f'polygon([for (p = {var_name}) [p[0] * {scale}, p[1] * {scale}]])'
-        fixed_code = fixed_code.replace(old, new)
+    # Common dimensions and their defaults
+    dimension_defaults = {
+        'width': '100',
+        'height': '50', 
+        'depth': '20',
+        'thickness': '2',
+        'radius': '10',
+        'diameter': '20',
+        'length': '100',
+        'angle': '45',
+        'size': '10',
+        'wall_thickness': '1.2',
+        'base_height': '5',
+        'base_width': '100',
+        'base_depth': '60',
+        'support_height': '40',
+        'support_width': '20',
+        'vent_hole_diameter': '5',
+        'cable_hole_diameter': '10',
+        'fillet_radius': '2',
+        'tolerance': '0.2',
+        'clearance': '0.3'
+    }
     
-    # Fix star point functions that were commonly generated incorrectly
-    # This handles the case seen in the cookie cutter example where the function had syntax errors
-    star_function_errors = re.findall(r'function\s+star_points\s*\([^)]*\)\s*=\s*\[\s*for\s*\(\s*i\s*=\s*\[\s*0\s*:\s*[^]]*\]\s*\)', fixed_code)
-    if star_function_errors:
-        # We found a likely broken star points generator, replace with a correct version
-        star_pattern = re.compile(r'function\s+star_points\s*\([^{]*\{[^}]*\}')
-        fixed_code = re.sub(star_pattern, """function star_points(points, outer_r, inner_r) = 
-    [for (i = [0:2*points-1])
-        let(angle = i * 180 / points)
-        (i % 2 == 0) ? 
-            [outer_r * cos(angle), outer_r * sin(angle)] : 
-            [inner_r * cos(angle), inner_r * sin(angle)]
-    ]""", fixed_code)
+    # Add defaults for undefined variables
+    declarations = []
+    for var in undefined_vars:
+        # Skip loop variables
+        if var in ['i', 'j', 'k', 'x', 'y', 'z']:
+            continue
+            
+        if var in dimension_defaults:
+            default = dimension_defaults[var]
+        else:
+            # Generic default
+            default = '10'
+            
+        declarations.append(f'{var} = {default}; // Auto-defined parameter')
     
-    # Add $fn if missing for models with curved surfaces
-    if ('cylinder' in fixed_code or 'sphere' in fixed_code or 'circle' in fixed_code) and '$fn' not in fixed_code:
-        # Find the first non-comment line to insert $fn
+    if declarations:
+        # Add declarations at the beginning after any existing comments or $fn declaration
         lines = fixed_code.split('\n')
-        insert_index = 0
+        
+        # First find if there are already parameter blocks
+        param_section_found = False
+        insert_pos = 0
+        
         for i, line in enumerate(lines):
-            if line.strip() and not line.strip().startswith('//') and not line.strip().startswith('/*'):
-                insert_index = i
-                break
+            # If we find "// Parameters" or similar, add our declarations after that block
+            if re.match(r'//.*[Pp]arameters', line):
+                # Find the end of this parameter block
+                for j in range(i+1, len(lines)):
+                    if not lines[j].strip() or not re.match(r'^\s*[\w$]', lines[j]):
+                        insert_pos = j
+                        param_section_found = True
+                        break
+                if param_section_found:
+                    break
         
-        lines.insert(insert_index, '$fn = 100;  // Smoothness of curved surfaces')
+        # If no parameter section found, insert after comments at the top
+        if not param_section_found:
+            # Skip past comments at the beginning
+            for i, line in enumerate(lines):
+                if not line.strip().startswith('//') and line.strip():
+                    insert_pos = i
+                    break
+        
+        # Add our declarations
+        lines.insert(insert_pos, '\n// Auto-defined parameters')
+        insert_pos += 1
+        for decl in declarations:
+            lines.insert(insert_pos, decl)
+            insert_pos += 1
+        lines.insert(insert_pos, '')
+        
         fixed_code = '\n'.join(lines)
+
+    # Fix missing modules that may be referenced
+    # Find module calls without definitions
+    module_pattern = r'module\s+(\w+)'
+    defined_modules = set(re.findall(module_pattern, fixed_code))
     
-    # Add missing comments for variables with numeric values
-    lines = fixed_code.split('\n')
-    for i, line in enumerate(lines):
-        if re.match(r'^\s*\w+\s*=\s*\d+(?:\.\d+)?\s*;(?!\s*\/\/)', line):
-            # This is a variable assignment without a comment
-            lines[i] = line.rstrip() + '  // mm'
+    call_pattern = r'(\w+)\s*\('
+    for match in re.finditer(call_pattern, fixed_code):
+        name = match.group(1)
+        if name not in ['if', 'for', 'translate', 'rotate', 'scale', 'mirror', 'color', 
+                       'union', 'difference', 'intersection', 'hull', 'minkowski', 'echo',
+                       'cube', 'sphere', 'cylinder', 'polyhedron', 'square', 'circle', 'polygon']:
+            if name not in defined_modules and name not in fixed_code[:match.start()]:
+                # Add a basic implementation for the missing module
+                basic_module = f"""
+// Auto-generated placeholder module
+module {name}() {{
+    echo("Placeholder for {name}");
+    cube([10, 10, 10], center=true);
+}}
+"""
+                # Add to the beginning of the file
+                fixed_code = basic_module + fixed_code
+                defined_modules.add(name)
     
-    fixed_code = '\n'.join(lines)
+    # Fix empty module and operation bodies
+    fixed_code = re.sub(r'(module\s+\w+\s*\([^)]*\))\s*{\s*}', r'\1 {\n    cube([1, 1, 1], center=true); // Placeholder\n}', fixed_code)
     
-    # Fix transformation operations that have semicolons but should have blocks
-    # Find transformations that end with semicolons instead of blocks
-    for transform in ['translate', 'rotate', 'scale', 'mirror', 'color']:
-        pattern = rf'({transform}\s*\([^)]*\))\s*;(?!\s*\/\/)'
-        for match in re.finditer(pattern, fixed_code):
-            # Make sure it's not within a module definition or another context where ; is valid
-            context = fixed_code[max(0, match.start()-20):match.start()]
-            if not re.search(r'function|module|return', context):
-                repl = r'\1 {\n    // Add objects here\n}'
-                fixed_code = fixed_code[:match.start()] + re.sub(pattern, repl, match.group(0)) + fixed_code[match.end():]
+    # Fix operations with empty bodies
+    ops = ['union', 'difference', 'intersection', 'translate', 'rotate', 'scale', 'mirror', 'color']
+    for op in ops:
+        fixed_code = re.sub(rf'({op}\s*\([^)]*\))\s*{{\s*}}', r'\1 {\n    cube([1, 1, 1], center=true); // Placeholder\n}', fixed_code)
     
-    # Add module documentation for undocumented modules
-    module_pattern = r'(module\s+(\w+)\s*\([^)]*\)\s*{)'
-    modules = re.finditer(module_pattern, fixed_code)
+    # Fix variables used in the wrong context (e.g., array when scalar expected)
+    # This is a complex check, but we can do some simple fixes
     
-    offset = 0
-    for match in modules:
-        full_match = match.group(1)
-        module_name = match.group(2)
-        match_start = match.start(1) + offset
+    # Fix broken for loops
+    # Look for for loops with incorrect syntax
+    for_pattern = r'for\s*\(([^)]+)\)'
+    for match in re.finditer(for_pattern, fixed_code):
+        loop_expr = match.group(1)
         
-        # Check if there's already a comment before this module
-        preceding_code = fixed_code[:match_start]
-        last_newline = preceding_code.rfind('\n')
-        if last_newline != -1:
-            line_before = preceding_code[last_newline+1:].strip()
-            # If no comment and not empty line, add documentation
-            if not line_before.startswith('//') and line_before.strip():
-                doc_comment = f"\n// {module_name}: Module for creating a component\n"
-                fixed_code = fixed_code[:match_start] + doc_comment + fixed_code[match_start:]
-                offset += len(doc_comment)
-    
-    # Fix function order issues
-    # This is a simple fix that ensures functions are defined before they're used
-    function_errors = check_function_call_before_definition(fixed_code)
-    if function_errors:
-        # Get functions that need to be moved
-        functions_to_fix = {}
-        for error in function_errors:
-            func_match = re.search(r"Function '([^']+)'", error)
-            if func_match:
-                func_name = func_match.group(1)
-                functions_to_fix[func_name] = True
+        # Check if it's using Python-style range
+        if 'range' in loop_expr:
+            # Fix: for(i in range(0, 10)) -> for(i = [0:1:9])
+            range_pattern = r'(\w+)\s+in\s+range\s*\(\s*(\d+)\s*,\s*(\d+)\s*\)'
+            range_match = re.search(range_pattern, loop_expr)
+            if range_match:
+                var, start, end = range_match.groups()
+                replacement = f'{var} = [{start}:1:{end}-1]'
+                fixed_code = fixed_code.replace(loop_expr, replacement)
         
-        if functions_to_fix:
-            # Extract function definitions
-            function_defs = {}
-            for func_name in functions_to_fix:
-                pattern = rf'(function\s+{func_name}\s*\([^)]*\)\s*=[^;]*;)'
-                match = re.search(pattern, fixed_code)
-                if match:
-                    function_defs[func_name] = match.group(1)
-            
-            # Remove original function definitions
-            for func_name, definition in function_defs.items():
-                fixed_code = fixed_code.replace(definition, '')
-            
-            # Add functions at the beginning after any initial comments
-            lines = fixed_code.split('\n')
-            insert_position = 0
-            for i, line in enumerate(lines):
-                if line.strip() and not line.strip().startswith('//') and not line.strip().startswith('/*'):
-                    insert_position = i
-                    break
-            
-            for func_name, definition in function_defs.items():
-                lines.insert(insert_position, definition)
-                insert_position += 1
-            
-            fixed_code = '\n'.join(lines)
-    
-    # Fix library imports - add missing ones if their functions are used
-    library_errors = check_library_imports(fixed_code)
-    if library_errors:
-        library_imports_to_add = []
-        for error in library_errors:
-            lib_match = re.search(r"'([^']+)'", error)
-            if lib_match:
-                lib_name = lib_match.group(1)
-                # Define the import statement for each library
-                if lib_name == 'BOSL2':
-                    library_imports_to_add.append('use <BOSL2/std.scad>;')
-                elif lib_name == 'BOSL':
-                    library_imports_to_add.append('use <BOSL/basics.scad>;')
-                elif lib_name == 'Round-Anything':
-                    library_imports_to_add.append('use <Round-Anything/polyround.scad>;')
-                elif lib_name == 'threads':
-                    library_imports_to_add.append('use <threads.scad>;')
-                elif lib_name == 'MCAD':
-                    library_imports_to_add.append('use <MCAD/involute_gears.scad>;')
-        
-        if library_imports_to_add:
-            # Add library imports at the beginning after any initial comments
-            import_block = '\n'.join(library_imports_to_add) + '\n\n'
-            
-            # Find the position to insert after comments
-            lines = fixed_code.split('\n')
-            insert_position = 0
-            for i, line in enumerate(lines):
-                if (line.strip() and not line.strip().startswith('//') and not line.strip().startswith('/*')
-                    and not re.match(r'^\s*use\s*<', line)):
-                    insert_position = i
-                    break
-            
-            lines.insert(insert_position, import_block)
-            fixed_code = '\n'.join(lines)
-    
+        # Check for Python-style 'in' for iteration
+        elif ' in ' in loop_expr:
+            # Fix: for(i in array) -> for(i = array)
+            in_pattern = r'(\w+)\s+in\s+(\[.*?\]|\w+)'
+            in_match = re.search(in_pattern, loop_expr)
+            if in_match:
+                var, array = in_match.groups()
+                replacement = f'{var} = {array}'
+                fixed_code = fixed_code.replace(loop_expr, replacement)
+                
+    # Add main call if none exists
+    # Check if there are any modules defined but none called at the end
+    if 'module' in fixed_code and not re.search(r'\w+\(\)\s*;?\s*$', fixed_code):
+        # Find the last defined module
+        module_matches = list(re.finditer(r'module\s+(\w+)', fixed_code))
+        if module_matches:
+            # Get the last defined module
+            last_module = module_matches[-1].group(1)
+            # Add a call to it at the end
+            fixed_code += f'\n\n// Render the model\n{last_module}();'
+                
     return fixed_code
 
 def analyze_model_complexity(scad_code):

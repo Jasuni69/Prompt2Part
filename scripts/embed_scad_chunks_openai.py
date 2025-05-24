@@ -46,6 +46,7 @@ print(f"Found {len(chunk_files)} chunks, {len(to_embed)} to embed.")
 tokenizer = tiktoken.encoding_for_model("text-embedding-ada-002")
 MAX_TOKENS = 2000
 OVERLAP = 100
+MAX_BATCH_TOKENS = 1500  # New: max tokens per batch for safety
 
 def split_by_tokens(text, max_tokens=MAX_TOKENS, overlap=OVERLAP):
     tokens = tokenizer.encode(text)
@@ -61,19 +62,34 @@ def split_by_tokens(text, max_tokens=MAX_TOKENS, overlap=OVERLAP):
         start += max_tokens - overlap
     return sub_chunks
 
+def batch_by_token_limit(sub_chunks, tokenizer, max_batch_tokens=MAX_BATCH_TOKENS):
+    batches = []
+    current_batch = []
+    current_tokens = 0
+    for sub_text, sub_idx, file in sub_chunks:
+        tokens = tokenizer.encode(sub_text)
+        if current_tokens + len(tokens) > max_batch_tokens and current_batch:
+            batches.append(current_batch)
+            current_batch = []
+            current_tokens = 0
+        current_batch.append((sub_text, sub_idx, file))
+        current_tokens += len(tokens)
+    if current_batch:
+        batches.append(current_batch)
+    return batches
+
 with open(OUTPUT_FILE, 'a') as out_f:
-    for i in tqdm(range(0, len(to_embed), BATCH_SIZE)):
-        batch_files = to_embed[i:i+BATCH_SIZE]
-        batch_texts = []
-        batch_indices = []
-        for file in batch_files:
-            with open(file, 'r') as f:
-                text = f.read()
-                # Split if needed
-                sub_chunks = split_by_tokens(text)
-                for sub_text, sub_idx in sub_chunks:
-                    batch_texts.append(sub_text)
-                    batch_indices.append((file, sub_idx, sub_text))
+    all_sub_chunks = []
+    for file in to_embed:
+        with open(file, 'r') as f:
+            text = f.read()
+            sub_chunks = split_by_tokens(text)
+            for sub_text, sub_idx in sub_chunks:
+                all_sub_chunks.append((sub_text, sub_idx, file))
+    batches = batch_by_token_limit(all_sub_chunks, tokenizer)
+    for batch_i, batch in enumerate(tqdm(batches)):
+        batch_texts = [sub_text for (sub_text, sub_idx, file) in batch]
+        batch_indices = [(file, sub_idx, sub_text) for (sub_text, sub_idx, file) in batch]
         try:
             response = client.embeddings.create(
                 input=batch_texts,
@@ -89,7 +105,7 @@ with open(OUTPUT_FILE, 'a') as out_f:
                 out_f.write(json.dumps(obj) + '\n')
                 out_f.flush()
         except Exception as e:
-            print(f"Batch {i//BATCH_SIZE} failed: {e}\nFalling back to single sub-chunk embedding.")
+            print(f"Batch {batch_i} failed: {e}\nFalling back to single sub-chunk embedding.")
             for (file, sub_idx, sub_text) in batch_indices:
                 try:
                     response = client.embeddings.create(

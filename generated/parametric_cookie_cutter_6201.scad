@@ -50,7 +50,6 @@ module star_shape() {
         offset(r = -wall_thickness)
             polygon(star_points_coords(star_points, outer_radius, inner_radius));
     }
-}
 
 // Main module for the cookie cutter
 module cookie_cutter() {
@@ -66,13 +65,13 @@ module cookie_cutter() {
             offset(r = -wall_thickness)
                 polygon(star_points_coords(star_points, outer_radius, inner_radius));
         }
-    }
     
     // Add a rounded base for strength
     linear_extrude(height = wall_thickness, center = false) {
         polygon(star_points_coords(star_points, outer_radius, inner_radius));
     }
-}
 
 // Render the cookie cutter
 cookie_cutter();
+}}
+}

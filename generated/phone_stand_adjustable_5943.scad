@@ -47,7 +47,6 @@ module phone_stand() {
         base();
         adjustable_support()
 }
-}
 
 // Base module
 module base() {
@@ -57,7 +56,6 @@ module base() {
         // Slot for the support to slide and adjust angle
         translate([base_thickness, support_height / 4, 0])
         cube([support_width, slot_depth, base_thickness + 1], center=true)
-}
 }
 
 // Adjustable support module
@@ -72,11 +70,11 @@ module adjustable_support() {
             translate([0, support_height / 2 - slot_depth, -1])
             cube([slot_width, slot_depth, back_thickness + 2], center=true)
 }
-    }
-}
 
 // Render the phone stand
 phone_stand();
 ```
 
 This OpenSCAD code defines a fully parametric, adjustable phone stand suitable for 3D printing. It includes a base and an adjustable support that can be positioned at various angles. The design uses fillets to reduce stress concentrations and is designed with a minimum wall thickness for printability. The adjustable support features a slot to hold a device, accommodating different sizes and cases. The code structure is organized into modules for clarity and reusability, and it uses libraries for rounded shapes and standard operations.
+}}
+}}

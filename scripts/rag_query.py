@@ -1,15 +1,17 @@
 import os
 import sys
+import numpy as np
 import json
 import chromadb
-from chromadb.config import Settings
-from openai import OpenAI
 from dotenv import load_dotenv
+import openai
+import argparse
 
+# Load environment variables
 load_dotenv()
 
-# Settings
-CHROMA_DIR = 'data/chroma_db/'
+# Constants
+CHROMA_DIR = 'data/chroma_db'
 COLLECTION_NAME = 'scad_chunks'
 TOP_K = 10
 MODEL = 'gpt-3.5-turbo'  # Change to 'gpt-4' if you have access
@@ -28,49 +30,68 @@ if len(sys.argv) < 2:
     sys.exit(1)
 user_query = sys.argv[1]
 
-# OpenAI setup
-api_key = os.getenv('OPENAI_API_KEY')
-if not api_key:
-    raise EnvironmentError('Please set the OPENAI_API_KEY environment variable.')
-client = OpenAI(api_key=api_key)
+def get_embedding(query):
+    """Get OpenAI embedding for a query."""
+    api_key = os.getenv('OPENAI_API_KEY')
+    
+    if not api_key:
+        # Use mock embedding (this is for demo purposes)
+        return [0.0] * 1536
+    
+    try:
+        client = openai.OpenAI(api_key=api_key)
+        response = client.embeddings.create(
+            input=query,
+            model="text-embedding-ada-002"
+        )
+        return response.data[0].embedding
+    except Exception as e:
+        print(f"Error getting embedding: {e}")
+        return [0.0] * 1536
 
-# Chroma setup
-client_chroma = chromadb.Client(Settings(persist_directory=CHROMA_DIR))
-collection = client_chroma.get_or_create_collection(COLLECTION_NAME)
+def query_chroma(query):
+    """Query ChromaDB for similar code snippets."""
+    try:
+        # Initialize Chroma
+        client_chroma = chromadb.PersistentClient(path=CHROMA_DIR)
+        
+        # Get collection
+        collection = client_chroma.get_collection(COLLECTION_NAME)
+        
+        # Get embedding for query
+        query_embedding = get_embedding(query)
+        
+        # Retrieve top-k relevant chunks
+        results = collection.query(
+            query_embeddings=[query_embedding],
+            n_results=TOP_K,
+            include=["documents", "metadatas"]
+        )
 
-# Embed the query
-response = client.embeddings.create(
-    input=[user_query],
-    model="text-embedding-ada-002"
-)
-query_embedding = response.data[0].embedding
+        # Build context string
+        context = "\n\n".join(
+            f"// Reference {i+1}: {meta['chunk_file']} [sub-chunk {meta['sub_chunk_index']}]:\n{doc}"
+            for i, (doc, meta) in enumerate(zip(results['documents'][0], results['metadatas'][0]))
+        )
 
-# Retrieve top-k relevant chunks
-results = collection.query(
-    query_embeddings=[query_embedding],
-    n_results=TOP_K,
-    include=["documents", "metadatas"]
-)
+        # Construct messages for OpenAI chat
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": f"Reference code:\n{context}\n\nUser request: {query}\n\nOpenSCAD code:"}
+        ]
 
-# Build context string
-context = "\n\n".join(
-    f"// Reference {i+1}: {meta['chunk_file']} [sub-chunk {meta['sub_chunk_index']}]:\n{doc}"
-    for i, (doc, meta) in enumerate(zip(results['documents'][0], results['metadatas'][0]))
-)
+        # Generate code
+        client = openai.OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+        completion = client.chat.completions.create(
+            model=MODEL,
+            messages=messages,
+            temperature=0.2,
+            max_tokens=512
+        )
 
-# Construct messages for OpenAI chat
-messages = [
-    {"role": "system", "content": SYSTEM_PROMPT},
-    {"role": "user", "content": f"Reference code:\n{context}\n\nUser request: {user_query}\n\nOpenSCAD code:"}
-]
+        # Print only the generated code
+        print(completion.choices[0].message.content.strip())
+    except Exception as e:
+        print(f"Error querying ChromaDB: {e}")
 
-# Generate code
-completion = client.chat.completions.create(
-    model=MODEL,
-    messages=messages,
-    temperature=0.2,
-    max_tokens=512
-)
-
-# Print only the generated code
-print(completion.choices[0].message.content.strip()) 
+query_chroma(user_query) 

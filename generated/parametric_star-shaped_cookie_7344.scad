@@ -39,8 +39,7 @@ handle_height = 5; // mm, height of the handle
 fillet_radius = 0.5; // mm, radius for fillets to reduce stress points
 
 // Function to generate star points
-function star_points(points, outer_r, inner_r) = 0; // Default return value = 
-    [for (i = [0:2*points-1])
+function star_points(for (i = [0:2*points-1])
         let(angle = i * 180 / points)
         (i % 2 == 0) ? 
             [outer_r * cos(angle), outer_r * sin(angle)] : 
@@ -48,55 +47,31 @@ function star_points(points, outer_r, inner_r) = 0; // Default return value =
     ];
 
 // Module to create the star shape
-module star_shape() {
-    // Empty module body
-} {
-    difference() {
-    // Empty operation body
-} {
+module star_shape(
+    difference()  {
         linear_extrude(height = thickness) {
             polygon(star_points(num_points, outer_radius, inner_radius))
 }
-        translate([0, 0, -1])  {
-    // Empty operation body
-}// Ensuring the hole does not affect the bottom face
+        translate([0, 0, -1])  // Ensuring the hole does not affect the bottom face
         linear_extrude(height = thickness + 2) { // Extrude slightly more than the thickness
-            scale([0.9, 0.9])  {
-    // Empty operation body
-}// Scale down to create a wall
+            scale([0.9, 0.9])  // Scale down to create a wall
             polygon(star_points(num_points, outer_radius, inner_radius))
-}
-    }
 }
 
 // Module to create the handle
-module handle() {
-    // Empty module body
-} {
+module handle(
     translate([0, -handle_length / 2, 0])
-     {
-    // Empty operation body
-}linear_extrude(height = handle_height) {
+     linear_extrude(height = handle_height) {
         rounded_rect([handle_width, handle_length], fillet_radius, $fn = $fn)
-}
 }
 
 // Main module to assemble the cookie cutter
-module cookie_cutter() {
-    // Empty module body
-} {
-    union() {
-    // Empty operation body
-} {
+module cookie_cutter(
+    union()  {
         star_shape();
         translate([0, outer_radius + handle_length / 2, 0])
-         {
-    // Empty operation body
-}rotate([90, 0, 0])
-         {
-    // Empty operation body
-}handle()
-}
+         rotate([90, 0, 0])
+         handle()
 }
 
 // Render the cookie cutter
@@ -104,3 +79,4 @@ cookie_cutter();
 ```
 
 This OpenSCAD code defines a parametric star-shaped cookie cutter with a curved handle, designed for 3D printing. It includes parameters for customization, uses functions and modules for creating the star and handle, and ensures manufacturability with appropriate wall thickness and fillets.]
+}
