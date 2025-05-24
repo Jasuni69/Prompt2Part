@@ -115,6 +115,8 @@ class Prompt2PartGUI(QWidget):
         stl_path, _ = QFileDialog.getSaveFileName(self, 'Export STL', '', 'STL Files (*.stl)')
         if not stl_path:
             return
+        if not stl_path.lower().endswith('.stl'):
+            stl_path += '.stl'
         # Call OpenSCAD CLI to export STL
         cmd = f"openscad -o '{stl_path}' '{scad_path}'"
         result = os.system(cmd)
