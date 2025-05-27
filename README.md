@@ -1,5 +1,37 @@
 # Advanced Text-to-CAD Generator (AI + OpenSCAD)
 
+## Quick Start
+
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-url>
+   cd <repo-directory>
+   ```
+2. **Install dependencies:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+3. **Download OpenSCAD libraries:**
+   ```bash
+   bash scripts/clone_scad_libs.sh
+   ```
+4. **Set up your OpenAI API key:**
+   - Copy your `.env` file (with your OpenAI API key) into the project root. (This file is not included in the repo.)
+5. **Run the CLI:**
+   ```bash
+   python -m ui.cli generate --prompt "A phone stand with adjustable angle"
+   ```
+6. **Run the GUI (optional):**
+   ```bash
+   python -m ui.gui
+   ```
+7. **Run tests (optional):**
+   ```bash
+   pytest
+   ```
+
 ## Overview
 Transform natural language descriptions into professional-grade 3D models with this advanced AI-powered CAD generator. The system uses state-of-the-art large language models (LLMs) combined with Retrieval-Augmented Generation (RAG) to produce high-quality OpenSCAD code that follows engineering best practices and considers manufacturing constraints.
 

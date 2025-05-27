@@ -1,1 +1,2 @@
-trapezoidal_threaded_rod(d=10, l=20, pitch=2);
+cylinder(h=10, r=5, $fn=6);
+P();
