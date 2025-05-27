@@ -240,3 +240,74 @@ To load your OpenAI SCAD embeddings into a Chroma vector database and test retri
 
 3. **Next steps:**
    - You can now build more advanced retrieval or RAG workflows using the Chroma DB. 
+
+## Description-Based RAG System (Improved Approach)
+
+The project now includes an improved RAG system that embeds function/module descriptions instead of raw code, providing better semantic search capabilities.
+
+### Key Improvements
+
+- **Better Semantic Understanding**: Searches function descriptions rather than raw code syntax
+- **Advanced Embedding Model**: Uses OpenAI's `text-embedding-3-large` (3072 dimensions vs 1536)
+- **Key-Value Architecture**: Descriptions are embedded for search, complete code is retrieved
+- **Reduced Noise**: Eliminates code syntax noise from embeddings
+- **Complete Context**: Returns full function/module code with comments
+
+### Setup Description-Based RAG
+
+1. **Extract function descriptions:**
+   ```bash
+   python scripts/extract_scad_descriptions.py
+   ```
+   - Creates `data/scad_descriptions/` with JSON files containing description-code pairs
+   - Generates `data/scad_descriptions_metadata.jsonl` with metadata
+
+2. **Generate embeddings with text-embedding-3-large:**
+   ```bash
+   python scripts/embed_scad_descriptions_large.py
+   ```
+   - Creates `data/scad_description_embeddings_large.jsonl` with description embeddings
+   - Uses OpenAI's `text-embedding-3-large` model (3072 dimensions)
+
+3. **Import to Chroma DB:**
+   ```bash
+   python scripts/import_description_embeddings_to_chroma.py
+   ```
+   - Creates `data/chroma_db_descriptions/` with optimized vector database
+   - Includes automatic testing of retrieval functionality
+
+4. **Test the system:**
+   ```bash
+   python scripts/test_description_rag.py
+   ```
+   - Compares old vs new approaches
+   - Tests various query types and domains
+
+### Using the Description-Based System
+
+```python
+from rag.description_retriever import retrieve_context
+
+# Search for functions by description
+context = retrieve_context("rounded cube with fillets")
+print(context)  # Returns complete OpenSCAD code for relevant functions
+```
+
+### Architecture Comparison
+
+| Aspect | Old Approach | New Approach |
+|--------|-------------|--------------|
+| **Embedding Target** | Raw code chunks | Function descriptions |
+| **Model** | text-embedding-ada-002 | text-embedding-3-large |
+| **Dimensions** | 1536 | 3072 |
+| **Search Quality** | Syntax-heavy | Semantic-focused |
+| **Context Completeness** | Partial functions | Complete functions |
+| **Query Understanding** | Limited | Enhanced |
+
+### Benefits
+
+1. **Improved Relevance**: Descriptions provide clearer semantic meaning than code syntax
+2. **Complete Functions**: No more cut-off function definitions
+3. **Better Matching**: Enhanced understanding of function purposes and use cases
+4. **Domain Awareness**: Automatic keyword enhancement for specialized domains (gears, threads, etc.)
+5. **Faster Development**: More accurate code retrieval leads to better generated models 

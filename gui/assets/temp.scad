@@ -1,1 +1,1 @@
-gear(module=5, H=20, C=5);
+trapezoidal_threaded_rod(d=10, l=20, pitch=2);

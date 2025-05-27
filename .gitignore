@@ -18,4 +18,10 @@ data/scad_full_corpus.txt .env
 data/chroma_db/
 data/chroma_db_backup_*/
 data/scad_embeddings_openai.jsonl
+# New description-based RAG files
+data/scad_descriptions/*
+!data/scad_descriptions/.gitkeep
+data/scad_descriptions_metadata.jsonl
+data/scad_description_embeddings_large.jsonl
+data/chroma_db_descriptions/
 .env
